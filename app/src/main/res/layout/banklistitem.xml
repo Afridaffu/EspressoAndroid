@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tvDebitHead"
+    android:layout_marginLeft="1dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="1dp"
+    android:layout_marginBottom="1dp"
+    app:cardCornerRadius="18dp"
+    app:strokeWidth="1.5dp">
+
+    <RelativeLayout
+        android:id="@+id/layoutCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:id="@+id/layoutBank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgBank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bank"></ImageView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvBankName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_semibold"
+                android:singleLine="true"
+                android:text="Bank of America"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_15sp"></TextView>
+
+            <TextView
+                android:id="@+id/tvCardNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1.1"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="right|center_vertical"
+                android:text="**** 3679"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_15sp"></TextView>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutAccName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutBank"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tvAccName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Benedict Cumberbacht"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_13sp"></TextView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_card_select"></ImageView>
+
+                <LinearLayout
+                    android:id="@+id/lyMore"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_more_options"></ImageView>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutAccName"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="M8 8LG, 165, Cheetham Hill Road Manchester, UK"
+            android:textColor="@color/withdrawopt"
+            android:textSize="@dimen/text_size_12sp"></TextView>
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

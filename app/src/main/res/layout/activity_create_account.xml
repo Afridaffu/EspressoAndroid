@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/status"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context="com.coyni.android.view.CreateAccountActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_back_arrow"></ImageView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="-19dp"
+            android:src="@drawable/ic_shape_new"
+            app:tint="#66FFFFFF"></ImageView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:fontFamily="@font/opensans_bold"
+        android:text="Create an account"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_23sp"></TextView>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/createacbackground"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingTop="20dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Please enter your details to proceed"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_14sp"></TextView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlFirstName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvMessage"
+                android:layout_marginTop="20dp"
+                android:hint="First Name"
+                android:textColorHint="@color/hintcolor"
+                app:boxStrokeColor="@color/status"
+                app:hintTextColor="@color/status">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:fontFamily="@font/opensans_regular"
+                    android:hint=""
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:padding="14dp"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlLastName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etlFirstName"
+                android:layout_marginTop="20dp"
+                android:hint="Last Name"
+                android:textColorHint="@color/hintcolor"
+                app:boxStrokeColor="@color/status"
+                app:hintTextColor="@color/status">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:fontFamily="@font/opensans_regular"
+                    android:hint=""
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:padding="14dp"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlPhone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etlLastName"
+                android:layout_marginTop="20dp"
+                android:hint="Phone Number"
+                android:textColorHint="@color/hintcolor"
+                app:boxStrokeColor="@color/status"
+                app:hintTextColor="@color/status">
+
+                <com.santalu.maskara.widget.MaskEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_us"
+                    android:drawablePadding="20dp"
+                    android:inputType="number"
+                    android:padding="14dp"
+                    android:textColor="@color/headcolor"
+                    android:textColorHint="@color/tokenadd"
+                    android:textSize="@dimen/text_size_14sp"
+                    app:mask="(___) ___-____" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etlPhone"
+                android:layout_marginTop="20dp"
+                android:hint="Email"
+                android:textColorHint="@color/hintcolor"
+                app:boxStrokeColor="@color/status"
+                app:hintTextColor="@color/status">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:hint=""
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:padding="14dp"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutTerms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etlEmail"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="By clicking next, you agree to the"
+                        android:textAlignment="center"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="5dp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Coyni"
+                        android:textAlignment="center"
+                        android:textColor="@color/status"
+                        android:textSize="@dimen/text_size_14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvPrivacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Privacy Policy"
+                        android:textAlignment="center"
+                        android:textColor="#FFA701"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text=" and "
+                        android:textAlignment="center"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvTerms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Terms of Services"
+                        android:textAlignment="center"
+                        android:textColor="#FFA701"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvNext"
+                android:layout_width="175dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/layoutTerms"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/btnback"
+                app:cardCornerRadius="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Next"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_18sp"></TextView>
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

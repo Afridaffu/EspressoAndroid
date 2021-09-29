@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#13A5A1"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_account_limits_bg"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_back_arrow"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Account Limits"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/ic_logout"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Logout"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp"
+                android:visibility="gone"></TextView>
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/viewdiv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"></View>
+
+        <RelativeLayout
+            android:id="@+id/layoutHead"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/viewdiv"
+            android:background="@drawable/transactionscorner">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/layoutCard"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:orientation="vertical"
+                            android:paddingTop="5dp"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="3dp"
+                                    android:src="@drawable/ic_acc_limits_withdrawl" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:gravity="center"
+                                    android:text="Withdrawals"
+                                    android:textColor="#4C4C4C"
+                                    android:textSize="@dimen/text_size_16sp" />
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Bank Account"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenWithdrawalBankWeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Instant Pay"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenWithdrawalInstantpayWeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Gift Card"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenWithdrawalGiftcardWeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Signet Account"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tokenWithdrawalSignetWeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="3dp"
+                                    android:src="@drawable/ic_buy_tokens" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:gravity="center"
+                                    android:text="Buy Tokens"
+                                    android:textColor="#4C4C4C"
+                                    android:textSize="@dimen/text_size_16sp" />
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Credit / Debit Card"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenBuyCardWeeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlTvTokenBuyCreditCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Credit Card"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenBuyCreditCardWeeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Bank Account"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenBuyBankWeeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="3dp"
+                                    android:src="@drawable/ic_pay_request" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:gravity="center"
+                                    android:text="Pay / Request"
+                                    android:textColor="#4C4C4C"
+                                    android:textSize="@dimen/text_size_16sp" />
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Send"
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvTokenSendWeekLimit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/headcolor"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </RelativeLayout>
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

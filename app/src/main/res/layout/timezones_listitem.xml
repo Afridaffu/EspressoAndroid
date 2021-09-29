@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/rlCurrencyPST"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/tvPreference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:padding="11dp"
+            android:text="PST : Pacific Standard Time UTC - 8:00"
+            android:textColor="@color/headcolor"
+            android:textSize="@dimen/text_size_14sp"></TextView>
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

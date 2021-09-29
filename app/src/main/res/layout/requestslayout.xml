@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/status"
+    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/status"
+        app:elevation="0dp"
+        app:theme="@style/Theme.QuickCard.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_sent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingEnd="72dp"
+            app:popupTheme="@style/Theme.QuickCard.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Requests"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"></TextView>
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageView
+        android:layout_width="156dp"
+        android:layout_height="174dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-10dp"
+        android:src="@drawable/ic_token_back"></ImageView>
+
+    <View
+        android:id="@+id/viewdiv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/appbar"
+        android:layout_marginTop="20dp"></View>
+
+    <RelativeLayout
+        android:id="@+id/layoutHead"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/viewdiv"
+        android:background="@drawable/transactionscorner">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nvScroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20dp">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/tab_layout_background"
+                    android:elevation="6dp"
+                    app:tabBackground="@drawable/tab_layout_selector"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabInlineLabel="true"
+                    app:tabMode="auto"
+                    app:tabRippleColor="@null"
+                    app:tabSelectedTextColor="@color/headcolor"
+                    app:tabTextAppearance="@style/TabTextAppearance"
+                    app:tabTextColor="@color/hintcolor">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Posted " />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Received" />
+                </com.google.android.material.tabs.TabLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPosted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tabLayout"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:divider="@null"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+
+                <TextView
+                    android:id="@+id/tvNoPostRecords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tabLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_14sp"
+                    android:visibility="gone"></TextView>
+
+                <ProgressBar
+                    android:id="@+id/pbPosted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rvPosted"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvReceived"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tabLayout"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:divider="@null"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvNoReceRecords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tabLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_14sp"
+                    android:visibility="gone"></TextView>
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/viewdiv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-30dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="35dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_receive_trans"></ImageView>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

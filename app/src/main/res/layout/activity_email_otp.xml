@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/status"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.coyni.android.view.EmailOtpActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
+        app:theme="@style/Theme.QuickCard.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_sent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/status"
+            android:paddingEnd="72dp"
+            app:popupTheme="@style/Theme.QuickCard.PopupOverlay">
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutEntry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="20dp">
+
+
+            <ImageView
+                android:id="@+id/imgEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_email"></ImageView>
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgEmail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:lineSpacingExtra="5dp"
+                android:text="Text message with your verification code has been"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_12sp"></TextView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvMessage"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvMessage1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text="sent to the Email "
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_12sp" />
+
+                <TextView
+                    android:id="@+id/tvFirstChar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text="k"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/ic_asterisk" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/ic_asterisk" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/ic_asterisk" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/ic_asterisk" />
+
+                <TextView
+                    android:id="@+id/tvLastChar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text="k"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvMessage2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/createacbackground"
+            android:paddingLeft="16dp"
+            android:paddingTop="30dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/tvEnterOtp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Enter Verification Code"
+                android:textColor="@color/headcolor"
+                android:textSize="14sp"></TextView>
+
+            <TextView
+                android:id="@+id/tvtimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:fontFamily="@font/opensans_light"
+                android:text="1:00"
+                android:textColor="#ADADAD"
+                android:textSize="14sp"></TextView>
+
+            <LinearLayout
+                android:id="@+id/layoutOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvEnterOtp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etOtp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/status"
+                    android:cursorVisible="true"
+                    android:digits="1234567890"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"></EditText>
+
+                <EditText
+                    android:id="@+id/etOtp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/unselectmenu"
+                    android:cursorVisible="true"
+                    android:digits="1234567890"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"></EditText>
+
+                <EditText
+                    android:id="@+id/etOtp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/unselectmenu"
+                    android:cursorVisible="true"
+                    android:digits="1234567890"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"></EditText>
+
+                <EditText
+                    android:id="@+id/etOtp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/unselectmenu"
+                    android:cursorVisible="true"
+                    android:digits="1234567890"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"></EditText>
+
+                <EditText
+                    android:id="@+id/etOtp5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/unselectmenu"
+                    android:cursorVisible="true"
+                    android:digits="1234567890"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"></EditText>
+
+                <EditText
+                    android:id="@+id/etOtp6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/unselectmenu"
+                    android:cursorVisible="true"
+                    android:digits="1234567890"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"></EditText>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvInvalid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutOtp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Invalid Code"
+                android:textColor="@color/invalidotp"
+                android:textSize="@dimen/text_size_13sp"
+                android:visibility="gone"></TextView>
+
+            <TextView
+                android:id="@+id/tvResend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutOtp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="RESEND"
+                android:textColor="@color/status"
+                android:textSize="14sp"></TextView>
+
+            <View
+                android:id="@+id/viewResend"
+                android:layout_width="52dp"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tvResend"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="2dp"
+                android:background="@color/status"></View>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvVerify"
+                android:layout_width="175dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/viewResend"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="50dp"
+                app:cardBackgroundColor="#F2F2F2"
+                app:cardCornerRadius="24dp">
+
+                <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:color="@color/headcolor"
+                    android:radius="3dp"
+                    android:visibility="gone"
+                    app:dd_animationDuration="500"
+                    app:dd_horizontalSpacing="4dp"
+                    app:dd_numDots="3"
+                    app:dd_scaleMultiplier="1.5" />
+
+                <TextView
+                    android:id="@+id/tvVerify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Verify"
+                    android:textColor="#D5D5D5"
+                    android:textSize="18sp"></TextView>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutSuccess"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imgSuccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvPhone"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_success"></ImageView>
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Awesome,Your Email Address is verified"
+            android:textColor="@color/white"
+            android:textSize="14sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvPhone"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Successfully!"
+            android:textColor="@color/white"
+            android:textSize="24sp"></TextView>
+    </RelativeLayout>
+</LinearLayout>

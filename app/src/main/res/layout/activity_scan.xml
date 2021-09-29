@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutBack"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#181818"
+    android:fitsSystemWindows="true"
+    tools:context="com.coyni.android.view.ScanActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#181818"
+        app:elevation="0dp"
+        app:theme="@style/Theme.QuickCard.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_sent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/Theme.QuickCard.PopupOverlay">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appbar"
+        android:layout_marginTop="20dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/tab_layout_background"
+                android:elevation="6dp"
+                app:tabBackground="@drawable/tab_layout_selector"
+                app:tabIndicatorHeight="0dp"
+                app:tabInlineLabel="true"
+                app:tabMode="auto"
+                app:tabRippleColor="@null"
+                app:tabSelectedTextColor="@color/headcolor"
+                app:tabTextAppearance="@style/TabTextAppearance"
+                app:tabTextColor="@color/hintcolor">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scan Code " />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My QR Code" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutScan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tabLayout"
+                android:layout_marginTop="40dp">
+
+                <com.budiyev.android.codescanner.CodeScannerView
+                    android:id="@+id/scanner_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="256dp"
+                    app:autoFocusButtonColor="@android:color/white"
+                    app:autoFocusButtonVisible="false"
+                    app:flashButtonColor="@android:color/white"
+                    app:flashButtonVisible="false"
+                    app:frameAspectRatioHeight="1"
+                    app:frameAspectRatioWidth="1"
+                    app:frameColor="@color/white"
+                    app:frameCornersRadius="16dp"
+                    app:frameCornersSize="50dp"
+                    app:frameSize="1"
+                    app:frameThickness="2dp"
+                    app:maskColor="#181818" />
+
+                <LinearLayout
+                    android:id="@+id/layoutPermission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="20dp"
+                        android:gravity="center"
+                        android:text="Coyni needs access to your camera\nto scan a QR code."
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/layoutEnable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/camerapermission"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Camera Access"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp"></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutQRDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tabLayout"
+                android:background="@color/white"
+                android:paddingBottom="30dp"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvQR"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="15dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="6dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="30dp">
+
+                        <RelativeLayout
+                            android:id="@+id/layoutQR"
+                            android:layout_width="240dp"
+                            android:layout_height="240dp"
+                            android:layout_centerHorizontal="true">
+
+                            <ImageView
+                                android:id="@+id/idIVQrcode"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_centerHorizontal="true"
+                                android:contentDescription="qr_code" />
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_centerInParent="true"
+                                android:visibility="gone"
+                                app:cardBackgroundColor="@color/white"
+                                app:cardCornerRadius="24dp">
+
+                                <TextView
+                                    android:id="@+id/tvNameHead"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:text="MG"
+                                    android:textColor="@color/withdrawopt"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/layoutQR"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Mohan G"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_20sp"></TextView>
+
+                        <RelativeLayout
+                            android:id="@+id/layoutDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvName"
+                            android:layout_marginTop="20dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="-8dp"
+                                app:cardBackgroundColor="#C7C7C7"
+                                app:cardCornerRadius="8dp"></androidx.cardview.widget.CardView>
+
+                            <View
+                                android:id="@+id/divider"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/dotted"></View>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="-8dp"
+                                app:cardBackgroundColor="#C7C7C7"
+                                app:cardCornerRadius="8dp"></androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tvWalletHead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/layoutDivider"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Wallet address"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp"></TextView>
+
+                        <TextView
+                            android:id="@+id/tvWalletAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvWalletHead"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="53FE8DBFUDBDJDB73...."
+                            android:textColor="#B34C4C4C"
+                            android:textSize="@dimen/text_size_14sp"></TextView>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cvQR"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/layoutShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_code_share"></ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Share"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutCopy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_code_copy"></ImageView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Copy"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp"></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

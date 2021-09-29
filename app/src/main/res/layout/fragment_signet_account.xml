@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/status"
+    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/status"
+        app:elevation="0dp"
+        app:theme="@style/Theme.QuickCard.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_sent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingEnd="72dp"
+            app:popupTheme="@style/Theme.QuickCard.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Signet Account"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"></TextView>
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageView
+        android:layout_width="156dp"
+        android:layout_height="174dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-10dp"
+        android:src="@drawable/ic_token_back"></ImageView>
+
+    <View
+        android:id="@+id/viewdiv"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/appbar"
+        android:layout_marginTop="10dp"></View>
+
+    <RelativeLayout
+        android:id="@+id/layoutHead"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/viewdiv"
+        android:background="@drawable/transactionscorner">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/layoutConfirm"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/createacbackground"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tvSignetHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="Add Signet Account"
+                    android:textColor="@color/smsotp"
+                    android:textSize="@dimen/text_size_18sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlNameOnSignetAcc"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvSignetHead"
+                    android:layout_marginTop="15dp"
+                    android:hint="Name on Signet Account"
+                    android:textColorHint="@color/hintcolor"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/status"
+                    app:hintTextAppearance="@style/TextLabel"
+                    app:hintTextColor="@color/status">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNameOnSignetAcc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint=""
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="50"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutWalletId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/etlNameOnSignetAcc"
+                    android:layout_marginTop="15dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/etlSignetWalletId"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@+id/imgPaste"
+                        android:enabled="true"
+                        android:hint="Signet Wallet ID"
+                        android:textColorHint="@color/hintcolor"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxStrokeColor="@color/status"
+                        app:hintTextAppearance="@style/TextLabel"
+                        app:hintTextColor="@color/status">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSignetWalletId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="true"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint=""
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:maxLength="50"
+                            android:maxLines="1"
+                            android:paddingRight="100dp"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/imgPaste"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_paste_icon"></ImageView>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvBilling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutWalletId"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Billing Address"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_15sp"></TextView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlAddress1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBilling"
+                    android:layout_marginTop="15dp"
+                    android:enabled="true"
+                    android:hint="Address Line1"
+                    android:textColorHint="@color/hintcolor"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/status"
+                    app:hintTextAppearance="@style/TextLabel"
+                    app:hintTextColor="@color/status">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAddress1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint=""
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="100"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlAddress2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/etlAddress1"
+                    android:layout_marginTop="15dp"
+                    android:hint="Address Line2"
+                    android:textColorHint="@color/hintcolor"
+                    app:boxStrokeColor="@color/status"
+                    app:hintTextColor="@color/status">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAddress2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint=""
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="100"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/etlAddress2"
+                    android:layout_marginTop="15dp"
+                    android:clickable="false">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/etlCountry"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:duplicateParentState="true"
+                        android:hint="Country"
+                        android:textColorHint="@color/hintcolor"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxStrokeColor="@color/status"
+                        app:errorEnabled="false"
+                        app:hintTextColor="@color/status">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:enabled="false"
+                            android:fontFamily="@font/opensans_regular"
+                            android:padding="11dp"
+                            android:text="United States"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutArrow"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/imgCardType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_drop_down"></ImageView>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutCountry"
+                    android:layout_marginTop="15dp"
+                    android:clickable="false">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/etlStateRegion"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="State / Province / Region"
+                        android:textColorHint="@color/hintcolor"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxStrokeColor="@color/status"
+                        app:hintTextColor="@color/status">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etStateRegion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:enabled="false"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint=""
+                            android:imeOptions="actionNext"
+                            android:inputType="text"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutStateArrow"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_arrow_drop_down"></ImageView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlCity"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutState"
+                    android:layout_marginTop="15dp"
+                    android:hint="City"
+                    android:textColorHint="@color/hintcolor"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/status"
+                    app:hintTextColor="@color/status">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint=""
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLength="50"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/etlCity"
+                    android:layout_marginTop="15dp"
+                    android:hint="Zip Code / Postal Code"
+                    android:textColorHint="@color/hintcolor"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/status"
+                    app:hintTextColor="@color/status">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint=""
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:maxLength="7"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/layoutConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:background="@color/btnback"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Confirm &amp; Save"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_20sp"></TextView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutSuccess"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingTop="?attr/actionBarSize"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imgSuccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvMessage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_dept_sucess"></ImageView>
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Added Successfully"
+            android:textColor="@color/status"
+            android:textSize="@dimen/text_size_20sp"></TextView>
+
+        <TextView
+            android:id="@+id/tvSubMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvMessage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="You added a new Signet Account to your profile!"
+            android:textColor="@color/exchgtext"
+            android:textSize="@dimen/text_size_14sp"></TextView>
+    </RelativeLayout>
+
+</RelativeLayout>

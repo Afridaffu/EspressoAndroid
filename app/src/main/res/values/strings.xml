@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Coyni</string>
+    <string name="internet">Check your internet connection</string>
+    <string name="currency">CYN</string>
+    <string name="usdcurrency">USD</string>
+    <string name="currencywithspace">CYN</string>
+    <string name="exchange">1 USD = 1 CYN</string>
+    <string name="cardmessage">Credit / Debit Cards payment can be used for Withdrawal\'s or for buying CYN Token.</string>
+    <string name="paycardmessage">Credit / Debit Card payment can be used for buying CYN Token.</string>
+    <string name="bankmessage">External Bank Account can be used for Adding or Withdrawing funds outside of your Portfolio.</string>
+    <string name="paybankmessage">External Bank Account can be used for withdrawals or for buying CYN Token.</string>
+    <string name="paysignetmessage">Signet account can be used for withdrawals or for buying CYN tokens.</string>
+    <string name="buttokenhead">Buy CYN Token</string>
+    <string name="sendhead">Send CYN</string>
+    <string name="receivehead">Receive CYN</string>
+    <string name="exchangegbt">1.00 CYN = 1.00 USD</string>
+    <string name="complete_your_profile"><font fgcolor='#4C4C4C'>Please complete your <font fgcolor='#35BAB6'>Profile Account</font> by adding payment method</font></string>
+    <string name="id_verificatin_text">Your photo ID and actions captured during the ID verification process may constitute biometric data. Please see our <font fgcolor='#35BAB6'>Privacy Policy</font> form more informmation about how we store and use your biometric data.</string>
+    <string name="error_code">117004</string>
+    <string name="time">5000</string>
+    <string name="closealert">3000</string>
+    <string name="maxlength">10</string>
+    <string name="maxlendecimal">16</string>
+    <string name="pwdexpire">Coyni security guidelines requires you to change your password every ( 60 days )</string>
+    <string name="isPST">PST</string>
+    <string name="isMST">America/Denver</string>
+    <string name="isCST">CST</string>
+    <string name="isEST">America/New_York</string>
+    <string name="isHST">HST</string>
+    <string name="PST">PST - Pacific Standard Time</string>
+    <string name="MST">MST - Mountain Standard Time</string>
+    <string name="CST">CST - Central Standard Time</string>
+    <string name="EST">EST - Eastern Standard Time</string>
+    <string name="HST">HST - Hawaii-Aleutian Standard Time</string>
+    <string name="walletBalValidation">Insufficient balance for this transaction</string>
+    <string name="session">Session Expired</string>
+    <string name="transpreview">Transaction Preview</string>
+    <string name="youget">You Get</string>
+    <string name="estbal">Estimated Balance</string>
+    <string name="paymethod">Payment Method</string>
+    <string name="inprog">Transaction In Progress</string>
+    <string name="buttonaction">20000</string>
+    <string name="inactivemax">14</string>
+    <string name="appminimized">1</string>
+    <string name="custmsg">It seems your password has been updated. So we have disabled your FaceID/ Thumb access.You need to login again with new credentials and enable Face ID/Thumb.</string>
+</resources>

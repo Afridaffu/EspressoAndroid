@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layoutMenu"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:background="@color/white"-->
+<!--        android:gravity="center_vertical">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/layoutToken"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/tokenIndicator"-->
+<!--                android:layout_width="44dp"-->
+<!--                android:layout_height="3dp"-->
+<!--                app:cardBackgroundColor="@color/status"-->
+<!--                app:cardCornerRadius="30dp"-->
+<!--                app:cardElevation="0dp"></androidx.cardview.widget.CardView>-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgToken"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:src="@drawable/ic_token"></ImageView>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvToken"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:fontFamily="@font/opensans_regular"-->
+<!--                android:text="Token"-->
+<!--                android:textColor="@color/status"-->
+<!--                android:textSize="10sp"></TextView>-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/layoutAsset"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/assetIndicator"-->
+<!--                android:layout_width="44dp"-->
+<!--                android:layout_height="3dp"-->
+<!--                android:visibility="gone"-->
+<!--                app:cardBackgroundColor="@color/status"-->
+<!--                app:cardCornerRadius="30dp"-->
+<!--                app:cardElevation="0dp"></androidx.cardview.widget.CardView>-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgAsset"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:src="@drawable/ic_assets_unselect"></ImageView>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvAsset"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:fontFamily="@font/opensans_regular"-->
+<!--                android:text="Assets"-->
+<!--                android:textColor="#C2C2C2"-->
+<!--                android:textSize="10sp"></TextView>-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/layoutSubMenu"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/ic_sub_menu"></ImageView>-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/payIndicator"-->
+<!--                android:layout_width="44dp"-->
+<!--                android:layout_height="3dp"-->
+<!--                android:visibility="gone"-->
+<!--                app:cardBackgroundColor="@color/status"-->
+<!--                app:cardCornerRadius="30dp"-->
+<!--                app:cardElevation="0dp"></androidx.cardview.widget.CardView>-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgPayments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:src="@drawable/ic_payments_unselect"></ImageView>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvPayments"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:fontFamily="@font/opensans_regular"-->
+<!--                android:text="Payments"-->
+<!--                android:textColor="#C2C2C2"-->
+<!--                android:textSize="10sp"></TextView>-->
+
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/layoutProfile"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/menuIndicator"-->
+<!--                android:layout_width="44dp"-->
+<!--                android:layout_height="3dp"-->
+<!--                android:visibility="gone"-->
+<!--                app:cardBackgroundColor="@color/status"-->
+<!--                app:cardCornerRadius="30dp"-->
+<!--                app:cardElevation="0dp"></androidx.cardview.widget.CardView>-->
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imgMenu"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:src="@drawable/ic_menu_unselect"></ImageView>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvMenu"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:fontFamily="@font/opensans_regular"-->
+<!--                android:text="Menu"-->
+<!--                android:textColor="#C2C2C2"-->
+<!--                android:textSize="10sp"></TextView>-->
+
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+</RelativeLayout>

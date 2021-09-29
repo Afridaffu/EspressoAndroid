@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/layoutWallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bitcoin_square"></ImageView>
+
+                <TextView
+                    android:id="@+id/tvWallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/imgCurrency"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Current BTC Price"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_12sp"></TextView>
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvWallet"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/imgCurrency"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="$49,713.30"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_14sp"></TextView>
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imgGraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutWallet"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_asset_graph"></ImageView>
+
+            <LinearLayout
+                android:id="@+id/layoutGraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgGraph"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:text="24h"
+                    android:textColor="@color/unselectmenu"
+                    android:textSize="@dimen/text_size_12sp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:text="1d"
+                    android:textColor="@color/unselectmenu"
+                    android:textSize="@dimen/text_size_12sp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:text="1m"
+                    android:textColor="@color/unselectmenu"
+                    android:textSize="@dimen/text_size_12sp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="3m"
+                    android:textColor="#FFA701"
+                    android:textSize="@dimen/text_size_12sp"></TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:text="1y"
+                    android:textColor="@color/unselectmenu"
+                    android:textSize="@dimen/text_size_12sp"></TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvProtHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutGraph"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Your Portfolio"
+                android:textColor="#1A1A1A"
+                android:textSize="@dimen/text_size_16sp"></TextView>
+
+            <RelativeLayout
+                android:id="@+id/layoutDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvProtHead"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/tvBalHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_light"
+                    android:text="BTC Balance"
+                    android:textColor="#AAAAAA"
+                    android:textSize="@dimen/text_size_13sp"></TextView>
+
+                <ImageView
+                    android:id="@+id/imgCurrency1"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:layout_below="@+id/tvBalHead"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_bitcoin"></ImageView>
+
+                <TextView
+                    android:id="@+id/tvWalletBal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBalHead"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/imgCurrency1"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="1.008937"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_18sp"></TextView>
+
+                <TextView
+                    android:id="@+id/tvCurValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:fontFamily="@font/opensans_light"
+                    android:text="Current Value"
+                    android:textColor="#AAAAAA"
+                    android:textSize="@dimen/text_size_13sp"></TextView>
+
+                <TextView
+                    android:id="@+id/tvValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvCurValue"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="$50,102.30"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_18sp"></TextView>
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvTransactions"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_below="@+id/layoutDetails"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="13dp"
+                app:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/imgTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_search"></ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgTime"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Transactions"
+                        android:textColor="@color/status"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_search"></ImageView>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cvTransactions"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="About Bitcoin"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_14sp"></TextView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

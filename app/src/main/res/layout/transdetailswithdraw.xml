@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+
+            <RelativeLayout
+                android:id="@+id/layoutWTitle"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="20dp"
+                android:background="#F9FAFE"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Withdraw"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+                <ImageView
+                    android:id="@+id/imgWTitleArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_up_arrow"></ImageView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutWithdraw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutWTitle"
+                android:layout_marginTop="20dp">
+
+                <RelativeLayout
+                    android:id="@+id/layoutWDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:id="@+id/tvWDateHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Date / Time"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/llPayStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvWDateHead"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/tvWDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvWDateHead"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="03/11/2021 11:53 AM"
+                            android:textColor="@color/baltext"
+                            android:textSize="@dimen/text_size_16sp"></TextView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvWDateHead"
+                            android:layout_alignParentRight="true"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cvWStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:cardBackgroundColor="#8FFFA701"
+                                app:cardCornerRadius="15dp"
+                                app:cardElevation="0dp">
+
+                                <TextView
+                                    android:id="@+id/tvWStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Pending"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_size_14sp"></TextView>
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutWDate"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Transaction Sub Type"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWTansType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="Instant Pay"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llWAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutType"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Withdrawn Amount"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="45.00 GBT"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llExchangeRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llWAmount"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/llWAmount"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Exchange Rate"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvExchangeRate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="@string/exchangegbt"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llRAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llExchangeRate"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Received Amount"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvRAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="1.00 USD"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llWPFee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llRAmount"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvRAmount"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Processing Fee"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWPFee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="1.00 GBT"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_below="@+id/llWPFee"
+                    android:layout_marginTop="20dp"
+                    android:background="#F6F6F6"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Total Amount"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="46.00 USD"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/lyDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutTotal"
+                    android:layout_marginTop="20dp"
+                    android:background="#F6F6F6"
+                    android:minHeight="43dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/tvDescHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Description"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDescHead"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text=""
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llWBalance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lyDescription"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lyDescription"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Account Balance"
+                        android:textColor="@color/exchgtext"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="45.00 GBT"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutWInfo"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_below="@+id/layoutWithdraw"
+                android:layout_marginTop="30dp"
+                android:background="#F9FAFE"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:id="@+id/tvCardInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Recipient Information"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+                <ImageView
+                    android:id="@+id/imgWArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_down_arrow_2"></ImageView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutWithdrawDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutWInfo"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/llWName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Card Holder Name"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvWName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="right"
+                        android:text="John Smith"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llWCardNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llWName"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Debit Card"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <LinearLayout
+                        android:id="@+id/layoutWCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvWName"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imgWType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/ic_visa_text"></ImageView>
+
+                        <TextView
+                            android:id="@+id/tvWCardNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text="****3679"
+                            android:textColor="@color/headcolor"
+                            android:textSize="@dimen/text_size_16sp"></TextView>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lyWLedgerInfo"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_below="@+id/layoutWithdrawDetails"
+                android:layout_marginTop="30dp"
+                android:background="#F9FAFE"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Ledger Information"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+                <ImageView
+                    android:id="@+id/imgWLedgerArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_down_arrow_2"></ImageView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lyWLedgerDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lyWLedgerInfo"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvWHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Withdrawal ID"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/imgWIdCopy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_copy"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvWithdrawId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="1YDJHUCHUEC..."
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvWHead"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Reference ID"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvWHead"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/imgRefCopy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_copy"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvWReferenceId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="1YDJHUCHUEC..."
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

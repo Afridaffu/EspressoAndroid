@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvWallet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="1dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginRight="1dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_bitcoin"></ImageView>
+
+        <TextView
+            android:id="@+id/tvWalletName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/imgCurrency"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Bitcoin"
+            android:textColor="@color/headcolor"
+            android:textSize="15sp"></TextView>
+
+        <TextView
+            android:id="@+id/tvExchAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvWalletName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/imgCurrency"
+            android:fontFamily="@font/opensans_regular"
+            android:text="$69,45,085.00"
+            android:textColor="@color/headcolor"
+            android:textSize="10sp"></TextView>
+
+        <TextView
+            android:id="@+id/tvBalValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/opensans_bold"
+            android:text="121.00 BTC"
+            android:textColor="@color/headcolor"
+            android:textSize="15sp"></TextView>
+
+        <TextView
+            android:id="@+id/tvExchVal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvBalValue"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="1 BTC = $57,847.60"
+            android:textColor="@color/exchgtext"
+            android:textSize="10sp"></TextView>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="18dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingTop="20dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="30dp">
+
+        <TextView
+            android:id="@+id/tvHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="Processing data for\nreport export."
+            android:textColor="@color/headcolor"
+            android:textSize="@dimen/text_size_16sp"></TextView>
+
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvHead"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Estimated duration of\n report exporting is 5 minutes.\nYou will be notified via email."
+            android:textAlignment="center"
+            android:textColor="@color/headcolor"
+            android:textSize="@dimen/text_size_14sp"></TextView>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

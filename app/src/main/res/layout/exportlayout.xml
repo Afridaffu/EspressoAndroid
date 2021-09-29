@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/status"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/layoutHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imgEClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_close_white"></ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Export"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_16sp"></TextView>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="156dp"
+        android:layout_height="174dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-10dp"
+        android:src="@drawable/ic_token_back"></ImageView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutHead"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/transactionscorner">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingTop="20dp"
+                android:paddingBottom="40dp">
+
+                <TextView
+                    android:id="@+id/tvEClear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Clear All"
+                    android:textColor="@color/status"
+                    android:textSize="@dimen/text_size_14sp"></TextView>
+
+                <TextView
+                    android:id="@+id/tvEHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvEClear"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Export Transactions"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+                <RelativeLayout
+                    android:id="@+id/lyCurrentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvEHead"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Export with current view"
+                        android:textColor="@color/msgcolor"
+                        android:textSize="@dimen/text_size_13sp"></TextView>
+
+                    <Switch
+                        android:id="@+id/switchCustom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:elevation="0dp"
+                        android:theme="@style/CustomStyleWidget.MaterialComponents.CompoundButton.Switch"></Switch>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutDateHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_below="@+id/lyCurrentSwitch"
+                    android:layout_marginTop="20dp"
+                    android:background="#F5F5F5"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Date Range"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <ImageView
+                        android:id="@+id/imgDateArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_up_arrow"></ImageView>
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDateRange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layoutDateHead"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/white"></androidx.recyclerview.widget.RecyclerView>
+                <View
+                    android:id="@+id/viewDisableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="#1A000000"
+                    android:layout_below="@+id/layoutDateHead"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone"/>
+                <RelativeLayout
+                    android:id="@+id/lyCustDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_below="@+id/rvDateRange"
+                    android:layout_marginTop="20dp"
+                    android:background="#F5F5F5"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Select date range"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutDates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lyCustDate"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="From"
+                            android:textColor="@color/otpvalue"
+                            android:textSize="@dimen/text_size_12sp"></TextView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="To"
+                            android:textColor="@color/otpvalue"
+                            android:textSize="@dimen/text_size_12sp"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/lyEFromDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/dateborder"
+                            android:paddingLeft="15dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imgCalFrom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_calendar"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvEFromDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_toRightOf="@+id/imgCalFrom"
+                                android:fontFamily="@font/opensans_regular"
+                                android:singleLine="true"
+                                android:textColor="@color/smsotp"
+                                android:textSize="@dimen/text_size_12sp"></TextView>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/lyEToDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/dateborder"
+                            android:paddingLeft="15dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imgCalTo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_calendar"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvEToDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_toRightOf="@+id/imgCalTo"
+                                android:fontFamily="@font/opensans_regular"
+                                android:singleLine="true"
+                                android:textColor="@color/smsotp"
+                                android:textSize="@dimen/text_size_12sp"></TextView>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/lyCuloumns"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_below="@+id/layoutDates"
+                    android:layout_marginTop="20dp"
+                    android:background="#F5F5F5"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:id="@+id/tvColumnHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Columns"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <ImageView
+                        android:id="@+id/imgColArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_down_arrow"></ImageView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyMainColumns"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lyCuloumns"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvDefault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Default"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tvCustom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Custom"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvColumns"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lyCuloumns"
+                    android:layout_margin="20dp"
+                    android:background="@color/white"
+                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/layoutExport"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/btnback"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Export"
+                android:textColor="@color/headcolor"
+                android:textSize="@dimen/text_size_20sp"></TextView>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

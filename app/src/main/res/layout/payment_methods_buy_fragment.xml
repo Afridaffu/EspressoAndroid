@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/status"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:src="@drawable/ic_back_arrow"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Payment Methods"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/ic_logout"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Logout"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp"
+                android:visibility="gone"></TextView>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-20dp"
+            android:layout_marginRight="-60dp"
+            android:src="@drawable/ic_payment_methods_toplogo" />
+
+        <View
+            android:id="@+id/viewdiv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"></View>
+
+
+        <RelativeLayout
+            android:id="@+id/layoutHead"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/viewdiv"
+            android:background="@drawable/transactionscorner">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/createacbackground"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <RelativeLayout
+                            android:id="@+id/rlBank"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <ImageView
+                                android:id="@+id/imgExtBank"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_bank"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvExtBank"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_toRightOf="@+id/imgExtBank"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="External Bank Account"
+                                android:textColor="@color/headcolor"
+                                android:textSize="@dimen/text_size_16sp"></TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvExtBank"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_toRightOf="@+id/imgExtBank"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="External Bank Account can be used for withdrawals or for buying CYN tokens."
+                                android:textColor="@color/exchgtext"
+                                android:textSize="@dimen/text_size_12sp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/ic_right_arrow"></ImageView>
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="20dp"
+                            android:background="#D6D6D6"></View>
+
+                        <RelativeLayout
+                            android:id="@+id/rlDebitCreditCard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp">
+
+                            <ImageView
+                                android:id="@+id/imgCard"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_instant"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvCard"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_toRightOf="@+id/imgCard"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Debit / Credit Card"
+                                android:textColor="@color/headcolor"
+                                android:textSize="@dimen/text_size_16sp"></TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvCard"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_toRightOf="@+id/imgCard"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="Visa or MasterCard debit Cards can be used for Instant Pay Withdrawals"
+                                android:textColor="@color/exchgtext"
+                                android:textSize="@dimen/text_size_12sp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/ic_right_arrow"></ImageView>
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="20dp"
+                            android:background="#D6D6D6"></View>
+
+                        <RelativeLayout
+                            android:id="@+id/rlSignetAccount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp">
+
+                            <ImageView
+                                android:id="@+id/imgSignetAccount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_signet_account"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvSignetAccount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_toRightOf="@+id/imgSignetAccount"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Signet Account"
+                                android:textColor="@color/headcolor"
+                                android:textSize="@dimen/text_size_16sp"></TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvSignetAccount"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_toRightOf="@+id/imgSignetAccount"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="Signet Account can be used for withdrawals or for buying CYN tokens."
+                                android:textColor="@color/exchgtext"
+                                android:textSize="@dimen/text_size_12sp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/ic_right_arrow"></ImageView>
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="20dp"
+                            android:background="#D6D6D6"></View>
+
+                        <RelativeLayout
+                            android:id="@+id/layoutBank1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp">
+
+                            <ImageView
+                                android:id="@+id/imgExtBank1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_wire_transfer"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvExtBank1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_toRightOf="@+id/imgExtBank1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Wire Transfer"
+                                android:textColor="@color/headcolor"
+                                android:textSize="@dimen/text_size_16sp"></TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvExtBank1"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_toRightOf="@+id/imgExtBank1"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text="Coming Soon"
+                                android:textColor="#35BAB6"
+                                android:textSize="@dimen/text_size_13sp"></TextView>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="-40dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/ic_payment_methods_bottom_logo" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/viewBack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:background="#141414"
+        android:visibility="gone"></View>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

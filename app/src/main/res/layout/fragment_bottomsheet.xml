@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottomsheetradius"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_send"></ImageView>
+
+        <TextView
+            android:id="@+id/tvAddHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgAdd"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Add Funds"
+            android:textColor="#303030"
+            android:textSize="12sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvAddHead"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/imgAdd"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Add funds to tokens"
+            android:textColor="#303030"
+            android:textSize="10sp"></TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/imgBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_buy"></ImageView>
+
+        <TextView
+            android:id="@+id/tvBuyHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgBuy"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Buy"
+            android:textColor="#4C4C4C"
+            android:textSize="12sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvBuyHead"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/imgBuy"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Buy crypto assets"
+            android:textColor="#303030"
+            android:textSize="10sp"></TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/imgSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_send"></ImageView>
+
+        <TextView
+            android:id="@+id/tvSendHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgSend"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Send"
+            android:textColor="#4C4C4C"
+            android:textSize="12sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSendHead"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/imgSend"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Send tokens to another wallet"
+            android:textColor="#303030"
+            android:textSize="10sp"></TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/imgReceive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_send"></ImageView>
+
+        <TextView
+            android:id="@+id/tvReceiveHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgReceive"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Receive"
+            android:textColor="#4C4C4C"
+            android:textSize="12sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvReceiveHead"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/imgReceive"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Receive tokens from another wallet"
+            android:textColor="#303030"
+            android:textSize="10sp"></TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/imgwithdraw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_withdraw"></ImageView>
+
+        <TextView
+            android:id="@+id/tvWithdrawHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/imgwithdraw"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Withdraw"
+            android:textColor="#4C4C4C"
+            android:textSize="12sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvWithdrawHead"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/imgwithdraw"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Withdraw tokens"
+            android:textColor="#303030"
+            android:textSize="10sp"></TextView>
+
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,1221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#13A5A1"
+    android:fitsSystemWindows="true"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layoutMenu">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:elevation="0dp"
+                app:theme="@style/ThemeOverlay.AppCompat.Light">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_sent"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:paddingEnd="72dp"
+                    app:popupTheme="@style/Theme.QuickCard.PopupOverlay">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Bitcoin"
+                            android:textColor="@color/headcolor"
+                            android:textSize="16sp"></TextView>
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <include
+                android:id="@+id/mainContainer"
+                layout="@layout/mainlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/appbar"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottomsheetradius"
+            android:clipToPadding="false"
+            android:elevation="40dp"
+            android:outlineProvider="bounds"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <RelativeLayout
+                    android:id="@+id/layoutTScan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvTokenScan"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_scan_menu"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvTScanHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvTokenScan"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Scan QR"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTScanHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvTokenScan"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Pay, Request &amp; Share"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutTPay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvTokenPay"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_pay_menu"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvTPayHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvTokenPay"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Pay / Request"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTPayHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvTokenPay"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Pay or Request Token"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutTBuy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvBuyToken"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_buytoken_menu"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvAddHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvBuyToken"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Buy Tokens"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAddHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvBuyToken"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Add funds to Your Token Account"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvBuyCrypto"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_buy_crypto"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvBuyHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvBuyCrypto"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Buy Crypto"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvBuyHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvBuyCrypto"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Buy crypto asset"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_10sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutTSend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvTokenSend"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_send_token"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvTSendHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvTokenSend"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Send"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTSendHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvTokenSend"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Send Tokens to another wallet"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_10sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutTReceive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvTokenReceive"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_receive_token"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvTReceiveHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvTokenReceive"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Receive"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTReceiveHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvTokenReceive"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Receive Tokens from another wallet"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_10sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutTWihdraw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvTokenWithdraw"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_withdraw_token"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvTWithdrawHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvTokenWithdraw"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Withdraw"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTWithdrawHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvTokenWithdraw"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Withdraw to US Account"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_asset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:background="@drawable/bottomsheetradius"
+            android:clipToPadding="false"
+            android:elevation="40dp"
+            android:outlineProvider="bounds"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvAssetSend"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_send_token"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvASendHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvAssetSend"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Send"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_15sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvASendHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvAssetSend"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Send crypto assets to another wallet"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvAssetReceive"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_receive_token"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvAReceiveHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvAssetReceive"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Receive"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_15sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAReceiveHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvAssetReceive"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Receive crypto assets from another wallet"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvAssetWithdraw"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="#FFD95A"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_exchange_asset"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvAWithdrawHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/cvAssetWithdraw"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Exchange"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_15sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvAWithdrawHead"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/cvAssetWithdraw"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Exchange crypto assets one wallet to another"
+                        android:textColor="@color/navmenu"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_withdraw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:background="@drawable/bottomsheetradius"
+            android:clipToPadding="false"
+            android:elevation="40dp"
+            android:outlineProvider="bounds"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Select a Destination"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_18sp"></TextView>
+
+                <RelativeLayout
+                    android:id="@+id/layoutInstant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/imgInstant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_instant"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvInstant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgInstant"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Instant pay"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvInstant"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/imgInstant"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Withdraw via Debit Card"
+                        android:textColor="@color/withdrawopt"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_right_arrow"></ImageView>
+                </RelativeLayout>
+
+                <!--                <View-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="0.8dp"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:background="#D6D6D6"></View>-->
+
+                <RelativeLayout
+                    android:id="@+id/layoutGift"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <ImageView
+                        android:id="@+id/imgGift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_giftcard"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvGift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgGift"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Gift Card"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvGift"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toRightOf="@+id/imgGift"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Withdraw via Gift Cards and can share to Recipients"
+                        android:textColor="@color/withdrawopt"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/ic_right_arrow"></ImageView>
+                </RelativeLayout>
+
+                <!--                <View-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="0.8dp"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:background="#D6D6D6"></View>-->
+
+                <RelativeLayout
+                    android:id="@+id/layoutWSignet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <ImageView
+                        android:id="@+id/imgSignet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_signet_account"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvSignet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgSignet"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Signet Account"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvSignet"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/imgSignet"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Withdraw to your Signet Account"
+                        android:textColor="@color/withdrawopt"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_right_arrow"></ImageView>
+                </RelativeLayout>
+
+                <!--                <View-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="0.8dp"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:background="#D6D6D6"></View>-->
+
+                <RelativeLayout
+                    android:id="@+id/layoutWBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp">
+
+                    <ImageView
+                        android:id="@+id/imgBank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:alpha="0.4"
+                        android:src="@drawable/ic_bank"></ImageView>
+
+                    <LinearLayout
+                        android:id="@+id/lyBank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgBank"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvBank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Bank Account"
+                            android:textColor="#E2E2E2"
+                            android:textSize="@dimen/text_size_16sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Coming Soon"
+                            android:textColor="@color/status"
+                            android:textSize="@dimen/text_size_10sp"></TextView>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lyBank"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/imgBank"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Withdraw to your Bank Account"
+                        android:textColor="#E2E2E2"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_right_arrow"></ImageView>
+                </RelativeLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_buytoken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:background="@drawable/bottomsheetradius"
+            android:clipToPadding="false"
+            android:elevation="40dp"
+            android:outlineProvider="bounds"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/buttokenhead"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp"></TextView>
+
+                <RelativeLayout
+                    android:id="@+id/layoutBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/imgExtBank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_bank"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvExtBank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgExtBank"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="External Bank Account"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvExtBank"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_toRightOf="@+id/imgExtBank"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/bankmessage"
+                        android:textColor="@color/exchgtext"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/ic_right_arrow"></ImageView>
+                </RelativeLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#D6D6D6"></View>
+
+                <RelativeLayout
+                    android:id="@+id/layoutCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp">
+
+                    <ImageView
+                        android:id="@+id/imgCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_instant"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/imgCard"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Credit / Debit Cards"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvCard"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_toRightOf="@+id/imgCard"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/cardmessage"
+                        android:textColor="@color/exchgtext"
+                        android:textSize="@dimen/text_size_12sp"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/ic_right_arrow"></ImageView>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bottom_sheet_addPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:background="@drawable/bottomsheetradius"
+            android:clipToPadding="false"
+            android:elevation="40dp"
+            android:outlineProvider="bounds"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:padding="20dp"
+                    android:src="@drawable/ic_add_payment"></ImageView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:text="Please complete your "
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp" />
+
+                    <TextView
+                        android:id="@+id/tvAddPaymentMethodsText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center"
+                        android:text="Profile Account"
+                        android:textColor="@color/headcolor"
+                        android:textSize="@dimen/text_size_16sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:text=" before adding payment method"
+                    android:textColor="@color/headcolor"
+                    android:textSize="@dimen/text_size_16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvConfirm_AddPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/layoutTerms"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/btnback">
+
+                    <TextView
+                        android:id="@+id/addOrupdateAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Proceed"
+                        android:textColor="@color/headcolor"
+                        android:textSize="20dp"></TextView>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+        <View
+            android:id="@+id/viewBackMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:background="#141414"
+            android:clickable="true"
+            android:visibility="gone"></View>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutMenu"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/layoutToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/tokenIndicator"
+                android:layout_width="44dp"
+                android:layout_height="3dp"
+                app:cardBackgroundColor="@color/status"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"></androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/imgToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_token"></ImageView>
+
+            <TextView
+                android:id="@+id/tvToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Token"
+                android:textColor="@color/status"
+                android:textSize="10sp"></TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutAsset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/assetIndicator"
+                android:layout_width="44dp"
+                android:layout_height="3dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/status"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"></androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/imgAsset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_assets_unselect"></ImageView>
+
+            <TextView
+                android:id="@+id/tvAsset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Assets"
+                android:textColor="#C2C2C2"
+                android:textSize="10sp"></TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutSubMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sub_menu"></ImageView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/payIndicator"
+                android:layout_width="44dp"
+                android:layout_height="3dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/status"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"></androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/imgPayments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_payments_unselect"></ImageView>
+
+            <TextView
+                android:id="@+id/tvPayments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Issuing"
+                android:textColor="#C2C2C2"
+                android:textSize="10sp"></TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/menuIndicator"
+                android:layout_width="44dp"
+                android:layout_height="3dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/status"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"></androidx.cardview.widget.CardView>
+
+
+            <ImageView
+                android:id="@+id/imgMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_menu_unselect"></ImageView>
+
+            <TextView
+                android:id="@+id/tvMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Menu"
+                android:textColor="#C2C2C2"
+                android:textSize="10sp"></TextView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

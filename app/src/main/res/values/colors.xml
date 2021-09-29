@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="status">#35BAB6</color>
+    <color name="splashback">#2196F3</color>
+    <color name="headcolor">#4C4C4C</color>
+    <color name="hintcolor">#626262</color>
+    <color name="termscolor">#696969</color>
+    <color name="smsotp">#595959</color>
+    <color name="otpvalue">#828282</color>
+    <color name="invalidotp">#D45858</color>
+    <color name="btnback">#FFD95A</color>
+    <color name="navmenu">#303030</color>
+    <color name="exchgtext">#656565</color>
+    <color name="baltext">#9B9B9B</color>
+    <color name="tokensend">#26D45858</color>
+    <color name="tokenrece">#57FFD95A</color>
+    <color name="tokenwith">#262196F3</color>
+    <color name="tokenpaid">#2635BAB6</color>
+    <color name="tokenadd">#1F000000</color>
+    <color name="msgcolor">#858585</color>
+    <color name="unselectmenu">#C2C2C2</color>
+    <color name="statusbar">#13A5A1</color>
+    <color name="withdrawopt">#A7A7A7</color>
+    <color name="editback">#A1A1A1</color>
+    <color name="deleteback">#D45858</color>
+    <color name="dateback">#3BD2D2D2</color>
+    <color name="btndisable">#4DD2D2D2</color>
+</resources>

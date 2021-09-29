@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#13A5A1"
+    android:fitsSystemWindows="true"
+    tools:context="com.coyni.android.view.MainActivity">
+
+    <include
+        android:id="@+id/assetContainer"
+        layout="@layout/assetlayout"
+        android:visibility="visible" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:background="@drawable/bottomsheetradius"
+        android:clipToPadding="false"
+        android:elevation="40dp"
+        android:outlineProvider="bounds"
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvSend"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+                    android:layout_centerVertical="true"
+                    app:cardBackgroundColor="#FFD95A"
+                    app:cardCornerRadius="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_send_token"></ImageView>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvSendHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/cvSend"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Send"
+                    android:textColor="@color/headcolor"
+                    android:textSize="15sp"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvSendHead"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/cvSend"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Send crypto assets to another wallet"
+                    android:textColor="#303030"
+                    android:textSize="12sp"></TextView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvReceive"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+                    android:layout_centerVertical="true"
+                    app:cardBackgroundColor="#FFD95A"
+                    app:cardCornerRadius="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_receive_token"></ImageView>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvReceiveHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/cvReceive"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Receive"
+                    android:textColor="@color/headcolor"
+                    android:textSize="15sp"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvReceiveHead"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/cvReceive"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Receive crypto assets from another wallet"
+                    android:textColor="#303030"
+                    android:textSize="12sp"></TextView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvWithdraw"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+                    android:layout_centerVertical="true"
+                    app:cardBackgroundColor="#FFD95A"
+                    app:cardCornerRadius="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_exchange_asset"></ImageView>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvWithdrawHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/cvWithdraw"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Exchange"
+                    android:textColor="@color/headcolor"
+                    android:textSize="15sp"></TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvWithdrawHead"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/cvWithdraw"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Exchange crypto assets one wallet to another"
+                    android:textColor="#303030"
+                    android:textSize="12sp"></TextView>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
