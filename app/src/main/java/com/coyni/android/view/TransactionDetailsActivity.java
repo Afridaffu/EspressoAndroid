@@ -67,7 +67,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         super.onResume();
         try {
             objMyApplication.getHandler().removeCallbacks(objMyApplication.getMyRunnable());
-            objMyApplication.userInactive( TransactionDetailsActivity.this, this, false);
+            objMyApplication.userInactive(TransactionDetailsActivity.this, this, false);
             objMyApplication.getAppHandler().removeCallbacks(objMyApplication.getAppRunnable());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -78,7 +78,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         objMyApplication.getHandler().removeCallbacks(objMyApplication.getMyRunnable());
-        objMyApplication.userInactive( TransactionDetailsActivity.this, this, true);
+        objMyApplication.userInactive(TransactionDetailsActivity.this, this, true);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onUserInteraction();
         objMyApplication.getHandler().removeCallbacks(objMyApplication.getMyRunnable());
-        objMyApplication.userInactive( TransactionDetailsActivity.this, this, false);
+        objMyApplication.userInactive(TransactionDetailsActivity.this, this, false);
     }
 
     private void initialization() {
@@ -126,6 +126,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             } else {
                 Utils.displayAlert(getString(R.string.internet), TransactionDetailsActivity.this);
             }
+            objMyApplication.setFromWhichFragment("transdetails");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

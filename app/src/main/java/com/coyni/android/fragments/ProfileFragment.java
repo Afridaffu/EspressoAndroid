@@ -379,7 +379,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     dashboardViewModel.mePreferences();
                     getPreferences();
                 }
-
+                hideMenu();
                 getActivity().findViewById(R.id.layoutMenu).setVisibility(View.GONE);
                 etPreferenceTimezone.requestFocus();
                 bottomSheetBehavior.setHideable(true);
@@ -388,6 +388,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                 viewBottomSheet = getView().findViewById(R.id.bottom_sheet_Preferences);
                 bottomSheetBehavior = BottomSheetBehavior.from(viewBottomSheet);
+                bottomSheetBehavior.setPeekHeight(0);
                 viewBottomSheet.setVisibility(View.VISIBLE);
                 viewBack.setVisibility(View.VISIBLE);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -425,6 +426,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                objMyApplication.setToken(true);
                 getActivity().onBackPressed();
             }
         });
@@ -630,7 +632,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                         } else {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());

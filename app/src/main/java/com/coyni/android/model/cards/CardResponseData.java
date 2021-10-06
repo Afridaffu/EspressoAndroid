@@ -11,6 +11,7 @@ public class CardResponseData {
     private int amount_authorized;
     private String cardNumber;
     private String status;
+    private String msg;
     private String descriptorName;
 
     public String getTransactionId() {
@@ -99,5 +100,13 @@ public class CardResponseData {
 
     public void setDescriptorName(String descriptorName) {
         this.descriptorName = descriptorName;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

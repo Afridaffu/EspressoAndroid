@@ -50,7 +50,7 @@
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/cvName"
             android:fontFamily="@font/opensans_semibold"
-            android:text="You Requested Maria 10.00 GBT"
+            android:text="You Requested Maria 10.00 CYN"
             android:textColor="@color/headcolor"
             android:textSize="@dimen/text_size_14sp"></TextView>
 

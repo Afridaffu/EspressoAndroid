@@ -309,6 +309,7 @@
                     android:text="Skip now"
                     android:textColor="@color/status"
                     android:textSize="@dimen/text_size_16sp"></TextView>
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

@@ -57,11 +57,11 @@ public class SignUpPrivacyWebViewActivity extends AppCompatActivity {
             webView.getSettings().setBuiltInZoomControls(true);
             webView.getSettings().setUseWideViewPort(true);
 
-//            String pdfurl = Uri.encode("https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf");
-//            webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + pdfurl);
+            String pdfurl = Uri.encode("https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf");
+            webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + pdfurl);
 
-            String pdfurl = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
-            webView.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=" + pdfurl);
+//            String pdfurl = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
+//            webView.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=" + pdfurl);
 
 
             webView.setWebViewClient(new Callback());

@@ -78,7 +78,7 @@ public class PostedAdapter extends RecyclerView.Adapter<PostedAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             SentRequestsItems objData = listItems.get(position);
-            String strPrev = "", strCurr = "", strCurDate = "";
+            String strPrev = "", strCurr = "", strCurDate = "", strName = "";
             holder.tvDate.setText(Utils.convertDate(objData.getRequestedDate()));
             if (position != 0) {
                 strPrev = Utils.convertDate(listItems.get(position - 1).getRequestedDate());
@@ -97,7 +97,9 @@ public class PostedAdapter extends RecyclerView.Adapter<PostedAdapter.MyViewHold
                 }
             }
             if (objData.getToUser().contains(" ")) {
-                holder.tvNameHead.setText(objData.getToUser().split(" ")[0].substring(0, 1).toUpperCase() + objData.getToUser().split(" ")[1].substring(0, 1).toUpperCase());
+                strName = objData.getToUser().trim().replaceAll("\\s{2,}"," ");
+//                holder.tvNameHead.setText(objData.getToUser().split(" ")[0].substring(0, 1).toUpperCase() + objData.getToUser().split(" ")[1].substring(0, 1).toUpperCase());
+                holder.tvNameHead.setText(strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase());
             } else {
                 holder.tvNameHead.setText(objData.getToUser().substring(0, 1).toUpperCase());
             }

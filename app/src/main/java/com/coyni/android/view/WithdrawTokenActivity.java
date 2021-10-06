@@ -165,7 +165,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         if (after < count) {
-            isDel = true;
+//            isDel = true;
         }
     }
 
@@ -187,13 +187,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     etPay.setText("");
                 } else if (s.length() == 0) {
                     etGet.setText(" ");
-                    isDel = false;
                 } else {
                     etPay.removeTextChangedListener(WithdrawTokenActivity.this);
                     etPay.setText("");
                     etPay.addTextChangedListener(WithdrawTokenActivity.this);
                     etGet.setText(" ");
-                    isDel = false;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -229,6 +227,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             RelativeLayout layoutMain = (RelativeLayout) findViewById(R.id.layoutMain);
             ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
             etPay.requestFocus();
+//            Utils.displayLongCloseAlert(getString(R.string.usermsg), WithdrawTokenActivity.this);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
                 buyViewModel.meBanks();
                 if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
@@ -542,7 +541,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         objMyApplication.setResolveUrl(true);
                         buyViewModel.meSignOn();
                     } else if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(WithdrawTokenActivity.this, getString(R.string.session));
                         } else {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawTokenActivity.this);
@@ -753,12 +752,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             cvRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    buyViewModel.deleteBanks(String.valueOf(objData.getId()));
-                    dialog = new ProgressDialog(WithdrawTokenActivity.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.getWindow().setGravity(Gravity.CENTER);
-                    dialog.show();
+                    try {
+                        if (!isDel) {
+                            isDel = true;
+                            buyViewModel.deleteBanks(String.valueOf(objData.getId()));
+                            dialog = new ProgressDialog(WithdrawTokenActivity.this, R.style.MyAlertDialogStyle);
+                            dialog.setIndeterminate(false);
+                            dialog.setMessage("Please wait...");
+                            dialog.getWindow().setGravity(Gravity.CENTER);
+                            dialog.show();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {

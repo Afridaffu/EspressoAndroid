@@ -239,9 +239,13 @@ public class PaymentMethodsBuyFragment extends Fragment {
 //                if (dialog != null) {
 //                    dialog.dismiss();
 //                }
-                if (cards != null && !isBank) {
-                    listAllCards = cards.getData().getItems();
-                    objMyApplication.setListCards(listAllCards);
+                try {
+                    if (cards != null && !isBank) {
+                        listAllCards = cards.getData().getItems();
+                        objMyApplication.setListCards(listAllCards);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -250,20 +254,24 @@ public class PaymentMethodsBuyFragment extends Fragment {
             @Override
             public void onChanged(SignOn signOn) {
                 //dialog.dismiss();
-                if (signOn != null) {
-                    if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                        strSignOn = "";
-                        signOnData = signOn.getData();
-                        objMyApplication.setSignOnData(signOnData);
-                        objMyApplication.setStrSignOnError("");
-                        if (objMyApplication.getResolveUrl()) {
-                            callResolveFlow();
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            strSignOn = "";
+                            signOnData = signOn.getData();
+                            objMyApplication.setSignOnData(signOnData);
+                            objMyApplication.setStrSignOnError("");
+                            if (objMyApplication.getResolveUrl()) {
+                                callResolveFlow();
+                            }
+                        } else {
+                            strSignOn = signOn.getError().getErrorDescription();
+                            objMyApplication.setSignOnData(null);
+                            objMyApplication.setStrSignOnError(strSignOn);
                         }
-                    } else {
-                        strSignOn = signOn.getError().getErrorDescription();
-                        objMyApplication.setSignOnData(null);
-                        objMyApplication.setStrSignOnError(strSignOn);
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -271,12 +279,16 @@ public class PaymentMethodsBuyFragment extends Fragment {
         buyViewModel.getSyncAccountMutableLiveData().observe(getActivity(), new Observer<SyncAccount>() {
             @Override
             public void onChanged(SyncAccount syncAccount) {
-                if (syncAccount != null) {
-                    if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                        buyViewModel.meBanks();
+                try {
+                    if (syncAccount != null) {
+                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            buyViewModel.meBanks();
 //                        Utils.displayAlert("You added a new Bank Account to your profile!", getActivity());
-                        Utils.displayCloseAlert("You added a new Bank Account to your profile!", getActivity());
+                            Utils.displayCloseAlert("You added a new Bank Account to your profile!", getActivity());
+                        }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -313,19 +325,23 @@ public class PaymentMethodsBuyFragment extends Fragment {
         buyViewModel.getApiErrorMutableLiveData().observe(getActivity(), new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
-                if (apiError != null) {
-                    if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                        objMyApplication.setResolveUrl(true);
-                        buyViewModel.meSignOn();
-                    } else if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
-                            objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
+                try {
+                    if (apiError != null) {
+                        if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                            objMyApplication.setResolveUrl(true);
+                            buyViewModel.meSignOn();
+                        } else if (!apiError.getError().getErrorDescription().equals("")) {
+                            if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                                objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
+                            } else {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());
+                            }
                         } else {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), getActivity());
                         }
-                    } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), getActivity());
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

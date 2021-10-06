@@ -495,7 +495,7 @@ public class PayRequestActivity extends AppCompatActivity implements TextWatcher
                     } else {
                         strMsg = apiError.getError().getFieldErrors().get(0);
                     }
-                    if (strMsg.toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                    if (strMsg.toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                         objMyApplication.displayAlert(PayRequestActivity.this, getString(R.string.session));
                     } else {
                         Context context = new ContextThemeWrapper(PayRequestActivity.this, R.style.Theme_QuickCard);

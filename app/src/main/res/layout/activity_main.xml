@@ -1203,7 +1203,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/ic_menu_unselect"></ImageView>
+                android:src="@drawable/ic_menu_unselect_withoutred"></ImageView>
 
             <TextView
                 android:id="@+id/tvMenu"

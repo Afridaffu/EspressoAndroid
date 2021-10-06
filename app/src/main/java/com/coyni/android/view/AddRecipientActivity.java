@@ -219,14 +219,6 @@ public class AddRecipientActivity extends AppCompatActivity implements TextWatch
                 @Override
                 public void onClick(View v) {
                     try {
-//                        if (ContextCompat.checkSelfPermission(AddRecipientActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-//                            //ask for authorisation
-//                            ActivityCompat.requestPermissions(AddRecipientActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
-//                        else {
-//                            //start your camera
-//                            Intent i = new Intent(AddRecipientActivity.this, ScanActivity.class);
-//                            startActivity(i);
-//                        }
                         Intent i = new Intent(AddRecipientActivity.this, ScanActivity.class);
                         startActivity(i);
                     } catch (Exception ex) {

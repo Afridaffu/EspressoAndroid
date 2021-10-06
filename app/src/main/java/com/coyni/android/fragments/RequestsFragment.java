@@ -236,7 +236,7 @@ public class RequestsFragment extends Fragment {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                         } else {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());
@@ -307,7 +307,7 @@ public class RequestsFragment extends Fragment {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                         } else {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());
@@ -325,7 +325,7 @@ public class RequestsFragment extends Fragment {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                         } else {
                             if (apiError.getError().getErrorDescription().toLowerCase().contains("not found")) {
@@ -351,7 +351,7 @@ public class RequestsFragment extends Fragment {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                         } else {
                             if (apiError.getError().getErrorDescription().toLowerCase().contains("not found")) {

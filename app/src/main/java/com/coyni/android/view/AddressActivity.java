@@ -300,29 +300,25 @@ public class AddressActivity extends AppCompatActivity {
         buyViewModel.getCardResponseMutableLiveData().observe(this, new Observer<CardResponse>() {
             @Override
             public void onChanged(CardResponse cardResponse) {
-                dialog.dismiss();
-                if (cardResponse != null) {
-                    cardResponseData = cardResponse.getData();
-                    Error errData = cardResponse.getError();
-//                    if (errData == null) {
-//                        if (cardResponseData.getStatus().toLowerCase().equals("authorized") || cardResponseData.getResponse().toLowerCase().contains("approved")) {
-//                            loadPreAuth(cardResponseData);
-//                        } else {
-//                            Utils.displayAlert("Test card added successfully, PreAuth is not required for this test card.", AddressActivity.this);
-//                        }
-//                    } else {
-//                        Utils.displayAlert(errData.getErrorDescription(), AddressActivity.this);
-//                    }
-                    if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
-                        if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
-                            loadPreAuth(cardResponseData);
-                        } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || cardResponseData.getResponse().toLowerCase().equals("declined")) {
-                            displayAlert_InvalidCard("Card details are invalid, please try with a valid card", AddressActivity.this);
+                try {
+                    dialog.dismiss();
+                    if (cardResponse != null) {
+                        cardResponseData = cardResponse.getData();
+                        Error errData = cardResponse.getError();
+                        if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
+                            if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
+                                loadPreAuth(cardResponseData);
+                            } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
+                                displayAlert_InvalidCard("Card details are invalid, please try with a valid card", AddressActivity.this);
+                            } else if (cardResponseData.getStatus().toLowerCase().equals("success") && cardResponseData.getAmount_authorized() == 0 && cardResponseData.getMsg() != null && !cardResponseData.getMsg().equals("")) {
+                                Utils.displayAlert(cardResponseData.getMsg(), AddressActivity.this);
+                            }
+                        } else {
+                            Utils.displayAlert(errData.getErrorDescription(), AddressActivity.this);
                         }
-                    } else {
-                        Utils.displayAlert(errData.getErrorDescription(), AddressActivity.this);
                     }
-
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -330,62 +326,41 @@ public class AddressActivity extends AppCompatActivity {
         buyViewModel.getEditCardResponseMutableLiveData().observe(this, new Observer<CardEditResponse>() {
             @Override
             public void onChanged(CardEditResponse cardEditResponse) {
-                dialog.dismiss();
-                if (cardEditResponse != null) {
-//                    Context context = new ContextThemeWrapper(AddressActivity.this, R.style.Theme_QuickCard);
-//                    new MaterialAlertDialogBuilder(context)
-//                            .setTitle(R.string.app_name)
-//                            .setMessage(cardEditResponse.getData())
-//                            .setPositiveButton("OK", (dialog, which) -> {
-//                                try {
-//                                    dialog.dismiss();
-//                                    if (getIntent().getStringExtra("fromProfilePaymentMethods") != null && getIntent().getStringExtra("fromProfilePaymentMethods").equals("fromProfilePaymentMethods")) {
-//                                        Intent i = new Intent(AddressActivity.this, BuyTokenActivityProfile.class);
-//                                        i.putExtra("subtype", getIntent().getStringExtra("subtype"));
-//                                        i.putExtra("type", getIntent().getStringExtra("type"));
-//                                        startActivity(i);
-//                                        finish();
-//                                    } else {
-//                                        Intent i = new Intent(AddressActivity.this, BuyTokenActivity.class);
-//                                        i.putExtra("subtype", getIntent().getStringExtra("subtype"));
-//                                        i.putExtra("type", getIntent().getStringExtra("type"));
-//                                        startActivity(i);
-//                                        finish();
-//                                    }
-//                                } catch (Exception ex) {
-//                                    ex.printStackTrace();
-//                                }
-//                            }).show();
+                try {
+                    dialog.dismiss();
+                    if (cardEditResponse != null) {
+                        Context context = new ContextThemeWrapper(AddressActivity.this, R.style.Theme_QuickCard);
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
 
-                    Context context = new ContextThemeWrapper(AddressActivity.this, R.style.Theme_QuickCard);
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-
-                    builder.setTitle(R.string.app_name);
-                    builder.setMessage(cardEditResponse.getData());
-                    AlertDialog dialog = builder.show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                dialog.dismiss();
-                                if (getIntent().getStringExtra("fromProfilePaymentMethods") != null && getIntent().getStringExtra("fromProfilePaymentMethods").equals("fromProfilePaymentMethods")) {
-                                    Intent i = new Intent(AddressActivity.this, BuyTokenActivityProfile.class);
-                                    i.putExtra("subtype", getIntent().getStringExtra("subtype"));
-                                    i.putExtra("type", getIntent().getStringExtra("type"));
-                                    startActivity(i);
-                                    finish();
-                                } else {
-                                    Intent i = new Intent(AddressActivity.this, BuyTokenActivity.class);
-                                    i.putExtra("subtype", getIntent().getStringExtra("subtype"));
-                                    i.putExtra("type", getIntent().getStringExtra("type"));
-                                    startActivity(i);
-                                    finish();
+                        builder.setTitle(R.string.app_name);
+                        builder.setMessage(cardEditResponse.getData());
+                        AlertDialog dialog = builder.show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    dialog.dismiss();
+                                    if (getIntent().getStringExtra("fromProfilePaymentMethods") != null && getIntent().getStringExtra("fromProfilePaymentMethods").equals("fromProfilePaymentMethods")) {
+                                        Intent i = new Intent(AddressActivity.this, BuyTokenActivityProfile.class);
+                                        i.putExtra("subtype", getIntent().getStringExtra("subtype"));
+                                        i.putExtra("type", getIntent().getStringExtra("type"));
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+                                        Intent i = new Intent(AddressActivity.this, BuyTokenActivity.class);
+                                        i.putExtra("subtype", getIntent().getStringExtra("subtype"));
+                                        i.putExtra("type", getIntent().getStringExtra("type"));
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
                                 }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
                             }
-                        }
-                    }, Integer.parseInt(context.getString(R.string.closealert)));
+                        }, Integer.parseInt(context.getString(R.string.closealert)));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -393,17 +368,21 @@ public class AddressActivity extends AppCompatActivity {
         buyViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
-                dialog.dismiss();
-                if (apiError != null) {
-                    if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
-                            objMyApplication.displayAlert(AddressActivity.this, getString(R.string.session));
+                try {
+                    dialog.dismiss();
+                    if (apiError != null) {
+                        if (!apiError.getError().getErrorDescription().equals("")) {
+                            if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                                objMyApplication.displayAlert(AddressActivity.this, getString(R.string.session));
+                            } else {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), AddressActivity.this);
+                            }
                         } else {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), AddressActivity.this);
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddressActivity.this);
                         }
-                    } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddressActivity.this);
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

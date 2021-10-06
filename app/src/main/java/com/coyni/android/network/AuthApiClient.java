@@ -21,9 +21,11 @@ public class AuthApiClient {
     public static final String TYPE_CONNECTION_INTERRUPT = "CONNECTION_INTERRUPT";
     public static final String TYPE_SESSION_TIMEOUT = "SESSION_TIMEOUT";
     private static final String TYPE_SOMETHING_WENT_WRONG = "WENT_WRONG";
-    //    private final static String URL_PRODUCTION = "http://3.94.123.86:9001/";  //QA
-    private final static String URL_PRODUCTION = "https://api-stg.coyni.com/";  //SAT
+    private final static String URL_PRODUCTION = "http://3.94.123.86:9001/";  //QA
+    //    private final static String URL_PRODUCTION = "https://api-stg.coyni.com/";  //SAT
     //    private final static String URL_PRODUCTION = "https://api.coyni.com/";  //UAT
+    private static final String Referer = "http://mobile/"; //QA
+    //    private static final String Referer = "https://members.coyni.com"; //SAT && //UAT
     private final int TIME_OUT = 120;
 
 
@@ -71,7 +73,7 @@ public class AuthApiClient {
             Request.Builder requestBuild = initialRequest.newBuilder()
                     .header(KEY_PROTOCOL_VERSION, VERSION)
                     .addHeader(KEY_CLIENT, CLIENT)
-                    .addHeader("Referer", "http://mobile/")
+                    .addHeader("Referer", Referer)
                     .addHeader("Accept", "application/json")
                     .addHeader("Content-Type", "application/json")
                     .addHeader("Accept-Language", Utils.getStrLang())

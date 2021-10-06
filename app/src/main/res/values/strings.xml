@@ -19,6 +19,7 @@
     <string name="error_code">117004</string>
     <string name="time">5000</string>
     <string name="closealert">3000</string>
+    <string name="closealert1">4000</string>
     <string name="maxlength">10</string>
     <string name="maxlendecimal">16</string>
     <string name="pwdexpire">Coyni security guidelines requires you to change your password every ( 60 days )</string>
@@ -43,4 +44,6 @@
     <string name="inactivemax">14</string>
     <string name="appminimized">1</string>
     <string name="custmsg">It seems your password has been updated. So we have disabled your FaceID/ Thumb access.You need to login again with new credentials and enable Face ID/Thumb.</string>
+    <string name="usermsg">These are live Credit/Debit Cards and Bank Accounts. Please note that do not exceed 25$ for transactions.</string>
+    <string name="default_notification_channel_id">Channel ID</string>
 </resources>

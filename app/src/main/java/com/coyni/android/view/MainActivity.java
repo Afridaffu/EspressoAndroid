@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,11 +32,14 @@ import com.coyni.android.fragments.ProfileFragment;
 import com.coyni.android.fragments.SignetAccountFragment;
 import com.coyni.android.model.usertracker.UserTracker;
 import com.coyni.android.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.coyni.android.R;
 import com.coyni.android.fragments.AccountActivatedFragment;
 import com.coyni.android.fragments.TokenFragment;
 import com.coyni.android.utils.MyApplication;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             initialization();
             receiver();
+            firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -450,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (!isMenu) {
+                            objMyApplication.setToken(true);
                             viewBack.setVisibility(View.GONE);
                             loadProfile();
 //                            tokenIndicator.setVisibility(View.GONE);
@@ -792,6 +798,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
             this.registerReceiver(broadcastReceiver, intentFilterACSD);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void firebaseToken() {
+        try {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            String token = task.getResult();
+
+                            // Log and toast
+//                            String msg = getString(R.string.msg_token_fmt, token);
+//                            Log.d("", msg);
+                            //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

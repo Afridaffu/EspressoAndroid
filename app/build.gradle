@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.application'
 }
-
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         config {
@@ -90,6 +91,13 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.1.0'
 
     implementation 'com.github.jinatonic.confetti:confetti:1.1.2'
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    //End
+
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

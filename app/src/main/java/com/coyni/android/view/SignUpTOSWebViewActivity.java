@@ -67,8 +67,8 @@ public class SignUpTOSWebViewActivity extends AppCompatActivity {
 
             String pdfurl = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
 //            String pdfurl = Uri.encode("https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf");
-//            webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + pdfurl);
-            webView.loadUrl("https://docs.google.com/viewer?url=" + pdfurl);
+            webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + pdfurl);
+//            webView.loadUrl("https://docs.google.com/viewer?url=" + pdfurl);
             webView.setWebViewClient(new Callback());
 
             imgBack.setOnClickListener(new View.OnClickListener() {

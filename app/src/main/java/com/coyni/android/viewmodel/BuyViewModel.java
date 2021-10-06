@@ -34,6 +34,8 @@ import com.coyni.android.network.AuthApiClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 
 import retrofit2.Call;
@@ -203,15 +205,25 @@ public class BuyViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<CardResponse>() {
                 @Override
                 public void onResponse(Call<CardResponse> call, Response<CardResponse> response) {
-                    if (response.isSuccessful()) {
-                        CardResponse obj = response.body();
-                        cardResponseMutableLiveData.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<CardResponse>() {
-                        }.getType();
-                        CardResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        cardResponseMutableLiveData.setValue(errorResponse);
+                    try {
+                        if (response.isSuccessful()) {
+                            CardResponse obj = response.body();
+                            cardResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CardResponse>() {
+                            }.getType();
+                            CardResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                cardResponseMutableLiveData.setValue(errorResponse);
+                            } else {
+                                String strResponse = response.errorBody().string().replaceAll("\"", "'");
+                                CardResponse errorResponse1 = gson.fromJson(strResponse, type);
+                                cardResponseMutableLiveData.setValue(errorResponse1);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
@@ -304,21 +316,36 @@ public class BuyViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<BuyTokenResponse> call, Response<BuyTokenResponse> response) {
                     try {
+                        String strResponse = "";
                         if (response.isSuccessful()) {
                             BuyTokenResponse obj = response.body();
                             buyTokResponseMutableLiveData.setValue(obj);
                         } else if (response.code() == 400) {
+                            strResponse = response.errorBody().string();
                             Gson gson = new Gson();
                             Type type = new TypeToken<BuyTokenFailure>() {
                             }.getType();
                             BuyTokenFailure errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            buyTokenFailureMutableLiveData.setValue(errorResponse);
+                            if (errorResponse != null) {
+                                buyTokenFailureMutableLiveData.setValue(errorResponse);
+                            } else {
+                                strResponse = response.errorBody().string().replaceAll("\"", "'");
+                                BuyTokenFailure errorResponse1 = gson.fromJson(strResponse, type);
+                                buyTokenFailureMutableLiveData.setValue(errorResponse1);
+                            }
                         } else {
+                            strResponse = response.errorBody().string();
                             Gson gson = new Gson();
                             Type type = new TypeToken<APIError>() {
                             }.getType();
                             APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                strResponse = response.errorBody().string().replaceAll("\"", "'");
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

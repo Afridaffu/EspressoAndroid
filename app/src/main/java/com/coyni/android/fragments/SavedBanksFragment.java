@@ -414,7 +414,7 @@ public class SavedBanksFragment extends Fragment {
                             if (apiError.getError().getFieldErrors() != null) {
                                 Utils.displayAlert(apiError.getError().getFieldErrors().get(0), getActivity());
                             } else {
-                                if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                                if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                                     objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                                 } else {
                                     Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());

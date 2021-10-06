@@ -145,11 +145,11 @@ public class AddEditCardDetailsActivity extends AppCompatActivity {
             //cvScan = (CardView) findViewById(R.id.cvScan);
             LinearLayout layoutProceed = (LinearLayout) findViewById(R.id.layoutProceed);
             LinearLayout layoutStateArrow = (LinearLayout) findViewById(R.id.layoutStateArrow);
-            etName.setText(Utils.capitalize(objMyApplication.getStrUser()));
+//            etName.setText(Utils.capitalize(objMyApplication.getStrUser()));
             etName.setEnabled(false);
             if (objMyApplication.getSelectedCard() != null && getIntent().getStringExtra("from") == null) {
                 selectedCard = objMyApplication.getSelectedCard();
-//                etName.setText(Utils.capitalize(selectedCard.getName()));
+                etName.setText(Utils.capitalize(selectedCard.getName()));
                 etNumber.setText("**** **** **** " + selectedCard.getLastFour());
                 etExpiry.setText(selectedCard.getExpiryDate());
                 imgCardType.setVisibility(View.VISIBLE);

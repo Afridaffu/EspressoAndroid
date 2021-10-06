@@ -62,7 +62,7 @@
                 android:layout_toRightOf="@+id/cvType"
                 android:fontFamily="@font/opensans_bold"
                 android:singleLine="true"
-                android:text="GBT sent to 2732YDG..."
+                android:text="CYN sent to 2732YDG..."
                 android:textColor="@color/smsotp"
                 android:textSize="@dimen/text_size_12sp"></TextView>
 
@@ -75,7 +75,7 @@
                 android:layout_marginTop="7dp"
                 android:layout_toRightOf="@+id/cvType"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="50.00 GBT"
+                android:text="50.00 CYN"
                 android:textColor="@color/baltext"
                 android:textSize="@dimen/text_size_12sp"></TextView>
 
@@ -86,7 +86,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="-10.00 GBT"
+                android:text="-10.00 CYN"
                 android:textColor="@color/hintcolor"
                 android:textSize="@dimen/text_size_12sp"></TextView>
 

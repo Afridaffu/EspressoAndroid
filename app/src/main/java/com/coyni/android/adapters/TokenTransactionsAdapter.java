@@ -3,6 +3,7 @@ package com.coyni.android.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,6 +184,28 @@ public class TokenTransactionsAdapter extends RecyclerView.Adapter<TokenTransact
             ex.printStackTrace();
         }
         return strValue;
+    }
+
+    public void addLoadingView() {
+        //add loading item
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                listTransactionsItem.add(null);
+                notifyItemInserted(listTransactionsItem.size() - 1);
+            }
+        });
+    }
+
+    public void removeLoadingView() {
+        //Remove loading item
+        listTransactionsItem.remove(listTransactionsItem.size() - 1);
+        notifyItemRemoved(listTransactionsItem.size());
+    }
+
+    public void addData(List<TokenTransactionsItem> listItems) {
+        this.listTransactionsItem.addAll(listItems);
+        notifyDataSetChanged();
     }
 
 }

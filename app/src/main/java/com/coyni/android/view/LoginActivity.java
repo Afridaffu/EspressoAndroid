@@ -141,9 +141,9 @@ public class LoginActivity extends AppCompatActivity {
                                 strPwd = "";
                             }
                             if (compareCredentials()) {
-                                strEmail = etEmail.getText().toString().trim();
+                                strEmail = etEmail.getText().toString().trim().toLowerCase();
                                 strPwd = etPassword.getText().toString().trim();
-                                objMyApplication.setStrLEmail(strEmail);
+                                objMyApplication.setStrLEmail(strEmail.toLowerCase());
                                 objMyApplication.setStrLPwd(strPwd);
                                 if (!isFace && Utils.checkAuthentication(LoginActivity.this)) {
                                     if (!isFaceLock) {
@@ -293,7 +293,7 @@ public class LoginActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(LoginActivity.this, getString(R.string.session));
                         } else {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this);
@@ -315,7 +315,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (emailResponse != null) {
                     Intent i = new Intent(LoginActivity.this, EmailOtpActivity.class);
                     i.putExtra("From", "passwordExpiredPopup");
-                    i.putExtra("email", etEmail.getText().toString());
+                    i.putExtra("email", etEmail.getText().toString().toLowerCase());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 }
@@ -389,7 +389,7 @@ public class LoginActivity extends AppCompatActivity {
                         dialog.setIndeterminate(false);
                         dialog.setMessage("Please wait...");
                         dialog.show();
-                        loginViewModel.emailotpresend(etEmail.getText().toString());
+                        loginViewModel.emailotpresend(etEmail.getText().toString().toLowerCase());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -466,11 +466,11 @@ public class LoginActivity extends AppCompatActivity {
     private void saveCredentials() {
         try {
             if (strEmail.equals("") && strPwd.equals("")) {
-                strEmail = etEmail.getText().toString().trim();
+                strEmail = etEmail.getText().toString().trim().toLowerCase();
                 strPwd = etPassword.getText().toString().trim();
             }
             mydatabase.execSQL("Delete from tblUserDetails");
-            mydatabase.execSQL("INSERT INTO tblUserDetails(id,username,password) VALUES(null,'" + strEmail + "','" + strPwd + "')");
+            mydatabase.execSQL("INSERT INTO tblUserDetails(id,username,password) VALUES(null,'" + strEmail.toLowerCase() + "','" + strPwd + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -640,9 +640,7 @@ public class LoginActivity extends AppCompatActivity {
         Boolean value = true;
         try {
             if (!strEmail.equals("") && !strPwd.equals("")) {
-//                if (!etEmail.getText().toString().equals("") && !etEmail.getText().toString().equals(strOldEmail) &&
-//                        !etPassword.getText().toString().equals("") && !etPassword.getText().toString().equals(strOldPwd)) {
-                if (!etEmail.getText().toString().trim().equals("") && !etEmail.getText().toString().trim().equals(strEmail.trim())) {
+                if (!etEmail.getText().toString().trim().toLowerCase().equals("") && !etEmail.getText().toString().trim().toLowerCase().equals(strEmail.trim().toLowerCase())) {
                     value = false;
                 } else {
                     value = true;

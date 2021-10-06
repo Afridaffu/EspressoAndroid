@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,11 +44,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.coyni.android.listener.OnLoadMoreListener;
+import com.coyni.android.listener.RecyclerViewLoadMoreScroll;
 import com.coyni.android.model.GlideApp;
 import com.coyni.android.model.bank.SignOn;
 import com.coyni.android.model.notification.Notifications;
@@ -133,14 +137,16 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
     Switch switchCustom;
     ScrollView scrollView;
     SwipeRefreshLayout swipeRefreshLayout;
-    Boolean isFilters = false, isRefresh = false, isNoData = false;
+    Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
     RecyclerView rvTransactions;
     View viewDisableLayout;
     FilterColumns objFilters;
     int totalItemCount, currentPage = 0, total = 0;
-//    ProgressBar pbLoader;
-//    NestedScrollView nvScroll;
-//    List<TokenTransactionsItem> items = new ArrayList<>();
+    ProgressBar pbLoader;
+    //    NestedScrollView nvScroll;
+    List<TokenTransactionsItem> items = new ArrayList<>();
+    private RecyclerViewLoadMoreScroll scrollListener;
+    TokenTransactionsAdapter tokenTransactionsAdapter;
 
     public TokenFragment() {
     }
@@ -282,6 +288,17 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+//        try {
+//            LocalBroadcastManager.getInstance(getActivity()).registerReceiver((receiver),
+//                    new IntentFilter(PushNotificationService.REQUEST_ACCEPT)
+//            );
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -291,7 +308,24 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        try {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            if (objMyApplication.getFromWhichFragment().equals("transdetails")) {
+                objMyApplication.setFromWhichFragment("");
+                if (objMap != null && objMap.size() == 0) {
+                    objMap.put("walletCategory", Utils.walletCategory);
+                }
+            } else {
+                objMap = new HashMap<>();
+                objMap.put("walletCategory", Utils.walletCategory);
+            }
+            if (Utils.checkInternet(context)) {
+                dashboardViewModel.meTransactions(objMap);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -312,7 +346,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             cvBuyToken = view.findViewById(R.id.cvBuyToken);
             cvProfilePic = view.findViewById(R.id.cvProfilePic);
             imgProfile = view.findViewById(R.id.imgProfile);
-//            pbLoader = view.findViewById(R.id.pbLoader);
+            pbLoader = view.findViewById(R.id.pbLoader);
 //            nvScroll = view.findViewById(R.id.nvScroll);
             swipeRefreshLayout = view.findViewById(R.id.refreshLayout);
             popupFilter = new Dialog(context, R.style.DialogTheme);
@@ -342,7 +376,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                     dialog.getWindow().setGravity(Gravity.CENTER);
                     dialog.show();
                     objMap.put("walletCategory", Utils.walletCategory);
-//                    objMap.put("pageSize", "20");
+//                    objMap.put("pageSize", String.valueOf(Utils.pageSize));
 //                    objMap.put("pageNo", String.valueOf(currentPage));
                     dashboardViewModel.meTransactions(objMap);
                     dashboardViewModel.meWallet();
@@ -386,6 +420,13 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                         isRefresh = true;
                         if (isNoData) {
                             isNoData = false;
+                            currentPage = 0;
+                            objMap = new HashMap<>();
+                            objMap.put("walletCategory", Utils.walletCategory);
+//                            objMap.put("pageSize", String.valueOf(Utils.pageSize));
+//                            objMap.put("pageNo", String.valueOf(currentPage));
+                        }
+                        if (objMap != null && objMap.size() == 0) {
                             objMap = new HashMap<>();
                             objMap.put("walletCategory", Utils.walletCategory);
                         }
@@ -416,11 +457,16 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 if (swipeRefreshLayout != null) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
-                objMyApplication.setTokenTransactions(tokenTransactions);
+//                objMyApplication.setTokenTransactions(tokenTransactions);
                 if (tokenTransactions != null) {
+//                    if (currentPage == 0) {
+//                        bindTransactions(tokenTransactions);
+//                    } else {
+//                        loadMore(tokenTransactions.getData().getItems());
+//                    }
                     bindTransactions(tokenTransactions);
                 }
-                new FetchData(getActivity()).execute();
+//                new FetchData(getActivity()).execute();
             }
         });
 
@@ -470,6 +516,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                     objMyApplication.setUserTracker(userTracker);
                     bindUserTracker(userTracker);
                 }
+                new FetchData(getActivity()).execute();
             }
         });
 
@@ -506,7 +553,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 }
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                             objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
                         } else {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), getActivity());
@@ -632,7 +679,6 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
 
     private void bindTransactions(TokenTransactions tokenTransactions) {
         RelativeLayout layoutTransactions, layoutFirst;
-        TokenTransactionsAdapter tokenTransactionsAdapter;
         try {
             rvTransactions = (RecyclerView) view.findViewById(R.id.rvTransactions);
             layoutTransactions = (RelativeLayout) view.findViewById(R.id.layoutTransactions);
@@ -642,6 +688,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 layoutFirst.setVisibility(View.GONE);
                 layoutTransactions.setVisibility(View.VISIBLE);
                 total = tokenTransactions.getData().getTotalPages();
+                objMyApplication.setTokenTransactions(tokenTransactions);
                 tokenTransactionsAdapter = new TokenTransactionsAdapter(tokenTransactions.getData().getItems(), context);
 //                items.addAll(tokenTransactions.getData().getItems());
 //                TokenTransactions obj = new TokenTransactions();
@@ -658,7 +705,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 rvTransactions.setLayoutManager(mLayoutManager);
                 rvTransactions.setItemAnimator(new DefaultItemAnimator());
                 rvTransactions.setAdapter(tokenTransactionsAdapter);
-                //pbLoader.setVisibility(View.GONE);
+                pbLoader.setVisibility(View.GONE);
                 rvTransactions.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
@@ -669,15 +716,16 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                     public void onScrolled(@NonNull @NotNull RecyclerView recyclerView, int dx, int dy) {
                         try {
                             super.onScrolled(recyclerView, dx, dy);
-                            swipeRefreshLayout.setEnabled(mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
-//                            if (dy > 0) { //check for scroll down
-//                                visibleItemCount = mLayoutManager.getChildCount();
-//                                totalItemCount = mLayoutManager.getItemCount();
-//                                pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-//
-//                                if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-//                                    Log.v("...", "Last Item Wow !");
-//                                    // Do pagination.. i.e. fetch new data
+                            //swipeRefreshLayout.setEnabled(mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
+                            LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                            int totalItemCount = layoutManager.getItemCount();
+                            int lastVisible = layoutManager.findLastVisibleItemPosition();
+
+                            boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+//                            if (totalItemCount > 0 && endHasBeenReached) {
+//                                //you have reached to the bottom of your recycler view
+//                                if (!isAPICalled) {
+//                                    isAPICalled = true;
 //                                    if (currentPage <= (total - 1)) {
 //                                        pbLoader.setVisibility(View.VISIBLE);
 //                                        currentPage = currentPage + 1;
@@ -691,41 +739,14 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
 //                                    }
 //                                }
 //                            } else {
-//                                swipeRefreshLayout.setEnabled(mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
+//                                pbLoader.setVisibility(View.GONE);
+//                                isAPICalled = false;
 //                            }
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
                 });
-
-//                nvScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//                    @Override
-//                    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                        try {
-//                            if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-//                                // in this method we are incrementing page number,
-//                                // making progress bar visible and calling get data method.
-//                                //page++;
-//                                pbLoader.setVisibility(View.VISIBLE);
-//                                if (currentPage <= (total - 1)) {
-//                                    pbLoader.setVisibility(View.VISIBLE);
-//                                    currentPage = currentPage + 1;
-//                                    objMap = new HashMap<>();
-//                                    objMap.put("walletCategory", Utils.walletCategory);
-//                                    objMap.put("pageSize", String.valueOf(tokenTransactions.getData().getPageSize()));
-//                                    objMap.put("pageNo", String.valueOf(currentPage));
-//                                    dashboardViewModel.meTransactions(objMap);
-//                                } else {
-//                                    pbLoader.setVisibility(View.GONE);
-//                                }
-//                            }
-//                        } catch (Exception ex) {
-//                            ex.printStackTrace();
-//                        }
-//                    }
-//                });
-
             } else {
                 if (!isFilters && !isRefresh) {
                     layoutFirst.setVisibility(View.VISIBLE);
@@ -738,6 +759,28 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                     rvTransactions.setVisibility(View.GONE);
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadMore(List<TokenTransactionsItem> listItems) {
+        try {
+            tokenTransactionsAdapter.addLoadingView();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        tokenTransactionsAdapter.removeLoadingView();
+                        tokenTransactionsAdapter.addData(listItems);
+                        tokenTransactionsAdapter.notifyDataSetChanged();
+                        pbLoader.setVisibility(View.GONE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }, 2000);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1064,7 +1107,10 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             strTo = "";
             strTransId = "";
             objMap = new HashMap<>();
+            currentPage = 0;
             objMap.put("walletCategory", Utils.walletCategory);
+//            objMap.put("pageSize", String.valueOf(Utils.pageSize));
+//            objMap.put("pageNo", String.valueOf(currentPage));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1072,9 +1118,22 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
 
     private void prepareFilters() {
         try {
-            if (!etTransactionId.getText().toString().equals("")) {
-                if (!strTransId.equals("")) {
-                    objMap.put("gbxTransactionId", strTransId);
+            if (objMap != null && objMap.size() == 0) {
+                objMap.put("walletCategory", Utils.walletCategory);
+            }
+            if (!etTransactionId.getText().toString().equals("") && !strTransId.equals("")) {
+                if (etTransactionId.getText().toString().length() > 30) {
+                    if (etTransactionId.getText().toString().substring(0, 30).equals(strTransId.substring(0, 30))) {
+                        objMap.put("gbxTransactionId", strTransId);
+                    } else {
+                        objMap.put("gbxTransactionId", etTransactionId.getText().toString());
+                    }
+                } else {
+                    if (etTransactionId.getText().toString().equals(strTransId)) {
+                        objMap.put("gbxTransactionId", strTransId);
+                    } else {
+                        objMap.put("gbxTransactionId", etTransactionId.getText().toString());
+                    }
                 }
             }
 //            if (!strFrom.equals("")) {
@@ -1109,6 +1168,10 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             if (objMyApplication.getTypeId() != -1) {
                 objMap.put("transactionType", String.valueOf(objMyApplication.getTypeId()));
             }
+//            currentPage = 0;
+//            if (Build.VERSION.SDK_INT >= 24) {
+//                objMap.replace("pageNo", String.valueOf(currentPage));
+//            }
             objMyApplication.setFiltersMap(objMap);
             popupFilter.dismiss();
             dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);

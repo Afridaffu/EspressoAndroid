@@ -357,7 +357,7 @@ public class BuyTokenPreviewActivity extends AppCompatActivity {
                     layoutProgress.setVisibility(View.GONE);
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                            if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                                 objMyApplication.displayAlert(BuyTokenPreviewActivity.this, getString(R.string.session));
                             } else {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPreviewActivity.this);

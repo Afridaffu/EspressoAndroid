@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "888647666102",
+    "project_id": "coyni-987c7",
+    "storage_bucket": "coyni-987c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888647666102:android:4720cecae0ee0f92e5d917",
+        "android_client_info": {
+          "package_name": "com.coyni.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "888647666102-umv1m7qm7kfngk7kl2iuaafoprr5jml2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEmsnLOe9J2GgXbailoKVOChjz0zBIDjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "888647666102-umv1m7qm7kfngk7kl2iuaafoprr5jml2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

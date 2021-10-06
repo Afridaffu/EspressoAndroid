@@ -151,21 +151,34 @@ public class LoginViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<Login> call, Response<Login> response) {
                     try {
+                        String strResponse = "";
                         if (response.isSuccessful()) {
                             Login obj = response.body();
                             loginLiveData.setValue(obj);
                         } else if (response.code() == 500) {
+                            strResponse = response.errorBody().string();
                             Gson gson = new Gson();
                             Type type = new TypeToken<Login>() {
                             }.getType();
                             Login errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                            loginLiveData.setValue(errorResponse);
+                            if (errorResponse != null) {
+                                loginLiveData.setValue(errorResponse);
+                            } else {
+                                Login errorResponse1 = gson.fromJson(strResponse, type);
+                                loginLiveData.setValue(errorResponse1);
+                            }
                         } else {
+                            strResponse = response.errorBody().string();
                             Gson gson = new Gson();
                             Type type = new TypeToken<APIError>() {
                             }.getType();
                             APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

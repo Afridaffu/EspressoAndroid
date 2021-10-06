@@ -57,6 +57,7 @@ public class BuyTokenActivityProfile extends AppCompatActivity {
     CardView cvAdd;
     ViewPager mViewPager;
     ViewPagerCardsAdapter mViewPagerAdapter;
+    Boolean isDel = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,12 +234,16 @@ public class BuyTokenActivityProfile extends AppCompatActivity {
             cvRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    buyViewModel.deleteCards(String.valueOf(objData.getId()));
-                    dialog = new ProgressDialog(BuyTokenActivityProfile.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.getWindow().setGravity(Gravity.CENTER);
-                    dialog.show();
+                    try {
+                        buyViewModel.deleteCards(String.valueOf(objData.getId()));
+                        dialog = new ProgressDialog(BuyTokenActivityProfile.this, R.style.MyAlertDialogStyle);
+                        dialog.setIndeterminate(false);
+                        dialog.setMessage("Please wait...");
+                        dialog.getWindow().setGravity(Gravity.CENTER);
+                        dialog.show();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {

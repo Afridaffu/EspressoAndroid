@@ -169,7 +169,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         if (after < count) {
-            isDel = true;
+//            isDel = true;
         }
     }
 
@@ -193,13 +193,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     etPay.setText("");
                 } else if (s.length() == 0) {
                     etGet.setText(" ");
-                    isDel = false;
                 } else {
                     etPay.removeTextChangedListener(BuyTokenActivity.this);
                     etPay.setText("");
                     etPay.addTextChangedListener(BuyTokenActivity.this);
                     etGet.setText(" ");
-                    isDel = false;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -256,6 +254,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvExchange.setVisibility(View.VISIBLE);
             isInstantPay = false;
             etPay.requestFocus();
+//            Utils.displayLongCloseAlert(getString(R.string.usermsg), BuyTokenActivity.this);
             imgLogo.setBackgroundResource(R.drawable.ic_buyt_trans);
             if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("card")) {
                 layoutCard.setVisibility(View.VISIBLE);
@@ -599,7 +598,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             if (apiError.getError().getFieldErrors() != null) {
                                 Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenActivity.this);
                             } else {
-                                if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                                if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                                     objMyApplication.displayAlert(BuyTokenActivity.this, getString(R.string.session));
                                 } else {
                                     Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenActivity.this);
@@ -663,7 +662,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             if (apiError.getError().getFieldErrors() != null) {
                                 Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenActivity.this);
                             } else {
-                                if (apiError.getError().getErrorDescription().toLowerCase().contains("expire") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+                                if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
                                     objMyApplication.displayAlert(BuyTokenActivity.this, getString(R.string.session));
                                 } else {
                                     Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenActivity.this);
@@ -1129,12 +1128,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             cvRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    buyViewModel.deleteBanks(String.valueOf(objData.getId()));
-                    dialog = new ProgressDialog(BuyTokenActivity.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.getWindow().setGravity(Gravity.CENTER);
-                    dialog.show();
+                    try {
+                        buyViewModel.deleteBanks(String.valueOf(objData.getId()));
+                        dialog = new ProgressDialog(BuyTokenActivity.this, R.style.MyAlertDialogStyle);
+                        dialog.setIndeterminate(false);
+                        dialog.setMessage("Please wait...");
+                        dialog.getWindow().setGravity(Gravity.CENTER);
+                        dialog.show();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {
@@ -1182,5 +1185,4 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             ex.printStackTrace();
         }
     }
-
 }

@@ -97,6 +97,7 @@ public class Utils {
     public static final int remindId = 76;
     public static final int declineId = 67;
     public static final int acceptedId = 60;
+    public static final int pageSize = 100;
 
     public static String getStrLang() {
         return strLang;
@@ -186,6 +187,7 @@ public class Utils {
         new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.app_name)
                 .setMessage(msg)
+                .setCancelable(false)
                 .setPositiveButton("OK", (dialog, which) -> {
                     dialog.dismiss();
                 }).show();
@@ -604,6 +606,21 @@ public class Utils {
             ex.printStackTrace();
         }
         return value;
+    }
+
+    public static void displayLongCloseAlert(String msg, Activity activity) {
+        Context context = new ContextThemeWrapper(activity, R.style.Theme_QuickCard);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+
+        builder.setTitle(R.string.app_name);
+        builder.setMessage(msg);
+        AlertDialog dialog = builder.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, Integer.parseInt(context.getString(R.string.closealert1)));
     }
 
 }
