@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.coyni.android.R;
+import com.coyni.android.fragments.TokenFragment;
 import com.coyni.android.model.transactions.TokenTransactionsItem;
 import com.coyni.android.utils.MyApplication;
 import com.coyni.android.utils.Utils;
@@ -21,12 +23,14 @@ import com.coyni.android.view.TransactionDetailsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class TokenTransactionsAdapter extends RecyclerView.Adapter<TokenTransactionsAdapter.MyViewHolder> {
     List<TokenTransactionsItem> listTransactionsItem;
     Context mContext;
     MyApplication objMyApplication;
+    TokenFragment tokenFragment;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvDate, tvDescription, tvBalance, tvAmount, tvStatus;
@@ -46,10 +50,11 @@ public class TokenTransactionsAdapter extends RecyclerView.Adapter<TokenTransact
     }
 
 
-    public TokenTransactionsAdapter(List<TokenTransactionsItem> list, Context context) {
+    public TokenTransactionsAdapter(List<TokenTransactionsItem> list, Context context, TokenFragment tokenFragment) {
         this.mContext = context;
         this.listTransactionsItem = list;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
+        this.tokenFragment = tokenFragment;
     }
 
     @Override
@@ -160,6 +165,23 @@ public class TokenTransactionsAdapter extends RecyclerView.Adapter<TokenTransact
             });
 
 
+            if (position == listTransactionsItem.size() - 1 && listTransactionsItem.size() < tokenFragment.totalItemCount) {
+                Log.e("size", listTransactionsItem.size() + "");
+                tokenFragment.currentPage = tokenFragment.currentPage + 1;
+
+                if (tokenFragment.currentPage <= (tokenFragment.total - 1)) {
+                    tokenFragment.pbLoader.setVisibility(View.VISIBLE);
+
+                    tokenFragment.objMap = new HashMap<>();
+                    tokenFragment.objMap.put("walletCategory", Utils.walletCategory);
+                    tokenFragment.objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                    tokenFragment.objMap.put("pageNo", String.valueOf(tokenFragment.currentPage));
+                    tokenFragment.dashboardViewModel.meTransactions(tokenFragment.objMap);
+                } else {
+                    tokenFragment.pbLoader.setVisibility(View.GONE);
+                }
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -209,7 +231,3 @@ public class TokenTransactionsAdapter extends RecyclerView.Adapter<TokenTransact
     }
 
 }
-
-
-
-

@@ -123,9 +123,9 @@ public class EmailOtpActivity extends AppCompatActivity {
             cvVerify.setEnabled(false);
             Utils.statusBar(EmailOtpActivity.this);
             if (getIntent().getStringExtra("From").equals("forgotPwd") || getIntent().getStringExtra("From").equals("passwordExpiredPopup")) {
-                strMail = getIntent().getStringExtra("email");
+                strMail = getIntent().getStringExtra("email").trim();
             } else {
-                strMail = objMyApplication.getStrEmail();
+                strMail = objMyApplication.getStrEmail().trim();
             }
 
             String text = strMail.split("@")[1];

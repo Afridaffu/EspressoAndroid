@@ -171,7 +171,7 @@
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="end"
                         android:singleLine="true"
-                        android:text="2.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_14sp"></TextView>
                 </LinearLayout>
@@ -203,7 +203,7 @@
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="end"
                         android:singleLine="true"
-                        android:text="12.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_14sp"></TextView>
                 </LinearLayout>
@@ -245,7 +245,7 @@
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="end"
                         android:singleLine="true"
-                        android:text="98.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_14sp"></TextView>
                 </LinearLayout>

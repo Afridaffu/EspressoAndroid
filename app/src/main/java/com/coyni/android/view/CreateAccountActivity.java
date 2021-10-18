@@ -142,7 +142,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (custRegisterResponse != null) {
                     try {
-                        objContext.setStrEmail(etEmail.getText().toString());
+                        objContext.setStrEmail(etEmail.getText().toString().trim());
                         Intent i = new Intent(CreateAccountActivity.this, SmsOtpActivity.class);
                         i.putExtra("countryCode", strCode);
                         i.putExtra("phone", phoneNumber);

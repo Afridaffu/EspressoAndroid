@@ -439,7 +439,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="0.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_14sp"></TextView>
                 </RelativeLayout>

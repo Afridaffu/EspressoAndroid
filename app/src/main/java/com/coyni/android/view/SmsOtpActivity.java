@@ -159,7 +159,7 @@ public class SmsOtpActivity extends AppCompatActivity {
                         tvVerify.setVisibility(View.GONE);
                         tvInvalid.setVisibility(View.GONE);
                         SmsRequest smsRequest = new SmsRequest();
-                        smsRequest.setEmail(objMyApplication.getStrEmail());
+                        smsRequest.setEmail(objMyApplication.getStrEmail().trim());
                         smsRequest.setOtp(etOtp1.getText().toString() + etOtp2.getText().toString() + etOtp3.getText().toString() + etOtp4.getText().toString() +
                                 etOtp5.getText().toString() + etOtp6.getText().toString());
                         loginViewModel.smsotp(smsRequest);

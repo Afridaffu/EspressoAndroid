@@ -254,7 +254,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="10dp"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="45.00 GBT"
+                    android:text=""
                     android:textColor="@color/headcolor"
                     android:textSize="@dimen/text_size_16sp"></TextView>
             </RelativeLayout>

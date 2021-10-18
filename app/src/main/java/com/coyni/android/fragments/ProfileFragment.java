@@ -228,6 +228,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     viewBottomSheet = view.findViewById(R.id.bottom_sheet_security);
                     bottomSheetBehavior = BottomSheetBehavior.from(viewBottomSheet);
                     viewBottomSheet.setVisibility(View.VISIBLE);
+                    viewBack = view.findViewById(R.id.viewBack);
                     viewBack.setVisibility(View.VISIBLE);
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
@@ -250,6 +251,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     viewBottomSheet = view.findViewById(R.id.bottom_sheet_facepin);
                     bottomSheetBehavior = BottomSheetBehavior.from(viewBottomSheet);
                     viewBottomSheet.setVisibility(View.VISIBLE);
+                    viewBack = view.findViewById(R.id.viewBack);
                     viewBack.setVisibility(View.VISIBLE);
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } catch (Exception ex) {
@@ -371,11 +373,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 objMyApplication.setFromWhichFragment("");
                 if (Utils.checkInternet(context)) {
-//                    dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
-//                    dialog.setIndeterminate(false);
-//                    dialog.setMessage("Please wait...");
-//                    dialog.getWindow().setGravity(Gravity.CENTER);
-//                    dialog.show();
                     dashboardViewModel.mePreferences();
                     getPreferences();
                 }
@@ -389,8 +386,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 viewBottomSheet = getView().findViewById(R.id.bottom_sheet_Preferences);
                 bottomSheetBehavior = BottomSheetBehavior.from(viewBottomSheet);
                 bottomSheetBehavior.setPeekHeight(0);
-                viewBottomSheet.setVisibility(View.VISIBLE);
+
+                viewBack = view.findViewById(R.id.viewBack);
                 viewBack.setVisibility(View.VISIBLE);
+                viewBottomSheet.setVisibility(View.VISIBLE);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 bottomSheetBehavior.setDraggable(false);
             }
@@ -609,7 +608,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     objMyApplication.setStrUser(Utils.capitalize(user.getData().getFirstName() + " " + user.getData().getLastName()));
                     objMyApplication.setStrUserCode(user.getData().getFirstName().substring(0, 1).toUpperCase() + user.getData().getLastName().substring(0, 1).toUpperCase());
 
-                    objMyApplication.setStrEmail(user.getData().getEmail());
+                    objMyApplication.setStrEmail(user.getData().getEmail().trim());
                     objMyApplication.setStrPhoneNum(user.getData().getPhoneNumber());
                     objMyApplication.setStrAddressLine1(user.getData().getAddressLine1());
                     objMyApplication.setStrAddressLine2(user.getData().getAddressLine2());

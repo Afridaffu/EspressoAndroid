@@ -157,7 +157,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/opensans_bold"
-            android:text="98.00 GBT"
+            android:text=""
             android:textColor="@color/headcolor"
             android:textSize="@dimen/text_size_14sp"></TextView>
 
@@ -188,7 +188,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:fontFamily="@font/opensans_bold"
-            android:text="52.00 GBT"
+            android:text=""
             android:textColor="@color/headcolor"
             android:textSize="@dimen/text_size_14sp"></TextView>
 
@@ -326,7 +326,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/opensans_bold"
-            android:text="0.00 GBT"
+            android:text=""
             android:textColor="@color/headcolor"
             android:textSize="@dimen/text_size_14sp"></TextView>
 

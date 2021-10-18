@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -68,6 +69,8 @@ public class SignetAccountFragment extends Fragment {
     Dialog popupStates;
     StatesListAdapter statesListAdapter;
     List<States> listStates = new ArrayList<>();
+    private long mLastClickTime = 0;
+
 
     public SignetAccountFragment() {
     }
@@ -169,6 +172,10 @@ public class SignetAccountFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.hideKeypad(getActivity(), v);
                         if (validation()) {
                             dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
@@ -247,11 +254,6 @@ public class SignetAccountFragment extends Fragment {
                         @Override
                         public void run() {
                             if (strScreen.equals("payment")) {
-//                            dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
-//                            dialog.setIndeterminate(false);
-//                            dialog.setMessage("Please wait...");
-//                            dialog.getWindow().setGravity(Gravity.CENTER);
-//                            dialog.show();
                                 buyViewModel.meBanks();
                             } else {
                                 getActivity().onBackPressed();

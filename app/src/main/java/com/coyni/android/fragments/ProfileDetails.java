@@ -293,7 +293,7 @@ public class ProfileDetails extends Fragment {
                         objMyApplication.setStrUser(Utils.capitalize(user.getData().getFirstName() + " " + user.getData().getLastName()));
                         objMyApplication.setStrUserCode(user.getData().getFirstName().substring(0, 1).toUpperCase() + user.getData().getLastName().substring(0, 1).toUpperCase());
                         userId = user.getData().getId();
-                        objMyApplication.setStrEmail(user.getData().getEmail());
+                        objMyApplication.setStrEmail(user.getData().getEmail().trim());
                         objMyApplication.setStrPhoneNum(user.getData().getPhoneNumber());
                         objMyApplication.setStrAddressLine1(user.getData().getAddressLine1());
                         objMyApplication.setStrAddressLine2(user.getData().getAddressLine2());

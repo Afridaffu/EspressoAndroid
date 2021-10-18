@@ -180,7 +180,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="right"
-                        android:text="45.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_16sp"></TextView>
                 </LinearLayout>
@@ -276,7 +276,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="right"
-                        android:text="1.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_16sp"></TextView>
                 </LinearLayout>
@@ -373,7 +373,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="right"
-                        android:text="45.00 GBT"
+                        android:text=""
                         android:textColor="@color/headcolor"
                         android:textSize="@dimen/text_size_16sp"></TextView>
                 </LinearLayout>

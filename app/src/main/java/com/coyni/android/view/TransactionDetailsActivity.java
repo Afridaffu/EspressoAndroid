@@ -576,7 +576,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             tvActAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this);
+                    if (objData.getTransactionSubtype().toLowerCase().replace(" ", "").equals("senttokens")) {
+                        Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this);
+                    } else {
+                        Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this);
+                    }
                 }
             });
 

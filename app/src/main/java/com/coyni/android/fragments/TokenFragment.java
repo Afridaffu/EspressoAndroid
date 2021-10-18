@@ -111,7 +111,7 @@ import java.util.Map;
 public class TokenFragment extends Fragment implements View.OnClickListener, TextWatcher {
     View view;
     static Context context;
-    DashboardViewModel dashboardViewModel;
+    public DashboardViewModel dashboardViewModel;
     NotificationsViewModel notificationsViewModel;
     BuyViewModel buyViewModel;
     PayViewModel payViewModel;
@@ -131,7 +131,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
     TypesAdapter typesAdapter;
     DateSelectionAdapter dateAdapter;
     ColumnSelectionAdapter columnsAdapter;
-    Map<String, String> objMap = new HashMap<>();
+    public Map<String, String> objMap = new HashMap<>();
     LinearLayout layoutDone, lyMainColumns, layoutDates, layoutExport, layoutTypeArrow, layoutStatusArrow;
     TextView tvDefault, tvCustom, tvColumnHead, tvEFromDate, tvEToDate, tvEClear;
     Switch switchCustom;
@@ -141,12 +141,14 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
     RecyclerView rvTransactions;
     View viewDisableLayout;
     FilterColumns objFilters;
-    int totalItemCount, currentPage = 0, total = 0;
-    ProgressBar pbLoader;
+    public int totalItemCount, currentPage = 0, total = 0;
+    public ProgressBar pbLoader;
     //    NestedScrollView nvScroll;
     List<TokenTransactionsItem> items = new ArrayList<>();
     private RecyclerViewLoadMoreScroll scrollListener;
     TokenTransactionsAdapter tokenTransactionsAdapter;
+
+    TokenFragment tokenFragment;
 
     public TokenFragment() {
     }
@@ -314,13 +316,18 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 objMyApplication.setFromWhichFragment("");
                 if (objMap != null && objMap.size() == 0) {
                     objMap.put("walletCategory", Utils.walletCategory);
+                    objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                    objMap.put("pageNo", String.valueOf(currentPage));
                 }
             } else {
                 objMap = new HashMap<>();
                 objMap.put("walletCategory", Utils.walletCategory);
+                objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                objMap.put("pageNo", String.valueOf(currentPage));
             }
             if (Utils.checkInternet(context)) {
                 dashboardViewModel.meTransactions(objMap);
+                dashboardViewModel.meWallet();
             }
 
         } catch (Exception ex) {
@@ -333,6 +340,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tokenlayout, container, false);
         try {
+            tokenFragment = this;
             objMyApplication = (MyApplication) context.getApplicationContext();
             objMyApplication.setFromWhichFragment("fromSignetToken");
             getActivity().findViewById(R.id.layoutMenu).setVisibility(View.VISIBLE);
@@ -363,6 +371,8 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             buyViewModel = new ViewModelProvider(this).get(BuyViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
+            clearData();
+            clearExportData();
             if (Build.VERSION.SDK_INT >= 23) {
                 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -376,8 +386,8 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                     dialog.getWindow().setGravity(Gravity.CENTER);
                     dialog.show();
                     objMap.put("walletCategory", Utils.walletCategory);
-//                    objMap.put("pageSize", String.valueOf(Utils.pageSize));
-//                    objMap.put("pageNo", String.valueOf(currentPage));
+                    objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                    objMap.put("pageNo", String.valueOf(currentPage));
                     dashboardViewModel.meTransactions(objMap);
                     dashboardViewModel.meWallet();
 
@@ -423,12 +433,15 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                             currentPage = 0;
                             objMap = new HashMap<>();
                             objMap.put("walletCategory", Utils.walletCategory);
-//                            objMap.put("pageSize", String.valueOf(Utils.pageSize));
-//                            objMap.put("pageNo", String.valueOf(currentPage));
+                            objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                            objMap.put("pageNo", String.valueOf(currentPage));
                         }
                         if (objMap != null && objMap.size() == 0) {
+                            currentPage = 0;
                             objMap = new HashMap<>();
                             objMap.put("walletCategory", Utils.walletCategory);
+                            objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                            objMap.put("pageNo", String.valueOf(currentPage));
                         }
                         dashboardViewModel.meTransactions(objMap);
                         dashboardViewModel.meWallet();
@@ -459,12 +472,12 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 }
 //                objMyApplication.setTokenTransactions(tokenTransactions);
                 if (tokenTransactions != null) {
-//                    if (currentPage == 0) {
-//                        bindTransactions(tokenTransactions);
-//                    } else {
-//                        loadMore(tokenTransactions.getData().getItems());
-//                    }
-                    bindTransactions(tokenTransactions);
+                    if (currentPage == 0) {
+                        bindTransactions(tokenTransactions);
+                    } else {
+                        loadMore(tokenTransactions.getData().getItems());
+                    }
+//                    bindTransactions(tokenTransactions);
                 }
 //                new FetchData(getActivity()).execute();
             }
@@ -493,7 +506,7 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                     objMyApplication.setStrUser(Utils.capitalize(user.getData().getFirstName() + " " + user.getData().getLastName()));
                     objMyApplication.setStrUserCode(user.getData().getFirstName().substring(0, 1).toUpperCase() + user.getData().getLastName().substring(0, 1).toUpperCase());
 
-                    objMyApplication.setStrEmail(user.getData().getEmail());
+                    objMyApplication.setStrEmail(user.getData().getEmail().trim());
                     objMyApplication.setStrPhoneNum(user.getData().getPhoneNumber());
                     objMyApplication.setStrAddressLine1(user.getData().getAddressLine1());
                     objMyApplication.setStrAddressLine2(user.getData().getAddressLine2());
@@ -689,74 +702,32 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
                 layoutTransactions.setVisibility(View.VISIBLE);
                 total = tokenTransactions.getData().getTotalPages();
                 objMyApplication.setTokenTransactions(tokenTransactions);
-                tokenTransactionsAdapter = new TokenTransactionsAdapter(tokenTransactions.getData().getItems(), context);
-//                items.addAll(tokenTransactions.getData().getItems());
-//                TokenTransactions obj = new TokenTransactions();
-//                TokenTransactionsData objData = new TokenTransactionsData();
-//                objData.setCurrentPageNo(currentPage);
-//                objData.setPageSize(tokenTransactions.getData().getPageSize());
-//                objData.setItems(items);
-//                objData.setTotalItems(tokenTransactions.getData().getTotalItems());
-//                objData.setTotalPages(total);
-//                obj.setData(objData);
-//                objMyApplication.setTokenTransactions(obj);
-//                tokenTransactionsAdapter = new TokenTransactionsAdapter(items, context);
+                tokenTransactionsAdapter = new TokenTransactionsAdapter(tokenTransactions.getData().getItems(), context, tokenFragment);
+
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
                 rvTransactions.setLayoutManager(mLayoutManager);
                 rvTransactions.setItemAnimator(new DefaultItemAnimator());
                 rvTransactions.setAdapter(tokenTransactionsAdapter);
                 pbLoader.setVisibility(View.GONE);
-                rvTransactions.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                    }
-
-                    @Override
-                    public void onScrolled(@NonNull @NotNull RecyclerView recyclerView, int dx, int dy) {
-                        try {
-                            super.onScrolled(recyclerView, dx, dy);
-                            //swipeRefreshLayout.setEnabled(mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
-                            LinearLayoutManager layoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
-                            int totalItemCount = layoutManager.getItemCount();
-                            int lastVisible = layoutManager.findLastVisibleItemPosition();
-
-                            boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
-//                            if (totalItemCount > 0 && endHasBeenReached) {
-//                                //you have reached to the bottom of your recycler view
-//                                if (!isAPICalled) {
-//                                    isAPICalled = true;
-//                                    if (currentPage <= (total - 1)) {
-//                                        pbLoader.setVisibility(View.VISIBLE);
-//                                        currentPage = currentPage + 1;
-//                                        objMap = new HashMap<>();
-//                                        objMap.put("walletCategory", Utils.walletCategory);
-//                                        objMap.put("pageSize", String.valueOf(tokenTransactions.getData().getPageSize()));
-//                                        objMap.put("pageNo", String.valueOf(currentPage));
-//                                        dashboardViewModel.meTransactions(objMap);
-//                                    } else {
-//                                        pbLoader.setVisibility(View.GONE);
-//                                    }
-//                                }
-//                            } else {
-//                                pbLoader.setVisibility(View.GONE);
-//                                isAPICalled = false;
-//                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
             } else {
                 if (!isFilters && !isRefresh) {
-                    layoutFirst.setVisibility(View.VISIBLE);
-                    layoutTransactions.setVisibility(View.GONE);
+                    if (tokenTransactionsAdapter == null || tokenTransactionsAdapter.getItemCount() == 0) {
+                        layoutFirst.setVisibility(View.VISIBLE);
+                        layoutTransactions.setVisibility(View.GONE);
+                    }
                 } else if (isFilters) {
                     isFilters = false;
+//                    tokenTransactionsAdapter = new TokenTransactionsAdapter(tokenTransactions.getData().getItems(), context, tokenFragment);
+//                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+//                    rvTransactions.setLayoutManager(mLayoutManager);
+//                    rvTransactions.setItemAnimator(new DefaultItemAnimator());
+//                    rvTransactions.setAdapter(tokenTransactionsAdapter);
                     transactionsNoData();
                 } else {
-                    isRefresh = false;
-                    rvTransactions.setVisibility(View.GONE);
+                    if (tokenTransactionsAdapter == null || tokenTransactionsAdapter.getItemCount() == 0) {
+                        isRefresh = false;
+                        rvTransactions.setVisibility(View.GONE);
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -1109,8 +1080,8 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             objMap = new HashMap<>();
             currentPage = 0;
             objMap.put("walletCategory", Utils.walletCategory);
-//            objMap.put("pageSize", String.valueOf(Utils.pageSize));
-//            objMap.put("pageNo", String.valueOf(currentPage));
+            objMap.put("pageSize", String.valueOf(Utils.pageSize));
+            objMap.put("pageNo", String.valueOf(currentPage));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1120,6 +1091,8 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
         try {
             if (objMap != null && objMap.size() == 0) {
                 objMap.put("walletCategory", Utils.walletCategory);
+                objMap.put("pageSize", String.valueOf(Utils.pageSize));
+                objMap.put("pageNo", String.valueOf(currentPage));
             }
             if (!etTransactionId.getText().toString().equals("") && !strTransId.equals("")) {
                 if (etTransactionId.getText().toString().length() > 30) {
@@ -1168,10 +1141,10 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             if (objMyApplication.getTypeId() != -1) {
                 objMap.put("transactionType", String.valueOf(objMyApplication.getTypeId()));
             }
-//            currentPage = 0;
-//            if (Build.VERSION.SDK_INT >= 24) {
-//                objMap.replace("pageNo", String.valueOf(currentPage));
-//            }
+            currentPage = 0;
+            if (Build.VERSION.SDK_INT >= 24) {
+                objMap.replace("pageNo", String.valueOf(currentPage));
+            }
             objMyApplication.setFiltersMap(objMap);
             popupFilter.dismiss();
             dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
@@ -1715,6 +1688,26 @@ public class TokenFragment extends Fragment implements View.OnClickListener, Tex
             super.onPostExecute(list);
 
         }
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public ProgressBar getLoader() {
+        return pbLoader;
+    }
+
+    public DashboardViewModel getDashboardViewModel() {
+        return dashboardViewModel;
+    }
+
+    public Map<String, String> getMapObj() {
+        return objMap;
     }
 
 }

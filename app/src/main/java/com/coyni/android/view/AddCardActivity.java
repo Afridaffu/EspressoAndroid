@@ -196,7 +196,17 @@ public class AddCardActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    try {
+                        if (count > 2) {
+                            if (s != null && s.length() >= 15) {
+                                CardTypeRequest request = new CardTypeRequest();
+                                request.setCardNumber(s.toString().replace(" ", ""));
+                                dashboardViewModel.cardType(request);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -206,7 +216,7 @@ public class AddCardActivity extends AppCompatActivity {
                             CardTypeRequest request = new CardTypeRequest();
                             request.setCardNumber(s.toString().replace(" ", ""));
                             dashboardViewModel.cardType(request);
-                        } else if (s.length() == 0) {
+                        } else if (s.toString().trim().length() == 0) {
                             imgCardType.setVisibility(View.GONE);
                             etExpiry.setText("");
                             etCVV.setText("");
@@ -261,19 +271,29 @@ public class AddCardActivity extends AppCompatActivity {
             public void onChanged(CardType cardType) {
                 if (cardType != null) {
                     objCard = cardType;
+                    Boolean isCardVisible = false;
                     if (!cardType.getData().getCardBrand().equals("")) {
                         if (cardType.getData().getCardBrand().toLowerCase().equals("visa")) {
-                            imgCardType.setVisibility(View.VISIBLE);
+                            isCardVisible = true;
                             imgCardType.setImageResource(R.drawable.ic_visa);
                         } else if (cardType.getData().getCardBrand().toLowerCase().contains("master")) {
-                            imgCardType.setVisibility(View.VISIBLE);
+                            isCardVisible = true;
                             imgCardType.setImageResource(R.drawable.ic_master);
                         } else if (cardType.getData().getCardBrand().toLowerCase().contains("american")) {
-                            imgCardType.setVisibility(View.VISIBLE);
+                            isCardVisible = true;
                             imgCardType.setImageResource(R.drawable.ic_amex);
                         } else if (cardType.getData().getCardBrand().toLowerCase().contains("discover")) {
-                            imgCardType.setVisibility(View.VISIBLE);
+                            isCardVisible = true;
                             imgCardType.setImageResource(R.drawable.ic_discover);
+                        }
+                        if (isCardVisible) {
+                            if (etNumber.getText().toString().trim().length() > 0) {
+                                imgCardType.setVisibility(View.VISIBLE);
+                            } else {
+                                imgCardType.setVisibility(View.GONE);
+                            }
+                        } else {
+                            imgCardType.setVisibility(View.GONE);
                         }
                     }
                 }
