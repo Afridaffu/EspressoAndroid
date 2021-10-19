@@ -1,8 +1,0 @@
-<vector android:height="21.10625dp" android:viewportHeight="22"
-    android:viewportWidth="32" android:width="30.7dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#bebebe" android:pathData="M2.93,1.28A1.5,1.5 0,0 0,1.38 2.75v16.5a1.51,1.51 0,0 0,1.55 1.47H29.07a1.51,1.51 0,0 0,1.55 -1.47V2.75a1.5,1.5 0,0 0,-1.55 -1.47H2.93M2.93,0H29.07A2.86,2.86 0,0 1,32 2.75v16.5A2.83,2.83 0,0 1,29.07 22H2.93A2.86,2.86 0,0 1,0 19.25V2.75A2.86,2.86 0,0 1,2.93 0Z"/>
-    <path android:fillColor="#bebebe" android:pathData="M31.15,9H1.76a0.71,0.71 0,0 1,-0.7 -0.73,0.74 0.74,0 0,1 0.7,-0.69H31.15a0.71,0.71 0,0 1,0.69 0.74A0.73,0.73 0,0 1,31.15 9Z"/>
-    <path android:fillColor="#bebebe" android:pathData="M17.14,13.8H4.1a0.73,0.73 0,0 1,-0.75 -0.69,0.69 0.69,0 0,1 0.75,-0.69h13a0.72,0.72 0,0 1,0.75 0.69,0.8 0.8,0 0,1 -0.75,0.69Z"/>
-    <path android:fillColor="#bebebe" android:pathData="M8.09,17.42h-4a0.72,0.72 0,0 1,-0.75 -0.69A0.69,0.69 0,0 1,4.1 16H8.15a0.72,0.72 0,0 1,0.74 0.69A0.8,0.8 0,0 1,8.09 17.42Z"/>
-    <path android:fillColor="#bebebe" android:pathData="M24,12.7v2.61H27.9V12.7H24m0,-0.92H27.9a1,1 0,0 1,1 1v2.61a1,1 0,0 1,-1 1H24a1,1 0,0 1,-1 -1V12.74A1,1 0,0 1,24 11.78Z"/>
-</vector>

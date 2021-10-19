@@ -1,2 +1,2 @@
+rootProject.name = "Coyni"
 include ':app'
-rootProject.name = "QuickCard"

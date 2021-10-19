@@ -1,24 +1,14 @@
 plugins {
     id 'com.android.application'
 }
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
 android {
-    signingConfigs {
-        config {
-            keyAlias 'alias'
-            keyPassword 'coyni@1'
-            storeFile file('../app/test.keystore')
-            storePassword 'coyni@1'
-        }
-    }
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdk 30
 
     defaultConfig {
-        applicationId "com.coyni.android"
-        minSdkVersion 21
-        targetSdkVersion 30
+        applicationId "com.greenbox.coyni"
+        minSdk 26
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
@@ -30,7 +20,25 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
 
+        }
+    }
+    flavorDimensions "default"
+
+    productFlavors {
+        uat {
+            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api.coyni.com/\"'
+            buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
+        }
+        sat {
+            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-stg.coyni.com/\"'
+            buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
+        }
+        qa {
+            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
+            buildConfigField 'String', 'Referer', '\"http://mobile/\"'
+        }
     }
     lintOptions {
         checkReleaseBuilds false
@@ -38,7 +46,6 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -61,41 +68,16 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.3.1'
-    implementation 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
-    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
-    implementation 'com.google.zxing:core:3.3.3'
-    implementation 'in.shadowfax:proswipebutton:1.2.2'
-    implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.3.0'
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    implementation 'com.mikhaellopez:circularimageview:3.2.0'
-
-    implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:17.5.1'
-    implementation 'com.github.santalu:maskara:1.0.0'
-
-    implementation 'androidx.biometric:biometric:1.1.0'
-
-    implementation 'com.github.jinatonic.confetti:confetti:1.1.2'
-
-    //Firebase
-    implementation platform('com.google.firebase:firebase-bom:28.4.1')
-    implementation 'com.google.firebase:firebase-messaging'
-    implementation 'com.google.firebase:firebase-analytics'
-    //End
-
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
