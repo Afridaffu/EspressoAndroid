@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.CreateAccountActivity"
+    android:padding="25dp"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:screenReaderFocusable="true"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    >
+
+    <ImageView
+        android:id="@+id/createAccountCloseIV"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_x"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Account"
+                android:textSize="@dimen/text_size_24sp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_bold"
+                />
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
+                android:id="@+id/firstNameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"/>
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
+                android:id="@+id/lastNameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"/>
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
+                android:id="@+id/emailET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:id="@+id/emailErrorLL"
+                android:visibility="gone"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_erro"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/error_red"
+                    android:layout_marginStart="10dp"
+                    android:textSize="@dimen/text_size_10sp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="User alread exists. Try a new email or log in."/>
+            </LinearLayout>
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
+                android:id="@+id/phoneNumberET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"/>
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
+                android:id="@+id/passwordET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"/>
+
+            <TextView
+                android:id="@+id/passwordInfoTV"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/text_size_10sp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."/>
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
+                android:id="@+id/confirmPasswordET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="By clicking next, you agree to "/>
+
+                <TextView
+                    android:id="@+id/tosTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_color"
+                    android:text="Terms of Service "
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_regular"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_black"
+                    android:text="&amp; "
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_regular"
+                    />
+
+
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/privacyTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_color"
+                android:text="Privacy Policy"
+                android:textSize="@dimen/text_size_12sp"
+                android:fontFamily="@font/opensans_regular"
+                />
+
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/nextCV"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:cardBackgroundColor="@color/inactive_color"
+                app:cardCornerRadius="30dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="30dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Next"
+                    android:textSize="@dimen/text_size_18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"/>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

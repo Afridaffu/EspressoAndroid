@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.SecureAccount"
+    android:padding="25dp"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_above="@+id/secureNextCV"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Secure Your Account"
+            android:textSize="@dimen/text_size_24sp"
+            android:textColor="@color/primary_black"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_marginBottom="21dp"
+            android:layout_marginTop="60dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="One way we keep your account secure is with 2- step verification, which requires you to create 6-digit PIN"
+            android:textSize="@dimen/text_size_16sp"
+            android:textColor="@color/primary_black"
+            android:fontFamily="@font/opensans_regular"
+            android:layout_marginBottom="40dp"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_secure_account"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/secureNextCV"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="30dp"
+        app:cardBackgroundColor="@color/primary_color"
+        app:cardCornerRadius="30dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Next"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18sp"
+            android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>
