@@ -279,4 +279,12 @@ public class OutLineBoxEditText extends ConstraintLayout {
     public static boolean isValidEmail(String target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
+
+    public void setText(String text) {
+        outLineEditText.setText(text);
+    }
+
+    public String getText() {
+        return outLineEditText.getText().toString().trim();
+    }
 }

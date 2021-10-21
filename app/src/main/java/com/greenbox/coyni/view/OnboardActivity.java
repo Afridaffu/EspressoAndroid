@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -59,6 +60,7 @@ public class OnboardActivity extends AppCompatActivity {
         });
 
         Log.e("Density", getDeviceDensity(this));
+
     }
 
     public static String getDeviceDensity(Context context){

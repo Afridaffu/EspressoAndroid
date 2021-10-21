@@ -16,9 +16,8 @@ import com.greenbox.coyni.R;
 import java.util.ArrayList;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "Pinkeyboard_Activity";
     View i1,i2,i3,i4,i5,i6;
-    TextView b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b_dot;
+    TextView b0,b1,b2,b3,b4,b5,b6,b7,b8,b9;
     ImageView b_back;
     ArrayList<String> number_list=new ArrayList<>();
     String passcode="";
@@ -50,7 +49,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         b8=(TextView) findViewById(R.id.textview_8);
         b9=(TextView) findViewById(R.id.textview_9);
         b_back=(ImageView) findViewById(R.id.button_back1);
-        b_dot=(TextView) findViewById(R.id.button_dot);
         b0.setOnClickListener(this);
         b1.setOnClickListener(this);
         b2.setOnClickListener(this);
@@ -62,7 +60,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         b8.setOnClickListener(this);
         b9.setOnClickListener(this);
         b_back.setOnClickListener(this);
-        b_dot.setOnClickListener(this);
 
     }
 

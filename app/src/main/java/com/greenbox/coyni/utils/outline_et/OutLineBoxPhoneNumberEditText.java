@@ -107,6 +107,13 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         pnET.setHint(hintText);
     }
 
+    public void setText(String text) {
+        pnET.setText(text);
+    }
+
+    public String getText() {
+        return pnET.getText().toString().trim();
+    }
 
 
 }

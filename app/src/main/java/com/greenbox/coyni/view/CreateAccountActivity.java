@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,15 +90,30 @@ public class CreateAccountActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class));
+                startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
+                        .putExtra("OTP_TYPE","MOBILE")
+                        .putExtra("MOBILE",phoneNumberET.getText())
+                        .putExtra("EMAIL",emailET.getText())
+                );
 
             }else{
-                startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class));
+                startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
+                        .putExtra("OTP_TYPE","EMAIL")
+                        .putExtra("MOBILE",phoneNumberET.getText())
+                        .putExtra("EMAIL",emailET.getText())
+                );
             }
+
+            Log.e("Field1", firstNameET.getText());
+            Log.e("Field2", lastNameET.getText());
+            Log.e("Field3", emailET.getText());
+            Log.e("Field4", phoneNumberET.getText());
+            Log.e("Field5", passwordET.getText());
+            Log.e("Field6", confirmPasswordET.getText());
         });
 
         createAccountCloseIV.setOnClickListener(view -> {
-
+            finish();
         });
     }
 }

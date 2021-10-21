@@ -52,7 +52,7 @@
                     android:layout_width="@dimen/text_size_7sp"
                     android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="100dp" />
+                    app:cardCornerRadius="5dp" />
                 <TextView
                     android:layout_marginStart="15dp"
                     android:id="@+id/oneTV"
@@ -72,7 +72,7 @@
                     android:layout_width="@dimen/text_size_7sp"
                     android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="100dp" />
+                    app:cardCornerRadius="5dp" />
                 <TextView
                     android:layout_marginStart="15dp"
                     android:id="@+id/twoTV"
@@ -92,7 +92,7 @@
                     android:layout_width="@dimen/text_size_7sp"
                     android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="100dp" />
+                    app:cardCornerRadius="5dp" />
                 <TextView
                     android:layout_marginStart="15dp"
                     android:id="@+id/threeTV"
