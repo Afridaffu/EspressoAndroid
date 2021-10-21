@@ -7,4 +7,20 @@
     <string name="password_strength_strong">Strong</string>
     <string name="password_strength_very_strong">Very Strong</string>
 
+
+    <string name="remembertxt">Remember Me</string>
+    <string name="forgotpwdtxt">Forgot Password</string>
+    <string name="retrievemail">Retrieve Email</string>
+    <string name="epincorrecttext">Email or password is incorrect</string>
+    <string name="epincorrectdescri">Either your email or password is incorrect. please try again, or use Forgot password and retrieve email.</string>
+    <string name="faceidnotavaitxt">Face ID Not available</string>
+    <string name="faceidnotavaidescri">Please Log in and go to your profile setting to set up the Face ID.</string>
+    <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
 </resources>
