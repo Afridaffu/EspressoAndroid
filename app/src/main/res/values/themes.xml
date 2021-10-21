@@ -37,6 +37,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:screenOrientation">portrait</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="TextInputLayout.OutlinedBox" parent="Base.Widget.MaterialComponents.TextInputLayout">
@@ -64,6 +65,15 @@
         <item name="android:textSelectHandle">@drawable/pv_invisible_image</item>
         <item name="android:textSelectHandleLeft">@drawable/pv_invisible_image</item>
         <item name="android:textSelectHandleRight">@drawable/pv_invisible_image</item>
+    </style>
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/roundeddialog</item>
     </style>
 
 </resources>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingLeft="32dp"
+    tools:context=".view.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="19.33dp"
+            android:layout_height="19.33dp"
+            android:layout_marginTop="67dp"
+            android:background="@color/white"
+            android:src="@drawable/ic_x" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="500dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="-80dp"
+                android:layout_marginRight="-175dp"
+                android:background="@color/white"
+                android:src="@drawable/ic_coynilogotop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_editor_absoluteX="336.24dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:src="@drawable/ic_coynilogo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.305"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV
+        android:id="@+id/emailET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="32dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV
+            android:id="@+id/passwordET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:layout_marginRight="31dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/white"
+                android:src="@drawable/ic_faceid"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.952"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.507"
+                app:layout_editor_absoluteX="336.24dp"
+                app:layout_editor_absoluteY="26.28dp" />
+        </com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondary_color"
+        />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/remembertxt"
+            android:textSize="13dp"
+            android:textColor="@color/primary_black"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="32dp">
+        <TextView
+            android:id="@+id/forgotpwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/forgotpwdtxt"
+            android:textColor="@color/primary_green"
+            android:textSize="13dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="94dp"
+            android:layout_toRightOf="@id/forgotpwd"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/retrievemail"
+            android:textColor="@color/primary_green"
+            android:textSize="13dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingRight="30dp">
+    <TextView
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center"
+        android:background="@drawable/nextbtnbackground"
+        android:fontFamily="@font/opensans_bold"
+        android:paddingTop="15dp"
+        android:text="Log in"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="13dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+    <TextView
+        android:id="@+id/mailpassIncorrect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LoginFailedSheet"
+        android:textColor="@color/black"
+        android:padding="10dp"
+
+            />
+
+    <TextView
+        android:id="@+id/faceidNotAvaiSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="face id not available bottomsheet"
+        android:textColor="@color/black"
+        android:padding="10dp"
+        />
+    </LinearLayout>
+</LinearLayout>
+
+
