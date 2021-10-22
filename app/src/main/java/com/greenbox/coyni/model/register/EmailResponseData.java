@@ -1,35 +1,36 @@
 package com.greenbox.coyni.model.register;
 
 public class EmailResponseData {
-    private String email;
-    private Boolean emailVerified;
-    private String verificationStatus;
+    private String userId;
+    private String email_status;
+    private String emailOtp;
     private String message;
-    private String code;
-    private Boolean userActive;
+    private Boolean smsVerified;
+    private Boolean emailVerified;
+    private String authenticationeCode;
 
-    public String getEmail() {
-        return email;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public Boolean getEmailVerified() {
-        return emailVerified;
+    public String getEmail_status() {
+        return email_status;
     }
 
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
+    public void setEmail_status(String email_status) {
+        this.email_status = email_status;
     }
 
-    public String getVerificationStatus() {
-        return verificationStatus;
+    public String getEmailOtp() {
+        return emailOtp;
     }
 
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
+    public void setEmailOtp(String emailOtp) {
+        this.emailOtp = emailOtp;
     }
 
     public String getMessage() {
@@ -40,20 +41,28 @@ public class EmailResponseData {
         this.message = message;
     }
 
-    public String getCode() {
-        return code;
+    public Boolean getSmsVerified() {
+        return smsVerified;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setSmsVerified(Boolean smsVerified) {
+        this.smsVerified = smsVerified;
     }
 
-    public Boolean getUserActive() {
-        return userActive;
+    public Boolean getEmailVerified() {
+        return emailVerified;
     }
 
-    public void setUserActive(Boolean userActive) {
-        this.userActive = userActive;
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getAuthenticationeCode() {
+        return authenticationeCode;
+    }
+
+    public void setAuthenticationeCode(String authenticationeCode) {
+        this.authenticationeCode = authenticationeCode;
     }
 }
 

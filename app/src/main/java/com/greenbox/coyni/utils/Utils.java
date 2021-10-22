@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 public class Utils {
     public static String strLang = "en-US";
     public static String strCode = "12345";
+    public static String strCCode = "US";
     public static String strAuth;
     public static String strReferer;
     public static String strURL_PRODUCTION;
