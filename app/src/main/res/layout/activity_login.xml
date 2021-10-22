@@ -7,6 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingLeft="32dp"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.LoginActivity">
 
     <LinearLayout
@@ -55,67 +56,95 @@
 
     </LinearLayout>
 
-    <com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV
-        android:id="@+id/emailET"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailTIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginRight="32dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="32dp"
+        android:hint="Email"
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:textColorHint="@color/black"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxStrokeColor="@color/primary_green"
+        app:expandedHintEnabled="false"
+        app:hintTextColor="@color/black">
 
-        <com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV
-            android:id="@+id/passwordET"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="21dp"
-            android:layout_marginRight="31dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            android:fontFamily="@font/opensans_semibold"
+            android:hint="Coyni@example.com"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="30"
+            android:padding="14dp"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_faceid"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.507"
-                app:layout_editor_absoluteX="336.24dp"
-                app:layout_editor_absoluteY="26.28dp" />
-        </com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pwdTIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="32dp"
+        android:hint="Password"
+        android:textColorHint="@color/black"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxStrokeColor="@color/primary_green"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_faceid"
+        app:endIconTint="@color/primary_green"
+        app:expandedHintEnabled="false"
+        app:hintTextColor="@color/primary_green">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pwdET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:hint="************"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:maxLength="30"
+            android:padding="14dp"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16.5dp"
         android:orientation="horizontal">
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/secondary_color" />
-
-        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:text="@string/remembertxt"
-            android:textColor="@color/primary_black"
-            android:textSize="13dp" />
+            android:theme="@style/AppTheme"
+            android:textSize="14dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textColor="@color/primary_black" />
+
 
     </LinearLayout>
-
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
