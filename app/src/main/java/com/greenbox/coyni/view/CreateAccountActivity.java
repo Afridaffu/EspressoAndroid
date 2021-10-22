@@ -20,12 +20,12 @@ import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 public class CreateAccountActivity extends AppCompatActivity {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
-    OutLineBoxEditText firstNameET,lastNameET,emailET,passwordET,confirmPasswordET;
+    OutLineBoxEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
     LinearLayout emailErrorLL;
-    TextView passwordInfoTV,privacyTV,tosTV;
+    TextView passwordInfoTV, privacyTV, tosTV;
     ImageView createAccountCloseIV;
-    public boolean isFirstName = false, isLastName = false,isEmail = false,isPhoneNumber = false,
-            isPassword = false,isConfirmPassword = false, isNextEnabled = false;
+    public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
+            isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
     public MaterialCardView nextCV;
 
@@ -40,7 +40,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         initFields();
     }
 
-    public void initFields(){
+    public void initFields() {
 
         emailErrorLL = findViewById(R.id.emailErrorLL);
         passwordInfoTV = findViewById(R.id.passwordInfoTV);
@@ -50,31 +50,31 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
 
         firstNameET = findViewById(R.id.firstNameET);
-        firstNameET.setField("First Name","First Name","text",false, this);
+        firstNameET.setField("First Name", "First Name", "text", false, this);
         firstNameET.setDigits();
 
         lastNameET = findViewById(R.id.lastNameET);
-        lastNameET.setField("Last Name","Last Name","text",false, this);
+        lastNameET.setField("Last Name", "Last Name", "text", false, this);
         lastNameET.setDigits();
 
         emailET = findViewById(R.id.emailET);
-        emailET.setField("Email","Email","textEmailAddress",false, this);
+        emailET.setField("Email", "Email", "textEmailAddress", false, this);
 
         phoneNumberET = findViewById(R.id.phoneNumberET);
-        phoneNumberET.setField("Phone Number","Phone Number","number",this);
+        phoneNumberET.setField("Phone Number", "Phone Number", "number", this);
 
         passwordET = findViewById(R.id.passwordET);
         passwordInfoTV = findViewById(R.id.passwordInfoTV);
-        passwordET.setField("Password","8-12 Characters","textPassword",true, this);
-        passwordET.setPasswordType(true,passwordInfoTV);
+        passwordET.setField("Password", "8-12 Characters", "textPassword", true, this);
+        passwordET.setPasswordType(true, passwordInfoTV);
 
         confirmPasswordET = findViewById(R.id.confirmPasswordET);
-        confirmPasswordET.setField("Confirm Password","Confirm Password","textPassword",false, this);
+        confirmPasswordET.setField("Confirm Password", "Confirm Password", "textPassword", false, this);
         confirmPasswordET.setPasswordType(true, null);
 
 
-        tosTV.setPaintFlags(tosTV.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
-        privacyTV.setPaintFlags(privacyTV.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        privacyTV.setPaintFlags(privacyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         tosTV.setOnClickListener(view -> {
 
@@ -85,23 +85,21 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
 
         nextCV.setOnClickListener(view -> {
-            if(isNextEnabled){
+            if (isNextEnabled) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
-                        .putExtra("OTP_TYPE","MOBILE")
-                        .putExtra("MOBILE",phoneNumberET.getText())
-                        .putExtra("EMAIL",emailET.getText())
-                );
+                        .putExtra("OTP_TYPE", "MOBILE")
+                        .putExtra("MOBILE", phoneNumberET.getText())
+                        .putExtra("EMAIL", emailET.getText()));
 
-            }else{
+            } else {
                 startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
-                        .putExtra("OTP_TYPE","EMAIL")
-                        .putExtra("MOBILE",phoneNumberET.getText())
-                        .putExtra("EMAIL",emailET.getText())
-                );
+                        .putExtra("OTP_TYPE", "EMAIL")
+                        .putExtra("MOBILE", phoneNumberET.getText())
+                        .putExtra("EMAIL", emailET.getText()));
             }
 
             Log.e("Field1", firstNameET.getText());

@@ -109,4 +109,28 @@
                 android:textSize="16sp"></TextView>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="30dp">
+
+        <TextView
+            android:id="@+id/tvForgot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"></TextView>
+
+        <TextView
+            android:id="@+id/tvRetrieve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Retrieve Email?"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"></TextView>
+    </RelativeLayout>
 </RelativeLayout>

@@ -4,98 +4,110 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.OTPValidation"
-    android:padding="25dp"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:padding="25dp"
+    tools:context=".view.OTPValidation">
 
-    <ImageView
-        android:id="@+id/otpValidationCloseIV"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_back"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="40dp"/>
-
-    <TextView
-        android:id="@+id/headerTV"
+    <LinearLayout
+        android:id="@+id/layoutEntry"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Please Verify Your Phone Number"
-        android:textSize="@dimen/text_size_24sp"
-        android:textColor="@color/primary_black"
-        android:fontFamily="@font/opensans_bold"
-        android:layout_marginBottom="21dp"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/subHeaderTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="We sent you 6-digit code to the register phone number (661) 726-0369"
-        android:textSize="@dimen/text_size_16sp"
-        android:textColor="@color/primary_black"
-        android:fontFamily="@font/opensans_regular"
-        android:layout_marginBottom="40dp"
-        />
+        <ImageView
+            android:id="@+id/otpValidationCloseIV"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_back" />
 
-    <com.greenbox.coyni.utils.otpview.PinView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/otpPV"
-        style="@style/PinWidget.PinView"
-        android:cursorVisible="false"
-        android:layout_marginTop="10dp"
-        android:hint="12346"
-        android:inputType="number"
-        android:textColor="@color/primary_black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/opensans_regular"
-        app:cursorColor="@color/primary_color"
-        app:cursorWidth="0dp"
-        app:hideLineWhenFilled="false"
-        app:itemCount="6"
-        app:itemRadius="6dp"
-        app:itemSpacing="5dp"
-        app:lineColor="@color/line_colors"
-        app:lineWidth="2dp"
-        app:viewType="rectangle" />
+        <TextView
+            android:id="@+id/headerTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Please Verify Your Phone Number"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/text_size_24sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Didn't get the code?"
-        android:textSize="@dimen/text_size_14sp"
-        android:textColor="@color/primary_black"
-        android:fontFamily="@font/opensans_regular"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        />
+        <TextView
+            android:id="@+id/subHeaderTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="We sent you 6-digit code to the register phone number (661) 726-0369"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/text_size_16sp" />
 
-    <TextView
-        android:id="@+id/resendTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Resend"
-        android:textSize="@dimen/text_size_14sp"
-        android:textColor="@color/primary_color"
-        android:fontFamily="@font/opensans_semibold"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        />
+        <com.greenbox.coyni.utils.otpview.PinView
+            android:id="@+id/otpPV"
+            style="@style/PinWidget.PinView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:cursorVisible="false"
+            android:fontFamily="@font/opensans_regular"
+            android:hint="12346"
+            android:inputType="number"
+            android:textColor="@color/primary_black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cursorColor="@color/primary_color"
+            app:cursorWidth="0dp"
+            app:hideLineWhenFilled="false"
+            app:itemCount="6"
+            app:itemRadius="6dp"
+            app:itemSpacing="5dp"
+            app:lineColor="@color/line_colors"
+            app:lineWidth="2dp"
+            app:viewType="rectangle" />
 
-    <TextView
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="center"
+            android:text="Didn't get the code?"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
+            android:id="@+id/resendTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text="Resend"
+            android:textColor="@color/primary_color"
+            android:textSize="@dimen/text_size_14sp" />
+
+        <TextView
             android:id="@+id/newCodeTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text="A new code has sent"
+            android:textColor="@color/primary_color"
+            android:textSize="@dimen/text_size_14sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutFailure"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="A new code has sent"
-        android:textSize="@dimen/text_size_14sp"
-        android:textColor="@color/primary_color"
-        android:fontFamily="@font/opensans_semibold"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:visibility="gone"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/activity_retry_create_account" />
+    </LinearLayout>
 </LinearLayout>

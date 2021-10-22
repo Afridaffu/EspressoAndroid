@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_above="@+id/bottomLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLL"
         android:orientation="vertical">
 
         <com.greenbox.coyni.intro_slider.AutoScrollViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -28,8 +25,7 @@
             android:layout_height="12dp"
             app:tabBackground="@drawable/viewpager_tab_selector"
             app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"
-            />
+            app:tabIndicatorHeight="0dp" />
 
     </LinearLayout>
 
@@ -37,12 +33,12 @@
         android:id="@+id/bottomLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="52dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="43dp"
-        android:layout_marginEnd="43dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="52dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/getStartedLL"
@@ -53,17 +49,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Get Started"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_18sp"
-                android:gravity="center"
                 android:layout_margin="20dp"
                 android:fontFamily="@font/opensans_bold"
-                />
+                android:gravity="center"
+                android:text="Get Started"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_18sp" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -78,8 +74,7 @@
                 android:gravity="center"
                 android:text="Log in"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/text_size_18sp"
-                />
+                android:textSize="@dimen/text_size_18sp" />
         </LinearLayout>
 
     </LinearLayout>

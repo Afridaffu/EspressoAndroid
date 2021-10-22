@@ -1,6 +1,9 @@
 package com.greenbox.coyni.utils;
 
+import static android.content.Context.KEYGUARD_SERVICE;
+
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -95,13 +98,13 @@ public class Utils {
         Utils.strURL_PRODUCTION = strURL_PRODUCTION;
     }
 
-    public static void statusBar(Activity activity) {
+    public static void statusBar(Activity activity, String strColor) {
         try {
             if (Build.VERSION.SDK_INT >= 21) {
                 Window window = activity.getWindow();
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(Color.parseColor("#35BAB6"));
+                window.setStatusBarColor(Color.parseColor(strColor));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

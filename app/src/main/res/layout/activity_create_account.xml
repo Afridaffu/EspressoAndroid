@@ -4,26 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CreateAccountActivity"
-    android:padding="25dp"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="25dp"
     android:screenReaderFocusable="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    >
+    tools:context=".view.CreateAccountActivity">
 
     <ImageView
         android:id="@+id/createAccountCloseIV"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/ic_x"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="40dp"/>
+        android:src="@drawable/ic_x" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,144 +32,143 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Create Account"
-                android:textSize="@dimen/text_size_24sp"
-                android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_bold"
-                />
+                android:text="Create Account"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/text_size_24sp" />
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
                 android:id="@+id/firstNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
                 android:id="@+id/lastNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
                 android:id="@+id/emailET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
+
             <LinearLayout
+                android:id="@+id/emailErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:id="@+id/emailErrorLL"
-                android:visibility="gone"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_erro"/>
+                    android:src="@drawable/ic_erro" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/error_red"
                     android:layout_marginStart="10dp"
-                    android:textSize="@dimen/text_size_10sp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="User alread exists. Try a new email or log in."/>
+                    android:text="User alread exists. Try a new email or log in."
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/text_size_10sp" />
             </LinearLayout>
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
                 android:id="@+id/phoneNumberET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
                 android:id="@+id/passwordET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
 
             <TextView
                 android:id="@+id/passwordInfoTV"
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_grey"
-                android:textSize="@dimen/text_size_10sp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."/>
+                android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/text_size_10sp" />
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
                 android:id="@+id/confirmPasswordET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                />
+                android:layout_marginTop="15dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="By clicking next, you agree to "/>
+                    android:text="By clicking next, you agree to "
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/text_size_12sp" />
 
                 <TextView
                     android:id="@+id/tosTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_color"
-                    android:text="Terms of Service "
-                    android:textSize="@dimen/text_size_12sp"
                     android:fontFamily="@font/opensans_regular"
-                    />
+                    android:text="Terms of Service "
+                    android:textColor="@color/primary_color"
+                    android:textSize="@dimen/text_size_12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_black"
-                    android:text="&amp; "
-                    android:textSize="@dimen/text_size_12sp"
                     android:fontFamily="@font/opensans_regular"
-                    />
-
+                    android:text="&amp; "
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/text_size_12sp" />
 
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/privacyTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primary_color"
-                android:text="Privacy Policy"
-                android:textSize="@dimen/text_size_12sp"
                 android:fontFamily="@font/opensans_regular"
-                />
-
+                android:text="Privacy Policy"
+                android:textColor="@color/primary_color"
+                android:textSize="@dimen/text_size_12sp" />
 
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/nextCV"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                app:cardBackgroundColor="@color/inactive_color"
-                app:cardCornerRadius="30dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="30dp"
+                app:cardBackgroundColor="@color/inactive_color"
+                app:cardCornerRadius="30dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Next"
-                    android:textSize="@dimen/text_size_18sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
                     android:layout_gravity="center"
-                    android:textColor="@color/white"/>
+                    android:gravity="center"
+                    android:text="Next"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_18sp"
+                    android:textStyle="bold" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
