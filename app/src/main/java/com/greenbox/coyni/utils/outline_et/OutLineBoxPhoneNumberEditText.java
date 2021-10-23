@@ -21,16 +21,16 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private MaskEditText pnET;
-    private CreateAccountActivity createAccountAct;
+//    private CreateAccountActivity createAccountAct;
+
+    public String FROM = "";
 
     public OutLineBoxPhoneNumberEditText(Context context){
         this(context,null,0);
-
     }
 
     public OutLineBoxPhoneNumberEditText(Context context, AttributeSet attrs){
         this(context,attrs,0);
-
     }
 
     public OutLineBoxPhoneNumberEditText(Context context, AttributeSet attrs, int defStyleattr){
@@ -65,27 +65,23 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e("Phone Number", pnET.getText().toString().trim().length()+"");
-                createAccountAct.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
 
-                if (createAccountAct.isFirstName && createAccountAct.isLastName &&
-                        createAccountAct.isEmail && createAccountAct.isPhoneNumber &&
-                        createAccountAct.isPassword && createAccountAct.isConfirmPassword) {
-                    createAccountAct.isNextEnabled = true;
-                    createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                if(FROM.equals("CREATE_ACCOUNT")){
+                    CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
+                    createAccountAct.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
 
-                    Log.e("All boolean", createAccountAct.isFirstName + " " + createAccountAct.isLastName + " " +
-                            createAccountAct.isEmail + " " + createAccountAct.isPhoneNumber + " " +
-                            createAccountAct.isPassword + " " + createAccountAct.isConfirmPassword);
-                } else {
+                    if (createAccountAct.isFirstName && createAccountAct.isLastName &&
+                            createAccountAct.isEmail && createAccountAct.isPhoneNumber &&
+                            createAccountAct.isPassword && createAccountAct.isConfirmPassword) {
+                        createAccountAct.isNextEnabled = true;
+                        createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                    Log.e("All boolean", createAccountAct.isFirstName + " " + createAccountAct.isLastName + " " +
-                            createAccountAct.isEmail + " " + createAccountAct.isPhoneNumber + " " +
-                            createAccountAct.isPassword + " " + createAccountAct.isConfirmPassword);
-
-                    createAccountAct.isNextEnabled = false;
-                    createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    } else {
+                        createAccountAct.isNextEnabled = false;
+                        createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    }
                 }
+
             }
 
             @Override
@@ -101,11 +97,12 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
     }
 
-    public void setField(String hintOutlineText, String hintText, String type, CreateAccountActivity createAccountActivity){
-        createAccountAct = createAccountActivity;
-        hintName.setText(hintOutlineText);
-        pnET.setHint(hintText);
+
+    public void setFrom(String fromm){
+        FROM = fromm;
     }
+
+
 
     public void setText(String text) {
         pnET.setText(text);

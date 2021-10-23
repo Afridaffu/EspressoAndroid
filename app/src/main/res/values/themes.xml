@@ -49,8 +49,6 @@
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusTopEnd">12dp</item>
         <item name="boxCornerRadiusTopStart">12dp</item>
-        <item name="boxStrokeColor">@color/light_gray</item>
-
     </style>
 
 

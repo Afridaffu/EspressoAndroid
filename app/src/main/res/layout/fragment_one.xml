@@ -15,12 +15,12 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/bg_onboard_frag_one"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="-100dp"
-            android:layout_marginTop="-100dp"
+            android:layout_above="@+id/bottomIV"
             android:layout_alignParentTop="true"
-            android:layout_above="@+id/bottomIV"/>
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="-100dp"
+            android:layout_marginEnd="-100dp"
+            android:src="@drawable/bg_onboard_frag_one" />
         <ImageView
             android:id="@+id/bottomIV"
             android:layout_width="173dp"
