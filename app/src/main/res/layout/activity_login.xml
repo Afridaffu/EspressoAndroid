@@ -1,195 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:paddingLeft="32dp"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.LoginActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <ImageButton
-            android:layout_width="19.33dp"
-            android:layout_height="19.33dp"
-            android:layout_marginTop="67dp"
-            android:background="@color/white"
-            android:src="@drawable/ic_x" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
-            <ImageView
+            <LinearLayout
+                android:id="@+id/layoutClose"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_marginTop="-80dp"
-                android:layout_marginRight="-175dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_coynilogotop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_editor_absoluteX="336.24dp" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:src="@drawable/ic_coynilogo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.305"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:background="@color/white"
+                    android:src="@drawable/ic_close" />
 
-    </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-    <com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV
-        android:id="@+id/emailET"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginRight="32dp" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="-80dp"
+                        android:layout_marginRight="-175dp"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_coynilogotop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:layout_editor_absoluteX="336.24dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_coynilogo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.305"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-        <com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV
-            android:id="@+id/passwordET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="21dp"
-            android:layout_marginRight="31dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_faceid"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.507"
-                app:layout_editor_absoluteX="336.24dp"
-                app:layout_editor_absoluteY="26.28dp" />
-        </com.greenbox.coyni.utils.outline_et.OutLineBoxEditTextIV>
+            </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layoutClose"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Email"
+                    android:textColorHint="@color/black"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:errorIconDrawable="@null"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/black">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/secondary_color" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="Coyni@example.com"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="30"
+                        android:padding="14dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_18sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/remembertxt"
-            android:textColor="@color/primary_black"
-            android:textSize="13dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutEmailError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_erro"></ImageView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="32dp"
-        android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvEmailError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/forgotpwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="@string/forgotpwdtxt"
-            android:textColor="@color/primary_green"
-            android:textSize="13dp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlPassword"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Password"
+                    android:textColorHint="@color/black"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:endIconDrawable="@drawable/ic_faceid"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/primary_green"
+                    app:errorIconDrawable="@null"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="94dp"
-            android:layout_toRightOf="@id/forgotpwd"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="@string/retrievemail"
-            android:textColor="@color/primary_green"
-            android:textSize="13dp" />
-    </LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="************"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:maxLength="30"
+                        android:padding="14dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_18sp"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingRight="30dp">
+                <LinearLayout
+                    android:id="@+id/layoutPwdError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
-        <TextView
-            android:id="@+id/nextBtn"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/nextbtnbackground"
-            android:fontFamily="@font/opensans_bold"
-            android:paddingTop="15dp"
-            android:text="Log in"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="13dp" />
-    </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_erro"></ImageView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvPwdError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/text_size_14sp"></TextView>
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/mailpassIncorrect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="LoginFailedSheet"
-            android:textColor="@color/black"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
 
-            />
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/remembertxt"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/text_size_14sp"
+                        android:theme="@style/AppTheme" />
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/faceidNotAvaiSheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:padding="10dp"
-            android:text="face id not available bottomsheet"
-            android:textColor="@color/black" />
-    </LinearLayout>
-</LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/forgotpwd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/forgotpwdtxt"
+                        android:textColor="@color/primary_green"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="94dp"
+                        android:layout_toRightOf="@id/forgotpwd"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/retrievemail"
+                        android:textColor="@color/primary_green"
+                        android:textSize="13dp" />
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="30dp"
+                    app:cardBackgroundColor="@color/inactive_color"
+                    app:cardCornerRadius="32dp">
+
+                    <TextView
+                        android:id="@+id/nextBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Log in"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_13sp" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/mailpassIncorrect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="LoginFailedSheet"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/faceidNotAvaiSheet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:padding="10dp"
+                        android:text="face id not available bottomsheet"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
 
 

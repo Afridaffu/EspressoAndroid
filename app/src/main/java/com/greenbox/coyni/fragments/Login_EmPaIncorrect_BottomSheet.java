@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -61,6 +62,14 @@ public class Login_EmPaIncorrect_BottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login__em_pa_incorrect__bottom_sheet, container, false);
+        View view = inflater.inflate(R.layout.fragment_login__em_pa_incorrect__bottom_sheet, container, false);
+        CardView cvEmailOK = view.findViewById(R.id.cvEmailOK);
+        cvEmailOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+        return view;
     }
 }

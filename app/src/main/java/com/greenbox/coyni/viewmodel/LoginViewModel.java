@@ -10,8 +10,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.login.LoginRequest;
+import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
+import com.greenbox.coyni.model.register.SMSResend;
+import com.greenbox.coyni.model.register.SMSResponse;
+import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
@@ -26,6 +31,9 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<EmailResendResponse> emailresendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailResponse> emailotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<SMSResponse> smsresendMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<SMSValidate> smsotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<LoginResponse> loginLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -41,6 +49,50 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<EmailResponse> getEmailotpLiveData() {
         return emailotpLiveData;
+    }
+
+    public MutableLiveData<SMSResponse> getSmsresendMutableLiveData() {
+        return smsresendMutableLiveData;
+    }
+
+    public MutableLiveData<SMSValidate> getSmsotpLiveData() {
+        return smsotpLiveData;
+    }
+
+    public MutableLiveData<LoginResponse> getLoginLiveData() {
+        return loginLiveData;
+    }
+
+    public void smsotpresend(SMSResend resend) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<SMSResponse> mCall = apiService.smsotpresend(resend);
+            mCall.enqueue(new Callback<SMSResponse>() {
+                @Override
+                public void onResponse(Call<SMSResponse> call, Response<SMSResponse> response) {
+                    if (response.isSuccessful()) {
+                        SMSResponse obj = response.body();
+                        smsresendMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<SMSResponse>() {
+                        }.getType();
+                        SMSResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            smsresendMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SMSResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void emailotpresend(String email) {
@@ -100,6 +152,92 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<EmailResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void smsotp(SmsRequest smsRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<SMSValidate> mCall = apiService.smsotp(smsRequest);
+            mCall.enqueue(new Callback<SMSValidate>() {
+                @Override
+                public void onResponse(Call<SMSValidate> call, Response<SMSValidate> response) {
+                    if (response.isSuccessful()) {
+                        SMSValidate obj = response.body();
+                        smsotpLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<SMSValidate>() {
+                        }.getType();
+                        SMSValidate errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            smsotpLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SMSValidate> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void login(LoginRequest loginRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<LoginResponse> mCall = apiService.login(loginRequest);
+            mCall.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    try {
+                        String strResponse = "";
+                        if (response.isSuccessful()) {
+                            LoginResponse obj = response.body();
+                            loginLiveData.setValue(obj);
+                        } else if (response.code() == 500) {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<LoginResponse>() {
+                            }.getType();
+                            LoginResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                loginLiveData.setValue(errorResponse);
+                            } else {
+                                LoginResponse errorResponse1 = gson.fromJson(strResponse, type);
+                                loginLiveData.setValue(errorResponse1);
+                            }
+                        } else {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    loginLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

@@ -20,7 +20,8 @@
             android:name=".view.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.PINActivity"
             android:exported="true"
