@@ -2,13 +2,19 @@ package com.greenbox.coyni.utils;
 
 import static android.content.Context.KEYGUARD_SERVICE;
 
+import static android.content.Context.FINGERPRINT_SERVICE;
+import static android.content.Context.KEYGUARD_SERVICE;
+
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.Window;
@@ -217,4 +223,61 @@ public class Utils {
         return strValue;
     }
 
+    public static void checkAuthentication(Activity context, int CODE_AUTHENTICATION_VERIFICATION) {
+        try {
+            KeyguardManager km = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
+            if (km.isKeyguardSecure()) {
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    Intent i = km.createConfirmDeviceCredentialIntent("Authentication required", "password");
+                    context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
+                }
+            } else
+                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static Boolean checkAuthentication(Activity context) {
+        Boolean value = false;
+        try {
+            KeyguardManager km = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
+            if (km.isKeyguardSecure()) {
+                value = true;
+            } else {
+                value = false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
+    public static Boolean isFingerPrint(Activity context) {
+        Boolean value = false;
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(FINGERPRINT_SERVICE);
+                if (!fingerprintManager.isHardwareDetected()) {
+                    // Device doesn't support fingerprint authentication
+                    Log.e("MY_APP_TAG", "Device doesn't support fingerprint authentication.");
+//                    isThumb = false;
+                    value = false;
+                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    // User hasn't enrolled any fingerprints to authenticate with
+                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
+//                    isThumb = false;
+                    value = false;
+                } else {
+                    // Everything is ready for fingerprint authentication
+                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
+//                    isThumb = true;
+                    value = true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
 }

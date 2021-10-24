@@ -1,8 +1,11 @@
 package com.greenbox.coyni.view;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -21,6 +25,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.EmailResponse;
@@ -44,6 +53,9 @@ public class OTPValidation extends AppCompatActivity {
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
 
+    private static final int CREDENTIAL_PICKER_REQUEST = 1;  // Set to an unused request code
+    private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -51,6 +63,11 @@ public class OTPValidation extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_otpvalidation);
+
+            SmsRetriever.getClient(this).startSmsUserConsent(null);
+
+            IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
+            registerReceiver(smsVerificationReceiver,  intentFilter);
 
             OTP_TYPE = getIntent().getStringExtra("OTP_TYPE");
             MOBILE = getIntent().getStringExtra("MOBILE");
@@ -282,4 +299,54 @@ public class OTPValidation extends AppCompatActivity {
         super.onResume();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            // ...
+            case SMS_CONSENT_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    // Get SMS message content
+                    String message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE);
+                    // Extract one-time code from the message and complete verification
+                    // `sms` contains the entire text of the SMS message, so you will need
+                    // to parse the string.
+//                    String oneTimeCode = parseOneTimeCode(message); // define this function
+
+                    Log.e("Message", message);
+                    // send one time code to the server
+                } else {
+                    // Consent canceled, handle the error ...
+                }
+                break;
+        }
+    }
+
+    private final BroadcastReceiver smsVerificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (SmsRetriever.SMS_RETRIEVED_ACTION.equals(intent.getAction())) {
+                Bundle extras = intent.getExtras();
+                Status smsRetrieverStatus = (Status) extras.get(SmsRetriever.EXTRA_STATUS);
+
+                switch (smsRetrieverStatus.getStatusCode()) {
+                    case CommonStatusCodes.SUCCESS:
+                        // Get consent intent
+                        Intent consentIntent = extras.getParcelable(SmsRetriever.EXTRA_CONSENT_INTENT);
+                        try {
+                            // Start activity to show consent dialog to user, activity must be started in
+                            // 5 minutes, otherwise you'll receive another TIMEOUT intent
+                            startActivityForResult(consentIntent, SMS_CONSENT_REQUEST);
+                        } catch (ActivityNotFoundException e) {
+                            // Handle the exception ...
+                        }
+                        break;
+                    case CommonStatusCodes.TIMEOUT:
+                        // Time out occurred, handle the error.
+                        break;
+                }
+            }
+        }
+    };
 }
