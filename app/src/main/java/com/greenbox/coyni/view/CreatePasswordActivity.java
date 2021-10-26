@@ -26,9 +26,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
     ImageView imgClose;
     CardView cvSave, cvLogin;
     RelativeLayout layoutNewPassword, layoutDone;
-    TextInputLayout etlPassword;
-    TextInputEditText etPassword;
-    TextView tvPasswordInfo;
+    TextInputLayout etlPassword,etlCPassword;
+    TextInputEditText etPassword,etCPassword;
+    TextView tvPasswordInfo, tvHead, tvMessage;
     LinearLayout layoutIndicator;
     private Pattern strong, medium;
     private static final String STRONG_PATTERN =
@@ -56,6 +56,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             cvLogin = findViewById(R.id.cvLogin);
             etlPassword = findViewById(R.id.etlPassword);
             etPassword = findViewById(R.id.etPassword);
+            etCPassword = findViewById(R.id.etCPassword);
             tvPasswordInfo = findViewById(R.id.tvPasswordInfo);
             strengthOne = findViewById(R.id.strengthOne);
             strengthTwo = findViewById(R.id.strengthTwo);
@@ -63,9 +64,18 @@ public class CreatePasswordActivity extends AppCompatActivity {
             layoutNewPassword = findViewById(R.id.layoutNewPassword);
             layoutDone = findViewById(R.id.layoutDone);
             layoutIndicator = findViewById(R.id.layoutIndicator);
+            tvHead = findViewById(R.id.tvHead);
+            tvMessage = findViewById(R.id.tvMessage);
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
             Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
+            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                tvMessage.setVisibility(VISIBLE);
+                tvHead.setText("Welcome Back!");
+            } else {
+                tvMessage.setVisibility(View.GONE);
+                tvHead.setText("Create New Password");
+            }
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,7 +147,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             cvLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(CreatePasswordActivity.this, DashboardActivity.class);
+                    Intent i = new Intent(CreatePasswordActivity.this, LoginActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 }
@@ -146,4 +156,5 @@ public class CreatePasswordActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
 }

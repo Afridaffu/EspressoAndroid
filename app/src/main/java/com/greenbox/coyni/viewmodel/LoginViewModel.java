@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -34,6 +35,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<EmailResendResponse> emailresendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailResponse> emailotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<EmailValidateResponse> emailValidateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SMSResponse> smsresendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SMSValidate> smsotpLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> loginLiveData = new MutableLiveData<>();
@@ -76,6 +78,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> getErrorMessage() {
         return errorMessage;
+    }
+
+    public MutableLiveData<EmailValidateResponse> getEmailValidateResponseMutableLiveData() {
+        return emailValidateResponseMutableLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -253,6 +259,38 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     loginLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void emailotpValidate(SmsRequest smsRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<EmailValidateResponse> mCall = apiService.emailotpValidate(smsRequest);
+            mCall.enqueue(new Callback<EmailValidateResponse>() {
+                @Override
+                public void onResponse(Call<EmailValidateResponse> call, Response<EmailValidateResponse> response) {
+                    if (response.isSuccessful()) {
+                        EmailValidateResponse obj = response.body();
+                        emailValidateResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<EmailValidateResponse>() {
+                        }.getType();
+                        EmailValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            emailValidateResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EmailValidateResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

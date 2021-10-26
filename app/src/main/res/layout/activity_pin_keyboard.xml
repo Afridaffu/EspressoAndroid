@@ -17,6 +17,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/imgBack"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="32dp"
@@ -24,6 +25,7 @@
             android:src="@drawable/ic_back" />
 
         <TextView
+            android:id="@+id/tvHead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -125,248 +127,18 @@
             </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/confirmPINLL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottomKeyPad"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="67dp"
-            android:src="@drawable/ic_back" />
-
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:fontFamily="@font/opensans_bold"
-            android:text="Confrim your PIN"
-            android:textAlignment="center"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_24sp" />
-
-        <LinearLayout
+            android:id="@+id/tvForgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="79dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/confirmCircleOne"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/confirmCircleTwo"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/confirmCircleThree"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/confirmCircleFour"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/confirmCircleFive"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/confirmCircleSix"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Forgot PIN"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/text_size_18sp"
+            android:visibility="gone"></TextView>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/enterPINLL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottomKeyPad"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="67dp"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:fontFamily="@font/opensans_bold"
-            android:text="Enter your PIN"
-            android:textAlignment="center"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_24sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="79dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/enterCircleOne"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/enterCircleTwo"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/enterCircleThree"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/enterCircleFour"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/enterCircleFive"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/enterCircleSix"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/bottomKeyPad"

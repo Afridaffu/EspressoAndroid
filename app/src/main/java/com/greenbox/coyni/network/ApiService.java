@@ -1,5 +1,6 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -35,4 +36,6 @@ public interface ApiService {
     @POST("/api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
 
+    @POST("/api/v2/user/email-otp/validate")
+    Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 }

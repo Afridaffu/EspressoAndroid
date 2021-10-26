@@ -21,6 +21,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="chpwdmsg">Look like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
 
     <string name="retrieveemailcontent">To help you retrieve your email, we will need your help. please enter the information below.</string>
     <string name="firstName">First Name</string>

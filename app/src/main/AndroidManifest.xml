@@ -79,7 +79,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.ForgotPasswordActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
