@@ -49,8 +49,7 @@
                 app:expandedHintEnabled="false"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
-                app:hintTextColor="@color/primary_green"
-                >
+                app:hintTextColor="@color/primary_green">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/firstNameET"
@@ -132,7 +131,7 @@
                 android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="14dp"

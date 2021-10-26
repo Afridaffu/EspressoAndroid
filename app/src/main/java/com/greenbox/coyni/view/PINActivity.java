@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -281,10 +282,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     confirmCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
                     passcodeConfirm=num1+num2+num3+num4+num5+num6;
                     if(getPasscode().length()==0){
-                        savePasscode(passcode);
+                        savePasscode(passcodeConfirm);
                     }
                     else {
-                        matchPasscode();
+                        matchPasscodeConfirm();
                     }
                     break;
 
@@ -295,9 +296,19 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     private void matchPasscode() {
 
         if (getPasscode().equals(passcode)){
-//            startActivity(new Intent(this,PassCode_Success.class));
+            choosePINLL.setVisibility(View.GONE);
+            confirmPINLL.setVisibility(View.VISIBLE);
+            TYPE = "CONFIRM";
         } else {
+            choosePINLL.setVisibility(View.VISIBLE);
+            confirmPINLL.setVisibility(View.GONE);
 //            Toast.makeText(this, "Passcode doest match plzz try again!!!"+getPasscode(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void matchPasscodeConfirm() {
+        if (getPasscode().equals(passcodeConfirm)){
+            startActivity(new Intent(this, EnableFaceID.class));
         }
     }
 
