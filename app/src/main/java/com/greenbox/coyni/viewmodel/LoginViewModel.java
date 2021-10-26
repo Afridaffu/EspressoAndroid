@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.register.CustRegisRequest;
+import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.SMSResend;
@@ -34,6 +37,10 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<SMSResponse> smsresendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SMSValidate> smsotpLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> loginLiveData = new MutableLiveData<>();
+
+    private MutableLiveData<CustRegisterResponse> custRegisResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<EmailResponse> emailresendLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -61,6 +68,14 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<LoginResponse> getLoginLiveData() {
         return loginLiveData;
+    }
+
+    public MutableLiveData<CustRegisterResponse> getCustRegisResponseMutableLiveData() {
+        return custRegisResponseMutableLiveData;
+    }
+
+    public MutableLiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -245,4 +260,39 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+    public void customerRegistration(CustRegisRequest custRegisRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<CustRegisterResponse> mCall = apiService.custRegister(custRegisRequest);
+            mCall.enqueue(new Callback<CustRegisterResponse>() {
+                @Override
+                public void onResponse(Call<CustRegisterResponse> call, Response<CustRegisterResponse> response) {
+                    if (response.isSuccessful()) {
+                        CustRegisterResponse obj = response.body();
+                        custRegisResponseMutableLiveData.setValue(obj);
+                    }else{
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<Login>() {
+//                        }.getType();
+//                        Login errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+//                        if (errorResponse != null) {
+//                            errorMessage.setValue(errorResponse.getError().getErrorDescription());
+//                            custRegisResponseMutableLiveData.setValue(null);
+//                        }
+
+                        Log.e("Cust reg response", response.isSuccessful()+"");
+                        Log.e("Cust reg", "ERROR");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CustRegisterResponse> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

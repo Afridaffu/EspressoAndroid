@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="25dp"
+    android:paddingLeft="22dp"
+    android:paddingRight="22dp"
+    android:paddingTop="22dp"
     android:screenReaderFocusable="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.CreateAccountActivity">
@@ -15,7 +17,7 @@
         android:id="@+id/createAccountCloseIV"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="45dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/ic_x" />
 
@@ -35,38 +37,106 @@
                 android:fontFamily="@font/opensans_bold"
                 android:text="Create Account"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_24sp" />
+                android:textSize="@dimen/text_size_16sp" />
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/firstNameET"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL"
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="14dp"
+                android:hint="First Name"
+                app:expandedHintEnabled="false"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintTextColor="@color/primary_green"
+                >
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/lastNameET"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="First Name"
+                    android:inputType="text"
+                    android:padding="14dp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:imeOptions="actionNext"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="14dp"
+                android:hint="Last Name"
+                app:expandedHintEnabled="false"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintTextColor="@color/primary_green">
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/emailET"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lastNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="Last Name"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:padding="14dp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:imeOptions="actionNext" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="14dp"
+                android:hint="Email"
+                app:expandedHintEnabled="false"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintTextColor="@color/primary_green">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:padding="14dp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:textColorHint="@color/light_gray"
+                    android:imeOptions="actionNext"
+                    android:textCursorDrawable="@drawable/cursor_color"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <LinearLayout
                 android:id="@+id/emailErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/ic_erro" />
 
                 <TextView
@@ -76,41 +146,130 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="User alread exists. Try a new email or log in."
                     android:textColor="@color/error_red"
-                    android:textSize="@dimen/text_size_10sp" />
+                    android:textSize="@dimen/text_size_10sp"
+                    />
             </LinearLayout>
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
                 android:id="@+id/phoneNumberET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="14dp" />
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/passwordET"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_height="70dp"
+                android:layout_marginTop="14dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    app:expandedHintEnabled="false"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:hintTextColor="@color/primary_green"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passwordET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="8-12 Characters"
+                        android:inputType="textPassword"
+                        android:maxLength="12"
+                        android:padding="14dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_12sp"
+                        android:textColorHint="@color/light_gray"
+                        android:imeOptions="actionNext"
+                        android:textCursorDrawable="@drawable/cursor_color"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/stregnthViewLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    >
+
+                    <View
+                        android:id="@+id/stregnthOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/error_red"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
+                    <View
+                        android:id="@+id/stregnthTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/error_red"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="invisible"/>
+                    <View
+                        android:id="@+id/stregnthThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/error_red"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="invisible"/>
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/passwordInfoTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/text_size_10sp" />
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/confirmPasswordET"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="14dp"
+                android:hint="Confirm Password"
+                app:expandedHintEnabled="false"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintTextColor="@color/primary_green"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confirmPasswordET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="Confirm Password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:maxLength="12"
+                    android:padding="14dp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -119,7 +278,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="By clicking next, you agree to "
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/text_size_11sp" />
 
                 <TextView
                     android:id="@+id/tosTV"
@@ -128,7 +287,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="Terms of Service "
                     android:textColor="@color/primary_color"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/text_size_11sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,7 +295,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="&amp; "
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/text_size_11sp" />
 
 
             </LinearLayout>
@@ -148,18 +307,17 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="Privacy Policy"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/text_size_12sp" />
+                android:textSize="@dimen/text_size_11sp" />
 
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/nextCV"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="30dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="20dp"
                 app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="30dp">
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,8 +325,8 @@
                     android:gravity="center"
                     android:text="Next"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_18sp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_bold" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>

@@ -17,19 +17,22 @@ public class AccountTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView(R.layout.activity_account_type);
+        try{
+            super.onCreate(savedInstanceState);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            setContentView(R.layout.activity_account_type);
 
-        personalAccontLL = findViewById(R.id.personalAccontLL);
+            personalAccontLL = findViewById(R.id.personalAccontLL);
+            personalAccontLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
+                }
+            });
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
 
-
-        personalAccontLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
-            }
-        });
     }
 }

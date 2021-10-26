@@ -15,20 +15,20 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/fragTwoBottomLL"
-            android:layout_marginTop="-30dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bg_onboard_two"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-40dp"
+            android:src="@drawable/bg_onboard_two" />
 
         <LinearLayout
             android:id="@+id/fragTwoBottomLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-            android:padding="32dp">
+            android:padding="21dp"
+            android:layout_below="@+id/topIV"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentBottom="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:text="Tokenize Your Money With coyni"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_18sp" />
+                android:textSize="@dimen/text_size_15sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_16sp" />
+                    android:textSize="@dimen/text_size_12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -79,7 +79,7 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_16sp" />
+                    android:textSize="@dimen/text_size_12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -100,10 +100,11 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_16sp" />
+                    android:textSize="@dimen/text_size_12sp" />
             </LinearLayout>
 
         </LinearLayout>
+
     </RelativeLayout>
 
 </FrameLayout>
