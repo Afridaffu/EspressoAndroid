@@ -345,4 +345,5 @@ public class LoginActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
 }

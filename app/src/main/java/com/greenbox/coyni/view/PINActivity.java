@@ -10,9 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.greenbox.coyni.R;
-
 import java.util.ArrayList;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {

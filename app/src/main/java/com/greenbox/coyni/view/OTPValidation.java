@@ -47,13 +47,12 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "";
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",countryCode="",maskedPhone="";
     LinearLayout layoutEntry, layoutFailure;
     MaterialCardView tryAgainCV;
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
 
-    private static final int CREDENTIAL_PICKER_REQUEST = 1;  // Set to an unused request code
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     @Override
@@ -95,11 +94,13 @@ public class OTPValidation extends AppCompatActivity {
                 otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                 headerTV.setText("Verify Email");
                 subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
-            } else {
+            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("SignUp")) {
+                countryCode = getIntent().getStringExtra("COUNTRY_CODE");
+                maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                 otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                 if (OTP_TYPE.equals("MOBILE")) {
                     headerTV.setText("Please Verify your Phone Number");
-                    subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + MOBILE);
+                    subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
                 } else if (OTP_TYPE.equals("EMAIL")) {
                     headerTV.setText("Please Verify your Email");
                     subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);

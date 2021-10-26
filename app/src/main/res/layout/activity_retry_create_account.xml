@@ -25,23 +25,33 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="22dp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Retry Create Account"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/text_size_16sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:fontFamily="@font/opensans_regular"
             android:text="Error: Look like we are having an issue with your OTP request, please retry again later."
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_16sp" />
+            android:textSize="@dimen/text_size_12sp" />
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/tryAgainCV"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="43dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="30dp"
         app:cardBackgroundColor="@color/primary_color"
-        app:cardCornerRadius="30dp">
+        app:cardCornerRadius="22dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -50,7 +60,7 @@
             android:gravity="center"
             android:text="Try Again"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_18sp"
+            android:textSize="@dimen/text_size_12sp"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 
