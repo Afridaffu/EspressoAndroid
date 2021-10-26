@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <ImageView
+        android:layout_width="19.33dp"
+        android:layout_height="19.33dp"
+        android:layout_marginTop="67dp"
+        android:layout_marginStart="32dp"
+        android:src="@drawable/ic_close"
+        />
+
+
+    <ImageView
+        android:id="@+id/relogoWeFoundAccount"
+        android:layout_width="333.67dp"
+        android:layout_height="173.97dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="53dp"
+        android:src="@drawable/ic_foundimg" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+
+        android:gravity="center"
+        android:text="@string/foundacc"
+        android:textSize="@dimen/text_size_24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@color/primary_black"
+        android:text="@string/belowtxtre"
+        android:textSize="18sp"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/reCoyniAccountLL"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:background="@drawable/bg_card">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_profilelogo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/primary_black"
+                android:textAlignment="textStart"
+                android:layout_marginTop="8dp"
+                android:text="@string/coyni_account"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"
+                android:textAlignment="textStart"
+                android:text="@string/jona_gmail_com"
+
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_rightarrow" />
+
+    </LinearLayout>
+</LinearLayout>

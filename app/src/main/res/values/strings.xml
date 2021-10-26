@@ -7,7 +7,7 @@
     <string name="emailotpmsg">We have sent you a 6-digit code sent to the register email address: </string>
 
 
-    <string name="remembertxt">Remember Me</string>
+    <string name="remembertxt">   Remember Me</string>
     <string name="forgotpwdtxt">Forgot Password</string>
     <string name="retrievemail">Retrieve Email</string>
     <string name="epincorrecttext">Email or password is incorrect</string>
@@ -20,6 +20,18 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <string name="retrieveemailcontent">To help you retrieve your email, we will need your help. please enter the information below.</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="processing">Processing…</string>
+    <string name="processingcontent">We are looking for your account in the moment. Thank you for your patience.</string>
+    <string name="sorrytxt">Sorry We Can’t Find Anything on File</string>
+    <string name="tryagain">Try Again</string>
+    <string name="coyni_account">Coyni Account</string>
+    <string name="foundacc">We’ve Found Your Account!</string>
+    <string name="belowtxtre">Click the Link below to log in</string>
+    <string name="jona_gmail_com">Jona***@gmail.com</string>
 
 
 </resources>
