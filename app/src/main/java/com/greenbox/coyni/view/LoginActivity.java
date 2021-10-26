@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView faceidNotAvail;
     CardView cvNext,cvEmailOK;
     LinearLayout layoutEmailError, layoutPwdError;
-    TextView tvEmailError, tvPwdError;
+    TextView tvEmailError, tvPwdError,forgotpwd;
     String strEmail = "", strPwd = "";
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
@@ -65,22 +65,22 @@ public class LoginActivity extends AppCompatActivity {
             tvEmailError = findViewById(R.id.tvEmailError);
             layoutPwdError = findViewById(R.id.layoutPwdError);
             tvPwdError = findViewById(R.id.tvPwdError);
+            forgotpwd = findViewById(R.id.forgotpwd);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             etlPassword.setEndIconOnClickListener(view -> {
                 FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
                 faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
-
             });
-            faceidNotAvail = findViewById(R.id.faceidNotAvaiSheet);
-
-            faceidNotAvail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
-                }
-            });
+//            faceidNotAvail = findViewById(R.id.faceidNotAvaiSheet);
+//
+//            faceidNotAvail.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
+//                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+//                }
+//            });
             etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -191,6 +191,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
+            forgotpwd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                    startActivity(i);
+                }
+            });
+
             cvNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,6 +216,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -223,6 +232,10 @@ public class LoginActivity extends AppCompatActivity {
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             if (login.getData().getPasswordExpired()) {
                                 //showPwdExpiredPopup();
+                                Intent i = new Intent(LoginActivity.this, PINActivity.class);
+                                i.putExtra("screen","loginExpiry");
+                                i.putExtra("TYPE", "ENTER");
+                                startActivity(i);
                             } else {
                                 Utils.setStrAuth(login.getData().getJwtToken());
                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);

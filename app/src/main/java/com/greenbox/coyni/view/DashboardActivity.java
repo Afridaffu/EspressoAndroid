@@ -19,21 +19,7 @@ public class DashboardActivity extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_dashboard);
-            String url = BuildConfig.URL_PRODUCTION;
-            String refererUrl = BuildConfig.Referer;
-            if (url.equals("")) {
-                Utils.setStrURL_PRODUCTION(url);
-                Utils.setStrReferer(refererUrl);
-            }
-            Toast.makeText(this, "Url - " + url, Toast.LENGTH_LONG).show();
-            TextView tvForgot = findViewById(R.id.tvForgot);
-            tvForgot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(DashboardActivity.this, ForgotPasswordActivity.class);
-                    startActivity(i);
-                }
-            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
