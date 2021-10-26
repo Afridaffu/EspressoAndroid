@@ -8,10 +8,15 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.utils.Utils;
@@ -23,7 +28,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     CardView cvNext;
     TextInputEditText etEmail;
     LoginViewModel loginViewModel;
+    TextInputLayout etlEmail;
     ProgressDialog dialog;
+    LinearLayout layoutEmailError;
+    TextView tvEmailError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             imgClose = findViewById(R.id.imgClose);
             cvNext = findViewById(R.id.cvNext);
             etEmail = findViewById(R.id.etEmail);
+            etlEmail = findViewById(R.id.etlEmail);
+            layoutEmailError = findViewById(R.id.layoutEmailError);
+            tvEmailError = findViewById(R.id.tvEmailError);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
             imgClose.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +61,30 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
+
+            etEmail.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    try {
+                        etlEmail.setErrorEnabled(false);
+                        etlEmail.setError("");
+                        layoutEmailError.setVisibility(View.GONE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
             cvNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,10 +132,18 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         Boolean value = true;
         try {
             if (etEmail.getText().toString().equals("")) {
-                Utils.displayAlert("Please enter Email", ForgotPasswordActivity.this);
+                etlEmail.setErrorEnabled(true);
+                etlEmail.setError(" ");
+                layoutEmailError.setVisibility(View.VISIBLE);
+                tvEmailError.setText("Please enter Email");
+                //Utils.displayAlert("Please enter Email", ForgotPasswordActivity.this);
                 return value = false;
             } else if (!isEmailValid(etEmail.getText().toString().trim())) {
-                Utils.displayAlert("Please enter valid Email", ForgotPasswordActivity.this);
+                etlEmail.setErrorEnabled(true);
+                etlEmail.setError(" ");
+                layoutEmailError.setVisibility(View.VISIBLE);
+                tvEmailError.setText("Please enter valid Email");
+                //Utils.displayAlert("Please enter valid Email", ForgotPasswordActivity.this);
                 return value = false;
             }
         } catch (Exception ex) {

@@ -24,7 +24,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.card.MaterialCardView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.EmailResponse;
+import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SmsRequest;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -94,6 +96,23 @@ public class OTPValidation extends AppCompatActivity {
                         newCodeTV.setVisibility(View.VISIBLE);
                         resendCounter++;
                         startTimer();
+                        Utils.hideKeypad(OTPValidation.this, view);
+                        if ((strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd"))||(OTP_TYPE.equals("EMAIL"))) {
+                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                            dialog.setIndeterminate(false);
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                            loginViewModel.emailotpresend(EMAIL.trim());
+                        } else if (OTP_TYPE.equals("MOBILE")) {
+                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                            dialog.setIndeterminate(false);
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                            SMSResend resend = new SMSResend();
+                            resend.setCountryCode(Utils.strCCode);
+                            resend.setPhoneNumber(MOBILE);
+                            loginViewModel.smsotpresend(resend);
+                        }
 
                     } else {
                         layoutEntry.setVisibility(View.GONE);
