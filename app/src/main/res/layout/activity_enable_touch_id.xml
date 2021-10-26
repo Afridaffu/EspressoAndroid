@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.EnableTouchID"
-    android:padding="25dp"
+    android:padding="20dp"
     android:background="@color/white"
     >
 
@@ -19,18 +19,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Enable Face ID"
-            android:textSize="@dimen/text_size_24sp"
+            android:textSize="@dimen/text_size_16sp"
             android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_bold"
             android:layout_marginBottom="21dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="72dp"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="By enabling Face ID, you are preventing unauthorized users from gaining access to your account and other sensitive information."
-            android:textSize="@dimen/text_size_16sp"
+            android:textSize="@dimen/text_size_12sp"
             android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_regular"
             android:layout_marginBottom="40dp"
@@ -55,16 +55,16 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/enableFaceCV"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="43dp"
             app:cardBackgroundColor="@color/primary_color"
-            app:cardCornerRadius="30dp"
+            app:cardCornerRadius="22dp"
             android:layout_marginBottom="20dp"
             >
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Enable"
-                android:textSize="@dimen/text_size_18sp"
+                android:textSize="@dimen/text_size_12sp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Not Now"
-            android:textSize="@dimen/text_size_18sp"
+            android:textSize="@dimen/text_size_12sp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:layout_gravity="center"

@@ -2,6 +2,8 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.register.CustRegisRequest;
+import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.SMSResend;
@@ -29,4 +31,8 @@ public interface ApiService {
 
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    @POST("/api/v2/register/newcustomer")
+    Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
+
 }

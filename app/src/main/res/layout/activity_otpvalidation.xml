@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="25dp"
+    android:padding="22dp"
     tools:context=".view.OTPValidation">
 
     <LinearLayout
@@ -19,8 +19,8 @@
             android:id="@+id/otpValidationCloseIV"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="14dp"
             android:src="@drawable/ic_back" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:fontFamily="@font/opensans_bold"
             android:text="Please Verify Your Phone Number"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_24sp" />
+            android:textSize="@dimen/text_size_16sp" />
 
         <TextView
             android:id="@+id/subHeaderTV"
@@ -41,7 +41,7 @@
             android:fontFamily="@font/opensans_regular"
             android:text="We sent you 6-digit code to the register phone number (661) 726-0369"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_16sp" />
+            android:textSize="@dimen/text_size_12sp" />
 
         <com.greenbox.coyni.utils.otpview.PinView
             android:id="@+id/otpPV"
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="28dp"
             android:cursorVisible="false"
             android:fontFamily="@font/opensans_regular"
             android:hint="12346"
@@ -75,7 +75,7 @@
             android:gravity="center"
             android:text="Didn't get the code?"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_14sp" />
+            android:textSize="@dimen/text_size_12sp" />
 
         <TextView
             android:id="@+id/resendTV"
@@ -86,7 +86,7 @@
             android:gravity="center"
             android:text="Resend"
             android:textColor="@color/primary_color"
-            android:textSize="@dimen/text_size_14sp" />
+            android:textSize="@dimen/text_size_12sp" />
 
         <TextView
             android:id="@+id/newCodeTV"

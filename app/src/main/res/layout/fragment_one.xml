@@ -6,7 +6,7 @@
     android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -15,22 +15,19 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/bottomIV"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="-100dp"
-            android:layout_marginEnd="-100dp"
+            android:layout_marginTop="-50dp"
             android:src="@drawable/bg_onboard_frag_one" />
+
         <ImageView
             android:id="@+id/bottomIV"
-            android:layout_width="173dp"
-            android:layout_height="70dp"
+            android:layout_width="116dp"
+            android:layout_height="46dp"
             android:src="@drawable/ic_coyni_logo"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
             android:layout_marginBottom="60dp"
             android:layout_gravity="center"
+            android:layout_marginTop="7dp"
             />
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>
