@@ -65,7 +65,9 @@
             app:itemSpacing="5dp"
             app:lineColor="@color/line_colors"
             app:lineWidth="2dp"
-            app:viewType="rectangle" />
+            app:viewType="rectangle"
+            app:itemHeight="58dp"
+            app:itemWidth="48dp"/>
 
         <TextView
             android:layout_width="match_parent"
