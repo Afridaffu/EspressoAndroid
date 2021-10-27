@@ -32,6 +32,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SmsRequest;
@@ -166,7 +167,7 @@ public class OTPValidation extends AppCompatActivity {
                                     SmsRequest smsRequest = new SmsRequest();
                                     smsRequest.setEmail(EMAIL.trim());
                                     smsRequest.setOtp(charSequence.toString().trim());
-                                    loginViewModel.emailotp(smsRequest);
+                                    loginViewModel.emailotpValidate(smsRequest);
                                 }
                             } else {
                                 if (OTP_TYPE.equals("MOBILE")) {
@@ -225,7 +226,7 @@ public class OTPValidation extends AppCompatActivity {
         }
     }
 
-    void startTimer() {
+    private void startTimer() {
         new Thread() {
             @Override
             public void run() {
@@ -266,6 +267,27 @@ public class OTPValidation extends AppCompatActivity {
                         shakeAnimateUpDown();
                         startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class));
                     }
+                }
+            }
+        });
+
+        loginViewModel.getEmailValidateResponseMutableLiveData().observe(this, new Observer<EmailValidateResponse>() {
+            @Override
+            public void onChanged(EmailValidateResponse emailValidateResponse) {
+                try{
+                    dialog.dismiss();
+                    if (emailValidateResponse != null) {
+                        if (emailValidateResponse.getStatus().toLowerCase().equals("error")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+                        } else {
+                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                            shakeAnimateUpDown();
+                            startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+                        }
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
                 }
             }
         });
