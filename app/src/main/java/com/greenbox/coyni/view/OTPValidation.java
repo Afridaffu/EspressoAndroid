@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,13 +49,29 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",countryCode="",maskedPhone="";
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",maskedPhone="";
     LinearLayout layoutEntry, layoutFailure;
-    MaterialCardView tryAgainCV;
+    MaterialCardView tryAgainCV,secureNextCV;
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
+    RelativeLayout secureAccountRL;
 
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
+
+    String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
+
+    int[][] states = new int[][] {
+            new int[] { android.R.attr.state_empty}, // enabled
+            new int[] {-android.R.attr.state_selected}, // disabled
+            new int[] {-android.R.attr.state_focused}, // unchecked
+            new int[] { android.R.attr.state_pressed}  // pressed
+    };
+
+    int[] colors = new int[] {
+        R.color.primary_color,
+            R.color.primary_color,
+            R.color.light_gray
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +101,8 @@ public class OTPValidation extends AppCompatActivity {
             layoutEntry = findViewById(R.id.layoutEntry);
             layoutFailure = findViewById(R.id.layoutFailure);
             tryAgainCV = findViewById(R.id.tryAgainCV);
+            secureAccountRL = findViewById(R.id.secureAccountRL);
+            secureNextCV = findViewById(R.id.secureNextCV);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             layoutEntry.setVisibility(View.VISIBLE);
             layoutFailure.setVisibility(View.GONE);
@@ -96,7 +115,6 @@ public class OTPValidation extends AppCompatActivity {
                 headerTV.setText("Verify Email");
                 subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("SignUp")) {
-                countryCode = getIntent().getStringExtra("COUNTRY_CODE");
                 maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                 otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                 if (OTP_TYPE.equals("MOBILE")) {
@@ -176,10 +194,11 @@ public class OTPValidation extends AppCompatActivity {
                                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                             shakeAnimateUpDown();
                                             startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                    .putExtra("screen", "SignUp")
                                                     .putExtra("OTP_TYPE", "EMAIL")
                                                     .putExtra("MOBILE", MOBILE)
-                                                    .putExtra("EMAIL", EMAIL)
-                                            );
+                                                    .putExtra("MASK_MOBILE",maskedPhone)
+                                                    .putExtra("EMAIL", EMAIL));
                                         } else {
                                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                                             shakeAnimateLeftRight();
@@ -190,7 +209,11 @@ public class OTPValidation extends AppCompatActivity {
                                         if (charSequence.toString().equals("123456")) {
                                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                             shakeAnimateUpDown();
-                                            startActivity(new Intent(OTPValidation.this, SecureAccount.class));
+                                            Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
+                                            secureAccountRL.setVisibility(View.VISIBLE);
+                                            layoutType = "SECURE";
+                                            layoutEntry.setVisibility(View.GONE);
+                                            layoutFailure.setVisibility(View.GONE);
                                         } else {
                                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                                             shakeAnimateLeftRight();
@@ -220,7 +243,13 @@ public class OTPValidation extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            secureNextCV.setOnClickListener(view -> {
+                startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE"));
+            });
+
             initObserver();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -294,12 +323,12 @@ public class OTPValidation extends AppCompatActivity {
     }
 
     public void shakeAnimateLeftRight() {
-        vibrateAction();
+//        vibrateAction();
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
     }
 
     public void shakeAnimateUpDown() {
-        vibrateAction();
+//        vibrateAction();
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
     }
 
@@ -372,4 +401,25 @@ public class OTPValidation extends AppCompatActivity {
             }
         }
     };
+
+
+    @Override
+    public void onBackPressed() {
+        try {
+            switch (layoutType) {
+                case "SECURE":
+                    Intent intent = new Intent(OTPValidation.this, OnboardActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    break;
+                case "OTP": {
+                    super.onBackPressed();
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

@@ -83,7 +83,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
-    String strCode = "IN",phoneNumber;
+    String phoneNumber;
     int PERSONAL_ACCOUNT = 1,BUSINESS_ACCOUNT = 2,SHARED_ACCOUNT = 3;
 
     String privacyURL  = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
@@ -176,14 +176,18 @@ public class CreateAccountActivity extends AppCompatActivity  {
 //                    callRegisterAPI();
 
                     startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
+                            .putExtra("screen", "SignUp")
                             .putExtra("OTP_TYPE", "MOBILE")
-                            .putExtra("MOBILE", phoneNumberET.getText())
+                            .putExtra("MOBILE", phoneNumber)
+                            .putExtra("MASK_MOBILE",phoneNumberET.getText())
                             .putExtra("EMAIL", emailET.getText().toString().trim()));
 
                 } else {
                     startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
+                            .putExtra("screen", "SignUp")
                             .putExtra("OTP_TYPE", "EMAIL")
-                            .putExtra("MOBILE", phoneNumberET.getText())
+                            .putExtra("MOBILE", phoneNumber)
+                            .putExtra("MASK_MOBILE",phoneNumberET.getText())
                             .putExtra("EMAIL", emailET.getText().toString().trim()));
                 }
 
@@ -217,7 +221,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
                         Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
                         i.putExtra("screen", "SignUp");
                         i.putExtra("OTP_TYPE", "MOBILE");
-                        i.putExtra("COUNTRY_CODE", strCode);
                         i.putExtra("MOBILE", phoneNumber);
                         i.putExtra("MASK_MOBILE",phoneNumberET.getText());
                         i.putExtra("EMAIL", emailET.getText().toString().trim());
@@ -474,7 +477,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
     private void callRegisterAPI() {
         try {
             PhNoWithCountryCode phone = new PhNoWithCountryCode();
-            phone.setCountryCode(strCode);
+            phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
 
             CustRegisRequest regisRequest = new CustRegisRequest();

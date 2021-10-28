@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="30dp"
-    android:paddingRight="32dp">
+    android:paddingRight="32dp"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <!-- TODO: Update blank fragment layout -->
 

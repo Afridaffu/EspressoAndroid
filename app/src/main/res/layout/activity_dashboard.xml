@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F4F5"
-    tools:context=".view.DashboardActivity">
+    tools:context=".view.DashboardActivity"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
