@@ -73,8 +73,7 @@ public class OnboardActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(OnboardActivity.this, PINActivity.class).putExtra("TYPE", "ENTER")
-                                .putExtra("screen","loginExpiry"));
+                        startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

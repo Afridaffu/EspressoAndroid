@@ -2,6 +2,8 @@ package com.greenbox.coyni.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,12 +35,16 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout etlEmail, etlPassword;
     TextInputEditText etEmail, etPassword;
     TextView faceidNotAvail;
-    CardView cvNext,cvEmailOK;
+    CardView cvNext, cvEmailOK;
     LinearLayout layoutEmailError, layoutPwdError;
-    TextView tvEmailError, tvPwdError,forgotpwd;
+    TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
     String strEmail = "", strPwd = "";
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
+    SQLiteDatabase mydatabase;
+    Cursor dsUserDetails, dsFacePin;
+    Boolean isFaceLock = false, isThumb = false;
+    ImageView imgClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,21 +73,15 @@ public class LoginActivity extends AppCompatActivity {
             layoutPwdError = findViewById(R.id.layoutPwdError);
             tvPwdError = findViewById(R.id.tvPwdError);
             forgotpwd = findViewById(R.id.forgotpwd);
+            tvRetEmail = findViewById(R.id.tvRetEmail);
+            imgClose = findViewById(R.id.imgClose);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             etlPassword.setEndIconOnClickListener(view -> {
                 FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
                 faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
             });
-//            faceidNotAvail = findViewById(R.id.faceidNotAvaiSheet);
-//
-//            faceidNotAvail.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-//                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
-//                }
-//            });
+
             etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -199,6 +200,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
+            tvRetEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(LoginActivity.this, RetrieveEmailActivity.class);
+                    startActivity(i);
+                }
+            });
+
             cvNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -217,8 +226,60 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
+            imgClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            SetDB();
+            SetLock();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void SetDB() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+            dsUserDetails.moveToFirst();
+            if (dsUserDetails.getCount() > 0 && Utils.checkAuthentication(LoginActivity.this)) {
+                strEmail = dsUserDetails.getString(1);
+                strPwd = dsUserDetails.getString(2);
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, username TEXT, password TEXT);");
+            }
+        }
+    }
+
+    private void SetLock() {
+        try {
+            isFaceLock = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    if (isThumb) {
+                        etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                    } else {
+                        etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+                    }
+                } else {
+                    isFaceLock = false;
+                }
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+            }
         }
     }
 
@@ -233,7 +294,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (login.getData().getPasswordExpired()) {
                                 //showPwdExpiredPopup();
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
-                                i.putExtra("screen","loginExpiry");
+                                i.putExtra("screen", "loginExpiry");
                                 i.putExtra("TYPE", "ENTER");
                                 startActivity(i);
                             } else {
@@ -244,7 +305,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         } else {
                             if (login.getData() != null) {
-//                                Utils.displayAlert(login.getData().getMessage(), LoginActivity.this);
                                 if (!login.getData().getMessage().equals("") && login.getData().getPasswordFailedAttempts() > 0) {
                                     Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());

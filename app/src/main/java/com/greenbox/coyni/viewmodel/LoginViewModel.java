@@ -12,6 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
+import com.greenbox.coyni.model.forgotpassword.SetPassword;
+import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -43,6 +45,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<CustRegisterResponse> custRegisResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailResponse> emailresendLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private MutableLiveData<SetPasswordResponse> setpwdLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -82,6 +85,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<EmailValidateResponse> getEmailValidateResponseMutableLiveData() {
         return emailValidateResponseMutableLiveData;
+    }
+
+    public MutableLiveData<SetPasswordResponse> getSetpwdLiveData() {
+        return setpwdLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -308,7 +315,7 @@ public class LoginViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         CustRegisterResponse obj = response.body();
                         custRegisResponseMutableLiveData.setValue(obj);
-                    }else{
+                    } else {
 //                        Gson gson = new Gson();
 //                        Type type = new TypeToken<Login>() {
 //                        }.getType();
@@ -318,7 +325,7 @@ public class LoginViewModel extends AndroidViewModel {
 //                            custRegisResponseMutableLiveData.setValue(null);
 //                        }
 
-                        Log.e("Cust reg response", response.isSuccessful()+"");
+                        Log.e("Cust reg response", response.isSuccessful() + "");
                         Log.e("Cust reg", "ERROR");
                     }
                 }
@@ -333,4 +340,35 @@ public class LoginViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void setPassword(SetPassword setPassword) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<SetPasswordResponse> mCall = apiService.setpassword(setPassword);
+            mCall.enqueue(new Callback<SetPasswordResponse>() {
+                @Override
+                public void onResponse(Call<SetPasswordResponse> call, Response<SetPasswordResponse> response) {
+                    if (response.isSuccessful()) {
+                        SetPasswordResponse obj = response.body();
+                        setpwdLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<SetPasswordResponse>() {
+                        }.getType();
+                        SetPasswordResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        setpwdLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SetPasswordResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

@@ -17,6 +17,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.BindingLayoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.RetrieveEmailActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".view.SignupSuccess"
             android:exported="true" />
         <activity

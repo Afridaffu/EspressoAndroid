@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,31 +19,33 @@ import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 public class RetrieveEmailActivity extends AppCompatActivity {
     OutLineBoxPhoneNumberEditText phoneNumberET;
     MaterialCardView nextBtn;
-    TextInputEditText firstName,lastName;
-    TextInputLayout firstTIL,lastTIL;
-    private boolean isPnNoEnable,isFirstNameEnable,isLastNameEnable,isNextBtnEnable;
+    TextInputEditText firstName, lastName;
+    TextInputLayout firstTIL, lastTIL;
+    private boolean isPnNoEnable, isFirstNameEnable, isLastNameEnable, isNextBtnEnable;
+    ImageView imgClose;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retrieve_email);
-        phoneNumberET=findViewById(R.id.rePhoneNumber);
-        nextBtn=findViewById(R.id.reCardViewNextBtn);
-        firstName=findViewById(R.id.reFirstNameET);
-        lastName=findViewById(R.id.reLastNameET);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_retrieve_email);
+            phoneNumberET = findViewById(R.id.rePhoneNumber);
+            nextBtn = findViewById(R.id.reCardViewNextBtn);
+            firstName = findViewById(R.id.reFirstNameET);
+            lastName = findViewById(R.id.reLastNameET);
+            imgClose = findViewById(R.id.imgClose);
 
-
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String phoneNumber, first, last,next;
-                phoneNumber = phoneNumberET.getText().toString();
-                first = firstName.getText().toString();
-                last = lastName.getText().toString();
-                firstTIL=findViewById(R.id.reFirstNameTIL);
-                lastTIL=findViewById(R.id.reLastNameTIL);
-                 if (phoneNumber.length() < 14) {
+            nextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String phoneNumber, first, last, next;
+                    phoneNumber = phoneNumberET.getText().toString();
+                    first = firstName.getText().toString();
+                    last = lastName.getText().toString();
+                    firstTIL = findViewById(R.id.reFirstNameTIL);
+                    lastTIL = findViewById(R.id.reLastNameTIL);
+                    if (phoneNumber.length() < 14) {
                         phoneNumberET.setErrorOutlineBox();
                         isPnNoEnable = false;
 
@@ -50,65 +53,78 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                         isPnNoEnable = true;
                     }
 
-                    if(first.isEmpty()){
-                        isFirstNameEnable=false;
-                    }
-                    else
-                    {
-                        isFirstNameEnable=true;
+                    if (first.isEmpty()) {
+                        isFirstNameEnable = false;
+                    } else {
+                        isFirstNameEnable = true;
 
                     }
 
-                    if(last.isEmpty()){
-                        isLastNameEnable=false;
-                   }
-                    else
-                    {
-                        isLastNameEnable=true;
+                    if (last.isEmpty()) {
+                        isLastNameEnable = false;
+                    } else {
+                        isLastNameEnable = true;
                     }
 
 
-                    if(isPnNoEnable&&isFirstNameEnable&&isLastNameEnable){
-                        isNextBtnEnable=true;
+                    if (isPnNoEnable && isFirstNameEnable && isLastNameEnable) {
+                        isNextBtnEnable = true;
                         nextBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                    }
-                    else {
-                        isNextBtnEnable=false;
+                    } else {
+                        isNextBtnEnable = false;
                     }
 
-                    if(isNextBtnEnable){
+                    if (isNextBtnEnable) {
                         final Dialog dialog = new Dialog(RetrieveEmailActivity.this);
                         dialog.setContentView(R.layout.retrieve_email_processing_layout);
                         dialog.getWindow().setBackgroundDrawableResource(R.color.white);
-                        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+                        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                         dialog.show();
                         startTimer(dialog);
                     }
 
                 }
-        });
-}
-    public void startTimer(Dialog dialog) {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(9000);
+            });
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.dismiss();
-                            }
-                        });
-
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            imgClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
                 }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-            }
-        }.start();
+    public void startTimer(Dialog dialog) {
+        try {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (this) {
+                            wait(5000);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
+                                    i.putExtra("OTP_TYPE", "MOBILE");
+                                    i.putExtra("MOBILE", phoneNumberET.getText());
+                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                    i.putExtra("screen", "retEmail");
+                                    startActivity(i);
+                                }
+                            });
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
