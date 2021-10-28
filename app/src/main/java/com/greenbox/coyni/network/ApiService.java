@@ -1,6 +1,8 @@
 package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
+import com.greenbox.coyni.model.forgotpassword.SetPassword;
+import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -14,6 +16,7 @@ import com.greenbox.coyni.model.register.SmsRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -38,4 +41,7 @@ public interface ApiService {
 
     @POST("/api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
+
+    @PATCH("api/v2/register/set-password")
+    Call<SetPasswordResponse> setpassword(@Body SetPassword setPassword);
 }

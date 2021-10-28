@@ -4,9 +4,14 @@ import static android.view.View.VISIBLE;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -18,7 +23,10 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.forgotpassword.SetPassword;
+import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Pattern;
 
@@ -26,10 +34,11 @@ public class CreatePasswordActivity extends AppCompatActivity {
     ImageView imgClose;
     CardView cvSave, cvLogin;
     RelativeLayout layoutNewPassword, layoutDone;
-    TextInputLayout etlPassword,etlCPassword;
-    TextInputEditText etPassword,etCPassword;
+    TextInputLayout etlPassword, etlCPassword;
+    TextInputEditText etPassword, etCPassword;
     TextView tvPasswordInfo, tvHead, tvMessage;
     LinearLayout layoutIndicator;
+    ProgressDialog dialog;
     private Pattern strong, medium;
     private static final String STRONG_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
@@ -37,6 +46,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private static final String MEDIUM_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,})";
     View strengthOne, strengthTwo, strengthThree;
+    String strCode = "", strNewPwd = "";
+    LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_password);
             initialization();
+            initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -68,6 +80,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             tvMessage = findViewById(R.id.tvMessage);
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                 tvMessage.setVisibility(VISIBLE);
@@ -75,6 +88,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
             } else {
                 tvMessage.setVisibility(View.GONE);
                 tvHead.setText("Create New Password");
+            }
+            if (getIntent().getStringExtra("code") != null && !getIntent().getStringExtra("code").equals("")) {
+                strCode = getIntent().getStringExtra("code");
             }
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,12 +152,24 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     }
                 }
             });
+
             cvSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.hideKeypad(CreatePasswordActivity.this, v);
-                    layoutNewPassword.setVisibility(View.GONE);
-                    layoutDone.setVisibility(VISIBLE);
+                    try {
+                        Utils.hideKeypad(CreatePasswordActivity.this, v);
+                        dialog = new ProgressDialog(CreatePasswordActivity.this, R.style.MyAlertDialogStyle);
+                        dialog.setIndeterminate(false);
+                        dialog.setMessage("Please wait...");
+                        dialog.show();
+                        strNewPwd = etPassword.getText().toString().trim();
+                        SetPassword setPassword = new SetPassword();
+                        setPassword.setCode(strCode);
+                        setPassword.setPassword(etPassword.getText().toString().trim());
+                        loginViewModel.setPassword(setPassword);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             cvLogin.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +183,22 @@ public class CreatePasswordActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void initObserver() {
+        loginViewModel.getSetpwdLiveData().observe(this, new Observer<SetPasswordResponse>() {
+            @Override
+            public void onChanged(SetPasswordResponse login) {
+                dialog.dismiss();
+                if (login != null) {
+                    if (login.getStatus().toLowerCase().equals("success")) {
+                        layoutNewPassword.setVisibility(View.GONE);
+                        layoutDone.setVisibility(VISIBLE);
+
+                    }
+                }
+            }
+        });
     }
 
 }

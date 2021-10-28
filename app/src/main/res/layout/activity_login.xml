@@ -10,10 +10,19 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.LoginActivity">
 
+    <ImageButton
+        android:id="@+id/imgClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/white"
+        android:src="@drawable/ic_close" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
+        android:fillViewport="false"
         android:scrollbars="none">
 
         <RelativeLayout
@@ -30,9 +39,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginTop="?attr/actionBarSize"
                     android:background="@color/white"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/ic_close"
+                    android:visibility="invisible" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -43,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="400dp"
                         android:layout_marginTop="-80dp"
-                        android:layout_marginRight="-175dp"
+                        android:layout_marginRight="-200dp"
                         android:background="@color/white"
                         android:src="@drawable/ic_coynilogotop"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -225,6 +234,7 @@
                         android:textSize="@dimen/text_size_18sp" />
 
                     <TextView
+                        android:id="@+id/tvRetEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -239,6 +249,7 @@
                     android:id="@+id/cvNext"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginTop="30dp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="32dp">
@@ -253,10 +264,12 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_18sp" />
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
+
         </RelativeLayout>
     </ScrollView>
+
+
 </RelativeLayout>
 
 

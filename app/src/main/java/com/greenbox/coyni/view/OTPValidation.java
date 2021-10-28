@@ -51,7 +51,7 @@ public class OTPValidation extends AppCompatActivity {
     private Vibrator vibrator;
     String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",maskedPhone="";
     LinearLayout layoutEntry, layoutFailure;
-    MaterialCardView tryAgainCV,secureNextCV;
+    MaterialCardView tryAgainCV;
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
@@ -59,19 +59,6 @@ public class OTPValidation extends AppCompatActivity {
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
-
-    int[][] states = new int[][] {
-            new int[] { android.R.attr.state_empty}, // enabled
-            new int[] {-android.R.attr.state_selected}, // disabled
-            new int[] {-android.R.attr.state_focused}, // unchecked
-            new int[] { android.R.attr.state_pressed}  // pressed
-    };
-
-    int[] colors = new int[] {
-        R.color.primary_color,
-            R.color.primary_color,
-            R.color.light_gray
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,19 +97,48 @@ public class OTPValidation extends AppCompatActivity {
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
 
-            if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
-                otpValidationCloseIV.setImageResource(R.drawable.ic_close);
-                headerTV.setText("Verify Email");
-                subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
-            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("SignUp")) {
-                maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
-                otpValidationCloseIV.setImageResource(R.drawable.ic_back);
-                if (OTP_TYPE.equals("MOBILE")) {
-                    headerTV.setText("Please Verify your Phone Number");
-                    subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
-                } else if (OTP_TYPE.equals("EMAIL")) {
-                    headerTV.setText("Please Verify your Email");
-                    subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
+//            if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
+//                otpValidationCloseIV.setImageResource(R.drawable.ic_close);
+//                headerTV.setText("Verify Email");
+//                subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+//            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("SignUp")) {
+//                countryCode = getIntent().getStringExtra("COUNTRY_CODE");
+//                maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
+//                otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+//                if (OTP_TYPE.equals("MOBILE")) {
+//                    headerTV.setText("Please Verify your Phone Number");
+//                    subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
+//                } else if (OTP_TYPE.equals("EMAIL")) {
+//                    headerTV.setText("Please Verify your Email");
+//                    subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
+//                }
+//            }
+            if (strScreen != null && !strScreen.equals("")) {
+                switch (strScreen) {
+                    case "ForgotPwd":
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_close);
+                        headerTV.setText("Verify Email");
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        break;
+                    case "retEmail":
+                        countryCode = Utils.strCCode;
+                        maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+                        headerTV.setText("Please Verify your Phone Number");
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register phone number " + maskedPhone);
+                        break;
+                    case "SignUp":
+                        countryCode = getIntent().getStringExtra("COUNTRY_CODE");
+                        maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+                        if (OTP_TYPE.equals("MOBILE")) {
+                            headerTV.setText("Please Verify your Phone Number");
+                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
+                        } else if (OTP_TYPE.equals("EMAIL")) {
+                            headerTV.setText("Please Verify your Email");
+                            subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
+                        }
+                        break;
                 }
             }
 
@@ -194,11 +210,10 @@ public class OTPValidation extends AppCompatActivity {
                                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                             shakeAnimateUpDown();
                                             startActivity(new Intent(OTPValidation.this, OTPValidation.class)
-                                                    .putExtra("screen", "SignUp")
                                                     .putExtra("OTP_TYPE", "EMAIL")
                                                     .putExtra("MOBILE", MOBILE)
-                                                    .putExtra("MASK_MOBILE",maskedPhone)
-                                                    .putExtra("EMAIL", EMAIL));
+                                                    .putExtra("EMAIL", EMAIL)
+                                            );
                                         } else {
                                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                                             shakeAnimateLeftRight();
@@ -209,11 +224,7 @@ public class OTPValidation extends AppCompatActivity {
                                         if (charSequence.toString().equals("123456")) {
                                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                             shakeAnimateUpDown();
-                                            Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
-                                            secureAccountRL.setVisibility(View.VISIBLE);
-                                            layoutType = "SECURE";
-                                            layoutEntry.setVisibility(View.GONE);
-                                            layoutFailure.setVisibility(View.GONE);
+                                            startActivity(new Intent(OTPValidation.this, SecureAccount.class));
                                         } else {
                                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                                             shakeAnimateLeftRight();
@@ -323,12 +334,12 @@ public class OTPValidation extends AppCompatActivity {
     }
 
     public void shakeAnimateLeftRight() {
-//        vibrateAction();
+        vibrateAction();
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
     }
 
     public void shakeAnimateUpDown() {
-//        vibrateAction();
+        vibrateAction();
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
     }
 
