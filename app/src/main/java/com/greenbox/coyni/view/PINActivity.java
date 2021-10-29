@@ -1,20 +1,24 @@
 package com.greenbox.coyni.view;
 
 
-import android.content.Context;
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.greenbox.coyni.R;
-import java.util.ArrayList;
+import com.greenbox.coyni.utils.Utils;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -27,6 +31,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_pin_keyboard);
             initializeComponents();
             TYPE = getIntent().getStringExtra("TYPE");
@@ -210,7 +216,29 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 if (!strChoose.equals(strConfirm)) {
                                     Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(getApplication(), "PIN match", Toast.LENGTH_LONG).show();
+
+                                    if(Utils.checkAuthentication(this)){
+                                        if(Utils.isFingerPrint(PINActivity.this)){
+                                            Log.e("isFingerPrint", "True");
+                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                            .putExtra("ENABLE_TYPE","TOUCH"));
+                                        }else{
+                                            Log.e("isFingerPrint", "False");
+                                                    final Intent enrollIntent;
+
+                                                    enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+                                                    enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                                            BIOMETRIC_STRONG);
+                                                    startActivityForResult(enrollIntent, 101);
+                                        }
+                                    }else{
+
+                                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+
+                                        }else{
+
+                                        }
+                                    }
                                 }
                                 break;
                             case "ENTER":

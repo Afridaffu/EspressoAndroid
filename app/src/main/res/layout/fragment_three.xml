@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:src="@drawable/bg_onboard_three"
-            android:layout_marginTop="-40dp"/>
+            android:src="@drawable/bg_onboard_three" />
 
         <LinearLayout
             android:layout_width="match_parent"

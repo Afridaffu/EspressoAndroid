@@ -13,6 +13,7 @@
 
 
     <color name="vlight_gray">#E8E8E8</color>
+    <color name="at_gray">#f2f5f8</color>
     <color name="light_gray">#C5C5C5</color>
     <color name="dark_gray">#909090</color>
     <color name="xdark_gray">#767676</color>

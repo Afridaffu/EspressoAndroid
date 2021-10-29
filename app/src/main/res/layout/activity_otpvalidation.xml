@@ -7,13 +7,15 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="22dp"
-    tools:context=".view.OTPValidation">
+    tools:context=".view.OTPValidation"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
         android:id="@+id/layoutEntry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/otpValidationCloseIV"
@@ -112,4 +114,68 @@
 
         <include layout="@layout/activity_retry_create_account" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/secureAccountRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@+id/secureNextCV"
+            android:layout_alignParentTop="true">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Secure Your Account"
+                android:textSize="@dimen/text_size_16sp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_bold"
+                android:layout_marginBottom="21dp"
+                android:layout_marginTop="72dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="One way we keep your account secure is with 2- step verification, which requires you to create 6-digit PIN"
+                android:textSize="@dimen/text_size_12sp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_regular"
+                android:layout_marginBottom="40dp"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/bg_secure_account"
+                android:layout_gravity="bottom"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/secureNextCV"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="30dp"
+            app:cardBackgroundColor="@color/primary_color"
+            app:cardCornerRadius="22dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_12sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
 </LinearLayout>
