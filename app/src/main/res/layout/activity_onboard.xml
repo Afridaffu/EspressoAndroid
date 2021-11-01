@@ -22,7 +22,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="12dp"
+            android:layout_height="@dimen/_12sdp"
             app:tabBackground="@drawable/viewpager_tab_selector"
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp" />
@@ -34,16 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginStart="@dimen/_29sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_29sdp"
+        android:layout_marginBottom="@dimen/_48sdp"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/getStartedLL"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="@dimen/_43sdp"
             android:background="@drawable/shape_green_round_rect">
 
             <TextView
@@ -53,7 +53,7 @@
                 android:gravity="center"
                 android:text="Get Started"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 android:layout_gravity="center" />
 
         </LinearLayout>
@@ -61,8 +61,8 @@
         <LinearLayout
             android:id="@+id/layoutLogin"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="@dimen/_43sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:background="@drawable/shape_green_round_rect_core"
             android:orientation="vertical"
             android:gravity="center">
@@ -74,7 +74,7 @@
                 android:gravity="center"
                 android:text="Log in"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/text_size_12sp" />
+                android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
     </LinearLayout>

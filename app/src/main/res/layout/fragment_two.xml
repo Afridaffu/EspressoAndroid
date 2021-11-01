@@ -15,19 +15,20 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/fragTwoBottomLL"
             android:layout_alignParentTop="true"
-            android:src="@drawable/bg_onboard_two" />
+            android:src="@drawable/bg_onboard_two"
+            android:scaleType="fitXY"/>
 
         <LinearLayout
             android:id="@+id/fragTwoBottomLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:padding="21dp"
-            android:layout_below="@+id/topIV"
             android:layout_marginTop="12dp"
-            android:layout_alignParentBottom="true">
+            android:orientation="vertical"
+            android:padding="21dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,28 +37,28 @@
                 android:gravity="center"
                 android:text="Tokenize Your Money With coyni"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_15sp" />
+                android:textSize="@dimen/_14ssp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/_30sdp"
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/text_size_7sp"
-                    android:layout_height="@dimen/text_size_7sp"
+                    android:layout_width="@dimen/_6sdp"
+                    android:layout_height="@dimen/_6sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="5dp" />
+                    app:cardCornerRadius="@dimen/_3sdp" />
 
                 <TextView
                     android:id="@+id/oneTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,19 +67,19 @@
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/text_size_7sp"
-                    android:layout_height="@dimen/text_size_7sp"
+                    android:layout_width="@dimen/_6sdp"
+                    android:layout_height="@dimen/_6sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="5dp" />
+                    app:cardCornerRadius="@dimen/_3sdp" />
 
                 <TextView
                     android:id="@+id/twoTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,10 +88,10 @@
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/text_size_7sp"
-                    android:layout_height="@dimen/text_size_7sp"
+                    android:layout_width="@dimen/_6sdp"
+                    android:layout_height="@dimen/_6sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="5dp" />
+                    app:cardCornerRadius="@dimen/_3sdp" />
 
                 <TextView
                     android:id="@+id/threeTV"
@@ -99,7 +100,7 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
         </LinearLayout>

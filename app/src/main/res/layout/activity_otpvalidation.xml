@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:fontFamily="@font/opensans_regular"
-            android:text="We sent you 6-digit code to the register phone number (661) 726-0369"
+            android:text="We sent you 6-digit code to the register phone number"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/text_size_12sp" />
 

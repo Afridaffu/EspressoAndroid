@@ -97,6 +97,14 @@ public class Utils {
         Utils.strReferer = strReferer;
     }
 
+        public static String getStrCCode() {
+        return strCCode;
+    }
+
+    public static void setStrCCode(String strCCode) {
+        Utils.strReferer = strReferer;
+    }
+
     public static String getStrURL_PRODUCTION() {
         return strURL_PRODUCTION;
     }

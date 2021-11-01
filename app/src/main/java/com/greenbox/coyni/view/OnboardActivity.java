@@ -34,6 +34,7 @@ public class OnboardActivity extends AppCompatActivity {
             layoutLogin = findViewById(R.id.layoutLogin);
             String url = BuildConfig.URL_PRODUCTION;
             String refererUrl = BuildConfig.Referer;
+            Utils.setStrCCode(BuildConfig.Country_Code);
             if (!url.equals("")) {
                 Utils.setStrURL_PRODUCTION(url);
                 Utils.setStrReferer(refererUrl);

@@ -12,8 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
@@ -21,8 +20,8 @@
             android:src="@drawable/bg_account_type" />
 
         <ImageView
-            android:layout_width="116dp"
-            android:layout_height="47dp"
+            android:layout_width="@dimen/_116sdp"
+            android:layout_height="@dimen/_47sdp"
             android:src="@drawable/ic_coyni_logo"
             android:layout_marginTop="7dp"
             android:layout_gravity="center"
@@ -34,7 +33,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_margin="@dimen/_24sdp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -44,21 +43,21 @@
             android:background="@drawable/account_type_bg"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginEnd="10dp">
+            android:layout_marginEnd="@dimen/_10sdp">
 
             <ImageView
-                android:layout_width="74dp"
-                android:layout_height="74dp"
+                android:layout_width="@dimen/_54sdp"
+                android:layout_height="@dimen/_54sdp"
                 android:src="@drawable/ic_case" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Business"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 />
         </LinearLayout>
 
@@ -69,23 +68,23 @@
             android:background="@drawable/account_type_bg"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:id="@+id/personalAccontLL">
 
             <ImageView
-                android:layout_width="74dp"
-                android:layout_height="74dp"
+                android:layout_width="@dimen/_54sdp"
+                android:layout_height="@dimen/_54sdp"
                 android:src="@drawable/ic_user"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Personal"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 />
         </LinearLayout>
 

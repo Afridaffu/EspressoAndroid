@@ -16,24 +16,26 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/fragThreeBottomLL"
             android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
             android:src="@drawable/bg_onboard_three" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="21dp"
+            android:padding="@dimen/_21sdp"
             android:id="@+id/fragThreeBottomLL"
-            android:layout_below="@+id/topIV"
-            android:layout_marginTop="12dp"
-            android:layout_alignParentBottom="true">
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_alignParentBottom="true"
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Optimize Your Business With Bank-Level Functionality"
-                android:textSize="@dimen/text_size_15sp"
+                android:textSize="@dimen/_14ssp"
                 android:textColor="@color/primary_black"
                 android:gravity="center"
                 android:fontFamily="@font/opensans_bold"/>
@@ -42,20 +44,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="@dimen/_30sdp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/text_size_7sp"
-                    android:layout_height="@dimen/text_size_7sp"
+                    android:layout_width="@dimen/_6sdp"
+                    android:layout_height="@dimen/_6sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="5dp" />
+                    app:cardCornerRadius="@dimen/_3sdp" />
                 <TextView
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:id="@+id/oneTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:textSize="@dimen/_11ssp"
                     android:fontFamily="@font/opensans_regular"
                     android:text="No chargebacks"/>
             </LinearLayout>
@@ -65,18 +67,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/text_size_7sp"
-                    android:layout_height="@dimen/text_size_7sp"
+                    android:layout_width="@dimen/_6sdp"
+                    android:layout_height="@dimen/_6sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="5dp" />
+                    app:cardCornerRadius="@dimen/_3sdp" />
                 <TextView
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:id="@+id/twoTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary_black"
                     android:text="Lower fees"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:textSize="@dimen/_11ssp"
                     android:fontFamily="@font/opensans_regular"/>
             </LinearLayout>
 
@@ -85,18 +87,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/text_size_7sp"
-                    android:layout_height="@dimen/text_size_7sp"
+                    android:layout_width="@dimen/_6sdp"
+                    android:layout_height="@dimen/_6sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="5dp" />
+                    app:cardCornerRadius="@dimen/_3sdp" />
                 <TextView
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="@dimen/_15sdp"
                     android:id="@+id/threeTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary_black"
                     android:text="Funds available to use instantly"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:textSize="@dimen/_11ssp"
                     android:fontFamily="@font/opensans_regular"/>
             </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.register;
 
+import com.greenbox.coyni.model.Error;
+
 public class CustRegisterResponse {
     private String status;
     private String timestamp;
