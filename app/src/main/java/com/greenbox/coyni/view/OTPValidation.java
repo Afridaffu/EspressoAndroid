@@ -36,6 +36,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.SMSResend;
+import com.greenbox.coyni.model.register.SMSResponse;
+import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
@@ -49,29 +51,17 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",countryCode="",maskedPhone="";
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",maskedPhone="";
     LinearLayout layoutEntry, layoutFailure;
     MaterialCardView tryAgainCV;
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
+    MaterialCardView secureNextCV;
 
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
-
-    int[][] states = new int[][] {
-            new int[] { android.R.attr.state_empty}, // enabled
-            new int[] {-android.R.attr.state_selected}, // disabled
-            new int[] {-android.R.attr.state_focused}, // unchecked
-            new int[] { android.R.attr.state_pressed}  // pressed
-    };
-
-    int[] colors = new int[] {
-        R.color.primary_color,
-            R.color.primary_color,
-            R.color.light_gray
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +75,7 @@ public class OTPValidation extends AppCompatActivity {
 
             IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
             registerReceiver(smsVerificationReceiver,  intentFilter);
+
 
             OTP_TYPE = getIntent().getStringExtra("OTP_TYPE");
             MOBILE = getIntent().getStringExtra("MOBILE");
@@ -110,19 +101,37 @@ public class OTPValidation extends AppCompatActivity {
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
 
-            if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
-                otpValidationCloseIV.setImageResource(R.drawable.ic_close);
-                headerTV.setText("Verify Email");
-                subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
-            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("SignUp")) {
-                maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
-                otpValidationCloseIV.setImageResource(R.drawable.ic_back);
-                if (OTP_TYPE.equals("MOBILE")) {
-                    headerTV.setText("Please Verify your Phone Number");
-                    subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
-                } else if (OTP_TYPE.equals("EMAIL")) {
-                    headerTV.setText("Please Verify your Email");
-                    subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
+            if (strScreen != null && !strScreen.equals("")) {
+                switch (strScreen) {
+                    case "ForgotPwd":
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_close);
+                        headerTV.setText("Verify Email");
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        break;
+                    case "retEmail":
+                        maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+                        headerTV.setText("Please Verify your Phone Number");
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register phone number " + maskedPhone);
+                        break;
+                    case "SignUp":
+
+                        maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+                        if (OTP_TYPE.equals("MOBILE")) {
+                            headerTV.setText("Please Verify your Phone Number");
+                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
+                        } else if (OTP_TYPE.equals("EMAIL")) {
+                            headerTV.setText("Please Verify your Email");
+                            subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
+                        } else if (OTP_TYPE.equals("SECURE")) {
+                            Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
+                            secureAccountRL.setVisibility(View.VISIBLE);
+                            layoutType = "SECURE";
+                            layoutEntry.setVisibility(View.GONE);
+                            layoutFailure.setVisibility(View.GONE);
+                        }
+                        break;
                 }
             }
 
@@ -190,34 +199,27 @@ public class OTPValidation extends AppCompatActivity {
                             } else {
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
-                                        if (charSequence.toString().equals("123456")) {
-                                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
-                                            shakeAnimateUpDown();
-                                            startActivity(new Intent(OTPValidation.this, OTPValidation.class)
-                                                    .putExtra("screen", "SignUp")
-                                                    .putExtra("OTP_TYPE", "EMAIL")
-                                                    .putExtra("MOBILE", MOBILE)
-                                                    .putExtra("MASK_MOBILE",maskedPhone)
-                                                    .putExtra("EMAIL", EMAIL));
-                                        } else {
-                                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
-                                            shakeAnimateLeftRight();
-                                        }
+
+                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                                        dialog.setIndeterminate(false);
+                                        dialog.setMessage("Please wait...");
+                                        dialog.show();
+                                        SmsRequest smsRequest = new SmsRequest();
+                                        smsRequest.setEmail(EMAIL.trim());
+                                        smsRequest.setOtp(charSequence.toString().trim());
+                                        loginViewModel.smsotp(smsRequest);
+
                                     }
-                                } else {
+                                } else if (OTP_TYPE.equals("EMAIL")) {
                                     if (charSequence.length() == 6) {
-                                        if (charSequence.toString().equals("123456")) {
-                                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
-                                            shakeAnimateUpDown();
-                                            Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
-                                            secureAccountRL.setVisibility(View.VISIBLE);
-                                            layoutType = "SECURE";
-                                            layoutEntry.setVisibility(View.GONE);
-                                            layoutFailure.setVisibility(View.GONE);
-                                        } else {
-                                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
-                                            shakeAnimateLeftRight();
-                                        }
+                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                                        dialog.setIndeterminate(false);
+                                        dialog.setMessage("Please wait...");
+                                        dialog.show();
+                                        SmsRequest smsRequest = new SmsRequest();
+                                        smsRequest.setEmail(EMAIL.trim());
+                                        smsRequest.setOtp(charSequence.toString().trim());
+                                        loginViewModel.emailotp(smsRequest);
                                     }
                                 }
                             }
@@ -225,7 +227,6 @@ public class OTPValidation extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
 
                 }
 
@@ -249,7 +250,6 @@ public class OTPValidation extends AppCompatActivity {
             });
 
             initObserver();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -292,13 +292,65 @@ public class OTPValidation extends AppCompatActivity {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
                     } else {
-                        otpPV.setLineColor(getResources().getColor(R.color.primary_color));
-                        shakeAnimateUpDown();
-                        startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class));
+                        if (strScreen != null && !strScreen.equals("")) {
+                            switch (strScreen) {
+                                case "ForgotPwd":
+                                    otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                                    shakeAnimateUpDown();
+                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class));
+                                    break;
+                                case "retEmail":
+
+                                    break;
+                                case "SignUp":
+                                    if(OTP_TYPE.equals("EMAIL")){
+                                        otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                                        shakeAnimateUpDown();
+                                        Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
+                                        secureAccountRL.setVisibility(View.VISIBLE);
+                                        layoutType = "SECURE";
+                                        layoutEntry.setVisibility(View.GONE);
+                                        layoutFailure.setVisibility(View.GONE);
+                                    }
+                                    break;
+                            }
+                        }
+
                     }
                 }
             }
         });
+
+        loginViewModel.getSmsotpLiveData().observe(this, new Observer<SMSValidate>() {
+            @Override
+            public void onChanged(SMSValidate smsValidate) {
+                dialog.dismiss();
+                if (smsValidate != null) {
+                    if (smsValidate.getStatus().toLowerCase().equals("error")) {
+                        otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                        shakeAnimateLeftRight();
+                    } else {
+                        if (strScreen != null && !strScreen.equals("")) {
+                            switch (strScreen) {
+                                case "SignUp":
+                                    if(OTP_TYPE.equals("MOBILE")){
+                                        otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                                        shakeAnimateUpDown();
+                                        startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                .putExtra("screen", "SignUp")
+                                                .putExtra("OTP_TYPE", "EMAIL")
+                                                .putExtra("MOBILE", MOBILE)
+                                                .putExtra("EMAIL", EMAIL));
+                                    }
+                                    break;
+                            }
+                        }
+
+                    }
+                }
+            }
+        });
+
 
         loginViewModel.getEmailValidateResponseMutableLiveData().observe(this, new Observer<EmailValidateResponse>() {
             @Override
@@ -318,6 +370,13 @@ public class OTPValidation extends AppCompatActivity {
                 }catch (Exception ex){
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
+            @Override
+            public void onChanged(SMSResponse smsResponse) {
+
             }
         });
     }
@@ -402,7 +461,6 @@ public class OTPValidation extends AppCompatActivity {
         }
     };
 
-
     @Override
     public void onBackPressed() {
         try {
@@ -421,5 +479,4 @@ public class OTPValidation extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
 }

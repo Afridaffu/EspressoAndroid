@@ -26,6 +26,7 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
+import com.greenbox.coyni.utils.Singleton;
 
 import java.lang.reflect.Type;
 
@@ -46,6 +47,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<EmailResponse> emailresendLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private MutableLiveData<SetPasswordResponse> setpwdLiveData = new MutableLiveData<>();
+    private MutableLiveData<SetPasswordResponse> registerPINLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -312,21 +314,34 @@ public class LoginViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<CustRegisterResponse>() {
                 @Override
                 public void onResponse(Call<CustRegisterResponse> call, Response<CustRegisterResponse> response) {
-                    if (response.isSuccessful()) {
-                        CustRegisterResponse obj = response.body();
-                        custRegisResponseMutableLiveData.setValue(obj);
-                    } else {
-//                        Gson gson = new Gson();
-//                        Type type = new TypeToken<Login>() {
-//                        }.getType();
-//                        Login errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-//                        if (errorResponse != null) {
-//                            errorMessage.setValue(errorResponse.getError().getErrorDescription());
-//                            custRegisResponseMutableLiveData.setValue(null);
-//                        }
 
-                        Log.e("Cust reg response", response.isSuccessful() + "");
-                        Log.e("Cust reg", "ERROR");
+                    if (response.isSuccessful()) {
+                        Log.e("CustReg Success", "CustReg Success");
+                        try{
+                            CustRegisterResponse obj = response.body();
+                            custRegisResponseMutableLiveData.setValue(obj);
+                            Singleton.setCustRegisterResponse(obj);
+                            Log.e("CustReg Success", new Gson().toJson(obj));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.e("CustReg Error", "CustReg Error");
+                        try{
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CustRegisterResponse>() {
+                            }.getType();
+                            CustRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                errorMessage.setValue(errorResponse.getError().getErrorDescription());
+                                custRegisResponseMutableLiveData.setValue(null);
+                            }
+                            Log.e("CustReg Error", new Gson().toJson(errorResponse));
+                        }catch (Exception e){
+                         e.printStackTrace();
+                        }
+
+
                     }
                 }
 

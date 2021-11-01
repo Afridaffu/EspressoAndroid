@@ -21,6 +21,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private MaskEditText pnET;
+    boolean isPhoneError = false;
 //    private CreateAccountActivity createAccountAct;
 
     public String FROM = "";
@@ -46,12 +47,23 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         pnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
-                    hintName.setTextColor(getResources().getColor(R.color.primary_color));
-                    hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                if(isPhoneError){
+                    if(b){
+                        hintName.setTextColor(getResources().getColor(R.color.error_red));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                    }else{
+                        hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                    }
                 }else{
-                    hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                    hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                    if(b){
+                        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                    }else{
+                        hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                    }
+
                 }
             }
         });
@@ -66,8 +78,17 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+
+
                 if(FROM.equals("CREATE_ACCOUNT")){
                     CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
+                    if(charSequence.length() > 0){
+                        isPhoneError = false;
+                        hintName.setTextColor(getResources().getColor(R.color.primary_green));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                        createAccountAct.phoneErrorLL.setVisibility(GONE);
+                    }
+
                     createAccountAct.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
 
                     if (createAccountAct.isFirstName && createAccountAct.isLastName &&
@@ -93,6 +114,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     }
 
     public void setErrorOutlineBox() {
+        isPhoneError = true;
         hintName.setTextColor(getResources().getColor(R.color.error_red));
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
     }

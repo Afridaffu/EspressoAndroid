@@ -36,10 +36,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
@@ -59,8 +61,8 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
-    TextInputLayout firstNameTIL;
-    LinearLayout emailErrorLL;
+    TextInputLayout firstNameTIL,emailTIL;
+    public LinearLayout emailErrorLL,phoneErrorLL;
     TextView passwordInfoTV, privacyTV, tosTV;
     ImageView createAccountCloseIV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
@@ -73,11 +75,12 @@ public class CreateAccountActivity extends AppCompatActivity  {
     private View stregnthOne, stregnthTwo, stregnthThree;
     private Pattern strong, medium;
 
+//    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&'()*+,-./:;<=>?@^_`{|}~]).{8,})";
 
     private static final String MEDIUM_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,})";
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&'()*+,-./:;<=>?@^_`{|}~]).{6,})";
 
     public  static CreateAccountActivity createAccountActivity;
 
@@ -89,6 +92,12 @@ public class CreateAccountActivity extends AppCompatActivity  {
     String privacyURL  = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL  = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
 
+    int[][] errorState, state ;
+    int[] errorColor, color;
+    ColorStateList errorColorState, colorState;
+
+    boolean isEmailError = false, isPhoneError = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try{
@@ -96,7 +105,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_create_account);
-            createAccountActivity = this;
+
             initFields();
             intiObserver();
         } catch (Exception e){
@@ -106,8 +115,19 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
     public void initFields() {
         try{
+            createAccountActivity = this;
+
+            errorState = new int[][] {new int[] { android.R.attr.state_enabled}};
+            errorColor = new int[] {getResources().getColor(R.color.error_red)};
+            errorColorState = new ColorStateList(errorState, errorColor);
+
+            state = new int[][] {new int[] { android.R.attr.state_enabled}};
+            color = new int[] {getResources().getColor(R.color.primary_green)};
+            colorState = new ColorStateList(state, color);
+
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             emailErrorLL = findViewById(R.id.emailErrorLL);
+            phoneErrorLL = findViewById(R.id.phoneErrorLL);
             passwordInfoTV = findViewById(R.id.passwordInfoTV);
             privacyTV = findViewById(R.id.privacyTV);
             tosTV = findViewById(R.id.tosTV);
@@ -116,11 +136,13 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
+            emailTIL = findViewById(R.id.emailTIL);
 
             lastNameET = findViewById(R.id.lastNameET);
             emailET = findViewById(R.id.emailET);
             phoneNumberET = findViewById(R.id.phoneNumberET);
             phoneNumberET.setFrom("CREATE_ACCOUNT");
+
             passwordET = findViewById(R.id.passwordET);
             passwordInfoTV = findViewById(R.id.passwordInfoTV);
             confirmPasswordET = findViewById(R.id.confirmPasswordET);
@@ -169,34 +191,22 @@ public class CreateAccountActivity extends AppCompatActivity  {
                     mLastClickTime = SystemClock.elapsedRealtime();
 
                     phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
-//                    dialog = new ProgressDialog(CreateAccountActivity.this, R.style.MyAlertDialogStyle);
-//                    dialog.setIndeterminate(false);
-//                    dialog.setMessage("Please wait...");
-//                    dialog.show();
-//                    callRegisterAPI();
-
-                    startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
-                            .putExtra("screen", "SignUp")
-                            .putExtra("OTP_TYPE", "MOBILE")
-                            .putExtra("MOBILE", phoneNumber)
-                            .putExtra("MASK_MOBILE",phoneNumberET.getText())
-                            .putExtra("EMAIL", emailET.getText().toString().trim()));
+                    dialog = new ProgressDialog(CreateAccountActivity.this, R.style.MyAlertDialogStyle);
+                    dialog.setIndeterminate(false);
+                    dialog.setMessage("Please wait...");
+                    dialog.show();
+                    callRegisterAPI();
 
                 } else {
-                    startActivity(new Intent(CreateAccountActivity.this, OTPValidation.class)
-                            .putExtra("screen", "SignUp")
-                            .putExtra("OTP_TYPE", "EMAIL")
-                            .putExtra("MOBILE", phoneNumber)
-                            .putExtra("MASK_MOBILE",phoneNumberET.getText())
-                            .putExtra("EMAIL", emailET.getText().toString().trim()));
+                    phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+                    Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
+                    i.putExtra("screen", "SignUp");
+                    i.putExtra("OTP_TYPE", "MOBILE");
+                    i.putExtra("MOBILE", phoneNumber);
+                    i.putExtra("MASK_MOBILE",phoneNumberET.getText());
+                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+                    startActivity(i);
                 }
-
-//            Log.e("Field1", firstNameET.getText());
-//            Log.e("Field2", lastNameET.getText());
-//            Log.e("Field3", emailET.getText());
-//            Log.e("Field4", phoneNumberET.getText());
-//            Log.e("Field5", passwordET.getText());
-//            Log.e("Field6", confirmPasswordET.getText());
             });
 
             createAccountCloseIV.setOnClickListener(view -> {
@@ -217,13 +227,27 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 dialog.dismiss();
                 if (custRegisterResponse != null) {
                     try {
-//                        objContext.setStrEmail(etEmail.getText().toString());
                         Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                        i.putExtra("screen", "SignUp");
-                        i.putExtra("OTP_TYPE", "MOBILE");
-                        i.putExtra("MOBILE", phoneNumber);
-                        i.putExtra("MASK_MOBILE",phoneNumberET.getText());
-                        i.putExtra("EMAIL", emailET.getText().toString().trim());
+
+                        if(!custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()){
+                            i.putExtra("screen", "SignUp");
+                            i.putExtra("OTP_TYPE", "MOBILE");
+                            i.putExtra("MOBILE", phoneNumber);
+                            i.putExtra("MASK_MOBILE",phoneNumberET.getText());
+                            i.putExtra("EMAIL", emailET.getText().toString().trim());
+                        }else if(custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()){
+                            i.putExtra("screen", "SignUp");
+                            i.putExtra("OTP_TYPE", "EMAIL");
+                            i.putExtra("MOBILE", phoneNumber);
+                            i.putExtra("MASK_MOBILE",phoneNumberET.getText());
+                            i.putExtra("EMAIL", emailET.getText().toString().trim());
+                        }else if(custRegisterResponse.getData().isSms_verified() && custRegisterResponse.getData().isEmail_verified()){
+                            i.putExtra("screen", "SignUp");
+                            i.putExtra("OTP_TYPE", "SECURE");
+                            i.putExtra("MOBILE", phoneNumber);
+                            i.putExtra("MASK_MOBILE",phoneNumberET.getText());
+                            i.putExtra("EMAIL", emailET.getText().toString().trim());
+                        }
                         startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -235,18 +259,36 @@ public class CreateAccountActivity extends AppCompatActivity  {
         loginViewModel.getErrorMessage().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-//                if (s.toString().toLowerCase().contains("entered email already exist in the system")) {
-//                    etEmail.setText("");
-//                }
-//                if (s.toString().toLowerCase().contains("entered phone number already exist in the system")) {
-//                    etPhone.setText("");
-//                }
-//                if (s.toString().toLowerCase().contains("entered phone number and email already exist in the system")) {
-//                    etPhone.setText("");
-//                    etEmail.setText("");
-//                }
+                Log.e("Error Message", s);
+                if (s.toString().toLowerCase().contains("entered email already exist in the system")) {
+                    isEmailError = true;
+                    emailTIL.requestFocus();
+                    emailErrorLL.setVisibility(VISIBLE);
+                    phoneErrorLL.setVisibility(GONE);
+                } else if (s.toString().toLowerCase().contains("entered phone number already exist in the system")) {
+                    isPhoneError = true;
+                    phoneNumberET.setErrorOutlineBox();
+                    phoneErrorLL.setVisibility(VISIBLE);
+                    emailErrorLL.setVisibility(GONE);
+                } else if (s.toString().toLowerCase().contains("entered phone number and email already exist in the system")) {
+                    isPhoneError = true;
+                    phoneNumberET.setErrorOutlineBox();
+                    phoneErrorLL.setVisibility(VISIBLE);
 
-                Utils.displayAlert(s, CreateAccountActivity.this);
+                    isEmailError = true;
+                    emailTIL.requestFocus();
+                    emailErrorLL.setVisibility(VISIBLE);
+                    emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                    emailTIL.setHintTextColor(errorColorState);
+
+                }else{
+                    isEmailError = false;
+                    isPhoneError = false;
+                    phoneErrorLL.setVisibility(GONE);
+                    emailErrorLL.setVisibility(GONE);
+                    Utils.displayAlert(s, CreateAccountActivity.this);
+                }
+
             }
         });
     }
@@ -305,6 +347,13 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    if(charSequence.length() > 0){
+                        isEmailError = false;
+                        emailErrorLL.setVisibility(GONE);
+                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        emailTIL.setHintTextColor(colorState);
+                    }
                     if(isValidEmail(charSequence.toString().trim())){
                         isEmail = true;
                     }else{
@@ -402,6 +451,21 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 }
             });
 
+            emailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(isEmailError){
+                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                        emailTIL.setHintTextColor(errorColorState);
+                    }else{
+                        if(b){
+                            emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            emailTIL.setHintTextColor(colorState);
+                        }
+                    }
+                }
+            });
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -476,22 +540,26 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
     private void callRegisterAPI() {
         try {
+
             PhNoWithCountryCode phone = new PhNoWithCountryCode();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
 
             CustRegisRequest regisRequest = new CustRegisRequest();
-            regisRequest.setUserId("");
             regisRequest.setFirstName(firstNameET.getText().toString().trim());
             regisRequest.setLastName(lastNameET.getText().toString().trim());
             regisRequest.setPhoneNumberWithCountryCode(phone);
             regisRequest.setEmail(emailET.getText().toString().trim());
-            regisRequest.setPassword(passwordET.getText().toString().trim());
+            regisRequest.setCreatePassword(passwordET.getText().toString().trim());
+            regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
             regisRequest.setAccountType(PERSONAL_ACCOUNT);
-            regisRequest.setParentAccount(null);
+            regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim()+" "+lastNameET.getText().toString().trim());
-
-            Log.e("Regsiter Object", regisRequest.toString());
+            if(Singleton.getCustRegisterResponse()!=null){
+                regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId());
+            }
+            Log.e("Regsiter Object", new Gson().toJson(regisRequest));
+            Singleton.setCustRegisRequest(regisRequest);
             loginViewModel.customerRegistration(regisRequest);
         } catch (Exception ex) {
             ex.printStackTrace();

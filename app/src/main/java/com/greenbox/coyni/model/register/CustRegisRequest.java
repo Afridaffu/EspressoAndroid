@@ -1,13 +1,15 @@
 package com.greenbox.coyni.model.register;
 
 public class CustRegisRequest {
-    private String userId;
+
+    private int userId;
     private String email;
     private String firstName;
     private String lastName;
-    private String password;
+    private String confirmPassword;
+    private String createPassword;
     private int accountType;
-    private String parentAccount;
+    private int parentAccount;
     private String entityName;
     private PhNoWithCountryCode phoneNumberWithCountryCode;
 
@@ -43,20 +45,12 @@ public class CustRegisRequest {
         this.phoneNumberWithCountryCode = phoneNumberWithCountryCode;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getAccountType() {
@@ -67,11 +61,11 @@ public class CustRegisRequest {
         this.accountType = accountType;
     }
 
-    public String getParentAccount() {
+    public int getParentAccount() {
         return parentAccount;
     }
 
-    public void setParentAccount(String parentAccount) {
+    public void setParentAccount(int parentAccount) {
         this.parentAccount = parentAccount;
     }
 
@@ -81,5 +75,21 @@ public class CustRegisRequest {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getCreatePassword() {
+        return createPassword;
+    }
+
+    public void setCreatePassword(String createPassword) {
+        this.createPassword = createPassword;
     }
 }
