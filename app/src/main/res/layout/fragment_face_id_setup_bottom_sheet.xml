@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingEnd="32dp"
+    android:paddingStart="30dp"
+    tools:context=".view.CustomerProfileActivity">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="@color/primary_color"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/faceidsetuptxt"
+        android:textSize="20dp"
+        android:layout_marginTop="38dp"
+        android:fontFamily="@font/opensans_bold"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/faceidsetup"
+        android:textSize="17sp"
+        android:lineSpacingExtra="6dp"
+        android:layout_marginTop="23dp"
+        android:fontFamily="@font/opensans_semibold"
+        android:textColor="@color/primary_black"
+        />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/faceidsetupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="62dp"
+        app:cardBackgroundColor="@color/primary_color"
+        app:cardCornerRadius="32dp"
+        android:layout_marginBottom="21dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sepupid"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/opensans_bold"
+            />
+    </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/layoutLogin"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_green_round_rect_core"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="@string/setupnotnowBtn"
+                    android:textColor="@color/primary_color"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        />
+
+
+</LinearLayout>
