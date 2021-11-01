@@ -208,6 +208,7 @@
                     android:orientation="horizontal">
 
                     <CheckBox
+                        android:id="@+id/chkRemember"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:fontFamily="@font/opensans_regular"
