@@ -26,6 +26,8 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.utils.Singleton;
@@ -51,6 +53,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<SetPasswordResponse> setpwdLiveData = new MutableLiveData<>();
     private MutableLiveData<SetPasswordResponse> registerPINLiveData = new MutableLiveData<>();
     private MutableLiveData<InitializeCustomerResponse> initCustomerLiveData = new MutableLiveData<>();
+    private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -102,6 +105,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void setInitCustomerLiveData(MutableLiveData<InitializeCustomerResponse> initCustomerLiveData) {
         this.initCustomerLiveData = initCustomerLiveData;
+    }
+
+    public MutableLiveData<RetrieveEmailResponse> getRetrieveEmailResponseMutableLiveData() {
+        return retrieveEmailResponseMutableLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -331,6 +338,7 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onResponse(Call<CustRegisterResponse> call, Response<CustRegisterResponse> response) {
 
                     if (response.isSuccessful()) {
+                        Log.e("CustReg Success", "CustReg Success");
                         try{
                             CustRegisterResponse obj = response.body();
                             custRegisResponseMutableLiveData.setValue(obj);
@@ -424,6 +432,38 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<InitializeCustomerResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void retrieveEmail(RetrieveEmailRequest request) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<RetrieveEmailResponse> mCall = apiService.retrieveEmail(request);
+            mCall.enqueue(new Callback<RetrieveEmailResponse>() {
+                @Override
+                public void onResponse(Call<RetrieveEmailResponse> call, Response<RetrieveEmailResponse> response) {
+                    if (response.isSuccessful()) {
+                        RetrieveEmailResponse obj = response.body();
+                        retrieveEmailResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RetrieveEmailResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

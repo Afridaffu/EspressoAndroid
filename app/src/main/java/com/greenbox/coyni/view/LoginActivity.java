@@ -11,6 +11,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,9 +44,10 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     SQLiteDatabase mydatabase;
-    Cursor dsUserDetails, dsFacePin;
+    Cursor dsUserDetails, dsFacePin, dsRemember;
     Boolean isFaceLock = false, isThumb = false;
     ImageView imgClose;
+    CheckBox chkRemember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             forgotpwd = findViewById(R.id.forgotpwd);
             tvRetEmail = findViewById(R.id.tvRetEmail);
             imgClose = findViewById(R.id.imgClose);
+            chkRemember = findViewById(R.id.chkRemember);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             etlPassword.setEndIconOnClickListener(view -> {
@@ -196,6 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                    i.putExtra("screen","ForgotPwd");
                     startActivity(i);
                 }
             });
@@ -216,6 +221,11 @@ public class LoginActivity extends AppCompatActivity {
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
                             strPwd = etPassword.getText().toString().trim();
+                            if (chkRemember.isChecked()) {
+                                saveCredentials();
+                            } else {
+                                mydatabase.execSQL("Delete from tblRemember");
+                            }
                             login();
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
@@ -232,8 +242,24 @@ public class LoginActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
+
+            chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    try {
+                        if (isChecked) {
+                            if (!etEmail.getText().toString().trim().equals("") && !etPassword.getText().toString().trim().equals("")) {
+                                saveCredentials();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             SetDB();
             SetLock();
+            SetRemember();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -283,6 +309,26 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void SetRemember() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsRemember = mydatabase.rawQuery("Select * from tblRemember", null);
+            dsRemember.moveToFirst();
+            if (dsRemember.getCount() > 0) {
+                etEmail.setText(dsRemember.getString(1));
+                etPassword.setText(dsRemember.getString(2));
+                chkRemember.setChecked(true);
+            } else {
+                chkRemember.setChecked(false);
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblRemember(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, username TEXT, password TEXT);");
+            }
+        }
+    }
+
     private void initObserver() {
         loginViewModel.getLoginLiveData().observe(this, new Observer<LoginResponse>() {
             @Override
@@ -299,9 +345,17 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(login.getData().getJwtToken());
-                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
+                                if (login.getData().getCoyniPin()) {
+                                    Intent i = new Intent(LoginActivity.this, PINActivity.class);
+                                    i.putExtra("TYPE", "ENTER");
+                                    i.putExtra("screen", "login");
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                } else {
+                                    Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                }
                             }
                         } else {
                             if (login.getData() != null) {
@@ -414,6 +468,19 @@ public class LoginActivity extends AppCompatActivity {
             loginRequest.setEmail(strEmail);
             loginRequest.setPassword(strPwd);
             loginViewModel.login(loginRequest);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void saveCredentials() {
+        try {
+            if (strEmail.equals("") && strPwd.equals("")) {
+                strEmail = etEmail.getText().toString().trim().toLowerCase();
+                strPwd = etPassword.getText().toString().trim();
+            }
+            mydatabase.execSQL("Delete from tblRemember");
+            mydatabase.execSQL("INSERT INTO tblRemember(id,username,password) VALUES(null,'" + strEmail.toLowerCase() + "','" + strPwd + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -36,4 +36,29 @@
     <string name="jona_gmail_com">Jona***@gmail.com</string>
 
 
+    <string name="cu_profile_name">Jonathan Joestar</string>
+    <string name="accountid">Account ID M-1234</string>
+    <string name="status_unverified">Account Status: </string>
+    <string name="unveri">Unverified</string>
+    <string name="cp_almost">You’re almost there!</string>
+    <string name="cp_setup">Finish the set up your account in\nless than 5 min.</string>
+    <string name="cp_getstarted">Get Started</string>
+    <string name="setting">Settings</string>
+    <string name="setting_userdetails">User Details</string>
+    <string name="setting_payment">Payment Methods</string>
+    <string name="setting_pref">Preferences</string>
+    <string name="account">Account</string>
+    <string name="account_limits">Account Limits</string>
+    <string name="account_agree">Agreements</string>
+    <string name="security">Security</string>
+    <string name="security_resetpin">"Reset PIN Code "</string>
+    <string name="security_faceid">Face ID Setting</string>
+    <string name="security_changepass">Change Password</string>
+    <string name="faceidsetuptxt">Set Up Face ID</string>
+    <string name="faceidsetup">Enable Face ID to Use face recognition to complete payments quickly and securely.</string>
+    <string name="sepupid">Set Up Face ID</string>
+    <string name="sepupidnotnoe">Not Now</string>
+    <string name="setupnotnowBtn">Not Now</string>
+
+
 </resources>

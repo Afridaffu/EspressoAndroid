@@ -110,7 +110,12 @@ public class OTPValidation extends AppCompatActivity {
                     case "ForgotPwd":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address:\n" + EMAIL);
+                        break;
+                    case "ForgotPin":
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+                        headerTV.setText("Verify Email");
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address:\n" + EMAIL);
                         break;
                     case "retEmail":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
@@ -119,7 +124,6 @@ public class OTPValidation extends AppCompatActivity {
                         subHeaderTV.setText("We have sent you a 6-digit code sent to the register phone number " + maskedPhone);
                         break;
                     case "SignUp":
-
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (OTP_TYPE.equals("MOBILE")) {
@@ -129,7 +133,7 @@ public class OTPValidation extends AppCompatActivity {
                             headerTV.setText("Please Verify your Email");
                             subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
                         } else if (OTP_TYPE.equals("SECURE")) {
-                            Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
+                            Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                             secureAccountRL.setVisibility(View.VISIBLE);
                             layoutType = "SECURE";
                             layoutEntry.setVisibility(View.GONE);
@@ -143,7 +147,7 @@ public class OTPValidation extends AppCompatActivity {
                 try {
                     if (resendCounter < 5) {
                         Utils.hideKeypad(OTPValidation.this, view);
-                        if ((strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd"))||(OTP_TYPE.equals("EMAIL"))) {
+                        if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin"))) || (OTP_TYPE.equals("EMAIL"))) {
                             dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                             dialog.setIndeterminate(false);
                             dialog.setMessage("Please wait...");
@@ -196,10 +200,22 @@ public class OTPValidation extends AppCompatActivity {
                                     smsRequest.setOtp(charSequence.toString().trim());
                                     loginViewModel.emailotpValidate(smsRequest);
                                 }
+                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
+                                if (charSequence.length() == 6) {
+//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+//                                    dialog.setIndeterminate(false);
+//                                    dialog.setMessage("Please wait...");
+//                                    dialog.show();
+//                                    SmsRequest smsRequest = new SmsRequest();
+//                                    smsRequest.setEmail(EMAIL.trim());
+//                                    smsRequest.setOtp(charSequence.toString().trim());
+//                                    loginViewModel.emailotpValidate(smsRequest);
+                                    startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                            .putExtra("screen", "retEmailfound"));
+                                }
                             } else {
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
-
                                         dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                         dialog.setIndeterminate(false);
                                         dialog.setMessage("Please wait...");
@@ -208,7 +224,6 @@ public class OTPValidation extends AppCompatActivity {
                                         smsRequest.setEmail(EMAIL.trim());
                                         smsRequest.setOtp(charSequence.toString().trim());
                                         loginViewModel.smsotp(smsRequest);
-
                                     }
                                 } else if (OTP_TYPE.equals("EMAIL")) {
                                     if (charSequence.length() == 6) {
@@ -300,11 +315,16 @@ public class OTPValidation extends AppCompatActivity {
                                     shakeAnimateUpDown();
                                     startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class));
                                     break;
+                                case "ForgotPin":
+                                    otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                                    shakeAnimateUpDown();
+                                    startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE"));
+                                    break;
                                 case "retEmail":
 
                                     break;
                                 case "SignUp":
-                                    if(OTP_TYPE.equals("EMAIL")){
+                                    if (OTP_TYPE.equals("EMAIL")) {
                                         otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                         shakeAnimateUpDown();
                                         Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
@@ -320,6 +340,7 @@ public class OTPValidation extends AppCompatActivity {
                                     break;
                             }
                         }
+
                     }
                 }
             }
@@ -337,7 +358,7 @@ public class OTPValidation extends AppCompatActivity {
                         if (strScreen != null && !strScreen.equals("")) {
                             switch (strScreen) {
                                 case "SignUp":
-                                    if(OTP_TYPE.equals("MOBILE")){
+                                    if (OTP_TYPE.equals("MOBILE")) {
                                         otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                         shakeAnimateUpDown();
                                         resendCounter = 0;
@@ -360,7 +381,7 @@ public class OTPValidation extends AppCompatActivity {
         loginViewModel.getEmailValidateResponseMutableLiveData().observe(this, new Observer<EmailValidateResponse>() {
             @Override
             public void onChanged(EmailValidateResponse emailValidateResponse) {
-                try{
+                try {
                     dialog.dismiss();
                     if (emailValidateResponse != null) {
                         if (emailValidateResponse.getStatus().toLowerCase().equals("error")) {
@@ -369,10 +390,14 @@ public class OTPValidation extends AppCompatActivity {
                         } else {
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
-                            startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+                            if(strScreen.equals("ForgotPwd")) {
+                                startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+                            }else{
+                                startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE"));
+                            }
                         }
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -429,7 +454,6 @@ public class OTPValidation extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void shakeAnimateLeftRight() {
