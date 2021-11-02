@@ -60,5 +60,55 @@
     <string name="sepupidnotnoe">Not Now</string>
     <string name="setupnotnowBtn">Not Now</string>
 
+    <string name="uploadid">Upload ID and fill out your information</string>
+    <string name="contentuploadid">Upload and Scan ID: Driver’s License,\nState-Issued ID, or Passport.</string>
+    <string name="digits4">Last 4 digits</string>
+    <string name="ssnlast">SSN Last 4 Digits</string>
+    <string name="dobol">Date of Birth</string>
+    <string name="dobhint">Pick your date of birth</string>
+    <string name="onfocusString"> </string>
+    <string name="identityInstruction">Enter your mailing address of your primary residence. Please do not use a PO Box.</string>
+    <string name="submitbtn">Submit</string>
+    <string name="exitbtn">Exit</string>
+
+    <string name="identity">Identity Verification</string>
+    <string name="mailingaddress1">Mailing Address Line 1</string>
+    <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zip">Zipcode</string>
+    <string name="country">Country</string>
+    <string name="contentuploadidsuccess">Uploaded Driver’s License</string>
+    <string name="mailingaddresshint">Street Address</string>
+    <string name="mailingaddresshint2">Apt#, Suit, Floor</string>
+    <string name="statehint">State</string>
+    <string name="cityhint">City</string>
+    <string name="ziphint">Zipcode</string>
+    <string name="countryhint">United States</string>
+
+    <string name="contentidtype">Choose ID Type</string>
+    <string name="driverlicense">Driver’s License</string>
+    <string name="pptext">Passport</string>
+    <string name="sic">State-Issued Card</string>
+
+    <string name="ivunder_review">Thank you for your interest in coyni. Please allow us up to 72 business hours for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
+    <string name="ivtitle">Identify Verification Under Review</string>
+    <string name="done">Done</string>
+
+    <string name="add_ac">Additional Action Required</string>
+    <string name="add_actioncontent">We are unable to match the last 4 digits of your Social Security number.\n \nIn order to continue, please enter your full Social Security Number and click submit.</string>
+    <string name="ssnhint">•••-••-••••</string>
+    <string name="ssnout">SSN</string>
+    <string name="submit">Submit</string>
+
+    <string name="iv_success">Identity Verification Successful</string>
+    <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
+
+    <string name="iv_failed">Identity Verification Failed</string>
+    <string name="iv_failedcontent">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
+    <string name="iv_failedcontentextention"> If you need any help Please</string>
+    <string name="iv_failedcontactex"><u>Contact Us</u></string>
+
+    <string name="exit">Exit</string>
 
 </resources>
