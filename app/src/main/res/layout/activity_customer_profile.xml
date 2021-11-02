@@ -185,6 +185,7 @@
                                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                                     <ImageView
+                                        android:id="@+id/imgQRCode"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:src="@drawable/ic_qr_code"

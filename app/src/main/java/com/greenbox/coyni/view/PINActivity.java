@@ -3,12 +3,14 @@ package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -16,9 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.coynipin.ValidateRequest;
+import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -26,6 +34,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     ImageView backActionIV, imgBack;
     String passcode = "", strChoose = "", strConfirm = "", TYPE;
     TextView tvHead, tvForgot;
+    CoyniViewModel coyniViewModel;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
                     break;
             }
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -120,6 +132,33 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    private void initObserver() {
+        coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
+            @Override
+            public void onChanged(ValidateResponse validateResponse) {
+                if (validateResponse != null) {
+                    if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                        String strScreen = "";
+                        if (getIntent().getStringExtra("screen") != null) {
+                            strScreen = getIntent().getStringExtra("screen");
+                        }
+                        switch (strScreen) {
+                            case "loginExpiry":
+                                Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+                                i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                startActivity(i);
+                                break;
+                            case "login":
+                                Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(d);
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
@@ -174,6 +213,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 onBackPressed();
                 break;
             case R.id.tvForgot:
+                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
+                i.putExtra("screen","ForgotPin");
+                startActivity(i);
                 break;
 
         }
@@ -216,38 +258,32 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 if (!strChoose.equals(strConfirm)) {
                                     Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
                                 } else {
-
-                                    if(Utils.checkAuthentication(this)){
-                                        if(Utils.isFingerPrint(PINActivity.this)){
+                                    if (Utils.checkAuthentication(this)) {
+                                        if (Utils.isFingerPrint(PINActivity.this)) {
                                             Log.e("isFingerPrint", "True");
                                             startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                            .putExtra("ENABLE_TYPE","TOUCH"));
-                                        }else{
+                                                    .putExtra("ENABLE_TYPE", "TOUCH"));
+                                        } else {
                                             Log.e("isFingerPrint", "False");
-                                                    final Intent enrollIntent;
+                                            final Intent enrollIntent;
 
-                                                    enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
-                                                    enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                                            BIOMETRIC_STRONG);
-                                                    startActivityForResult(enrollIntent, 101);
+                                            enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+                                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                                    BIOMETRIC_STRONG);
+                                            startActivityForResult(enrollIntent, 101);
                                         }
-                                    }else{
+                                    } else {
 
-                                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-                                        }else{
+                                        } else {
 
                                         }
                                     }
                                 }
                                 break;
                             case "ENTER":
-                                Toast.makeText(getApplication(), "Enter PIN value", Toast.LENGTH_LONG).show();
-                                if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
-                                    Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
-                                    i.putExtra("screen", getIntent().getStringExtra("screen"));
-                                    startActivity(i);
-                                }
+                                validatePIN();
                                 break;
                         }
                         break;
@@ -300,9 +336,19 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void matchPasscode() {
-
-
+    private void validatePIN() {
+        try {
+            dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
+            dialog.setIndeterminate(false);
+            dialog.setMessage("Please wait...");
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.show();
+            ValidateRequest request = new ValidateRequest();
+            request.setPin(passcode);
+            coyniViewModel.validateCoyniPin(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

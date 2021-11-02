@@ -200,6 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                    i.putExtra("screen","ForgotPwd");
                     startActivity(i);
                 }
             });
@@ -222,6 +223,8 @@ public class LoginActivity extends AppCompatActivity {
                             strPwd = etPassword.getText().toString().trim();
                             if (chkRemember.isChecked()) {
                                 saveCredentials();
+                            } else {
+                                mydatabase.execSQL("Delete from tblRemember");
                             }
                             login();
                         } else {
@@ -314,6 +317,9 @@ public class LoginActivity extends AppCompatActivity {
             if (dsRemember.getCount() > 0) {
                 etEmail.setText(dsRemember.getString(1));
                 etPassword.setText(dsRemember.getString(2));
+                chkRemember.setChecked(true);
+            } else {
+                chkRemember.setChecked(false);
             }
         } catch (Exception ex) {
             if (ex.getMessage().toString().contains("no such table")) {
@@ -339,13 +345,13 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(login.getData().getJwtToken());
-                                if(login.getData().getCoyniPin()){
+                                if (login.getData().getCoyniPin()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
-                                    i.putExtra("screen", "manual");
+                                    i.putExtra("screen", "login");
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
-                                }else{
+                                } else {
                                     Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
