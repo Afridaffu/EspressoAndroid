@@ -3,9 +3,10 @@ package com.greenbox.coyni.model.register;
 import com.greenbox.coyni.model.Error;
 
 public class CustRegisterResponse {
+
     private String status;
     private String timestamp;
-    private Data data;
+    private Data data = new Data();
     private Error error;
 
     public String getStatus() {
@@ -42,7 +43,7 @@ public class CustRegisterResponse {
 
     public class Data {
         private String accountStatus;
-        private int userId;
+        private String userId = "";
         private String name;
         private String phoneNumber;
         private String email;
@@ -59,11 +60,11 @@ public class CustRegisterResponse {
             this.accountStatus = accountStatus;
         }
 
-        public int getUserId() {
+        public String getUserId() {
             return userId;
         }
 
-        public void setUserId(int userId) {
+        public void setUserId(String userId) {
             this.userId = userId;
         }
 
@@ -123,4 +124,5 @@ public class CustRegisterResponse {
             this.email_verified = email_verified;
         }
     }
+
 }

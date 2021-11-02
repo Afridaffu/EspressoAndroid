@@ -2,7 +2,7 @@ package com.greenbox.coyni.model.register;
 
 public class CustRegisRequest {
 
-    private int userId;
+    private String userId = "";
     private String email;
     private String firstName;
     private String lastName;
@@ -45,11 +45,11 @@ public class CustRegisRequest {
         this.phoneNumberWithCountryCode = phoneNumberWithCountryCode;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
