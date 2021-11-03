@@ -45,8 +45,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -70,7 +69,7 @@
                         android:src="@drawable/ic_coynilogo"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.305"
+                        app:layout_constraintHorizontal_bias="0.41"
                         app:layout_constraintStart_toStartOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -214,7 +213,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/remembertxt"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/text_size_16sp"
+                        android:textSize="@dimen/text_size_14sp"
                         android:theme="@style/AppTheme" />
                 </LinearLayout>
 
@@ -226,24 +225,23 @@
 
                     <TextView
                         android:id="@+id/forgotpwd"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_toRightOf="@id/forgotpwd"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="@string/forgotpwdtxt"
                         android:textColor="@color/primary_green"
-                        android:textSize="@dimen/text_size_18sp" />
+                        android:textSize="13dp"
+                        android:layout_weight="1"/>
 
                     <TextView
                         android:id="@+id/tvRetEmail"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:gravity="right"
                         android:text="@string/retrievemail"
                         android:textColor="@color/primary_green"
-                        android:textSize="@dimen/text_size_18sp" />
+                        android:textSize="13dp" />
                 </LinearLayout>
 
                 <androidx.cardview.widget.CardView
@@ -263,7 +261,7 @@
                         android:fontFamily="@font/opensans_bold"
                         android:text="Log in"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_18sp" />
+                        android:textSize="@dimen/text_size_13sp" />
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 

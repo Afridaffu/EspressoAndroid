@@ -7,7 +7,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingEnd="32dp"
     android:paddingStart="30dp"
-    tools:context=".view.CustomerProfileActivity">
+    tools:context=".view.CustomerProfileActivity"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    >
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -18,11 +20,13 @@
         android:orientation="vertical"
         android:paddingBottom="30dp">
 
-        <View
+        <androidx.cardview.widget.CardView
             android:layout_width="80dp"
-            android:layout_height="3dp"
+            android:layout_height="4dp"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
+            app:cardBackgroundColor="@color/primary_color"
+            app:cardCornerRadius="2dp"
             android:background="@color/primary_color"
             />
 
@@ -37,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/faceidsetuptxt"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_marginTop="38dp"
         android:fontFamily="@font/opensans_bold"
         android:textColor="@color/black"

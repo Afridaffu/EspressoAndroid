@@ -7,8 +7,7 @@
     android:orientation="vertical"
     android:background="@color/white"
     tools:context=".view.IdentityVerificationActivity"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    >
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar" >
 
     <LinearLayout
         android:id="@+id/topbarll"
