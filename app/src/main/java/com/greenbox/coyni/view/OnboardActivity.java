@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,6 +16,9 @@ import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
+import com.greenbox.coyni.model.register.CustRegisRequest;
+import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 
 public class OnboardActivity extends AppCompatActivity {
@@ -30,6 +34,12 @@ public class OnboardActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
+//            CustRegisRequest custRegisRequest = new CustRegisRequest();
+//            custRegisRequest.setUserId("1234");
+//            Singleton.setCustRegisRequest(custRegisRequest);
+
+            Log.e("Log",Singleton.getCustRegisRequest().getUserId()+"  sdsds");
+
             getStarted = findViewById(R.id.getStartedLL);
             layoutLogin = findViewById(R.id.layoutLogin);
             String url = BuildConfig.URL_PRODUCTION;

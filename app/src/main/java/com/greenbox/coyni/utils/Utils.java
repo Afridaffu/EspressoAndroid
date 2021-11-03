@@ -33,9 +33,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static int PERSONAL_ACCOUNT = 1,BUSINESS_ACCOUNT = 2,SHARED_ACCOUNT = 3;
     public static String strLang = "en-US";
     public static String strCode = "12345";
-    public static String strCCode = "US";
+    public static String strCCode = "";
     public static String strAuth;
     public static String strReferer;
     public static String strURL_PRODUCTION;
@@ -97,12 +98,12 @@ public class Utils {
         Utils.strReferer = strReferer;
     }
 
-        public static String getStrCCode() {
+    public static String getStrCCode() {
         return strCCode;
     }
 
     public static void setStrCCode(String strCCode) {
-        Utils.strReferer = strReferer;
+        Utils.strCCode = strCCode;
     }
 
     public static String getStrURL_PRODUCTION() {

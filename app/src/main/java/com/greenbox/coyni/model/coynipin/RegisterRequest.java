@@ -12,11 +12,4 @@ public class RegisterRequest {
         this.pin = pin;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 }

@@ -20,6 +20,8 @@ import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
+import com.greenbox.coyni.model.register.InitCustomerRequest;
+import com.greenbox.coyni.model.register.InitializeCustomerResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.model.register.SMSValidate;
@@ -50,6 +52,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private MutableLiveData<SetPasswordResponse> setpwdLiveData = new MutableLiveData<>();
     private MutableLiveData<SetPasswordResponse> registerPINLiveData = new MutableLiveData<>();
+    private MutableLiveData<InitializeCustomerResponse> initCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
@@ -96,6 +99,14 @@ public class LoginViewModel extends AndroidViewModel {
         return setpwdLiveData;
     }
 
+    public MutableLiveData<InitializeCustomerResponse> getInitCustomerLiveData() {
+        return initCustomerLiveData;
+    }
+
+    public void setInitCustomerLiveData(MutableLiveData<InitializeCustomerResponse> initCustomerLiveData) {
+        this.initCustomerLiveData = initCustomerLiveData;
+    }
+
     public MutableLiveData<RetrieveEmailResponse> getRetrieveEmailResponseMutableLiveData() {
         return retrieveEmailResponseMutableLiveData;
     }
@@ -110,6 +121,7 @@ public class LoginViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         SMSResponse obj = response.body();
                         smsresendMutableLiveData.setValue(obj);
+                        Log.e("SMS Resend Resp", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<SMSResponse>() {
@@ -142,6 +154,7 @@ public class LoginViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         EmailResendResponse obj = response.body();
                         emailresendMutableLiveData.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<EmailResendResponse>() {
@@ -174,6 +187,7 @@ public class LoginViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         EmailResponse obj = response.body();
                         emailotpLiveData.setValue(obj);
+                        Log.e("Email Validate Resp", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<EmailResponse>() {
@@ -206,6 +220,7 @@ public class LoginViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         SMSValidate obj = response.body();
                         smsotpLiveData.setValue(obj);
+                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<SMSValidate>() {
@@ -384,6 +399,39 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<SetPasswordResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void initializeCustomer(InitCustomerRequest initCustomerRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<InitializeCustomerResponse> mCall = apiService.initializeCustomer(initCustomerRequest);
+            mCall.enqueue(new Callback<InitializeCustomerResponse>() {
+                @Override
+                public void onResponse(Call<InitializeCustomerResponse> call, Response<InitializeCustomerResponse> response) {
+                    if (response.isSuccessful()) {
+                        InitializeCustomerResponse obj = response.body();
+                        initCustomerLiveData.setValue(obj);
+                        Log.e("Init Customer", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<InitializeCustomerResponse>() {
+                        }.getType();
+                        InitializeCustomerResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            initCustomerLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<InitializeCustomerResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

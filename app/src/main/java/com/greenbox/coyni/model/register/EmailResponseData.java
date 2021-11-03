@@ -2,12 +2,12 @@ package com.greenbox.coyni.model.register;
 
 public class EmailResponseData {
     private String userId;
-    private String email_status;
+    private String emailStatus;
     private String emailOtp;
     private String message;
     private Boolean smsVerified;
     private Boolean emailVerified;
-    private String authenticationeCode;
+    private String code;
 
     public String getUserId() {
         return userId;
@@ -18,11 +18,11 @@ public class EmailResponseData {
     }
 
     public String getEmail_status() {
-        return email_status;
+        return emailStatus;
     }
 
-    public void setEmail_status(String email_status) {
-        this.email_status = email_status;
+    public void setEmail_status(String emailStatus) {
+        this.emailStatus = emailStatus;
     }
 
     public String getEmailOtp() {
@@ -57,12 +57,12 @@ public class EmailResponseData {
         this.emailVerified = emailVerified;
     }
 
-    public String getAuthenticationeCode() {
-        return authenticationeCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setAuthenticationeCode(String authenticationeCode) {
-        this.authenticationeCode = authenticationeCode;
+    public void getCode(String authenticationeCode) {
+        this.code = authenticationeCode;
     }
 }
 

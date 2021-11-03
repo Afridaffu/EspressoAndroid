@@ -8,8 +8,8 @@ public class Singleton {
 
     private static Singleton instance;
 
-    public static CustRegisRequest custRegisRequest ;
-    public static CustRegisterResponse custRegisterResponse ;
+    public static CustRegisRequest custRegisRequest = new CustRegisRequest();
+    public static CustRegisterResponse custRegisterResponse = new CustRegisterResponse() ;
 
     private Singleton() {
     }

@@ -21,7 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
+import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.utils.Utils;
@@ -83,7 +86,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     clearPassCode();
                     passcode = "";
                     break;
-
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -154,6 +156,19 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 startActivity(d);
                                 break;
                         }
+                    }
+                }
+            }
+        });
+
+        coyniViewModel.getRegisterPINResponseMutableLiveData().observe(this, new Observer<PINRegisterResponse>() {
+            @Override
+            public void onChanged(PINRegisterResponse pinRegisterResponse) {
+                dialog.dismiss();
+                if(pinRegisterResponse!=null){
+                    Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
+                    if(!pinRegisterResponse.getStatus().toLowerCase().equals("error")){
+
                     }
                 }
             }
@@ -258,28 +273,39 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 if (!strChoose.equals(strConfirm)) {
                                     Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
                                 } else {
-                                    if (Utils.checkAuthentication(this)) {
-                                        if (Utils.isFingerPrint(PINActivity.this)) {
-                                            Log.e("isFingerPrint", "True");
-                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                    .putExtra("ENABLE_TYPE", "TOUCH"));
-                                        } else {
-                                            Log.e("isFingerPrint", "False");
-                                            final Intent enrollIntent;
 
-                                            enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
-                                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                                    BIOMETRIC_STRONG);
-                                            startActivityForResult(enrollIntent, 101);
-                                        }
-                                    } else {
+                                    dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
+                                    dialog.setIndeterminate(false);
+                                    dialog.setMessage("Please wait...");
+                                    dialog.getWindow().setGravity(Gravity.CENTER);
+                                    dialog.show();
 
-                                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                    RegisterRequest registerRequest = new RegisterRequest();
+                                    registerRequest.setPin(strChoose);
+                                    coyniViewModel.registerCoyniPin(registerRequest);
 
-                                        } else {
-
-                                        }
-                                    }
+//                                    if (Utils.checkAuthentication(this)) {
+//                                        if (Utils.isFingerPrint(PINActivity.this)) {
+//                                            Log.e("isFingerPrint", "True");
+//                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                    .putExtra("ENABLE_TYPE", "TOUCH"));
+//                                        } else {
+//                                            Log.e("isFingerPrint", "False");
+//                                            final Intent enrollIntent;
+//
+//                                            enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+//                                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                                                    BIOMETRIC_STRONG);
+//                                            startActivityForResult(enrollIntent, 101);
+//                                        }
+//                                    } else {
+//
+//                                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//
+//                                        } else {
+//
+//                                        }
+//                                    }
                                 }
                                 break;
                             case "ENTER":

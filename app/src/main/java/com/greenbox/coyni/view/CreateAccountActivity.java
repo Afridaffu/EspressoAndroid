@@ -87,7 +87,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     String phoneNumber;
-    int PERSONAL_ACCOUNT = 1,BUSINESS_ACCOUNT = 2,SHARED_ACCOUNT = 3;
 
     String privacyURL  = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL  = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
@@ -169,7 +168,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 try {
                     startActivity(browserIntent);
                 }catch (ActivityNotFoundException e){
-
+                    e.printStackTrace();
                 }
             });
 
@@ -179,7 +178,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 try {
                     startActivity(browserIntent);
                 }catch (ActivityNotFoundException e){
-
+                    e.printStackTrace();
                 }
             });
 
@@ -190,22 +189,23 @@ public class CreateAccountActivity extends AppCompatActivity  {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
                     dialog = new ProgressDialog(CreateAccountActivity.this, R.style.MyAlertDialogStyle);
                     dialog.setIndeterminate(false);
                     dialog.setMessage("Please wait...");
                     dialog.show();
+                    phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+
                     callRegisterAPI();
 
                 } else {
-                    phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
-                    Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                    i.putExtra("screen", "SignUp");
-                    i.putExtra("OTP_TYPE", "MOBILE");
-                    i.putExtra("MOBILE", phoneNumber);
-                    i.putExtra("MASK_MOBILE",phoneNumberET.getText());
-                    i.putExtra("EMAIL", emailET.getText().toString().trim());
-                    startActivity(i);
+//                    phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+//                    Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
+//                    i.putExtra("screen", "SignUp");
+//                    i.putExtra("OTP_TYPE", "MOBILE");
+//                    i.putExtra("MOBILE", phoneNumber);
+//                    i.putExtra("MASK_MOBILE",phoneNumberET.getText());
+//                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+//                    startActivity(i);
                 }
             });
 
@@ -552,12 +552,10 @@ public class CreateAccountActivity extends AppCompatActivity  {
             regisRequest.setEmail(emailET.getText().toString().trim());
             regisRequest.setCreatePassword(passwordET.getText().toString().trim());
             regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
-            regisRequest.setAccountType(PERSONAL_ACCOUNT);
+            regisRequest.setAccountType(Utils.PERSONAL_ACCOUNT);
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim()+" "+lastNameET.getText().toString().trim());
-            if(Singleton.getCustRegisterResponse()!=null){
-                regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId());
-            }
+            regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId()+"");
             Log.e("Regsiter Object", new Gson().toJson(regisRequest));
             Singleton.setCustRegisRequest(regisRequest);
             loginViewModel.customerRegistration(regisRequest);

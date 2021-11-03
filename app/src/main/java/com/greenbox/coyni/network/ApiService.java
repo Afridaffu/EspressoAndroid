@@ -1,5 +1,7 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
+import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
@@ -11,6 +13,8 @@ import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
+import com.greenbox.coyni.model.register.InitCustomerRequest;
+import com.greenbox.coyni.model.register.InitializeCustomerResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.model.register.SMSValidate;
@@ -28,10 +32,11 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
     @POST("api/v2/user/email-otp/resend")
     Call<EmailResendResponse> emailotpresend(@Query("email") String email);
 
-    @POST("api/v2/register/email-otp/validate")
+    @POST("api/v2/user/register/email-otp/validate")
     Call<EmailResponse> emailotp(@Body SmsRequest smsRequest);
 
     @POST("api/v2/user/sms-otp/resend")
@@ -43,14 +48,18 @@ public interface ApiService {
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("api/v2/register/newcustomer")
+    @POST("/api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
 
-    @POST("api/v2/user/email-otp/validate")
+    @POST("/api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 
     @PATCH("api/v2/register/set-password")
     Call<SetPasswordResponse> setpassword(@Body SetPassword setPassword);
+
+    @POST("api/v2/register/initialize/customer")
+    Call<InitializeCustomerResponse> initializeCustomer(@Body InitCustomerRequest initCustomerRequest);
+
 
     @POST("api/v2/user/forgot-email/otp/send")
     Call<RetrieveEmailResponse> retrieveEmail(@Body RetrieveEmailRequest request);
@@ -60,5 +69,9 @@ public interface ApiService {
 
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
+
+
+    @POST("api/v2/coyni-pin/register")
+    Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
 }
