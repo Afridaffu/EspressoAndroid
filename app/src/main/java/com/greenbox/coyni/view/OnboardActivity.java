@@ -1,6 +1,8 @@
 package com.greenbox.coyni.view;
 
 import android.content.Intent;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -38,7 +40,7 @@ public class OnboardActivity extends AppCompatActivity {
 //            custRegisRequest.setUserId("1234");
 //            Singleton.setCustRegisRequest(custRegisRequest);
 
-            Log.e("Log",Singleton.getCustRegisRequest().getUserId()+"  sdsds");
+            Log.e("Log", Singleton.getCustRegisRequest().getUserId() + "  sdsds");
 
             getStarted = findViewById(R.id.getStartedLL);
             layoutLogin = findViewById(R.id.layoutLogin);
@@ -90,4 +92,34 @@ public class OnboardActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
+    private Boolean isFingerPrint() {
+        Boolean value = false;
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+                if (!fingerprintManager.isHardwareDetected()) {
+                    // Device doesn't support fingerprint authentication
+                    Log.e("MY_APP_TAG", "Device doesn't support fingerprint authentication.");
+                    Utils.setIsTouchEnabled(false);
+                    value = false;
+                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    // User hasn't enrolled any fingerprints to authenticate with
+                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
+                    Utils.setIsTouchEnabled(false);
+                    value = false;
+                } else {
+                    // Everything is ready for fingerprint authentication
+                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                    value = true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
 }

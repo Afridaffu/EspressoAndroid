@@ -4,9 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     CardView cvNext, cvEmailOK;
     LinearLayout layoutEmailError, layoutPwdError;
     TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
-    String strEmail = "", strPwd = "";
+    String strEmail = "", strPwd = "", strMsg = "";
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     SQLiteDatabase mydatabase;
@@ -200,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                    i.putExtra("screen","ForgotPwd");
+                    i.putExtra("screen", "ForgotPwd");
                     startActivity(i);
                 }
             });
@@ -257,6 +260,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
+            enableIcon();
             SetDB();
             SetLock();
             SetRemember();
@@ -352,7 +356,13 @@ public class LoginActivity extends AppCompatActivity {
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 } else {
-                                    Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+//                                    Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+//                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(i);
+                                    Intent i = new Intent(LoginActivity.this, OTPValidation.class);
+                                    i.putExtra("screen", "SignUp");
+                                    i.putExtra("OTP_TYPE", "MOBILE");
+                                    i.putExtra("MOBILE", login.getData().getPhoneNumber());
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 }
@@ -481,6 +491,54 @@ public class LoginActivity extends AppCompatActivity {
             }
             mydatabase.execSQL("Delete from tblRemember");
             mydatabase.execSQL("INSERT INTO tblRemember(id,username,password) VALUES(null,'" + strEmail.toLowerCase() + "','" + strPwd + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Boolean isFingerPrint() {
+        Boolean value = false;
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+                if (!fingerprintManager.isHardwareDetected()) {
+                    // Device doesn't support fingerprint authentication
+                    Log.e("MY_APP_TAG", "Device doesn't support fingerprint authentication.");
+                    isThumb = false;
+                    value = false;
+                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    // User hasn't enrolled any fingerprints to authenticate with
+                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
+                    isThumb = false;
+                    value = false;
+                } else {
+                    // Everything is ready for fingerprint authentication
+                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
+                    isThumb = true;
+                    value = true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
+    private void enableIcon() {
+        try {
+            if (Utils.checkAuthentication(LoginActivity.this)) {
+                etlPassword.setPasswordVisibilityToggleEnabled(false);
+                etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+            } else {
+                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+            }
+            if (isFingerPrint()) {
+                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                strMsg = "Do you want to register with Thumb/Pin.";
+            } else {
+                strMsg = "Do you want to register with FaceID/Pin.";
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -68,7 +68,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.profileqrcode);
             Window window = dialog.getWindow();
-            window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
