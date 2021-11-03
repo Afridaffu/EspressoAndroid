@@ -31,7 +31,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     TextInputLayout etlEmail;
     ProgressDialog dialog;
     LinearLayout layoutEmailError;
-    TextView tvEmailError;
+    TextView tvEmailError, tvMessage, tvHead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             etlEmail = findViewById(R.id.etlEmail);
             layoutEmailError = findViewById(R.id.layoutEmailError);
             tvEmailError = findViewById(R.id.tvEmailError);
+            tvMessage = findViewById(R.id.tvMessage);
+            tvHead = findViewById(R.id.tvHead);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
             imgClose.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +63,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
+            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd")) {
+                tvHead.setText("Forgot Your Password?");
+                tvMessage.setText("Before we can reset your password, we will need to verify your identity.\nPlease enter the email register with your account.");
+            } else {
+                tvHead.setText("Forgot Your PIN?");
+                tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
+            }
 
             etEmail.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -117,7 +126,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         Intent i = new Intent(ForgotPasswordActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "EMAIL");
                         i.putExtra("EMAIL", etEmail.getText().toString().trim());
-                        i.putExtra("screen", "ForgotPwd");
+                        i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
                         Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this);

@@ -40,6 +40,8 @@ public class Utils {
     public static String strAuth;
     public static String strReferer;
     public static String strURL_PRODUCTION;
+    public static Boolean isFaceEnabled;
+    public static Boolean isTouchEnabled;
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
@@ -112,6 +114,22 @@ public class Utils {
 
     public static void setStrURL_PRODUCTION(String strURL_PRODUCTION) {
         Utils.strURL_PRODUCTION = strURL_PRODUCTION;
+    }
+
+    public static Boolean getIsFaceEnabled() {
+        return isFaceEnabled;
+    }
+
+    public static void setIsFaceEnabled(Boolean isFaceEnabled) {
+        Utils.isFaceEnabled = isFaceEnabled;
+    }
+
+    public static Boolean getIsTouchEnabled() {
+        return isTouchEnabled;
+    }
+
+    public static void setIsTouchEnabled(Boolean isTouchEnabled) {
+        Utils.isTouchEnabled = isTouchEnabled;
     }
 
     public static void statusBar(Activity activity, String strColor) {
