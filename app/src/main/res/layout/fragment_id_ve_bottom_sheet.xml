@@ -16,12 +16,12 @@
         android:paddingBottom="30dp">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="80dp"
-            android:layout_height="3dp"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_3sdp"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/_15sdp"
             app:cardBackgroundColor="@color/primary_color"
-            app:cardCornerRadius="1dp"
+            app:cardCornerRadius="@dimen/_1sdp"
             android:background="@color/primary_color"
             />
 
@@ -30,26 +30,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="@dimen/_20sdp"
         android:fontFamily="@font/opensans_bold"
         android:text="@string/contentidtype"
         android:textColor="@color/black"
-        android:textSize="24dp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/_16ssp"
+        />
 
     <LinearLayout
         android:id="@+id/driverlicensell"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="32dp"
-        android:paddingTop="20dp"
-        android:paddingRight="32dp"
-        android:paddingBottom="20dp">
+        android:paddingLeft="@dimen/_21sdp"
+        android:paddingTop="@dimen/_14sdp"
+        android:paddingBottom="@dimen/_14sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_20sdp"
             android:orientation="horizontal">
 
             <ImageView
@@ -63,20 +63,19 @@
                 android:id="@+id/driverlicensetxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/driverlicense"
                 android:textColor="@color/primary_black"
-
-                android:textSize="18dp" />
+                android:textSize="@dimen/_12ssp" />
 
             <ImageView
                 android:id="@+id/rightarrowbtndl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:background="@color/white"
                 android:src="@drawable/ic_rightarrow" />
         </LinearLayout>
@@ -86,24 +85,24 @@
 
     <View
         android:layout_width="wrap_content"
-        android:layout_height="1.4dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@color/dark_grey" />
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginRight="@dimen/_21sdp"
+        android:background="@color/viewcolor" />
 
     <LinearLayout
         android:id="@+id/passportll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:paddingBottom="20dp">
+        android:paddingLeft="@dimen/_21sdp"
+        android:paddingRight="@dimen/_21sdp"
+        android:paddingBottom="@dimen/_14sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal">
 
             <ImageView
@@ -115,22 +114,22 @@
 
             <TextView
                 android:id="@+id/passporttxt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/pptext"
                 android:textColor="@color/primary_black"
 
-                android:textSize="18dp" />
+                android:textSize="@dimen/_16ssp" />
 
             <ImageView
                 android:id="@+id/rightarrowbtnpp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:background="@color/white"
                 android:src="@drawable/ic_rightarrow" />
         </LinearLayout>
@@ -138,10 +137,10 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1.4dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@color/dark_grey" />
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginRight="@dimen/_21sdp"
+        android:background="@color/viewcolor" />
 
 
     <LinearLayout
@@ -157,7 +156,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal">
 
             <ImageView
@@ -171,20 +170,20 @@
                 android:id="@+id/sictxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/sic"
                 android:textColor="@color/primary_black"
 
-                android:textSize="18sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <ImageView
                 android:id="@+id/rightarrowbtnsic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:background="@color/white"
                 android:src="@drawable/ic_rightarrow" />
         </LinearLayout>
@@ -197,7 +196,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
 
-        android:background="@color/dark_grey" />
+        android:background="@color/viewcolor" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -110,5 +110,14 @@
     <string name="iv_failedcontactex"><u>Contact Us</u></string>
 
     <string name="exit">Exit</string>
+    <string name="bank_account">Bank Account</string>
+    <string name="weeklimittext">250,000.00/Week</string>
+    <string name="daylimittext">250,000.00/Day</string>
+    <string name="bebit_card">Debit Card </string>
+    <string name="credit_card">Credit Card </string>
+    <string name="withdraw">Withdraw</string>
+    <string name="instant">Instant Pay</string>
+    <string name="giftcard">Gift Card</string>
+    <string name="buytoken">Buy Tokens</string>
 
 </resources>

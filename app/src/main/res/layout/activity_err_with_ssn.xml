@@ -22,37 +22,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_close"
-        android:layout_marginTop="67dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginTop="@dimen/_45sdp"
+        android:layout_marginLeft="@dimen/_21sdp"
         />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_additional_action_required"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="67dp"
+        android:layout_marginLeft="@dimen/_103sdp"
+        android:layout_marginTop="@dimen/_16sdp"
 
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_ac"
-        android:textSize="24dp"
+        android:textSize="@dimen/_16ssp"
         android:textColor="@color/primary_black"
 
         android:textAlignment="center"
-        android:layout_marginTop="30.5dp"
+        android:layout_marginTop="@dimen/_14sdp"
         android:fontFamily="@font/opensans_bold"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_actioncontent"
-        android:textSize="15dp"
+        android:textSize="@dimen/_11ssp"
         android:textColor="@color/primary_black"
-        android:layout_marginLeft="31.5dp"
-        android:layout_marginRight="31.5dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginRight="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:textAlignment="center"
         android:fontFamily="@font/opensans_regular"
         />
@@ -61,15 +61,15 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="53.5dp"
-            android:layout_marginRight="32sp"
-            android:layout_marginLeft="32sp"
+            android:layout_marginTop="@dimen/_43sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:layout_marginLeft="@dimen/_21sdp"
             android:hint="@string/ssnout"
             android:textColorHint="@color/black"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxCornerRadiusTopEnd="10sp"
-            app:boxCornerRadiusTopStart="10sp"
+            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+            app:boxCornerRadiusTopStart="@dimen/_10sdp"
             app:boxStrokeColor="@color/primary_color"
             app:expandedHintEnabled="false"
             app:hintTextColor="@color/black">
@@ -83,9 +83,9 @@
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:maxLength="30"
-                android:padding="14dp"
+                android:padding="@dimen/_12sdp"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/_12ssp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,13 +93,13 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/idveridoneBtn"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="150dp"
+            android:layout_height="@dimen/_43sdp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_70sdp"
             app:cardBackgroundColor="@color/primary_color"
-            app:cardCornerRadius="32dp"
-            android:layout_marginBottom="21dp">
+            app:cardCornerRadius="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_100sdp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                 android:text="@string/done"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="@dimen/_12ssp" />
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
