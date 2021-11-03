@@ -251,7 +251,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="@dimen/_33sdp"
                     app:cardBackgroundColor="@color/inactive_color"
-                    app:cardCornerRadius="@dimen/_22sdp">
+                    app:cardCornerRadius="@dimen/_22sdp"
+                    android:layout_marginBottom="@dimen/_2sdp">
 
                     <TextView
                         android:id="@+id/nextBtn"

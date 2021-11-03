@@ -88,6 +88,19 @@ public class OnboardActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            if(Utils.checkAuthentication(OnboardActivity.this)){
+                if(Utils.isFingerPrint(OnboardActivity.this)){
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                }else{
+                    Utils.setIsTouchEnabled(false);
+                    Utils.setIsFaceEnabled(true);
+                }
+            }else{
+                Utils.setIsTouchEnabled(false);
+                Utils.setIsFaceEnabled(false);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
