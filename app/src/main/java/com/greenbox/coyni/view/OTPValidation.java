@@ -55,7 +55,7 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "",maskedPhone="";
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "";
     LinearLayout layoutEntry, layoutFailure;
     MaterialCardView tryAgainCV;
     ProgressDialog dialog;
@@ -78,8 +78,7 @@ public class OTPValidation extends AppCompatActivity {
             SmsRetriever.getClient(this).startSmsUserConsent(null);
 
             IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
-            registerReceiver(smsVerificationReceiver,  intentFilter);
-
+            registerReceiver(smsVerificationReceiver, intentFilter);
 
             OTP_TYPE = getIntent().getStringExtra("OTP_TYPE");
             MOBILE = getIntent().getStringExtra("MOBILE");
@@ -261,7 +260,9 @@ public class OTPValidation extends AppCompatActivity {
             });
 
             secureNextCV.setOnClickListener(view -> {
-                startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE"));
+                startActivity(new Intent(OTPValidation.this, PINActivity.class)
+                        .putExtra("screen", "SignUp")
+                        .putExtra("TYPE", "CHOOSE"));
             });
 
             initObserver();
@@ -303,7 +304,7 @@ public class OTPValidation extends AppCompatActivity {
             public void onChanged(EmailResponse emailResponse) {
                 dialog.dismiss();
                 if (emailResponse != null) {
-                    Log.e("Email OTP Validate",new Gson().toJson(emailResponse));
+                    Log.e("Email OTP Validate", new Gson().toJson(emailResponse));
                     if (emailResponse.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
@@ -327,7 +328,7 @@ public class OTPValidation extends AppCompatActivity {
                                     if (OTP_TYPE.equals("EMAIL")) {
                                         otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                         shakeAnimateUpDown();
-                                        Utils.hideKeypad(OTPValidation.this,otpPV.getRootView());
+                                        Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
 
                                         dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                         dialog.setIndeterminate(false);
@@ -378,6 +379,7 @@ public class OTPValidation extends AppCompatActivity {
             }
         });
 
+
         loginViewModel.getEmailValidateResponseMutableLiveData().observe(this, new Observer<EmailValidateResponse>() {
             @Override
             public void onChanged(EmailValidateResponse emailValidateResponse) {
@@ -390,11 +392,7 @@ public class OTPValidation extends AppCompatActivity {
                         } else {
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
-                            if(strScreen.equals("ForgotPwd")) {
-                                startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
-                            }else{
-                                startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE"));
-                            }
+                            startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
                         }
                     }
                 } catch (Exception ex) {
@@ -417,6 +415,7 @@ public class OTPValidation extends AppCompatActivity {
                         Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this);
                     }
                 }
+
             }
         });
 

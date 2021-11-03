@@ -1,5 +1,7 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
+import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
@@ -27,10 +29,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
     @POST("api/v2/user/email-otp/resend")
     Call<EmailResendResponse> emailotpresend(@Query("email") String email);
 
-    @POST("api/v2/register/email-otp/validate")
+    @POST("api/v2/user/register/email-otp/validate")
     Call<EmailResponse> emailotp(@Body SmsRequest smsRequest);
 
     @POST("api/v2/user/sms-otp/resend")
@@ -60,4 +63,8 @@ public interface ApiService {
 
     @PATCH("api/v2/coyni-pin/validate")
     Call<ValidateResponse> validateCoyniPin(@Body ValidateRequest request);
+
+    @POST("api/v2/coyni-pin/register")
+    Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
+
 }

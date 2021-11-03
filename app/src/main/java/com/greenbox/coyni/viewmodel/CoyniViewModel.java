@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
+import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
@@ -28,6 +31,12 @@ import retrofit2.Response;
 public class CoyniViewModel extends AndroidViewModel {
     private MutableLiveData<ValidateResponse> validateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<PINRegisterResponse> getRegisterPINResponseMutableLiveData() {
+        return registerPINResponseMutableLiveData;
+    }
+
+    private MutableLiveData<PINRegisterResponse> registerPINResponseMutableLiveData = new MutableLiveData<>();
 
     public CoyniViewModel(@NonNull Application application) {
         super(application);
@@ -72,4 +81,39 @@ public class CoyniViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void registerCoyniPin(RegisterRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<PINRegisterResponse> mCall = apiService.coyniPINRegister(request);
+            mCall.enqueue(new Callback<PINRegisterResponse>() {
+                @Override
+                public void onResponse(Call<PINRegisterResponse> call, Response<PINRegisterResponse> response) {
+                    if (response.isSuccessful()) {
+                        PINRegisterResponse obj = response.body();
+                        registerPINResponseMutableLiveData.setValue(obj);
+                        Log.e("PIN Success", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ValidateResponse>() {
+                        }.getType();
+                        PINRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            registerPINResponseMutableLiveData.setValue(errorResponse);
+                            Log.e("PIN Error", new Gson().toJson(errorResponse));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PINRegisterResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
