@@ -18,35 +18,34 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="334dp"
-            android:layout_height="174dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="90dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/_142sdp"
             android:src="@drawable/ic_searchbar" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="77dp"
+            android:layout_marginTop="@dimen/_51sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:text="@string/sorrytxt"
             android:textColor="@color/black"
-            android:textSize="24dp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_16ssp"
+            />
 
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/reTryAgainBtn"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="@dimen/_44sdp"
         app:cardBackgroundColor="@color/primary_color"
         android:gravity="center"
-        app:cardCornerRadius="32dp"
+        app:cardCornerRadius="@dimen/_22sdp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="@dimen/_28sdp"
         >
         <TextView
             android:layout_width="match_parent"
@@ -56,7 +55,7 @@
             android:gravity="center"
             android:fontFamily="@font/opensans_bold"
             android:layout_gravity="center"
-            android:textSize="18dp"
+            android:textSize="@dimen/_12ssp"
             />
     </androidx.cardview.widget.CardView>
 

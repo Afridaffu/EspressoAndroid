@@ -21,9 +21,11 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
+import com.greenbox.coyni.model.users.AccountLimits;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -63,6 +65,10 @@ public interface ApiService {
 
     @PATCH("api/v2/coyni-pin/validate")
     Call<ValidateResponse> validateCoyniPin(@Body ValidateRequest request);
+
+    @GET("api/v2/profile/me/accountlimits/{userType}")
+    Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
+
 
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
