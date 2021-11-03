@@ -555,10 +555,14 @@ public class CreateAccountActivity extends AppCompatActivity  {
             regisRequest.setAccountType(Utils.PERSONAL_ACCOUNT);
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim()+" "+lastNameET.getText().toString().trim());
-            regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId()+"");
+            if(Singleton.getCustRegisterResponse().getData().getUserId().equals("")){
+                loginViewModel.customerRegistration(regisRequest,"POST");
+            }else{
+                regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId()+"");
+                loginViewModel.customerRegistration(regisRequest,"PATCH");
+            }
             Log.e("Regsiter Object", new Gson().toJson(regisRequest));
             Singleton.setCustRegisRequest(regisRequest);
-            loginViewModel.customerRegistration(regisRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

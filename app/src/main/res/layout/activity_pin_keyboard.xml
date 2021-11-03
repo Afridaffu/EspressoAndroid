@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/imgBack"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="67dp"
             android:src="@drawable/ic_back" />
@@ -29,21 +29,22 @@
             android:id="@+id/tvHead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="@dimen/_60sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="Choose your PIN"
             android:textAlignment="center"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_24sp" />
+            android:textSize="@dimen/_16ssp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="79dp"
+            android:layout_marginTop="@dimen/_52sdp"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/circleOneLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -52,12 +53,13 @@
 
                 <View
                     android:id="@+id/chooseCircleOne"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_6sdp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/circleTwoLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -66,12 +68,13 @@
 
                 <View
                     android:id="@+id/chooseCircleTwo"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_6sdp"  />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/circleThreeLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -80,12 +83,13 @@
 
                 <View
                     android:id="@+id/chooseCircleThree"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_6sdp"  />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/circleFourLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -94,12 +98,13 @@
 
                 <View
                     android:id="@+id/chooseCircleFour"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_6sdp"  />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/circleFiveLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -108,12 +113,13 @@
 
                 <View
                     android:id="@+id/chooseCircleFive"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_6sdp"  />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/circleSixLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -122,9 +128,9 @@
 
                 <View
                     android:id="@+id/chooseCircleSix"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="6dp" />
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_6sdp"  />
             </LinearLayout>
         </LinearLayout>
 
@@ -133,11 +139,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_24sdp"
             android:text="Forgot PIN"
+            android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/primary_green"
-            android:textSize="@dimen/text_size_18sp"
-            android:visibility="gone"></TextView>
+            android:textSize="@dimen/_12ssp"
+            android:visibility="visible" />
 
     </LinearLayout>
 
@@ -166,7 +173,7 @@
                 android:text="1"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keyTwoTV"
@@ -180,7 +187,7 @@
                 android:text="2"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keyThreeTV"
@@ -194,7 +201,7 @@
                 android:text="3"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
         </LinearLayout>
 
@@ -215,7 +222,7 @@
                 android:text="4"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keyFiveTV"
@@ -229,7 +236,7 @@
                 android:text="5"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keySixTV"
@@ -243,7 +250,7 @@
                 android:text="6"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
         </LinearLayout>
 
         <LinearLayout
@@ -263,7 +270,7 @@
                 android:text="7"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keyEightTV"
@@ -277,7 +284,7 @@
                 android:text="8"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keyNineTV"
@@ -291,7 +298,7 @@
                 android:text="9"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
         </LinearLayout>
 
         <LinearLayout
@@ -309,7 +316,7 @@
                 android:padding="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:id="@+id/keyZeroTV"
@@ -323,7 +330,7 @@
                 android:text="0"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_16sp" />
+                android:textSize="@dimen/_16ssp" />
 
             <ImageView
                 android:id="@+id/backActionIV"

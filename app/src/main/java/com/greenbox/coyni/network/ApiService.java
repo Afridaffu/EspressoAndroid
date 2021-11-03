@@ -26,6 +26,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -57,7 +58,6 @@ public interface ApiService {
     @POST("api/v2/register/initialize/customer")
     Call<InitializeCustomerResponse> initializeCustomer(@Body InitCustomerRequest initCustomerRequest);
 
-
     @POST("api/v2/user/forgot-email/otp/send")
     Call<RetrieveEmailResponse> retrieveEmail(@Body RetrieveEmailRequest request);
 
@@ -66,5 +66,8 @@ public interface ApiService {
 
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
+
+    @PATCH("/api/v2/register/newcustomer/{userId}")
+    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Path("userId") String  id);
 
 }

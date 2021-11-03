@@ -329,10 +329,15 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void customerRegistration(CustRegisRequest custRegisRequest) {
+    public void customerRegistration(CustRegisRequest custRegisRequest, String type) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<CustRegisterResponse> mCall = apiService.custRegister(custRegisRequest);
+            Call<CustRegisterResponse> mCall;
+            if(type.equals("POST"))
+                mCall = apiService.custRegister(custRegisRequest);
+            else
+                mCall = apiService.custRegisterPatch(custRegisRequest, custRegisRequest.getUserId());
+
             mCall.enqueue(new Callback<CustRegisterResponse>() {
                 @Override
                 public void onResponse(Call<CustRegisterResponse> call, Response<CustRegisterResponse> response) {

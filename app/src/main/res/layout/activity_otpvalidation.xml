@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="22dp"
+    android:padding="@dimen/_20sdp"
     tools:context=".view.OTPValidation"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
@@ -19,31 +19,31 @@
 
         <ImageView
             android:id="@+id/otpValidationCloseIV"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginBottom="14dp"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
             android:src="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/headerTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="21dp"
+            android:layout_marginBottom="@dimen/_21sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="Please Verify Your Phone Number"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_16sp" />
+            android:textSize="@dimen/_16ssp" />
 
         <TextView
             android:id="@+id/subHeaderTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="@dimen/_28sdp"
             android:fontFamily="@font/opensans_regular"
             android:text="We sent you 6-digit code to the register phone number"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_12sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <com.greenbox.coyni.utils.otpview.PinView
             android:id="@+id/otpPV"
@@ -51,13 +51,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="28dp"
             android:cursorVisible="false"
             android:fontFamily="@font/opensans_regular"
-            android:hint="12346"
             android:inputType="number"
             android:textColor="@color/primary_black"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18ssp"
             android:textStyle="bold"
             app:cursorColor="@color/primary_color"
             app:cursorWidth="0dp"
@@ -74,34 +72,34 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/_30sdp"
             android:fontFamily="@font/opensans_regular"
             android:gravity="center"
             android:text="Didn't get the code?"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/text_size_12sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
             android:id="@+id/resendTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="center"
             android:text="Resend"
             android:textColor="@color/primary_color"
-            android:textSize="@dimen/text_size_12sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
             android:id="@+id/newCodeTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="center"
             android:text="A new code has sent"
             android:textColor="@color/primary_color"
-            android:textSize="@dimen/text_size_14sp"
+            android:textSize="@dimen/_12ssp"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -131,40 +129,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Secure Your Account"
-                android:textSize="@dimen/text_size_16sp"
+                android:textSize="@dimen/_16ssp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_bold"
-                android:layout_marginBottom="21dp"
-                android:layout_marginTop="72dp"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_62sdp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="One way we keep your account secure is with 2- step verification, which requires you to create 6-digit PIN"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_regular"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="@dimen/_40sdp"
                 />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/bg_secure_account"
-                android:layout_gravity="bottom"/>
+                android:src="@drawable/bg_secure_account" />
 
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/secureNextCV"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="@dimen/_43sdp"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="@dimen/_30sdp"
             app:cardBackgroundColor="@color/primary_color"
-            app:cardCornerRadius="22dp">
+            app:cardCornerRadius="@dimen/_22sdp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -173,7 +169,7 @@
                 android:gravity="center"
                 android:text="Next"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 

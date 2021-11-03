@@ -5,7 +5,10 @@ import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.FINGERPRINT_SERVICE;
 import static android.content.Context.KEYGUARD_SERVICE;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +17,16 @@ import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -286,19 +294,10 @@ public class Utils {
             if (Build.VERSION.SDK_INT >= 23) {
                 FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(FINGERPRINT_SERVICE);
                 if (!fingerprintManager.isHardwareDetected()) {
-                    // Device doesn't support fingerprint authentication
-                    Log.e("MY_APP_TAG", "Device doesn't support fingerprint authentication.");
-//                    isThumb = false;
                     value = false;
                 } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    // User hasn't enrolled any fingerprints to authenticate with
-                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
-//                    isThumb = false;
                     value = false;
                 } else {
-                    // Everything is ready for fingerprint authentication
-                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
-//                    isThumb = true;
                     value = true;
                 }
             }
@@ -306,5 +305,29 @@ public class Utils {
             ex.printStackTrace();
         }
         return value;
+    }
+
+    public void showCustomToast(final Context context) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_toast);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        window.setAttributes(wlp);
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 }

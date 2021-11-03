@@ -4,7 +4,9 @@ package com.greenbox.coyni.view;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
+    LinearLayout circleOneLL,circleTwoLL,circleThreeLL,circleFourLL,circleFiveLL,circleSixLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +105,13 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             chooseCircleFive = (View) findViewById(R.id.chooseCircleFive);
             chooseCircleSix = (View) findViewById(R.id.chooseCircleSix);
 
+            circleOneLL = findViewById(R.id.circleOneLL);
+            circleTwoLL = findViewById(R.id.circleTwoLL);
+            circleThreeLL = findViewById(R.id.circleThreeLL);
+            circleFourLL = findViewById(R.id.circleFourLL);
+            circleFiveLL = findViewById(R.id.circleFiveLL);
+            circleSixLL =  findViewById(R.id.circleSixLL);
+
             keyZeroTV = (TextView) findViewById(R.id.keyZeroTV);
             keyOneTV = (TextView) findViewById(R.id.keyOneTV);
             keyTwoTV = (TextView) findViewById(R.id.keyTwoTV);
@@ -135,6 +146,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void initObserver() {
+
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override
             public void onChanged(ValidateResponse validateResponse) {
@@ -169,6 +181,31 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
                     if(!pinRegisterResponse.getStatus().toLowerCase().equals("error")){
 
+                        if(Utils.checkAuthentication(PINActivity.this)){
+                            if(Utils.isFingerPrint(PINActivity.this)){
+                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                        .putExtra("ENABLE_TYPE","TOUCH"));
+                            }else{
+                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                        .putExtra("ENABLE_TYPE","FACE"));
+                            }
+                        }else{
+                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                    .putExtra("ENABLE_TYPE","SUCCESS"));
+                        }
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+//                            if (!fingerprintManager.isHardwareDetected()) {
+//                                Log.e("Not support","Not support");
+//                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+//                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                        .putExtra("ENABLE_TYPE","TOUCH"));
+//                            } else {
+//                                Log.e("Supports","Supports");
+//                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                        .putExtra("ENABLE_TYPE","TOUCH"));
+//                            }
+//                        }
                     }
                 }
             }
@@ -179,44 +216,64 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.keyZeroTV:
-                passcode += "0";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "0";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyOneTV:
-                passcode += "1";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "1";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyTwoTV:
-                passcode += "2";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "2";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyThreeTV:
-                passcode += "3";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "3";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyFourTV:
-                passcode += "4";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "4";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyFiveTV:
-                passcode += "5";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "5";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keySixTV:
-                passcode += "6";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "6";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keySevenTV:
-                passcode += "7";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "7";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyEightTV:
-                passcode += "8";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "8";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.keyNineTV:
-                passcode += "9";
-                passNumber(passcode);
+                if(passcode.length()<6){
+                    passcode += "9";
+                    passNumber(passcode);
+                }
                 break;
             case R.id.backActionIV:
                 if (!passcode.equals("")) {
@@ -271,7 +328,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                             case "CONFIRM":
                                 strConfirm = passcode;
                                 if (!strChoose.equals(strConfirm)) {
-                                    Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
+//                                    Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
+                                    setErrorPIN();
                                 } else {
 
                                     dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
@@ -325,6 +383,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             switch (number_list.length()) {
                 case 5:
+                    setSuccessPIN();
                     chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_white);
                     break;
                 case 4:
@@ -377,4 +436,35 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    public void setErrorPIN(){
+        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+
+        chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+    }
+
+    public void setSuccessPIN(){
+        circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
+
+        chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
+        chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
+        chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
+        chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
+        chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
+        chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+    }
 }

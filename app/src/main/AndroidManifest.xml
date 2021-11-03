@@ -16,11 +16,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".view.EnableAuthID"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".view.CustomerProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".view.BindingLayoutActivity"
             android:exported="false"
@@ -83,6 +89,7 @@
             android:name=".view.DashboardActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

@@ -48,6 +48,8 @@ import com.greenbox.coyni.utils.otpview.PinView;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OTPValidation extends AppCompatActivity {
     TextView resendTV, newCodeTV, subHeaderTV, headerTV;
@@ -162,7 +164,6 @@ public class OTPValidation extends AppCompatActivity {
                             resend.setPhoneNumber(MOBILE);
                             loginViewModel.smsotpresend(resend);
                         }
-
                     } else {
                         layoutEntry.setVisibility(View.GONE);
                         layoutFailure.setVisibility(View.VISIBLE);
@@ -266,6 +267,7 @@ public class OTPValidation extends AppCompatActivity {
             });
 
             initObserver();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -298,7 +300,8 @@ public class OTPValidation extends AppCompatActivity {
         }.start();
     }
 
-    private void initObserver() {
+    private void initObserver()  {
+
         loginViewModel.getEmailotpLiveData().observe(this, new Observer<EmailResponse>() {
             @Override
             public void onChanged(EmailResponse emailResponse) {
@@ -378,7 +381,6 @@ public class OTPValidation extends AppCompatActivity {
                 }
             }
         });
-
 
         loginViewModel.getEmailValidateResponseMutableLiveData().observe(this, new Observer<EmailValidateResponse>() {
             @Override
@@ -500,6 +502,7 @@ public class OTPValidation extends AppCompatActivity {
 //                    String oneTimeCode = parseOneTimeCode(message); // define this function
 
                     Log.e("Message", message);
+                    setOtpFromMessage(message);
                     // send one time code to the server
                 } else {
                     // Consent canceled, handle the error ...
@@ -551,6 +554,15 @@ public class OTPValidation extends AppCompatActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void setOtpFromMessage(String message) {
+        // This will match any 6 digit number in the message
+        Pattern pattern = Pattern.compile("(|^)\\d{6}");
+        Matcher matcher = pattern.matcher(message);
+        if (matcher.find()) {
+            otpPV.setText(matcher.group(0));
         }
     }
 }

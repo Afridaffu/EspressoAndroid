@@ -1,10 +1,16 @@
 package com.greenbox.coyni.view;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -27,7 +33,6 @@ public class OnboardActivity extends AppCompatActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -36,11 +41,6 @@ public class OnboardActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
-//            CustRegisRequest custRegisRequest = new CustRegisRequest();
-//            custRegisRequest.setUserId("1234");
-//            Singleton.setCustRegisRequest(custRegisRequest);
-
-            Log.e("Log", Singleton.getCustRegisRequest().getUserId() + "  sdsds");
 
             getStarted = findViewById(R.id.getStartedLL);
             layoutLogin = findViewById(R.id.layoutLogin);
@@ -58,7 +58,7 @@ public class OnboardActivity extends AppCompatActivity {
             TabLayout tabs = findViewById(R.id.tabs);
             tabs.setupWithViewPager(viewPager);
             // start auto scroll
-//        viewPager.startAutoScroll();
+            viewPager.startAutoScroll();
             // set auto scroll time in mili
             viewPager.setInterval(AUTO_SCROLL_THRESHOLD_IN_MILLI);
             // enable recycling using true
@@ -91,6 +91,7 @@ public class OnboardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
     }
 
     private Boolean isFingerPrint() {
@@ -121,5 +122,7 @@ public class OnboardActivity extends AppCompatActivity {
         }
         return value;
     }
+
+
 
 }
