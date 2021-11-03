@@ -23,7 +23,7 @@
     <string name="previous">Previous</string>
     <string name="chpwdmsg">Look like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
 
-    <string name="retrieveemailcontent">To help you retrieve your email, we will need your help. please enter the information below.</string>
+    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. please enter the\n information below.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="processing">Processing…</string>
@@ -119,5 +119,6 @@
     <string name="instant">Instant Pay</string>
     <string name="giftcard">Gift Card</string>
     <string name="buytoken">Buy Tokens</string>
+    <string name="ok">OK</string>
 
 </resources>

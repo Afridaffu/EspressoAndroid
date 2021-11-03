@@ -6,9 +6,9 @@
 
     <LinearLayout
         android:id="@+id/lyClose"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_21sdp"
         android:layout_marginTop="?attr/actionBarSize"
         android:gravity="center"
         android:orientation="horizontal">
@@ -24,40 +24,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/_34sdp"
         android:src="@drawable/ic_foundimg" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="@dimen/_36sdp"
         android:gravity="center"
+        android:fontFamily="@font/opensans_bold"
         android:text="@string/foundacc"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_24sp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/_16ssp"
+         />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/_18sdp"
         android:gravity="center"
+        android:fontFamily="@font/opensans_regular"
         android:text="@string/belowtxtre"
         android:textAlignment="center"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/text_size_18sp" />
+        android:textSize="@dimen/_12ssp" />
 
     <LinearLayout
         android:id="@+id/llCoyniAct"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
         android:background="@drawable/bg_card"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="14dp">
+        android:paddingBottom="@dimen/_18sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingTop="@dimen/_17sdp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -77,18 +81,20 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/coyni_account"
                 android:textAlignment="textStart"
+                android:fontFamily="@font/opensans_semibold"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_18sp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/_12ssp"
+                />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="@string/jona_gmail_com"
+                android:fontFamily="@font/opensans_regular"
                 android:textAlignment="textStart"
                 android:textColor="#767676"
-                android:textSize="@dimen/text_size_14sp" />
+                android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
         <ImageView
