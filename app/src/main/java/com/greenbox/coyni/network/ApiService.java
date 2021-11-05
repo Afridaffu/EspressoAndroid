@@ -1,5 +1,7 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
@@ -69,11 +71,13 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
-
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
     @PATCH("/api/v2/register/newcustomer/{userId}")
     Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Path("userId") String  id);
+
+    @POST("/api/v2/user/biometric")
+    Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);
 
 }

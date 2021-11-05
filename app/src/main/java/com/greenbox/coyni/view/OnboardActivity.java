@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -42,6 +43,7 @@ public class OnboardActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
 
+            Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             getStarted = findViewById(R.id.getStartedLL);
             layoutLogin = findViewById(R.id.layoutLogin);
             String url = BuildConfig.URL_PRODUCTION;
@@ -136,6 +138,30 @@ public class OnboardActivity extends AppCompatActivity {
         return value;
     }
 
+    public void toastTimer(Dialog dialog) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(3500);
 
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                               dialog.dismiss();
+                            }
+                        });
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            ;
+        }.start();
+    }
 
 }

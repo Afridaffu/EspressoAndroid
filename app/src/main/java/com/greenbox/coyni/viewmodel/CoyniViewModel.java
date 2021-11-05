@@ -11,6 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
@@ -31,12 +33,16 @@ import retrofit2.Response;
 public class CoyniViewModel extends AndroidViewModel {
     private MutableLiveData<ValidateResponse> validateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<PINRegisterResponse> registerPINResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BiometricResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<PINRegisterResponse> getRegisterPINResponseMutableLiveData() {
         return registerPINResponseMutableLiveData;
     }
 
-    private MutableLiveData<PINRegisterResponse> registerPINResponseMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<BiometricResponse> getBiometricResponseMutableLiveData() {
+        return biometricResponseMutableLiveData;
+    }
 
     public CoyniViewModel(@NonNull Application application) {
         super(application);
@@ -95,7 +101,7 @@ public class CoyniViewModel extends AndroidViewModel {
                         Log.e("PIN Success", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<ValidateResponse>() {
+                        Type type = new TypeToken<PINRegisterResponse>() {
                         }.getType();
                         PINRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
@@ -107,6 +113,40 @@ public class CoyniViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<PINRegisterResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void saveBiometric(BiometricRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BiometricResponse> mCall = apiService.saveBiometric(request);
+            mCall.enqueue(new Callback<BiometricResponse>() {
+                @Override
+                public void onResponse(Call<BiometricResponse> call, Response<BiometricResponse> response) {
+                    if (response.isSuccessful()) {
+                        BiometricResponse obj = response.body();
+                        biometricResponseMutableLiveData.setValue(obj);
+                        Log.e("Bio Success", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BiometricResponse>() {
+                        }.getType();
+                        BiometricResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            biometricResponseMutableLiveData.setValue(errorResponse);
+                            Log.e("Biometric Error", new Gson().toJson(errorResponse));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BiometricResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

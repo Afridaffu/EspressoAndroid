@@ -55,7 +55,7 @@
             android:fontFamily="@font/opensans_regular"
             android:inputType="number"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_18ssp"
+            android:textSize="@dimen/_16ssp"
             android:textStyle="bold"
             app:cursorColor="@color/primary_color"
             app:cursorWidth="0dp"
