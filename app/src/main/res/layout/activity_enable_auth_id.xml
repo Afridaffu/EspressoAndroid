@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/faceIDRL"
-        android:padding="20dp"
+        android:padding="@dimen/_20sdp"
         >
 
         <LinearLayout
@@ -27,21 +27,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Enable Face ID"
-                android:textSize="@dimen/text_size_16sp"
+                android:textSize="@dimen/_16ssp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_bold"
-                android:layout_marginBottom="21dp"
-                android:layout_marginTop="72dp"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_52sdp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="By enabling Face ID, you are preventing unauthorized users from gaining access to your account and other sensitive information."
-                android:textSize="@dimen/text_size_12sp"
+                android:text="@string/enableidinfo"
+                android:textSize="@dimen/_12ssp"
+                android:lineSpacingExtra="@dimen/_6sdp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_regular"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="@dimen/_60sdp"
                 />
 
             <ImageView
@@ -57,21 +58,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="@dimen/_46sdp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enableFaceCV"
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="@dimen/_43sdp"
                 app:cardBackgroundColor="@color/primary_color"
-                app:cardCornerRadius="22dp"
-                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="@dimen/_21sdp"
+                android:layout_marginBottom="@dimen/_11sdp"
                 >
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Enable"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:textSize="@dimen/_12ssp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
@@ -83,10 +84,12 @@
                 android:id="@+id/notNowFaceTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Not Now"
-                android:textSize="@dimen/text_size_12sp"
+                android:text="@string/not_now"
+                android:textSize="@dimen/_12ssp"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
+                android:paddingTop="@dimen/_13sdp"
+                android:paddingBottom="@dimen/_13sdp"
                 android:layout_gravity="center"
                 android:textColor="@color/primary_color"/>
         </LinearLayout>
@@ -99,7 +102,7 @@
         android:orientation="vertical"
         android:id="@+id/touchIDRL"
         android:visibility="gone"
-        android:padding="20dp">
+        android:padding="@dimen/_20sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,21 +114,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Enable Touch ID"
-                android:textSize="@dimen/text_size_16sp"
+                android:textSize="@dimen/_16sdp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_bold"
-                android:layout_marginBottom="21dp"
-                android:layout_marginTop="72dp"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_52sdp"
                 />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="By enabling Touch ID, you are preventing unauthorized users from gaining access to your account and other sensitive information."
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_regular"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="@dimen/_60sdp"
                 />
 
             <ImageView
@@ -141,22 +144,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="@dimen/_45sdp"
             >
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/enableTouchCV"
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="@dimen/_43sdp"
                 app:cardBackgroundColor="@color/primary_color"
-                app:cardCornerRadius="22dp"
-                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="@dimen/_21sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
                 >
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Enable"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:textSize="@dimen/_12ssp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
@@ -169,9 +172,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Not Now"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/_12ssp"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
+                android:paddingTop="@dimen/_13sdp"
+                android:paddingBottom="@dimen/_13sdp"
                 android:layout_gravity="center"
                 android:textColor="@color/primary_color"/>
         </LinearLayout>
@@ -190,7 +195,7 @@
             android:background="@drawable/arc_shape"></RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="@dimen/_300sdp"
             android:alpha="0.2"
             android:background="@drawable/ic_dash_back"
             android:backgroundTint="@color/white"></RelativeLayout>
@@ -204,10 +209,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="31dp"
-                    android:layout_marginTop="37dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_36sdp"
                     android:src="@drawable/ic_x"
                     app:tint="@color/white" />
 
@@ -235,25 +240,26 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:paddingLeft="22dp"
-                android:paddingRight="22dp"
+                android:paddingLeft="@dimen/_17sdp"
+                android:paddingRight="@dimen/_23sdp"
                 android:layout_marginTop="40dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Your Account Has Been Created"
+                    android:text="@string/your_account_has_been_created"
                     android:fontFamily="@font/opensans_bold"
-                    android:textSize="@dimen/text_size_16sp"
+                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/primary_black"
                     android:gravity="center_horizontal"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="You’re almost there! Before you can start tokenizing your money. Please follow the instructions below."
+                    android:text="@string/youtaccountcontent"
                     android:fontFamily="@font/opensans_regular"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:textSize="@dimen/_10sdp"
+                    android:lineSpacingExtra="@dimen/_4sdp"
                     android:textColor="@color/primary_black"
                     android:layout_marginTop="11dp"/>
 
@@ -273,21 +279,21 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight="1"
-                        android:layout_marginStart="16dp">
+                        android:layout_marginStart="@dimen/_11sdp">
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Verify Your Identity"
+                            android:text="@string/verify_your_identity"
                             android:fontFamily="@font/opensans_semibold"
-                            android:textSize="@dimen/text_size_12sp"
+                            android:textSize="@dimen/_10sdp"
                             android:textColor="@color/primary_black" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="ID, Mailing address"
+                            android:text="@string/id_mailing_address"
                             android:fontFamily="@font/opensans_regular"
-                            android:textSize="@dimen/text_size_10sp"
+                            android:textSize="@dimen/_9ssp"
                             android:textColor="@color/xdark_gray" />
 
                     </LinearLayout>
@@ -295,9 +301,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5 min"
+                        android:text="@string/_5_min"
                         android:fontFamily="@font/opensans_semibold"
-                        android:textSize="@dimen/text_size_12sp"
+                        android:textSize="@dimen/_10ssp"
                         android:textColor="@color/primary_green" />
                 </LinearLayout>
 
@@ -305,7 +311,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/vlight_gray"
-                    android:layout_marginTop="18dp"/>
+                    android:layout_marginTop="@dimen/_10sdp"/>
 
 
             </LinearLayout>
@@ -316,23 +322,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="50dp"
-                android:padding="31dp">
+                android:layout_marginTop="@dimen/_40sdp"
+                android:padding="@dimen/_16sdp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/getStartedCV"
                     android:layout_width="match_parent"
-                    android:layout_height="43dp"
+                    android:layout_height="@dimen/_43sdp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="30dp"
-                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="@dimen/_21sdp"
                     >
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Get Started"
-                        android:textSize="@dimen/text_size_12sp"
+                        android:textSize="@dimen/_12ssp"
                         android:gravity="center"
+
                         android:layout_gravity="center"
                         android:textColor="@color/white"
                         android:fontFamily="@font/opensans_bold"
@@ -344,10 +350,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Not Now"
-                    android:textSize="@dimen/text_size_12sp"
+                    android:paddingTop="@dimen/_13sdp"
+                    android:paddingBottom="@dimen/_13sdp"
+                    android:textSize="@dimen/_12ssp"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
                     android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_30sdp"
                     android:textColor="@color/primary_color"/>
             </LinearLayout>
         </RelativeLayout>
