@@ -79,6 +79,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             switch (TYPE) {
                 case "CHOOSE":
+                    super.onBackPressed();
+                    break;
                 case "ENTER": {
                     super.onBackPressed();
                     break;
@@ -282,7 +284,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                onBackPressed();
+                if(TYPE.equals("CHOOSE")){
+                    onBackPressed();
+                }else{
+                    tvForgot.setVisibility(View.GONE);
+                    TYPE = "CHOOSE";
+                    tvHead.setText("Choose your PIN");
+                    clearPassCode();
+                    passcode = "";
+                }
                 break;
             case R.id.tvForgot:
                 Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
@@ -342,28 +352,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     registerRequest.setPin(strChoose);
                                     coyniViewModel.registerCoyniPin(registerRequest);
 
-//                                    if (Utils.checkAuthentication(this)) {
-//                                        if (Utils.isFingerPrint(PINActivity.this)) {
-//                                            Log.e("isFingerPrint", "True");
-//                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-//                                                    .putExtra("ENABLE_TYPE", "TOUCH"));
-//                                        } else {
-//                                            Log.e("isFingerPrint", "False");
-//                                            final Intent enrollIntent;
-//
-//                                            enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
-//                                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-//                                                    BIOMETRIC_STRONG);
-//                                            startActivityForResult(enrollIntent, 101);
-//                                        }
-//                                    } else {
-//
-//                                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//
-//                                        } else {
-//
-//                                        }
-//                                    }
                                 }
                                 break;
                             case "ENTER":

@@ -3,9 +3,6 @@ package com.greenbox.coyni.utils;
 import static android.content.Context.KEYGUARD_SERVICE;
 
 import static android.content.Context.FINGERPRINT_SERVICE;
-import static android.content.Context.KEYGUARD_SERVICE;
-
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -17,20 +14,20 @@ import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.provider.Settings;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.OnboardActivity;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -83,6 +80,8 @@ public class Utils {
     public static final int declineId = 67;
     public static final int acceptedId = 60;
     public static final int pageSize = 25;
+    public static String deviceID ="";
+    public static Long mLastClickTime = 0L;
 
     public static String getStrLang() {
         return strLang;
@@ -138,6 +137,14 @@ public class Utils {
 
     public static void setIsTouchEnabled(Boolean isTouchEnabled) {
         Utils.isTouchEnabled = isTouchEnabled;
+    }
+
+    public static String getDeviceID() {
+        return deviceID;
+    }
+
+    public static void setDeviceID(String dID) {
+        Utils.deviceID = dID;
     }
 
     public static void statusBar(Activity activity, String strColor) {
@@ -307,7 +314,7 @@ public class Utils {
         return value;
     }
 
-    public void showCustomToast(final Context context) {
+    public static void showCustomToast(final Context context, String text, int imageID) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -322,12 +329,33 @@ public class Utils {
 
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.BOTTOM;
+        wlp.gravity = Gravity.TOP;
         wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         window.setAttributes(wlp);
 //        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        TextView textTV = dialog.findViewById(R.id.toastTV);
+        ImageView imageIV = dialog.findViewById(R.id.toastIV);
+        textTV.setText(text);
+        imageIV.setImageResource(imageID);
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+
+        new OnboardActivity().toastTimer(dialog);
+
     }
+
+    public static boolean disabledMultiClick(){
+        boolean action = false;
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            action = false;
+            mLastClickTime = 0L;
+        }else{
+            action = true;
+            mLastClickTime = SystemClock.elapsedRealtime();
+        }
+
+        return action;
+    }
+
 }

@@ -25,7 +25,7 @@ public class ApiClient {
     private final int TIME_OUT = 120;
 
 
-    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private TokenInterceptor tokenInterceptor = new TokenInterceptor();
 
     private OkHttpClient client = new OkHttpClient.Builder().

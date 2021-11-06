@@ -24,5 +24,7 @@
     <color name="error_red">#E72222</color>
     <color name="dark_grey">#767676</color>
     <color name="viewcolor">#e8e8e8</color>
+    <color name="toast_bg">#7cabaa</color>
+    <color name="toast_icon">#ebffd0</color>
 
 </resources>

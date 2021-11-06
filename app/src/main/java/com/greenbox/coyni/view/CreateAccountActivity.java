@@ -163,6 +163,11 @@ public class CreateAccountActivity extends AppCompatActivity  {
             privacyTV.setPaintFlags(privacyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             tosTV.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW );
                 browserIntent.setDataAndType(Uri.parse(tosURL),"application/pdf");
                 try {
@@ -173,6 +178,11 @@ public class CreateAccountActivity extends AppCompatActivity  {
             });
 
             privacyTV.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW );
                 browserIntent.setDataAndType(Uri.parse(privacyURL),"application/pdf");
                 try {
@@ -568,7 +578,13 @@ public class CreateAccountActivity extends AppCompatActivity  {
         }
     }
 
-//    static String enccriptData(String txt)
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Singleton.setCustRegisterResponse(new CustRegisterResponse());
+    }
+
+    //    static String enccriptData(String txt)
 //    {
 //        String encoded = "";
 //        byte[] encrypted = null;

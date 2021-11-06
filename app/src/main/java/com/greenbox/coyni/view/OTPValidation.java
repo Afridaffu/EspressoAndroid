@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -72,7 +73,7 @@ public class OTPValidation extends AppCompatActivity {
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
-
+    Long mLastClickTime = 0L;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -151,6 +152,10 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setOnClickListener(view -> {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     if (resendCounter < 5) {
                         Utils.hideKeypad(OTPValidation.this, view);
                         if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin"))) || (OTP_TYPE.equals("EMAIL"))) {
@@ -258,6 +263,10 @@ public class OTPValidation extends AppCompatActivity {
             tryAgainCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Intent intent = new Intent(OTPValidation.this, OnboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -265,6 +274,10 @@ public class OTPValidation extends AppCompatActivity {
             });
 
             secureNextCV.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(OTPValidation.this, PINActivity.class)
                         .putExtra("screen", "SignUp")
                         .putExtra("TYPE", "CHOOSE"));
