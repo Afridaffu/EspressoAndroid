@@ -21,6 +21,8 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 
 import retrofit2.Call;
@@ -75,5 +77,8 @@ public interface ApiService {
 
     @PATCH("/api/v2/register/newcustomer/{userId}")
     Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Path("userId") String  id);
+
+    @POST("api/v2/user/forgot-email/retrieve-users")
+    Call<RetrieveUsersResponse> retrieveUsers(@Body RetrieveUsersRequest request, @Query("otp") String otp);
 
 }

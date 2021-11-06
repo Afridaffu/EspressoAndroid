@@ -89,7 +89,7 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 if (retrieveEmailResponse != null) {
                     if (!retrieveEmailResponse.getStatus().toLowerCase().equals("error")) {
                         SMSResend resend = new SMSResend();
-                        resend.setCountryCode(Utils.strCCode);
+                        resend.setCountryCode(Utils.getStrCCode());
                         resend.setPhoneNumber(phoneNumberET.getText().toString());
                         loginViewModel.smsotpresend(resend);
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);

@@ -28,6 +28,8 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.utils.Singleton;
@@ -54,6 +56,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<SetPasswordResponse> registerPINLiveData = new MutableLiveData<>();
     private MutableLiveData<InitializeCustomerResponse> initCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -109,6 +112,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<RetrieveEmailResponse> getRetrieveEmailResponseMutableLiveData() {
         return retrieveEmailResponseMutableLiveData;
+    }
+
+    public MutableLiveData<RetrieveUsersResponse> getRetrieveUsersResponseMutableLiveData() {
+        return retrieveUsersResponseMutableLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -469,6 +476,38 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<RetrieveEmailResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void retrieveUsers(RetrieveUsersRequest request,String strOTP) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<RetrieveUsersResponse> mCall = apiService.retrieveUsers(request,strOTP);
+            mCall.enqueue(new Callback<RetrieveUsersResponse>() {
+                @Override
+                public void onResponse(Call<RetrieveUsersResponse> call, Response<RetrieveUsersResponse> response) {
+                    if (response.isSuccessful()) {
+                        RetrieveUsersResponse obj = response.body();
+                        retrieveUsersResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RetrieveUsersResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

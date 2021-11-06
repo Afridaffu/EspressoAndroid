@@ -356,9 +356,6 @@ public class LoginActivity extends AppCompatActivity {
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 } else {
-//                                    Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-//                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(i);
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
                                     i.putExtra("screen", "SignUp");
                                     i.putExtra("OTP_TYPE", "MOBILE");
@@ -526,18 +523,31 @@ public class LoginActivity extends AppCompatActivity {
 
     private void enableIcon() {
         try {
-            if (Utils.checkAuthentication(LoginActivity.this)) {
+//            if (Utils.checkAuthentication(LoginActivity.this)) {
+//                etlPassword.setPasswordVisibilityToggleEnabled(false);
+//                etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+//                etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+//            } else {
+//                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+//            }
+//            if (isFingerPrint()) {
+//                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+//                strMsg = "Do you want to register with Thumb/Pin.";
+//            } else {
+//                strMsg = "Do you want to register with FaceID/Pin.";
+//            }
+            if (Utils.getIsTouchEnabled()) {
+                etlPassword.setPasswordVisibilityToggleEnabled(false);
+                etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                strMsg = "Do you want to register with Thumb/Pin.";
+            } else if (Utils.getIsFaceEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+                strMsg = "Do you want to register with FaceID/Pin.";
             } else {
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-            }
-            if (isFingerPrint()) {
-                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
-                strMsg = "Do you want to register with Thumb/Pin.";
-            } else {
-                strMsg = "Do you want to register with FaceID/Pin.";
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -43,6 +43,9 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -64,6 +67,7 @@ public class OTPValidation extends AppCompatActivity {
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
     MaterialCardView secureNextCV;
+    MyApplication objMyApplication;
 
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
@@ -105,6 +109,7 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
+            objMyApplication = (MyApplication) getApplicationContext();
 
             if (strScreen != null && !strScreen.equals("")) {
                 switch (strScreen) {
@@ -160,7 +165,7 @@ public class OTPValidation extends AppCompatActivity {
                             dialog.setMessage("Please wait...");
                             dialog.show();
                             SMSResend resend = new SMSResend();
-                            resend.setCountryCode(Utils.strCCode);
+                            resend.setCountryCode(Utils.getStrCCode());
                             resend.setPhoneNumber(MOBILE);
                             loginViewModel.smsotpresend(resend);
                         }
@@ -202,16 +207,15 @@ public class OTPValidation extends AppCompatActivity {
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
                                 if (charSequence.length() == 6) {
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
-//                                    SmsRequest smsRequest = new SmsRequest();
-//                                    smsRequest.setEmail(EMAIL.trim());
-//                                    smsRequest.setOtp(charSequence.toString().trim());
-//                                    loginViewModel.emailotpValidate(smsRequest);
-                                    startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
-                                            .putExtra("screen", "retEmailfound"));
+                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                                    dialog.setIndeterminate(false);
+                                    dialog.setMessage("Please wait...");
+                                    dialog.show();
+                                    String phoneNumber = MOBILE.substring(1, 4) + MOBILE.substring(6, 9) + MOBILE.substring(10, MOBILE.length());
+                                    RetrieveUsersRequest request = new RetrieveUsersRequest();
+                                    request.setCountryCode(Utils.getStrCCode());
+                                    request.setPhoneNumber(phoneNumber);
+                                    loginViewModel.retrieveUsers(request, charSequence.toString().trim());
                                 }
                             } else {
                                 if (OTP_TYPE.equals("MOBILE")) {
@@ -300,7 +304,7 @@ public class OTPValidation extends AppCompatActivity {
         }.start();
     }
 
-    private void initObserver()  {
+    private void initObserver() {
 
         loginViewModel.getEmailotpLiveData().observe(this, new Observer<EmailResponse>() {
             @Override
@@ -452,6 +456,26 @@ public class OTPValidation extends AppCompatActivity {
                     } else {
                         Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this);
                     }
+                }
+            }
+        });
+
+        loginViewModel.getRetrieveUsersResponseMutableLiveData().observe(this, new Observer<RetrieveUsersResponse>() {
+            @Override
+            public void onChanged(RetrieveUsersResponse retrieveUsersResponse) {
+                try {
+                    dialog.dismiss();
+                    if (retrieveUsersResponse != null) {
+                        if (!retrieveUsersResponse.getStatus().toLowerCase().equals("error")) {
+                            objMyApplication.setObjRetUsers(retrieveUsersResponse);
+                            startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                    .putExtra("screen", "retEmailfound"));
+                        } else {
+                            Utils.displayAlert(retrieveUsersResponse.getError().getErrorDescription(), OTPValidation.this);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
