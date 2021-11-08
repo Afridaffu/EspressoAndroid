@@ -12,6 +12,7 @@ public class MyApplication extends Application {
     static String strEncryptedPublicKey;
     List<CardsDataItem> listCards = new ArrayList<>();
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
+    String strUserName = "";
 
 
     //Account Limits
@@ -245,6 +246,14 @@ public class MyApplication extends Application {
 
     public void setObjRetUsers(RetrieveUsersResponse objRetUsers) {
         this.objRetUsers = objRetUsers;
+    }
+
+    public String getStrUserName() {
+        return strUserName;
+    }
+
+    public void setStrUserName(String strUserName) {
+        this.strUserName = strUserName;
     }
 
     private String fromWhichFragment;

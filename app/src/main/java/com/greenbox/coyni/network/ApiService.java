@@ -12,6 +12,7 @@ import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
@@ -89,5 +90,7 @@ public interface ApiService {
     @POST("api/v2/user/biometric/login")
     Call<BiometricResponse> biometricLogin(@Body BiometricLoginRequest request);
 
+    @GET("api/v2/profile/me")
+    Call<Profile> meProfile();
 
 }
