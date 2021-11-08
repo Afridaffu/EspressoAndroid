@@ -74,8 +74,8 @@ public interface ApiService {
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
-    @PATCH("/api/v2/register/newcustomer/{userId}")
-    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Path("userId") String  id);
+    @PATCH("/api/v2/register/newcustomer")
+    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Query("userId") String  id);
 
     @POST("/api/v2/user/biometric")
     Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);

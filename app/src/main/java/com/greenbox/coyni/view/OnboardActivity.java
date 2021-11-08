@@ -35,7 +35,7 @@ public class OnboardActivity extends AppCompatActivity {
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
