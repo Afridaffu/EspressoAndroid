@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.EnableAuthID"
+    android:background="@color/white"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/faceIDRL"
+        android:padding="@dimen/_20sdp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@+id/bottomFaceLL"
+            android:layout_alignParentTop="true">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enable Face ID"
+                android:textSize="@dimen/_16ssp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_bold"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_62sdp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="By enabling Face ID, you are preventing unauthorized users from gaining access to your account and other sensitive information."
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_regular"
+                android:layout_marginBottom="@dimen/_40sdp"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bg_face_id"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomFaceLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="50dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/enableFaceCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_43sdp"
+                app:cardBackgroundColor="@color/primary_color"
+                app:cardCornerRadius="@dimen/_22sdp"
+                android:layout_marginBottom="20dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enable"
+                    android:textSize="@dimen/_12ssp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/opensans_bold"
+                    />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/notNowFaceTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not Now"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/primary_color"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/touchIDRL"
+        android:visibility="gone"
+        android:padding="@dimen/_20sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@+id/bottomTouchLL"
+            android:layout_alignParentTop="true">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enable Touch ID"
+                android:textSize="@dimen/_16ssp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_bold"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_62sdp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="By enabling Touch ID, you are preventing unauthorized users from gaining access to your account and other sensitive information."
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_regular"
+                android:layout_marginBottom="@dimen/_40sdp"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bg_touch_id"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomTouchLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/_50sdp"
+            >
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/enableTouchCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_43sdp"
+                app:cardBackgroundColor="@color/primary_color"
+                app:cardCornerRadius="@dimen/_22sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enable"
+                    android:textSize="@dimen/_12ssp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/opensans_bold"
+                    />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/notNowTouchTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not Now"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/primary_color"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/successRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/arc_shape"></RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:alpha="0.2"
+            android:background="@drawable/ic_dash_back"
+            android:backgroundTint="@color/white"></RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/topRL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/succesCloseIV"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_32sdp"
+                    android:layout_marginTop="@dimen/_37sdp"
+                    android:src="@drawable/ic_x"
+                    app:tint="@color/white" />
+
+                <LinearLayout
+                    android:layout_below="@+id/accountCreatedIV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/arc_shape"
+                    android:layout_marginTop="-40dp"
+                    android:layout_marginBottom="-40dp"/>
+
+                <ImageView
+                    android:id="@+id/accountCreatedIV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="77dp"
+                    android:src="@drawable/ic_account_created" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_below="@id/topRL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="22dp"
+                android:paddingRight="22dp"
+                android:layout_marginTop="@dimen/_30sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your Account Has Been Created"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@color/primary_black"
+                    android:gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="You’re almost there! Before you can start tokenizing your money. Please follow the instructions below."
+                    android:fontFamily="@font/opensans_regular"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginTop="@dimen/_11sdp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/ic_id_verify"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_16sdp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Verify Your Identity"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textSize="@dimen/_12ssp"
+                            android:textColor="@color/primary_black" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ID, Mailing address"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textSize="@dimen/_10ssp"
+                            android:textColor="@color/xdark_gray" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5 min"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/primary_green" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/vlight_gray"
+                    android:layout_marginTop="@dimen/_18sdp"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bottomLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:padding="@dimen/_31sdp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/successGetStartedCV"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_43sdp"
+                    app:cardBackgroundColor="@color/primary_color"
+                    app:cardCornerRadius="30dp"
+                    android:layout_marginBottom="20dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Get Started"
+                        android:textSize="@dimen/_12ssp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/opensans_bold"
+                        />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/notNowSuccessTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Not Now"
+                    android:textSize="@dimen/_12ssp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/primary_color"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

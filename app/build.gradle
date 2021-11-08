@@ -30,14 +30,22 @@ android {
         uat {
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api.coyni.com/\"'
             buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
+            buildConfigField 'String', 'Country_Code', '\"US\"'
         }
         sat {
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-stg.coyni.com/\"'
             buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
+            buildConfigField 'String', 'Country_Code', '\"US\"'
         }
         qa {
             buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
+            buildConfigField 'String', 'Country_Code', '\"US\"'
+        }
+        dev {
+            buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
+            buildConfigField 'String', 'Referer', '\"http://mobile/\"'
+            buildConfigField 'String', 'Country_Code', '\"IN\"'
         }
     }
     lintOptions {
@@ -81,4 +89,14 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'com.github.santalu:maskara:1.0.0'
+    implementation 'androidx.biometric:biometric:1.1.0'
+
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.5.1'
+    implementation 'com.github.angads25:toggle:1.1.0'
+
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
 }

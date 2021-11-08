@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F4F5"
-    tools:context=".view.DashboardActivity">
+    tools:context=".view.DashboardActivity"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="-30dp"
-                android:background="@drawable/ic_dash_back"></View>
+                android:background="@drawable/ic_dash_back"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvProfile"
@@ -79,6 +80,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/tvUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -87,14 +89,14 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Hi! [Name Selected]"
                 android:textColor="@color/text_color"
-                android:textSize="16sp"></TextView>
+                android:textSize="@dimen/_12ssp"></TextView>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="@dimen/_21sdp"
                 android:src="@drawable/ic_notifications"></ImageView>
 
             <TextView
@@ -106,7 +108,118 @@
                 android:fontFamily="@font/opensans_bold"
                 android:text="Available Balance"
                 android:textColor="@color/text_color"
-                android:textSize="16sp"></TextView>
+                android:textSize="@dimen/_12ssp"></TextView>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/menuborder"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_9sdp"
+        android:paddingBottom="@dimen/_25sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_token_active"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Token"
+                android:textColor="@color/primary_green"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_crypto_inactive"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Crypto"
+                android:textColor="@color/light_gray"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_quick_action_menu"></ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dashboardProfileLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_issue_card_inactive"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="Issue\nCard"
+                android:textColor="@color/light_gray"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile"></ImageView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Profile"
+                android:textColor="@color/light_gray"></TextView>
+        </LinearLayout>
+
+    </LinearLayout>
 </RelativeLayout>

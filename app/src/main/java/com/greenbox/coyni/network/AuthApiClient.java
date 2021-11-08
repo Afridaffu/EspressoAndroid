@@ -29,7 +29,7 @@ public class AuthApiClient {
     private final int TIME_OUT = 120;
 
 
-    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private AuthApiClient.TokenInterceptor tokenInterceptor = new AuthApiClient.TokenInterceptor();
 
     private OkHttpClient client = new OkHttpClient.Builder().
