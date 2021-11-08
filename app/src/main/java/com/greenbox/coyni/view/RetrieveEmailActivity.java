@@ -21,6 +21,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.login.LoginRequest;
+import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.utils.Utils;
@@ -87,10 +88,14 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             public void onChanged(RetrieveEmailResponse retrieveEmailResponse) {
                 if (retrieveEmailResponse != null) {
                     if (!retrieveEmailResponse.getStatus().toLowerCase().equals("error")) {
+                        SMSResend resend = new SMSResend();
+                        resend.setCountryCode(Utils.getStrCCode());
+                        resend.setPhoneNumber(phoneNumberET.getText().toString());
+                        loginViewModel.smsotpresend(resend);
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "MOBILE");
-                        i.putExtra("MOBILE", phoneNumberET.getText());
-                        i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                        i.putExtra("MOBILE", phoneNumberET.getText().toString());
+                        i.putExtra("MASK_MOBILE", phoneNumberET.getText().toString());
                         i.putExtra("screen", "retEmail");
                         startActivity(i);
                     } else {

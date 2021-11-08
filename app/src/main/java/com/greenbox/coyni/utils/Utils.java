@@ -38,7 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static int PERSONAL_ACCOUNT = 1,BUSINESS_ACCOUNT = 2,SHARED_ACCOUNT = 3;
+    public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strCCode = "";
@@ -80,7 +80,7 @@ public class Utils {
     public static final int declineId = 67;
     public static final int acceptedId = 60;
     public static final int pageSize = 25;
-    public static String deviceID ="";
+    public static String deviceID = "";
     public static Long mLastClickTime = 0L;
 
     public static String getStrLang() {
@@ -163,6 +163,15 @@ public class Utils {
     public static void hideKeypad(Context context, View view) {
         InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void hideKeypad(Context context) {
+        try {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static String USNumberFormat(double number) {
@@ -345,17 +354,23 @@ public class Utils {
 
     }
 
-    public static boolean disabledMultiClick(){
+    public static boolean disabledMultiClick() {
         boolean action = false;
         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
             action = false;
             mLastClickTime = 0L;
-        }else{
+        } else {
             action = true;
             mLastClickTime = SystemClock.elapsedRealtime();
         }
 
         return action;
+    }
+
+    public static String convertToUSFormat(String strPhone) {
+        String strNumber = "";
+        strNumber = "(" + strPhone.substring(0, 3) + ") " + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
+        return strNumber;
     }
 
 }

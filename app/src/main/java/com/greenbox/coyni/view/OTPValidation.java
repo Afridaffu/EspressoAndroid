@@ -44,6 +44,9 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -65,11 +68,13 @@ public class OTPValidation extends AppCompatActivity {
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
     MaterialCardView secureNextCV;
+    MyApplication objMyApplication;
 
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
     Long mLastClickTime = 0L;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -106,6 +111,7 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
+            objMyApplication = (MyApplication) getApplicationContext();
 
             if (strScreen != null && !strScreen.equals("")) {
                 switch (strScreen) {
@@ -142,6 +148,18 @@ public class OTPValidation extends AppCompatActivity {
                             layoutFailure.setVisibility(View.GONE);
                         }
                         break;
+                    case "Login":
+                        maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_close);
+                        if (OTP_TYPE.equals("MOBILE")) {
+                            headerTV.setText("Please Verify your Phone Number");
+                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
+                        }
+                        SMSResend resend = new SMSResend();
+                        resend.setCountryCode(Utils.getStrCCode());
+                        resend.setPhoneNumber(MOBILE);
+                        loginViewModel.smsotpresend(resend);
+                        break;
                 }
             }
 
@@ -165,7 +183,7 @@ public class OTPValidation extends AppCompatActivity {
                             dialog.setMessage("Please wait...");
                             dialog.show();
                             SMSResend resend = new SMSResend();
-                            resend.setCountryCode(Utils.strCCode);
+                            resend.setCountryCode(Utils.getStrCCode());
                             resend.setPhoneNumber(MOBILE);
                             loginViewModel.smsotpresend(resend);
                         }
@@ -196,6 +214,7 @@ public class OTPValidation extends AppCompatActivity {
                         } else {
                             if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
                                 if (charSequence.length() == 6) {
+                                    Utils.hideKeypad(OTPValidation.this);
                                     dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                     dialog.setIndeterminate(false);
                                     dialog.setMessage("Please wait...");
@@ -207,20 +226,21 @@ public class OTPValidation extends AppCompatActivity {
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
                                 if (charSequence.length() == 6) {
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
-//                                    SmsRequest smsRequest = new SmsRequest();
-//                                    smsRequest.setEmail(EMAIL.trim());
-//                                    smsRequest.setOtp(charSequence.toString().trim());
-//                                    loginViewModel.emailotpValidate(smsRequest);
-                                    startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
-                                            .putExtra("screen", "retEmailfound"));
+                                    Utils.hideKeypad(OTPValidation.this);
+                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                                    dialog.setIndeterminate(false);
+                                    dialog.setMessage("Please wait...");
+                                    dialog.show();
+                                    String phoneNumber = MOBILE.substring(1, 4) + MOBILE.substring(6, 9) + MOBILE.substring(10, MOBILE.length());
+                                    RetrieveUsersRequest request = new RetrieveUsersRequest();
+                                    request.setCountryCode(Utils.getStrCCode());
+                                    request.setPhoneNumber(phoneNumber);
+                                    loginViewModel.retrieveUsers(request, charSequence.toString().trim());
                                 }
                             } else {
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
+                                        Utils.hideKeypad(OTPValidation.this);
                                         dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                         dialog.setIndeterminate(false);
                                         dialog.setMessage("Please wait...");
@@ -232,6 +252,7 @@ public class OTPValidation extends AppCompatActivity {
                                     }
                                 } else if (OTP_TYPE.equals("EMAIL")) {
                                     if (charSequence.length() == 6) {
+                                        Utils.hideKeypad(OTPValidation.this);
                                         dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                         dialog.setIndeterminate(false);
                                         dialog.setMessage("Please wait...");
@@ -313,7 +334,7 @@ public class OTPValidation extends AppCompatActivity {
         }.start();
     }
 
-    private void initObserver()  {
+    private void initObserver() {
 
         loginViewModel.getEmailotpLiveData().observe(this, new Observer<EmailResponse>() {
             @Override
@@ -366,7 +387,9 @@ public class OTPValidation extends AppCompatActivity {
         loginViewModel.getSmsotpLiveData().observe(this, new Observer<SMSValidate>() {
             @Override
             public void onChanged(SMSValidate smsValidate) {
-                dialog.dismiss();
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
                 if (smsValidate != null) {
                     if (smsValidate.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
@@ -386,6 +409,12 @@ public class OTPValidation extends AppCompatActivity {
                                                 .putExtra("EMAIL", EMAIL));
                                         finish();
                                     }
+                                    break;
+                                case "Login":
+                                    secureAccountRL.setVisibility(View.VISIBLE);
+                                    layoutType = "SECURE";
+                                    layoutEntry.setVisibility(View.GONE);
+                                    layoutFailure.setVisibility(View.GONE);
                                     break;
                             }
                         }
@@ -419,13 +448,17 @@ public class OTPValidation extends AppCompatActivity {
         loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
             @Override
             public void onChanged(SMSResponse smsResponse) {
-                dialog.dismiss();
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
                 if (smsResponse != null) {
                     if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        resendTV.setVisibility(View.GONE);
-                        newCodeTV.setVisibility(View.VISIBLE);
-                        resendCounter++;
-                        startTimer();
+                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("Login")) {
+                            resendTV.setVisibility(View.GONE);
+                            newCodeTV.setVisibility(View.VISIBLE);
+                            resendCounter++;
+                            startTimer();
+                        }
                     } else {
                         Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this);
                     }
@@ -465,6 +498,26 @@ public class OTPValidation extends AppCompatActivity {
                     } else {
                         Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this);
                     }
+                }
+            }
+        });
+
+        loginViewModel.getRetrieveUsersResponseMutableLiveData().observe(this, new Observer<RetrieveUsersResponse>() {
+            @Override
+            public void onChanged(RetrieveUsersResponse retrieveUsersResponse) {
+                try {
+                    dialog.dismiss();
+                    if (retrieveUsersResponse != null) {
+                        if (!retrieveUsersResponse.getStatus().toLowerCase().equals("error")) {
+                            objMyApplication.setObjRetUsers(retrieveUsersResponse);
+                            startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                    .putExtra("screen", "retEmailfound"));
+                        } else {
+                            Utils.displayAlert(retrieveUsersResponse.getError().getErrorDescription(), OTPValidation.this);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

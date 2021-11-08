@@ -3,6 +3,7 @@ package com.greenbox.coyni.utils;
 import android.app.Application;
 
 import com.greenbox.coyni.model.cards.CardsDataItem;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
 public class MyApplication extends Application {
     static String strEncryptedPublicKey;
     List<CardsDataItem> listCards = new ArrayList<>();
+    RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
+    String strUserName = "", strRetrEmail = "";
 
 
     //Account Limits
@@ -235,6 +238,30 @@ public class MyApplication extends Application {
 
     public void setListCards(List<CardsDataItem> listCards) {
         this.listCards = listCards;
+    }
+
+    public RetrieveUsersResponse getObjRetUsers() {
+        return objRetUsers;
+    }
+
+    public void setObjRetUsers(RetrieveUsersResponse objRetUsers) {
+        this.objRetUsers = objRetUsers;
+    }
+
+    public String getStrUserName() {
+        return strUserName;
+    }
+
+    public void setStrUserName(String strUserName) {
+        this.strUserName = strUserName;
+    }
+
+    public String getStrRetrEmail() {
+        return strRetrEmail;
+    }
+
+    public void setStrRetrEmail(String strRetrEmail) {
+        this.strRetrEmail = strRetrEmail;
     }
 
     private String fromWhichFragment;

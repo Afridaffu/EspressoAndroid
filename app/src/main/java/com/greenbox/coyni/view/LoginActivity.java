@@ -33,6 +33,7 @@ import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -43,14 +44,15 @@ public class LoginActivity extends AppCompatActivity {
     CardView cvNext, cvEmailOK;
     LinearLayout layoutEmailError, layoutPwdError;
     TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
-    String strEmail = "", strPwd = "", strMsg = "";
+    String strEmail = "", strPwd = "", strMsg = "", strToken = "";
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     SQLiteDatabase mydatabase;
-    Cursor dsUserDetails, dsFacePin, dsRemember;
-    Boolean isFaceLock = false, isThumb = false;
+    Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
+    Boolean isFaceLock = false, isThumb = false, isTouchId = false;
     ImageView imgClose;
     CheckBox chkRemember;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +86,17 @@ public class LoginActivity extends AppCompatActivity {
             chkRemember = findViewById(R.id.chkRemember);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            etlPassword.setEndIconOnClickListener(view -> {
-                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+            objMyApplication = (MyApplication) getApplicationContext();
+
+            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+                etEmail.setText(objMyApplication.getStrRetrEmail());
+            }
+            etlPassword.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
+                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                }
             });
 
             etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -262,7 +272,9 @@ public class LoginActivity extends AppCompatActivity {
             });
             enableIcon();
             SetDB();
-            SetLock();
+            SetToken();
+            SetFaceLock();
+            SetTouchId();
             SetRemember();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -286,7 +298,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void SetLock() {
+    private void SetToken() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+            dsPermanentToken.moveToFirst();
+            if (dsPermanentToken.getCount() > 0) {
+                strToken = dsPermanentToken.getString(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void SetFaceLock() {
         try {
             isFaceLock = false;
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
@@ -296,7 +321,7 @@ public class LoginActivity extends AppCompatActivity {
                 String value = dsFacePin.getString(1);
                 if (value.equals("true")) {
                     isFaceLock = true;
-                    if (isThumb) {
+                    if (Utils.getIsTouchEnabled()) {
                         etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
                     } else {
                         etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
@@ -306,10 +331,27 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+            ex.printStackTrace();
+        }
+    }
+
+    private void SetTouchId() {
+        try {
+            isTouchId = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                } else {
+                    isTouchId = false;
+                }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -356,13 +398,12 @@ public class LoginActivity extends AppCompatActivity {
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 } else {
-//                                    Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-//                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(i);
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-                                    i.putExtra("screen", "SignUp");
+                                    i.putExtra("screen", "Login");
                                     i.putExtra("OTP_TYPE", "MOBILE");
                                     i.putExtra("MOBILE", login.getData().getPhoneNumber());
+                                    i.putExtra("EMAIL", login.getData().getEmail());
+                                    i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 }
@@ -496,48 +537,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isFingerPrint() {
-        Boolean value = false;
-        try {
-            if (Build.VERSION.SDK_INT >= 23) {
-                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-                if (!fingerprintManager.isHardwareDetected()) {
-                    // Device doesn't support fingerprint authentication
-                    Log.e("MY_APP_TAG", "Device doesn't support fingerprint authentication.");
-                    isThumb = false;
-                    value = false;
-                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    // User hasn't enrolled any fingerprints to authenticate with
-                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
-                    isThumb = false;
-                    value = false;
-                } else {
-                    // Everything is ready for fingerprint authentication
-                    Log.e("MY_APP_TAG", "User hasn't enrolled any fingerprints to authenticate with.");
-                    isThumb = true;
-                    value = true;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return value;
-    }
-
     private void enableIcon() {
         try {
-            if (Utils.checkAuthentication(LoginActivity.this)) {
+            if (Utils.getIsTouchEnabled()) {
+                etlPassword.setPasswordVisibilityToggleEnabled(false);
+                etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                strMsg = "Do you want to register with Thumb/Pin.";
+            } else if (Utils.getIsFaceEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+                strMsg = "Do you want to register with FaceID/Pin.";
             } else {
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-            }
-            if (isFingerPrint()) {
-                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
-                strMsg = "Do you want to register with Thumb/Pin.";
-            } else {
-                strMsg = "Do you want to register with FaceID/Pin.";
             }
         } catch (Exception ex) {
             ex.printStackTrace();

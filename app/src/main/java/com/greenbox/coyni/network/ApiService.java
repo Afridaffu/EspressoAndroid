@@ -9,8 +9,10 @@ import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
+import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
@@ -23,6 +25,8 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
+import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 
 import retrofit2.Call;
@@ -50,10 +54,10 @@ public interface ApiService {
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("/api/v2/register/newcustomer")
+    @POST("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
 
-    @POST("/api/v2/user/email-otp/validate")
+    @POST("api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 
     @PATCH("api/v2/register/set-password")
@@ -74,10 +78,19 @@ public interface ApiService {
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
-    @PATCH("/api/v2/register/newcustomer")
-    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Query("userId") String  id);
+    @PATCH("api/v2/register/newcustomer")
+    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Query("id") int id);
 
-    @POST("/api/v2/user/biometric")
+    @POST("api/v2/user/forgot-email/retrieve-users")
+    Call<RetrieveUsersResponse> retrieveUsers(@Body RetrieveUsersRequest request, @Query("otp") String otp);
+
+    @POST("api/v2/user/biometric")
     Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);
+
+    @POST("api/v2/user/biometric/login")
+    Call<LoginResponse> biometricLogin(@Body BiometricLoginRequest request);
+
+    @GET("api/v2/profile/me")
+    Call<Profile> meProfile();
 
 }

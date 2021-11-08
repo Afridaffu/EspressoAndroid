@@ -120,5 +120,21 @@
     <string name="giftcard">Gift Card</string>
     <string name="buytoken">Buy Tokens</string>
     <string name="ok">OK</string>
+    <string name="create_new_password">Create New Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="enableidinfo">By enabling Face ID, you are preventing \nunauthorized users from gaining access to\n your account and other sensitive \ninformation.</string>
+    <string name="not_now">Not Now</string>
+    <string name="your_account_has_been_created">Your Account Has Been Created</string>
+    <string name="youtaccountcontent">You’re almost there! Before you can start \ntokenizing your money. Please follow the\n instructions below.</string>
+    <string name="verify_your_identity">Verify Your Identity</string>
+    <string name="id_mailing_address">ID, Mailing address</string>
+    <string name="_5_min">5 min</string>
+    <string name="forgot_content">Before we can reset your password, we will \nneed to verify your identity.\nPlease enter the email register with your\naccount.</string>
+    <string name="email">Email</string>
+    <string name="retry_create_account">Retry Create Account</string>
+    <string name="retry_account">Error: Look like we are having an issue with \nyour OTP request, please retry again later.</string>
+    <string name="try_again">Try Again</string>
+    <string name="qr_code">qr_code</string>
 
 </resources>

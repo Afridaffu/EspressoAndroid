@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +9,20 @@ import android.os.Handler;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.retrieveemail.RetUserResData;
+import com.greenbox.coyni.utils.MyApplication;
+
+import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout llCoyniAct,lyClose;
+    LinearLayout llCoyniAct, lyClose;
+    TextView tvEmail;
+    MyApplication objMyApplication;
+    CardView reTryAgainBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,17 @@ public class BindingLayoutActivity extends AppCompatActivity {
         try {
             llCoyniAct = findViewById(R.id.llCoyniAct);
             lyClose = findViewById(R.id.lyClose);
+            tvEmail = findViewById(R.id.tvEmail);
+            reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
+            objMyApplication = (MyApplication) getApplicationContext();
+            List<RetUserResData> usersData;
+            if (objMyApplication.getObjRetUsers() != null) {
+                usersData = objMyApplication.getObjRetUsers().getData();
+                if (usersData != null && usersData.size() > 0) {
+                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
+                }
+            }
             llCoyniAct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -45,6 +65,13 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
+                    startActivity(i);
+                }
+            });
+            reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(BindingLayoutActivity.this, RetrieveEmailActivity.class);
                     startActivity(i);
                 }
             });

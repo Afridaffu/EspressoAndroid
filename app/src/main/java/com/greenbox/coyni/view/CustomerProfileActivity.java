@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -9,18 +10,24 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
+import com.greenbox.coyni.utils.MyApplication;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     LabeledSwitch labeledSwitch;
     View viewFaceBottom;
     ImageView imgQRCode;
     Dialog dialog;
+    TextView customerNameTV;
+    MyApplication objMyApplication;
+    CardView cvLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +46,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
             labeledSwitch = findViewById(R.id.switchbtn);
             viewFaceBottom = findViewById(R.id.viewSetupFaceBottom);
             imgQRCode = findViewById(R.id.imgQRCode);
+            customerNameTV = findViewById(R.id.customerNameTV);
+            cvLogout = findViewById(R.id.cvLogout);
+            objMyApplication = (MyApplication) getApplicationContext();
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FaceIdSetupBottomSheet faceIdSetupBottomSheet = new FaceIdSetupBottomSheet();
                     faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
-
-
                 }
             });
             labeledSwitch.setOnToggledListener((labeledSwitch, isOn) -> {
@@ -53,9 +61,22 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayQRCode();
+//                    displayQRCode();
                 }
             });
+
+            cvLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                    finish();
+                }
+            });
+
+            customerNameTV.setText(objMyApplication.getStrUserName());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
