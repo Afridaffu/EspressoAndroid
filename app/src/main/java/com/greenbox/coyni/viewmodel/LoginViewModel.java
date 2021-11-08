@@ -61,7 +61,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<InitializeCustomerResponse> initCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<BiometricResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<LoginResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -123,7 +123,7 @@ public class LoginViewModel extends AndroidViewModel {
         return retrieveUsersResponseMutableLiveData;
     }
 
-    public MutableLiveData<BiometricResponse> getBiometricResponseMutableLiveData() {
+    public MutableLiveData<LoginResponse> getBiometricResponseMutableLiveData() {
         return biometricResponseMutableLiveData;
     }
 
@@ -532,20 +532,20 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void biometricLogin(BiometricLoginRequest request) {
         try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BiometricResponse> mCall = apiService.biometricLogin(request);
-            mCall.enqueue(new Callback<BiometricResponse>() {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<LoginResponse> mCall = apiService.biometricLogin(request);
+            mCall.enqueue(new Callback<LoginResponse>() {
                 @Override
-                public void onResponse(Call<BiometricResponse> call, Response<BiometricResponse> response) {
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful()) {
-                        BiometricResponse obj = response.body();
+                        LoginResponse obj = response.body();
                         biometricResponseMutableLiveData.setValue(obj);
                         Log.e("Bio Success", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<BiometricResponse>() {
+                        Type type = new TypeToken<LoginResponse>() {
                         }.getType();
-                        BiometricResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        LoginResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
                             biometricResponseMutableLiveData.setValue(errorResponse);
                             Log.e("Biometric Error", new Gson().toJson(errorResponse));
@@ -554,7 +554,7 @@ public class LoginViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<BiometricResponse> call, Throwable t) {
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

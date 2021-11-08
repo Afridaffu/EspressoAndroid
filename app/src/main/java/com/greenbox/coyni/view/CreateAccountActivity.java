@@ -238,7 +238,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (custRegisterResponse != null) {
                     try {
                         Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-
                         if (!custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "MOBILE");

@@ -103,7 +103,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
                         layoutIndicator.setVisibility(VISIBLE);
-                        tvPasswordInfo.setVisibility(VISIBLE);
+                        //tvPasswordInfo.setVisibility(VISIBLE);
                     } else {
                         layoutIndicator.setVisibility(View.GONE);
                         tvPasswordInfo.setVisibility(View.GONE);

@@ -88,7 +88,7 @@ public interface ApiService {
     Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);
 
     @POST("api/v2/user/biometric/login")
-    Call<BiometricResponse> biometricLogin(@Body BiometricLoginRequest request);
+    Call<LoginResponse> biometricLogin(@Body BiometricLoginRequest request);
 
     @GET("api/v2/profile/me")
     Call<Profile> meProfile();
