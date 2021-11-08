@@ -357,9 +357,11 @@ public class LoginActivity extends AppCompatActivity {
                                     startActivity(i);
                                 } else {
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-                                    i.putExtra("screen", "SignUp");
+                                    i.putExtra("screen", "Login");
                                     i.putExtra("OTP_TYPE", "MOBILE");
                                     i.putExtra("MOBILE", login.getData().getPhoneNumber());
+                                    i.putExtra("EMAIL", login.getData().getEmail());
+                                    i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 }

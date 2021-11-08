@@ -11,9 +11,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
+import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -32,6 +35,7 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
+import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.Singleton;
 
 import java.lang.reflect.Type;
@@ -57,6 +61,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<InitializeCustomerResponse> initCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BiometricResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -118,6 +123,10 @@ public class LoginViewModel extends AndroidViewModel {
         return retrieveUsersResponseMutableLiveData;
     }
 
+    public MutableLiveData<BiometricResponse> getBiometricResponseMutableLiveData() {
+        return biometricResponseMutableLiveData;
+    }
+
     public void smsotpresend(SMSResend resend) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
@@ -125,18 +134,22 @@ public class LoginViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<SMSResponse>() {
                 @Override
                 public void onResponse(Call<SMSResponse> call, Response<SMSResponse> response) {
-                    if (response.isSuccessful()) {
-                        SMSResponse obj = response.body();
-                        smsresendMutableLiveData.setValue(obj);
-                        Log.e("SMS Resend Resp", new Gson().toJson(obj));
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<SMSResponse>() {
-                        }.getType();
-                        SMSResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            smsresendMutableLiveData.setValue(errorResponse);
+                    try {
+                        if (response.isSuccessful()) {
+                            SMSResponse obj = response.body();
+                            smsresendMutableLiveData.setValue(obj);
+                            Log.e("SMS Resend Resp", new Gson().toJson(obj));
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SMSResponse>() {
+                            }.getType();
+                            SMSResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                smsresendMutableLiveData.setValue(errorResponse);
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
@@ -340,10 +353,10 @@ public class LoginViewModel extends AndroidViewModel {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
             Call<CustRegisterResponse> mCall;
-            if(type.equals("POST"))
+            if (type.equals("POST"))
                 mCall = apiService.custRegister(custRegisRequest);
             else
-                mCall = apiService.custRegisterPatch(custRegisRequest, custRegisRequest.getUserId());
+                mCall = apiService.custRegisterPatch(custRegisRequest, Integer.parseInt(custRegisRequest.getUserId()));
 
             mCall.enqueue(new Callback<CustRegisterResponse>() {
                 @Override
@@ -351,17 +364,17 @@ public class LoginViewModel extends AndroidViewModel {
 
                     if (response.isSuccessful()) {
                         Log.e("CustReg Success", "CustReg Success");
-                        try{
+                        try {
                             CustRegisterResponse obj = response.body();
                             custRegisResponseMutableLiveData.setValue(obj);
                             Singleton.setCustRegisterResponse(obj);
                             Log.e("CustReg Success", new Gson().toJson(obj));
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     } else {
                         Log.e("CustReg Error", "CustReg Error");
-                        try{
+                        try {
                             Gson gson = new Gson();
                             Type type = new TypeToken<CustRegisterResponse>() {
                             }.getType();
@@ -371,8 +384,8 @@ public class LoginViewModel extends AndroidViewModel {
                                 custRegisResponseMutableLiveData.setValue(null);
                             }
                             Log.e("CustReg Error", new Gson().toJson(errorResponse));
-                        }catch (Exception e){
-                         e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
 
@@ -485,10 +498,10 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void retrieveUsers(RetrieveUsersRequest request,String strOTP) {
+    public void retrieveUsers(RetrieveUsersRequest request, String strOTP) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<RetrieveUsersResponse> mCall = apiService.retrieveUsers(request,strOTP);
+            Call<RetrieveUsersResponse> mCall = apiService.retrieveUsers(request, strOTP);
             mCall.enqueue(new Callback<RetrieveUsersResponse>() {
                 @Override
                 public void onResponse(Call<RetrieveUsersResponse> call, Response<RetrieveUsersResponse> response) {
@@ -508,6 +521,40 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<RetrieveUsersResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void biometricLogin(BiometricLoginRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BiometricResponse> mCall = apiService.biometricLogin(request);
+            mCall.enqueue(new Callback<BiometricResponse>() {
+                @Override
+                public void onResponse(Call<BiometricResponse> call, Response<BiometricResponse> response) {
+                    if (response.isSuccessful()) {
+                        BiometricResponse obj = response.body();
+                        biometricResponseMutableLiveData.setValue(obj);
+                        Log.e("Bio Success", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BiometricResponse>() {
+                        }.getType();
+                        BiometricResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            biometricResponseMutableLiveData.setValue(errorResponse);
+                            Log.e("Biometric Error", new Gson().toJson(errorResponse));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BiometricResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

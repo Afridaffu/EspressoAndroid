@@ -1,5 +1,7 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
@@ -7,6 +9,7 @@ import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
+import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -50,10 +53,10 @@ public interface ApiService {
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("/api/v2/register/newcustomer")
+    @POST("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
 
-    @POST("/api/v2/user/email-otp/validate")
+    @POST("api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 
     @PATCH("api/v2/register/set-password")
@@ -71,14 +74,20 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
-
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
-    @PATCH("/api/v2/register/newcustomer/{userId}")
-    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Path("userId") String  id);
+    @PATCH("api/v2/register/newcustomer")
+    Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Query("id") int id);
 
     @POST("api/v2/user/forgot-email/retrieve-users")
     Call<RetrieveUsersResponse> retrieveUsers(@Body RetrieveUsersRequest request, @Query("otp") String otp);
+
+    @POST("api/v2/user/biometric")
+    Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);
+
+    @POST("api/v2/user/biometric/login")
+    Call<BiometricResponse> biometricLogin(@Body BiometricLoginRequest request);
+
 
 }

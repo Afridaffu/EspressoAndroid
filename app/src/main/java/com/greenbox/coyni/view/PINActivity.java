@@ -42,7 +42,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
-    LinearLayout circleOneLL,circleTwoLL,circleThreeLL,circleFourLL,circleFiveLL,circleSixLL;
+    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +112,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             circleThreeLL = findViewById(R.id.circleThreeLL);
             circleFourLL = findViewById(R.id.circleFourLL);
             circleFiveLL = findViewById(R.id.circleFiveLL);
-            circleSixLL =  findViewById(R.id.circleSixLL);
+            circleSixLL = findViewById(R.id.circleSixLL);
 
             keyZeroTV = (TextView) findViewById(R.id.keyZeroTV);
             keyOneTV = (TextView) findViewById(R.id.keyOneTV);
@@ -179,21 +179,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onChanged(PINRegisterResponse pinRegisterResponse) {
                 dialog.dismiss();
-                if(pinRegisterResponse!=null){
+                if (pinRegisterResponse != null) {
                     Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
-                    if(!pinRegisterResponse.getStatus().toLowerCase().equals("error")){
+                    if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
 
-                        if(Utils.checkAuthentication(PINActivity.this)){
-                            if(Utils.isFingerPrint(PINActivity.this)){
+                        if (Utils.checkAuthentication(PINActivity.this)) {
+                            if (Utils.isFingerPrint(PINActivity.this)) {
                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE","TOUCH"));
-                            }else{
+                                        .putExtra("ENABLE_TYPE", "TOUCH"));
+                            } else {
                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE","FACE"));
+                                        .putExtra("ENABLE_TYPE", "FACE"));
                             }
-                        }else{
+                        } else {
                             startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                    .putExtra("ENABLE_TYPE","SUCCESS"));
+                                    .putExtra("ENABLE_TYPE", "SUCCESS"));
                         }
 //                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
@@ -218,61 +218,61 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.keyZeroTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "0";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyOneTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "1";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyTwoTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "2";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyThreeTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "3";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyFourTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "4";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyFiveTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "5";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keySixTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "6";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keySevenTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "7";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyEightTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "8";
                     passNumber(passcode);
                 }
                 break;
             case R.id.keyNineTV:
-                if(passcode.length()<6){
+                if (passcode.length() < 6) {
                     passcode += "9";
                     passNumber(passcode);
                 }
@@ -284,9 +284,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                if(TYPE.equals("CHOOSE")){
+                if (TYPE.equals("CHOOSE")) {
                     onBackPressed();
-                }else{
+                } else {
                     tvForgot.setVisibility(View.GONE);
                     TYPE = "CHOOSE";
                     tvHead.setText("Choose your PIN");
@@ -296,7 +296,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.tvForgot:
                 Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
-                i.putExtra("screen","ForgotPin");
+                i.putExtra("screen", "ForgotPin");
                 startActivity(i);
                 break;
 
@@ -424,7 +424,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public void setErrorPIN(){
+    public void setErrorPIN() {
         circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
         circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
         circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
@@ -440,7 +440,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
     }
 
-    public void setSuccessPIN(){
+    public void setSuccessPIN() {
         circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);

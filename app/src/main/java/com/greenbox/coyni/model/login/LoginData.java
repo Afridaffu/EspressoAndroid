@@ -15,6 +15,8 @@ public class LoginData {
     private Boolean riskFlag;
     private Boolean coyniPin;
     private Boolean paymentAdded;
+    private Boolean biometricEnabled;
+
 
     public int getUserId() {
         return userId;
@@ -126,6 +128,14 @@ public class LoginData {
 
     public void setPaymentAdded(Boolean paymentAdded) {
         this.paymentAdded = paymentAdded;
+    }
+
+    public Boolean getBiometricEnabled() {
+        return biometricEnabled;
+    }
+
+    public void setBiometricEnabled(Boolean biometricEnabled) {
+        this.biometricEnabled = biometricEnabled;
     }
 }
 

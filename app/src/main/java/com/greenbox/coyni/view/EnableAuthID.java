@@ -33,9 +33,9 @@ import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends AppCompatActivity {
 
-    MaterialCardView enableFaceCV,enableTouchCV,successGetStartedCV;
-    TextView notNowFaceTV,notNowTouchTV, notNowSuccessTV;
-    RelativeLayout faceIDRL,touchIDRL,successRL;
+    MaterialCardView enableFaceCV, enableTouchCV, successGetStartedCV;
+    TextView notNowFaceTV, notNowTouchTV, notNowSuccessTV;
+    RelativeLayout faceIDRL, touchIDRL, successRL;
     String enableType;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     SQLiteDatabase mydatabase;
@@ -119,11 +119,11 @@ public class EnableAuthID extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.isHardwareDetected()) {
-                        Log.e("Not support","Not support");
+                        Log.e("Not support", "Not support");
                     } else if (!fingerprintManager.hasEnrolledFingerprints()) {
                         final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
                         enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                            BIOMETRIC_STRONG);
+                                BIOMETRIC_STRONG);
                         startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                     } else {
                         dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
@@ -147,15 +147,15 @@ public class EnableAuthID extends AppCompatActivity {
             succesCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                  if(enableType.equals("TOUCH")){
-                      faceIDRL.setVisibility(View.GONE);
-                      touchIDRL.setVisibility(View.VISIBLE);
-                      successRL.setVisibility(View.GONE);
-                  }else{
-                      faceIDRL.setVisibility(View.VISIBLE);
-                      touchIDRL.setVisibility(View.GONE);
-                      successRL.setVisibility(View.GONE);
-                  }
+                    if (enableType.equals("TOUCH")) {
+                        faceIDRL.setVisibility(View.GONE);
+                        touchIDRL.setVisibility(View.VISIBLE);
+                        successRL.setVisibility(View.GONE);
+                    } else {
+                        faceIDRL.setVisibility(View.VISIBLE);
+                        touchIDRL.setVisibility(View.GONE);
+                        successRL.setVisibility(View.GONE);
+                    }
                 }
             });
 
@@ -182,27 +182,28 @@ public class EnableAuthID extends AppCompatActivity {
                     startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void initObserver(){
+    public void initObserver() {
         coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
             @Override
             public void onChanged(BiometricResponse biometricResponse) {
                 dialog.dismiss();
-                if(biometricResponse!=null){
+                if (biometricResponse != null) {
                     Log.e("bio resp", new Gson().toJson(biometricResponse));
-                    if(enableType.equals("FACE")){
+                    saveToken(biometricResponse.getData().getToken());
+                    if (enableType.equals("FACE")) {
                         saveFace("true");
                         saveThumb("false");
                         Utils.showCustomToast(EnableAuthID.this, "Face ID has been turned on", R.drawable.ic_faceid);
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
                         successRL.setVisibility(View.VISIBLE);
-                    }else if(enableType.equals("TOUCH")){
+                    } else if (enableType.equals("TOUCH")) {
                         saveFace("false");
                         saveThumb("true");
                         Utils.showCustomToast(EnableAuthID.this, "Touch ID has been turned on", R.drawable.ic_touch_id);
@@ -214,11 +215,12 @@ public class EnableAuthID extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE  && resultCode  == RESULT_OK) {
+            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
 
                 dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
                 dialog.setIndeterminate(false);
@@ -253,6 +255,17 @@ public class EnableAuthID extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
+    private void saveToken(String value) {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     @Override
     public void onBackPressed() {
         try {
@@ -263,4 +276,5 @@ public class EnableAuthID extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
 }
