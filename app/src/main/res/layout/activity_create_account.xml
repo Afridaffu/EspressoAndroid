@@ -7,8 +7,8 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingLeft="22dp"
-    android:paddingRight="22dp"
     android:paddingTop="22dp"
+    android:paddingRight="22dp"
     android:screenReaderFocusable="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.CreateAccountActivity">
@@ -46,9 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:hint="First Name"
-                app:expandedHintEnabled="false"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
+                app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -57,15 +57,14 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="First Name"
+                    android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:maxLength="30"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12ssp"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:imeOptions="actionNext"
-                    android:maxLength="30"
-                    />
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,9 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:hint="Last Name"
-                app:expandedHintEnabled="false"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
+                app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -86,15 +85,14 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Last Name"
+                    android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLength="30"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12ssp"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:imeOptions="actionNext"
-                    />
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,11 +103,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:hint="Email"
-                app:expandedHintEnabled="false"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
-                app:hintTextColor="@color/primary_green"
-                app:errorTextColor="@color/error_red">
+                app:errorTextColor="@color/error_red"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailET"
@@ -117,13 +115,13 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Email"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12ssp"
                     android:textColorHint="@color/light_gray"
-                    android:imeOptions="actionNext"
-                    android:textCursorDrawable="@drawable/cursor_color"/>
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,10 +130,10 @@
                 android:id="@+id/emailErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/_5sdp">
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/_12sdp"
@@ -149,8 +147,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="User already exists. Try a new email or log in."
                     android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10ssp"
-                    />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
@@ -163,10 +160,10 @@
                 android:id="@+id/phoneErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/_5sdp">
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/_12sdp"
@@ -180,13 +177,12 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="User already exists. Try a new phone number or log in."
                     android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10ssp"
-                    />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -194,9 +190,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    app:expandedHintEnabled="false"
                     android:textColorHint="@color/black"
                     app:boxStrokeColor="@color/primary_green"
+                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green"
                     app:passwordToggleEnabled="true">
 
@@ -206,14 +202,14 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="8-12 Characters"
+                        android:imeOptions="actionNext"
                         android:inputType="textPassword"
                         android:maxLength="12"
                         android:padding="@dimen/_14sdp"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_12ssp"
                         android:textColorHint="@color/light_gray"
-                        android:imeOptions="actionNext"
-                        android:textCursorDrawable="@drawable/cursor_color"/>
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,35 +217,36 @@
                     android:id="@+id/stregnthViewLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="@dimen/_5sdp"
-                    >
+                    android:paddingBottom="@dimen/_3sdp"
+                    android:visibility="gone">
 
                     <View
                         android:id="@+id/stregnthOne"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@color/error_red"
-                        android:layout_weight="1"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/error_red" />
+
                     <View
                         android:id="@+id/stregnthTwo"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@color/error_red"
-                        android:layout_weight="1"
                         android:layout_marginEnd="10dp"
-                        android:visibility="invisible"/>
+                        android:layout_weight="1"
+                        android:background="@color/error_red"
+                        android:visibility="invisible" />
+
                     <View
                         android:id="@+id/stregnthThree"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="@color/error_red"
-                        android:layout_weight="1"
                         android:layout_marginEnd="10dp"
-                        android:visibility="invisible"/>
+                        android:layout_weight="1"
+                        android:background="@color/error_red"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -258,11 +255,11 @@
                 android:id="@+id/passwordInfoTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."
                 android:textColor="@color/dark_grey"
-                android:textSize="@dimen/_10ssp"
-                android:layout_marginTop="@dimen/_10sdp"/>
+                android:textSize="@dimen/_10ssp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/TextInputLayout.OutlinedBox"
@@ -270,12 +267,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:hint="Confirm Password"
-                app:expandedHintEnabled="false"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
-                app:hintTextColor="@color/primary_green"
-                >
-<!--                app:passwordToggleEnabled="true"-->
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
+                <!--                app:passwordToggleEnabled="true"-->
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPasswordET"
@@ -288,12 +284,11 @@
                     android:maxLength="12"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12ssp"
                     android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"/>
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
 
 
             <LinearLayout
@@ -348,15 +343,16 @@
                 android:layout_marginBottom="@dimen/_20sdp"
                 app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="@dimen/_22sdp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
                     android:text="Next"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/opensans_bold" />
+                    android:textSize="@dimen/_12ssp" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>

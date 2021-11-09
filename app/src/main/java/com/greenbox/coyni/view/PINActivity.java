@@ -152,6 +152,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override
             public void onChanged(ValidateResponse validateResponse) {
+                dialog.dismiss();
                 if (validateResponse != null) {
                     if (!validateResponse.getStatus().toLowerCase().equals("error")) {
                         String strScreen = "";
@@ -170,6 +171,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 startActivity(d);
                                 break;
                         }
+                    } else {
+                        Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
+                        setErrorPIN();
                     }
                 }
             }

@@ -3,8 +3,10 @@ package com.greenbox.coyni.view;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
@@ -14,6 +16,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,14 +31,18 @@ import com.google.android.material.tabs.TabLayout;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
+import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
+import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.util.UUID;
 
 public class OnboardActivity extends AppCompatActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
@@ -47,6 +54,7 @@ public class OnboardActivity extends AppCompatActivity {
     Boolean isFaceLock = false, isTouchId = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginViewModel loginViewModel;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +65,10 @@ public class OnboardActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
 
-            Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            if (!isDeviceID()) {
+                generateUUID();
+            }
             strDeviceID = Utils.getDeviceID();
             getStarted = findViewById(R.id.getStartedLL);
             layoutLogin = findViewById(R.id.layoutLogin);
@@ -187,11 +198,37 @@ public class OnboardActivity extends AppCompatActivity {
     }
 
     private void initObserver() {
-        loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
+        loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
             @Override
-            public void onChanged(BiometricResponse biometricResponse) {
-                if (biometricResponse != null) {
-
+            public void onChanged(LoginResponse loginResponse) {
+                dialog.dismiss();
+                try {
+                    if (loginResponse != null) {
+                        if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                            if (loginResponse.getData().getPasswordExpired()) {
+                                Intent i = new Intent(OnboardActivity.this, PINActivity.class);
+                                i.putExtra("screen", "loginExpiry");
+                                i.putExtra("TYPE", "ENTER");
+                                startActivity(i);
+                            } else {
+                                Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                            }
+                        } else {
+                            if (loginResponse.getData() != null) {
+                                if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
+                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                                }
+                            } else {
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this);
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -250,6 +287,11 @@ public class OnboardActivity extends AppCompatActivity {
 
     private void login() {
         try {
+            dialog = new ProgressDialog(OnboardActivity.this, R.style.MyAlertDialogStyle);
+            dialog.setIndeterminate(false);
+            dialog.setMessage("Please wait...");
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.show();
             BiometricLoginRequest request = new BiometricLoginRequest();
             request.setDeviceId(strDeviceID);
             request.setEnableBiometic(true);
@@ -258,6 +300,29 @@ public class OnboardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void generateUUID() {
+        try {
+            String uuid = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = getSharedPreferences("DeviceID", MODE_PRIVATE).edit();
+            editor.putString("deviceId", uuid);
+            editor.putBoolean("isDevice", true);
+            editor.apply();
+            Utils.setDeviceID(uuid);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Boolean isDeviceID() {
+        Boolean value = false;
+        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+        value = prefs.getBoolean("isDevice", false);
+        if (value) {
+            Utils.setDeviceID(prefs.getString("deviceId", ""));
+        }
+        return value;
     }
 
 }

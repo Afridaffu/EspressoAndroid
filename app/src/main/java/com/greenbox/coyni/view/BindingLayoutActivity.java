@@ -51,6 +51,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 usersData = objMyApplication.getObjRetUsers().getData();
                 if (usersData != null && usersData.size() > 0) {
                     tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
             llCoyniAct.setOnClickListener(new View.OnClickListener() {
