@@ -25,13 +25,22 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         android:usesCleartextTraffic="true" >
         <activity
+            android:name=".AgreementsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.UserDetailsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.CustomerProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".view.AccountLimitsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name=".view.BindingLayoutActivity"
             android:exported="false"
@@ -95,9 +104,8 @@
             android:exported="true"
             android:screenOrientation="portrait" />
 
-
-        <activity android:name=".view.IdentityVerificationActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".view.IdentityVerificationActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             />

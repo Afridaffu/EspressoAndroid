@@ -136,5 +136,17 @@
     <string name="retry_account">Error: Look like we are having an issue with \nyour OTP request, please retry again later.</string>
     <string name="try_again">Try Again</string>
     <string name="qr_code">qr_code</string>
+    <string name="user_details">User Details</string>
+    <string name="us_email">Email</string>
+    <string name="emailid">Jonathanjostar@gmail.com</string>
+    <string name="user_phonenumber">Phone Number</string>
+    <string name="user_ph">(661) 726-0369</string>
+    <string name="user_address">3131 Camino Del Rio, San Diego,\nCA, 92108</string>
+    <string name="user_add">Address</string>
+    <string name="cp_agreements">Agreements</string>
+    <string name="cpactive_agreements">Active Agreements</string>
+    <string name="privacyv202">Privacy Policy v2.0.2</string>
+    <string name="tos">Terms of Service v2.3.3</string>
+    <string name="usdcurrency">USD</string>
 
 </resources>
