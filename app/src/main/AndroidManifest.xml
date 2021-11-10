@@ -16,19 +16,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".view.EditEmailActivity"
+            android:exported="true" />
         <activity
             android:name=".view.EnableAuthID"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        android:usesCleartextTraffic="true" >
         <activity
             android:name=".view.CustomerProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".view.AccountLimitsActivity"
             android:exported="true" />
@@ -44,9 +44,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.PINActivity"
@@ -94,14 +91,11 @@
             android:name=".view.DashboardActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
-
-
-        <activity android:name=".view.IdentityVerificationActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".view.IdentityVerificationActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
     </application>
 
 </manifest>
