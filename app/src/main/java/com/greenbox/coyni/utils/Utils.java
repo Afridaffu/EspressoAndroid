@@ -15,7 +15,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
@@ -373,4 +375,7 @@ public class Utils {
         return strNumber;
     }
 
+    public static boolean isValidEmail(String target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 }

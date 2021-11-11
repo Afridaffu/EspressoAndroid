@@ -170,6 +170,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(d);
                                 break;
+                            case "EditEmail":
+                                Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+                                startActivity(ee);
+                                finish();
+                                break;
                         }
                     } else {
                         Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);

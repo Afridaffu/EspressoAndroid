@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onChanged(Profile profile) {
                 if (profile != null) {
+                    objMyApplication.setMyProfile(profile);
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                     tvUserName.setText("Hi " + Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                 }

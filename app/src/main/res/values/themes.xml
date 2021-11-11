@@ -95,4 +95,5 @@
     <style name="CalendarDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/primary_color</item>
     </style>
+
 </resources>

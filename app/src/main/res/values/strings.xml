@@ -136,5 +136,6 @@
     <string name="retry_account">Error: Look like we are having an issue with \nyour OTP request, please retry again later.</string>
     <string name="try_again">Try Again</string>
     <string name="qr_code">qr_code</string>
+    <string name="contact_us"><u>Contact Us</u></string>
 
 </resources>

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.UserDetailsActivity">
+    tools:context=".view.UserDetailsActivity"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -80,7 +81,17 @@
                             android:id="@+id/userProfileIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_launcher_background" />
+                            android:visibility="gone"/>
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/imageTextTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="VT"
+                            android:textSize="@dimen/_20sdp"
+                            android:fontFamily="@font/opensans_bold"
+                            android:textColor="@color/primary_black"/>
                     </androidx.cardview.widget.CardView>
 
 
@@ -97,6 +108,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+                android:id="@+id/emailLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/_10sdp"
@@ -147,6 +159,7 @@
                 android:background="@color/light_gray" />
 
             <LinearLayout
+                android:id="@+id/phoneLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/_10sdp"
@@ -198,6 +211,7 @@
                 android:background="@color/light_gray" />
 
             <LinearLayout
+                android:id="@+id/addressLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/_10sdp"
