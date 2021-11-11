@@ -356,7 +356,8 @@ public class OTPValidation extends AppCompatActivity {
                                 case "ForgotPin":
                                     otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                                     shakeAnimateUpDown();
-                                    startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE"));
+                                    startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
+                                            .putExtra("screen", getIntent().getStringExtra("screen")));
                                     break;
                                 case "retEmail":
 

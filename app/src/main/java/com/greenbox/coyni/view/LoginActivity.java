@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
     Boolean isFaceLock = false, isThumb = false, isTouchId = false;
-    ImageView imgClose,loginBGIV;
+    ImageView imgClose, loginBGIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
 
@@ -388,19 +388,17 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     dialog.dismiss();
                     if (login != null) {
                         if (!login.getStatus().toLowerCase().equals("error")) {
+                            Utils.setStrAuth(login.getData().getJwtToken());
                             if (login.getData().getPasswordExpired()) {
-                                //showPwdExpiredPopup();
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
                                 i.putExtra("TYPE", "ENTER");
                                 startActivity(i);
                             } else {
-                                Utils.setStrAuth(login.getData().getJwtToken());
                                 if (login.getData().getCoyniPin()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
                                     i.putExtra("screen", "login");
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 } else {
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
@@ -409,7 +407,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     i.putExtra("MOBILE", login.getData().getPhoneNumber());
                                     i.putExtra("EMAIL", login.getData().getEmail());
                                     i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 }
                             }
@@ -591,9 +588,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     @Override
     public void onVisibilityChanged(boolean visible) {
-        if(visible){
+        if (visible) {
             loginBGIV.setAlpha(0.2f);
-        }else{
+        } else {
             loginBGIV.setAlpha(1.0f);
         }
     }

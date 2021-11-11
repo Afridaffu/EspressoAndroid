@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
     <RelativeLayout
@@ -15,16 +15,15 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/fragTwoBottomLL"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/bg_onboard_two"
-            android:scaleType="fitXY"/>
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_onboard_two" />
 
         <LinearLayout
             android:id="@+id/fragTwoBottomLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/topIV"
             android:layout_centerInParent="true"
             android:layout_marginTop="12dp"
             android:orientation="vertical"

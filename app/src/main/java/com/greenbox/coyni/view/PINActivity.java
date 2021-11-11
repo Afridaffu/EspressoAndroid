@@ -75,6 +75,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        clearControls();
+    }
+
+    @Override
     public void onBackPressed() {
         try {
             switch (TYPE) {
@@ -128,7 +134,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             tvForgot = (TextView) findViewById(R.id.tvForgot);
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
-
+            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                imgBack.setImageResource(R.drawable.ic_close);
+            } else {
+                imgBack.setImageResource(R.drawable.ic_back);
+            }
             keyZeroTV.setOnClickListener(this);
             keyOneTV.setOnClickListener(this);
             keyTwoTV.setOnClickListener(this);
@@ -172,7 +182,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 break;
                         }
                     } else {
-                        Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
+                        //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
                         setErrorPIN();
                     }
                 }
@@ -288,14 +298,18 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                if (TYPE.equals("CHOOSE")) {
+                if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
                     onBackPressed();
                 } else {
-                    tvForgot.setVisibility(View.GONE);
-                    TYPE = "CHOOSE";
-                    tvHead.setText("Choose your PIN");
-                    clearPassCode();
-                    passcode = "";
+                    if (TYPE.equals("CHOOSE")) {
+                        onBackPressed();
+                    } else {
+                        tvForgot.setVisibility(View.GONE);
+                        TYPE = "CHOOSE";
+                        tvHead.setText("Choose your PIN");
+                        clearPassCode();
+                        passcode = "";
+                    }
                 }
                 break;
             case R.id.tvForgot:
@@ -458,5 +472,19 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
         chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+    }
+
+    private void clearControls() {
+        try {
+            circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            clearPassCode();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
