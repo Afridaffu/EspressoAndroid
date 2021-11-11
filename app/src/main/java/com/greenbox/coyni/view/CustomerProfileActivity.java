@@ -28,6 +28,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     TextView customerNameTV;
     MyApplication objMyApplication;
     CardView cvLogout;
+    LinearLayout cpUserDetailsLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgQRCode = findViewById(R.id.imgQRCode);
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
+            cpUserDetailsLL = findViewById(R.id.cpUserDetailsLL);
+
             objMyApplication = (MyApplication) getApplicationContext();
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,6 +80,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
             });
 
             customerNameTV.setText(objMyApplication.getStrUserName());
+
+            cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

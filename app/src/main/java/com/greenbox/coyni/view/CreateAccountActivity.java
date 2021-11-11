@@ -136,6 +136,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
             emailTIL = findViewById(R.id.emailTIL);
+            firstNameET.setMaxEms(30);
 
             lastNameET = findViewById(R.id.lastNameET);
             emailET = findViewById(R.id.emailET);
@@ -604,4 +605,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        }
 //        return encoded;
 //    }
+
+
 }
