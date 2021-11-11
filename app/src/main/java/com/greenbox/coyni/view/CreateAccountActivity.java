@@ -57,14 +57,13 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity implements TextWatcher {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
     TextInputLayout firstNameTIL, emailTIL;
     public LinearLayout emailErrorLL, phoneErrorLL;
     TextView passwordInfoTV, privacyTV, tosTV;
-    ImageView createAccountCloseIV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -74,6 +73,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private LinearLayout stregnthViewLL;
     private View stregnthOne, stregnthTwo, stregnthThree;
     private Pattern strong, medium;
+    LinearLayout layoutClose;
 
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
@@ -112,10 +112,56 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (after < count) {
+//            isDel = true;
+        }
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s == passwordET.getEditableText()) {
+            try {
+                if (s.length() > 0 && s.toString().trim().length() == 0) {
+                    passwordET.removeTextChangedListener(CreateAccountActivity.this);
+                    passwordET.setText("");
+                    passwordET.addTextChangedListener(CreateAccountActivity.this);
+                } else if (s.length() > 0 && s.toString().contains(" ")) {
+                    passwordET.removeTextChangedListener(CreateAccountActivity.this);
+                    passwordET.setText(s.toString().trim());
+                    passwordET.setSelection(s.toString().trim().length());
+                    passwordET.addTextChangedListener(CreateAccountActivity.this);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (s == confirmPasswordET.getEditableText()) {
+            try {
+                if (s.length() > 0 && s.toString().trim().length() == 0) {
+                    confirmPasswordET.removeTextChangedListener(CreateAccountActivity.this);
+                    confirmPasswordET.setText("");
+                    confirmPasswordET.addTextChangedListener(CreateAccountActivity.this);
+                } else if (s.length() > 0 && s.toString().contains(" ")) {
+                    confirmPasswordET.removeTextChangedListener(CreateAccountActivity.this);
+                    confirmPasswordET.setText(s.toString().trim());
+                    confirmPasswordET.setSelection(s.toString().trim().length());
+                    confirmPasswordET.addTextChangedListener(CreateAccountActivity.this);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     public void initFields() {
         try {
             createAccountActivity = this;
-
             errorState = new int[][]{new int[]{android.R.attr.state_enabled}};
             errorColor = new int[]{getResources().getColor(R.color.error_red)};
             errorColorState = new ColorStateList(errorState, errorColor);
@@ -131,7 +177,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             privacyTV = findViewById(R.id.privacyTV);
             tosTV = findViewById(R.id.tosTV);
             nextCV = findViewById(R.id.nextCV);
-            createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
+            layoutClose = findViewById(R.id.layoutClose);
 
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
@@ -154,12 +200,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
-
             firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             textWatchers();
-
-
+            firstNameET.requestFocus();
+            passwordET.addTextChangedListener(this);
+            confirmPasswordET.addTextChangedListener(this);
             tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             privacyTV.setPaintFlags(privacyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -220,8 +266,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             });
 
-            createAccountCloseIV.setOnClickListener(view -> {
-                finish();
+            layoutClose.setOnClickListener(view -> {
+                onBackPressed();
             });
 
         } catch (Exception e) {

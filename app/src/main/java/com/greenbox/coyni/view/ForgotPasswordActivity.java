@@ -47,7 +47,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            imgClose = findViewById(R.id.imgClose);
+            imgClose = findViewById(R.id.imgFPClose);
             cvNext = findViewById(R.id.cvNext);
             etEmail = findViewById(R.id.etEmail);
             etlEmail = findViewById(R.id.etlEmail);
@@ -57,6 +57,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             tvHead = findViewById(R.id.tvHead);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
+            etEmail.requestFocus();
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -145,14 +146,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 etlEmail.setError(" ");
                 layoutEmailError.setVisibility(View.VISIBLE);
                 tvEmailError.setText("Please enter Email");
-                //Utils.displayAlert("Please enter Email", ForgotPasswordActivity.this);
                 return value = false;
             } else if (!isEmailValid(etEmail.getText().toString().trim())) {
                 etlEmail.setErrorEnabled(true);
                 etlEmail.setError(" ");
                 layoutEmailError.setVisibility(View.VISIBLE);
                 tvEmailError.setText("Please enter valid Email");
-                //Utils.displayAlert("Please enter valid Email", ForgotPasswordActivity.this);
                 return value = false;
             }
         } catch (Exception ex) {

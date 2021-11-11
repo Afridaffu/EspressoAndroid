@@ -13,13 +13,21 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.CreateAccountActivity">
 
-    <ImageView
-        android:id="@+id/createAccountCloseIV"
-        android:layout_width="@dimen/_13sdp"
-        android:layout_height="@dimen/_13sdp"
-        android:layout_marginTop="@dimen/_45sdp"
+    <LinearLayout
+        android:id="@+id/layoutClose"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:layout_marginBottom="@dimen/_14sdp"
-        android:src="@drawable/ic_x" />
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/createAccountCloseIV"
+            android:layout_width="@dimen/_13sdp"
+            android:layout_height="@dimen/_13sdp"
+            android:src="@drawable/ic_x" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,11 +63,13 @@
                     android:id="@+id/firstNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="First Name"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLength="30"
+                    android:maxLines="1"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
@@ -83,11 +93,13 @@
                     android:id="@+id/lastNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Last Name"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLength="30"
+                    android:maxLines="1"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
@@ -270,8 +282,8 @@
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_green">
-                <!--                app:passwordToggleEnabled="true"-->
+                app:hintTextColor="@color/primary_green"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPasswordET"

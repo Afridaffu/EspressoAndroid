@@ -12,7 +12,7 @@
     tools:context=".view.RetrieveEmailActivity">
 
     <ImageView
-        android:id="@+id/imgClose"
+        android:id="@+id/imgREClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_45sdp"
@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="@string/retrieveemailcontent"
                 android:lineSpacingExtra="@dimen/_5sdp"
+                android:text="@string/retrieveemailcontent"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -68,6 +68,7 @@
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
+                app:errorIconDrawable="@null"
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green">
 
@@ -75,11 +76,13 @@
                     android:id="@+id/reFirstNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/firstName"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
+                    android:inputType="textFilter"
                     android:maxLength="30"
+                    android:maxLines="1"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
@@ -99,6 +102,7 @@
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
+                app:errorIconDrawable="@null"
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green">
 
@@ -106,11 +110,13 @@
                     android:id="@+id/reLastNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/lastName"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLength="30"
+                    android:maxLines="1"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
@@ -122,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_44sdp"
                 android:layout_marginTop="@dimen/_188sdp"
-                app:cardBackgroundColor="@color/primary_color"
+                app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="@dimen/_22sdp">
 
                 <TextView
@@ -135,9 +141,10 @@
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.card.MaterialCardView>
-            <androidx.viewpager.widget.ViewPager
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_28sdp"/>
+                android:layout_height="@dimen/_28sdp" />
 
         </LinearLayout>
     </ScrollView>
