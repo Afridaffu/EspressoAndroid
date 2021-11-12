@@ -57,7 +57,7 @@ public class OnboardActivity extends AppCompatActivity {
     ProgressDialog dialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -99,6 +99,7 @@ public class OnboardActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(OnboardActivity.this, AccountTypeActivity.class));
+//                    startActivity(new Intent(OnboardActivity.this, CreatePasswordActivity.class));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

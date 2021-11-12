@@ -21,7 +21,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-
+            testCoverageEnabled true
         }
     }
     flavorDimensions "default"
@@ -70,6 +70,7 @@ android {
             enableSplit = true
         }
     }
+
 }
 
 dependencies {
@@ -99,4 +100,7 @@ dependencies {
 
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 }

@@ -4,13 +4,17 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -33,9 +37,11 @@ public class RetrieveEmailActivity extends AppCompatActivity {
     MaterialCardView nextBtn;
     TextInputEditText firstName, lastName;
     TextInputLayout firstTIL, lastTIL;
-    ImageView imgClose;
+    LinearLayout layoutClose;
     LoginViewModel loginViewModel;
     Dialog dialog;
+    public static RetrieveEmailActivity retrieveEmailActivity;
+    String phoneNumber = "";
 
 
     @Override
@@ -50,14 +56,35 @@ public class RetrieveEmailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            phoneNumberET.setText("");
+            firstName.setText("");
+            lastName.setText("");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void initialization() {
         try {
+            retrieveEmailActivity = this;
             phoneNumberET = findViewById(R.id.rePhoneNumber);
             nextBtn = findViewById(R.id.reCardViewNextBtn);
             firstName = findViewById(R.id.reFirstNameET);
             lastName = findViewById(R.id.reLastNameET);
-            imgClose = findViewById(R.id.imgClose);
+            layoutClose = findViewById(R.id.layoutClose);
+            firstTIL = findViewById(R.id.reFirstNameTIL);
+            lastTIL = findViewById(R.id.reLastNameTIL);
+            phoneNumberET.setFrom("Retrieve");
+            nextBtn.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            phoneNumberET.requestFocus();
             nextBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,12 +98,101 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 }
             });
 
-            imgClose.setOnClickListener(new View.OnClickListener() {
+            layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
                 }
             });
+
+            firstName.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    try {
+                        if (s.length() > 0) {
+                            firstTIL.setErrorEnabled(false);
+                            firstTIL.setError("");
+                            enableButton();
+                        } else if (s.length() == 0) {
+                            firstTIL.setErrorEnabled(true);
+                            firstTIL.setError(" ");
+                            nextBtn.setEnabled(false);
+                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            lastName.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    try {
+                        if (s.length() > 0) {
+                            lastTIL.setErrorEnabled(false);
+                            lastTIL.setError("");
+                            enableButton();
+                        } else if (s.length() == 0) {
+                            lastTIL.setErrorEnabled(true);
+                            lastTIL.setError(" ");
+                            nextBtn.setEnabled(false);
+                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        if (firstName.getText().toString().trim().equals("")) {
+                            firstTIL.setErrorEnabled(true);
+                            firstTIL.setError(" ");
+                            nextBtn.setEnabled(false);
+                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+                    }
+                }
+            });
+
+            lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        if (lastName.getText().toString().trim().equals("")) {
+                            lastTIL.setErrorEnabled(true);
+                            lastTIL.setError(" ");
+                            nextBtn.setEnabled(false);
+                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+                    }
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -90,11 +206,11 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                     if (!retrieveEmailResponse.getStatus().toLowerCase().equals("error")) {
                         SMSResend resend = new SMSResend();
                         resend.setCountryCode(Utils.getStrCCode());
-                        resend.setPhoneNumber(phoneNumberET.getText().toString());
+                        resend.setPhoneNumber(phoneNumber);
                         loginViewModel.smsotpresend(resend);
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "MOBILE");
-                        i.putExtra("MOBILE", phoneNumberET.getText().toString());
+                        i.putExtra("MOBILE", phoneNumber);
                         i.putExtra("MASK_MOBILE", phoneNumberET.getText().toString());
                         i.putExtra("screen", "retEmail");
                         startActivity(i);
@@ -118,11 +234,14 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-                    if (!apiError.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this);
-                    } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this);
-                    }
+//                    if (apiError.getError().getErrorCode().equals("111069")) {
+//                        displayNoAccount();
+//                    } else if (!apiError.getError().getErrorDescription().equals("")) {
+//                        Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this);
+//                    } else {
+//                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this);
+//                    }
+                    displayNoAccount();
                 }
             }
         });
@@ -152,37 +271,6 @@ public class RetrieveEmailActivity extends AppCompatActivity {
         return value;
     }
 
-    public void startTimer(Dialog dialog) {
-        try {
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        synchronized (this) {
-                            wait(5000);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
-                                    i.putExtra("OTP_TYPE", "MOBILE");
-                                    i.putExtra("MOBILE", phoneNumberET.getText());
-                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                    i.putExtra("screen", "retEmail");
-                                    startActivity(i);
-                                }
-                            });
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }.start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void retrieveEmail() {
         try {
             dialog = new Dialog(RetrieveEmailActivity.this);
@@ -190,13 +278,47 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawableResource(R.color.white);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.show();
-            String phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+            phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
             RetrieveEmailRequest request = new RetrieveEmailRequest();
             request.setFirstName(firstName.getText().toString().trim());
             request.setLastName(lastName.getText().toString().trim());
             request.setCountryCode(Utils.getStrCCode());
             request.setPhoneNumber(phoneNumber.trim());
             loginViewModel.retrieveEmail(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void displayNoAccount() {
+        try {
+            dialog = new Dialog(RetrieveEmailActivity.this);
+            dialog.setContentView(R.layout.retrieve_email_tryagain_layout);
+            dialog.getWindow().setBackgroundDrawableResource(R.color.white);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.show();
+            CardView reTryAgainBtn = dialog.findViewById(R.id.reTryAgainBtn);
+            reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void enableButton() {
+        try {
+            if (!phoneNumberET.getText().toString().trim().equals("") && phoneNumberET.getText().toString().length() == 14
+                    && !firstName.getText().toString().trim().equals("") && !lastName.getText().toString().trim().equals("")) {
+                nextBtn.setEnabled(true);
+                nextBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+            } else {
+                nextBtn.setEnabled(false);
+                nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

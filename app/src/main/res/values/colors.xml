@@ -5,7 +5,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_green">#00A6A2</color>
     <color name="text_color">#151515</color>
@@ -26,6 +26,6 @@
     <color name="viewcolor">#e8e8e8</color>
     <color name="toast_bg">#7cabaa</color>
     <color name="toast_icon">#ebffd0</color>
-    <color name="pinkish_grey">#c5c5c5</color>
+    <color name="default_red">#FFDD2C00</color>
 
 </resources>

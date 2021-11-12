@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".view.PINActivity"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context=".view.PINActivity">
 
     <LinearLayout
         android:id="@+id/choosePINLL"
@@ -48,6 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginRight="@dimen/_3sdp"
                 android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
@@ -63,6 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_3sdp"
                 android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
@@ -70,7 +73,7 @@
                     android:id="@+id/chooseCircleTwo"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp"  />
+                    android:layout_margin="@dimen/_6sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -78,6 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_3sdp"
                 android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
@@ -85,7 +90,7 @@
                     android:id="@+id/chooseCircleThree"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp"  />
+                    android:layout_margin="@dimen/_6sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -93,6 +98,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_3sdp"
                 android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
@@ -100,7 +107,7 @@
                     android:id="@+id/chooseCircleFour"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp"  />
+                    android:layout_margin="@dimen/_6sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,6 +115,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_3sdp"
                 android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
@@ -115,7 +124,7 @@
                     android:id="@+id/chooseCircleFive"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp"  />
+                    android:layout_margin="@dimen/_6sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,6 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_3sdp"
                 android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
@@ -130,7 +140,7 @@
                     android:id="@+id/chooseCircleSix"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp"  />
+                    android:layout_margin="@dimen/_6sdp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -140,8 +150,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_24sdp"
-            android:text="Forgot PIN"
             android:fontFamily="@font/opensans_semibold"
+            android:text="Forgot PIN"
             android:textColor="@color/primary_green"
             android:textSize="@dimen/_12ssp"
             android:visibility="visible" />

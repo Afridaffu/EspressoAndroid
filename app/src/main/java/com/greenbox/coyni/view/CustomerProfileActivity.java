@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
     TextView customerNameTV;
     MyApplication objMyApplication;
     CardView cvLogout;
+    LinearLayout cpUserDetailsLL;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgQRCode = findViewById(R.id.imgQRCode);
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
+            cpUserDetailsLL = findViewById(R.id.cpUserDetailsLL);
+
             objMyApplication = (MyApplication) getApplicationContext();
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,6 +82,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
             });
 
             customerNameTV.setText(objMyApplication.getStrUserName());
+
+            cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

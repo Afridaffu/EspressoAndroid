@@ -13,6 +13,9 @@ import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
@@ -92,5 +95,12 @@ public interface ApiService {
 
     @GET("api/v2/profile/me")
     Call<Profile> meProfile();
+
+    @POST("api/v2/user/update-email/otp/send")
+    Call<UpdateEmailResponse> updateEmailSendOTP(@Body UpdateEmailRequest request);
+
+    @POST("api/v2/user/update-email/otp-validate")
+    Call<UpdateEmailResponse> updateEmailValidateOTP(@Body UpdateEmailValidateRequest request);
+
 
 }

@@ -3,6 +3,8 @@ package com.greenbox.coyni.utils;
 import android.app.Application;
 
 import com.greenbox.coyni.model.cards.CardsDataItem;
+import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 
 import java.util.ArrayList;
@@ -13,7 +15,8 @@ public class MyApplication extends Application {
     List<CardsDataItem> listCards = new ArrayList<>();
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
     String strUserName = "", strRetrEmail = "";
-
+    Profile myProfile = new Profile();
+    UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
 
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
@@ -274,5 +277,19 @@ public class MyApplication extends Application {
         this.fromWhichFragment = fromWhichFragment;
     }
 
+    public Profile getMyProfile() {
+        return myProfile;
+    }
 
+    public void setMyProfile(Profile myProfile) {
+        this.myProfile = myProfile;
+    }
+
+    public UpdateEmailResponse getUpdateEmailResponse() {
+        return updateEmailResponse;
+    }
+
+    public void setUpdateEmailResponse(UpdateEmailResponse updateEmailResponse) {
+        this.updateEmailResponse = updateEmailResponse;
+    }
 }

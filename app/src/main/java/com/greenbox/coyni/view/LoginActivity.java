@@ -4,16 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.fingerprint.FingerprintManager;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -30,6 +32,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -37,7 +40,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlEmail, etlPassword;
     TextInputEditText etEmail, etPassword;
     TextView faceidNotAvail;
@@ -50,17 +53,18 @@ public class LoginActivity extends AppCompatActivity {
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
     Boolean isFaceLock = false, isThumb = false, isTouchId = false;
-    ImageView imgClose;
+    ImageView loginBGIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
+    LinearLayout layoutClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_login);
             initialization();
             initObserver();
@@ -71,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            setKeyboardVisibilityListener(this);
             etlPassword = findViewById(R.id.etlPassword);
             etlEmail = findViewById(R.id.etlEmail);
             etEmail = findViewById(R.id.etEmail);
@@ -82,8 +87,9 @@ public class LoginActivity extends AppCompatActivity {
             tvPwdError = findViewById(R.id.tvPwdError);
             forgotpwd = findViewById(R.id.forgotpwd);
             tvRetEmail = findViewById(R.id.tvRetEmail);
-            imgClose = findViewById(R.id.imgClose);
+            layoutClose = findViewById(R.id.layoutClose);
             chkRemember = findViewById(R.id.chkRemember);
+            loginBGIV = findViewById(R.id.loginBGIV);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -103,12 +109,15 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-                        if (emailValidation() && passwordValidation()) {
-                            cvNext.setEnabled(true);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        } else {
-                            cvNext.setEnabled(false);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        if (emailValidation() && passwordValidation()) {
+//                            cvNext.setEnabled(true);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//                        } else {
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+                        if (!hasFocus && etEmail.getText().toString().trim().equals("")) {
+                            emailValidation();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -120,12 +129,15 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-                        if (emailValidation() && passwordValidation()) {
-                            cvNext.setEnabled(true);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        } else {
-                            cvNext.setEnabled(false);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        if (emailValidation() && passwordValidation()) {
+//                            cvNext.setEnabled(true);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//                        } else {
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+                        if (!hasFocus && etPassword.getText().toString().trim().equals("")) {
+                            passwordValidation();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -249,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-            imgClose.setOnClickListener(new View.OnClickListener() {
+            layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -383,19 +395,17 @@ public class LoginActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (login != null) {
                         if (!login.getStatus().toLowerCase().equals("error")) {
+                            Utils.setStrAuth(login.getData().getJwtToken());
                             if (login.getData().getPasswordExpired()) {
-                                //showPwdExpiredPopup();
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
                                 i.putExtra("TYPE", "ENTER");
                                 startActivity(i);
                             } else {
-                                Utils.setStrAuth(login.getData().getJwtToken());
                                 if (login.getData().getCoyniPin()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
                                     i.putExtra("screen", "login");
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 } else {
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
@@ -404,7 +414,6 @@ public class LoginActivity extends AppCompatActivity {
                                     i.putExtra("MOBILE", login.getData().getPhoneNumber());
                                     i.putExtra("EMAIL", login.getData().getEmail());
                                     i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
                                 }
                             }
@@ -557,4 +566,39 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            loginBGIV.setAlpha(0.2f);
+        } else {
+            loginBGIV.setAlpha(1.0f);
+        }
+    }
 }

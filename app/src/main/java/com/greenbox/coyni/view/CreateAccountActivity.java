@@ -41,6 +41,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.EmojiExcludeFilter;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
@@ -57,14 +58,13 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity implements TextWatcher {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
     TextInputLayout firstNameTIL, emailTIL;
     public LinearLayout emailErrorLL, phoneErrorLL;
     TextView passwordInfoTV, privacyTV, tosTV;
-    ImageView createAccountCloseIV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -74,6 +74,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private LinearLayout stregnthViewLL;
     private View stregnthOne, stregnthTwo, stregnthThree;
     private Pattern strong, medium;
+    LinearLayout layoutClose;
 
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
@@ -112,10 +113,56 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (after < count) {
+//            isDel = true;
+        }
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s == passwordET.getEditableText()) {
+            try {
+                if (s.length() > 0 && s.toString().trim().length() == 0) {
+                    passwordET.removeTextChangedListener(CreateAccountActivity.this);
+                    passwordET.setText("");
+                    passwordET.addTextChangedListener(CreateAccountActivity.this);
+                } else if (s.length() > 0 && s.toString().contains(" ")) {
+                    passwordET.removeTextChangedListener(CreateAccountActivity.this);
+                    passwordET.setText(s.toString().trim());
+                    passwordET.setSelection(s.toString().trim().length());
+                    passwordET.addTextChangedListener(CreateAccountActivity.this);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (s == confirmPasswordET.getEditableText()) {
+            try {
+                if (s.length() > 0 && s.toString().trim().length() == 0) {
+                    confirmPasswordET.removeTextChangedListener(CreateAccountActivity.this);
+                    confirmPasswordET.setText("");
+                    confirmPasswordET.addTextChangedListener(CreateAccountActivity.this);
+                } else if (s.length() > 0 && s.toString().contains(" ")) {
+                    confirmPasswordET.removeTextChangedListener(CreateAccountActivity.this);
+                    confirmPasswordET.setText(s.toString().trim());
+                    confirmPasswordET.setSelection(s.toString().trim().length());
+                    confirmPasswordET.addTextChangedListener(CreateAccountActivity.this);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     public void initFields() {
         try {
             createAccountActivity = this;
-
             errorState = new int[][]{new int[]{android.R.attr.state_enabled}};
             errorColor = new int[]{getResources().getColor(R.color.error_red)};
             errorColorState = new ColorStateList(errorState, errorColor);
@@ -131,11 +178,12 @@ public class CreateAccountActivity extends AppCompatActivity {
             privacyTV = findViewById(R.id.privacyTV);
             tosTV = findViewById(R.id.tosTV);
             nextCV = findViewById(R.id.nextCV);
-            createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
+            layoutClose = findViewById(R.id.layoutClose);
 
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
             emailTIL = findViewById(R.id.emailTIL);
+            firstNameET.setMaxEms(30);
 
             lastNameET = findViewById(R.id.lastNameET);
             emailET = findViewById(R.id.emailET);
@@ -153,12 +201,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
-
-            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
-            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+//            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+//            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             textWatchers();
-
-
+            firstNameET.requestFocus();
+            passwordET.addTextChangedListener(this);
+            confirmPasswordET.addTextChangedListener(this);
             tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             privacyTV.setPaintFlags(privacyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -219,8 +267,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             });
 
-            createAccountCloseIV.setOnClickListener(view -> {
-                finish();
+            layoutClose.setOnClickListener(view -> {
+                onBackPressed();
             });
 
         } catch (Exception e) {
@@ -238,19 +286,19 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (custRegisterResponse != null) {
                     try {
                         Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                        if (!custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()) {
+                        if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "MOBILE");
                             i.putExtra("MOBILE", phoneNumber);
                             i.putExtra("MASK_MOBILE", phoneNumberET.getText());
                             i.putExtra("EMAIL", emailET.getText().toString().trim());
-                        } else if (custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()) {
+                        } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "EMAIL");
                             i.putExtra("MOBILE", phoneNumber);
                             i.putExtra("MASK_MOBILE", phoneNumberET.getText());
                             i.putExtra("EMAIL", emailET.getText().toString().trim());
-                        } else if (custRegisterResponse.getData().isSms_verified() && custRegisterResponse.getData().isEmail_verified()) {
+                        } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "SECURE");
                             i.putExtra("MOBILE", phoneNumber);
@@ -364,7 +412,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHintTextColor(colorState);
                     }
-                    if (isValidEmail(charSequence.toString().trim())) {
+                    if (Utils.isValidEmail(charSequence.toString().trim())) {
                         isEmail = true;
                     } else {
                         isEmail = false;
@@ -508,9 +556,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
-    public static boolean isValidEmail(String target) {
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
-    }
+
 
     public static InputFilter acceptonlyAlphabetValuesnotNumbersMethod() {
         return new InputFilter() {
@@ -604,4 +650,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        }
 //        return encoded;
 //    }
+
+
 }
