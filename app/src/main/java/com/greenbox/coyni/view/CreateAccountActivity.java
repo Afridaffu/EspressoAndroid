@@ -411,7 +411,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHintTextColor(colorState);
                     }
-                    if (isValidEmail(charSequence.toString().trim())) {
+                    if (Utils.isValidEmail(charSequence.toString().trim())) {
                         isEmail = true;
                     } else {
                         isEmail = false;
@@ -555,9 +555,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
     }
 
-    public static boolean isValidEmail(String target) {
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
-    }
+
 
     public static InputFilter acceptonlyAlphabetValuesnotNumbersMethod() {
         return new InputFilter() {

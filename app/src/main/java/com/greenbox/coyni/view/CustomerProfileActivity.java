@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     CardView cvLogout;
     LinearLayout cpUserDetailsLL;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
                 }
             });
         } catch (Exception ex) {

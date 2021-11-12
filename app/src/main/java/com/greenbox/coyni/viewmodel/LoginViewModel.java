@@ -19,6 +19,8 @@ import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
@@ -62,6 +64,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateEmailResponse> updateEmailValidateResponse = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -555,6 +558,42 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public MutableLiveData<UpdateEmailResponse> getUpdateEmailValidateResponse() {
+        return updateEmailValidateResponse;
+    }
+
+    public void updateEmailotpValidate(UpdateEmailValidateRequest updateEmailValidateRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdateEmailResponse> mCall = apiService.updateEmailValidateOTP(updateEmailValidateRequest);
+            mCall.enqueue(new Callback<UpdateEmailResponse>() {
+                @Override
+                public void onResponse(Call<UpdateEmailResponse> call, Response<UpdateEmailResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdateEmailResponse obj = response.body();
+                        updateEmailValidateResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<EmailValidateResponse>() {
+                        }.getType();
+                        UpdateEmailResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updateEmailValidateResponse.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdateEmailResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

@@ -17,6 +17,8 @@ import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -27,122 +29,45 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CustomerProfileViewModel extends AndroidViewModel {
-    private MutableLiveData<ValidateResponse> validateResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateEmailResponse> updateEmailSendOTPResponse = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<PINRegisterResponse> registerPINResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<BiometricResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<PINRegisterResponse> getRegisterPINResponseMutableLiveData() {
-        return registerPINResponseMutableLiveData;
-    }
-
-    public MutableLiveData<BiometricResponse> getBiometricResponseMutableLiveData() {
-        return biometricResponseMutableLiveData;
-    }
 
     public CustomerProfileViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public MutableLiveData<ValidateResponse> getValidateResponseMutableLiveData() {
-        return validateResponseMutableLiveData;
+    public MutableLiveData<UpdateEmailResponse> getUpdateEmailSendOTPResponse() {
+        return updateEmailSendOTPResponse;
     }
 
     public MutableLiveData<APIError> getApiErrorMutableLiveData() {
         return apiErrorMutableLiveData;
     }
 
-    public void validateCoyniPin(ValidateRequest request) {
+    public void updateEmailSendOTP(UpdateEmailRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ValidateResponse> mCall = apiService.validateCoyniPin(request);
-            mCall.enqueue(new Callback<ValidateResponse>() {
+            Call<UpdateEmailResponse> mCall = apiService.updateEmailSendOTP(request);
+            mCall.enqueue(new Callback<UpdateEmailResponse>() {
                 @Override
-                public void onResponse(Call<ValidateResponse> call, Response<ValidateResponse> response) {
+                public void onResponse(Call<UpdateEmailResponse> call, Response<UpdateEmailResponse> response) {
                     if (response.isSuccessful()) {
-                        ValidateResponse obj = response.body();
-                        validateResponseMutableLiveData.setValue(obj);
+                        UpdateEmailResponse obj = response.body();
+                        updateEmailSendOTPResponse.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<ValidateResponse>() {
+                        Type type = new TypeToken<UpdateEmailResponse>() {
                         }.getType();
-                        ValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        UpdateEmailResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
-                            validateResponseMutableLiveData.setValue(errorResponse);
+                            updateEmailSendOTPResponse.setValue(errorResponse);
                         }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ValidateResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void registerCoyniPin(RegisterRequest request) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<PINRegisterResponse> mCall = apiService.coyniPINRegister(request);
-            mCall.enqueue(new Callback<PINRegisterResponse>() {
-                @Override
-                public void onResponse(Call<PINRegisterResponse> call, Response<PINRegisterResponse> response) {
-                    if (response.isSuccessful()) {
-                        PINRegisterResponse obj = response.body();
-                        registerPINResponseMutableLiveData.setValue(obj);
-                        Log.e("PIN Success", new Gson().toJson(obj));
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<PINRegisterResponse>() {
-                        }.getType();
-                        PINRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            registerPINResponseMutableLiveData.setValue(errorResponse);
-                            Log.e("PIN Error", new Gson().toJson(errorResponse));
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<PINRegisterResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void saveBiometric(BiometricRequest request) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BiometricResponse> mCall = apiService.saveBiometric(request);
-            mCall.enqueue(new Callback<BiometricResponse>() {
-                @Override
-                public void onResponse(Call<BiometricResponse> call, Response<BiometricResponse> response) {
-                    if (response.isSuccessful()) {
-                        BiometricResponse obj = response.body();
-                        biometricResponseMutableLiveData.setValue(obj);
-                        Log.e("Bio Success", new Gson().toJson(obj));
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<BiometricResponse>() {
-                        }.getType();
-                        BiometricResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            biometricResponseMutableLiveData.setValue(errorResponse);
-                            Log.e("Biometric Error", new Gson().toJson(errorResponse));
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<BiometricResponse> call, Throwable t) {
+                public void onFailure(Call<UpdateEmailResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }
