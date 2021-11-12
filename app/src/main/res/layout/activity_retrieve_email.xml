@@ -86,12 +86,13 @@
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/firstName"
-                    android:imeOptions="actionDone"
-                    android:inputType="textFilter"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
                     android:maxLength="30"
                     android:maxLines="1"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -121,11 +122,12 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/lastName"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:maxLength="30"
                     android:maxLines="1"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>

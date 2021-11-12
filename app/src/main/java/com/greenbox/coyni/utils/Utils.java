@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.OnboardActivity;
+import com.greenbox.coyni.view.PINActivity;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -325,7 +326,7 @@ public class Utils {
         return value;
     }
 
-    public static void showCustomToast(final Context context, String text, int imageID) {
+    public static void showCustomToast(final Context context, String text, int imageID, String strScreen) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -343,16 +344,19 @@ public class Utils {
         wlp.gravity = Gravity.TOP;
         wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         window.setAttributes(wlp);
-//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         TextView textTV = dialog.findViewById(R.id.toastTV);
         ImageView imageIV = dialog.findViewById(R.id.toastIV);
         textTV.setText(text);
         imageIV.setImageResource(imageID);
 
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
-
-        new OnboardActivity().toastTimer(dialog);
+        if (strScreen.equals("pin")) {
+            new PINActivity().toastTimer(dialog);
+        } else {
+            new OnboardActivity().toastTimer(dialog);
+        }
 
     }
 

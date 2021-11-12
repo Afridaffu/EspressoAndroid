@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/topradius"
     android:orientation="vertical"
     android:paddingLeft="@dimen/_21sdp"
     android:paddingRight="@dimen/_21sdp"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_44sdp"
+        android:layout_marginTop="@dimen/_65sdp"
         android:fontFamily="@font/opensans_bold"
         android:text="@string/epincorrecttext"
         android:textColor="@color/black"
@@ -32,7 +33,7 @@
         android:id="@+id/cvEmailOK"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_44sdp"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="@dimen/_20sdp"
         app:cardBackgroundColor="@color/primary_green"
         app:cardCornerRadius="@dimen/_22sdp">
 

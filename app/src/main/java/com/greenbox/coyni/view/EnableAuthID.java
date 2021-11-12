@@ -199,14 +199,14 @@ public class EnableAuthID extends AppCompatActivity {
                     if (enableType.equals("FACE")) {
                         saveFace("true");
                         saveThumb("false");
-                        Utils.showCustomToast(EnableAuthID.this, "Face ID has been turned on", R.drawable.ic_faceid);
+                        Utils.showCustomToast(EnableAuthID.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
                         successRL.setVisibility(View.VISIBLE);
                     } else if (enableType.equals("TOUCH")) {
                         saveFace("false");
                         saveThumb("true");
-                        Utils.showCustomToast(EnableAuthID.this, "Touch ID has been turned on", R.drawable.ic_touch_id);
+                        Utils.showCustomToast(EnableAuthID.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
                         successRL.setVisibility(View.VISIBLE);
