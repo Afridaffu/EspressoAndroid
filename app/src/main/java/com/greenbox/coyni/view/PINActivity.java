@@ -180,7 +180,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(d);
                                 break;
-                            case "EditEmail":
+                            case "UserDetails":
                                 Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
                                 startActivity(ee);
                                 finish();
@@ -303,7 +303,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
+                        getIntent().getStringExtra("screen").equals("UserDetails"))) {
                     onBackPressed();
                 } else {
                     if (TYPE.equals("CHOOSE")) {

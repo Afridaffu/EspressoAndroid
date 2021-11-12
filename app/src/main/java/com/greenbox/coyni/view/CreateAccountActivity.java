@@ -61,8 +61,9 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
-    TextInputLayout firstNameTIL, emailTIL;
-    public LinearLayout emailErrorLL, phoneErrorLL;
+    TextInputLayout firstNameTIL,lastNameTIL, emailTIL,passwordTIL,confPasswordTIL;
+    public LinearLayout emailErrorLL, phoneErrorLL,firstNameErrorLL,lastNameErrorLL,passwordErrorLL,confPassErrorLL;
+    public TextView emailErrorTV, phoneErrorTV,firstNameErrorTV,lastNameErrorTV,passwordErrorTV,confPassErrorTV;
     TextView passwordInfoTV, privacyTV, tosTV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
@@ -101,10 +102,10 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_create_account);
-
+            Utils.statusBar(this,"#FFFFFF" );
             initFields();
             intiObserver();
         } catch (Exception e) {
@@ -162,7 +163,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
     public void initFields() {
         try {
             createAccountActivity = this;
-            errorState = new int[][]{new int[]{android.R.attr.state_enabled}};
+            errorState = new int[][]{new int[]{android.R.attr.state_focused}};
             errorColor = new int[]{getResources().getColor(R.color.error_red)};
             errorColorState = new ColorStateList(errorState, errorColor);
 
@@ -173,6 +174,17 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             emailErrorLL = findViewById(R.id.emailErrorLL);
             phoneErrorLL = findViewById(R.id.phoneErrorLL);
+            firstNameErrorLL = findViewById(R.id.firstNameErrorLL);
+            lastNameErrorLL = findViewById(R.id.lastNameErrorLL);
+            passwordErrorLL = findViewById(R.id.passwordErrorLL);
+            confPassErrorLL = findViewById(R.id.confPassErrorLL);
+            firstNameErrorTV = findViewById(R.id.firstNameErrorTV);
+            lastNameErrorTV = findViewById(R.id.lastNameErrorTV);
+            emailErrorTV = findViewById(R.id.emailErrorTV);
+            phoneErrorTV = findViewById(R.id.phoneErrorTV);
+            passwordErrorTV = findViewById(R.id.passwordErrorTV);
+            confPassErrorTV = findViewById(R.id.confPassErrorTV);
+
             passwordInfoTV = findViewById(R.id.passwordInfoTV);
             privacyTV = findViewById(R.id.privacyTV);
             tosTV = findViewById(R.id.tosTV);
@@ -181,7 +193,10 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
+            lastNameTIL = findViewById(R.id.lastNameTIL);
             emailTIL = findViewById(R.id.emailTIL);
+            passwordTIL = findViewById(R.id.passwordTIL);
+            confPasswordTIL = findViewById(R.id.confPasswordTIL);
             firstNameET.setMaxEms(30);
 
             lastNameET = findViewById(R.id.lastNameET);
@@ -203,6 +218,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
             firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             textWatchers();
+            focusWatchers();
             firstNameET.requestFocus();
             passwordET.addTextChangedListener(this);
             confirmPasswordET.addTextChangedListener(this);
@@ -363,6 +379,9 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.toString().trim().length() > 0) {
                         isFirstName = true;
+                        firstNameErrorLL.setVisibility(GONE);
+                        firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        firstNameTIL.setHintTextColor(colorState);
                     } else {
                         isFirstName = false;
                     }
@@ -385,6 +404,9 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.toString().trim().length() > 0) {
                         isLastName = true;
+                        lastNameErrorLL.setVisibility(GONE);
+                        lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        lastNameTIL.setHintTextColor(colorState);
                     } else {
                         isLastName = false;
                     }
@@ -461,6 +483,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
                     if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
                         isPassword = true;
+
                     } else {
                         isPassword = false;
                     }
@@ -498,6 +521,56 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
                 }
             });
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void focusWatchers() {
+
+        try {
+            firstNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(b){
+
+                        Log.e("focus","1");
+                    }else{
+                        Log.e("focus","2");
+                        if(firstNameET.getText().toString().trim().length() > 0 ){
+                            Log.e("focus","3");
+                            firstNameErrorLL.setVisibility(GONE);
+//                            firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+//                            firstNameTIL.setHintTextColor(errorColorState);
+                        }else{
+                            Log.e("focus","4");
+                            firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                            firstNameTIL.setHintTextColor(errorColorState);
+                            firstNameErrorLL.setVisibility(VISIBLE);
+                            firstNameErrorTV.setText("Field Required");
+                        }
+                    }
+                }
+            });
+
+            lastNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(b){
+
+                    }else{
+                        if(lastNameET.getText().toString().trim().length() > 0 ){
+                            lastNameErrorLL.setVisibility(GONE);
+                        }else{
+                            lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                            lastNameTIL.setHintTextColor(errorColorState);
+                            lastNameErrorLL.setVisibility(VISIBLE);
+                            lastNameErrorTV.setText("Field Required");
+                        }
+                    }
+                }
+            });
+
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -512,17 +585,33 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
             emailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if (isEmailError) {
-                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
-                        emailTIL.setHintTextColor(errorColorState);
-                    } else {
-                        if (b) {
-                            emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            emailTIL.setHintTextColor(colorState);
+                    if(b){
+
+                    }else{
+                        if(emailET.getText().toString().trim().length() > 0 ){
+                            emailErrorLL.setVisibility(GONE);
+                        }else if(emailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(emailET.getText().toString().trim())){
+                            emailErrorLL.setVisibility(VISIBLE);
+                            emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                            emailTIL.setHintTextColor(errorColorState);
+                            emailErrorTV.setText("Invalid Email");
+                        }else{
+                            emailErrorLL.setVisibility(VISIBLE);
+                            emailErrorTV.setText("Field Required");
                         }
                     }
+//                    if (isEmailError) {
+//                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+//                        emailTIL.setHintTextColor(errorColorState);
+//                    } else {
+//                        if (b) {
+//                            emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            emailTIL.setHintTextColor(colorState);
+//                        }
+//                    }
                 }
             });
+
 
         } catch (Exception e) {
             e.printStackTrace();

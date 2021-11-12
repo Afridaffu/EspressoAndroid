@@ -63,7 +63,7 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "", oldEmail = "", newEmail = "",isOldEmail;
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "", oldEmail = "", newEmail = "",isOldEmail ="";
     LinearLayout layoutEntry, layoutFailure;
     MaterialCardView tryAgainCV;
     ProgressDialog dialog;
@@ -173,6 +173,7 @@ public class OTPValidation extends AppCompatActivity {
                         }else{
                             headerTV.setText("Please Verify New Email");
                             subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + newEmail);
+                            loginViewModel.emailotpresend(newEmail);
                         }
                         break;
                 }
@@ -195,7 +196,7 @@ public class OTPValidation extends AppCompatActivity {
                                 if(isOldEmail.equals("true")){
                                     loginViewModel.emailotpresend(oldEmail);
                                 }else{
-                                    loginViewModel.emailotpresend(oldEmail);
+                                    loginViewModel.emailotpresend(newEmail);
                                 }
                             }else{
                                 loginViewModel.emailotpresend(EMAIL.trim());
@@ -519,6 +520,7 @@ public class OTPValidation extends AppCompatActivity {
                 dialog.dismiss();
                 if (emailResponse != null) {
                     if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
+//                        if(!strScreen.equals("EditEmail"))
                         resendTV.setVisibility(View.GONE);
                         newCodeTV.setVisibility(View.VISIBLE);
                         resendCounter++;
@@ -583,7 +585,7 @@ public class OTPValidation extends AppCompatActivity {
                             resendCounter = 0;
                             startActivity(new Intent(OTPValidation.this, OTPValidation.class)
                                     .putExtra("screen", "EditEmail")
-                                    .putExtra("IS_OLD_EMAIL","true")
+                                    .putExtra("IS_OLD_EMAIL","false")
                                     .putExtra("OLD_EMAIL", oldEmail)
                                     .putExtra("NEW_EMAIL", newEmail));
                             finish();

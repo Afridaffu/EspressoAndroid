@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,7 +20,8 @@
         android:layout_marginTop="@dimen/_40sdp"
         android:layout_marginBottom="@dimen/_14sdp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
 
         <ImageView
             android:id="@+id/createAccountCloseIV"
@@ -31,8 +32,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/layoutClose">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,6 +80,30 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/firstNameErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/firstNameErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -87,7 +113,8 @@
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary_green"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_green">
+                app:hintTextColor="@color/primary_green"
+                android:id="@+id/lastNameTIL">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/lastNameET"
@@ -107,6 +134,30 @@
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/lastNameErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/lastNameErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailTIL"
@@ -153,6 +204,7 @@
                     android:src="@drawable/ic_erro" />
 
                 <TextView
+                    android:id="@+id/emailErrorTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -183,6 +235,7 @@
                     android:src="@drawable/ic_erro" />
 
                 <TextView
+                    android:id="@+id/phoneErrorTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -206,7 +259,8 @@
                     app:boxStrokeColor="@color/primary_green"
                     app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green"
-                    app:passwordToggleEnabled="true">
+                    app:passwordToggleEnabled="true"
+                    android:id="@+id/passwordTIL">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passwordET"
@@ -263,6 +317,31 @@
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:id="@+id/passwordErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/passwordErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="User already exists. Try a new phone number or log in."
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/passwordInfoTV"
                 android:layout_width="match_parent"
@@ -283,7 +362,8 @@
                 app:boxStrokeColor="@color/primary_green"
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                android:id="@+id/confPasswordTIL">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confirmPasswordET"
@@ -302,6 +382,29 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/confPassErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/confPassErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -369,4 +472,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>
