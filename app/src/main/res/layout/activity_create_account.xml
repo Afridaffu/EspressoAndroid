@@ -9,6 +9,7 @@
     android:paddingLeft="22dp"
     android:paddingTop="22dp"
     android:paddingRight="22dp"
+    android:fillViewport="true"
     android:screenReaderFocusable="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.CreateAccountActivity">
@@ -61,7 +62,7 @@
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.greenbox.coyni.utils.CutCopyPasteEditText
                     android:id="@+id/firstNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,14 +70,16 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="First Name"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="text|textNoSuggestions"
                     android:maxLength="30"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12ssp"
+                    android:textIsSelectable="false"
+                    android:longClickable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -406,49 +409,16 @@
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="By clicking next, you agree to "
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
-
-                <TextView
-                    android:id="@+id/tosTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="Terms of Service "
-                    android:textColor="@color/primary_color"
-                    android:textSize="@dimen/_11ssp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="&amp; "
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
-
-
-            </LinearLayout>
 
             <TextView
-                android:id="@+id/privacyTV"
+                android:id="@+id/spannableTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Privacy Policy"
-                android:textColor="@color/primary_color"
-                android:textSize="@dimen/_11ssp" />
-
+                android:text="@string/spannable_text"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp"
+                android:layout_marginTop="@dimen/_14sdp"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/nextCV"

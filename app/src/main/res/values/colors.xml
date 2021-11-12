@@ -27,5 +27,6 @@
     <color name="viewcolor">#e8e8e8</color>
     <color name="toast_bg">#7cabaa</color>
     <color name="toast_icon">#ebffd0</color>
+    <color name="default_red">#FFDD2C00</color>
 
 </resources>

@@ -17,7 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:src="@drawable/bg_onboard_three"
-            android:layout_marginTop="-40dp"/>
+            android:adjustViewBounds="true"
+            android:layout_above="@+id/fragThreeBottomLL"
+            android:scaleType="fitXY"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +27,6 @@
             android:orientation="vertical"
             android:padding="21dp"
             android:id="@+id/fragThreeBottomLL"
-            android:layout_below="@+id/topIV"
             android:layout_marginTop="12dp"
             android:layout_alignParentBottom="true">
 

@@ -16,10 +16,16 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
@@ -28,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -41,6 +48,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.CutCopyPasteEditText;
 import com.greenbox.coyni.utils.EmojiExcludeFilter;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
@@ -61,11 +69,12 @@ import javax.crypto.Cipher;
 public class CreateAccountActivity extends AppCompatActivity implements TextWatcher {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
-    TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
+    CutCopyPasteEditText firstNameET;
+    TextInputEditText  lastNameET, emailET, passwordET, confirmPasswordET;
     TextInputLayout firstNameTIL,lastNameTIL, emailTIL,passwordTIL,confPasswordTIL;
     public LinearLayout emailErrorLL, phoneErrorLL,firstNameErrorLL,lastNameErrorLL,passwordErrorLL,confPassErrorLL;
     public TextView emailErrorTV, phoneErrorTV,firstNameErrorTV,lastNameErrorTV,passwordErrorTV,confPassErrorTV;
-    TextView passwordInfoTV, privacyTV, tosTV;
+    TextView passwordInfoTV,spannableText;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -106,7 +115,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 //            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
 //                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_create_account);
-            Utils.statusBar(this,"#FFFFFF" );
+//            Utils.statusBar(this,"#FFFFFF" );
             initFields();
             intiObserver();
         } catch (Exception e) {
@@ -187,8 +196,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
             confPassErrorTV = findViewById(R.id.confPassErrorTV);
 
             passwordInfoTV = findViewById(R.id.passwordInfoTV);
-            privacyTV = findViewById(R.id.privacyTV);
-            tosTV = findViewById(R.id.tosTV);
+            spannableText = findViewById(R.id.spannableTV);
             nextCV = findViewById(R.id.nextCV);
             layoutClose = findViewById(R.id.layoutClose);
 
@@ -216,45 +224,16 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
-//            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
-//            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+            firstNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             textWatchers();
             focusWatchers();
             firstNameET.requestFocus();
             passwordET.addTextChangedListener(this);
             confirmPasswordET.addTextChangedListener(this);
-            tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            privacyTV.setPaintFlags(privacyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-            tosTV.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-                try {
-                    startActivity(browserIntent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-
-            privacyTV.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
-                try {
-                    startActivity(browserIntent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
+            setSpannableText();
 
             nextCV.setOnClickListener(view -> {
                 if (isNextEnabled) {
@@ -378,7 +357,7 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
                         isFirstName = true;
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -395,6 +374,23 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
                 }
             });
 
+            firstNameET.setOnCutCopyPasteListener(new CutCopyPasteEditText.OnCutCopyPasteListener() {
+                @Override
+                public void onCut() {
+                    // Do your onCut reactions
+                }
+
+                @Override
+                public void onCopy() {
+                    // Do your onCopy reactions
+                }
+
+                @Override
+                public void onPaste() {
+                    // Do your onPaste reactions
+                    Log.e("paste","paste");
+                }
+            });
             lastNameET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -741,4 +737,63 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 //    }
 
 
+    public void setSpannableText(){
+
+        SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & Privacy Policy");
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Log.e("Click","click");
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+                try {
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+
+        ClickableSpan clickableSpan2 = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Log.e("Click","click");
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
+                try {
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+        ss.setSpan(clickableSpan, 31, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableText.setText(ss);
+        spannableText.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableText.setHighlightColor(Color.TRANSPARENT);
+    }
 }

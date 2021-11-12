@@ -98,7 +98,7 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Coyni@example.com"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:maxLength="255"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
