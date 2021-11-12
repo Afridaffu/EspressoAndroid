@@ -24,13 +24,12 @@ import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
-    ImageView imgClose;
     CardView cvNext;
     TextInputEditText etEmail;
     LoginViewModel loginViewModel;
     TextInputLayout etlEmail;
     ProgressDialog dialog;
-    LinearLayout layoutEmailError;
+    LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
 
     @Override
@@ -47,7 +46,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            imgClose = findViewById(R.id.imgFPClose);
+            llClose = findViewById(R.id.llClose);
             cvNext = findViewById(R.id.cvNext);
             etEmail = findViewById(R.id.etEmail);
             etlEmail = findViewById(R.id.etlEmail);
@@ -58,7 +57,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
             etEmail.requestFocus();
-            imgClose.setOnClickListener(new View.OnClickListener() {
+            llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();

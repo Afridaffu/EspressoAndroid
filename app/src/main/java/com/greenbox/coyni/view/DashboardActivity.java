@@ -68,7 +68,12 @@ public class DashboardActivity extends AppCompatActivity {
                 if (profile != null) {
                     objMyApplication.setMyProfile(profile);
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                    tvUserName.setText("Hi " + Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                    String strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                    if (strName != null && strName.length() > 21) {
+                        tvUserName.setText("Hi " + strName.substring(0, 21) + "...");
+                    } else {
+                        tvUserName.setText("Hi " + strName);
+                    }
                 }
             }
         });

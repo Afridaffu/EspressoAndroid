@@ -41,6 +41,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.EmojiExcludeFilter;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
@@ -200,8 +201,8 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
 
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
-            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
-            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+//            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+//            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             textWatchers();
             firstNameET.requestFocus();
             passwordET.addTextChangedListener(this);
@@ -285,19 +286,19 @@ public class CreateAccountActivity extends AppCompatActivity implements TextWatc
                 if (custRegisterResponse != null) {
                     try {
                         Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                        if (!custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()) {
+                        if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "MOBILE");
                             i.putExtra("MOBILE", phoneNumber);
                             i.putExtra("MASK_MOBILE", phoneNumberET.getText());
                             i.putExtra("EMAIL", emailET.getText().toString().trim());
-                        } else if (custRegisterResponse.getData().isSms_verified() && !custRegisterResponse.getData().isEmail_verified()) {
+                        } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "EMAIL");
                             i.putExtra("MOBILE", phoneNumber);
                             i.putExtra("MASK_MOBILE", phoneNumberET.getText());
                             i.putExtra("EMAIL", emailET.getText().toString().trim());
-                        } else if (custRegisterResponse.getData().isSms_verified() && custRegisterResponse.getData().isEmail_verified()) {
+                        } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
                             i.putExtra("screen", "SignUp");
                             i.putExtra("OTP_TYPE", "SECURE");
                             i.putExtra("MOBILE", phoneNumber);

@@ -11,12 +11,19 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.RetrieveEmailActivity">
 
-    <ImageView
-        android:id="@+id/imgREClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutClose"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="@dimen/_45sdp"
-        android:src="@drawable/ic_close" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imgREClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

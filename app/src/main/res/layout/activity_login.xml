@@ -13,19 +13,25 @@
         android:padding="10dp">
 
         <LinearLayout
-            android:id="@+id/layoutClose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/layoutClose"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
                 android:layout_marginLeft="@dimen/_21sdp"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:src="@drawable/ic_close" />
+                android:layout_marginTop="?attr/actionBarSize">
+
+                <ImageView
+                    android:id="@+id/imgClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_close" />
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -192,7 +198,7 @@
 
                 <CheckBox
                     android:id="@+id/chkRemember"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
                     android:text="@string/remembertxt"

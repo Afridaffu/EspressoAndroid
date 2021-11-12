@@ -48,9 +48,10 @@ public class CustRegisterResponse {
         private String phoneNumber;
         private String email;
         private String smsOtp;
+        private String emailOtp;
         private String sendSmsCodeAttempts;
-        private boolean sms_verified;
-        private boolean email_verified;
+        private boolean smsVerified;
+        private boolean emailVerified;
 
         public String getAccountStatus() {
             return accountStatus;
@@ -108,20 +109,28 @@ public class CustRegisterResponse {
             this.sendSmsCodeAttempts = sendSmsCodeAttempts;
         }
 
-        public boolean isSms_verified() {
-            return sms_verified;
+        public boolean isSmsVerified() {
+            return smsVerified;
         }
 
-        public void setSms_verified(boolean sms_verified) {
-            this.sms_verified = sms_verified;
+        public void setSmsVerified(boolean smsVerified) {
+            this.smsVerified = smsVerified;
         }
 
-        public boolean isEmail_verified() {
-            return email_verified;
+        public boolean isEmailVerified() {
+            return emailVerified;
         }
 
-        public void setEmail_verified(boolean email_verified) {
-            this.email_verified = email_verified;
+        public void setEmailVerified(boolean emailVerified) {
+            this.emailVerified = emailVerified;
+        }
+
+        public String getEmailOtp() {
+            return emailOtp;
+        }
+
+        public void setEmailOtp(String emailOtp) {
+            this.emailOtp = emailOtp;
         }
     }
 
