@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,10 +37,11 @@ public class RetrieveEmailActivity extends AppCompatActivity {
     MaterialCardView nextBtn;
     TextInputEditText firstName, lastName;
     TextInputLayout firstTIL, lastTIL;
-    ImageView imgClose;
+    LinearLayout layoutClose;
     LoginViewModel loginViewModel;
     Dialog dialog;
     public static RetrieveEmailActivity retrieveEmailActivity;
+    String phoneNumber = "";
 
 
     @Override
@@ -68,11 +70,12 @@ public class RetrieveEmailActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            retrieveEmailActivity = this;
             phoneNumberET = findViewById(R.id.rePhoneNumber);
             nextBtn = findViewById(R.id.reCardViewNextBtn);
             firstName = findViewById(R.id.reFirstNameET);
             lastName = findViewById(R.id.reLastNameET);
-            imgClose = findViewById(R.id.imgREClose);
+            layoutClose = findViewById(R.id.layoutClose);
             firstTIL = findViewById(R.id.reFirstNameTIL);
             lastTIL = findViewById(R.id.reLastNameTIL);
             phoneNumberET.setFrom("Retrieve");
@@ -92,7 +95,7 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 }
             });
 
-            imgClose.setOnClickListener(new View.OnClickListener() {
+            layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -118,8 +121,9 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                             firstTIL.setError("");
                             enableButton();
                         } else if (s.length() == 0) {
-                            firstTIL.setErrorEnabled(true);
-                            firstTIL.setError(" ");
+                            //firstTIL.setErrorEnabled(true);
+                            //firstTIL.setError(" ");
+                            firstTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
                             nextBtn.setEnabled(false);
                             nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
@@ -172,11 +176,11 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                     if (!retrieveEmailResponse.getStatus().toLowerCase().equals("error")) {
                         SMSResend resend = new SMSResend();
                         resend.setCountryCode(Utils.getStrCCode());
-                        resend.setPhoneNumber(phoneNumberET.getText().toString());
+                        resend.setPhoneNumber(phoneNumber);
                         loginViewModel.smsotpresend(resend);
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "MOBILE");
-                        i.putExtra("MOBILE", phoneNumberET.getText().toString());
+                        i.putExtra("MOBILE", phoneNumber);
                         i.putExtra("MASK_MOBILE", phoneNumberET.getText().toString());
                         i.putExtra("screen", "retEmail");
                         startActivity(i);
@@ -200,13 +204,14 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-                    if (apiError.getError().getErrorCode().equals("111069")) {
-                        displayNoAccount();
-                    } else if (!apiError.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this);
-                    } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this);
-                    }
+//                    if (apiError.getError().getErrorCode().equals("111069")) {
+//                        displayNoAccount();
+//                    } else if (!apiError.getError().getErrorDescription().equals("")) {
+//                        Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this);
+//                    } else {
+//                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this);
+//                    }
+                    displayNoAccount();
                 }
             }
         });
@@ -243,7 +248,7 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawableResource(R.color.white);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.show();
-            String phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+            phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
             RetrieveEmailRequest request = new RetrieveEmailRequest();
             request.setFirstName(firstName.getText().toString().trim());
             request.setLastName(lastName.getText().toString().trim());

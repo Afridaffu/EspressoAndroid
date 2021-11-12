@@ -32,15 +32,18 @@
         <activity
             android:name=".view.EditEmailActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".view.UserDetailsActivity"
+            android:screenOrientation="portrait"/>
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.UserDetailsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.EnableAuthID"
             android:exported="true"
@@ -53,7 +56,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.AccountLimitsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.BindingLayoutActivity"
             android:exported="false"
@@ -66,7 +70,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.PINActivity"
             android:exported="true"

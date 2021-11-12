@@ -35,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
@@ -113,6 +114,7 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
+            otpPV.requestFocus();
             objMyApplication = (MyApplication) getApplicationContext();
 
             if (strScreen != null && !strScreen.equals("")) {
@@ -120,12 +122,12 @@ public class OTPValidation extends AppCompatActivity {
                     case "ForgotPwd":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address:\n" + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
                         break;
                     case "ForgotPin":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address:\n" + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
                         break;
                     case "retEmail":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
@@ -138,10 +140,10 @@ public class OTPValidation extends AppCompatActivity {
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (OTP_TYPE.equals("MOBILE")) {
                             headerTV.setText("Please Verify your Phone Number");
-                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
+                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number " + maskedPhone);
                         } else if (OTP_TYPE.equals("EMAIL")) {
                             headerTV.setText("Please Verify your Email");
-                            subHeaderTV.setText("We sent you a 6-digit code to the register email address: " + EMAIL);
+                            subHeaderTV.setText("We sent you a 6-digit code sent to the register email address: " + EMAIL);
                         } else if (OTP_TYPE.equals("SECURE")) {
                             Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                             secureAccountRL.setVisibility(View.VISIBLE);
@@ -155,7 +157,7 @@ public class OTPValidation extends AppCompatActivity {
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
                             headerTV.setText("Please Verify your Phone Number");
-                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number: " + maskedPhone);
+                            subHeaderTV.setText("We have sent you 6 digits code sent to the register phone number " + maskedPhone);
                         }
                         SMSResend resend = new SMSResend();
                         resend.setCountryCode(Utils.getStrCCode());
@@ -256,7 +258,12 @@ public class OTPValidation extends AppCompatActivity {
                                     dialog.setIndeterminate(false);
                                     dialog.setMessage("Please wait...");
                                     dialog.show();
-                                    String phoneNumber = MOBILE.substring(1, 4) + MOBILE.substring(6, 9) + MOBILE.substring(10, MOBILE.length());
+                                    String phoneNumber = "";
+                                    if (MOBILE.contains("(")) {
+                                        phoneNumber = MOBILE.substring(1, 4) + MOBILE.substring(6, 9) + MOBILE.substring(10, MOBILE.length());
+                                    } else {
+                                        phoneNumber = MOBILE;
+                                    }
                                     RetrieveUsersRequest request = new RetrieveUsersRequest();
                                     request.setCountryCode(Utils.getStrCCode());
                                     request.setPhoneNumber(phoneNumber);
@@ -566,6 +573,22 @@ public class OTPValidation extends AppCompatActivity {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+            }
+        });
+
+        loginViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if (apiError != null) {
+                    if (!apiError.getError().getErrorDescription().equals("")) {
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this);
+                    } else {
+                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this);
+                    }
                 }
             }
         });

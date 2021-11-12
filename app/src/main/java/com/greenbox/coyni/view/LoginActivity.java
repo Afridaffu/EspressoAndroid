@@ -53,9 +53,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
     Boolean isFaceLock = false, isThumb = false, isTouchId = false;
-    ImageView imgClose, loginBGIV;
+    ImageView loginBGIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
+    LinearLayout layoutClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             tvPwdError = findViewById(R.id.tvPwdError);
             forgotpwd = findViewById(R.id.forgotpwd);
             tvRetEmail = findViewById(R.id.tvRetEmail);
-            imgClose = findViewById(R.id.imgClose);
+            layoutClose = findViewById(R.id.layoutClose);
             chkRemember = findViewById(R.id.chkRemember);
             loginBGIV = findViewById(R.id.loginBGIV);
             cvNext.setEnabled(false);
@@ -108,12 +109,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-                        if (emailValidation() && passwordValidation()) {
-                            cvNext.setEnabled(true);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        } else {
-                            cvNext.setEnabled(false);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        if (emailValidation() && passwordValidation()) {
+//                            cvNext.setEnabled(true);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//                        } else {
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+                        if (!hasFocus && etEmail.getText().toString().trim().equals("")) {
+                            emailValidation();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -125,12 +129,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-                        if (emailValidation() && passwordValidation()) {
-                            cvNext.setEnabled(true);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        } else {
-                            cvNext.setEnabled(false);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        if (emailValidation() && passwordValidation()) {
+//                            cvNext.setEnabled(true);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//                        } else {
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+                        if (!hasFocus && etPassword.getText().toString().trim().equals("")) {
+                            passwordValidation();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -254,7 +261,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
             });
 
-            imgClose.setOnClickListener(new View.OnClickListener() {
+            layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
