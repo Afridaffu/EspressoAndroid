@@ -6,6 +6,7 @@
     android:layout_height="435dp"
     android:orientation="vertical"
     android:background="@color/white"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
     tools:context=".view.IdentityVerificationActivity">
 
     <LinearLayout

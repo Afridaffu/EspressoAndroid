@@ -35,7 +35,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     ConstraintLayout idveriDOBConLayout;
     LinearLayout bottomSheet;
     CardView btnNext;
-    ScrollView firstIVeri, secondIVeri;
+    ScrollView secondIVeri;
+    LinearLayout firstIVeri;
     View viewLeft, viewRight;
     ImageButton closebtn, backbtn;
     ImageView upIdSuccessImg;
@@ -54,7 +55,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         exitBtn=findViewById(R.id.exitBtn);
         btnExit=findViewById(R.id.btnExit);
         btnNext = findViewById(R.id.nextBtn);
-        firstIVeri = findViewById(R.id.scrlViewIV1st);
+        firstIVeri = findViewById(R.id.linearLayoutIdVe);
         secondIVeri = findViewById(R.id.scrlViewIV2nd);
         viewLeft = findViewById(R.id.viewBarLeft);
         viewRight = findViewById(R.id.viewBarRight);
@@ -183,14 +184,14 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         viewLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
+                    firstIVeri.setVisibility(View.VISIBLE);
+                    secondIVeri.setVisibility(View.GONE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background);
+                    viewRight.setBackgroundResource(R.drawable.button_background1);
+                    backbtn.setVisibility(View.GONE);
+                    closebtn.setVisibility(View.VISIBLE);
+                }
 
-            }
         });
 
 
