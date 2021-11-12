@@ -32,9 +32,6 @@
         <activity
             android:name=".view.EditEmailActivity"
             android:exported="true"
-            android:screenOrientation="portrait"/>
-            android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
@@ -49,7 +46,8 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
         <activity
             android:name=".view.CustomerProfileActivity"
             android:exported="false"
@@ -70,8 +68,9 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.PINActivity"
             android:exported="true"

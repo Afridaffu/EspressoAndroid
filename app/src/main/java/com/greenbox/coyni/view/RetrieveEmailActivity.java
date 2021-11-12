@@ -63,6 +63,9 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             if (dialog != null) {
                 dialog.dismiss();
             }
+            phoneNumberET.setText("");
+            firstName.setText("");
+            lastName.setText("");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -121,9 +124,8 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                             firstTIL.setError("");
                             enableButton();
                         } else if (s.length() == 0) {
-                            //firstTIL.setErrorEnabled(true);
-                            //firstTIL.setError(" ");
-                            firstTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                            firstTIL.setErrorEnabled(true);
+                            firstTIL.setError(" ");
                             nextBtn.setEnabled(false);
                             nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
@@ -159,6 +161,34 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                    }
+                }
+            });
+
+            firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        if (firstName.getText().toString().trim().equals("")) {
+                            firstTIL.setErrorEnabled(true);
+                            firstTIL.setError(" ");
+                            nextBtn.setEnabled(false);
+                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+                    }
+                }
+            });
+
+            lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        if (lastName.getText().toString().trim().equals("")) {
+                            lastTIL.setErrorEnabled(true);
+                            lastTIL.setError(" ");
+                            nextBtn.setEnabled(false);
+                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
                     }
                 }
             });

@@ -527,7 +527,6 @@ public class OTPValidation extends AppCompatActivity {
                 dialog.dismiss();
                 if (emailResponse != null) {
                     if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
-//                        if(!strScreen.equals("EditEmail"))
                         resendTV.setVisibility(View.GONE);
                         newCodeTV.setVisibility(View.VISIBLE);
                         resendCounter++;

@@ -3,12 +3,15 @@ package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
@@ -33,6 +36,9 @@ import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -77,7 +83,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        clearControls();
+        try {
+            clearControls();
+            passcode = "";
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -201,32 +212,35 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 if (pinRegisterResponse != null) {
                     Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
                     if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPin")) {
+                            Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Intent d = new Intent(PINActivity.this, LoginActivity.class);
+                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        PINActivity.this.startActivity(d);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, 2000);
 
-                        if (Utils.checkAuthentication(PINActivity.this)) {
-                            if (Utils.isFingerPrint(PINActivity.this)) {
-                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "TOUCH"));
+                        } else {
+                            if (Utils.checkAuthentication(PINActivity.this)) {
+                                if (Utils.isFingerPrint(PINActivity.this)) {
+                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                            .putExtra("ENABLE_TYPE", "TOUCH"));
+                                } else {
+                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                            .putExtra("ENABLE_TYPE", "FACE"));
+                                }
                             } else {
                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "FACE"));
+                                        .putExtra("ENABLE_TYPE", "SUCCESS"));
                             }
-                        } else {
-                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                    .putExtra("ENABLE_TYPE", "SUCCESS"));
                         }
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-//                            if (!fingerprintManager.isHardwareDetected()) {
-//                                Log.e("Not support","Not support");
-//                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-//                                        .putExtra("ENABLE_TYPE","TOUCH"));
-//                            } else {
-//                                Log.e("Supports","Supports");
-//                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-//                                        .putExtra("ENABLE_TYPE","TOUCH"));
-//                            }
-//                        }
                     }
                 }
             }
@@ -303,7 +317,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
+                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("loginExpiry") ||
                         getIntent().getStringExtra("screen").equals("UserDetails"))) {
                     onBackPressed();
                 } else {
@@ -395,23 +409,29 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             switch (number_list.length()) {
                 case 5:
-                    setSuccessPIN();
+                    //setSuccessPIN();
                     chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 4:
                     chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 3:
                     chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 2:
                     chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 1:
                     chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 0:
                     chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
 
             }
@@ -493,4 +513,33 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             ex.printStackTrace();
         }
     }
+
+    public void toastTimer(Dialog dialog) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(2000);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    dialog.dismiss();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+    }
+
 }

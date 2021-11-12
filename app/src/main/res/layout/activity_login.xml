@@ -237,7 +237,6 @@
                 android:id="@+id/cvNext"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_44sdp"
-                android:layout_alignParentBottom="true"
                 android:layout_marginTop="@dimen/_33sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 app:cardBackgroundColor="@color/inactive_color"
