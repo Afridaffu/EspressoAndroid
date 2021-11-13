@@ -60,13 +60,26 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:text="sdsdsd" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/oneOneTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/text_size_12sp"
+                android:text="sdsd"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/_10sdp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="@dimen/text_size_7sp"
@@ -81,7 +94,9 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:text="sdsds"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -102,8 +117,19 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:text="sdsdsd"/>
             </LinearLayout>
+            <TextView
+                android:id="@+id/threethreeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/text_size_12sp"
+                android:text=""
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"/>
 
         </LinearLayout>
 

@@ -317,7 +317,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("loginExpiry") ||
+                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
+                        || getIntent().getStringExtra("screen").equals("loginExpiry") ||
                         getIntent().getStringExtra("screen").equals("UserDetails"))) {
                     onBackPressed();
                 } else {

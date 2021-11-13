@@ -56,6 +56,7 @@ public class OnboardActivity extends AppCompatActivity {
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginViewModel loginViewModel;
     ProgressDialog dialog;
+    public static OnboardActivity onboardActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class OnboardActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
+            onboardActivity = this;
 
             //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (!isDeviceID()) {
