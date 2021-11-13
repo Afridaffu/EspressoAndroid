@@ -60,7 +60,8 @@
             android:textCursorDrawable="@drawable/cursor_color"
             android:fontFamily="@font/opensans_semibold"
             android:longClickable="false"
-            android:digits="0123456789"/>
+            android:digits="0123456789"
+            android:imeOptions="actionNext"/>
 
 
     </LinearLayout>

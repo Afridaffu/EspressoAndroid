@@ -1,5 +1,8 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -84,12 +87,23 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    try {
-                        etlEmail.setErrorEnabled(false);
-                        etlEmail.setError("");
-                        layoutEmailError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+//                    try {
+//                        etlEmail.setErrorEnabled(false);
+//                        etlEmail.setError("");
+//                        layoutEmailError.setVisibility(View.GONE);
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+                }
+            });
+
+            etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(b){
+                        etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
+
                     }
                 }
             });
@@ -99,13 +113,37 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         Utils.hideKeypad(ForgotPasswordActivity.this, v);
-                        if (validation()) {
+                        if(etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())){
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                            layoutEmailError.setVisibility(VISIBLE);
+                            tvEmailError.setText("Invalid Email");
+                            etEmail.clearFocus();
+                        }else if(etEmail.getText().toString().trim().length() > 0 && Utils.isValidEmail(etEmail.getText().toString().trim())){
+                            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
+                            layoutEmailError.setVisibility(GONE);
+                            etEmail.clearFocus();
                             dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
                             dialog.setIndeterminate(false);
                             dialog.setMessage("Please wait...");
                             dialog.show();
                             loginViewModel.emailotpresend(etEmail.getText().toString().trim());
+
+                        } else{
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                            layoutEmailError.setVisibility(VISIBLE);
+                            tvEmailError.setText("Field Required");
+                            etEmail.clearFocus();
                         }
+//                        if (validation()) {
+//                            dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
+//                            dialog.setIndeterminate(false);
+//                            dialog.setMessage("Please wait...");
+//                            dialog.show();
+//                            loginViewModel.emailotpresend(etEmail.getText().toString().trim());
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

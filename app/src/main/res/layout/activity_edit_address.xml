@@ -8,6 +8,7 @@
     android:paddingStart="@dimen/_21sdp"
     android:paddingTop="@dimen/_45sdp"
     android:paddingEnd="@dimen/_21sdp"
+    android:background="@color/white"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <ImageView

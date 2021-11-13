@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -120,8 +121,10 @@ public class CreateAccountActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
+
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -311,6 +314,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
                     isPhoneError = true;
                     phoneNumberET.setErrorOutlineBox();
                     phoneErrorLL.setVisibility(VISIBLE);
+                    phoneErrorTV.setText("User already exists. Try a new phone number or log in.");
                     emailErrorLL.setVisibility(GONE);
                 } else if (s.toString().toLowerCase().contains("entered phone number and email already exist in the system")) {
                     isPhoneError = true;
@@ -320,10 +324,12 @@ public class CreateAccountActivity extends AppCompatActivity  {
                     isEmailError = true;
                     emailTIL.requestFocus();
                     emailErrorLL.setVisibility(VISIBLE);
+                    emailErrorTV.setText("User already exists. Try a new email or log in.");
                     emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
                     emailTIL.setHintTextColor(errorColorState);
 
                 } else {
+                    Log.e("Error message", s);
                     isEmailError = false;
                     isPhoneError = false;
                     phoneErrorLL.setVisibility(GONE);

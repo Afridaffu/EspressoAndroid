@@ -88,7 +88,8 @@
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
                         android:textIsSelectable="false"
-                        android:longClickable="false"/>
+                        android:longClickable="false"
+                        android:singleLine="true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,7 +146,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
-                        android:longClickable="false"/>
+                        android:longClickable="false"
+                        android:singleLine="true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,7 +204,8 @@
                         android:textSize="@dimen/_12ssp"
                         android:longClickable="false"
                         android:maxLines="1"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,."/>
+                        android:singleLine="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,."/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -297,6 +300,7 @@
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textSize="@dimen/_12ssp"
                             android:longClickable="false"
+                            android:singleLine="true"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"
                             />
 
@@ -405,6 +409,7 @@
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
                         android:longClickable="false"
+                        android:singleLine="true"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"/>
 
                 </com.google.android.material.textfield.TextInputLayout>

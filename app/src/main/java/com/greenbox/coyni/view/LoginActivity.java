@@ -1,5 +1,8 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +11,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
@@ -94,9 +98,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
 
+            etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+
+            etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+
             if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
                 etEmail.setText(objMyApplication.getStrRetrEmail());
             }
+
             etlPassword.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -116,8 +125,29 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //                            cvNext.setEnabled(false);
 //                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
 //                        }
-                        if (!hasFocus && etEmail.getText().toString().trim().equals("")) {
-                            emailValidation();
+//                        if (!hasFocus && etEmail.getText().toString().trim().equals("")) {
+//                            emailValidation();
+//                        }
+
+                        if(!hasFocus){
+                            if(etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())){
+                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                                layoutEmailError.setVisibility(VISIBLE);
+                                tvEmailError.setText("Invalid Email");
+                            }else if(etEmail.getText().toString().trim().length() > 0 && Utils.isValidEmail(etEmail.getText().toString().trim())){
+                                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
+                                layoutEmailError.setVisibility(GONE);
+                            } else{
+                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                                layoutEmailError.setVisibility(VISIBLE);
+                                tvEmailError.setText("Field Required");
+                            }
+                        }else{
+                            etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -129,16 +159,37 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-//                        if (emailValidation() && passwordValidation()) {
-//                            cvNext.setEnabled(true);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//                        } else {
-//                            cvNext.setEnabled(false);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+////                        if (emailValidation() && passwordValidation()) {
+////                            cvNext.setEnabled(true);
+////                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+////                        } else {
+////                            cvNext.setEnabled(false);
+////                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+////                        }
+//                        if (!hasFocus && etPassword.getText().toString().trim().equals("")) {
+//                            passwordValidation();
 //                        }
-                        if (!hasFocus && etPassword.getText().toString().trim().equals("")) {
-                            passwordValidation();
+                        if(!hasFocus){
+                            if(etPassword.getText().toString().trim().length() < 8){
+                                etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
+                                layoutPwdError.setVisibility(VISIBLE);
+                                tvPwdError.setText("Invalid Password");
+                            }else if(etPassword.getText().toString().trim().length() >= 8){
+                                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
+                                layoutPwdError.setVisibility(GONE);
+                            }else{
+                                etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
+                                layoutPwdError.setVisibility(VISIBLE);
+                                tvPwdError.setText("Field Required");
+                            }
+                        }else{
+                            etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -159,21 +210,29 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (emailValidation() && passwordValidation()) {
+//                        if (emailValidation() && passwordValidation()) {
+//                            cvNext.setEnabled(true);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//                        } else if (emailValidation()) {
+//                            etlEmail.setErrorEnabled(false);
+//                            etlEmail.setError("");
+//                            layoutEmailError.setVisibility(View.GONE);
+//                        } else {
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+//                        if (s.toString().length() == 0) {
+//                            etlEmail.setErrorEnabled(false);
+//                            etlEmail.setError("");
+//                            layoutEmailError.setVisibility(View.GONE);
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+
+                        if(Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length()>=8){
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        } else if (emailValidation()) {
-                            etlEmail.setErrorEnabled(false);
-                            etlEmail.setError("");
-                            layoutEmailError.setVisibility(View.GONE);
-                        } else {
-                            cvNext.setEnabled(false);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                        }
-                        if (s.toString().length() == 0) {
-                            etlEmail.setErrorEnabled(false);
-                            etlEmail.setError("");
-                            layoutEmailError.setVisibility(View.GONE);
+                        }else{
                             cvNext.setEnabled(false);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
@@ -197,21 +256,29 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (emailValidation() && passwordValidation()) {
+//                        if (emailValidation() && passwordValidation()) {
+//                            cvNext.setEnabled(true);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//                        } else if (passwordValidation()) {
+//                            etlPassword.setErrorEnabled(false);
+//                            etlPassword.setError("");
+//                            layoutPwdError.setVisibility(View.GONE);
+//                        } else {
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+//                        if (s.toString().length() == 0) {
+//                            etlPassword.setErrorEnabled(false);
+//                            etlPassword.setError("");
+//                            layoutPwdError.setVisibility(View.GONE);
+//                            cvNext.setEnabled(false);
+//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+
+                        if(Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length()>=8){
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        } else if (passwordValidation()) {
-                            etlPassword.setErrorEnabled(false);
-                            etlPassword.setError("");
-                            layoutPwdError.setVisibility(View.GONE);
-                        } else {
-                            cvNext.setEnabled(false);
-                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                        }
-                        if (s.toString().length() == 0) {
-                            etlPassword.setErrorEnabled(false);
-                            etlPassword.setError("");
-                            layoutPwdError.setVisibility(View.GONE);
+                        }else{
                             cvNext.setEnabled(false);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
