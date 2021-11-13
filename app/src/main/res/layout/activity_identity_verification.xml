@@ -79,6 +79,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="visible"
+            android:background="@color/white"
             android:layout_marginTop="@dimen/_14sdp">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -308,6 +309,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
+        android:background="@color/white"
         android:visibility="gone">
 
         <LinearLayout
@@ -349,6 +351,8 @@
                    android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint"
                     android:imeOptions="actionNext"
+                    android:singleLine="true"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/"
                     android:inputType="textEmailAddress"
                     android:maxLength="255"
                     android:textCursorDrawable="@drawable/cursor_color"
@@ -379,9 +383,11 @@
                     android:id="@+id/mailingAddlineoptET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint2"
                     android:imeOptions="actionNext"
+                    android:singleLine="true"
                     android:inputType="textEmailAddress"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:maxLength="255"
