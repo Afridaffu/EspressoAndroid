@@ -82,7 +82,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    try {
+                        String str = etEmail.getText().toString();
+                        if(str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" ") )) {
+                            etEmail.setText(etEmail.getText().toString().replaceAll(" ",""));
+                            etEmail.setSelection(etEmail.getText().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 @Override

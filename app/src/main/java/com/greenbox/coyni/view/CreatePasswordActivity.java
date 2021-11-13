@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -101,18 +102,53 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
+
             etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
+//                    if (hasFocus) {
+//                        layoutIndicator.setVisibility(VISIBLE);
+//                        //tvPasswordInfo.setVisibility(VISIBLE);
+//                    } else {
+//                        layoutIndicator.setVisibility(View.GONE);
+//                        tvPasswordInfo.setVisibility(View.GONE);
+//                    }
+
                     if (hasFocus) {
                         layoutIndicator.setVisibility(VISIBLE);
-                        //tvPasswordInfo.setVisibility(VISIBLE);
+                        etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                     } else {
-                        layoutIndicator.setVisibility(View.GONE);
-                        tvPasswordInfo.setVisibility(View.GONE);
+                        layoutIndicator.setVisibility(GONE);
+                        if(strong.matcher(etPassword.getText().toString()).matches()){
+                            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
+                        }else{
+                            etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
+                        }
                     }
                 }
             });
+
+            etCPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        etlCPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_green));
+                    } else {
+                        if(etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())){
+                            etlCPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_black));
+                        }else{
+                            etlCPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlCPassword, getColor(R.color.error_red));
+                        }
+                    }
+                }
+            });
+
             etPassword.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -120,14 +156,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
+                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                     try {
-                        if (strong.matcher(s).matches()) {
+                        if (strong.matcher(charSequence).matches()) {
                             strengthOne.setVisibility(View.VISIBLE);
                             strengthTwo.setVisibility(View.VISIBLE);
                             strengthThree.setVisibility(View.VISIBLE);
@@ -136,7 +167,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                             strengthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
                             tvPasswordInfo.setVisibility(View.GONE);
                             isPassword = true;
-                        } else if (medium.matcher(s).matches()) {
+                        } else if (medium.matcher(charSequence).matches()) {
                             strengthOne.setVisibility(View.VISIBLE);
                             strengthTwo.setVisibility(View.VISIBLE);
                             strengthThree.setVisibility(View.INVISIBLE);
@@ -156,9 +187,36 @@ public class CreatePasswordActivity extends AppCompatActivity {
                             cvSave.setEnabled(false);
                             cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
+
+                        if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
+                            isPassword = true;
+                        } else {
+                            isPassword = false;
+                        }
+                        if (etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())) {
+                            isConfirm = true;
+                        } else {
+                            isConfirm = false;
+                        }
+//                        enableOrDisableNext();
+
+                        if(isConfirm && isPassword){
+                            cvSave.setEnabled(true);
+                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                        }else{
+                            cvSave.setEnabled(false);
+                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
                 }
             });
 
@@ -169,57 +227,73 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+                    if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
+                        isPassword = true;
+                    } else {
+                        isPassword = false;
+                    }
+                    if (etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())) {
+                        isConfirm = true;
+                    } else {
+                        isConfirm = false;
+                    }
+//                        enableOrDisableNext();
+
+                    if(isConfirm && isPassword){
+                        cvSave.setEnabled(true);
+                        cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                    }else{
+                        cvSave.setEnabled(false);
+                        cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    }
 
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (s.length() > 0 && etPassword.getText().toString().equals(etCPassword.getText().toString())) {
-                            cvSave.setEnabled(true);
-                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                            etlCPassword.setHint("Confirm Password");
-                            etlPassword.setHint("New Password");
-                            etlPassword.setErrorEnabled(false);
-                            etlPassword.setError("");
-                            etlCPassword.setErrorEnabled(false);
-                            etlCPassword.setError("");
-                        } else if (s.length() == 0) {
-                            cvSave.setEnabled(false);
-                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                            etlCPassword.setHint("Confirm Password");
-                            etlPassword.setHint("New Password");
-                            etlPassword.setErrorEnabled(false);
-                            etlPassword.setError("");
-                            etlCPassword.setErrorEnabled(false);
-                            etlCPassword.setError("");
-                        } else if (!etPassword.getText().toString().trim().equals("")) {
-                            cvSave.setEnabled(false);
-                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                            etlCPassword.setHint("Password doesn’t match");
-                            etlPassword.setHint("Password doesn’t match");
-                            etlPassword.setErrorEnabled(true);
-                            etlPassword.setError(" ");
-                            etlCPassword.setErrorEnabled(true);
-                            etlCPassword.setError(" ");
+
+                        if (s.length() > 0 && s.toString().trim().length() == 0) {
+                            etCPassword.setText("");
+                        } else if (s.length() > 0 && s.toString().contains(" ")) {
+                            etCPassword.setText(s.toString().trim());
+                            etCPassword.setSelection(s.toString().trim().length());
                         }
-                        if (strong.matcher(s).matches()) {
+
+                        if (etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())) {
                             isConfirm = true;
-                        } else if (medium.matcher(s).matches()) {
-                            isConfirm = false;
-                            cvSave.setEnabled(false);
-                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+
+                            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlPassword.setHint("New Password");
+                            Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
+
+                            etlCPassword.setBoxStrokeColor(getColor(R.color.primary_green));
+                            etlCPassword.setHint("Confirm Password");
+                            Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_green));
+
                         } else {
                             isConfirm = false;
-                            cvSave.setEnabled(false);
-                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+
+                            etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            etlPassword.setHint("Password doesn’t match");
+                            Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
+
+                            etlCPassword.setHint("Password doesn’t match");
+
+                            if(etPassword.getText().toString().trim().length() == etCPassword.getText().toString().trim().length()){
+                                etCPassword.clearFocus();
+                            }
+
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
+
             cvSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -239,6 +313,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     }
                 }
             });
+
             cvLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

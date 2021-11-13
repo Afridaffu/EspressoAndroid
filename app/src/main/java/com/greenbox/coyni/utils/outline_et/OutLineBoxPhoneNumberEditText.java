@@ -67,9 +67,18 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
                     }
                     if (FROM.equals("Retrieve") && !b) {
-                        if (pnET.getText().toString().length() == 0 || (pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
+                        if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
+                            rea.phoneErrorLL.setVisibility(VISIBLE);
+                            rea.phoneErrorTV.setText("Invalid Phone Number");
+                        } else if ((pnET.getText().length() == 0)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
+                            rea.phoneErrorLL.setVisibility(VISIBLE);
+                            rea.phoneErrorTV.setText("Field Required");
                         } else {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
@@ -128,6 +137,12 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                     } else {
                         createAccountAct.isNextEnabled = false;
                         createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    }
+                }else if (FROM.equals("Retrieve")) {
+                    RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
+                    if (charSequence.length() == 14) {
+                        isPhoneError = false;
+                        rea.phoneErrorLL.setVisibility(GONE);
                     }
                 }
 

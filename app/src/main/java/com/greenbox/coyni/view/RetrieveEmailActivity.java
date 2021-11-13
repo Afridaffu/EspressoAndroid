@@ -1,5 +1,8 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -42,7 +45,8 @@ public class RetrieveEmailActivity extends AppCompatActivity {
     Dialog dialog;
     public static RetrieveEmailActivity retrieveEmailActivity;
     String phoneNumber = "";
-
+    public LinearLayout phoneErrorLL,firstNameErrorLL,lastNameErrorLL;
+    public TextView  phoneErrorTV,firstNameErrorTV,lastNameErrorTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,14 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             layoutClose = findViewById(R.id.layoutClose);
             firstTIL = findViewById(R.id.reFirstNameTIL);
             lastTIL = findViewById(R.id.reLastNameTIL);
+
+            phoneErrorLL = findViewById(R.id.phoneErrorLL);
+            firstNameErrorLL = findViewById(R.id.firstNameErrorLL);
+            lastNameErrorLL = findViewById(R.id.lastNameErrorLL);
+            firstNameErrorTV = findViewById(R.id.firstNameErrorTV);
+            lastNameErrorTV = findViewById(R.id.lastNameErrorTV);
+            phoneErrorTV = findViewById(R.id.phoneErrorTV);
+
             phoneNumberET.setFrom("Retrieve");
             nextBtn.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
@@ -106,29 +118,28 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             });
 
             firstName.addTextChangedListener(new TextWatcher() {
+
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                        firstNameErrorLL.setVisibility(GONE);
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (s.length() > 0) {
-                            firstTIL.setErrorEnabled(false);
-                            firstTIL.setError("");
-                            enableButton();
-                        } else if (s.length() == 0) {
-                            firstTIL.setErrorEnabled(true);
-                            firstTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        String str = firstName.getText().toString();
+                        if(str.length() > 0 && str.substring(0).equals(" ")) {
+                            firstName.setText(firstName.getText().toString().replaceAll(" ",""));
+                            firstName.setSelection(firstName.getText().length());
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -137,28 +148,26 @@ public class RetrieveEmailActivity extends AppCompatActivity {
 
             lastName.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().trim().length() > 0) {
+                        lastNameErrorLL.setVisibility(GONE);
+                    }
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(Editable editable) {
                     try {
-                        if (s.length() > 0) {
-                            lastTIL.setErrorEnabled(false);
-                            lastTIL.setError("");
-                            enableButton();
-                        } else if (s.length() == 0) {
-                            lastTIL.setErrorEnabled(true);
-                            lastTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        String str = lastName.getText().toString();
+                        if(str.length() > 0 && str.substring(0).equals(" ")) {
+                            lastName.setText(lastName.getText().toString().replaceAll(" ",""));
+                            lastName.setSelection(lastName.getText().length());
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -167,28 +176,42 @@ public class RetrieveEmailActivity extends AppCompatActivity {
 
             firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        if (firstName.getText().toString().trim().equals("")) {
-                            firstTIL.setErrorEnabled(true);
-                            firstTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                public void onFocusChange(View view, boolean b) {
+                    if(!b){
+                        if(firstName.getText().toString().trim().length() > 0 ){
+                            firstNameErrorLL.setVisibility(GONE);
+                            firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
+                        }else{
+                            firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
+                            firstNameErrorLL.setVisibility(VISIBLE);
+                            firstNameErrorTV.setText("Field Required");
                         }
+                    }else{
+                        firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
                     }
                 }
             });
 
             lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        if (lastName.getText().toString().trim().equals("")) {
-                            lastTIL.setErrorEnabled(true);
-                            lastTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                public void onFocusChange(View view, boolean b) {
+                    if(!b){
+                        if(lastName.getText().toString().trim().length() > 0 ){
+                            lastNameErrorLL.setVisibility(GONE);
+                            lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_black));
+                        }else{
+                            lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
+                            lastNameErrorLL.setVisibility(VISIBLE);
+                            lastNameErrorTV.setText("Field Required");
                         }
+                    }else{
+                        lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
                     }
                 }
             });

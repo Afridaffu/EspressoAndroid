@@ -497,7 +497,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
                     }
                     enableOrDisableNext();
 
-
                 }
 
                 @Override
@@ -524,7 +523,32 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                        isConfirmPassword = true;
 
+                        passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        passwordTIL.setHint("Password");
+                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+
+                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                        confPasswordTIL.setHint("Confirm Password");
+                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+
+                    } else {
+                        isConfirmPassword = false;
+
+                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        passwordTIL.setHint("Password doesn’t match");
+                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+
+                        confPasswordTIL.setHint("Password doesn’t match");
+
+                        if(passwordET.getText().toString().trim().length() == confirmPasswordET.getText().toString().trim().length()){
+                            confirmPasswordET.clearFocus();
+                        }
+
+                    }
+                    enableOrDisableNext();
                 }
 
                 @Override
@@ -537,32 +561,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
                             confirmPasswordET.setSelection(s.toString().trim().length());
                         }
 
-                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            isConfirmPassword = true;
-
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            passwordTIL.setHint("Password");
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-
-                            confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                            confPasswordTIL.setHint("Confirm Password");
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-
-                        } else {
-                            isConfirmPassword = false;
-
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            passwordTIL.setHint("Password doesn’t match");
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-
-                            confPasswordTIL.setHint("Password doesn’t match");
-
-                            if(passwordET.getText().toString().trim().length() == confirmPasswordET.getText().toString().trim().length()){
-                                confirmPasswordET.clearFocus();
-                            }
-
-                        }
-                        enableOrDisableNext();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -636,6 +634,28 @@ public class CreateAccountActivity extends AppCompatActivity  {
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                         }
                     }
+
+//                    ////
+//
+//
+//                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                        isPassword = true;
+//
+//                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+//                        confPasswordTIL.setHint("Confirm Password");
+//                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+//
+//                    } else  {
+//                        isPassword = false;
+//                        if(confirmPasswordET.getText().toString().length()>0){
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            passwordTIL.setHint("Password doesn’t match");
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//
+//                            confPasswordTIL.setHint("Password doesn’t match");
+//
+//                        }
+//                    }
                 }
             });
 
@@ -654,6 +674,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
                         }
                     }
+
                 }
             });
 
