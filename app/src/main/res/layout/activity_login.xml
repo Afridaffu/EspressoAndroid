@@ -134,44 +134,60 @@
                     android:textSize="@dimen/_12ssp"></TextView>
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etlPassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_22sdp"
-                android:hint="Password"
-                android:textColorHint="@color/black"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/primary_green"
-                app:endIconDrawable="@drawable/ic_faceid"
-                app:endIconMode="custom"
-                app:endIconTint="@color/primary_green"
-                app:errorIconDrawable="@null"
-                app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_green">
+                android:layout_marginTop="@dimen/_14sdp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlPassword"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:hint="************"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword|textNoSuggestions"
-                    android:maxLength="12"
-                    android:padding="@dimen/_14sdp"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp"
-                    android:longClickable="false"
-                    android:singleLine="true"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Password"
+                    android:textColorHint="@color/black"
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/primary_green"
+                    app:errorIconDrawable="@null"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="************"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword|textNoSuggestions"
+                        android:maxLength="12"
+                        android:padding="@dimen/_14sdp"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:longClickable="false"
+                        android:singleLine="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <ImageView
+                    android:id="@+id/endIconIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_faceid"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/_10sdp"/>
+
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:id="@+id/layoutPwdError"

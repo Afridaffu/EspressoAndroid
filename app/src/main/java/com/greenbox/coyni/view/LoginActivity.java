@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
     Boolean isFaceLock = false, isThumb = false, isTouchId = false;
-    ImageView loginBGIV;
+    ImageView loginBGIV,endIconIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
     LinearLayout layoutClose;
@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             layoutMain = findViewById(R.id.layoutMain);
             chkRemember = findViewById(R.id.chkRemember);
             loginBGIV = findViewById(R.id.loginBGIV);
+            endIconIV = findViewById(R.id.endIconIV);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -112,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etEmail.setText(objMyApplication.getStrRetrEmail());
             }
 
-            etlPassword.setEndIconOnClickListener(new View.OnClickListener() {
+            endIconIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
@@ -210,7 +211,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    try {
+                        String str = etEmail.getText().toString();
+                        if(str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" ") )) {
+                            etEmail.setText(etEmail.getText().toString().replaceAll(" ",""));
+                            etEmail.setSelection(etEmail.getText().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -256,7 +265,16 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    try {
+                        if (s.length() > 0 && s.toString().trim().length() == 0) {
+                            etPassword.setText("");
+                        } else if (s.length() > 0 && s.toString().contains(" ")) {
+                            etPassword.setText(s.toString().trim());
+                            etPassword.setSelection(s.toString().trim().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -284,6 +302,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if(Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length()>=8){
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                            layoutEmailError.setVisibility(GONE);
+                            layoutPwdError.setVisibility(GONE);
                         }else{
                             cvNext.setEnabled(false);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -417,9 +437,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 if (value.equals("true")) {
                     isFaceLock = true;
                     if (Utils.getIsTouchEnabled()) {
-                        etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                        endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
                     } else {
-                        etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+                        endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
                     }
                 } else {
                     isFaceLock = false;
@@ -636,12 +656,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (Utils.getIsTouchEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
                 strMsg = "Do you want to register with Thumb/Pin.";
             } else if (Utils.getIsFaceEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                etlPassword.setEndIconDrawable(R.drawable.ic_faceid);
+                endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);

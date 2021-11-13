@@ -1,5 +1,8 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -46,7 +49,8 @@ public class RetrieveEmailActivity extends AppCompatActivity {
     Dialog dialog;
     public static RetrieveEmailActivity retrieveEmailActivity;
     String phoneNumber = "";
-
+    public LinearLayout phoneErrorLL,firstNameErrorLL,lastNameErrorLL;
+    public TextView  phoneErrorTV,firstNameErrorTV,lastNameErrorTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,14 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             firstTIL = findViewById(R.id.reFirstNameTIL);
             lastTIL = findViewById(R.id.reLastNameTIL);
             layoutMain = findViewById(R.id.layoutMain);
+
+            phoneErrorLL = findViewById(R.id.phoneErrorLL);
+            firstNameErrorLL = findViewById(R.id.firstNameErrorLL);
+            lastNameErrorLL = findViewById(R.id.lastNameErrorLL);
+            firstNameErrorTV = findViewById(R.id.firstNameErrorTV);
+            lastNameErrorTV = findViewById(R.id.lastNameErrorTV);
+            phoneErrorTV = findViewById(R.id.phoneErrorTV);
+
             phoneNumberET.setFrom("Retrieve");
             nextBtn.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
@@ -108,29 +120,28 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             });
 
             firstName.addTextChangedListener(new TextWatcher() {
+
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                        firstNameErrorLL.setVisibility(GONE);
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (s.length() > 0) {
-                            firstTIL.setErrorEnabled(false);
-                            firstTIL.setError("");
-                            enableButton();
-                        } else if (s.length() == 0) {
-                            firstTIL.setErrorEnabled(true);
-                            firstTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        String str = firstName.getText().toString();
+                        if(str.length() > 0 && str.substring(0).equals(" ")) {
+                            firstName.setText(firstName.getText().toString().replaceAll(" ",""));
+                            firstName.setSelection(firstName.getText().length());
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -139,28 +150,26 @@ public class RetrieveEmailActivity extends AppCompatActivity {
 
             lastName.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().trim().length() > 0) {
+                        lastNameErrorLL.setVisibility(GONE);
+                    }
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(Editable editable) {
                     try {
-                        if (s.length() > 0) {
-                            lastTIL.setErrorEnabled(false);
-                            lastTIL.setError("");
-                            enableButton();
-                        } else if (s.length() == 0) {
-                            lastTIL.setErrorEnabled(true);
-                            lastTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        String str = lastName.getText().toString();
+                        if(str.length() > 0 && str.substring(0).equals(" ")) {
+                            lastName.setText(lastName.getText().toString().replaceAll(" ",""));
+                            lastName.setSelection(lastName.getText().length());
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -192,16 +201,6 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                             nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
                     }
-                }
-            });
-
-            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(RetrieveEmailActivity.this);
-                    }
-                    return false;
                 }
             });
 
@@ -314,9 +313,6 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    phoneNumberET.setText("");
-                    firstName.setText("");
-                    lastName.setText("");
                 }
             });
         } catch (Exception ex) {
