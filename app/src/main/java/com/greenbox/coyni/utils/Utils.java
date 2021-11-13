@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
@@ -28,10 +29,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -85,6 +89,11 @@ public class Utils {
     public static final int pageSize = 25;
     public static String deviceID = "";
     public static Long mLastClickTime = 0L;
+
+    public static int[][] errorState, state;
+    public static int[] errorColor, color;
+    public static ColorStateList errorColorState, colorState;
+
 
     public static String getStrLang() {
         return strLang;
@@ -381,5 +390,43 @@ public class Utils {
 
     public static boolean isValidEmail(String target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public static ColorStateList getErrorColorState() {
+        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
+        errorColorState = new ColorStateList(errorState, errorColor);
+
+        return errorColorState;
+    }
+
+    public static ColorStateList getNormalColorState() {
+        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray),OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
+        colorState = new ColorStateList(state, color);
+        return colorState;
+    }
+
+
+    public static void setUpperHintColor(TextInputLayout til, int color) {
+        try {
+            Field field = til.getClass().getDeclaredField("defaultHintTextColor");
+            field.setAccessible(true);
+            int[][] states = new int[][]{
+                    new int[]{}
+            };
+            int[] colors = new int[]{
+                    color
+            };
+            ColorStateList myList = new ColorStateList(states, colors);
+            field.set(til, myList);
+
+            Method method = til.getClass().getDeclaredMethod("updateLabelState", boolean.class);
+            method.setAccessible(true);
+            method.invoke(til, true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

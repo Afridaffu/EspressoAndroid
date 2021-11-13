@@ -68,8 +68,8 @@ public class FragmentOne extends Fragment {
         // Inflate the layout for this fragment
         View view  = inflater.inflate(R.layout.fragment_one, container, false);
 
-//        ImageView imageView = view.findViewById(R.id.topIV);
-//        imageView.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.rotate));
+        ImageView imageView = view.findViewById(R.id.topIV);
+        imageView.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.rotate));
         return  view;
     }
 }

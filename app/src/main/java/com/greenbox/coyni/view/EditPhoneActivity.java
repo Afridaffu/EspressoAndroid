@@ -2,11 +2,6 @@ package com.greenbox.coyni.view;
 
 import static android.view.View.GONE;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -21,26 +16,24 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
-import com.greenbox.coyni.model.register.CustRegisRequest;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
-import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-public class EditEmailActivity extends AppCompatActivity {
+public class EditPhoneActivity extends AppCompatActivity {
 
     TextInputEditText currentEmailET, newEmailET;
     TextInputLayout currentEmailTIL, newEmailTIL;
@@ -62,7 +55,7 @@ public class EditEmailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_edit_email);
+            setContentView(R.layout.activity_edit_phone);
             initFields();
 
             initObservers();
@@ -107,7 +100,7 @@ public class EditEmailActivity extends AppCompatActivity {
             editEmailSV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.hideKeypad(EditEmailActivity.this);
+                    Utils.hideKeypad(EditPhoneActivity.this);
                     currentEmailET.clearFocus();
                     newEmailET.clearFocus();
                 }
@@ -213,7 +206,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
 
-                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
+                        dialog = new ProgressDialog(EditPhoneActivity.this, R.style.MyAlertDialogStyle);
                         dialog.setIndeterminate(false);
                         dialog.setMessage("Please wait...");
                         dialog.show();
@@ -268,14 +261,14 @@ public class EditEmailActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if(updateEmailResponse!= null && updateEmailResponse.getStatus().toLowerCase().equals("success")){
                     myApplicationObj.setUpdateEmailResponse(updateEmailResponse);
-                    startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
+                    startActivity(new Intent(EditPhoneActivity.this, OTPValidation.class)
                             .putExtra("screen", "EditEmail")
                             .putExtra("IS_OLD_EMAIL","true")
                             .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
                             .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
                     );
                 }else {
-                    Utils.displayAlert(updateEmailResponse.getData().getMessage(), EditEmailActivity.this);
+                    Utils.displayAlert(updateEmailResponse.getData().getMessage(), EditPhoneActivity.this);
                 }
             }
         });

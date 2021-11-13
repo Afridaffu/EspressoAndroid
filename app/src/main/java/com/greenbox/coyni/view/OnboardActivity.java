@@ -17,6 +17,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -55,6 +56,7 @@ public class OnboardActivity extends AppCompatActivity {
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginViewModel loginViewModel;
     ProgressDialog dialog;
+    public static OnboardActivity onboardActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class OnboardActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
+            onboardActivity = this;
 
             //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (!isDeviceID()) {
@@ -86,12 +89,38 @@ public class OnboardActivity extends AppCompatActivity {
             viewPager.setAdapter(autoScrollPagerAdapter);
             TabLayout tabs = findViewById(R.id.tabs);
             tabs.setupWithViewPager(viewPager);
+            viewPager.setStopScrollWhenTouch(true);
             // start auto scroll
             viewPager.startAutoScroll();
+
             // set auto scroll time in mili
             viewPager.setInterval(AUTO_SCROLL_THRESHOLD_IN_MILLI);
             // enable recycling using true
             viewPager.setCycle(true);
+//            viewPager.setStopScrollWhenTouch(false);
+            Log.e("Stop Scroll", viewPager.isStopScrollWhenTouch()+"");
+//            viewPager.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View view, MotionEvent event) {
+//
+//
+//                    int action = event.getActionMasked();
+//
+//                    switch(action) {
+//                        case (MotionEvent.ACTION_DOWN) :
+//                            viewPager.stopAutoScroll();
+//                            return true;
+//                        case (MotionEvent.ACTION_UP) :
+//                            viewPager.startAutoScroll();
+//                            return true;
+//                        case (MotionEvent.ACTION_SCROLL) :
+//                            viewPager.startAutoScroll();
+//                            return true;
+//                        default :
+//                            return false;
+//                    }
+//                }
+//            });
             getStarted.setOnClickListener(view -> {
                 try {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -140,6 +169,7 @@ public class OnboardActivity extends AppCompatActivity {
             SetFaceLock();
             SetTouchId();
             initObserver();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -64,7 +64,7 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "", oldEmail = "", newEmail = "", isOldEmail;
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "", oldEmail = "", newEmail = "",isOldEmail ="";
     LinearLayout layoutEntry, layoutFailure;
     MaterialCardView tryAgainCV;
     ProgressDialog dialog;
@@ -169,12 +169,13 @@ public class OTPValidation extends AppCompatActivity {
                         oldEmail = getIntent().getStringExtra("OLD_EMAIL");
                         newEmail = getIntent().getStringExtra("NEW_EMAIL");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
-                        if (isOldEmail.equals("true")) {
+                        if(isOldEmail.equals("true")){
                             headerTV.setText("Please Verify your Current Email");
                             subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + oldEmail);
-                        } else {
+                        }else{
                             headerTV.setText("Please Verify New Email");
                             subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + newEmail);
+                            loginViewModel.emailotpresend(newEmail);
                         }
                         break;
                 }
@@ -193,13 +194,13 @@ public class OTPValidation extends AppCompatActivity {
                             dialog.setIndeterminate(false);
                             dialog.setMessage("Please wait...");
                             dialog.show();
-                            if (strScreen.equals("EditEmail")) {
-                                if (isOldEmail.equals("true")) {
+                            if(strScreen.equals("EditEmail")){
+                                if(isOldEmail.equals("true")){
                                     loginViewModel.emailotpresend(oldEmail);
-                                } else {
-                                    loginViewModel.emailotpresend(oldEmail);
+                                }else{
+                                    loginViewModel.emailotpresend(newEmail);
                                 }
-                            } else {
+                            }else{
                                 loginViewModel.emailotpresend(EMAIL.trim());
                             }
 
@@ -268,20 +269,20 @@ public class OTPValidation extends AppCompatActivity {
                                     request.setPhoneNumber(phoneNumber);
                                     loginViewModel.retrieveUsers(request, charSequence.toString().trim());
                                 }
-                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditEmail")) {
+                            }else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditEmail")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
                                     dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                     dialog.setIndeterminate(false);
                                     dialog.setMessage("Please wait...");
                                     dialog.show();
-                                    if (isOldEmail.equals("true")) {
+                                    if(isOldEmail.equals("true")){
                                         UpdateEmailValidateRequest updateEmailValidateRequest = new UpdateEmailValidateRequest();
                                         updateEmailValidateRequest.setOldEmail(true);
                                         updateEmailValidateRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
                                         updateEmailValidateRequest.setOtp(charSequence.toString().trim());
                                         loginViewModel.updateEmailotpValidate(updateEmailValidateRequest);
-                                    } else {
+                                    }else{
                                         UpdateEmailValidateRequest updateEmailValidateRequest = new UpdateEmailValidateRequest();
                                         updateEmailValidateRequest.setOldEmail(false);
                                         updateEmailValidateRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
@@ -606,7 +607,7 @@ public class OTPValidation extends AppCompatActivity {
                             resendCounter = 0;
                             startActivity(new Intent(OTPValidation.this, OTPValidation.class)
                                     .putExtra("screen", "EditEmail")
-                                    .putExtra("IS_OLD_EMAIL", "true")
+                                    .putExtra("IS_OLD_EMAIL","false")
                                     .putExtra("OLD_EMAIL", oldEmail)
                                     .putExtra("NEW_EMAIL", newEmail));
                             finish();

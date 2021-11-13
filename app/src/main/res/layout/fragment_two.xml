@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
     <RelativeLayout
@@ -15,19 +15,22 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/bg_onboard_two"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/bg_onboard_two" />
+            android:layout_above="@+id/fragTwoBottomLL"
+            android:scaleType="fitXY"/>
 
         <LinearLayout
             android:id="@+id/fragTwoBottomLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/topIV"
             android:layout_centerInParent="true"
-            android:layout_marginTop="12dp"
             android:orientation="vertical"
-            android:padding="21dp">
+            android:padding="21dp"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentBottom="true"
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,49 +39,64 @@
                 android:gravity="center"
                 android:text="Tokenize Your Money With coyni"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_14ssp" />
+                android:textSize="@dimen/text_size_15sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginTop="30dp"
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_6sdp"
+                    android:layout_width="@dimen/text_size_7sp"
+                    android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_3sdp" />
+                    app:cardCornerRadius="5dp" />
 
                 <TextView
                     android:id="@+id/oneTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:text="sdsdsd" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/oneOneTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/text_size_12sp"
+                android:text="sdsd"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/_10sdp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_6sdp"
+                    android:layout_width="@dimen/text_size_7sp"
+                    android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_3sdp" />
+                    app:cardCornerRadius="5dp" />
 
                 <TextView
                     android:id="@+id/twoTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:text="sdsds"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -87,10 +105,10 @@
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_6sdp"
+                    android:layout_width="@dimen/text_size_7sp"
+                    android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_3sdp" />
+                    app:cardCornerRadius="5dp" />
 
                 <TextView
                     android:id="@+id/threeTV"
@@ -99,8 +117,19 @@
                     android:layout_marginStart="15dp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:text="sdsdsd"/>
             </LinearLayout>
+            <TextView
+                android:id="@+id/threethreeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/text_size_12sp"
+                android:text=""
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"/>
 
         </LinearLayout>
 

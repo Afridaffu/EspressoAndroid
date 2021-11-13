@@ -74,6 +74,23 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
+                    }else if (FROM.equals("CREATE_ACCOUNT") && !b) {
+                        if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+                            caa.phoneErrorLL.setVisibility(VISIBLE);
+                            caa.phoneErrorTV.setText("Invalid Phone Number");
+                        } else if ((pnET.getText().length() == 0)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+                            caa.phoneErrorLL.setVisibility(VISIBLE);
+                            caa.phoneErrorTV.setText("Field Required");
+                        } else {
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -93,10 +110,10 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
                 if (FROM.equals("CREATE_ACCOUNT")) {
                     CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
-                    if (charSequence.length() > 0) {
+                    if (charSequence.length() == 14) {
                         isPhoneError = false;
-                        hintName.setTextColor(getResources().getColor(R.color.primary_green));
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+//                        hintName.setTextColor(getResources().getColor(R.color.primary_green));
+//                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         createAccountAct.phoneErrorLL.setVisibility(GONE);
                     }
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.view.EditAddressActivity;
 
 import java.util.List;
 
@@ -54,15 +55,9 @@ public class StatesListAdapter extends RecyclerView.Adapter<StatesListAdapter.My
                 @Override
                 public void onClick(View v) {
                     try {
-//                        if (strScreen.equals("add")) {
-//                            ((AddressActivity) mContext).populateState(objData.getName());
-//                        } else if (strScreen.equals("signet")) {
-//                            fragment.populateState(objData.getName());
-//                        } else if (strScreen.equals("edit")) {
-//                            ((AddEditCardDetailsActivity) mContext).populateState(objData.getName());
-//                        } else {
-//                            addressFragment.populateState(objData.getName());
-//                        }
+                        if (strScreen.equals("EditAddress")) {
+                            ((EditAddressActivity) mContext).populateState(objData.getName());
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

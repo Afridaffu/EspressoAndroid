@@ -96,4 +96,27 @@
         <item name="colorAccent">@color/primary_color</item>
     </style>
 
+    <style name="ThemeFullSCreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
+    </style>
+
+    <style name="inactive" parent="Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/primary_black</item>
+        <item name="android:textColor">@color/primary_black</item>
+    </style>
+
+    <style name="active" parent="Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/error_red</item>
+        <item name="android:textColor">@color/error_red</item>
+    </style>
+
+    <style name="error" parent="Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/primary_green</item>
+        <item name="android:textColor">@color/primary_green</item>
+        <item name="android:fontFamily">@font/opensans_bolditalic</item>
+    </style>
+
 </resources>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,92 +15,92 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/bg_onboard_three"
             android:adjustViewBounds="true"
-            android:src="@drawable/bg_onboard_three" />
+            android:layout_above="@+id/fragThreeBottomLL"
+            android:scaleType="fitXY"/>
 
         <LinearLayout
-            android:id="@+id/fragThreeBottomLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/topIV"
-            android:layout_marginTop="@dimen/_12sdp"
             android:orientation="vertical"
-            android:padding="@dimen/_21sdp">
+            android:padding="21dp"
+            android:id="@+id/fragThreeBottomLL"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentBottom="true">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_bold"
-                android:gravity="center"
                 android:text="Optimize Your Business With Bank-Level Functionality"
+                android:textSize="@dimen/text_size_15sp"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_14ssp" />
+                android:gravity="center"
+                android:fontFamily="@font/opensans_bold"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginTop="30dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_6sdp"
+                    android:layout_width="@dimen/text_size_7sp"
+                    android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_3sdp" />
-
+                    app:cardCornerRadius="5dp" />
                 <TextView
+                    android:layout_marginStart="15dp"
                     android:id="@+id/oneTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="No chargebacks"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="No chargebacks"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
-
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_10sdp">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_6sdp"
+                    android:layout_width="@dimen/text_size_7sp"
+                    android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_3sdp" />
-
+                    app:cardCornerRadius="5dp" />
                 <TextView
+                    android:layout_marginStart="15dp"
                     android:id="@+id/twoTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="Lower fees"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:text="Lower fees"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_regular"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
-
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_10sdp">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_6sdp"
+                    android:layout_width="@dimen/text_size_7sp"
+                    android:layout_height="@dimen/text_size_7sp"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_3sdp" />
-
+                    app:cardCornerRadius="5dp" />
                 <TextView
+                    android:layout_marginStart="15dp"
                     android:id="@+id/threeTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="Funds available to use instantly"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:text="Funds available to use instantly"
+                    android:textSize="@dimen/text_size_12sp"
+                    android:fontFamily="@font/opensans_regular"/>
             </LinearLayout>
 
         </LinearLayout>
