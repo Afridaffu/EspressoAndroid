@@ -2,15 +2,19 @@ package com.greenbox.coyni.view;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +41,7 @@ public class RetrieveEmailActivity extends AppCompatActivity {
     MaterialCardView nextBtn;
     TextInputEditText firstName, lastName;
     TextInputLayout firstTIL, lastTIL;
-    LinearLayout layoutClose;
+    LinearLayout layoutClose, layoutMain;
     LoginViewModel loginViewModel;
     Dialog dialog;
     public static RetrieveEmailActivity retrieveEmailActivity;
@@ -63,9 +67,6 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             if (dialog != null) {
                 dialog.dismiss();
             }
-            phoneNumberET.setText("");
-            firstName.setText("");
-            lastName.setText("");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -81,6 +82,7 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             layoutClose = findViewById(R.id.layoutClose);
             firstTIL = findViewById(R.id.reFirstNameTIL);
             lastTIL = findViewById(R.id.reLastNameTIL);
+            layoutMain = findViewById(R.id.layoutMain);
             phoneNumberET.setFrom("Retrieve");
             nextBtn.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
@@ -193,6 +195,16 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 }
             });
 
+            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Utils.hideKeypad(RetrieveEmailActivity.this);
+                    }
+                    return false;
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -302,6 +314,9 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    phoneNumberET.setText("");
+                    firstName.setText("");
+                    lastName.setText("");
                 }
             });
         } catch (Exception ex) {

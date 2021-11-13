@@ -9,13 +9,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -34,6 +38,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     ProgressDialog dialog;
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
+    RelativeLayout layoutMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             tvEmailError = findViewById(R.id.tvEmailError);
             tvMessage = findViewById(R.id.tvMessage);
             tvHead = findViewById(R.id.tvHead);
+            layoutMain = findViewById(R.id.layoutMain);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
             etEmail.requestFocus();
@@ -100,7 +106,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(b){
+                    if (b) {
                         etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
 
@@ -113,13 +119,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         Utils.hideKeypad(ForgotPasswordActivity.this, v);
-                        if(etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())){
+                        if (etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Invalid Email");
                             etEmail.clearFocus();
-                        }else if(etEmail.getText().toString().trim().length() > 0 && Utils.isValidEmail(etEmail.getText().toString().trim())){
+                        } else if (etEmail.getText().toString().trim().length() > 0 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                             layoutEmailError.setVisibility(GONE);
@@ -130,7 +136,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             dialog.show();
                             loginViewModel.emailotpresend(etEmail.getText().toString().trim());
 
-                        } else{
+                        } else {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
@@ -147,6 +153,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Utils.hideKeypad(ForgotPasswordActivity.this);
+                    }
+                    return false;
                 }
             });
         } catch (Exception ex) {

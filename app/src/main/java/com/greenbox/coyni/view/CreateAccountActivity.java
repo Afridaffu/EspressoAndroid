@@ -136,7 +136,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
         }
     }
 
-
     public void initFields() {
         try {
             createAccountActivity = this;

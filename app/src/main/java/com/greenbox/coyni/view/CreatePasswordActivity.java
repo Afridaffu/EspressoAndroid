@@ -8,13 +8,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -49,6 +52,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     View strengthOne, strengthTwo, strengthThree;
     String strCode = "", strNewPwd = "";
     LoginViewModel loginViewModel;
+    RelativeLayout layoutMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             strengthThree = findViewById(R.id.strengthThree);
             layoutNewPassword = findViewById(R.id.layoutNewPassword);
             layoutDone = findViewById(R.id.layoutDone);
+            layoutMain = findViewById(R.id.layoutMain);
             layoutIndicator = findViewById(R.id.layoutIndicator);
             tvHead = findViewById(R.id.tvHead);
             tvMessage = findViewById(R.id.tvMessage);
@@ -245,6 +250,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     Intent i = new Intent(CreatePasswordActivity.this, LoginActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
+                }
+            });
+
+            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Utils.hideKeypad(CreatePasswordActivity.this);
+                    }
+                    return false;
                 }
             });
         } catch (Exception ex) {

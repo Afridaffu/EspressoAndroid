@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,14 +17,17 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     CheckBox chkRemember;
     MyApplication objMyApplication;
     LinearLayout layoutClose;
+    RelativeLayout layoutMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             forgotpwd = findViewById(R.id.forgotpwd);
             tvRetEmail = findViewById(R.id.tvRetEmail);
             layoutClose = findViewById(R.id.layoutClose);
+            layoutMain = findViewById(R.id.layoutMain);
             chkRemember = findViewById(R.id.chkRemember);
             loginBGIV = findViewById(R.id.loginBGIV);
             cvNext.setEnabled(false);
@@ -349,6 +355,16 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     }
                 }
             });
+            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Utils.hideKeypad(LoginActivity.this);
+                    }
+                    return false;
+                }
+            });
+
             enableIcon();
             SetDB();
             SetToken();
@@ -506,11 +522,13 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-                    if (!apiError.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this);
-                    } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), LoginActivity.this);
-                    }
+//                    if (!apiError.getError().getErrorDescription().equals("")) {
+//                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this);
+//                    } else {
+//                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), LoginActivity.this);
+//                    }
+                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                 }
             }
         });
