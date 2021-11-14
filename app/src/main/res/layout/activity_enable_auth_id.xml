@@ -191,7 +191,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:alpha="0.2"
+            android:alpha="0.5"
             android:background="@drawable/ic_dash_back"
             android:backgroundTint="@color/white"></RelativeLayout>
         <RelativeLayout
