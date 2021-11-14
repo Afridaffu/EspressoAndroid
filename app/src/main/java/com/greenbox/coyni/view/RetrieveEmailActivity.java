@@ -1,23 +1,15 @@
 package com.greenbox.coyni.view;
 
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +23,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
@@ -39,7 +30,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-public class RetrieveEmailActivity extends AppCompatActivity {
+public class RetrieveEmailActivity extends AppCompatActivity implements TextWatcher {
     OutLineBoxPhoneNumberEditText phoneNumberET;
     MaterialCardView nextBtn;
     TextInputEditText firstName, lastName;
@@ -49,8 +40,8 @@ public class RetrieveEmailActivity extends AppCompatActivity {
     Dialog dialog;
     public static RetrieveEmailActivity retrieveEmailActivity;
     String phoneNumber = "";
-    public LinearLayout phoneErrorLL,firstNameErrorLL,lastNameErrorLL;
-    public TextView  phoneErrorTV,firstNameErrorTV,lastNameErrorTV;
+    public LinearLayout phoneErrorLL, firstNameErrorLL, lastNameErrorLL;
+    public TextView phoneErrorTV, firstNameErrorTV, lastNameErrorTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +64,53 @@ public class RetrieveEmailActivity extends AppCompatActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s == firstName.getEditableText()) {
+            try {
+                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
+                    firstNameErrorLL.setVisibility(GONE);
+                }
+                String str = firstName.getText().toString();
+                if (str.length() > 0) {
+                    firstName.removeTextChangedListener(RetrieveEmailActivity.this);
+                    firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
+                    firstName.setSelection(firstName.getText().toString().trim().length());
+                    firstName.addTextChangedListener(RetrieveEmailActivity.this);
+                    enableButton();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (s == lastName.getEditableText()) {
+            try {
+                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
+                    lastNameErrorLL.setVisibility(GONE);
+                }
+                String str = lastName.getText().toString();
+                if (str.length() > 0) {
+                    lastName.removeTextChangedListener(RetrieveEmailActivity.this);
+                    lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
+                    lastName.setSelection(lastName.getText().length());
+                    lastName.addTextChangedListener(RetrieveEmailActivity.this);
+                    enableButton();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -119,62 +157,69 @@ public class RetrieveEmailActivity extends AppCompatActivity {
                 }
             });
 
-            firstName.addTextChangedListener(new TextWatcher() {
+//            firstName.addTextChangedListener(new TextWatcher() {
+//
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+//                        firstNameErrorLL.setVisibility(GONE);
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//                    try {
+//                        String str = firstName.getText().toString();
+////                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+//                        if (str.length() > 0) {
+//                            firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
+//                            firstName.setSelection(firstName.getText().toString().trim().length());
+//                            enableButton();
+//                        }
+//
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
 
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            lastName.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                    if (charSequence.toString().trim().length() > 0) {
+//                        lastNameErrorLL.setVisibility(GONE);
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                    try {
+//                        String str = lastName.getText().toString();
+////                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+//                        if (str.length() > 0) {
+//                            lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
+//                            lastName.setSelection(lastName.getText().length());
+//                            enableButton();
+//                        }
+//
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
-                        firstNameErrorLL.setVisibility(GONE);
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    try {
-                        String str = firstName.getText().toString();
-                        if(str.length() > 0 && str.substring(0).equals(" ")) {
-                            firstName.setText(firstName.getText().toString().replaceAll(" ",""));
-                            firstName.setSelection(firstName.getText().length());
-                        }
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-
-            lastName.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
-                        lastNameErrorLL.setVisibility(GONE);
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    try {
-                        String str = lastName.getText().toString();
-                        if(str.length() > 0 && str.substring(0).equals(" ")) {
-                            lastName.setText(lastName.getText().toString().replaceAll(" ",""));
-                            lastName.setSelection(lastName.getText().length());
-                        }
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+            firstName.addTextChangedListener(this);
+            lastName.addTextChangedListener(this);
 
             firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override

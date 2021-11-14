@@ -75,14 +75,14 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
-public class CreateAccountActivity extends AppCompatActivity  {
+public class CreateAccountActivity extends AppCompatActivity {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
-    TextInputEditText  firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
-    TextInputLayout firstNameTIL,lastNameTIL, emailTIL,passwordTIL,confPasswordTIL;
-    public LinearLayout emailErrorLL, phoneErrorLL,firstNameErrorLL,lastNameErrorLL,passwordErrorLL,confPassErrorLL;
-    public TextView emailErrorTV, phoneErrorTV,firstNameErrorTV,lastNameErrorTV,passwordErrorTV,confPassErrorTV;
-    TextView passwordInfoTV,spannableText;
+    TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
+    TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
+    public LinearLayout emailErrorLL, phoneErrorLL, firstNameErrorLL, lastNameErrorLL, passwordErrorLL, confPassErrorLL;
+    public TextView emailErrorTV, phoneErrorTV, firstNameErrorTV, lastNameErrorTV, passwordErrorTV, confPassErrorTV;
+    TextView passwordInfoTV, spannableText;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -118,6 +118,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
     RelativeLayout mainRL;
     ScrollView mainSV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -134,6 +135,12 @@ public class CreateAccountActivity extends AppCompatActivity  {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firstNameET.requestFocus();
     }
 
     public void initFields() {
@@ -204,13 +211,13 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
             textWatchers();
             focusWatchers();
-            firstNameET.requestFocus();
+//            firstNameET.requestFocus();
 
             setSpannableText();
 
             nextCV.setOnClickListener(view -> {
                 if (isNextEnabled) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -242,7 +249,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
             mainRL.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                         Utils.hideKeypad(CreateAccountActivity.this);
                     }
                     return false;
@@ -269,33 +276,38 @@ public class CreateAccountActivity extends AppCompatActivity  {
         loginViewModel.getCustRegisResponseMutableLiveData().observe(this, new Observer<CustRegisterResponse>() {
             @Override
             public void onChanged(CustRegisterResponse custRegisterResponse) {
-                dialog.dismiss();
-                if (custRegisterResponse != null) {
-                    try {
-                        Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                        if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
-                            i.putExtra("screen", "SignUp");
-                            i.putExtra("OTP_TYPE", "MOBILE");
-                            i.putExtra("MOBILE", phoneNumber);
-                            i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                            i.putExtra("EMAIL", emailET.getText().toString().trim());
-                        } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
-                            i.putExtra("screen", "SignUp");
-                            i.putExtra("OTP_TYPE", "EMAIL");
-                            i.putExtra("MOBILE", phoneNumber);
-                            i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                            i.putExtra("EMAIL", emailET.getText().toString().trim());
-                        } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
-                            i.putExtra("screen", "SignUp");
-                            i.putExtra("OTP_TYPE", "SECURE");
-                            i.putExtra("MOBILE", phoneNumber);
-                            i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                            i.putExtra("EMAIL", emailET.getText().toString().trim());
+                try {
+                    dialog.dismiss();
+                    mLastClickTime = 0L;
+                    if (custRegisterResponse != null) {
+                        try {
+                            Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
+                            if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
+                                i.putExtra("screen", "SignUp");
+                                i.putExtra("OTP_TYPE", "MOBILE");
+                                i.putExtra("MOBILE", phoneNumber);
+                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                i.putExtra("EMAIL", emailET.getText().toString().trim());
+                            } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
+                                i.putExtra("screen", "SignUp");
+                                i.putExtra("OTP_TYPE", "EMAIL");
+                                i.putExtra("MOBILE", phoneNumber);
+                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                i.putExtra("EMAIL", emailET.getText().toString().trim());
+                            } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
+                                i.putExtra("screen", "SignUp");
+                                i.putExtra("OTP_TYPE", "SECURE");
+                                i.putExtra("MOBILE", phoneNumber);
+                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                i.putExtra("EMAIL", emailET.getText().toString().trim());
+                            }
+                            startActivity(i);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                        startActivity(i);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -303,39 +315,43 @@ public class CreateAccountActivity extends AppCompatActivity  {
         loginViewModel.getErrorMessage().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.e("Error Message", s);
-                if (s.toString().toLowerCase().contains("entered email already exist in the system")) {
-                    isEmailError = true;
-                    emailTIL.requestFocus();
-                    emailErrorLL.setVisibility(VISIBLE);
-                    phoneErrorLL.setVisibility(GONE);
-                } else if (s.toString().toLowerCase().contains("entered phone number already exist in the system")) {
-                    isPhoneError = true;
-                    phoneNumberET.setErrorOutlineBox();
-                    phoneErrorLL.setVisibility(VISIBLE);
-                    phoneErrorTV.setText("User already exists. Try a new phone number or log in.");
-                    emailErrorLL.setVisibility(GONE);
-                } else if (s.toString().toLowerCase().contains("entered phone number and email already exist in the system")) {
-                    isPhoneError = true;
-                    phoneNumberET.setErrorOutlineBox();
-                    phoneErrorLL.setVisibility(VISIBLE);
+                try {
+                    Log.e("Error Message", s);
+                    mLastClickTime = 0L;
+                    if (s.toString().toLowerCase().contains("entered email already exist in the system")) {
+                        isEmailError = true;
+                        emailTIL.requestFocus();
+                        emailErrorLL.setVisibility(VISIBLE);
+                        phoneErrorLL.setVisibility(GONE);
+                    } else if (s.toString().toLowerCase().contains("entered phone number already exist in the system")) {
+                        isPhoneError = true;
+                        phoneNumberET.setErrorOutlineBox();
+                        phoneErrorLL.setVisibility(VISIBLE);
+                        phoneErrorTV.setText("User already exists. Try a new phone number or log in.");
+                        emailErrorLL.setVisibility(GONE);
+                    } else if (s.toString().toLowerCase().contains("entered phone number and email already exist in the system")) {
+                        isPhoneError = true;
+                        phoneNumberET.setErrorOutlineBox();
+                        phoneErrorLL.setVisibility(VISIBLE);
 
-                    isEmailError = true;
-                    emailTIL.requestFocus();
-                    emailErrorLL.setVisibility(VISIBLE);
-                    emailErrorTV.setText("User already exists. Try a new email or log in.");
-                    emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
-                    emailTIL.setHintTextColor(errorColorState);
+                        isEmailError = true;
+                        emailTIL.requestFocus();
+                        emailErrorLL.setVisibility(VISIBLE);
+                        emailErrorTV.setText("User already exists. Try a new email or log in.");
+                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.error_red));
+                        emailTIL.setHintTextColor(errorColorState);
 
-                } else {
-                    Log.e("Error message", s);
-                    isEmailError = false;
-                    isPhoneError = false;
-                    phoneErrorLL.setVisibility(GONE);
-                    emailErrorLL.setVisibility(GONE);
-                    Utils.displayAlert(s, CreateAccountActivity.this);
+                    } else {
+                        Log.e("Error message", s);
+                        isEmailError = false;
+                        isPhoneError = false;
+                        phoneErrorLL.setVisibility(GONE);
+                        emailErrorLL.setVisibility(GONE);
+                        Utils.displayAlert(s, CreateAccountActivity.this);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-
             }
         });
     }
@@ -367,8 +383,8 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 public void afterTextChanged(Editable s) {
                     try {
                         String str = firstNameET.getText().toString();
-                        if(str.length() > 0 && str.substring(0).equals(" ")) {
-                            firstNameET.setText(firstNameET.getText().toString().replaceAll(" ",""));
+                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
                         }
 
@@ -401,8 +417,8 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 public void afterTextChanged(Editable editable) {
                     try {
                         String str = lastNameET.getText().toString();
-                        if(str.length() > 0 && str.substring(0).equals(" ")) {
-                            lastNameET.setText(lastNameET.getText().toString().replaceAll(" ",""));
+                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
                         }
 
@@ -438,8 +454,8 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 public void afterTextChanged(Editable editable) {
                     try {
                         String str = emailET.getText().toString();
-                        if(str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" ") )) {
-                            emailET.setText(emailET.getText().toString().replaceAll(" ",""));
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            emailET.setText(emailET.getText().toString().replaceAll(" ", ""));
                             emailET.setSelection(emailET.getText().length());
                         }
 
@@ -542,7 +558,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
 
                         confPasswordTIL.setHint("Password doesn’t match");
 
-                        if(passwordET.getText().toString().trim().length() == confirmPasswordET.getText().toString().trim().length()){
+                        if (passwordET.getText().toString().trim().length() == confirmPasswordET.getText().toString().trim().length()) {
                             confirmPasswordET.clearFocus();
                         }
 
@@ -577,18 +593,18 @@ public class CreateAccountActivity extends AppCompatActivity  {
             firstNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(!b){
-                        if(firstNameET.getText().toString().trim().length() > 0 ){
+                    if (!b) {
+                        if (firstNameET.getText().toString().trim().length() > 0) {
                             firstNameErrorLL.setVisibility(GONE);
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_black));
-                        }else{
+                        } else {
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
-                    }else{
+                    } else {
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
                     }
@@ -598,18 +614,18 @@ public class CreateAccountActivity extends AppCompatActivity  {
             lastNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(!b){
-                        if(lastNameET.getText().toString().trim().length() > 0 ){
+                    if (!b) {
+                        if (lastNameET.getText().toString().trim().length() > 0) {
                             lastNameErrorLL.setVisibility(GONE);
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_black));
-                        }else{
+                        } else {
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
                         }
-                    }else{
+                    } else {
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
                     }
@@ -625,10 +641,10 @@ public class CreateAccountActivity extends AppCompatActivity  {
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
                     } else {
                         stregnthViewLL.setVisibility(GONE);
-                        if(strong.matcher(passwordET.getText().toString()).matches()){
+                        if (strong.matcher(passwordET.getText().toString()).matches()) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                        }else{
+                        } else {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                         }
@@ -665,10 +681,10 @@ public class CreateAccountActivity extends AppCompatActivity  {
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                     } else {
-                        if(passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())){
+                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                        }else{
+                        } else {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
                         }
@@ -680,30 +696,28 @@ public class CreateAccountActivity extends AppCompatActivity  {
             emailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(!b){
-                        if(emailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(emailET.getText().toString().trim())){
+                    if (!b) {
+                        if (emailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Invalid Email");
-                        }else if(emailET.getText().toString().trim().length() > 0 && Utils.isValidEmail(emailET.getText().toString().trim())){
+                        } else if (emailET.getText().toString().trim().length() > 0 && Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
-                        } else{
+                        } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Field Required");
                         }
-                    }else{
+                    } else {
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
                     }
                 }
             });
-
-
 
 
         } catch (Exception e) {
@@ -736,8 +750,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
         }
 
     }
-
-
 
     public static InputFilter acceptonlyAlphabetValuesnotNumbersMethod() {
         return new InputFilter() {
@@ -833,13 +845,13 @@ public class CreateAccountActivity extends AppCompatActivity  {
 //    }
 
 
-    public void setSpannableText(){
+    public void setSpannableText() {
 
         SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & Privacy Policy");
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Log.e("Click","click");
+                Log.e("Click", "click");
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -854,6 +866,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 }
 
             }
+
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
@@ -864,7 +877,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
         ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Log.e("Click","click");
+                Log.e("Click", "click");
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -879,6 +892,7 @@ public class CreateAccountActivity extends AppCompatActivity  {
                 }
 
             }
+
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
@@ -889,7 +903,6 @@ public class CreateAccountActivity extends AppCompatActivity  {
         ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 49, 63, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
 
 
         spannableText.setText(ss);

@@ -107,6 +107,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     TYPE = "CHOOSE";
                     tvHead.setText("Choose your PIN");
                     clearPassCode();
+                    setDefault();
                     passcode = "";
                     break;
             }
@@ -329,6 +330,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         TYPE = "CHOOSE";
                         tvHead.setText("Choose your PIN");
                         clearPassCode();
+                        setDefault();
                         passcode = "";
                     }
                 }
@@ -485,20 +487,13 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
     }
 
-    public void setSuccessPIN() {
+    public void setDefault() {
         circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
         circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
-
-        chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
     }
 
     private void clearControls() {

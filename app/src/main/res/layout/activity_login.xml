@@ -22,9 +22,9 @@
                 android:id="@+id/layoutClose"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:orientation="horizontal"
                 android:layout_marginLeft="@dimen/_21sdp"
-                android:layout_marginTop="?attr/actionBarSize">
+                android:layout_marginTop="?attr/actionBarSize"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgClose"
@@ -41,6 +41,7 @@
                     android:id="@+id/loginBGIV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_logintoplogo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -48,8 +49,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:layout_editor_absoluteX="336.24dp"
-                    android:adjustViewBounds="true"/>
+                    app:layout_editor_absoluteX="336.24dp" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -95,19 +95,19 @@
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,."
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Email"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress|textNoSuggestions"
+                    android:longClickable="false"
+                    android:maxLines="1"
                     android:padding="@dimen/_14sdp"
+                    android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp"
-                    android:longClickable="false"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,." />
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,19 +161,19 @@
                         android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="************"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword|textNoSuggestions"
+                        android:longClickable="false"
                         android:maxLength="12"
                         android:padding="@dimen/_14sdp"
+                        android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:longClickable="false"
-                        android:singleLine="true"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/" />
+                        android:textSize="@dimen/_12ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -182,9 +182,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_faceid"
                     android:layout_centerInParent="true"
-                    android:layout_marginRight="@dimen/_10sdp"/>
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_faceid" />
 
             </RelativeLayout>
 
@@ -259,8 +259,8 @@
                 android:id="@+id/cvNext"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_44sdp"
-                android:layout_marginTop="@dimen/_33sdp"
-                android:layout_marginBottom="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
                 app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="@dimen/_22sdp">
 
