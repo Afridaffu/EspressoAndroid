@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -90,8 +91,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                     firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
                     firstName.setSelection(firstName.getText().toString().trim().length());
                     firstName.addTextChangedListener(RetrieveEmailActivity.this);
-                    enableButton();
+
                 }
+                enableButton();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -106,8 +108,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                     lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
                     lastName.setSelection(lastName.getText().length());
                     lastName.addTextChangedListener(RetrieveEmailActivity.this);
-                    enableButton();
+
                 }
+                enableButton();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -224,13 +227,20 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        if (firstName.getText().toString().trim().equals("")) {
-                            firstTIL.setErrorEnabled(true);
-                            firstTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    if(!hasFocus){
+                        if(firstName.getText().toString().trim().length() > 0 ){
+                            firstNameErrorLL.setVisibility(GONE);
+                            firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
+                        }else{
+                            firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
+                            firstNameErrorLL.setVisibility(VISIBLE);
+                            firstNameErrorTV.setText("Field Required");
                         }
+                    }else{
+                        firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
                     }
                 }
             });
@@ -238,13 +248,20 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        if (lastName.getText().toString().trim().equals("")) {
-                            lastTIL.setErrorEnabled(true);
-                            lastTIL.setError(" ");
-                            nextBtn.setEnabled(false);
-                            nextBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    if(!hasFocus){
+                        if(lastName.getText().toString().trim().length() > 0 ){
+                            lastNameErrorLL.setVisibility(GONE);
+                            lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_black));
+                        }else{
+                            lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
+                            lastNameErrorLL.setVisibility(VISIBLE);
+                            lastNameErrorTV.setText("Field Required");
                         }
+                    }else{
+                        lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
                     }
                 }
             });

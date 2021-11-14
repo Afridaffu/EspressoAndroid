@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //                            passwordValidation();
 //                        }
                         if (!hasFocus) {
-                            if (etPassword.getText().toString().trim().length() < 8) {
+                            if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0 ) {
                                 etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                                 layoutPwdError.setVisibility(VISIBLE);
@@ -281,6 +281,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         } else if (s.length() > 0 && s.toString().contains(" ")) {
                             etPassword.setText(s.toString().trim());
                             etPassword.setSelection(s.toString().trim().length());
+                        }
+                        if (etPassword.getText().toString().length() >= 8) {
+                            layoutPwdError.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -474,7 +477,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 String value = dsTouchID.getString(1);
                 if (value.equals("true")) {
                     isTouchId = true;
-                    etlPassword.setEndIconDrawable(R.drawable.ic_touch_id);
+                    endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
                 } else {
                     isTouchId = false;
                 }
@@ -671,12 +674,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         try {
             if (Utils.getIsTouchEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
-                etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
                 strMsg = "Do you want to register with Thumb/Pin.";
             } else if (Utils.getIsFaceEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
-                etlPassword.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
