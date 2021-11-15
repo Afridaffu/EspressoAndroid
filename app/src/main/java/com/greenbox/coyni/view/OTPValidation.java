@@ -198,7 +198,7 @@ public class OTPValidation extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (resendCounter < 5) {
+                    if (resendCounter < 4) {
                         Utils.hideKeypad(OTPValidation.this, view);
                         if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin") || strScreen.equals("EditEmail"))) || (OTP_TYPE.equals("EMAIL"))) {
                             dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);

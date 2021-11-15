@@ -230,7 +230,6 @@ public class EnableAuthID extends AppCompatActivity {
                 }
             });
 
-
             succesCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -269,6 +268,7 @@ public class EnableAuthID extends AppCompatActivity {
                     startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }

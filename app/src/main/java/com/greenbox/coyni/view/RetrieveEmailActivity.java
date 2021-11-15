@@ -131,7 +131,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             layoutMain = findViewById(R.id.layoutMain);
 
             firstName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+            firstName.setFilters(new InputFilter[]{Utils.acceptonlyAlphabetValuesnotNumbersMethod()});
             lastName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+            lastName.setFilters(new InputFilter[]{Utils.acceptonlyAlphabetValuesnotNumbersMethod()});
 
             phoneErrorLL = findViewById(R.id.phoneErrorLL);
             firstNameErrorLL = findViewById(R.id.firstNameErrorLL);

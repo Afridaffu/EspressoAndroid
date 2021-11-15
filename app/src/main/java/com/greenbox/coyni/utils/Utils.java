@@ -16,6 +16,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
+import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -478,6 +481,43 @@ public class Utils {
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+    }
+
+    public static InputFilter acceptonlyAlphabetValuesnotNumbersMethod() {
+        return new InputFilter() {
+
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                boolean isCheck = true;
+                StringBuilder sb = new StringBuilder(end - start);
+                for (int i = start; i < end; i++) {
+                    char c = source.charAt(i);
+                    if (isCharAllowed(c)) {
+                        sb.append(c);
+                    } else {
+                        isCheck = false;
+                    }
+                }
+                if (isCheck)
+                    return null;
+                else {
+                    if (source instanceof Spanned) {
+                        SpannableString spannableString = new SpannableString(sb);
+                        TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, spannableString, 0);
+                        return spannableString;
+                    } else {
+                        return sb;
+                    }
+                }
+            }
+
+            private boolean isCharAllowed(char c) {
+                Pattern pattern = Pattern.compile("^[a-zA-Z ]+$");
+                Matcher match = pattern.matcher(String.valueOf(c));
+                return match.matches();
+            }
+        };
     }
 
 }
