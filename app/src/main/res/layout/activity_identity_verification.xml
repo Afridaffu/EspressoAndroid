@@ -561,7 +561,6 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/submitBtn"
                 android:layout_width="match_parent"
-
                 android:layout_height="@dimen/_43sdp"
                 android:layout_marginTop="@dimen/_22sdp"
                 app:cardBackgroundColor="@color/inactive_color"

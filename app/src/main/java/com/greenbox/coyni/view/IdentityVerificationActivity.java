@@ -439,6 +439,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isSubmit){
                     btnNext.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                    finish();
                 }
 
             }
