@@ -61,7 +61,7 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
                 android:text="@string/contact_us"
-                android:textColor="#00a6a2"
+                android:textColor="@color/primary_green"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
@@ -75,7 +75,7 @@
         android:id="@+id/nextCV"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:cardBackgroundColor="#00a6a2"
+        app:cardBackgroundColor="@color/primary_green"
         android:gravity="center"
         app:cardCornerRadius="20dp"
         android:layout_marginTop="100dp"

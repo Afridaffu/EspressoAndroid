@@ -11,7 +11,7 @@
     <View
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_2sdp"
-        android:background="#00a6a2"
+        android:background="@color/primary_color"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_28sdp"
@@ -141,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_16sdp"
             android:text="160.00 USD"
-            android:textColor="#00a6a2"
+            android:textColor="@color/primary_color"
             android:gravity="right"
             android:fontFamily="@font/opensans_bold"
             android:layout_marginLeft="@dimen/_145sdp"

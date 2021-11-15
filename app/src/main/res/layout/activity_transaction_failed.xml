@@ -54,7 +54,7 @@
         android:id="@+id/nextCV"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:cardBackgroundColor="#00a6a2"
+        app:cardBackgroundColor="@color/primary_green"
         android:gravity="center"
         app:cardCornerRadius="20dp"
         android:layout_marginTop="@dimen/_189sdp"

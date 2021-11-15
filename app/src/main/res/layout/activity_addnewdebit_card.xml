@@ -35,7 +35,7 @@
                     android:layout_marginLeft="@dimen/_26sdp"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_28sdp"
-                    android:background="#00a6a2" />
+                    android:background="@color/primary_color" />
 
                 <View
                     android:layout_width="@dimen/_83sdp"
@@ -44,7 +44,8 @@
                     android:layout_marginLeft="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_28sdp"
-                    android:background="#3700BCD4" />
+                    android:background="@color/inactive_color"
+                   />
             </LinearLayout>
 
             <TextView
@@ -328,7 +329,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="@dimen/_228sdp"
                 android:gravity="center"
-                app:cardBackgroundColor="#00a6a2"
+                app:cardBackgroundColor="@color/primary_green"
                 app:cardCornerRadius="20dp">
 
                 <TextView

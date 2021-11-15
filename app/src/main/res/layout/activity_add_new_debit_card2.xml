@@ -38,7 +38,7 @@
         <View
             android:layout_width="@dimen/_83sdp"
             android:layout_height="@dimen/_2sdp"
-            android:background="#00a6a2"
+            android:background="@color/primary_color"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_40sdp"
             android:layout_marginBottom="@dimen/_28sdp"
@@ -213,8 +213,8 @@
                     android:text="City"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolder"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolder"
+                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderll"
+                    app:layout_constraintStart_toStartOf="@+id/hintdHolderll"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -393,7 +393,7 @@
             android:id="@+id/nextCV"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:cardBackgroundColor="#00a6a2"
+            app:cardBackgroundColor="@color/primary_color"
             android:gravity="center"
             app:cardCornerRadius="20dp"
             android:layout_marginTop="@dimen/_43sdp"

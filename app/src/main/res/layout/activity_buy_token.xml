@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="0.00"
-                android:textColor="#c5c5c5"
+                android:textColor="@color/light_gray"
                 android:textSize="@dimen/_53ssp"
                 android:fontFamily="@font/opensans_bold"
                 />
@@ -133,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_2sdp"
                 android:layout_gravity="center"
-                android:background="#d8e2f0"
+                android:background="@color/inactive_color"
                 />
         </LinearLayout>
 

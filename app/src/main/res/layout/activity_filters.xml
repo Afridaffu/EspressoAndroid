@@ -9,7 +9,7 @@
         <View
         android:layout_width="@dimen/_43sdp"
         android:layout_height="@dimen/_2sdp"
-        android:background="#00a6a2"
+        android:background="@color/primary_green"
         android:layout_marginBottom="@dimen/_28sdp"
        android:layout_marginLeft="@dimen/_100sdp"
         />
@@ -35,7 +35,7 @@
             android:text="Reset all filters"
             android:textSize="@dimen/_11ssp"
             android:fontFamily="@font/opensans_semibold"
-            android:textColor="#00a6a2"
+            android:textColor="@color/primary_green"
             android:layout_marginLeft="@dimen/_105sdp"
             android:layout_marginBottom="@dimen/_3sdp"
             />
@@ -80,7 +80,7 @@
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Pay/Request"
                         android:textSize="@dimen/_11ssp"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Buy Token"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -115,7 +115,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Sales Order"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                         android:paddingRight="@dimen/_28sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Withdrawn"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,7 +149,7 @@
                         android:paddingRight="@dimen/_38sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Refund"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -162,7 +162,7 @@
                         android:paddingTop="@dimen/_8sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Account Transfer"
-                        android:textColor="#00a6a2"
+                        android:textColor="@color/primary_green"
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
@@ -177,7 +177,7 @@
                     android:paddingRight="@dimen/_36sdp"
                     android:paddingBottom="@dimen/_8sdp"
                     android:text="Paid Invoice"
-                    android:textColor="#00a6a2" />
+                    android:textColor="@color/primary_green" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -206,7 +206,7 @@
                         android:paddingRight="@dimen/_45sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Sent"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -220,7 +220,7 @@
                         android:paddingRight="@dimen/_33sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Received"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,7 +241,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Bank Account"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -255,7 +255,7 @@
                         android:paddingRight="@dimen/_27sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Credit Card"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -275,7 +275,7 @@
                         android:paddingRight="@dimen/_29sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Debit Card"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -289,7 +289,7 @@
                         android:paddingRight="@dimen/_41sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Signet"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -309,7 +309,7 @@
                         android:paddingRight="@dimen/_27sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Instant Pay"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -323,7 +323,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Gift Card"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -344,7 +344,8 @@
                         android:paddingRight="@dimen/_10sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Sale Order: Token"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green"
+                        />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -358,7 +359,7 @@
                         android:paddingRight="@dimen/_14sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Failed Withdraw"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <TextView
@@ -373,7 +374,7 @@
                     android:paddingBottom="@dimen/_8sdp"
                     android:text="Canceled Withdraw"
                     android:gravity="center"
-                    android:textColor="#00a6a2" />
+                    android:textColor="@color/primary_green" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -400,7 +401,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Pending"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -414,7 +415,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Completed"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -434,7 +435,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Canceled"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -448,7 +449,7 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="In progress"
-                        android:textColor="#00a6a2" />
+                        android:textColor="@color/primary_green" />
                 </LinearLayout>
 
                 <TextView
@@ -462,7 +463,7 @@
                     android:paddingRight="@dimen/_54sdp"
                     android:paddingBottom="@dimen/_8sdp"
                     android:text="Failed"
-                    android:textColor="#00a6a2" />
+                    android:textColor="@color/primary_green" />
 
                 <TextView
                     android:layout_width="match_parent"
