@@ -123,7 +123,8 @@
                     android:textSize="@dimen/_12ssp"
                     android:textIsSelectable="false"
                     android:longClickable="false"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -185,7 +186,8 @@
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp"
                     android:longClickable="false"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
