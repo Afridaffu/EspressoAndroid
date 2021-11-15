@@ -7,18 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.Utils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FaceIdNotAvailable_BottomSheet#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FaceIdNotAvailable_BottomSheet extends BottomSheetDialogFragment {
+public class FaceIdDisabled_BottomSheet extends BottomSheetDialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,8 +21,9 @@ public class FaceIdNotAvailable_BottomSheet extends BottomSheetDialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    static Boolean isTouchId = false, isFaceId = false;
 
-    public FaceIdNotAvailable_BottomSheet() {
+    public FaceIdDisabled_BottomSheet() {
         // Required empty public constructor
     }
 
@@ -40,11 +34,13 @@ public class FaceIdNotAvailable_BottomSheet extends BottomSheetDialogFragment {
      * @return A new instance of fragment FaceIdNotAvailable_BottomSheet.
      */
     // TODO: Rename and change types and number of parameters
-    public static FaceIdNotAvailable_BottomSheet newInstance() {
-        FaceIdNotAvailable_BottomSheet fragment = new FaceIdNotAvailable_BottomSheet();
+    public static FaceIdDisabled_BottomSheet newInstance(Boolean isTouch, Boolean isFace) {
+        FaceIdDisabled_BottomSheet fragment = new FaceIdDisabled_BottomSheet();
         Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
+        isTouchId = isTouch;
+        isFaceId = isFace;
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,13 +59,14 @@ public class FaceIdNotAvailable_BottomSheet extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_face_id_not_available__bottom_sheet, container, false);
-        View view = inflater.inflate(R.layout.fragment_face_id_not_available__bottom_sheet, container, false);
+        View view = inflater.inflate(R.layout.fragment_face_id_disabled__bottom_sheet, container, false);
         TextView tvHead = view.findViewById(R.id.tvHead);
+        TextView tvMessage = view.findViewById(R.id.tvMessage);
         CardView cvOK = view.findViewById(R.id.cvOK);
-        if (Utils.getIsTouchEnabled()) {
-            tvHead.setText("Touch ID Not available");
-        } else if (Utils.getIsFaceEnabled()) {
-            tvHead.setText("Face ID Not available");
+        if (isFaceId) {
+            tvHead.setText("Face ID Temporarily disabled");
+        } else if (isTouchId) {
+            tvHead.setText("Touch ID Temporarily disabled");
         }
         cvOK.setOnClickListener(new View.OnClickListener() {
             @Override

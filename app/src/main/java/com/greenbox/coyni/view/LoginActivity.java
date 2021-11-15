@@ -41,6 +41,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
@@ -157,12 +158,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onClick(View v) {
                     try {
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
-                            if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || isFaceLock && !Utils.isFingerPrint(LoginActivity.this)) {
+                            if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
                                 Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
-                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdNotAvailable_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                FaceIdDisabled_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
                                 faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
                             }
+                        } else {
+                            FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
+                            faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -387,7 +391,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
@@ -552,7 +556,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             public void onChanged(LoginResponse login) {
                 try {
                     dialog.dismiss();
-                    mLastClickTime = 0;
                     if (login != null) {
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
@@ -599,7 +602,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             @Override
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
-                mLastClickTime = 0;
                 if (apiError != null) {
 //                    if (!apiError.getError().getErrorDescription().equals("")) {
 //                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this);

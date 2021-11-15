@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
+import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
@@ -124,7 +125,7 @@ public class OnboardActivity extends AppCompatActivity {
 //            });
             getStarted.setOnClickListener(view -> {
                 try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -137,16 +138,16 @@ public class OnboardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
-                            if ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || isFaceLock && !Utils.isFingerPrint(OnboardActivity.this)) {
+                            if ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock)) {
                                 Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
-                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdNotAvailable_BottomSheet.newInstance(isTouchId, isFaceLock);
-                                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                                FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                             }
                         } else {
                             Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
@@ -184,7 +185,6 @@ public class OnboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mLastClickTime = 0L;
     }
 
     @Override
