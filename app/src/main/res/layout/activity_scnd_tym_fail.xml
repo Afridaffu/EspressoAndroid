@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_21sdp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_caution_exclaimation_mark__icon"
+        android:layout_marginLeft="@dimen/_64sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginBottom="@dimen/_34sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Error With Bank Account \nVerification"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="@dimen/_16ssp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_88sdp"
+        android:text="There was an error with verifying your bank account information. Please re-enter
+your bank information or try a different payment method."
+        android:textSize="@dimen/_12ssp"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_148sdp"
+        />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/nextCV"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        app:cardBackgroundColor="#00a6a2"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="@dimen/_21sdp"
+        >
+        <TextView
+            android:id="@+id/mainpageTV"
+            android:layout_width="@dimen/_138sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:text="Add Credit/Debit Card"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:layout_gravity="center"
+            />
+    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</LinearLayout>

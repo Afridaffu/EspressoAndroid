@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_20sdp">
+        <View
+        android:layout_width="@dimen/_43sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:background="#00a6a2"
+        android:layout_marginBottom="@dimen/_28sdp"
+       android:layout_marginLeft="@dimen/_100sdp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_10sdp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="@dimen/_56sdp"
+            android:layout_height="wrap_content"
+            android:text="Filter"
+            android:textSize="@dimen/_16ssp"
+            android:fontFamily="@font/opensans_bold"
+            />
+        <TextView
+            android:layout_width="@dimen/_81sdp"
+            android:layout_height="wrap_content"
+            android:text="Reset all filters"
+            android:textSize="@dimen/_11ssp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="#00a6a2"
+            android:layout_marginLeft="@dimen/_105sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
+            />
+
+    </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:text="Transaction Type"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_26sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Pay/Request"
+                        android:textSize="@dimen/_11ssp"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="@dimen/_26sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Buy Token"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_26sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Sales Order"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_28sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Withdrawn"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_40sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_38sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Refund"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Account Transfer"
+                        android:textColor="#00a6a2"
+                        android:textSize="@dimen/_11ssp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_17sdp"
+                    android:background="@drawable/bg_core_new_colorfill"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:paddingLeft="@dimen/_30sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_36sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:text="Paid Invoice"
+                    android:textColor="#00a6a2" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction SubType"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_47sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_45sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Sent"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_37sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_33sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Received"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_26sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Bank Account"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_29sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_27sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Credit Card"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_31sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_29sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Debit Card"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_43sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_41sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Signet"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_27sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Instant Pay"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_36sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Gift Card"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/_12sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Sale Order: Token"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_16sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_14sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Failed Withdraw"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:background="@drawable/bg_core_new_colorfill"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_20sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:text="Canceled Withdraw"
+                    android:gravity="center"
+                    android:textColor="#00a6a2" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction Status"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_38sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Pending"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Completed"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_38sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="Canceled"
+                        android:textColor="#00a6a2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_core_new_colorfill"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_26sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text="In progress"
+                        android:textColor="#00a6a2" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_core_new_colorfill"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:paddingLeft="@dimen/_44sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_54sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:text="Failed"
+                    android:textColor="#00a6a2" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_17sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction Amount"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_small_corners"
+                        android:fontFamily="@font/opensans_regular"
+                        android:paddingLeft="@dimen/_9sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_67sdp"
+                        android:paddingBottom="@dimen/_13sdp"
+                        android:text="(CYN)"
+                        android:textSize="@dimen/_11ssp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_11sdp"
+                        android:layout_marginRight="@dimen/_11sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="To"
+                        android:textSize="@dimen/_11ssp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_small_corners"
+                        android:fontFamily="@font/opensans_regular"
+                        android:paddingLeft="@dimen/_9sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_67sdp"
+                        android:paddingBottom="@dimen/_13sdp"
+                        android:text="(CYN)"
+                        android:textSize="@dimen/_11ssp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_17sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textSize="@dimen/_11ssp"
+                    android:text="Date" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_small_corners"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_45sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingLeft="@dimen/_9sdp"
+                        android:text="Jan,16,2020 - Feb,31, 2020"
+                        android:textSize="@dimen/_11ssp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar_icon"
+                        android:layout_marginLeft="@dimen/_75sdp"
+                        android:paddingLeft="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_8sdp"
+
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/nextCV"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
+        app:cardBackgroundColor="#00a6a2"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_37sdp"
+        >
+        <TextView
+            android:id="@+id/home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apply Filter"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+         </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

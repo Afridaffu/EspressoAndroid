@@ -138,5 +138,12 @@
     <string name="qr_code">qr_code</string>
     <string name="contact_us"><u>Contact Us</u></string>
     <string name="spannable_text"><![CDATA[By clicking next, you agree to Term of Service & Privacy Policy]]></string>
+    <string name="learn_more"><u>Learn more</u></string>
+    <string name="instant_pay"><b>Instant Pay:</b>Withdrawing money to an Instant Pay bank account uses your debit card to facilitate the process. This typically takes about 30 seconds to process, but can take up to 30 minutes depending on your bank. Most, but not all banks support Instant Pay</string>
+    <string name="gift_card"><b>Gift Cards:</b> Purchasing a gift card with your coyni tokens typically takes about 1 minute to process the request and to send out the email that contains the gift card.</string>
+    <string name="bank_acount"><b>Bank Accounts:</b> All Bank account transactions typically take up to 3 business days to process.</string>
+    <string name="learn_more1"> <u>Learn More</u></string>
+    <string name="learn"><u>Learn More</u></string>
+
 
 </resources>

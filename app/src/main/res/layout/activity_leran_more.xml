@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_core"
+    android:padding="@dimen/_21sdp">
+
+    <View
+        android:layout_width="@dimen/_43sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:background="#00a6a2"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_23sdp"
+        />
+    <ImageView
+        android:layout_width="@dimen/_13sdp"
+        android:layout_height="@dimen/_13sdp"
+        android:src="@drawable/ic_x"
+        android:layout_marginBottom="@dimen/_25sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="When you send or receive money from a source \noutside the coyni environment, it can take up to \na few minutes to complete those requests. \nTransactions made within the coyni environment \n(token to token transactions) happen instantly.  \nHere is some information on specific transaction \ntypes that you might encounter:"
+        android:textSize="@dimen/_11ssp"
+        android:layout_marginBottom="@dimen/_19sdp"
+        />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bank_acount"
+        android:textSize="@dimen/_12ssp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/instant_pay"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/opensans_regular"
+        android:layout_marginTop="@dimen/_19sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/gift_card"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/opensans_regular"
+        android:layout_marginTop="@dimen/_19sdp"
+        />
+</LinearLayout>
+
+</LinearLayout>

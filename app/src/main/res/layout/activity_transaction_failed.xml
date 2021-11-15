@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_21sdp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+        <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_failed"
+        android:layout_marginTop="@dimen/_102sdp"
+        android:layout_marginLeft="@dimen/_64sdp"
+        android:layout_marginBottom="@dimen/_35sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Transaction Failed"
+        android:gravity="center"
+        android:fontFamily="@font/opensans_semibold"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginBottom="@dimen/_21sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/opensans_regular"
+        android:text="The transaction failed due to error \ncode: {error code - error code \ndescription}. Please try again."
+        android:gravity="center"
+        />
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+        android:id="@+id/nextCV"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="#00a6a2"
+        android:gravity="center"
+        app:cardCornerRadius="20dp"
+        android:layout_marginTop="@dimen/_189sdp"
+        >
+        <TextView
+            android:id="@+id/home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Try Again"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_gravity="center"
+            />
+    </androidx.cardview.widget.CardView>
+            </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
