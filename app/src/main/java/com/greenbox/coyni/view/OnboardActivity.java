@@ -99,32 +99,10 @@ public class OnboardActivity extends AppCompatActivity {
             // enable recycling using true
             viewPager.setCycle(true);
 //            viewPager.setStopScrollWhenTouch(false);
-            Log.e("Stop Scroll", viewPager.isStopScrollWhenTouch() + "");
-//            viewPager.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent event) {
-//
-//
-//                    int action = event.getActionMasked();
-//
-//                    switch(action) {
-//                        case (MotionEvent.ACTION_DOWN) :
-//                            viewPager.stopAutoScroll();
-//                            return true;
-//                        case (MotionEvent.ACTION_UP) :
-//                            viewPager.startAutoScroll();
-//                            return true;
-//                        case (MotionEvent.ACTION_SCROLL) :
-//                            viewPager.startAutoScroll();
-//                            return true;
-//                        default :
-//                            return false;
-//                    }
-//                }
-//            });
+
             getStarted.setOnClickListener(view -> {
                 try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -184,7 +162,7 @@ public class OnboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mLastClickTime = 0L;
+//        mLastClickTime = 0L;
     }
 
     @Override

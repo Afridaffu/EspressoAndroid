@@ -122,7 +122,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
 

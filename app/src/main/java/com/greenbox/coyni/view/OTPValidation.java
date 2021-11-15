@@ -158,6 +158,8 @@ public class OTPValidation extends AppCompatActivity {
                         } else if (OTP_TYPE.equals("SECURE")) {
                             Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                             secureAccountRL.setVisibility(View.VISIBLE);
+                            layoutMain.setClickable(false);
+                            layoutMain.setEnabled(false);
                             layoutType = "SECURE";
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.GONE);
@@ -492,6 +494,8 @@ public class OTPValidation extends AppCompatActivity {
                                     break;
                                 case "Login":
                                     secureAccountRL.setVisibility(View.VISIBLE);
+                                    layoutMain.setClickable(false);
+                                    layoutMain.setEnabled(false);
                                     layoutType = "SECURE";
                                     layoutEntry.setVisibility(View.GONE);
                                     layoutFailure.setVisibility(View.GONE);
@@ -572,6 +576,8 @@ public class OTPValidation extends AppCompatActivity {
                     if (initializeCustomerResponse.getStatus().toLowerCase().toString().equals("success")) {
                         Utils.setStrAuth(initializeCustomerResponse.getData().getJwtToken());
                         secureAccountRL.setVisibility(View.VISIBLE);
+                        layoutMain.setClickable(false);
+                        layoutMain.setEnabled(false);
                         layoutType = "SECURE";
                         layoutEntry.setVisibility(View.GONE);
                         layoutFailure.setVisibility(View.GONE);
@@ -675,7 +681,7 @@ public class OTPValidation extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        mLastClickTime = 0L;
+//        mLastClickTime = 0L;
     }
 
     @Override
