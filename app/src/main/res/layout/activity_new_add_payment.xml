@@ -48,19 +48,17 @@
             android:padding="@dimen/_10sdp">
 
             <ImageView
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:src="@drawable/ic__01_bank" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
                 >
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,10 +67,9 @@
                     android:textSize="@dimen/_12ssp"
                     android:fontFamily="@font/opensans_bold"
                     />
-
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_height="wrap_content"
                     android:text="Can be used for making Coyni purchases\n or withdrawing funds."
                     android:textSize="@dimen/_10ssp"
                     android:fontFamily="@font/opensans_regular"
@@ -96,10 +93,10 @@
             android:padding="10.3dp">
 
             <ImageView
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_12sdp"
                 android:src="@drawable/ic_credit_card" />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -142,8 +139,8 @@
             android:padding="@dimen/_10sdp">
 
             <ImageView
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:src="@drawable/ic_credit_card" />
