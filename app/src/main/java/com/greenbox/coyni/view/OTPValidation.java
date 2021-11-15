@@ -196,7 +196,7 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setOnClickListener(view -> {
                 try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -346,7 +346,7 @@ public class OTPValidation extends AppCompatActivity {
             tryAgainCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -357,7 +357,7 @@ public class OTPValidation extends AppCompatActivity {
             });
 
             secureNextCV.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -416,7 +416,6 @@ public class OTPValidation extends AppCompatActivity {
             @Override
             public void onChanged(EmailResponse emailResponse) {
                 dialog.dismiss();
-                mLastClickTime = 0L;
                 if (emailResponse != null) {
                     Log.e("Email OTP Validate", new Gson().toJson(emailResponse));
                     if (emailResponse.getStatus().toLowerCase().equals("error")) {
@@ -681,7 +680,7 @@ public class OTPValidation extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//        mLastClickTime = 0L;
+        mLastClickTime = 0L;
     }
 
     @Override

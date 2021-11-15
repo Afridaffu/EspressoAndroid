@@ -216,7 +216,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             nextCV.setOnClickListener(view -> {
                 if (isNextEnabled) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -277,7 +277,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onChanged(CustRegisterResponse custRegisterResponse) {
                 try {
                     dialog.dismiss();
-                    mLastClickTime = 0L;
                     if (custRegisterResponse != null) {
                         try {
                             Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
@@ -316,7 +315,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onChanged(String s) {
                 try {
                     Log.e("Error Message", s);
-                    mLastClickTime = 0L;
                     if (s.toString().toLowerCase().contains("entered email already exist in the system")) {
                         isEmailError = true;
                         emailTIL.requestFocus();
