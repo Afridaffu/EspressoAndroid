@@ -126,12 +126,12 @@ public class CreateAccountActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
 
-//            Window window = getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//            initFields();
-//            intiObserver();
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+            initFields();
+            intiObserver();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -140,7 +140,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        firstNameET.requestFocus();
+        firstNameET.requestFocus();
     }
 
     public void initFields() {

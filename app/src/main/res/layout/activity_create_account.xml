@@ -15,48 +15,48 @@
     tools:context=".view.CreateAccountActivity"
     android:id="@+id/mainRL">
 
-    <LinearLayout
-        android:id="@+id/layoutClose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="@dimen/_40sdp"
-        android:layout_marginBottom="@dimen/_14sdp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true">
-
-        <ImageView
-            android:id="@+id/createAccountCloseIV"
-            android:layout_width="@dimen/_13sdp"
-            android:layout_height="@dimen/_13sdp"
-            android:src="@drawable/ic_x" />
-    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layoutClose"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        >
+        <LinearLayout
+            android:id="@+id/layoutClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:id="@+id/createAccountCloseIV"
+                android:layout_width="@dimen/_13sdp"
+                android:layout_height="@dimen/_13sdp"
+                android:src="@drawable/ic_x"
+                android:layout_marginBottom="@dimen/_14sdp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Create Account"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_16ssp" />
+        </LinearLayout>
 
         <ScrollView
             android:id="@+id/mainSV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            >
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/layoutClose">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="Create Account"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_16ssp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/firstNameTIL"
@@ -205,7 +205,7 @@
                         android:longClickable="false"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,."/>
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,_."/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

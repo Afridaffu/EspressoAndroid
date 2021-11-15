@@ -469,6 +469,10 @@ public class OTPValidation extends AppCompatActivity {
                     if (smsValidate.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
+                        if(smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
+                                smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")){
+                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this);
+                        }
                     } else {
                         if (strScreen != null && !strScreen.equals("")) {
                             switch (strScreen) {

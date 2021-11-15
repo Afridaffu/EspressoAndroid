@@ -29,12 +29,13 @@ public class AccountTypeActivity extends AppCompatActivity {
             personalAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
                     finish();
+                    overridePendingTransition (0, 0);
 
                 }
             });
