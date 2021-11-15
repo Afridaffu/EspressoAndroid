@@ -40,6 +40,8 @@
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
 
     <style name="TextInputLayout.OutlinedBox" parent="Base.Widget.MaterialComponents.TextInputLayout">

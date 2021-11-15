@@ -355,12 +355,12 @@ public class OTPValidation extends AppCompatActivity {
             });
 
             secureNextCV.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(OTPValidation.this, PINActivity.class)
-                        .putExtra("screen", "SignUp")
+                        .putExtra("screen", strScreen)
                         .putExtra("TYPE", "CHOOSE"));
             });
 
@@ -414,6 +414,7 @@ public class OTPValidation extends AppCompatActivity {
             @Override
             public void onChanged(EmailResponse emailResponse) {
                 dialog.dismiss();
+                mLastClickTime = 0L;
                 if (emailResponse != null) {
                     Log.e("Email OTP Validate", new Gson().toJson(emailResponse));
                     if (emailResponse.getStatus().toLowerCase().equals("error")) {

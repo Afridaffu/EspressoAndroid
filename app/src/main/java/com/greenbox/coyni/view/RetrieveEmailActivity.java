@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +129,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             firstTIL = findViewById(R.id.reFirstNameTIL);
             lastTIL = findViewById(R.id.reLastNameTIL);
             layoutMain = findViewById(R.id.layoutMain);
+
+            firstName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+            lastName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
 
             phoneErrorLL = findViewById(R.id.phoneErrorLL);
             firstNameErrorLL = findViewById(R.id.firstNameErrorLL);

@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -68,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     LinearLayout layoutClose;
     RelativeLayout layoutMain;
     private long mLastClickTime = 0;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 241;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,32 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         super.onResume();
         if (dialog != null) {
             dialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == RESULT_OK && requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (Utils.checkInternet(LoginActivity.this)) {
+                            if (!strToken.equals("") && !Utils.getDeviceID().equals("")) {
+                                login();
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
+                        }
+                    }
+                });
+            } else {
+                Intent i = new Intent(LoginActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -126,8 +155,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             endIconIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                    try {
+                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
+                            if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || isFaceLock && !Utils.isFingerPrint(LoginActivity.this)) {
+                                Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdNotAvailable_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -187,7 +226,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //                            passwordValidation();
 //                        }
                         if (!hasFocus) {
-                            if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0 ) {
+                            if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0) {
                                 etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                                 layoutPwdError.setVisibility(VISIBLE);
@@ -517,6 +556,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     if (login != null) {
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
+                            objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");

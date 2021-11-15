@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -49,6 +52,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL;
+    MyApplication objMyApplication;
+    SQLiteDatabase mydatabase;
+    Cursor dsDontRemind;
+    Boolean isDontRemind = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +81,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     break;
             }
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            SetDontRemind();
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -106,8 +114,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setVisibility(View.GONE);
                     TYPE = "CHOOSE";
                     tvHead.setText("Choose your PIN");
-                    clearPassCode();
-                    setDefault();
+                    clearControls();
                     passcode = "";
                     break;
             }
@@ -146,6 +153,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             tvForgot = (TextView) findViewById(R.id.tvForgot);
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
+            objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
@@ -174,34 +182,58 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override
             public void onChanged(ValidateResponse validateResponse) {
-                dialog.dismiss();
-                if (validateResponse != null) {
-                    if (!validateResponse.getStatus().toLowerCase().equals("error")) {
-                        String strScreen = "";
-                        if (getIntent().getStringExtra("screen") != null) {
-                            strScreen = getIntent().getStringExtra("screen");
+                try {
+                    dialog.dismiss();
+                    if (validateResponse != null) {
+                        if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                            String strScreen = "";
+                            if (getIntent().getStringExtra("screen") != null) {
+                                strScreen = getIntent().getStringExtra("screen");
+                            }
+                            switch (strScreen) {
+                                case "loginExpiry":
+                                    Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+                                    i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                    startActivity(i);
+                                    break;
+                                case "login":
+                                    if (objMyApplication.getBiometric()) {
+                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(d);
+                                    } else {
+                                        if (!isDontRemind) {
+                                            if (Utils.checkAuthentication(PINActivity.this)) {
+                                                if (Utils.isFingerPrint(PINActivity.this)) {
+                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                                            .putExtra("screen", strScreen));
+                                                } else {
+                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                            .putExtra("ENABLE_TYPE", "FACE")
+                                                            .putExtra("screen", strScreen));
+                                                }
+                                            } else {
+                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                        .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                        .putExtra("screen", strScreen));
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case "UserDetails":
+                                    Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+                                    startActivity(ee);
+                                    finish();
+                                    break;
+                            }
+                        } else {
+                            //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
+                            setErrorPIN();
                         }
-                        switch (strScreen) {
-                            case "loginExpiry":
-                                Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
-                                i.putExtra("screen", getIntent().getStringExtra("screen"));
-                                startActivity(i);
-                                break;
-                            case "login":
-                                Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(d);
-                                break;
-                            case "UserDetails":
-                                Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
-                                startActivity(ee);
-                                finish();
-                                break;
-                        }
-                    } else {
-                        //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
-                        setErrorPIN();
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -329,8 +361,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         tvForgot.setVisibility(View.GONE);
                         TYPE = "CHOOSE";
                         tvHead.setText("Choose your PIN");
-                        clearPassCode();
-                        setDefault();
+                        clearControls();
                         passcode = "";
                     }
                 }
@@ -487,15 +518,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
     }
 
-    public void setDefault() {
-        circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
-    }
-
     private void clearControls() {
         try {
             circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
@@ -536,6 +558,26 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
             }
         }.start();
+    }
+
+    private void SetDontRemind() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
+            dsDontRemind.moveToFirst();
+            if (dsDontRemind.getCount() > 0) {
+                if (dsDontRemind.getString(1).equals("true")) {
+                    isDontRemind = true;
+                } else {
+                    isDontRemind = false;
+                }
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+            }
+        }
     }
 
 }

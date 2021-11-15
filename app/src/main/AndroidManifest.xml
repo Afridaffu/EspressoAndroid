@@ -18,9 +18,16 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.IdVeAdditionalActionActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".view.UserDetailsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditPhoneActivity"
             android:exported="true"
@@ -56,7 +63,7 @@
         <activity
             android:name=".view.BindingLayoutActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".view.RetrieveEmailActivity"
@@ -91,10 +98,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.AccountTypeActivity"
@@ -119,7 +126,7 @@
             android:name=".view.IdentityVerificationActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AgreementsActivity"
             android:exported="true"

@@ -1,6 +1,5 @@
 package com.greenbox.coyni.network;
 
-import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -79,8 +78,8 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
-    @GET("api/v2/profile/me/signedagreements")
-    Call<Agreements> meAgreementsByType();
+//    @GET("api/v2/profile/me/signedagreements")
+//    Call<Agreements> meAgreementsByType();
 
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);

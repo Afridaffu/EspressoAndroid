@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
+import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
@@ -98,7 +99,7 @@ public class OnboardActivity extends AppCompatActivity {
             // enable recycling using true
             viewPager.setCycle(true);
 //            viewPager.setStopScrollWhenTouch(false);
-            Log.e("Stop Scroll", viewPager.isStopScrollWhenTouch()+"");
+            Log.e("Stop Scroll", viewPager.isStopScrollWhenTouch() + "");
 //            viewPager.setOnTouchListener(new View.OnTouchListener() {
 //                @Override
 //                public boolean onTouch(View view, MotionEvent event) {
@@ -123,7 +124,7 @@ public class OnboardActivity extends AppCompatActivity {
 //            });
             getStarted.setOnClickListener(view -> {
                 try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -137,12 +138,17 @@ public class OnboardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
-                            Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            if ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || isFaceLock && !Utils.isFingerPrint(OnboardActivity.this)) {
+                                Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdNotAvailable_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                            }
                         } else {
                             Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
                             startActivity(i);
@@ -177,6 +183,12 @@ public class OnboardActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mLastClickTime = 0L;
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -202,31 +214,31 @@ public class OnboardActivity extends AppCompatActivity {
         }
     }
 
-    public void toastTimer(Dialog dialog) {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(3500);
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.dismiss();
-                            }
-                        });
-
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            ;
-        }.start();
-    }
+//    public void toastTimer(Dialog dialog) {
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    synchronized (this) {
+//                        wait(3500);
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//            ;
+//        }.start();
+//    }
 
     private void initObserver() {
         loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {

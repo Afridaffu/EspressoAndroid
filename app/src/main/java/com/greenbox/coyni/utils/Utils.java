@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 
@@ -380,7 +381,7 @@ public class Utils {
         if (strScreen.equals("pin")) {
             new PINActivity().toastTimer(dialog);
         } else {
-            new OnboardActivity().toastTimer(dialog);
+            new EnableAuthID().toastTimer(dialog);
         }
 
     }

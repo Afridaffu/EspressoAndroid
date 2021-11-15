@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.Agreements;
+//import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
@@ -33,15 +33,15 @@ public class DashboardViewModel extends AndroidViewModel {
         this.profileMutableLiveData = profileMutableLiveData;
     }
 
-    public MutableLiveData<Agreements> getAgreementsMutableLiveData() {
-        return agreementsMutableLiveData;
-    }
-
-    public void setAgreementsMutableLiveData(MutableLiveData<Agreements> agreementsMutableLiveData) {
-        this.agreementsMutableLiveData = agreementsMutableLiveData;
-    }
-
-    private MutableLiveData<Agreements> agreementsMutableLiveData=new MutableLiveData<>();
+//    public MutableLiveData<Agreements> getAgreementsMutableLiveData() {
+//        return agreementsMutableLiveData;
+//    }
+//
+//    public void setAgreementsMutableLiveData(MutableLiveData<Agreements> agreementsMutableLiveData) {
+//        this.agreementsMutableLiveData = agreementsMutableLiveData;
+//    }
+//
+//    private MutableLiveData<Agreements> agreementsMutableLiveData=new MutableLiveData<>();
 
     public DashboardViewModel(@NonNull Application application) {
         super(application);
@@ -89,43 +89,43 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
-    public void meAgreementsById(){
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<Agreements> mcall = apiService.meAgreementsByType();
-            mcall.enqueue(new Callback<Agreements>() {
-                @Override
-                public void onResponse(Call<Agreements> call, Response<Agreements> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            Agreements obj = response.body();
-                            agreementsMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
-                    }
-                }
-                @Override
-                public void onFailure(Call<Agreements> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        }
-       catch (Exception ex){
-            ex.printStackTrace();
-
-       }
-
-
-    }
+//    public void meAgreementsById(){
+//        try {
+//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+//            Call<Agreements> mcall = apiService.meAgreementsByType();
+//            mcall.enqueue(new Callback<Agreements>() {
+//                @Override
+//                public void onResponse(Call<Agreements> call, Response<Agreements> response) {
+//                    try {
+//                        if (response.isSuccessful()) {
+//                            Agreements obj = response.body();
+//                            agreementsMutableLiveData.setValue(obj);
+//                        } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            apiErrorMutableLiveData.setValue(errorResponse);
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                        apiErrorMutableLiveData.setValue(null);
+//                    }
+//                }
+//                @Override
+//                public void onFailure(Call<Agreements> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+//                    apiErrorMutableLiveData.setValue(null);
+//                }
+//            });
+//        }
+//       catch (Exception ex){
+//            ex.printStackTrace();
+//
+//       }
+//
+//
+//    }
 
 
 }
