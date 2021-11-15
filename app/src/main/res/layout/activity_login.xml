@@ -107,7 +107,8 @@
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12ssp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,7 +174,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
 

@@ -89,7 +89,8 @@
                         android:textSize="@dimen/_12ssp"
                         android:textIsSelectable="false"
                         android:longClickable="false"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +148,8 @@
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
                         android:longClickable="false"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -196,7 +198,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="Email"
                         android:imeOptions="actionNext"
-                        android:inputType="textEmailAddress"
+                        android:inputType="textEmailAddress|textNoSuggestions"
                         android:padding="@dimen/_14sdp"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
@@ -205,6 +207,7 @@
                         android:longClickable="false"
                         android:maxLines="1"
                         android:singleLine="true"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,_."/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -301,6 +304,7 @@
                             android:textSize="@dimen/_12ssp"
                             android:longClickable="false"
                             android:singleLine="true"
+                            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"
                             />
 
@@ -410,6 +414,7 @@
                         android:textSize="@dimen/_12ssp"
                         android:longClickable="false"
                         android:singleLine="true"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
