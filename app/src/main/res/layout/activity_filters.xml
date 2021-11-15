@@ -7,11 +7,11 @@
     android:orientation="vertical"
     android:padding="@dimen/_20sdp">
         <View
-        android:layout_width="@dimen/_43sdp"
-        android:layout_height="@dimen/_2sdp"
-        android:background="@color/primary_green"
-        android:layout_marginBottom="@dimen/_28sdp"
-       android:layout_marginLeft="@dimen/_100sdp"
+                android:layout_width="@dimen/_43sdp"
+                android:layout_height="@dimen/_2sdp"
+                android:background="@color/primary_green"
+                android:layout_marginBottom="@dimen/_28sdp"
+                android:layout_marginLeft="@dimen/_121sdp"
         />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,14 +23,16 @@
         android:paddingBottom="@dimen/_10sdp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="@dimen/_56sdp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Filter"
             android:textSize="@dimen/_16ssp"
+            android:textColor="@color/black"
             android:fontFamily="@font/opensans_bold"
+            android:layout_weight="1"
             />
         <TextView
-            android:layout_width="@dimen/_81sdp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reset all filters"
             android:textSize="@dimen/_11ssp"
@@ -38,6 +40,7 @@
             android:textColor="@color/primary_green"
             android:layout_marginLeft="@dimen/_105sdp"
             android:layout_marginBottom="@dimen/_3sdp"
+
             />
 
     </LinearLayout>
@@ -58,15 +61,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_12sdp"
                     android:text="Transaction Type"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:orientation="horizontal"
-
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -79,8 +81,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Pay/Request"
-                        android:textSize="@dimen/_11ssp"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -95,7 +97,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Buy Token"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -115,7 +118,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Sales Order"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -129,7 +133,8 @@
                         android:paddingRight="@dimen/_28sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Withdrawn"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,7 +154,8 @@
                         android:paddingRight="@dimen/_38sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Refund"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -177,7 +183,8 @@
                     android:paddingRight="@dimen/_36sdp"
                     android:paddingBottom="@dimen/_8sdp"
                     android:text="Paid Invoice"
-                    android:textColor="@color/primary_green" />
+                    android:textColor="@color/primary_green"
+                    android:textSize="@dimen/_11ssp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -185,15 +192,14 @@
                     android:layout_marginBottom="@dimen/_12sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="Transaction SubType"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:orientation="horizontal"
-
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -206,7 +212,8 @@
                         android:paddingRight="@dimen/_45sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Sent"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -220,7 +227,8 @@
                         android:paddingRight="@dimen/_33sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Received"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,7 +249,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Bank Account"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -255,7 +264,8 @@
                         android:paddingRight="@dimen/_27sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Credit Card"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -275,7 +285,8 @@
                         android:paddingRight="@dimen/_29sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Debit Card"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -289,7 +300,8 @@
                         android:paddingRight="@dimen/_41sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Signet"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -309,7 +321,8 @@
                         android:paddingRight="@dimen/_27sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Instant Pay"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -323,7 +336,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Gift Card"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -345,7 +359,7 @@
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Sale Order: Token"
                         android:textColor="@color/primary_green"
-                        />
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -359,7 +373,8 @@
                         android:paddingRight="@dimen/_14sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Failed Withdraw"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <TextView
@@ -368,13 +383,14 @@
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:background="@drawable/bg_core_new_colorfill"
                     android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/_10sdp"
                     android:paddingTop="@dimen/_8sdp"
                     android:paddingRight="@dimen/_20sdp"
                     android:paddingBottom="@dimen/_8sdp"
                     android:text="Canceled Withdraw"
-                    android:gravity="center"
-                    android:textColor="@color/primary_green" />
+                    android:textColor="@color/primary_green"
+                    android:textSize="@dimen/_11ssp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -382,6 +398,7 @@
                     android:layout_marginBottom="@dimen/_12sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="Transaction Status"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
@@ -401,7 +418,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Pending"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -415,7 +433,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Completed"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -435,7 +454,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="Canceled"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -449,7 +469,8 @@
                         android:paddingRight="@dimen/_26sdp"
                         android:paddingBottom="@dimen/_8sdp"
                         android:text="In progress"
-                        android:textColor="@color/primary_green" />
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
                 <TextView
@@ -463,7 +484,8 @@
                     android:paddingRight="@dimen/_54sdp"
                     android:paddingBottom="@dimen/_8sdp"
                     android:text="Failed"
-                    android:textColor="@color/primary_green" />
+                    android:textColor="@color/primary_green"
+                    android:textSize="@dimen/_11ssp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -472,6 +494,7 @@
                     android:layout_marginBottom="@dimen/_12sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="Transaction Amount"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
@@ -482,6 +505,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_small_corners"
                         android:fontFamily="@font/opensans_regular"
                         android:paddingLeft="@dimen/_9sdp"
@@ -489,8 +513,7 @@
                         android:paddingRight="@dimen/_67sdp"
                         android:paddingBottom="@dimen/_13sdp"
                         android:text="(CYN)"
-                        android:textSize="@dimen/_11ssp"
-                        android:layout_weight="1"/>
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -499,12 +522,13 @@
                         android:layout_marginRight="@dimen/_11sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="To"
-                        android:textSize="@dimen/_11ssp"
-                        />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_small_corners"
                         android:fontFamily="@font/opensans_regular"
                         android:paddingLeft="@dimen/_9sdp"
@@ -512,8 +536,7 @@
                         android:paddingRight="@dimen/_67sdp"
                         android:paddingBottom="@dimen/_13sdp"
                         android:text="(CYN)"
-                        android:textSize="@dimen/_11ssp"
-                        android:layout_weight="1"/>
+                        android:textSize="@dimen/_11ssp" />
 
                 </LinearLayout>
 
@@ -523,36 +546,37 @@
                     android:layout_marginTop="@dimen/_17sdp"
                     android:layout_marginBottom="@dimen/_7sdp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:textSize="@dimen/_11ssp"
-                    android:text="Date" />
+                    android:text="Date"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_45sdp"
                     android:background="@drawable/bg_small_corners"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="@dimen/_45sdp">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginBottom="@dimen/_8sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:paddingLeft="@dimen/_9sdp"
                         android:text="Jan,16,2020 - Feb,31, 2020"
                         android:textSize="@dimen/_11ssp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        />
+                        android:layout_weight="@integer/material_motion_duration_long_1"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_calendar_icon"
                         android:layout_marginLeft="@dimen/_75sdp"
-                        android:paddingLeft="@dimen/_8sdp"
-                        android:paddingRight="@dimen/_8sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginBottom="@dimen/_8sdp"
+                        android:src="@drawable/ic_calendar_icon"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_13sdp"
 
                         />
                 </LinearLayout>
@@ -567,7 +591,7 @@
         android:gravity="center"
         android:layout_alignParentBottom="true"
         app:cardCornerRadius="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_37sdp"
+        android:layout_marginTop="@dimen/_37sdp"
         >
         <TextView
             android:id="@+id/home"
@@ -576,6 +600,7 @@
             android:text="Apply Filter"
             android:textColor="@color/white"
             android:gravity="center"
+            android:textSize="@dimen/_12ssp"
             android:layout_gravity="center"
             />
          </androidx.cardview.widget.CardView>
