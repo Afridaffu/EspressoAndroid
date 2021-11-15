@@ -59,7 +59,6 @@ public class UserDetailsActivity extends AppCompatActivity {
             if(myApplicationObj.getMyProfile().getData().getFirstName()!=null){
                 String phoneNumber  = profile.getData().getPhoneNumber().split(" ")[1];
                 String phoneFormat = "("+phoneNumber.substring(0, 3)+") "+phoneNumber.substring(3, 6)+"-"+phoneNumber.substring(6, 10);
-
                 Log.e("Phone",phoneNumber);
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 userEmailIdTV.setText(profile.getData().getEmail());
