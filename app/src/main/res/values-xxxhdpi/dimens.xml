@@ -11,6 +11,7 @@
     <dimen name="text_size_17sp">19sp</dimen>
     <dimen name="text_size_18sp">20sp</dimen>
     <dimen name="text_size_20sp">22sp</dimen>
+    <dimen name="text_size_21sp">23sp</dimen>
     <dimen name="text_size_22sp">24sp</dimen>
     <dimen name="text_size_23sp">25sp</dimen>
     <dimen name="text_size_24sp">26sp</dimen>
@@ -20,7 +21,7 @@
     <dimen name="margintop_10dp">10dp</dimen>
     <dimen name="paddingbottom_10dp">10dp</dimen>
 
-    <dimen name="pv_pin_view_item_size">48dp</dimen>
+    <dimen name="pv_pin_view_item_size">38dp</dimen>
     <dimen name="pv_pin_view_item_radius">5dp</dimen>
     <dimen name="pv_pin_view_item_spacing">5dp</dimen>
     <dimen name="pv_pin_view_item_line_width">2dp</dimen>

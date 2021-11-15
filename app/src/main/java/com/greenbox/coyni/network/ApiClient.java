@@ -22,15 +22,10 @@ public class ApiClient {
     public static final String TYPE_CONNECTION_INTERRUPT = "CONNECTION_INTERRUPT";
     public static final String TYPE_SESSION_TIMEOUT = "SESSION_TIMEOUT";
     private static final String TYPE_SOMETHING_WENT_WRONG = "WENT_WRONG";
-    //    private final static String URL_PRODUCTION = "http://3.94.123.86:9001/";  //QA
-//    private final static String URL_PRODUCTION = "https://api-stg.coyni.com/";  //SAT
-    //    private final static String URL_PRODUCTION = "https://api.coyni.com/";  //UAT
     private final int TIME_OUT = 120;
-    //    private static final String Referer = "http://mobile/"; //QA
-//    private static final String Referer = "https://members.coyni.com"; //SAT && //UAT
 
 
-    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private TokenInterceptor tokenInterceptor = new TokenInterceptor();
 
     private OkHttpClient client = new OkHttpClient.Builder().

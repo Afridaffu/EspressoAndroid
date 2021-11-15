@@ -1,20 +1,43 @@
 package com.greenbox.coyni.utils;
 
+import static android.content.Context.KEYGUARD_SERVICE;
+
+import static android.content.Context.FINGERPRINT_SERVICE;
+
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.SystemClock;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.OnboardActivity;
+import com.greenbox.coyni.view.PINActivity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -24,11 +47,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String strLang = "en-US";
     public static String strCode = "12345";
+    public static String strCCode = "";
     public static String strAuth;
     public static String strReferer;
     public static String strURL_PRODUCTION;
+    public static Boolean isFaceEnabled;
+    public static Boolean isTouchEnabled;
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
@@ -62,6 +89,13 @@ public class Utils {
     public static final int declineId = 67;
     public static final int acceptedId = 60;
     public static final int pageSize = 25;
+    public static String deviceID = "";
+    public static Long mLastClickTime = 0L;
+
+    public static int[][] errorState, state;
+    public static int[] errorColor, color;
+    public static ColorStateList errorColorState, colorState;
+
 
     public static String getStrLang() {
         return strLang;
@@ -87,6 +121,14 @@ public class Utils {
         Utils.strReferer = strReferer;
     }
 
+    public static String getStrCCode() {
+        return strCCode;
+    }
+
+    public static void setStrCCode(String strCCode) {
+        Utils.strCCode = strCCode;
+    }
+
     public static String getStrURL_PRODUCTION() {
         return strURL_PRODUCTION;
     }
@@ -95,13 +137,37 @@ public class Utils {
         Utils.strURL_PRODUCTION = strURL_PRODUCTION;
     }
 
-    public static void statusBar(Activity activity) {
+    public static Boolean getIsFaceEnabled() {
+        return isFaceEnabled;
+    }
+
+    public static void setIsFaceEnabled(Boolean isFaceEnabled) {
+        Utils.isFaceEnabled = isFaceEnabled;
+    }
+
+    public static Boolean getIsTouchEnabled() {
+        return isTouchEnabled;
+    }
+
+    public static void setIsTouchEnabled(Boolean isTouchEnabled) {
+        Utils.isTouchEnabled = isTouchEnabled;
+    }
+
+    public static String getDeviceID() {
+        return deviceID;
+    }
+
+    public static void setDeviceID(String dID) {
+        Utils.deviceID = dID;
+    }
+
+    public static void statusBar(Activity activity, String strColor) {
         try {
             if (Build.VERSION.SDK_INT >= 21) {
                 Window window = activity.getWindow();
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(Color.parseColor("#35BAB6"));
+                window.setStatusBarColor(Color.parseColor(strColor));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -111,6 +177,27 @@ public class Utils {
     public static void hideKeypad(Context context, View view) {
         InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void hideKeypad(Context context) {
+        try {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if(inputMethodManager.isAcceptingText()){
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(),
+                    0
+            );
+        }
     }
 
     public static String USNumberFormat(double number) {
@@ -166,14 +253,16 @@ public class Utils {
     }
 
     public static void displayAlert(String msg, Activity activity) {
-        Context context = new ContextThemeWrapper(activity, R.style.Theme_Coyni);
-        new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.app_name)
-                .setMessage(msg)
-                .setCancelable(false)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    dialog.dismiss();
-                }).show();
+//        Context context = new ContextThemeWrapper(activity, R.style.Theme_Coyni);
+//        new MaterialAlertDialogBuilder(context)
+//                .setTitle(R.string.app_name)
+//                .setMessage(msg)
+//                .setCancelable(false)
+//                .setPositiveButton("OK", (dialog, which) -> {
+//                    dialog.dismiss();
+//                }).show();
+
+        displayAlertNew( msg, activity);
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -211,6 +300,183 @@ public class Utils {
             ex.printStackTrace();
         }
         return strValue;
+    }
+
+    public static void checkAuthentication(Activity context, int CODE_AUTHENTICATION_VERIFICATION) {
+        try {
+            KeyguardManager km = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
+            if (km.isKeyguardSecure()) {
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    Intent i = km.createConfirmDeviceCredentialIntent("Authentication required", "password");
+                    context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
+                }
+            } else
+                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static Boolean checkAuthentication(Activity context) {
+        Boolean value = false;
+        try {
+            KeyguardManager km = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
+            if (km.isKeyguardSecure()) {
+                value = true;
+            } else {
+                value = false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
+    public static Boolean isFingerPrint(Activity context) {
+        Boolean value = false;
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(FINGERPRINT_SERVICE);
+                if (!fingerprintManager.isHardwareDetected()) {
+                    value = false;
+                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    value = false;
+                } else {
+                    value = true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
+    public static void showCustomToast(final Context context, String text, int imageID, String strScreen) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_toast);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.TOP;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        window.setAttributes(wlp);
+        TextView textTV = dialog.findViewById(R.id.toastTV);
+        ImageView imageIV = dialog.findViewById(R.id.toastIV);
+        textTV.setText(text);
+        imageIV.setImageResource(imageID);
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+        if (strScreen.equals("pin")) {
+            new PINActivity().toastTimer(dialog);
+        } else {
+            new OnboardActivity().toastTimer(dialog);
+        }
+
+    }
+
+    public static boolean disabledMultiClick() {
+        boolean action = false;
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            action = false;
+            mLastClickTime = 0L;
+        } else {
+            action = true;
+            mLastClickTime = SystemClock.elapsedRealtime();
+        }
+
+        return action;
+    }
+
+    public static String convertToUSFormat(String strPhone) {
+        String strNumber = "";
+        strNumber = "(" + strPhone.substring(0, 3) + ") " + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
+        return strNumber;
+    }
+
+    public static boolean isValidEmail(String target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public static ColorStateList getErrorColorState() {
+        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
+        errorColorState = new ColorStateList(errorState, errorColor);
+
+        return errorColorState;
+    }
+
+    public static ColorStateList getNormalColorState() {
+        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray),OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
+        colorState = new ColorStateList(state, color);
+        return colorState;
+    }
+
+
+    public static void setUpperHintColor(TextInputLayout til, int color) {
+        try {
+            Field field = til.getClass().getDeclaredField("defaultHintTextColor");
+            field.setAccessible(true);
+            int[][] states = new int[][]{
+                    new int[]{}
+            };
+            int[] colors = new int[]{
+                    color
+            };
+            ColorStateList myList = new ColorStateList(states, colors);
+            field.set(til, myList);
+
+            Method method = til.getClass().getDeclaredMethod("updateLabelState", boolean.class);
+            method.setAccessible(true);
+            method.invoke(til, true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayAlertNew(String msg, final Context context) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alert_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView message = dialog.findViewById(R.id.textTV);
+        TextView ok = dialog.findViewById(R.id.okTV);
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout((int) (width * 0.80), WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
 }

@@ -1,194 +1,541 @@
 package com.greenbox.coyni.view;
 
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
+import android.text.Html;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
+import com.greenbox.coyni.model.coynipin.RegisterRequest;
+import com.greenbox.coyni.model.coynipin.ValidateRequest;
+import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "Pinkeyboard_Activity";
-    View i1,i2,i3,i4,i5,i6;
-    TextView b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b_dot;
-    ImageView b_back;
-    ArrayList<String> number_list=new ArrayList<>();
-    String passcode="";
-    String num1,num2,num3,num4,num5,num6;
+    View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
+    TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
+    ImageView backActionIV, imgBack;
+    String passcode = "", strChoose = "", strConfirm = "", TYPE;
+    TextView tvHead, tvForgot;
+    CoyniViewModel coyniViewModel;
+    ProgressDialog dialog;
+    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pinkeyboard);
-       initializeComponents();
+        try {
+            super.onCreate(savedInstanceState);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            setContentView(R.layout.activity_pin_keyboard);
+            initializeComponents();
+            TYPE = getIntent().getStringExtra("TYPE");
+            switch (TYPE) {
+                case "CHOOSE":
+                    tvHead.setText("Choose your PIN");
+                    tvForgot.setVisibility(View.GONE);
+                    break;
+                case "CONFIRM":
+                    tvForgot.setVisibility(View.GONE);
+                    break;
+                case "ENTER":
+                    tvHead.setText("Enter your PIN");
+                    tvForgot.setVisibility(View.VISIBLE);
+                    tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
+                    break;
+            }
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            initObserver();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            clearControls();
+            passcode = "";
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            switch (TYPE) {
+                case "CHOOSE":
+                    super.onBackPressed();
+                    break;
+                case "ENTER": {
+                    super.onBackPressed();
+                    break;
+                }
+                case "CONFIRM":
+                    tvForgot.setVisibility(View.GONE);
+                    TYPE = "CHOOSE";
+                    tvHead.setText("Choose your PIN");
+                    clearPassCode();
+                    setDefault();
+                    passcode = "";
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void initializeComponents() {
+        try {
+            chooseCircleOne = (View) findViewById(R.id.chooseCircleOne);
+            chooseCircleTwo = (View) findViewById(R.id.chooseCircleTwo);
+            chooseCircleThree = (View) findViewById(R.id.chooseCircleThree);
+            chooseCircleFour = (View) findViewById(R.id.chooseCircleFour);
+            chooseCircleFive = (View) findViewById(R.id.chooseCircleFive);
+            chooseCircleSix = (View) findViewById(R.id.chooseCircleSix);
 
-        i1=(View) findViewById(R.id.imageview_circle1);
-        i2=(View) findViewById(R.id.imageview_circle2);
-        i3=(View) findViewById(R.id.imageview_circle3);
-        i4=(View) findViewById(R.id.imageview_circle4);
-        i5=(View) findViewById(R.id.imageview_circle5);
-        i6=(View) findViewById(R.id.imageview_circle6);
+            circleOneLL = findViewById(R.id.circleOneLL);
+            circleTwoLL = findViewById(R.id.circleTwoLL);
+            circleThreeLL = findViewById(R.id.circleThreeLL);
+            circleFourLL = findViewById(R.id.circleFourLL);
+            circleFiveLL = findViewById(R.id.circleFiveLL);
+            circleSixLL = findViewById(R.id.circleSixLL);
 
-        b0=(TextView) findViewById(R.id.textview_0);
-        b1=(TextView) findViewById(R.id.textview_1);
-        b2=(TextView) findViewById(R.id.textview_2);
-        b3=(TextView) findViewById(R.id.textview_3);
-        b4=(TextView) findViewById(R.id.textview_4);
-        b5=(TextView) findViewById(R.id.textview_5);
-        b6=(TextView) findViewById(R.id.textview_6);
-        b7=(TextView) findViewById(R.id.textview_7);
-        b8=(TextView) findViewById(R.id.textview_8);
-        b9=(TextView) findViewById(R.id.textview_9);
-        b_back=(ImageView) findViewById(R.id.button_back1);
-        b_dot=(TextView) findViewById(R.id.button_dot);
-        b0.setOnClickListener(this);
-        b1.setOnClickListener(this);
-        b2.setOnClickListener(this);
-        b3.setOnClickListener(this);
-        b4.setOnClickListener(this);
-        b5.setOnClickListener(this);
-        b6.setOnClickListener(this);
-        b7.setOnClickListener(this);
-        b8.setOnClickListener(this);
-        b9.setOnClickListener(this);
-        b_back.setOnClickListener(this);
-        b_dot.setOnClickListener(this);
-
+            keyZeroTV = (TextView) findViewById(R.id.keyZeroTV);
+            keyOneTV = (TextView) findViewById(R.id.keyOneTV);
+            keyTwoTV = (TextView) findViewById(R.id.keyTwoTV);
+            keyThreeTV = (TextView) findViewById(R.id.keyThreeTV);
+            keyFourTV = (TextView) findViewById(R.id.keyFourTV);
+            keyFiveTV = (TextView) findViewById(R.id.keyFiveTV);
+            keySixTV = (TextView) findViewById(R.id.keySixTV);
+            keySevenTV = (TextView) findViewById(R.id.keySevenTV);
+            keyEightTV = (TextView) findViewById(R.id.keyEightTV);
+            keyNineTV = (TextView) findViewById(R.id.keyNineTV);
+            tvHead = (TextView) findViewById(R.id.tvHead);
+            tvForgot = (TextView) findViewById(R.id.tvForgot);
+            backActionIV = (ImageView) findViewById(R.id.backActionIV);
+            imgBack = (ImageView) findViewById(R.id.imgBack);
+            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                imgBack.setImageResource(R.drawable.ic_close);
+            } else {
+                imgBack.setImageResource(R.drawable.ic_back);
+            }
+            keyZeroTV.setOnClickListener(this);
+            keyOneTV.setOnClickListener(this);
+            keyTwoTV.setOnClickListener(this);
+            keyThreeTV.setOnClickListener(this);
+            keyFourTV.setOnClickListener(this);
+            keyFiveTV.setOnClickListener(this);
+            keySixTV.setOnClickListener(this);
+            keySevenTV.setOnClickListener(this);
+            keyEightTV.setOnClickListener(this);
+            keyNineTV.setOnClickListener(this);
+            backActionIV.setOnClickListener(this);
+            tvForgot.setOnClickListener(this);
+            imgBack.setOnClickListener(this);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
+    private void initObserver() {
+
+        coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
+            @Override
+            public void onChanged(ValidateResponse validateResponse) {
+                dialog.dismiss();
+                if (validateResponse != null) {
+                    if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                        String strScreen = "";
+                        if (getIntent().getStringExtra("screen") != null) {
+                            strScreen = getIntent().getStringExtra("screen");
+                        }
+                        switch (strScreen) {
+                            case "loginExpiry":
+                                Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+                                i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                startActivity(i);
+                                break;
+                            case "login":
+                                Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(d);
+                                break;
+                            case "UserDetails":
+                                Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+                                startActivity(ee);
+                                finish();
+                                break;
+                        }
+                    } else {
+                        //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
+                        setErrorPIN();
+                    }
+                }
+            }
+        });
+
+        coyniViewModel.getRegisterPINResponseMutableLiveData().observe(this, new Observer<PINRegisterResponse>() {
+            @Override
+            public void onChanged(PINRegisterResponse pinRegisterResponse) {
+                dialog.dismiss();
+                if (pinRegisterResponse != null) {
+                    Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
+                    if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPin")) {
+                            Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Intent d = new Intent(PINActivity.this, LoginActivity.class);
+                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        PINActivity.this.startActivity(d);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, 2000);
+
+                        } else {
+                            if (Utils.checkAuthentication(PINActivity.this)) {
+                                if (Utils.isFingerPrint(PINActivity.this)) {
+                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                            .putExtra("ENABLE_TYPE", "TOUCH"));
+                                } else {
+                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                            .putExtra("ENABLE_TYPE", "FACE"));
+                                }
+                            } else {
+                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                        .putExtra("ENABLE_TYPE", "SUCCESS"));
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-
-            case R.id.textview_0:
-                number_list.add("0");
-                passNumber(number_list);
+        switch (view.getId()) {
+            case R.id.keyZeroTV:
+                if (passcode.length() < 6) {
+                    passcode += "0";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_1:
-                number_list.add("1");
-                passNumber(number_list);
+            case R.id.keyOneTV:
+                if (passcode.length() < 6) {
+                    passcode += "1";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_2:
-                number_list.add("2");
-                passNumber(number_list);
+            case R.id.keyTwoTV:
+                if (passcode.length() < 6) {
+                    passcode += "2";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_3:
-                number_list.add("3");
-                passNumber(number_list);
+            case R.id.keyThreeTV:
+                if (passcode.length() < 6) {
+                    passcode += "3";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_4:
-                number_list.add("4");
-                passNumber(number_list);
+            case R.id.keyFourTV:
+                if (passcode.length() < 6) {
+                    passcode += "4";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_5:
-                number_list.add("5");
-                passNumber(number_list);
+            case R.id.keyFiveTV:
+                if (passcode.length() < 6) {
+                    passcode += "5";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_6:
-                number_list.add("6");
-                passNumber(number_list);
+            case R.id.keySixTV:
+                if (passcode.length() < 6) {
+                    passcode += "6";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_7:
-                number_list.add("7");
-                passNumber(number_list);
+            case R.id.keySevenTV:
+                if (passcode.length() < 6) {
+                    passcode += "7";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_8:
-                number_list.add("8");
-                passNumber(number_list);
+            case R.id.keyEightTV:
+                if (passcode.length() < 6) {
+                    passcode += "8";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.textview_9:
-                number_list.add("9");
-                passNumber(number_list);
+            case R.id.keyNineTV:
+                if (passcode.length() < 6) {
+                    passcode += "9";
+                    passNumber(passcode);
+                }
                 break;
-            case R.id.button_back1:
-                number_list.clear();
-                passNumber(number_list);
+            case R.id.backActionIV:
+                if (!passcode.equals("")) {
+                    passcode = passcode.substring(0, passcode.length() - 1);
+                }
+                passNumberClear(passcode);
+                break;
+            case R.id.imgBack:
+                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
+                        || getIntent().getStringExtra("screen").equals("loginExpiry") ||
+                        getIntent().getStringExtra("screen").equals("UserDetails"))) {
+                    onBackPressed();
+                } else {
+                    if (TYPE.equals("CHOOSE")) {
+                        onBackPressed();
+                    } else {
+                        tvForgot.setVisibility(View.GONE);
+                        TYPE = "CHOOSE";
+                        tvHead.setText("Choose your PIN");
+                        clearPassCode();
+                        setDefault();
+                        passcode = "";
+                    }
+                }
+                break;
+            case R.id.tvForgot:
+                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
+                i.putExtra("screen", "ForgotPin");
+                startActivity(i);
                 break;
 
         }
 
     }
 
-    private void passNumber(ArrayList<String> number_list) {
+    private void passNumber(String number_list) {
+        try {
+            if (number_list.length() == 0) {
+                clearPassCode();
+            } else {
+                switch (number_list.length()) {
+                    case 1:
+                        chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
+                        break;
+                    case 2:
+                        chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
+                        break;
+                    case 3:
+                        chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
+                        break;
+                    case 4:
+                        chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
+                        break;
+                    case 5:
+                        chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
+                        break;
+                    case 6:
+                        chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+                        switch (TYPE) {
+                            case "CHOOSE":
+                                strChoose = passcode;
+                                passcode = "";
+                                TYPE = "CONFIRM";
+                                tvHead.setText("Confrim your PIN");
+                                clearPassCode();
+                                break;
+                            case "CONFIRM":
+                                strConfirm = passcode;
+                                if (!strChoose.equals(strConfirm)) {
+//                                    Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
+                                    setErrorPIN();
+                                } else {
 
-        if(number_list.size()==0){
-            i1.setBackgroundResource(R.drawable.ic_baseline_circle_white);
-            i2.setBackgroundResource(R.drawable.ic_baseline_circle_white);
-            i3.setBackgroundResource(R.drawable.ic_baseline_circle_white);
-            i4.setBackgroundResource(R.drawable.ic_baseline_circle_white);
-            i5.setBackgroundResource(R.drawable.ic_baseline_circle_white);
-            i6.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                                    dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
+                                    dialog.setIndeterminate(false);
+                                    dialog.setMessage("Please wait...");
+                                    dialog.getWindow().setGravity(Gravity.CENTER);
+                                    dialog.show();
+
+                                    RegisterRequest registerRequest = new RegisterRequest();
+                                    registerRequest.setPin(strChoose);
+                                    coyniViewModel.registerCoyniPin(registerRequest);
+
+                                }
+                                break;
+                            case "ENTER":
+                                validatePIN();
+                                break;
+                        }
+                        break;
+
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        else {
-            switch (number_list.size()){
-                case 1:
-                    num1=number_list.get(0);
-                    i1.setBackgroundResource(R.drawable.ic_baseline_circle);
-                    break;
-                case 2:
-                    num2=number_list.get(1);
-                    i2.setBackgroundResource(R.drawable.ic_baseline_circle);
-                    break;
-                case 3:
-                    num3=number_list.get(2);
-                    i3.setBackgroundResource(R.drawable.ic_baseline_circle);
+    }
+
+    private void passNumberClear(String number_list) {
+        try {
+            switch (number_list.length()) {
+                case 5:
+                    //setSuccessPIN();
+                    chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 4:
-                    num4=number_list.get(3);
-                    i4.setBackgroundResource(R.drawable.ic_baseline_circle);
+                    chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
-                case 5:
-                    num5=number_list.get(4);
-                    i5.setBackgroundResource(R.drawable.ic_baseline_circle);
+                case 3:
+                    chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
-                case 6:
-                    num6=number_list.get(5);
-                    i6.setBackgroundResource(R.drawable.ic_baseline_circle);
-                    passcode=num1+num2+num3+num4+num5+num6;
-                    if(getPasscode().length()==0){
-                        savePasscode(passcode);
-                    }
-                    else {
-                        matchPasscode();
-                    }
+                case 2:
+                    chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
+                    break;
+                case 1:
+                    chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
+                    break;
+                case 0:
+                    chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
 
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    private void matchPasscode() {
-
-        if (getPasscode().equals(passcode)){
-//            startActivity(new Intent(this,PassCode_Success.class));
+    private void clearPassCode() {
+        try {
+            chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+            chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+            chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+            chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+            chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+            chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        else {
-            Toast.makeText(this, "Passcode doest match plzz try again!!!"+getPasscode(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void validatePIN() {
+        try {
+            dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
+            dialog.setIndeterminate(false);
+            dialog.setMessage("Please wait...");
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.show();
+            ValidateRequest request = new ValidateRequest();
+            request.setPin(passcode);
+            coyniViewModel.validateCoyniPin(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    private SharedPreferences.Editor savePasscode(String passcode){
-        SharedPreferences preferences=getSharedPreferences("passcode_pref",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putString("passcode",passcode);
-        editor.commit();
-        return editor;
+    public void setErrorPIN() {
+        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
 
+        chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
     }
-    private String getPasscode(){
 
-        SharedPreferences preferences=getSharedPreferences("passcode_pref",Context.MODE_PRIVATE);
-        return preferences.getString("passcode","");
+    public void setDefault() {
+        circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
     }
+
+    private void clearControls() {
+        try {
+            circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            clearPassCode();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void toastTimer(Dialog dialog) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(2000);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    dialog.dismiss();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+    }
+
 }

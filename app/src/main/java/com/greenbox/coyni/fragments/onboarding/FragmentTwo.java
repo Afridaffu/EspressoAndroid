@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,21 +71,27 @@ public class FragmentTwo extends Fragment {
         View view = inflater.inflate(R.layout.fragment_two, container, false);
 
         TextView textOne  = view.findViewById(R.id.oneTV);
+        TextView textOneOne  = view.findViewById(R.id.oneOneTV);
         TextView textTwo  = view.findViewById(R.id.twoTV);
         TextView textThree  = view.findViewById(R.id.threeTV);
+        TextView textThreeThree  = view.findViewById(R.id.threethreeTV);
 
 
-        makeSpannableString("Stable coin token (CYN) backed by the U.S. dollar on a 1:1 ratio",55,64,textOne);
+        textOne.setText("Stable coin token (CYN) backed by the U.S.");
+        makeSpannableString("dollar on a 1:1 ratio",11,21,textOneOne);
         makeSpannableString("Send and request payments without fees",26,38,textTwo);
-        makeSpannableString("Generate QR codes for specific values to make secure payments",9,17,textThree);
+        makeSpannableString("Generate QR codes for specific values to",9,18,textThree);
+        textThreeThree.setText("make secure payments");
 
         return view;
 
     }
 
     private void makeSpannableString(String text, int start, int end, TextView textView){
+
         SpannableString spannable = new SpannableString(text);
-        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.primary_color)), start,end,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.primary_color)),
+                start,end,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         spannable.setSpan(new StyleSpan(Typeface.BOLD), start,end,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         textView.setText(spannable);
     }

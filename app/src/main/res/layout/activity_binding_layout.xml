@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".view.BindingLayoutActivity">
+
+    <include
+        android:id="@+id/retfoundactcontainer"
+        layout="@layout/retrieve_email_foundaccount_layout"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/retfailaccontainer"
+        layout="@layout/retrieve_email_tryagain_layout"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/editEmailSuccessLayout"
+        layout="@layout/edit_email_successful_layout"
+        android:visibility="visible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

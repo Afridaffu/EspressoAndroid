@@ -1,5 +1,6 @@
 package com.greenbox.coyni.utils.outline_et;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -28,8 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OutLineBoxEditText extends ConstraintLayout {
-
-
     private TextView hintName, passwordInfoTV;
     private LinearLayout hintHolder, stregnthViewLL;
     private EditText outLineEditText;
@@ -39,7 +38,7 @@ public class OutLineBoxEditText extends ConstraintLayout {
     private Pattern strong, medium;
     private Matcher matcher;
     private String fieldType = "";
-    private CreateAccountActivity createAccountAct;
+    private Activity activity;
     private static final String PASSWORD_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,12})";
 
@@ -92,27 +91,6 @@ public class OutLineBoxEditText extends ConstraintLayout {
                     hintName.setTextColor(getResources().getColor(R.color.primary_black));
                     hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                     stregnthViewLL.setVisibility(GONE);
-
-//                    if(fieldType.equalsIgnoreCase("First Name")){
-//                        createAccountAct.isFirstName = outLineEditText.getText().toString().trim().length() > 2;
-//                    }else if(fieldType.equalsIgnoreCase("Last Name")){
-//                        createAccountAct.isLastName = outLineEditText.getText().toString().trim().length() > 0;
-//                    }else if(fieldType.equalsIgnoreCase("Email")){
-//                        createAccountAct.isEmail = isValidEmail(outLineEditText.getText().toString().trim());
-//                    }else if(fieldType.equalsIgnoreCase("Phone Number")){
-//                        createAccountAct.isPhoneNumber = outLineEditText.getText().toString().trim().length() > 9;
-//                    }else if(fieldType.equalsIgnoreCase("Password")){
-//                        if(outLineEditText.getText().toString().trim().length() > 7){
-//                            createAccountAct.isPassword = true;
-//                            createAccountAct.passwordString = outLineEditText.getText().toString().trim();
-//                        }else{
-//                            createAccountAct.isPassword = false;
-//                        }
-//                    }else if(fieldType.equalsIgnoreCase("Confirm Password")){
-//                        createAccountAct.isConfirmPassword = outLineEditText.getText().toString().equals(createAccountAct.passwordString);
-//                    }
-
-
                 }
             }
         });
@@ -154,43 +132,43 @@ public class OutLineBoxEditText extends ConstraintLayout {
                 }
 
                 if (fieldType.equalsIgnoreCase("First Name")) {
-                    createAccountAct.isFirstName = outLineEditText.getText().toString().trim().length() > 2;
+                    ((CreateAccountActivity)context).isFirstName = outLineEditText.getText().toString().trim().length() > 2;
                 } else if (fieldType.equalsIgnoreCase("Last Name")) {
-                    createAccountAct.isLastName = outLineEditText.getText().toString().trim().length() > 0;
+                    ((CreateAccountActivity)context).isLastName = outLineEditText.getText().toString().trim().length() > 0;
                 } else if (fieldType.equalsIgnoreCase("Email")) {
-                    createAccountAct.isEmail = isValidEmail(outLineEditText.getText().toString().trim());
+                    ((CreateAccountActivity)context).isEmail = isValidEmail(outLineEditText.getText().toString().trim());
                 } else if (fieldType.equalsIgnoreCase("Phone Number")) {
                     Log.e("Phone Number", outLineEditText.getText().toString().trim().length()+"");
-                    createAccountAct.isPhoneNumber = outLineEditText.getText().toString().trim().length() > 9;
+                    ((CreateAccountActivity)context).isPhoneNumber = outLineEditText.getText().toString().trim().length() > 9;
                 } else if (fieldType.equalsIgnoreCase("Password")) {
                     if (outLineEditText.getText().toString().trim().length() > 7 && strong.matcher(charSequence).matches()) {
-                        createAccountAct.isPassword = true;
-                        createAccountAct.passwordString = outLineEditText.getText().toString().trim();
+                        ((CreateAccountActivity)context).isPassword = true;
+                        ((CreateAccountActivity)context).passwordString = outLineEditText.getText().toString().trim();
                     } else {
-                        createAccountAct.isPassword = false;
+                        ((CreateAccountActivity)context).isPassword = false;
                     }
                 } else if (fieldType.equalsIgnoreCase("Confirm Password")) {
-                    if(!createAccountAct.passwordString.equals(""))
-                        createAccountAct.isConfirmPassword = outLineEditText.getText().toString().equals(createAccountAct.passwordString);
+                    if(!((CreateAccountActivity)context).passwordString.equals(""))
+                        ((CreateAccountActivity)context).isConfirmPassword = outLineEditText.getText().toString().equals(((CreateAccountActivity)context).passwordString);
                 }
 
-                if (createAccountAct.isFirstName && createAccountAct.isLastName &&
-                        createAccountAct.isEmail && createAccountAct.isPhoneNumber &&
-                        createAccountAct.isPassword && createAccountAct.isConfirmPassword) {
-                    createAccountAct.isNextEnabled = true;
-                    createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                if (((CreateAccountActivity)context).isFirstName && ((CreateAccountActivity)context).isLastName &&
+                        ((CreateAccountActivity)context).isEmail && ((CreateAccountActivity)context).isPhoneNumber &&
+                        ((CreateAccountActivity)context).isPassword && ((CreateAccountActivity)context).isConfirmPassword) {
+                    ((CreateAccountActivity)context).isNextEnabled = true;
+                    ((CreateAccountActivity)context).nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                    Log.e("All boolean", createAccountAct.isFirstName + " " + createAccountAct.isLastName + " " +
-                            createAccountAct.isEmail + " " + createAccountAct.isPhoneNumber + " " +
-                            createAccountAct.isPassword + " " + createAccountAct.isConfirmPassword);
+                    Log.e("All boolean", ((CreateAccountActivity)context).isFirstName + " " + ((CreateAccountActivity)context).isLastName + " " +
+                            ((CreateAccountActivity)context).isEmail + " " + ((CreateAccountActivity)context).isPhoneNumber + " " +
+                            ((CreateAccountActivity)context).isPassword + " " + ((CreateAccountActivity)context).isConfirmPassword);
                 } else {
 
-                    Log.e("All boolean", createAccountAct.isFirstName + " " + createAccountAct.isLastName + " " +
-                            createAccountAct.isEmail + " " + createAccountAct.isPhoneNumber + " " +
-                            createAccountAct.isPassword + " " + createAccountAct.isConfirmPassword);
+                    Log.e("All boolean", ((CreateAccountActivity)context).isFirstName + " " + ((CreateAccountActivity)context).isLastName + " " +
+                            ((CreateAccountActivity)context).isEmail + " " + ((CreateAccountActivity)context).isPhoneNumber + " " +
+                            ((CreateAccountActivity)context).isPassword + " " + ((CreateAccountActivity)context).isConfirmPassword);
 
-                    createAccountAct.isNextEnabled = false;
-                    createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    ((CreateAccountActivity)context).isNextEnabled = false;
+                    ((CreateAccountActivity)context).nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 }
 
             }
@@ -208,8 +186,8 @@ public class OutLineBoxEditText extends ConstraintLayout {
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
     }
 
-    public void setField(String hintOutlineText, String hintText, String type, boolean showPassowrdStrength, CreateAccountActivity createAccountActivity) {
-        createAccountAct = createAccountActivity;
+    public void setField(String hintOutlineText, String hintText, String type, boolean showPassowrdStrength, Activity activity1) {
+        activity = activity1;
         hintName.setText(hintOutlineText);
         outLineEditText.setHint(hintText);
 
@@ -278,5 +256,13 @@ public class OutLineBoxEditText extends ConstraintLayout {
 
     public static boolean isValidEmail(String target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public void setText(String text) {
+        outLineEditText.setText(text);
+    }
+
+    public String getText() {
+        return outLineEditText.getText().toString().trim();
     }
 }

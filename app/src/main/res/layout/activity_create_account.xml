@@ -1,177 +1,476 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CreateAccountActivity"
-    android:padding="25dp"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="22dp"
+    android:paddingTop="22dp"
+    android:paddingRight="22dp"
+    android:fillViewport="true"
     android:screenReaderFocusable="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    >
+    tools:context=".view.CreateAccountActivity"
+    android:id="@+id/mainRL">
 
-    <ImageView
-        android:id="@+id/createAccountCloseIV"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_x"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="40dp"/>
+    <LinearLayout
+        android:id="@+id/layoutClose"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_14sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
 
-    <ScrollView
+        <ImageView
+            android:id="@+id/createAccountCloseIV"
+            android:layout_width="@dimen/_13sdp"
+            android:layout_height="@dimen/_13sdp"
+            android:src="@drawable/ic_x" />
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutClose"
+        android:fitsSystemWindows="true">
+
+        <ScrollView
+            android:id="@+id/mainSV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create Account"
-                android:textSize="@dimen/text_size_24sp"
-                android:textColor="@color/primary_black"
-                android:fontFamily="@font/opensans_bold"
-                />
-
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/firstNameET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
-
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/lastNameET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
-
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/emailET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:id="@+id/emailErrorLL"
-                android:visibility="gone"
-                android:gravity="center">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_erro"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/error_red"
-                    android:layout_marginStart="10dp"
-                    android:textSize="@dimen/text_size_10sp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="User alread exists. Try a new email or log in."/>
-            </LinearLayout>
-
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
-                android:id="@+id/phoneNumberET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
-
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/passwordET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"/>
-
-            <TextView
-                android:id="@+id/passwordInfoTV"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_grey"
-                android:textSize="@dimen/text_size_10sp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."/>
-
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxEditText
-                android:id="@+id/confirmPasswordET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                />
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/text_size_12sp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="By clicking next, you agree to "/>
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tosTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary_color"
-                    android:text="Terms of Service "
-                    android:textSize="@dimen/text_size_12sp"
-                    android:fontFamily="@font/opensans_regular"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary_black"
-                    android:text="&amp; "
-                    android:textSize="@dimen/text_size_12sp"
-                    android:fontFamily="@font/opensans_regular"
-                    />
-
-
-
-            </LinearLayout>
-            <TextView
-                android:id="@+id/privacyTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/primary_color"
-                android:text="Privacy Policy"
-                android:textSize="@dimen/text_size_12sp"
-                android:fontFamily="@font/opensans_regular"
-                />
-
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/nextCV"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:cardBackgroundColor="@color/inactive_color"
-                app:cardCornerRadius="30dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="30dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Next"
-                    android:textSize="@dimen/text_size_18sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Create Account"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_16ssp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/firstNameTIL"
+                    style="@style/TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:hint="First Name"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green"
+                    app:errorIconDrawable="@null">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/firstNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="First Name"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textNoSuggestions"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:padding="@dimen/_14sdp"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:textIsSelectable="false"
+                        android:longClickable="false"
+                        android:singleLine="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/firstNameErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textColor="@color/white"/>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-    </ScrollView>
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
-</LinearLayout>
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/firstNameErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:hint="Last Name"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green"
+                    android:id="@+id/lastNameTIL"
+                    app:errorIconDrawable="@null">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lastNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="Last Name"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textNoSuggestions"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:padding="@dimen/_14sdp"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:longClickable="false"
+                        android:singleLine="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/lastNameErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/lastNameErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/emailTIL"
+                    style="@style/TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:hint="Email"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:errorTextColor="@color/error_red"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green"
+                    app:errorIconDrawable="@null">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/emailET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="Email"
+                        android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_14sdp"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:longClickable="false"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,."/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/emailErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/emailErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="User already exists. Try a new email or log in."
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
+                    android:id="@+id/phoneNumberET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp" />
+
+                <LinearLayout
+                    android:id="@+id/phoneErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/phoneErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="User already exists. Try a new phone number or log in."
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:textColorHint="@color/black"
+                        app:boxStrokeColor="@color/primary_green"
+                        app:expandedHintEnabled="false"
+                        app:hintTextColor="@color/primary_green"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/xdark_gray"
+                        android:id="@+id/passwordTIL"
+                        app:errorIconDrawable="@null">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/passwordET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:hint="8-12 Characters"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword|textNoSuggestions"
+                            android:maxLength="12"
+                            android:padding="@dimen/_14sdp"
+                            android:textColor="@color/text_color"
+                            android:textColorHint="@color/light_gray"
+                            android:textCursorDrawable="@drawable/cursor_color"
+                            android:textSize="@dimen/_12ssp"
+                            android:longClickable="false"
+                            android:singleLine="true"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/stregnthViewLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:paddingBottom="@dimen/_3sdp"
+                        android:visibility="gone">
+
+                        <View
+                            android:id="@+id/stregnthOne"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:background="@color/error_red" />
+
+                        <View
+                            android:id="@+id/stregnthTwo"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:background="@color/error_red"
+                            android:visibility="invisible" />
+
+                        <View
+                            android:id="@+id/stregnthThree"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:background="@color/error_red"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/passwordErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/passwordErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="User already exists. Try a new phone number or log in."
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/passwordInfoTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/_10ssp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:hint="Confirm Password"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green"
+                    app:passwordToggleEnabled="true"
+                    android:id="@+id/confPasswordTIL"
+                    app:passwordToggleTint="@color/xdark_gray"
+                    app:errorIconDrawable="@null">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/confirmPasswordET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="Confirm Password"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword|textNoSuggestions"
+                        android:maxLength="12"
+                        android:padding="@dimen/_14sdp"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp"
+                        android:longClickable="false"
+                        android:singleLine="true"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/confPassErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/confPassErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/spannableTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/spannable_text"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp"
+                    android:layout_marginTop="@dimen/_14sdp"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/nextCV"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_43sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    app:cardBackgroundColor="@color/inactive_color"
+                    app:cardCornerRadius="@dimen/_22sdp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center"
+                        android:text="Next"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,10 +1,142 @@
 <resources>
     <string name="app_name">Coyni</string>
-
-
+    <string name="internet">Check your internet connection</string>
     <string name="password_strength_weak">Weak</string>
     <string name="password_strength_medium">Medium</string>
     <string name="password_strength_strong">Strong</string>
     <string name="password_strength_very_strong">Very Strong</string>
+    <string name="emailotpmsg">We have sent you a 6-digit code sent to the register email address: </string>
+
+
+    <string name="remembertxt">   Remember Me</string>
+    <string name="forgotpwdtxt">Forgot Password</string>
+    <string name="retrievemail">Retrieve Email</string>
+    <string name="epincorrecttext">Email or password is incorrect</string>
+    <string name="epincorrectdescri">Either your email or password is incorrect. please try again, or use Forgot password and retrieve email.</string>
+    <string name="faceidnotavaitxt">Face ID Not available</string>
+    <string name="faceidnotavaidescri">Please Log in and go to your profile setting to set up the Face ID.</string>
+    <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="chpwdmsg">Look like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
+
+    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. please enter the\n information below.</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="processing">Processing…</string>
+    <string name="processingcontent">We are looking for your account in the moment. Thank you for your patience.</string>
+    <string name="sorrytxt">Sorry We Can’t Find Anything on File</string>
+    <string name="tryagain">Try Again</string>
+    <string name="coyni_account">Coyni Account</string>
+    <string name="foundacc">We’ve Found Your Account!</string>
+    <string name="belowtxtre">Click the Link below to log in</string>
+    <string name="jona_gmail_com">Jona***@gmail.com</string>
+
+
+    <string name="cu_profile_name">Jonathan Joestar</string>
+    <string name="accountid">Account ID M-1234</string>
+    <string name="status_unverified">Account Status: </string>
+    <string name="unveri">Unverified</string>
+    <string name="cp_almost">You’re almost there!</string>
+    <string name="cp_setup">Finish the set up your account in\nless than 5 min.</string>
+    <string name="cp_getstarted">Get Started</string>
+    <string name="setting">Settings</string>
+    <string name="setting_userdetails">User Details</string>
+    <string name="setting_payment">Payment Methods</string>
+    <string name="setting_pref">Preferences</string>
+    <string name="account">Account</string>
+    <string name="account_limits">Account Limits</string>
+    <string name="account_agree">Agreements</string>
+    <string name="security">Security</string>
+    <string name="security_resetpin">"Reset PIN Code "</string>
+    <string name="security_faceid">Face ID Setting</string>
+    <string name="security_changepass">Change Password</string>
+    <string name="faceidsetuptxt">Set Up Face ID</string>
+    <string name="faceidsetup">Enable Face ID to Use face recognition to complete payments quickly and securely.</string>
+    <string name="sepupid">Set Up Face ID</string>
+    <string name="sepupidnotnoe">Not Now</string>
+    <string name="setupnotnowBtn">Not Now</string>
+
+    <string name="uploadid">Upload ID and fill out your information</string>
+    <string name="contentuploadid">Upload and Scan ID: Driver’s License,\nState-Issued ID, or Passport.</string>
+    <string name="digits4">Last 4 digits</string>
+    <string name="ssnlast">SSN Last 4 Digits</string>
+    <string name="dobol">Date of Birth</string>
+    <string name="dobhint">Pick your date of birth</string>
+    <string name="onfocusString"> </string>
+    <string name="identityInstruction">Enter your mailing address of your primary residence. Please do not use a PO Box.</string>
+    <string name="submitbtn">Submit</string>
+    <string name="exitbtn">Exit</string>
+
+    <string name="identity">Identity Verification</string>
+    <string name="mailingaddress1">Mailing Address Line 1</string>
+    <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zip">Zipcode</string>
+    <string name="country">Country</string>
+    <string name="contentuploadidsuccess">Uploaded Driver’s License</string>
+    <string name="mailingaddresshint">Street Address</string>
+    <string name="mailingaddresshint2">Apt#, Suit, Floor</string>
+    <string name="statehint">State</string>
+    <string name="cityhint">City</string>
+    <string name="ziphint">Zipcode</string>
+    <string name="countryhint">United States</string>
+
+    <string name="contentidtype">Choose ID Type</string>
+    <string name="driverlicense">Driver’s License</string>
+    <string name="pptext">Passport</string>
+    <string name="sic">State-Issued Card</string>
+
+    <string name="ivunder_review">Thank you for your interest in coyni. Please allow us up to 72 business hours for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
+    <string name="ivtitle">Identify Verification Under Review</string>
+    <string name="done">Done</string>
+
+    <string name="add_ac">Additional Action Required</string>
+    <string name="add_actioncontent">We are unable to match the last 4 digits of your Social Security number.\n \nIn order to continue, please enter your full Social Security Number and click submit.</string>
+    <string name="ssnhint">•••-••-••••</string>
+    <string name="ssnout">SSN</string>
+    <string name="submit">Submit</string>
+
+    <string name="iv_success">Identity Verification Successful</string>
+    <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
+
+    <string name="iv_failed">Identity Verification Failed</string>
+    <string name="iv_failedcontent">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
+    <string name="iv_failedcontentextention"> If you need any help Please</string>
+    <string name="iv_failedcontactex"><u>Contact Us</u></string>
+
+    <string name="exit">Exit</string>
+    <string name="bank_account">Bank Account</string>
+    <string name="weeklimittext">250,000.00/Week</string>
+    <string name="daylimittext">250,000.00/Day</string>
+    <string name="bebit_card">Debit Card </string>
+    <string name="credit_card">Credit Card </string>
+    <string name="withdraw">Withdraw</string>
+    <string name="instant">Instant Pay</string>
+    <string name="giftcard">Gift Card</string>
+    <string name="buytoken">Buy Tokens</string>
+    <string name="ok">OK</string>
+    <string name="create_new_password">Create New Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="enableidinfo">By enabling Face ID, you are preventing \nunauthorized users from gaining access to\n your account and other sensitive \ninformation.</string>
+    <string name="not_now">Not Now</string>
+    <string name="your_account_has_been_created">Your Account Has Been Created</string>
+    <string name="youtaccountcontent">You’re almost there! Before you can start \ntokenizing your money. Please follow the\n instructions below.</string>
+    <string name="verify_your_identity">Verify Your Identity</string>
+    <string name="id_mailing_address">ID, Mailing address</string>
+    <string name="_5_min">5 min</string>
+    <string name="forgot_content">Before we can reset your password, we will \nneed to verify your identity.\nPlease enter the email register with your\naccount.</string>
+    <string name="email">Email</string>
+    <string name="retry_create_account">Retry Create Account</string>
+    <string name="retry_account">Error: Look like we are having an issue with \nyour OTP request, please retry again later.</string>
+    <string name="try_again">Try Again</string>
+    <string name="qr_code">qr_code</string>
+    <string name="contact_us"><u>Contact Us</u></string>
+    <string name="spannable_text"><![CDATA[By clicking next, you agree to Term of Service & Privacy Policy]]></string>
 
 </resources>
