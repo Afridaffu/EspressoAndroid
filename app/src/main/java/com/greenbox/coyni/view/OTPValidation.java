@@ -194,7 +194,7 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setOnClickListener(view -> {
                 try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -344,7 +344,7 @@ public class OTPValidation extends AppCompatActivity {
             tryAgainCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -470,8 +470,8 @@ public class OTPValidation extends AppCompatActivity {
                     if (smsValidate.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
-                        if(smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
-                                smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")){
+                        if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
+                                smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
                             Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this);
                         }
                     } else {
@@ -675,6 +675,7 @@ public class OTPValidation extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mLastClickTime = 0L;
     }
 
     @Override
