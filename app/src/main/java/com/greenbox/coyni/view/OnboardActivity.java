@@ -129,7 +129,6 @@ public class OnboardActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(OnboardActivity.this, AccountTypeActivity.class));
-//                    startActivity(new Intent(OnboardActivity.this, CreatePasswordActivity.class));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
