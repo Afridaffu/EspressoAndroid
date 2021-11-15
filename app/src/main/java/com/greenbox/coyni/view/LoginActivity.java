@@ -46,6 +46,7 @@ import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -106,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     public void run() {
                         if (Utils.checkInternet(LoginActivity.this)) {
                             if (!strToken.equals("") && !Utils.getDeviceID().equals("")) {
-                                login();
+                                biometricLogin();
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
@@ -613,6 +614,41 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
             }
         });
+
+        loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
+            @Override
+            public void onChanged(LoginResponse loginResponse) {
+                dialog.dismiss();
+                try {
+                    if (loginResponse != null) {
+                        if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                            if (loginResponse.getData().getPasswordExpired()) {
+                                Intent i = new Intent(LoginActivity.this, PINActivity.class);
+                                i.putExtra("screen", "loginExpiry");
+                                i.putExtra("TYPE", "ENTER");
+                                startActivity(i);
+                            } else {
+                                Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                            }
+                        } else {
+                            if (loginResponse.getData() != null) {
+                                if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
+                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                                }
+                            } else {
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this);
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     private Boolean emailValidation() {
@@ -694,6 +730,23 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             loginRequest.setEmail(strEmail);
             loginRequest.setPassword(strPwd);
             loginViewModel.login(loginRequest);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void biometricLogin() {
+        try {
+            dialog = new ProgressDialog(LoginActivity.this, R.style.MyAlertDialogStyle);
+            dialog.setIndeterminate(false);
+            dialog.setMessage("Please wait...");
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.show();
+            BiometricLoginRequest request = new BiometricLoginRequest();
+            request.setDeviceId(Utils.getDeviceID());
+            request.setEnableBiometic(true);
+            request.setMobileToken(strToken);
+            loginViewModel.biometricLogin(request);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
