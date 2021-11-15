@@ -1,18 +1,22 @@
 package com.greenbox.coyni.model.users;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class AccountLimits {
+
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("timestamp")
+    @Expose
     private String timestamp;
+    @SerializedName("data")
+    @Expose
     private AccountLimitsData data;
-    private Error error;
-
-    public AccountLimitsData getData() {
-        return data;
-    }
-
-    public void setData(AccountLimitsData data) {
-        this.data = data;
-    }
+    @SerializedName("error")
+    @Expose
+    private Object error;
 
     public String getStatus() {
         return status;
@@ -22,7 +26,6 @@ public class AccountLimits {
         this.status = status;
     }
 
-
     public String getTimestamp() {
         return timestamp;
     }
@@ -31,12 +34,20 @@ public class AccountLimits {
         this.timestamp = timestamp;
     }
 
+    public AccountLimitsData getData() {
+        return data;
+    }
 
-    public Error getError() {
+    public void setData(AccountLimitsData data) {
+        this.data = data;
+    }
+
+    public Object getError() {
         return error;
     }
 
-    public void setError(Error error) {
+    public void setError(Object error) {
         this.error = error;
     }
+
 }
