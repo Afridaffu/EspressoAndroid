@@ -30,6 +30,7 @@
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="Pre-Authorization"
+                android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
 
             <TextView
@@ -38,6 +39,7 @@
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="left"
+                android:textColor="@color/primary_black"
                 android:text="A temporary hold was placed on your card \nand will be removed by the end of this \nverification process. Please check your \nbank/card statement for a charge from \n[Descriptor Name] and enter the amount \nbelow."
                 android:textSize="@dimen/_12ssp" />
 
@@ -56,7 +58,9 @@
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
                     android:text="$"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/primary_black"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
