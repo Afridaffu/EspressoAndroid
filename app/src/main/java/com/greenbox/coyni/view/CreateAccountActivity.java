@@ -7,10 +7,12 @@ import static android.view.View.VISIBLE;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -93,6 +97,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private View stregnthOne, stregnthTwo, stregnthThree;
     private Pattern strong, medium;
     LinearLayout layoutClose;
+    ImageView createAccountCloseIV;
 
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
@@ -171,6 +176,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             spannableText = findViewById(R.id.spannableTV);
             nextCV = findViewById(R.id.nextCV);
             layoutClose = findViewById(R.id.layoutClose);
+            createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
 
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
@@ -241,19 +247,17 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             });
 
-            layoutClose.setOnClickListener(view -> {
+            createAccountCloseIV.setOnClickListener(view -> {
                 onBackPressed();
             });
 
-            mainRL.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(CreateAccountActivity.this);
-                    }
-                    return false;
-                }
-            });
+//            mainRL.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View view, MotionEvent motionEvent) {
+//                    Utils.hideKeypad(CreateAccountActivity.this);
+//                    return false;
+//                }
+//            });
 //            mainSV.setOnTouchListener(new View.OnTouchListener() {
 //                @Override
 //                public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -383,6 +387,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
+                        }else if(str.length() > 0 && str.substring(str.length()-1).equals(".")){
+                            firstNameET.setText(firstNameET.getText().toString().replaceAll(".", ""));
+                            firstNameET.setSelection(firstNameET.getText().length());
                         }
 
                     } catch (Exception ex) {
@@ -416,6 +423,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         String str = lastNameET.getText().toString();
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
+                            lastNameET.setSelection(lastNameET.getText().length());
+                        }else if(str.length() > 0 && str.substring(str.length()-1).equals(".")){
+                            lastNameET.setText(lastNameET.getText().toString().replaceAll(".", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
                         }
 
@@ -504,8 +514,27 @@ public class CreateAccountActivity extends AppCompatActivity {
                     }
                     if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                         isConfirmPassword = true;
+
+                        passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                        passwordTIL.setHint("Password");
+                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+
+                        confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        confPasswordTIL.setHint("Confirm Password");
+                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+
                     } else {
                         isConfirmPassword = false;
+
+                        if(confirmPasswordET.getText().toString().trim().length() > 0){
+                            passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                            passwordTIL.setHint("Password doesn’t match");
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            confPasswordTIL.setHint("Password doesn’t match");
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                        }
                     }
                     enableOrDisableNext();
 
@@ -534,6 +563,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    if (passwordET.getText().toString().trim().length() > 7 && strong.matcher(passwordET.getText().toString().trim()).matches()) {
+                        isPassword = true;
+                    } else {
+                        isPassword = false;
+                    }
 
                     if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                         isConfirmPassword = true;
@@ -636,6 +671,20 @@ public class CreateAccountActivity extends AppCompatActivity {
                         stregnthViewLL.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+//                        /////
+//                        if(passwordET.getText().toString().trim().equals(passwordET.getText().toString().trim())){
+//                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+//                            passwordTIL.setHint("Password");
+//
+//                        }else{
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            passwordTIL.setHint("Password doesn’t match");
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//
+//                            passwordTIL.setHint("Password doesn’t match");
+//                        }
+//                        /////
                     } else {
                         stregnthViewLL.setVisibility(GONE);
                         if (strong.matcher(passwordET.getText().toString()).matches()) {
@@ -646,28 +695,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                         }
                     }
-
-//                    ////
-//
-//
-//                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                        isPassword = true;
-//
-//                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-//                        confPasswordTIL.setHint("Confirm Password");
-//                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-//
-//                    } else  {
-//                        isPassword = false;
-//                        if(confirmPasswordET.getText().toString().length()>0){
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            passwordTIL.setHint("Password doesn’t match");
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//
-//                            confPasswordTIL.setHint("Password doesn’t match");
-//
-//                        }
-//                    }
                 }
             });
 
@@ -675,6 +702,18 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
+//                        /////
+//                        if(passwordET.getText().toString().trim().length() > 7 && strong.matcher(passwordET.getText().toString().trim()).matches()){
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            passwordTIL.setHint("Password");
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                        }else{
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            passwordTIL.setHint("Password doesn’t match");
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                        }
+//                        /////
+
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                     } else {
@@ -841,7 +880,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        return encoded;
 //    }
 
-
     public void setSpannableText() {
 
         SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & Privacy Policy");
@@ -907,4 +945,54 @@ public class CreateAccountActivity extends AppCompatActivity {
         spannableText.setHighlightColor(Color.TRANSPARENT);
     }
 
+//    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//        if (event.action == MotionEvent.ACTION_DOWN) {
+//            val v = currentFocus
+//            if (v is EditText) {
+//                val outRect = Rect()
+//                v.getGlobalVisibleRect(outRect)
+//                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+//                    Log.d("focus", "touchevent")
+//                    v.clearFocus()
+//                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+//                }
+//            }
+//        }
+//        return super.dispatchTouchEvent(event)
+//    }
+
+
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//
+//        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+//            View v = getCurrentFocus();
+////            if (v.getClass().getName().toString().contains("EditText") ||
+////                    v.getClass().getName().equalsIgnoreCase("EditText")) {
+////                Log.e("touch", "Edittext");
+////                v.requestFocus();
+////            } else{
+////                Log.e("touch", "not Edittext");
+////                Utils.hideKeypad(CreateAccountActivity.this);
+////            }
+//
+//            try {
+//                Rect outRect = new Rect();
+//                v.getGlobalVisibleRect(outRect);
+//                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+//                    Log.e("focus", "touchevent");
+//                    v.clearFocus();
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE) ;
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                }else{
+//                    Log.e("focus", "not touchevent");
+//                    v.requestFocus();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
 }

@@ -71,7 +71,6 @@ public class AccountLimitsActivity extends AppCompatActivity {
                     }
 
 
-
                     if(accountLimits.getData().getTokenWithdrawalInstantpayDayLimit() > 0
                             &&accountLimits.getData().getTokenWithdrawalInstantpayWeekLimit()<=0){
                         withdrawTokenInstantLimit

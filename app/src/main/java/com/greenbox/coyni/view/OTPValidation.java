@@ -366,15 +366,15 @@ public class OTPValidation extends AppCompatActivity {
                         .putExtra("TYPE", "CHOOSE"));
             });
 
-            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(OTPValidation.this);
-                    }
-                    return false;
-                }
-            });
+//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                        Utils.hideKeypad(OTPValidation.this);
+//                    }
+//                    return false;
+//                }
+//            });
 
             initObserver();
 

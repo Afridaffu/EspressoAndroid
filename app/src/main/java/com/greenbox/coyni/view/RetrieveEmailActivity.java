@@ -61,6 +61,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     protected void onResume() {
         super.onResume();
         try {
+            phoneNumberET.requestFocus();
             if (dialog != null) {
                 dialog.dismiss();
             }
@@ -145,7 +146,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             phoneNumberET.setFrom("Retrieve");
             nextBtn.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            phoneNumberET.requestFocus();
+
             nextBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
