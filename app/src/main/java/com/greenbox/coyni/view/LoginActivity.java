@@ -780,7 +780,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
                 etlPassword.setPasswordVisibilityToggleEnabled(true);
-                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+//                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
                 endIconIV.setVisibility(GONE);
             }
         } catch (Exception ex) {
