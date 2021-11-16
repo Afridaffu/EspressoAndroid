@@ -139,7 +139,7 @@ public class OnboardActivity extends AppCompatActivity {
                 }
             });
 
-            if (Utils.checkAuthentication(OnboardActivity.this)) {
+            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (Utils.isFingerPrint(OnboardActivity.this)) {
                     Utils.setIsTouchEnabled(true);
                     Utils.setIsFaceEnabled(false);
@@ -192,32 +192,6 @@ public class OnboardActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
-//    public void toastTimer(Dialog dialog) {
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    synchronized (this) {
-//                        wait(3500);
-//
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            ;
-//        }.start();
-//    }
 
     private void initObserver() {
         loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {

@@ -14,6 +14,8 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
@@ -65,6 +67,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateEmailResponse> updateEmailValidateResponse = new MutableLiveData<>();
+    private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -128,6 +131,14 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<LoginResponse> getBiometricResponseMutableLiveData() {
         return biometricResponseMutableLiveData;
+    }
+
+    public MutableLiveData<ManagePasswordResponse> getManagePasswordResponseMutableLiveData() {
+        return managePasswordResponseMutableLiveData;
+    }
+
+    public MutableLiveData<UpdateEmailResponse> getUpdateEmailValidateResponse() {
+        return updateEmailValidateResponse;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -567,10 +578,6 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<UpdateEmailResponse> getUpdateEmailValidateResponse() {
-        return updateEmailValidateResponse;
-    }
-
     public void updateEmailotpValidate(UpdateEmailValidateRequest updateEmailValidateRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -594,6 +601,36 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<UpdateEmailResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setExpiryPassword(ManagePasswordRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ManagePasswordResponse> mCall = apiService.setExpiryPassword(request);
+            mCall.enqueue(new Callback<ManagePasswordResponse>() {
+                @Override
+                public void onResponse(Call<ManagePasswordResponse> call, Response<ManagePasswordResponse> response) {
+                    if (response.isSuccessful()) {
+                        ManagePasswordResponse obj = response.body();
+                        managePasswordResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ManagePasswordResponse>() {
+                        }.getType();
+                        ManagePasswordResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        managePasswordResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ManagePasswordResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

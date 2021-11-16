@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -46,6 +47,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     public LinearLayout phoneErrorLL, firstNameErrorLL, lastNameErrorLL;
     public TextView phoneErrorTV, firstNameErrorTV, lastNameErrorTV;
     Boolean isInvalid = false;
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         super.onResume();
         try {
             phoneNumberET.requestFocus();
+            isInvalid = false;
             if (dialog != null) {
                 dialog.dismiss();
             }
@@ -152,12 +155,20 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             nextBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (validation()) {
-                        if (Utils.checkInternet(RetrieveEmailActivity.this)) {
-                            retrieveEmail();
-                        } else {
-                            Utils.displayAlert(getString(R.string.internet), RetrieveEmailActivity.this);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
                         }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (validation()) {
+                            if (Utils.checkInternet(RetrieveEmailActivity.this)) {
+                                retrieveEmail();
+                            } else {
+                                Utils.displayAlert(getString(R.string.internet), RetrieveEmailActivity.this);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });

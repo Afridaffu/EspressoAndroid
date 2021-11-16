@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,_."
                     android:fontFamily="@font/opensans_semibold"
-                    android:hint="Email"
+                    android:hint="Coyni@example.com"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:longClickable="false"
@@ -152,7 +152,6 @@
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_green"
-                    app:endIconTint="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green"
@@ -187,7 +186,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:src="@drawable/ic_faceid"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
