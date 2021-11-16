@@ -261,12 +261,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                             }, 2000);
 
                         } else {
-                            if(Utils.bio()){
+                            if(Utils.checkBiometric(PINActivity.this)){
                                 if (Utils.checkAuthentication(PINActivity.this)) {
                                     if (Utils.isFingerPrint(PINActivity.this)) {
                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
                                                 .putExtra("ENABLE_TYPE", "TOUCH"));
-                                    } else {
+                                      } else {
                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
                                                 .putExtra("ENABLE_TYPE", "FACE"));
                                     }
