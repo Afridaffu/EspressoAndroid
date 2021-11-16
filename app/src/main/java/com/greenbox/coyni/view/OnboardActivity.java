@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -59,6 +60,7 @@ public class OnboardActivity extends AppCompatActivity {
     LoginViewModel loginViewModel;
     ProgressDialog dialog;
     public static OnboardActivity onboardActivity;
+    Boolean isBiometric = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,7 +123,7 @@ public class OnboardActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
-                            if ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock)) {
+                            if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
                                 Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
                                 FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
@@ -153,7 +155,7 @@ public class OnboardActivity extends AppCompatActivity {
             SetFaceLock();
             SetTouchId();
             initObserver();
-
+            isBiometric = Utils.checkBiometric(OnboardActivity.this);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
