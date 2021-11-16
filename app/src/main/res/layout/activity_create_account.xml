@@ -88,7 +88,6 @@
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
                         android:textIsSelectable="false"
-                        android:longClickable="false"
                         android:singleLine="true"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
@@ -147,7 +146,6 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
-                        android:longClickable="false"
                         android:singleLine="true"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
 
@@ -204,7 +202,6 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
-                        android:longClickable="false"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"

@@ -32,6 +32,9 @@ import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -611,6 +614,24 @@ public class CreateAccountActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            firstNameET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
                 }
             });
 

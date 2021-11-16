@@ -261,17 +261,22 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                             }, 2000);
 
                         } else {
-                            if (Utils.checkAuthentication(PINActivity.this)) {
-                                if (Utils.isFingerPrint(PINActivity.this)) {
-                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                            .putExtra("ENABLE_TYPE", "TOUCH"));
+                            if(Utils.bio()){
+                                if (Utils.checkAuthentication(PINActivity.this)) {
+                                    if (Utils.isFingerPrint(PINActivity.this)) {
+                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                .putExtra("ENABLE_TYPE", "TOUCH"));
+                                    } else {
+                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                .putExtra("ENABLE_TYPE", "FACE"));
+                                    }
                                 } else {
                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                            .putExtra("ENABLE_TYPE", "FACE"));
+                                            .putExtra("ENABLE_TYPE", "SUCCESS"));
                                 }
-                            } else {
+                            }else{
                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "SUCCESS"));
+                                        .putExtra("ENABLE_TYPE", "TOUCH"));
                             }
                         }
                     }
