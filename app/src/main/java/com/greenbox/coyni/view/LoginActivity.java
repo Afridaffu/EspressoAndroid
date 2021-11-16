@@ -436,15 +436,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     }
                 }
             });
-            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(LoginActivity.this);
-                    }
-                    return false;
-                }
-            });
+//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                        Utils.hideKeypad(LoginActivity.this);
+//                    }
+//                    return false;
+//                }
+//            });
 
             enableIcon();
             SetDB();
