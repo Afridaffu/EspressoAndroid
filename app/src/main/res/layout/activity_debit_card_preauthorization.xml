@@ -19,33 +19,34 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_40sdp"
-                android:layout_marginBottom="@dimen/_13sdp"
+                android:layout_marginTop="@dimen/_45sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
                 android:src="@drawable/ic_chevron_left" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_22sdp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="Pre-Authorization"
-                android:textColor="@color/primary_black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_100sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="left"
-                android:textColor="@color/primary_black"
                 android:text="A temporary hold was placed on your card \nand will be removed by the end of this \nverification process. Please check your \nbank/card statement for a charge from \n[Descriptor Name] and enter the amount \nbelow."
+                android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
                 android:background="@drawable/bg_text_field"
                 android:fitsSystemWindows="true"
                 android:orientation="horizontal">
@@ -54,13 +55,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:text="$"
-                    android:textSize="14sp"
-                    android:textColor="@color/primary_black"
-                    />
+                    android:textSize="@dimen/_14ssp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
             >
-            <com.greenbox.coyni.utils.keyboards.CustomKeyboard                android:id="@+id/ckb"
+                <com.greenbox.coyni.utils.keyboards.CustomKeyboard                android:id="@+id/ckb"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_196sdp"
                 />

@@ -9,21 +9,21 @@
     android:padding="@dimen/_11sdp">
 
     <View
-        android:layout_width="@dimen/_60sdp"
+        android:layout_width="@dimen/_43sdp"
         android:layout_height="@dimen/_2sdp"
-        android:background="@color/primary_color"
+        android:background="@drawable/bg_core_colorfill"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_28sdp"
         />
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_16sdp"
+        android:layout_height="wrap_content"
         android:text="Order Preview"
         android:gravity="center"
         android:fontFamily="@font/opensans_semibold"
         android:textSize="@dimen/_12ssp"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_black"
         android:layout_marginBottom="@dimen/_7sdp"
         />
     <LinearLayout
@@ -31,16 +31,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="159.40"
-        android:gravity="right"
-        android:textSize="@dimen/_35ssp"
-        android:fontFamily="@font/opensans_bold"
-        android:textColor="@color/primary_color"
-        android:layout_marginLeft="@dimen/_78sdp"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="159.40"
+            android:gravity="right"
+            android:textSize="@dimen/_35ssp"
+            android:fontFamily="@font/opensans_bold"
+            android:textColor="@color/primary_color"
+            android:layout_marginLeft="@dimen/_78sdp"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:textSize="@dimen/_11sdp"
             android:textColor="@color/primary_color"
             />
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,25 +57,26 @@
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/_21sdp"
         android:padding="@dimen/_10sdp"
-            >
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Payment Method"
+            android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_regular"
             android:textSize="@dimen/_11ssp"
             android:layout_weight="1"
-            android:textColor="@color/xdark_gray"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bank of America ••••5359"
             android:layout_marginLeft="@dimen/_30sdp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:textColor="@color/primary_black"
             />
-        </LinearLayout>
+    </LinearLayout>
 
 
     <LinearLayout
@@ -88,18 +89,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Purchase Amount"
+            android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_regular"
             android:textSize="@dimen/_11ssp"
             android:layout_weight="1"
-            android:textColor="@color/xdark_gray"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="159.40 USD"
+            android:textColor="@color/black"
             android:fontFamily="@font/opensans_semibold"
             android:layout_marginLeft="@dimen/_96sdp"
-            android:textColor="@color/primary_black"
             />
     </LinearLayout>
     <LinearLayout
@@ -112,10 +113,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Processing Fee"
+            android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_regular"
             android:textSize="@dimen/_11ssp"
             android:layout_weight="1"
-            android:textColor="@color/xdark_gray"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -124,8 +125,8 @@
             android:fontFamily="@font/opensans_semibold"
             android:textSize="@dimen/_11ssp"
             android:layout_weight="1"
+            android:textColor="@color/black"
             android:gravity="right"
-            android:textColor="@color/primary_black"
             android:layout_marginLeft="@dimen/_124sdp"
             />
     </LinearLayout>
@@ -142,8 +143,8 @@
             android:layout_height="wrap_content"
             android:text="Total "
             android:textSize="@dimen/_11ssp"
+            android:textColor="@color/black"
             android:fontFamily="@font/opensans_bold"
-            android:textColor="@color/primary_black"
             />
         <TextView
             android:layout_width="match_parent"
@@ -170,6 +171,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/shape_round_rectable"
         app:layoutDescription="@xml/activity_swipe_unloack_scene"
+        android:layout_marginBottom="@dimen/_23sdp"
         >
 
         <TextView

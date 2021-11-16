@@ -21,46 +21,51 @@
         android:orientation="horizontal"
         >
         <ImageView
-            android:layout_width="@dimen/_5sdp"
-            android:layout_height="@dimen/_13sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_chevron_left"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_45sdp"
             />
         <View
             android:layout_width="@dimen/_83sdp"
-            android:layout_height="@dimen/_2sdp"
-            android:background="#3700BCD4"
+            android:layout_height="@dimen/_4sdp"
+            android:background="@drawable/bg_core_new_4r_colorfill"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_45sdp"
             android:layout_marginLeft="@dimen/_26sdp"
             android:layout_marginBottom="@dimen/_28sdp"
             />
         <View
             android:layout_width="@dimen/_83sdp"
-            android:layout_height="@dimen/_2sdp"
-            android:background="@color/primary_color"
+            android:layout_height="@dimen/_4sdp"
+            android:background="@drawable/bg_core_colorfill"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginLeft="@dimen/_14sdp"
             android:layout_marginBottom="@dimen/_28sdp"
-            android:layout_marginLeft="@dimen/_20sdp"
             />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add New Debit Card"
-        android:fontFamily="@font/opensans_bold"
-        android:textSize="@dimen/_16ssp"
-        android:layout_marginTop="@dimen/_14sdp"
-        />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add New Debit Card"
+                android:fontFamily="@font/opensans_bold"
+                android:textSize="@dimen/_16ssp"
+                android:textColor="@color/black"
+                android:layout_marginTop="@dimen/_14sdp"
+                />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Please confirm your billing address"
-        android:textSize="@dimen/_12ssp"
-        android:layout_marginBottom="@dimen/_18sdp"
-        />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please confirm your billing address"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/opensans_semibold"
+                android:textColor="@color/primary_black"
+                android:layout_marginBottom="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginLeft="@dimen/_4sdp"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -90,8 +95,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="3131 Camino Del Rio North "
+                            android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -143,9 +149,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="Suite 1400"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:textColor="@color/primary_black"/>
                     </LinearLayout>
                 </LinearLayout>
                 <TextView
@@ -195,9 +202,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="San Diego"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:textColor="@color/primary_black"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -249,8 +257,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="CA"
+                            android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -310,9 +319,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="92108"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:textColor="@color/primary_black"/>
                     </LinearLayout>
                 </LinearLayout>
                 <TextView
@@ -364,8 +374,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="United States"
+                            android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>

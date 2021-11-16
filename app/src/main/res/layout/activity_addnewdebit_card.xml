@@ -27,25 +27,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:src="@drawable/ic_chevron_left" />
-
                 <View
                     android:layout_width="@dimen/_83sdp"
-                    android:layout_height="@dimen/_2sdp"
+                    android:layout_height="@dimen/_4sdp"
                     android:layout_gravity="center"
+                    android:background="@drawable/bg_core_colorfill"
+                    android:layout_marginTop="@dimen/_40sdp"
                     android:layout_marginLeft="@dimen/_26sdp"
-                    android:layout_marginTop="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_28sdp"
-                    android:background="@color/primary_color" />
-
+                    />
                 <View
                     android:layout_width="@dimen/_83sdp"
-                    android:layout_height="@dimen/_2sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:background="@drawable/bg_core_new_4r_colorfill"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_28sdp"
-                    android:background="@color/inactive_color"
-                   />
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    />
             </LinearLayout>
 
             <TextView
@@ -54,8 +53,8 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="Add New Debit Card"
-                android:textSize="@dimen/_16ssp"
                 android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
 
                 />
 
@@ -64,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_21sdp"
-                android:fontFamily="@font/opensans_regular"
+                android:fontFamily="@font/opensans_semibold"
                 android:text="Please enter card details"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
@@ -99,7 +98,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="John Joestar"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -148,9 +147,11 @@
 
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_visa" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_disable_visa"
+                            android:layout_marginEnd="@dimen/_7sdp"
+                            />
 
                         <View
                             android:layout_width="1.5dp"
@@ -238,7 +239,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="MM/YY"
+                                android:hint="MM/YY"
+                                android:inputType="number"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -293,8 +295,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="123"
-                                android:textColor="@color/primary_black"
+                                android:hint="123"
+                                android:inputType="number"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -309,6 +311,7 @@
                         android:paddingStart="4dp"
                         android:paddingEnd="4dp"
                         android:text="CVV/CVC"
+                        android:inputType="number"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp"
                         app:layout_constraintBottom_toTopOf="@+id/hintdHolderll11"
@@ -333,7 +336,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="@dimen/_228sdp"
                 android:gravity="center"
-                app:cardBackgroundColor="@color/primary_green"
+                app:cardBackgroundColor="#b5e2e0"
                 app:cardCornerRadius="20dp">
 
                 <TextView

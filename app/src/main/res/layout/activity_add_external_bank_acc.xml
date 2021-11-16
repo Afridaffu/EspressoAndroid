@@ -26,9 +26,10 @@
 
              <TextView
                  android:layout_width="match_parent"
-                 android:layout_height="@dimen/_22sdp"
+                 android:layout_height="wrap_content"
                  android:fontFamily="@font/opensans_bold"
                  android:text="Add External Bank Account"
+                 android:textColor="@color/black"
                  android:textSize="@dimen/_16ssp" />
 
              <ImageView
@@ -47,7 +48,9 @@
                  <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:text="Coyni uses Fiserv to verify bank account information. Fiserv may also check you balance(s) to ensure that you have enough funds to cover requested transactions. By clicking below you agree to link your bank account."
+                     android:textColor="@color/black"
+                     android:fontFamily="@font/opensans_regular"
+                     android:text="Coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount."
                      android:textSize="@dimen/_12ssp" />
 
                  <TextView
@@ -76,11 +79,12 @@
         >
         <TextView
             android:id="@+id/authorTV"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Next"
             android:textColor="@color/white"
             android:gravity="center"
+            android:fontFamily="@font/opensans_bold"
             android:layout_gravity="center"
             />
         </androidx.cardview.widget.CardView>

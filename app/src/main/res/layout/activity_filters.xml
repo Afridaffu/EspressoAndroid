@@ -513,6 +513,7 @@
                         android:paddingRight="@dimen/_67sdp"
                         android:paddingBottom="@dimen/_13sdp"
                         android:text="(CYN)"
+                        android:inputType="number"
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
@@ -536,6 +537,7 @@
                         android:paddingRight="@dimen/_67sdp"
                         android:paddingBottom="@dimen/_13sdp"
                         android:text="(CYN)"
+                        android:inputType="number"
                         android:textSize="@dimen/_11ssp" />
 
                 </LinearLayout>
