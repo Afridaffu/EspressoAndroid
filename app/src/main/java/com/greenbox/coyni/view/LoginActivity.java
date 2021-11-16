@@ -114,9 +114,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         }
                     }
                 });
-            } else {
-                Intent i = new Intent(LoginActivity.this, LoginActivity.class);
-                startActivity(i);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -400,11 +397,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
                             strPwd = etPassword.getText().toString().trim();
-                            if (chkRemember.isChecked()) {
-                                saveCredentials();
-                            } else {
-                                mydatabase.execSQL("Delete from tblRemember");
-                            }
+//                            if (chkRemember.isChecked()) {
+//                                saveCredentials();
+//                            } else {
+//                                mydatabase.execSQL("Delete from tblRemember");
+//                            }
                             login();
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
@@ -422,20 +419,20 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
             });
 
-            chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    try {
-                        if (isChecked) {
-                            if (!etEmail.getText().toString().trim().equals("") && !etPassword.getText().toString().trim().equals("")) {
-                                saveCredentials();
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+//            chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    try {
+//                        if (isChecked) {
+//                            if (!etEmail.getText().toString().trim().equals("") && !etPassword.getText().toString().trim().equals("")) {
+//                                saveCredentials();
+//                            }
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
 //            layoutMain.setOnTouchListener(new View.OnTouchListener() {
 //                @Override
 //                public boolean onTouch(View v, MotionEvent event) {
@@ -567,6 +564,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 i.putExtra("TYPE", "ENTER");
                                 startActivity(i);
                             } else {
+                                if (chkRemember.isChecked()) {
+                                    saveCredentials();
+                                } else {
+                                    mydatabase.execSQL("Delete from tblRemember");
+                                }
                                 if (login.getData().getCoyniPin()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
@@ -767,6 +769,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void enableIcon() {
         try {
+            endIconIV.setVisibility(VISIBLE);
             if (Utils.getIsTouchEnabled()) {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
@@ -776,7 +779,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
+                etlPassword.setPasswordVisibilityToggleEnabled(true);
                 etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+                endIconIV.setVisibility(GONE);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

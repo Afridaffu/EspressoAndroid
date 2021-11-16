@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -44,6 +45,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     String phoneNumber = "";
     public LinearLayout phoneErrorLL, firstNameErrorLL, lastNameErrorLL;
     public TextView phoneErrorTV, firstNameErrorTV, lastNameErrorTV;
+    Boolean isInvalid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,85 +169,24 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 }
             });
 
-//            firstName.addTextChangedListener(new TextWatcher() {
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
-//                        firstNameErrorLL.setVisibility(GONE);
-//                    }
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    try {
-//                        String str = firstName.getText().toString();
-////                        if (str.length() > 0 && str.substring(0).equals(" ")) {
-//                        if (str.length() > 0) {
-//                            firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
-//                            firstName.setSelection(firstName.getText().toString().trim().length());
-//                            enableButton();
-//                        }
-//
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-
-//            lastName.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                    if (charSequence.toString().trim().length() > 0) {
-//                        lastNameErrorLL.setVisibility(GONE);
-//                    }
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable editable) {
-//                    try {
-//                        String str = lastName.getText().toString();
-////                        if (str.length() > 0 && str.substring(0).equals(" ")) {
-//                        if (str.length() > 0) {
-//                            lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
-//                            lastName.setSelection(lastName.getText().length());
-//                            enableButton();
-//                        }
-//
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-
             firstName.addTextChangedListener(this);
             lastName.addTextChangedListener(this);
 
             firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus){
-                        if(firstName.getText().toString().trim().length() > 0 ){
+                    if (!hasFocus) {
+                        if (firstName.getText().toString().trim().length() > 0) {
                             firstNameErrorLL.setVisibility(GONE);
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
-                        }else{
+                        } else if (!isInvalid) {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
-                    }else{
+                    } else {
                         firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
                     }
@@ -255,18 +196,18 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus){
-                        if(lastName.getText().toString().trim().length() > 0 ){
+                    if (!hasFocus) {
+                        if (lastName.getText().toString().trim().length() > 0) {
                             lastNameErrorLL.setVisibility(GONE);
                             lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_black));
-                        }else{
+                        } else if (!isInvalid) {
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
                         }
-                    }else{
+                    } else {
                         lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
                     }
@@ -372,18 +313,37 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 
     private void displayNoAccount() {
         try {
-            dialog = new Dialog(RetrieveEmailActivity.this);
-            dialog.setContentView(R.layout.retrieve_email_tryagain_layout);
-            dialog.getWindow().setBackgroundDrawableResource(R.color.white);
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            dialog.show();
-            CardView reTryAgainBtn = dialog.findViewById(R.id.reTryAgainBtn);
-            reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
+//            dialog = new Dialog(RetrieveEmailActivity.this);
+//            dialog.setContentView(R.layout.retrieve_email_tryagain_layout);
+//            dialog.getWindow().setBackgroundDrawableResource(R.color.white);
+//            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            dialog.show();
+//            CardView reTryAgainBtn = dialog.findViewById(R.id.reTryAgainBtn);
+//            reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                }
+//            });
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            Intent i = new Intent(RetrieveEmailActivity.this, BindingLayoutActivity.class);
+            i.putExtra("screen", "retEmailfail");
+            startActivity(i);
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
+                public void run() {
+                    try {
+                        phoneNumberET.setText("");
+                        firstName.setText("");
+                        lastName.setText("");
+                        isInvalid = true;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            });
+            }, 1000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

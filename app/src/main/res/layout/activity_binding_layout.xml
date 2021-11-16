@@ -21,6 +21,6 @@
     <include
         android:id="@+id/editEmailSuccessLayout"
         layout="@layout/edit_email_successful_layout"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -21,6 +21,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -32,6 +33,8 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.biometric.BiometricManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -196,7 +199,7 @@ public class Utils {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isAcceptingText()){
+        if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
                     activity.getCurrentFocus().getWindowToken(),
                     0
@@ -266,7 +269,7 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        displayAlertNew( msg, activity);
+        displayAlertNew(msg, activity);
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -422,7 +425,7 @@ public class Utils {
 
     public static ColorStateList getNormalColorState() {
         state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
-        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray),OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
+        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray), OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
         colorState = new ColorStateList(state, color);
         return colorState;
     }
@@ -518,6 +521,34 @@ public class Utils {
                 return match.matches();
             }
         };
+    }
+
+    public static Boolean checkBiometric(Context context) {
+        Boolean isBiometric = false;
+        try {
+            BiometricManager biometricManager = BiometricManager.from(context.getApplicationContext());
+            switch (biometricManager.canAuthenticate()) {
+                case BiometricManager.BIOMETRIC_SUCCESS:
+                    Log.e("BIOMETRIC_STRONG", "App can authenticate using biometrics.");
+                    isBiometric = true;
+                    break;
+                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                    Log.e("BIOMETRIC_STRONG", "No biometric features available on this device.");
+                    isBiometric = false;
+                    break;
+                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                    Log.e("BIOMETRIC_STRONG", "Biometric features are currently unavailable.");
+                    isBiometric = false;
+                    break;
+                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                    // Prompts the user to create credentials that your app accepts.
+                    isBiometric = false;
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isBiometric;
     }
 
 }

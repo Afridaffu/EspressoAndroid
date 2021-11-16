@@ -1,5 +1,6 @@
 package com.greenbox.coyni.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import androidx.cardview.widget.CardView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.LoginActivity;
+import com.greenbox.coyni.view.OnboardActivity;
 
 public class FaceIdDisabled_BottomSheet extends BottomSheetDialogFragment {
 
@@ -72,6 +75,8 @@ public class FaceIdDisabled_BottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
+                Intent i = new Intent(getActivity(), LoginActivity.class);
+                startActivity(i);
             }
         });
         return view;
