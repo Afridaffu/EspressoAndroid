@@ -118,14 +118,14 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
-            otpPV.requestFocus();
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-            });
+//            otpPV.requestFocus();
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//                }
+//            });
             objMyApplication = (MyApplication) getApplicationContext();
 
             if (strScreen != null && !strScreen.equals("")) {
@@ -695,7 +695,16 @@ public class OTPValidation extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        mLastClickTime = 0L;
+//        mLastClickTime = 0L;
+
+        otpPV.requestFocus();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+        });
     }
 
     @Override
@@ -776,4 +785,6 @@ public class OTPValidation extends AppCompatActivity {
             otpPV.setText(matcher.group(0));
         }
     }
+
+
 }
