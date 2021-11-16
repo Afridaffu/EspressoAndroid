@@ -27,6 +27,8 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.utils.Utils;
@@ -125,10 +127,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                     } else {
                         layoutIndicator.setVisibility(GONE);
-                        if(strong.matcher(etPassword.getText().toString()).matches()){
+                        if (strong.matcher(etPassword.getText().toString()).matches()) {
                             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
-                        }else{
+                        } else {
                             etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                         }
@@ -143,10 +145,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         etlCPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_green));
                     } else {
-                        if(etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())){
+                        if (etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())) {
                             etlCPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_black));
-                        }else{
+                        } else {
                             etlCPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlCPassword, getColor(R.color.error_red));
                         }
@@ -205,10 +207,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         }
 //                        enableOrDisableNext();
 
-                        if(isConfirm && isPassword){
+                        if (isConfirm && isPassword) {
                             cvSave.setEnabled(true);
                             cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                        }else{
+                        } else {
                             cvSave.setEnabled(false);
                             cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
@@ -246,10 +248,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     }
 //                        enableOrDisableNext();
 
-                    if(isConfirm && isPassword){
+                    if (isConfirm && isPassword) {
                         cvSave.setEnabled(true);
                         cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                    }else{
+                    } else {
                         cvSave.setEnabled(false);
                         cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
@@ -287,7 +289,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
                             etlCPassword.setHint("Password doesn’t match");
 
-                            if(etPassword.getText().toString().trim().length() == etCPassword.getText().toString().trim().length()){
+                            if (etPassword.getText().toString().trim().length() == etCPassword.getText().toString().trim().length()) {
                                 etCPassword.clearFocus();
                             }
 
@@ -309,10 +311,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         dialog.setMessage("Please wait...");
                         dialog.show();
                         strNewPwd = etPassword.getText().toString().trim();
-                        SetPassword setPassword = new SetPassword();
-                        setPassword.setCode(strCode);
-                        setPassword.setPassword(etPassword.getText().toString().trim());
-                        loginViewModel.setPassword(setPassword);
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                            ManagePasswordRequest request = new ManagePasswordRequest();
+                            request.setPassword(etPassword.getText().toString().trim());
+                            loginViewModel.setExpiryPassword(request);
+                        } else {
+                            SetPassword setPassword = new SetPassword();
+                            setPassword.setCode(strCode);
+                            setPassword.setPassword(etPassword.getText().toString().trim());
+                            loginViewModel.setPassword(setPassword);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -352,6 +360,19 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         layoutNewPassword.setVisibility(View.GONE);
                         layoutDone.setVisibility(VISIBLE);
 
+                    }
+                }
+            }
+        });
+
+        loginViewModel.getManagePasswordResponseMutableLiveData().observe(this, new Observer<ManagePasswordResponse>() {
+            @Override
+            public void onChanged(ManagePasswordResponse managePasswordResponse) {
+                dialog.dismiss();
+                if (managePasswordResponse != null) {
+                    if (managePasswordResponse.getStatus().toLowerCase().equals("success")) {
+                        layoutNewPassword.setVisibility(View.GONE);
+                        layoutDone.setVisibility(VISIBLE);
                     }
                 }
             }

@@ -155,6 +155,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
                             if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
                                 Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);

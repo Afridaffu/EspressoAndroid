@@ -218,6 +218,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                         .putExtra("ENABLE_TYPE", "SUCCESS")
                                                         .putExtra("screen", strScreen));
                                             }
+                                        } else {
+                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(d);
                                         }
                                     }
                                     break;

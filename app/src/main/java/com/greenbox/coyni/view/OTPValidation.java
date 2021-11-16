@@ -655,6 +655,21 @@ public class OTPValidation extends AppCompatActivity {
     public void shakeAnimateLeftRight() {
 //        vibrateAction();
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    otpPV.setText("");
+                    otpPV.requestFocus();
+                    finish();
+                    overridePendingTransition( 0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition( 0, 0);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }, 2000);
     }
 
     public void shakeAnimateUpDown() {
