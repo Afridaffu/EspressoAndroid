@@ -114,17 +114,17 @@
                     android:hint="First Name"
                     android:imeOptions="actionNext"
                     android:inputType="text|textNoSuggestions"
+                    android:longClickable="false"
                     android:maxLength="30"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp"
                     android:textIsSelectable="false"
-                    android:longClickable="false"
-                    android:singleLine="true"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -176,18 +176,18 @@
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Last Name"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:inputType="text|textNoSuggestions"
+                    android:longClickable="false"
                     android:maxLength="30"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp"
-                    android:longClickable="false"
-                    android:singleLine="true"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"/>
+                    android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

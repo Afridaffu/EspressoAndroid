@@ -30,7 +30,7 @@
         android:id="@+id/tvHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/opensans_bold"
         android:text="Face ID Temporarily disabled"
         android:textColor="@color/black"
