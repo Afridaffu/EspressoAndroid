@@ -138,11 +138,22 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         createAccountAct.isNextEnabled = false;
                         createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
+
+                    if ((pnET.getText().length() == 0)) {
+                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+                        caa.phoneErrorLL.setVisibility(VISIBLE);
+                        caa.phoneErrorTV.setText("Field Required");
+                    }
                 }else if (FROM.equals("Retrieve")) {
                     RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
                     if (charSequence.length() == 14) {
                         isPhoneError = false;
                         rea.phoneErrorLL.setVisibility(GONE);
+                    }
+
+                    if ((pnET.getText().length() == 0)) {
+                        rea.phoneErrorLL.setVisibility(VISIBLE);
+                        rea.phoneErrorTV.setText("Field Required");
                     }
                 }
 
