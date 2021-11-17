@@ -738,16 +738,21 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                     } else {
                         stregnthViewLL.setVisibility(GONE);
-
-                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                        } else {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                        }
+//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                        } else {
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                        }
 
                         if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+                        } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                         } else {
@@ -766,12 +771,26 @@ public class CreateAccountActivity extends AppCompatActivity {
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                     } else {
-                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                        } else {
+//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//                        } else {
+//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+//                        }
+
+                        if (confirmPasswordET.getText().toString().trim().length() == 0) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+                        } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                        } else {
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
                         }
                     }
 

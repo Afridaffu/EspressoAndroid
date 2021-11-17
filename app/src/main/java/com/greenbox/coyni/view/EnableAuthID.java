@@ -410,7 +410,7 @@ public class EnableAuthID extends AppCompatActivity {
             public void run() {
                 try {
                     synchronized (this) {
-                        wait(2000);
+                        wait(3500);
 
                         runOnUiThread(new Runnable() {
                             @Override
