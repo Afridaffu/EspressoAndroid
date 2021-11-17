@@ -369,7 +369,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                         emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                         emailErrorLL.setVisibility(GONE);
-                        loginViewModel.validateEmail(emailET.getText().toString().trim());
                     } else {
                         emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
@@ -543,7 +542,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         }
                         if (passwordET.getText().toString().length() == 0) {
                             passwordTIL.setHint("Password");
-                            confPasswordTIL.setHint("Confrim Password");
+                            confPasswordTIL.setHint("Confirm Password");
 
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
@@ -610,7 +609,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                         if (confirmPasswordET.getText().toString().length() == 0) {
                             passwordTIL.setHint("Password");
-                            confPasswordTIL.setHint("Confrim Password");
+                            confPasswordTIL.setHint("Confirm Password");
                             if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
                                 passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
