@@ -255,6 +255,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 if (pinRegisterResponse != null) {
                     Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
                     if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
+                        String strScreen = "";
+                        if (getIntent().getStringExtra("screen") != null) {
+                            strScreen = getIntent().getStringExtra("screen");
+                        }
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPin")) {
                             Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
                             new Handler().postDelayed(new Runnable() {
@@ -275,18 +279,22 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 if (Utils.checkAuthentication(PINActivity.this)) {
                                     if (Utils.isFingerPrint(PINActivity.this)) {
                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                .putExtra("ENABLE_TYPE", "TOUCH"));
+                                                .putExtra("ENABLE_TYPE", "TOUCH")
+                                                .putExtra("screen", strScreen));
                                     } else {
                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                .putExtra("ENABLE_TYPE", "FACE"));
+                                                .putExtra("ENABLE_TYPE", "FACE")
+                                                .putExtra("screen", strScreen));
                                     }
                                 } else {
                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                            .putExtra("ENABLE_TYPE", "SUCCESS"));
+                                            .putExtra("ENABLE_TYPE", "SUCCESS")
+                                            .putExtra("screen", strScreen));
                                 }
                             } else {
                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "TOUCH"));
+                                        .putExtra("ENABLE_TYPE", "TOUCH")
+                                        .putExtra("screen", strScreen));
                             }
                         }
                     }

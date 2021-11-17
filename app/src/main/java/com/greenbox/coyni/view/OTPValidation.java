@@ -165,7 +165,7 @@ public class OTPValidation extends AppCompatActivity {
                             layoutFailure.setVisibility(View.GONE);
                         }
                         break;
-                    case "Login":
+                    case "login":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
@@ -266,6 +266,7 @@ public class OTPValidation extends AppCompatActivity {
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
                                 if (charSequence.length() == 6) {
+                                    String strFirstName = "", strLastName = "";
                                     Utils.hideKeypad(OTPValidation.this);
                                     dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                     dialog.setIndeterminate(false);
@@ -277,9 +278,17 @@ public class OTPValidation extends AppCompatActivity {
                                     } else {
                                         phoneNumber = MOBILE;
                                     }
+                                    if (getIntent().getStringExtra("firstname") != null && !getIntent().getStringExtra("firstname").equals("")) {
+                                        strFirstName = getIntent().getStringExtra("firstname");
+                                    }
+                                    if (getIntent().getStringExtra("lastname") != null && !getIntent().getStringExtra("lastname").equals("")) {
+                                        strLastName = getIntent().getStringExtra("lastname");
+                                    }
                                     RetrieveUsersRequest request = new RetrieveUsersRequest();
                                     request.setCountryCode(Utils.getStrCCode());
                                     request.setPhoneNumber(phoneNumber);
+                                    request.setFirstName(strFirstName);
+                                    request.setLastName(strLastName);
                                     loginViewModel.retrieveUsers(request, charSequence.toString().trim());
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditEmail")) {
@@ -491,7 +500,7 @@ public class OTPValidation extends AppCompatActivity {
                                         finish();
                                     }
                                     break;
-                                case "Login":
+                                case "login":
                                     secureAccountRL.setVisibility(View.VISIBLE);
                                     layoutMain.setClickable(false);
                                     layoutMain.setEnabled(false);
@@ -536,7 +545,7 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (smsResponse != null) {
                     if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("Login")) {
+                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("login")) {
                             resendTV.setVisibility(View.GONE);
                             newCodeTV.setVisibility(View.VISIBLE);
                             resendCounter++;
@@ -662,9 +671,9 @@ public class OTPValidation extends AppCompatActivity {
                     otpPV.setText("");
                     otpPV.requestFocus();
                     finish();
-                    overridePendingTransition( 0, 0);
+                    overridePendingTransition(0, 0);
                     startActivity(getIntent());
-                    overridePendingTransition( 0, 0);
+                    overridePendingTransition(0, 0);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -701,8 +710,10 @@ public class OTPValidation extends AppCompatActivity {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                if (!layoutType.equals("SECURE")) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
             }
         });
     }

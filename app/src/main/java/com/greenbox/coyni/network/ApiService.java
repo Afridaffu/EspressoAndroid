@@ -20,6 +20,7 @@ import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.InitCustomerRequest;
@@ -110,5 +111,7 @@ public interface ApiService {
     @PATCH("api/v2/user/set-password")
     Call<ManagePasswordResponse> setExpiryPassword(@Body ManagePasswordRequest request);
 
+    @GET("api/v2/user/validate-email")
+    Call<EmailExistsResponse> validateEmail(@Query("email") String email);
 
 }

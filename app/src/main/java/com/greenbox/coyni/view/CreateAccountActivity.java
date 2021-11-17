@@ -61,6 +61,7 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.CutCopyPasteEditText;
 import com.greenbox.coyni.utils.EmojiExcludeFilter;
@@ -358,6 +359,24 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
+
+        loginViewModel.getEmailExistsResponseMutableLiveData().observe(this, new Observer<EmailExistsResponse>() {
+            @Override
+            public void onChanged(EmailExistsResponse emailExistsResponse) {
+                if (emailExistsResponse != null) {
+                    if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
+                        emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
+                        emailErrorLL.setVisibility(GONE);
+                    } else {
+                        emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
+                        emailErrorLL.setVisibility(VISIBLE);
+                        emailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                    }
+                }
+            }
+        });
     }
 
     public void textWatchers() {
@@ -390,7 +409,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
-                        }else if(str.length() > 0 && str.substring(str.length()-1).equals(".")){
+                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
                             firstNameET.setText(firstNameET.getText().toString().replaceAll(".", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
                         }
@@ -427,7 +446,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
-                        }else if(str.length() > 0 && str.substring(str.length()-1).equals(".")){
+                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(".", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
                         }
@@ -529,7 +548,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     } else {
                         isConfirmPassword = false;
 
-                        if(confirmPasswordET.getText().toString().trim().length() > 0){
+                        if (confirmPasswordET.getText().toString().trim().length() > 0) {
                             passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             passwordTIL.setHint("Password doesn’t match");
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
@@ -763,6 +782,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
+                            loginViewModel.validateEmail(emailET.getText().toString().trim());
                         } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));

@@ -90,6 +90,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        objMyApplication.setStrRetrEmail("");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (dialog != null) {
@@ -419,6 +425,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    objMyApplication.setStrRetrEmail("");
                     onBackPressed();
                 }
             });
@@ -580,7 +587,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     startActivity(i);
                                 } else {
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-                                    i.putExtra("screen", "Login");
+                                    i.putExtra("screen", "login");
                                     i.putExtra("OTP_TYPE", "MOBILE");
                                     i.putExtra("MOBILE", login.getData().getPhoneNumber());
                                     i.putExtra("EMAIL", login.getData().getEmail());

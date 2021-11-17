@@ -250,6 +250,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "MOBILE");
                         i.putExtra("MOBILE", phoneNumber);
+                        i.putExtra("firstname", firstName.getText().toString().trim());
+                        i.putExtra("lastname", lastName.getText().toString().trim());
                         i.putExtra("MASK_MOBILE", phoneNumberET.getText().toString());
                         i.putExtra("screen", "retEmail");
                         startActivity(i);
