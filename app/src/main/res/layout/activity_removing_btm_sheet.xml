@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/_20sdp"
     android:background="@drawable/bg_core"
+    android:padding="@dimen/_20sdp"
     >
     <View
         android:layout_width="@dimen/_60sdp"
@@ -18,7 +18,7 @@
         />
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_22sdp"
+        android:layout_height="wrap_content"
         android:text="Removing"
         android:fontFamily="@font/opensans_bold"
         android:textSize="@dimen/_16ssp"
@@ -101,8 +101,19 @@
             android:gravity="center"
             android:fontFamily="@font/opensans_bold"
             android:layout_weight="1"
-
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal" />
 
     </LinearLayout>
 
