@@ -37,6 +37,7 @@
             android:textSize="@dimen/_16ssp" />
 
         <LinearLayout
+            android:id="@+id/pinLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
