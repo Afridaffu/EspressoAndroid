@@ -13,6 +13,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -44,7 +45,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     LinearLayout layoutIndicator;
     ProgressDialog dialog;
     private Pattern strong, medium;
-    Boolean isPassword = false, isConfirm = false;
+    Boolean isPassword = false, isConfirm = false, isPwdEye = false, isCPwdEye = false;
     private static final String STRONG_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
 
@@ -72,6 +73,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
         super.onResume();
         try {
             passwordET.requestFocus();
+            isPwdEye = false;
+            isCPwdEye = false;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -118,52 +121,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 }
             });
 
-//            etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-////                    if (hasFocus) {
-////                        layoutIndicator.setVisibility(VISIBLE);
-////                        //tvPasswordInfo.setVisibility(VISIBLE);
-////                    } else {
-////                        layoutIndicator.setVisibility(View.GONE);
-////                        tvPasswordInfo.setVisibility(View.GONE);
-////                    }
-//
-//                    if (hasFocus) {
-//                        layoutIndicator.setVisibility(VISIBLE);
-//                        etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
-//                    } else {
-//                        layoutIndicator.setVisibility(GONE);
-//                        if (strong.matcher(etPassword.getText().toString()).matches()) {
-//                            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
-//                        } else {
-//                            etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
-//                        }
-//                    }
-//                }
-//            });
-//
-//            etCPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View view, boolean b) {
-//                    if (b) {
-//                        etlCPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_green));
-//                    } else {
-//                        if (etPassword.getText().toString().trim().equals(etCPassword.getText().toString().trim())) {
-//                            etlCPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(etlCPassword, getColor(R.color.primary_black));
-//                        } else {
-//                            etlCPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(etlCPassword, getColor(R.color.error_red));
-//                        }
-//                    }
-//                }
-//            });
-
 
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -208,7 +165,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 }
             });
 
-
             confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -240,153 +196,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
                 }
             });
-
-
-//            passwordET.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-//                    try {
-//                        if (strong.matcher(charSequence).matches()) {
-//                            strengthOne.setVisibility(View.VISIBLE);
-//                            strengthTwo.setVisibility(View.VISIBLE);
-//                            strengthThree.setVisibility(View.VISIBLE);
-//                            strengthOne.setBackgroundColor(getResources().getColor(R.color.primary_color));
-//                            strengthTwo.setBackgroundColor(getResources().getColor(R.color.primary_color));
-//                            strengthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
-//                            tvPasswordInfo.setVisibility(View.GONE);
-//                            isPassword = true;
-//                        } else if (medium.matcher(charSequence).matches()) {
-//                            strengthOne.setVisibility(View.VISIBLE);
-//                            strengthTwo.setVisibility(View.VISIBLE);
-//                            strengthThree.setVisibility(View.INVISIBLE);
-//                            strengthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-//                            strengthTwo.setBackgroundColor(getResources().getColor(R.color.error_red));
-//                            tvPasswordInfo.setVisibility(View.VISIBLE);
-//                            isPassword = false;
-//                            cvSave.setEnabled(false);
-//                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        } else {
-//                            strengthOne.setVisibility(View.VISIBLE);
-//                            strengthTwo.setVisibility(View.INVISIBLE);
-//                            strengthThree.setVisibility(View.INVISIBLE);
-//                            strengthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-//                            tvPasswordInfo.setVisibility(VISIBLE);
-//                            isPassword = false;
-//                            cvSave.setEnabled(false);
-//                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-//
-//                        if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
-//                            isPassword = true;
-//                        } else {
-//                            isPassword = false;
-//                        }
-//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            isConfirm = true;
-//                        } else {
-//                            isConfirm = false;
-//                        }
-////                        enableOrDisableNext();
-//
-//                        if (isConfirm && isPassword) {
-//                            cvSave.setEnabled(true);
-//                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//                        } else {
-//                            cvSave.setEnabled(false);
-//                            cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-//
-//
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
-//
-//            confirmPasswordET.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-//
-//                    if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
-//                        isPassword = true;
-//                    } else {
-//                        isPassword = false;
-//                    }
-//                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                        isConfirm = true;
-//                    } else {
-//                        isConfirm = false;
-//                    }
-////                        enableOrDisableNext();
-//
-//                    if (isConfirm && isPassword) {
-//                        cvSave.setEnabled(true);
-//                        cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//                    } else {
-//                        cvSave.setEnabled(false);
-//                        cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                    }
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    try {
-//
-//                        if (s.length() > 0 && s.toString().trim().length() == 0) {
-//                            confirmPasswordET.setText("");
-//                        } else if (s.length() > 0 && s.toString().contains(" ")) {
-//                            confirmPasswordET.setText(s.toString().trim());
-//                            confirmPasswordET.setSelection(s.toString().trim().length());
-//                        }
-//
-//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            isConfirm = true;
-//
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            passwordTIL.setHint("New Password");
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-//
-//                            confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-//                            confPasswordTIL.setHint("Confirm Password");
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-//
-//                        } else {
-//                            isConfirm = false;
-//
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            passwordTIL.setHint("Password doesn’t match");
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//
-//                            confPasswordTIL.setHint("Password doesn’t match");
-//
-//                            if (passwordET.getText().toString().trim().length() == confirmPasswordET.getText().toString().trim().length()) {
-//                                confirmPasswordET.clearFocus();
-//                            }
-//
-//                        }
-//
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-
 
             passwordET.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -541,6 +350,54 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         } else if (s.length() > 0 && s.toString().contains(" ")) {
                             confirmPasswordET.setText(s.toString().trim());
                             confirmPasswordET.setSelection(s.toString().trim().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            passwordTIL.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (!isPwdEye) {
+                            isPwdEye = true;
+                            passwordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            passwordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        } else {
+                            isPwdEye = false;
+                            passwordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            passwordET.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                        if (passwordET.getText().length() > 0) {
+                            passwordET.setSelection(passwordET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            confPasswordTIL.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (!isCPwdEye) {
+                            isCPwdEye = true;
+                            confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            confirmPasswordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        } else {
+                            isCPwdEye = false;
+                            confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            confirmPasswordET.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                        if (confirmPasswordET.getText().length() > 0) {
+                            confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
 
                     } catch (Exception ex) {

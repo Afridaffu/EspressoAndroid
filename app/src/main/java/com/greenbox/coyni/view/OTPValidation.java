@@ -453,13 +453,22 @@ public class OTPValidation extends AppCompatActivity {
                                         shakeAnimateUpDown();
                                         Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
 
-                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                                        dialog.setIndeterminate(false);
-                                        dialog.setMessage("Please wait...");
-                                        dialog.show();
-                                        InitCustomerRequest initCustomerRequest = new InitCustomerRequest();
-                                        initCustomerRequest.setCode(emailResponse.getData().getCode());
-                                        loginViewModel.initializeCustomer(initCustomerRequest);
+//                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+//                                        dialog.setIndeterminate(false);
+//                                        dialog.setMessage("Please wait...");
+//                                        dialog.show();
+//                                        InitCustomerRequest initCustomerRequest = new InitCustomerRequest();
+//                                        initCustomerRequest.setCode(emailResponse.getData().getCode());
+//                                        loginViewModel.initializeCustomer(initCustomerRequest);
+
+                                        Utils.setStrAuth(emailResponse.getData().getJwtToken());
+                                        secureAccountRL.setVisibility(View.VISIBLE);
+                                        layoutMain.setClickable(false);
+                                        layoutMain.setEnabled(false);
+                                        layoutType = "SECURE";
+                                        layoutEntry.setVisibility(View.GONE);
+                                        layoutFailure.setVisibility(View.GONE);
+
                                     }
                                     break;
                             }

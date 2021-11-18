@@ -415,7 +415,11 @@ public class EnableAuthID extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                dialog.dismiss();
+                                try {
+                                    dialog.dismiss();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                         });
 

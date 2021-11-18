@@ -15,23 +15,21 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/bottomIV"
             android:layout_alignParentTop="true"
-            android:src="@drawable/bg_onboard_frag_one"
             android:layout_marginTop="-70dp"
             android:layout_marginRight="-150dp"
-            android:layout_above="@+id/bottomIV"
-            />
+            android:src="@drawable/bg_onboard_frag_one" />
 
         <ImageView
             android:id="@+id/bottomIV"
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:src="@drawable/ic_coyni_logo"
-            android:layout_marginBottom="60dp"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_marginTop="7dp"
-            android:layout_alignParentBottom="true"
-            />
+            android:layout_marginBottom="60dp"
+            android:src="@drawable/ic_coyni_logo" />
     </RelativeLayout>
 
 </FrameLayout>

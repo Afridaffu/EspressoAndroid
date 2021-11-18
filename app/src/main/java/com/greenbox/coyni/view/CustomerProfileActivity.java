@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Gravity;
@@ -31,6 +32,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     CardView cvLogout;
     LinearLayout cpUserDetailsLL;
     Long mLastClickTime = 0L;
+    SQLiteDatabase mydatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
             cpUserDetailsLL = findViewById(R.id.cpUserDetailsLL);
-
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,11 +75,16 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cvLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                    finish();
+                    try {
+                        dropAllTables();
+                        Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                        finish();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -121,6 +128,18 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void dropAllTables() {
+        try {
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

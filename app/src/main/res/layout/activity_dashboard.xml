@@ -255,6 +255,7 @@
             android:id="@+id/dashboardProfileLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -267,7 +268,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
                 android:text="Issue\nCard"
@@ -291,7 +292,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="Profile"
                 android:textColor="@color/light_gray"

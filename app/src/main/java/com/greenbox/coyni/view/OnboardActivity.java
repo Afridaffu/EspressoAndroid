@@ -72,6 +72,29 @@ public class OnboardActivity extends AppCompatActivity {
             setContentView(R.layout.activity_onboard);
             onboardActivity = this;
 
+            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
+                if (Utils.isFingerPrint(OnboardActivity.this)) {
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                } else {
+                    Utils.setIsTouchEnabled(false);
+                    Utils.setIsFaceEnabled(true);
+                }
+            } else {
+                Utils.setIsTouchEnabled(false);
+                Utils.setIsFaceEnabled(false);
+            }
+            SetToken();
+            SetFaceLock();
+            SetTouchId();
+            isBiometric = Utils.checkBiometric(OnboardActivity.this);
+//            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
+//                if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
+//                    Intent i = new Intent(OnboardActivity.this, AuthLoginActivity.class);
+//                    startActivity(i);
+//                }
+//            }
+
             //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (!isDeviceID()) {
                 generateUUID();
@@ -87,6 +110,7 @@ public class OnboardActivity extends AppCompatActivity {
                 Utils.setStrReferer(refererUrl);
             }
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
             AutoScrollPagerAdapter autoScrollPagerAdapter =
                     new AutoScrollPagerAdapter(getSupportFragmentManager());
             AutoScrollViewPager viewPager = findViewById(R.id.view_pager);
@@ -114,6 +138,7 @@ public class OnboardActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
             });
+
             layoutLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,23 +164,7 @@ public class OnboardActivity extends AppCompatActivity {
                 }
             });
 
-            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
-                if (Utils.isFingerPrint(OnboardActivity.this)) {
-                    Utils.setIsTouchEnabled(true);
-                    Utils.setIsFaceEnabled(false);
-                } else {
-                    Utils.setIsTouchEnabled(false);
-                    Utils.setIsFaceEnabled(true);
-                }
-            } else {
-                Utils.setIsTouchEnabled(false);
-                Utils.setIsFaceEnabled(false);
-            }
-            SetToken();
-            SetFaceLock();
-            SetTouchId();
             initObserver();
-            isBiometric = Utils.checkBiometric(OnboardActivity.this);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

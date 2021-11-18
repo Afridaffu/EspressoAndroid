@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -124,7 +125,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     int[] errorColor, color;
     ColorStateList errorColorState, colorState;
 
-    boolean isEmailError = false, isPhoneError = false;
+    boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false;
 
     RelativeLayout mainRL;
     ScrollView mainSV;
@@ -150,6 +151,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         firstNameET.requestFocus();
+        isPwdEye = false;
+        isCPwdEye = false;
     }
 
     public void initFields() {
@@ -256,22 +259,53 @@ public class CreateAccountActivity extends AppCompatActivity {
                 onBackPressed();
             });
 
-//            mainRL.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent motionEvent) {
-//                    Utils.hideKeypad(CreateAccountActivity.this);
-//                    return false;
-//                }
-//            });
-//            mainSV.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent motionEvent) {
-//                    if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-//                        Utils.hideKeypad(CreateAccountActivity.this);
-//                    }
-//                    return false;
-//                }
-//            });
+            passwordTIL.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (!isPwdEye) {
+                            isPwdEye = true;
+                            passwordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            passwordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        } else {
+                            isPwdEye = false;
+                            passwordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            passwordET.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                        if (passwordET.getText().length() > 0) {
+                            passwordET.setSelection(passwordET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            confPasswordTIL.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (!isCPwdEye) {
+                            isCPwdEye = true;
+                            confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            confirmPasswordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        } else {
+                            isCPwdEye = false;
+                            confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            confirmPasswordET.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                        if (confirmPasswordET.getText().length() > 0) {
+                            confirmPasswordET.setSelection(confirmPasswordET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -735,7 +769,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         stregnthViewLL.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-
+                        passwordTIL.setHint("Password");
                     } else {
                         stregnthViewLL.setVisibility(GONE);
 //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
@@ -770,6 +804,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     if (b) {
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+                        confPasswordTIL.setHint("Confirm Password");
                     } else {
 //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
 //                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
