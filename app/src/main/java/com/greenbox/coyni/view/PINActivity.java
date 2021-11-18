@@ -67,7 +67,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             setContentView(R.layout.activity_pin_keyboard);
             initializeComponents();
             TYPE = getIntent().getStringExtra("TYPE");
-            TYPE = "CHOOSE";
             switch (TYPE) {
                 case "CHOOSE":
                     tvHead.setText("Choose your PIN");

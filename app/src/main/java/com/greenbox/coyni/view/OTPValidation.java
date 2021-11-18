@@ -133,28 +133,28 @@ public class OTPValidation extends AppCompatActivity {
                     case "ForgotPwd":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + EMAIL);
                         break;
                     case "ForgotPin":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + EMAIL);
                         break;
                     case "retEmail":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
-                        headerTV.setText("Please Verify your Phone Number");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register phone number " + maskedPhone);
+                        headerTV.setText("Please Verify Your Phone Number");
+                        subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + maskedPhone);
                         break;
                     case "SignUp":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (OTP_TYPE.equals("MOBILE")) {
-                            headerTV.setText("Please Verify your Phone Number");
-                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number " + maskedPhone);
+                            headerTV.setText("Please Verify Your Phone Number");
+                            subHeaderTV.setText("We sent you a 6-digit code to the registered phone number " + maskedPhone);
                         } else if (OTP_TYPE.equals("EMAIL")) {
-                            headerTV.setText("Please Verify your Email");
-                            subHeaderTV.setText("We sent you a 6-digit code sent to the register email address: " + EMAIL);
+                            headerTV.setText("Please Verify Your Email");
+                            subHeaderTV.setText("We sent you a 6-digit code to the registered email address: " + EMAIL);
                         } else if (OTP_TYPE.equals("SECURE")) {
                             Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                             secureAccountRL.setVisibility(View.VISIBLE);
@@ -169,8 +169,8 @@ public class OTPValidation extends AppCompatActivity {
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
-                            headerTV.setText("Please Verify your Phone Number");
-                            subHeaderTV.setText("We have sent you 6 digits code sent to the register phone number " + maskedPhone);
+                            headerTV.setText("Please Verify Your Phone Number");
+                            subHeaderTV.setText("We have sent you 6 digits code to the registered phone number " + maskedPhone);
                         }
                         SMSResend resend = new SMSResend();
                         resend.setCountryCode(Utils.getStrCCode());
@@ -183,11 +183,11 @@ public class OTPValidation extends AppCompatActivity {
                         newEmail = getIntent().getStringExtra("NEW_EMAIL");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldEmail.equals("true")) {
-                            headerTV.setText("Please Verify your Current Email");
-                            subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + oldEmail);
+                            headerTV.setText("Please Verify Your Current Email");
+                            subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + oldEmail);
                         } else {
                             headerTV.setText("Please Verify New Email");
-                            subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + newEmail);
+                            subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + newEmail);
                             loginViewModel.emailotpresend(newEmail);
                         }
                         break;
