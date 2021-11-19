@@ -4,212 +4,216 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f2f4f5"
     android:orientation="vertical">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_x"
-        android:layout_marginTop="@dimen/_45sdp"
-        android:layout_marginLeft="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_14sdp"
-        />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="Select Withdraw Method"
-        android:fontFamily="@font/opensans_bold"
-        android:textSize="@dimen/_16ssp"
-        android:layout_marginLeft="@dimen/_21sdp"
-        android:layout_marginRight="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_32sdp"
-        />
+        android:orientation="vertical"
+        android:background="@drawable/backgrndbtmcornrs"
+        android:layout_marginBottom="@dimen/_20sdp"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_x"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Select Withdraw Method"
+            android:fontFamily="@font/opensans_bold"
+            android:textSize="@dimen/_16ssp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:background="@drawable/backgrndallcornrs"
+        >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/_12sdp"
-            android:layout_marginRight="@dimen/_12sdp">
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic__01_bank"
-                    android:paddingTop="@dimen/_24sdp"
-                    android:paddingBottom="@dimen/_25sdp"
-                    android:layout_marginRight="@dimen/_12sdp"
-                    />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="External Bank Account"
-                            android:fontFamily="@font/opensans_bold"
-                            android:textSize="@dimen/_12ssp"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Your[daily/weekly]limit is[$amount].\nSettlement: 3-5 business days"
-                            android:textSize="@dimen/_10sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:textColor="@color/primary_black"
-                            android:layout_marginBottom="@dimen/_15sdp"
-                            />
-                    </LinearLayout>
-                <ImageView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_10sdp"
-                    android:src="@drawable/ic_chevron_right"
-                    android:layout_marginLeft="@dimen/_18sdp"
-                    android:layout_marginTop="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_35ssp"
-                    />
-
-
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:background="@color/inactive_color"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:src="@drawable/ic__01_bank"
+                android:paddingTop="@dimen/_24sdp"
+                android:paddingBottom="@dimen/_25sdp"
+                android:layout_marginRight="@dimen/_12sdp"
                 />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_credit_card"
-                    android:paddingTop="@dimen/_24sdp"
-                    android:paddingBottom="@dimen/_25sdp"
-                    android:layout_marginRight="@dimen/_12sdp"
-                    />
-                <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Instant Pay"
-                        android:fontFamily="@font/opensans_bold"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Your[daily/weekly]limit is[$amount].\nSettlement: Instant"
-                        android:textSize="@dimen/_10sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@color/primary_black"
-                        android:layout_marginBottom="@dimen/_15sdp"
-                        />
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_10sdp"
-                    android:src="@drawable/ic_chevron_right"
-                    android:layout_marginLeft="@dimen/_18sdp"
-                    android:layout_marginTop="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_35ssp"
+                    android:text="External Bank Account"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="@dimen/_16sdp"
                     />
-
-
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your[daily/weekly]limit is[$amount].\nSettlement: 3-5 business days"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:background="@color/inactive_color"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_right"
+                android:layout_marginLeft="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_35ssp"
                 />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#e8e8e8"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_credit_card"
+                android:paddingTop="@dimen/_24sdp"
+                android:paddingBottom="@dimen/_25sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_gift_card_icon"
-                    android:paddingTop="@dimen/_24sdp"
-                    android:paddingBottom="@dimen/_25sdp"
-                    android:layout_marginRight="@dimen/_12sdp"
-                    />
-                <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Gift Card"
-                        android:fontFamily="@font/opensans_bold"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Your[daily/weekly]limit is[$amount]."
-                        android:textSize="@dimen/_10sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@color/primary_black"
-                        android:layout_marginBottom="@dimen/_15sdp"
-                        />
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_10sdp"
-                    android:src="@drawable/ic_chevron_right"
-                    android:layout_marginLeft="@dimen/_18sdp"
-                    android:layout_marginTop="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_35ssp"
+                    android:text="Instant Pay"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="@dimen/_16sdp"
                     />
-
-
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your[daily/weekly]limit is[$amount].\nSettlement: Instant"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:background="@color/inactive_color"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_right"
+                android:layout_marginLeft="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_35ssp"
                 />
+
+
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#e8e8e8"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            />
 
-
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_gift_card_icon"
+                android:paddingTop="@dimen/_24sdp"
+                android:paddingBottom="@dimen/_25sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gift Card"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your[daily/weekly]limit is[$amount]."
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_right"
+                android:layout_marginLeft="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginBottom="@dimen/_35ssp"
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#e8e8e8"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            />
+    </LinearLayout>
 </LinearLayout>
