@@ -73,9 +73,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(BindingLayoutActivity.this, RetrieveEmailActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    onBackPressed();
                 }
             });
         } catch (Exception ex) {

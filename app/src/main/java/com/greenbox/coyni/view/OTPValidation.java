@@ -118,14 +118,14 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
-            otpPV.requestFocus();
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-            });
+//            otpPV.requestFocus();
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//                }
+//            });
             objMyApplication = (MyApplication) getApplicationContext();
 
             if (strScreen != null && !strScreen.equals("")) {
@@ -133,42 +133,44 @@ public class OTPValidation extends AppCompatActivity {
                     case "ForgotPwd":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + EMAIL);
                         break;
                     case "ForgotPin":
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         headerTV.setText("Verify Email");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + EMAIL);
+                        subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + EMAIL);
                         break;
                     case "retEmail":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
-                        headerTV.setText("Please Verify your Phone Number");
-                        subHeaderTV.setText("We have sent you a 6-digit code sent to the register phone number " + maskedPhone);
+                        headerTV.setText("Please Verify Your Phone Number");
+                        subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + maskedPhone);
                         break;
                     case "SignUp":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (OTP_TYPE.equals("MOBILE")) {
-                            headerTV.setText("Please Verify your Phone Number");
-                            subHeaderTV.setText("We sent you a 6-digit code to the register phone number " + maskedPhone);
+                            headerTV.setText("Please Verify Your Phone Number");
+                            subHeaderTV.setText("We sent you a 6-digit code to the registered phone number " + maskedPhone);
                         } else if (OTP_TYPE.equals("EMAIL")) {
-                            headerTV.setText("Please Verify your Email");
-                            subHeaderTV.setText("We sent you a 6-digit code sent to the register email address: " + EMAIL);
+                            headerTV.setText("Please Verify Your Email");
+                            subHeaderTV.setText("We sent you a 6-digit code to the registered email address: " + EMAIL);
                         } else if (OTP_TYPE.equals("SECURE")) {
                             Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                             secureAccountRL.setVisibility(View.VISIBLE);
+                            layoutMain.setClickable(false);
+                            layoutMain.setEnabled(false);
                             layoutType = "SECURE";
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.GONE);
                         }
                         break;
-                    case "Login":
+                    case "login":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
-                            headerTV.setText("Please Verify your Phone Number");
-                            subHeaderTV.setText("We have sent you 6 digits code sent to the register phone number " + maskedPhone);
+                            headerTV.setText("Please Verify Your Phone Number");
+                            subHeaderTV.setText("We have sent you 6 digits code to the registered phone number " + maskedPhone);
                         }
                         SMSResend resend = new SMSResend();
                         resend.setCountryCode(Utils.getStrCCode());
@@ -181,11 +183,11 @@ public class OTPValidation extends AppCompatActivity {
                         newEmail = getIntent().getStringExtra("NEW_EMAIL");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldEmail.equals("true")) {
-                            headerTV.setText("Please Verify your Current Email");
-                            subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + oldEmail);
+                            headerTV.setText("Please Verify Your Current Email");
+                            subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + oldEmail);
                         } else {
                             headerTV.setText("Please Verify New Email");
-                            subHeaderTV.setText("We have sent you a 6-digit code sent to the register email address: " + newEmail);
+                            subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + newEmail);
                             loginViewModel.emailotpresend(newEmail);
                         }
                         break;
@@ -198,7 +200,7 @@ public class OTPValidation extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (resendCounter < 5) {
+                    if (resendCounter < 4) {
                         Utils.hideKeypad(OTPValidation.this, view);
                         if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin") || strScreen.equals("EditEmail"))) || (OTP_TYPE.equals("EMAIL"))) {
                             dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
@@ -264,6 +266,7 @@ public class OTPValidation extends AppCompatActivity {
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
                                 if (charSequence.length() == 6) {
+                                    String strFirstName = "", strLastName = "";
                                     Utils.hideKeypad(OTPValidation.this);
                                     dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
                                     dialog.setIndeterminate(false);
@@ -275,9 +278,17 @@ public class OTPValidation extends AppCompatActivity {
                                     } else {
                                         phoneNumber = MOBILE;
                                     }
+                                    if (getIntent().getStringExtra("firstname") != null && !getIntent().getStringExtra("firstname").equals("")) {
+                                        strFirstName = getIntent().getStringExtra("firstname");
+                                    }
+                                    if (getIntent().getStringExtra("lastname") != null && !getIntent().getStringExtra("lastname").equals("")) {
+                                        strLastName = getIntent().getStringExtra("lastname");
+                                    }
                                     RetrieveUsersRequest request = new RetrieveUsersRequest();
                                     request.setCountryCode(Utils.getStrCCode());
                                     request.setPhoneNumber(phoneNumber);
+                                    request.setFirstName(strFirstName);
+                                    request.setLastName(strLastName);
                                     loginViewModel.retrieveUsers(request, charSequence.toString().trim());
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditEmail")) {
@@ -360,19 +371,19 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(OTPValidation.this, PINActivity.class)
-                        .putExtra("screen", "SignUp")
+                        .putExtra("screen", strScreen)
                         .putExtra("TYPE", "CHOOSE"));
             });
 
-            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(OTPValidation.this);
-                    }
-                    return false;
-                }
-            });
+//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                        Utils.hideKeypad(OTPValidation.this);
+//                    }
+//                    return false;
+//                }
+//            });
 
             initObserver();
 
@@ -442,13 +453,22 @@ public class OTPValidation extends AppCompatActivity {
                                         shakeAnimateUpDown();
                                         Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
 
-                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                                        dialog.setIndeterminate(false);
-                                        dialog.setMessage("Please wait...");
-                                        dialog.show();
-                                        InitCustomerRequest initCustomerRequest = new InitCustomerRequest();
-                                        initCustomerRequest.setCode(emailResponse.getData().getCode());
-                                        loginViewModel.initializeCustomer(initCustomerRequest);
+//                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+//                                        dialog.setIndeterminate(false);
+//                                        dialog.setMessage("Please wait...");
+//                                        dialog.show();
+//                                        InitCustomerRequest initCustomerRequest = new InitCustomerRequest();
+//                                        initCustomerRequest.setCode(emailResponse.getData().getCode());
+//                                        loginViewModel.initializeCustomer(initCustomerRequest);
+
+                                        Utils.setStrAuth(emailResponse.getData().getJwtToken());
+                                        secureAccountRL.setVisibility(View.VISIBLE);
+                                        layoutMain.setClickable(false);
+                                        layoutMain.setEnabled(false);
+                                        layoutType = "SECURE";
+                                        layoutEntry.setVisibility(View.GONE);
+                                        layoutFailure.setVisibility(View.GONE);
+
                                     }
                                     break;
                             }
@@ -469,6 +489,10 @@ public class OTPValidation extends AppCompatActivity {
                     if (smsValidate.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
+                        if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
+                                smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
+                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this);
+                        }
                     } else {
                         if (strScreen != null && !strScreen.equals("")) {
                             switch (strScreen) {
@@ -485,8 +509,10 @@ public class OTPValidation extends AppCompatActivity {
                                         finish();
                                     }
                                     break;
-                                case "Login":
+                                case "login":
                                     secureAccountRL.setVisibility(View.VISIBLE);
+                                    layoutMain.setClickable(false);
+                                    layoutMain.setEnabled(false);
                                     layoutType = "SECURE";
                                     layoutEntry.setVisibility(View.GONE);
                                     layoutFailure.setVisibility(View.GONE);
@@ -528,7 +554,7 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (smsResponse != null) {
                     if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("Login")) {
+                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("login")) {
                             resendTV.setVisibility(View.GONE);
                             newCodeTV.setVisibility(View.VISIBLE);
                             resendCounter++;
@@ -567,6 +593,8 @@ public class OTPValidation extends AppCompatActivity {
                     if (initializeCustomerResponse.getStatus().toLowerCase().toString().equals("success")) {
                         Utils.setStrAuth(initializeCustomerResponse.getData().getJwtToken());
                         secureAccountRL.setVisibility(View.VISIBLE);
+                        layoutMain.setClickable(false);
+                        layoutMain.setEnabled(false);
                         layoutType = "SECURE";
                         layoutEntry.setVisibility(View.GONE);
                         layoutFailure.setVisibility(View.GONE);
@@ -645,6 +673,21 @@ public class OTPValidation extends AppCompatActivity {
     public void shakeAnimateLeftRight() {
 //        vibrateAction();
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    otpPV.setText("");
+                    otpPV.requestFocus();
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition(0, 0);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }, 2000);
     }
 
     public void shakeAnimateUpDown() {
@@ -670,6 +713,18 @@ public class OTPValidation extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        mLastClickTime = 0L;
+
+        otpPV.requestFocus();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (!layoutType.equals("SECURE")) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+            }
+        });
     }
 
     @Override
@@ -750,4 +805,6 @@ public class OTPValidation extends AppCompatActivity {
             otpPV.setText(matcher.group(0));
         }
     }
+
+
 }

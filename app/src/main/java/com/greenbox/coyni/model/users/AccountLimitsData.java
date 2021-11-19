@@ -37,7 +37,7 @@ public class AccountLimitsData{
     private boolean tokenBuyBankDayFlag;
     private double tokenBuyBankDayLimit;
     private boolean tokenBuyBankWeekFlag;
-    private double tokenBuyBankWeeekLimit;
+    private double tokenBuyBankWeekLimit;
 
     private boolean tokenBuyCardLimit;
     private double tokenBuyCardMinimumLimit;
@@ -45,6 +45,53 @@ public class AccountLimitsData{
     private double tokenBuyCardDayLimit;
     private boolean tokenBuyCardWeekFlag;
     private double tokenBuyCardWeekLimit;
+
+    private boolean tokenBuyDebitCardLimit;
+    private double tokenBuyDebitCardDayLimit;
+    private boolean tokenBuyDebitCardDayFlag;
+    private double tokenBuyDebitCardWeekLimit;
+
+    public boolean isTokenBuyDebitCardLimit() {
+        return tokenBuyDebitCardLimit;
+    }
+
+    public void setTokenBuyDebitCardLimit(boolean tokenBuyDebitCardLimit) {
+        this.tokenBuyDebitCardLimit = tokenBuyDebitCardLimit;
+    }
+
+    public double getTokenBuyDebitCardDayLimit() {
+        return tokenBuyDebitCardDayLimit;
+    }
+
+    public void setTokenBuyDebitCardDayLimit(double tokenBuyDebitCardDayLimit) {
+        this.tokenBuyDebitCardDayLimit = tokenBuyDebitCardDayLimit;
+    }
+
+    public boolean isTokenBuyDebitCardDayFlag() {
+        return tokenBuyDebitCardDayFlag;
+    }
+
+    public void setTokenBuyDebitCardDayFlag(boolean tokenBuyDebitCardDayFlag) {
+        this.tokenBuyDebitCardDayFlag = tokenBuyDebitCardDayFlag;
+    }
+
+    public double getTokenBuyDebitCardWeekLimit() {
+        return tokenBuyDebitCardWeekLimit;
+    }
+
+    public void setTokenBuyDebitCardWeekLimit(double tokenBuyDebitCardWeekLimit) {
+        this.tokenBuyDebitCardWeekLimit = tokenBuyDebitCardWeekLimit;
+    }
+
+    public boolean isTokenBuyDebitCardWeekFlag() {
+        return tokenBuyDebitCardWeekFlag;
+    }
+
+    public void setTokenBuyDebitCardWeekFlag(boolean tokenBuyDebitCardWeekFlag) {
+        this.tokenBuyDebitCardWeekFlag = tokenBuyDebitCardWeekFlag;
+    }
+
+    private boolean tokenBuyDebitCardWeekFlag;
 
     private boolean cryptoBuyLimit;
     private double cryptoBuyMinimumLimit;
@@ -210,12 +257,12 @@ public class AccountLimitsData{
         this.tokenBuyBankDayLimit = tokenBuyBankDayLimit;
     }
 
-    public double getTokenBuyBankWeeekLimit() {
-        return tokenBuyBankWeeekLimit;
+    public double getTokenBuyBankWeekLimit() {
+        return tokenBuyBankWeekLimit;
     }
 
-    public void setTokenBuyBankWeeekLimit(double tokenBuyBankWeeekLimit) {
-        this.tokenBuyBankWeeekLimit = tokenBuyBankWeeekLimit;
+    public void setTokenBuyBankWeekLimit(double tokenBuyBankWeekLimit) {
+        this.tokenBuyBankWeekLimit = tokenBuyBankWeekLimit;
     }
 
     public boolean isTokenBuyCardLimit() {

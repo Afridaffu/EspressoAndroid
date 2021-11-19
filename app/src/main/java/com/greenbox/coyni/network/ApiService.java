@@ -7,6 +7,8 @@ import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
@@ -18,6 +20,7 @@ import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.InitCustomerRequest;
@@ -78,6 +81,9 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
+//    @GET("api/v2/profile/me/signedagreements")
+//    Call<Agreements> meAgreementsByType();
+
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
@@ -102,5 +108,10 @@ public interface ApiService {
     @POST("api/v2/user/update-email/otp-validate")
     Call<UpdateEmailResponse> updateEmailValidateOTP(@Body UpdateEmailValidateRequest request);
 
+    @PATCH("api/v2/user/set-password")
+    Call<ManagePasswordResponse> setExpiryPassword(@Body ManagePasswordRequest request);
+
+    @GET("api/v2/user/validate-email")
+    Call<EmailExistsResponse> validateEmail(@Query("email") String email);
 
 }

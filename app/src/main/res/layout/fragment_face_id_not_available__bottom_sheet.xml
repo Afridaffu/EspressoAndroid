@@ -27,16 +27,17 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tvHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/opensans_bold"
         android:text="@string/faceidnotavaitxt"
-        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp" />
 
     <TextView
+        android:id="@+id/tvMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16sdp"

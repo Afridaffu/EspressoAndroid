@@ -30,7 +30,7 @@
             android:id="@+id/headerTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="Please Verify Your Phone Number"
             android:textColor="@color/primary_black"
@@ -40,7 +40,7 @@
             android:id="@+id/subHeaderTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_28sdp"
+            android:layout_marginBottom="@dimen/_38sdp"
             android:fontFamily="@font/opensans_regular"
             android:text="We sent you 6-digit code to the register phone number"
             android:textColor="@color/primary_black"
@@ -62,10 +62,10 @@
             app:cursorWidth="0dp"
             app:hideLineWhenFilled="false"
             app:itemCount="6"
-            app:itemHeight="58dp"
+            app:itemHeight="@dimen/_40sdp"
             app:itemRadius="6dp"
-            app:itemSpacing="5dp"
-            app:itemWidth="48dp"
+            app:itemSpacing="@dimen/_7sdp"
+            app:itemWidth="@dimen/_35sdp"
             app:lineColor="@color/line_colors"
             app:lineWidth="2dp"
             app:viewType="rectangle" />
@@ -73,7 +73,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_25sdp"
             android:fontFamily="@font/opensans_regular"
             android:gravity="center"
             android:text="Didn't get the code?"
@@ -109,7 +109,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/_7sdp">
 
         <include layout="@layout/activity_retry_create_account" />
     </LinearLayout>
@@ -168,6 +169,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Next"
+                android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />

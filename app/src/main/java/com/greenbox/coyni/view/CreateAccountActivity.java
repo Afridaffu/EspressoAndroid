@@ -7,16 +7,19 @@ import static android.view.View.VISIBLE;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -30,10 +33,15 @@ import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
@@ -54,6 +63,7 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.CutCopyPasteEditText;
 import com.greenbox.coyni.utils.EmojiExcludeFilter;
@@ -93,6 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private View stregnthOne, stregnthTwo, stregnthThree;
     private Pattern strong, medium;
     LinearLayout layoutClose;
+    ImageView createAccountCloseIV;
 
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
@@ -114,7 +125,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     int[] errorColor, color;
     ColorStateList errorColorState, colorState;
 
-    boolean isEmailError = false, isPhoneError = false;
+    boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false;
 
     RelativeLayout mainRL;
     ScrollView mainSV;
@@ -122,7 +133,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
 
@@ -141,6 +151,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         firstNameET.requestFocus();
+        isPwdEye = false;
+        isCPwdEye = false;
     }
 
     public void initFields() {
@@ -172,6 +184,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             spannableText = findViewById(R.id.spannableTV);
             nextCV = findViewById(R.id.nextCV);
             layoutClose = findViewById(R.id.layoutClose);
+            createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
 
             firstNameET = findViewById(R.id.firstNameET);
             firstNameTIL = findViewById(R.id.firstNameTIL);
@@ -217,7 +230,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             nextCV.setOnClickListener(view -> {
                 if (isNextEnabled) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 100000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
@@ -242,28 +255,57 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             });
 
-            layoutClose.setOnClickListener(view -> {
+            createAccountCloseIV.setOnClickListener(view -> {
                 onBackPressed();
             });
 
-            mainRL.setOnTouchListener(new View.OnTouchListener() {
+            passwordTIL.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(CreateAccountActivity.this);
+                public void onClick(View v) {
+                    try {
+                        if (!isPwdEye) {
+                            isPwdEye = true;
+                            passwordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            passwordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        } else {
+                            isPwdEye = false;
+                            passwordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            passwordET.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                        if (passwordET.getText().length() > 0) {
+                            passwordET.setSelection(passwordET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    return false;
                 }
             });
-//            mainSV.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent motionEvent) {
-//                    if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-//                        Utils.hideKeypad(CreateAccountActivity.this);
-//                    }
-//                    return false;
-//                }
-//            });
+
+            confPasswordTIL.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (!isCPwdEye) {
+                            isCPwdEye = true;
+                            confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            confirmPasswordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        } else {
+                            isCPwdEye = false;
+                            confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            confirmPasswordET.setInputType(InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        }
+                        if (confirmPasswordET.getText().length() > 0) {
+                            confirmPasswordET.setSelection(confirmPasswordET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,7 +320,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onChanged(CustRegisterResponse custRegisterResponse) {
                 try {
                     dialog.dismiss();
-                    mLastClickTime = 0L;
                     if (custRegisterResponse != null) {
                         try {
                             Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
@@ -317,7 +358,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onChanged(String s) {
                 try {
                     Log.e("Error Message", s);
-                    mLastClickTime = 0L;
                     if (s.toString().toLowerCase().contains("entered email already exist in the system")) {
                         isEmailError = true;
                         emailTIL.requestFocus();
@@ -354,6 +394,24 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
+
+        loginViewModel.getEmailExistsResponseMutableLiveData().observe(this, new Observer<EmailExistsResponse>() {
+            @Override
+            public void onChanged(EmailExistsResponse emailExistsResponse) {
+                if (emailExistsResponse != null) {
+                    if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
+                        emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
+                        emailErrorLL.setVisibility(GONE);
+                    } else {
+                        emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
+                        emailErrorLL.setVisibility(VISIBLE);
+                        emailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                    }
+                }
+            }
+        });
     }
 
     public void textWatchers() {
@@ -385,6 +443,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         String str = firstNameET.getText().toString();
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
+                            firstNameET.setSelection(firstNameET.getText().length());
+                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
+                            firstNameET.setText(firstNameET.getText().toString().replaceAll(".", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
                         }
 
@@ -420,6 +481,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
+                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
+                            lastNameET.setText(lastNameET.getText().toString().replaceAll(".", ""));
+                            lastNameET.setSelection(lastNameET.getText().length());
                         }
 
                     } catch (Exception ex) {
@@ -441,6 +505,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         emailErrorLL.setVisibility(GONE);
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHintTextColor(colorState);
+                    } else if (emailET.getText().toString().trim().length() == 0) {
+                        emailErrorLL.setVisibility(VISIBLE);
+                        emailErrorTV.setText("Field Required");
                     }
                     if (Utils.isValidEmail(charSequence.toString().trim())) {
                         isEmail = true;
@@ -474,44 +541,78 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (strong.matcher(charSequence).matches()) {
-                        stregnthOne.setVisibility(VISIBLE);
-                        stregnthTwo.setVisibility(VISIBLE);
-                        stregnthThree.setVisibility(VISIBLE);
-                        stregnthOne.setBackgroundColor(getResources().getColor(R.color.primary_color));
-                        stregnthTwo.setBackgroundColor(getResources().getColor(R.color.primary_color));
-                        stregnthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
-                        passwordInfoTV.setVisibility(GONE);
-                    } else if (medium.matcher(charSequence).matches()) {
-                        stregnthOne.setVisibility(VISIBLE);
-                        stregnthTwo.setVisibility(VISIBLE);
-                        stregnthThree.setVisibility(INVISIBLE);
-                        stregnthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-                        stregnthTwo.setBackgroundColor(getResources().getColor(R.color.error_red));
-                        passwordInfoTV.setVisibility(VISIBLE);
-                        passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
+                    if (getCurrentFocus().getId() == passwordET.getId()) {
 
-                    } else {
-                        stregnthOne.setVisibility(VISIBLE);
-                        stregnthTwo.setVisibility(INVISIBLE);
-                        stregnthThree.setVisibility(INVISIBLE);
-                        stregnthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-                        passwordInfoTV.setVisibility(VISIBLE);
-                        passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
-                    }
+                        if (strong.matcher(charSequence).matches()) {
+                            stregnthOne.setVisibility(VISIBLE);
+                            stregnthTwo.setVisibility(VISIBLE);
+                            stregnthThree.setVisibility(VISIBLE);
+                            stregnthOne.setBackgroundColor(getResources().getColor(R.color.primary_color));
+                            stregnthTwo.setBackgroundColor(getResources().getColor(R.color.primary_color));
+                            stregnthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
+                            passwordInfoTV.setVisibility(GONE);
+                        } else if (medium.matcher(charSequence).matches()) {
+                            stregnthOne.setVisibility(VISIBLE);
+                            stregnthTwo.setVisibility(VISIBLE);
+                            stregnthThree.setVisibility(INVISIBLE);
+                            stregnthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
+                            stregnthTwo.setBackgroundColor(getResources().getColor(R.color.error_red));
+                            passwordInfoTV.setVisibility(VISIBLE);
+                            passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
 
-                    if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
-                        isPassword = true;
-                    } else {
-                        isPassword = false;
-                    }
-                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                        isConfirmPassword = true;
-                    } else {
-                        isConfirmPassword = false;
-                    }
-                    enableOrDisableNext();
+                        } else {
+                            stregnthOne.setVisibility(VISIBLE);
+                            stregnthTwo.setVisibility(INVISIBLE);
+                            stregnthThree.setVisibility(INVISIBLE);
+                            stregnthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
+                            passwordInfoTV.setVisibility(VISIBLE);
+                            passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
+                        }
 
+                        if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
+                            isPassword = true;
+                        } else {
+                            isPassword = false;
+                        }
+                        if (passwordET.getText().toString().length() == 0) {
+                            passwordTIL.setHint("Password");
+                            confPasswordTIL.setHint("Confirm Password");
+
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+
+                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            isConfirmPassword = true;
+
+                            passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                            passwordTIL.setHint("Password");
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            confPasswordTIL.setHint("Confirm Password");
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+
+                        } else {
+                            isConfirmPassword = false;
+
+                            if (confirmPasswordET.getText().toString().trim().length() > 0) {
+                                passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                                passwordTIL.setHint("Password doesn’t match");
+                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+
+                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                confPasswordTIL.setHint("Password doesn’t match");
+                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                            } else if (confirmPasswordET.getText().toString().trim().length() == 0) {
+                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                confPasswordTIL.setHint("Confirm Password");
+                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+
+                                passwordTIL.setHint("Password");
+                            }
+                        }
+                        enableOrDisableNext();
+                    }
                 }
 
                 @Override
@@ -538,32 +639,42 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                        isConfirmPassword = true;
+                    if (getCurrentFocus().getId() == confirmPasswordET.getId()) {
 
-                        passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        passwordTIL.setHint("Password");
-                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+                        if (confirmPasswordET.getText().toString().length() == 0) {
+                            passwordTIL.setHint("Password");
+                            confPasswordTIL.setHint("Confirm Password");
+                            if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
+                                passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+                            } else {
+                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                            }
+                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            isConfirmPassword = true;
 
-                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                        confPasswordTIL.setHint("Confirm Password");
-                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            passwordTIL.setHint("Password");
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
 
-                    } else {
-                        isConfirmPassword = false;
+                            confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                            confPasswordTIL.setHint("Confirm Password");
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
 
-                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        passwordTIL.setHint("Password doesn’t match");
-                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                        } else {
+                            isConfirmPassword = false;
 
-                        confPasswordTIL.setHint("Password doesn’t match");
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            passwordTIL.setHint("Password doesn’t match");
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
 
-                        if (passwordET.getText().toString().trim().length() == confirmPasswordET.getText().toString().trim().length()) {
-                            confirmPasswordET.clearFocus();
+                            confPasswordTIL.setHint("Password doesn’t match");
+
                         }
-
+                        enableOrDisableNext();
                     }
-                    enableOrDisableNext();
+
                 }
 
                 @Override
@@ -579,6 +690,24 @@ public class CreateAccountActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            firstNameET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
                 }
             });
 
@@ -635,44 +764,39 @@ public class CreateAccountActivity extends AppCompatActivity {
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
+
                     if (b) {
                         stregnthViewLL.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+                        passwordTIL.setHint("Password");
                     } else {
                         stregnthViewLL.setVisibility(GONE);
-                        if (strong.matcher(passwordET.getText().toString()).matches()) {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                        } else {
+//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                        } else {
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                        }
+
+                        if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+                        } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                        } else {
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                         }
                     }
-
-//                    ////
-//
-//
-//                    if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                        isPassword = true;
-//
-//                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-//                        confPasswordTIL.setHint("Confirm Password");
-//                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-//
-//                    } else  {
-//                        isPassword = false;
-//                        if(confirmPasswordET.getText().toString().length()>0){
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            passwordTIL.setHint("Password doesn’t match");
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//
-//                            confPasswordTIL.setHint("Password doesn’t match");
-//
-//                        }
-//                    }
                 }
             });
+
 
             confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -680,13 +804,28 @@ public class CreateAccountActivity extends AppCompatActivity {
                     if (b) {
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+                        confPasswordTIL.setHint("Confirm Password");
                     } else {
-                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                        } else {
+//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//                        } else {
+//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+//                        }
+
+                        if (confirmPasswordET.getText().toString().trim().length() == 0) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+                        } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                        } else {
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
                         }
                     }
 
@@ -706,6 +845,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
+                            loginViewModel.validateEmail(emailET.getText().toString().trim());
                         } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
@@ -844,7 +984,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        return encoded;
 //    }
 
-
     public void setSpannableText() {
 
         SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & Privacy Policy");
@@ -910,4 +1049,54 @@ public class CreateAccountActivity extends AppCompatActivity {
         spannableText.setHighlightColor(Color.TRANSPARENT);
     }
 
+//    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//        if (event.action == MotionEvent.ACTION_DOWN) {
+//            val v = currentFocus
+//            if (v is EditText) {
+//                val outRect = Rect()
+//                v.getGlobalVisibleRect(outRect)
+//                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+//                    Log.d("focus", "touchevent")
+//                    v.clearFocus()
+//                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+//                }
+//            }
+//        }
+//        return super.dispatchTouchEvent(event)
+//    }
+
+
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//
+//        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+//            View v = getCurrentFocus();
+////            if (v.getClass().getName().toString().contains("EditText") ||
+////                    v.getClass().getName().equalsIgnoreCase("EditText")) {
+////                Log.e("touch", "Edittext");
+////                v.requestFocus();
+////            } else{
+////                Log.e("touch", "not Edittext");
+////                Utils.hideKeypad(CreateAccountActivity.this);
+////            }
+//
+//            try {
+//                Rect outRect = new Rect();
+//                v.getGlobalVisibleRect(outRect);
+//                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+//                    Log.e("focus", "touchevent");
+//                    v.clearFocus();
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE) ;
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                }else{
+//                    Log.e("focus", "not touchevent");
+//                    v.requestFocus();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
 }

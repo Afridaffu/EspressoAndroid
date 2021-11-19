@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.IdVeAdditionalActionActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/idveriErrWithSSNLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/closeBtnUnderReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                android:layout_marginTop="@dimen/_45sdp"
+                android:layout_marginLeft="@dimen/_21sdp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_additional_action_required"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_16sdp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_ac"
+                android:textSize="@dimen/_16ssp"
+                android:textColor="@color/primary_black"
+                android:textAlignment="center"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:fontFamily="@font/opensans_bold"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_actioncontent"
+                android:textSize="@dimen/_11ssp"
+                android:textColor="@color/primary_black"
+                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_marginRight="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:textAlignment="center"
+                android:fontFamily="@font/opensans_regular"
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_44sdp"
+                >
+                <LinearLayout
+                    android:id="@+id/hintdHolderLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/outline_box_unfocused"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_21sdp"
+                    android:layout_marginEnd="@dimen/_21sdp"
+
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+
+                    <com.santalu.maskara.widget.MaskEditText
+                        android:id="@+id/ssnET"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:inputType="number"
+                        android:padding="14dp"
+                        android:hint="•••-••-••••"
+                        android:background="@android:color/transparent"
+                        android:textColor="@color/primary_black"
+                        android:textColorHint="@color/light_gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:mask="___-__-____"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:fontFamily="@font/opensans_semibold"/>
+
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/hintTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/white"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:textSize="@dimen/_12ssp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="SSN"
+                    android:textColor="@color/primary_black"
+                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderLL"
+                    app:layout_constraintStart_toStartOf="@+id/hintdHolderLL"
+                    app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/idveridoneBtn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_43sdp"
+                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_marginRight="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_70sdp"
+                app:cardBackgroundColor="@color/inactive_color"
+                app:cardCornerRadius="@dimen/_21sdp"
+                android:layout_marginBottom="@dimen/_100sdp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/done"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

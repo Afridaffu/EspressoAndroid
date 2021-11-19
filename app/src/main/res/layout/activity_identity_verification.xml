@@ -5,17 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     android:paddingStart="@dimen/_21sdp"
     android:paddingEnd="@dimen/_21sdp"
-    tools:context=".view.IdentityVerificationActivity"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar" >
+    android:background="@color/white"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+    tools:context=".view.IdentityVerificationActivity">
+
 
     <LinearLayout
         android:id="@+id/topbarll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="54dp">
+        android:layout_marginEnd="@dimen/_32sdp"
+        >
 
         <ImageButton
             android:id="@+id/closeBtn"
@@ -27,13 +29,13 @@
             android:src="@drawable/ic_close"
             android:visibility="visible"
             app:tint="@color/black" />
-
         <ImageButton
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_45sdp"
             android:layout_marginBottom="@dimen/_14sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:background="@color/white"
             android:src="@drawable/ic_back"
             android:visibility="gone"
@@ -41,23 +43,21 @@
 
         <View
             android:id="@+id/viewBarLeft"
-            android:layout_width="80dp"
-            android:layout_height="@dimen/_3sdp"
-            android:layout_marginStart="@dimen/_19sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_28sdp"
+            android:layout_weight="1"
             android:layout_marginTop="@dimen/_50sdp"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_19sdp"
-           android:layout_weight="1"
-            android:background="@color/primary_color" />
+            android:background="@drawable/button_background" />
 
         <View
             android:id="@+id/viewBarRight"
-            android:layout_width="80dp"
-            android:layout_height="@dimen/_3sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_50sdp"
-            android:layout_marginBottom="18.7dp"
             android:layout_weight="1"
-            android:background="@color/viewcolor" />
+            android:layout_marginStart="@dimen/_18sdp"
+            android:background="@drawable/button_background1" />
 
     </LinearLayout>
 
@@ -71,19 +71,25 @@
         android:textSize="@dimen/_16sdp"
         />
 
-    <ScrollView
-        android:id="@+id/scrlViewIV1st"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:visibility="visible">
+
 
         <LinearLayout
             android:id="@+id/linearLayoutIdVe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="visible"
+            android:background="@color/white"
             android:layout_marginTop="@dimen/_14sdp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_above="@id/bottomNaviLL"
+                android:orientation="vertical">
 
             <TextView
                 android:id="@+id/upidentityTV"
@@ -99,6 +105,7 @@
                 android:id="@+id/clickBottomSheet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="@dimen/_19sdp"
                 android:background="@drawable/card_background">
 
@@ -106,7 +113,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_13sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_13sdp"
                     android:layout_marginBottom="@dimen/_13sdp"
                     android:backgroundTint="@color/white"
@@ -115,14 +122,13 @@
 
                 <TextView
                     android:id="@+id/idveriUpIdTxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_17sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_11sdp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:lineSpacingExtra="@dimen/_6sdp"
+                    android:lineSpacingExtra="5dp"
                     android:visibility="visible"
                     android:text="@string/contentuploadid"
                     android:textColor="@color/primary_black"
@@ -133,23 +139,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_17sdp"
-                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:layout_marginBottom="@dimen/_18sdp"
                     android:layout_marginEnd="5dp"
                     android:fontFamily="@font/opensans_regular"
                     android:lineSpacingExtra="@dimen/_6sdp"
                     android:text="@string/contentuploadidsuccess"
                     android:textColor="@color/primary_color"
-                    android:textSize="@dimen/_12ssp"
+                    android:textSize="@dimen/_11ssp"
                     android:visibility="gone" />
                 <ImageView
                     android:id="@+id/idveriUpIdSuccessImg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_complete"
-                    android:layout_marginStart="@dimen/_21sdp"
-                    android:layout_marginTop="@dimen/_18sdp"
-                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_25sdp"
+                    android:layout_gravity="center"
                     android:visibility="gone"
                     />
 
@@ -162,10 +167,10 @@
                 android:id="@+id/idveriSSNTIL"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:hint="@string/ssnlast"
-                android:textColorHint="@color/primary_black"
+                android:textColorHint="@color/black"
                 app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
@@ -180,14 +185,12 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/ssnlast"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:imeOptions="actionDone"
+                    android:padding="@dimen/_14sdp"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:paddingTop="@dimen/_12sdp"
-                    android:paddingBottom="@dimen/_12sdp"
-                    android:paddingLeft="10dp"
-
-                    android:textColor="@color/dark_grey"
+                    android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -221,7 +224,6 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:hint="@string/dobol"
-
                     android:textColorHint="@color/black"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
@@ -229,7 +231,7 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black"
+                    app:hintTextColor="@color/primary_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -244,9 +246,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="none"
                         android:maxLength="30"
-                        android:paddingTop="@dimen/_12sdp"
-                        android:paddingBottom="@dimen/_12sdp"
-                        android:paddingStart="@dimen/_10sdp"
+                        android:padding="@dimen/_14sdp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -255,12 +255,20 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/bottomNaviLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="@dimen/_37sdp"
+                    android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/nextBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
-                android:layout_marginTop="@dimen/_178sdp"
                 app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="@dimen/_21sdp">
 
@@ -271,7 +279,6 @@
                     android:fontFamily="@font/opensans_bold"
                     android:layout_marginTop="@dimen/_13sdp"
                     android:layout_marginBottom="@dimen/_13sdp"
-
                     android:text="@string/next"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -284,24 +291,25 @@
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_37sdp"
-                android:background="@drawable/exitbtnbackgroundcolor"
                 android:fontFamily="@font/opensans_bold"
                 android:paddingTop="@dimen/_15sdp"
                 android:text="@string/exit"
                 android:textAlignment="center"
                 android:textColor="@color/primary_color"
                 android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
-    </ScrollView>
 
     <ScrollView
         android:id="@+id/scrlViewIV2nd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
+        android:background="@color/white"
         android:visibility="gone">
 
         <LinearLayout
@@ -334,17 +342,20 @@
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/primary_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mailingAddET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
+                   android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLength="30"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="255"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
@@ -366,17 +377,20 @@
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/primary_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/mailingAddlineoptET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint2"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLength="30"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
+                    android:inputType="textEmailAddress"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:maxLength="255"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
@@ -398,17 +412,19 @@
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/primary_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cityET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/cityhint"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLength="30"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
@@ -449,7 +465,7 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black"
+                    app:hintTextColor="@color/primary_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
@@ -458,11 +474,13 @@
                         android:id="@+id/stateET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/statehint"
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLength="30"
+                        android:textCursorDrawable="@drawable/cursor_color"
                         android:padding="@dimen/_12sdp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp" />
@@ -486,7 +504,7 @@
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/primary_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/zipcodeET"
@@ -495,8 +513,9 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/ziphint"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLength="30"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp" />
@@ -516,6 +535,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                app:boxBackgroundColor="@color/boxbackgroundgray"
                 app:boxStrokeColor="@color/primary_color"
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/black">
@@ -527,11 +547,13 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/countryhint"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLength="30"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:editable="false"
+                    android:enabled="false"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12sdp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -540,7 +562,7 @@
                 android:id="@+id/submitBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
-                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_22sdp"
                 app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="@dimen/_21sdp">
 
@@ -556,11 +578,11 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:layout_marginBottom="@dimen/_26sdp"
                 android:id="@+id/btnExit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="56dp"
                 android:background="@drawable/exitbtnbackgroundcolor"
                 android:fontFamily="@font/opensans_bold"
                 android:paddingTop="@dimen/_14sdp"

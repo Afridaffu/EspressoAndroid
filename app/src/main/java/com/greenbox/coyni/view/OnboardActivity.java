@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,6 +33,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
+import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
+import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
@@ -57,6 +60,7 @@ public class OnboardActivity extends AppCompatActivity {
     LoginViewModel loginViewModel;
     ProgressDialog dialog;
     public static OnboardActivity onboardActivity;
+    Boolean isBiometric = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,29 @@ public class OnboardActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
             onboardActivity = this;
+
+            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
+                if (Utils.isFingerPrint(OnboardActivity.this)) {
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                } else {
+                    Utils.setIsTouchEnabled(false);
+                    Utils.setIsFaceEnabled(true);
+                }
+            } else {
+                Utils.setIsTouchEnabled(false);
+                Utils.setIsFaceEnabled(false);
+            }
+            SetToken();
+            SetFaceLock();
+            SetTouchId();
+            isBiometric = Utils.checkBiometric(OnboardActivity.this);
+//            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
+//                if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
+//                    Intent i = new Intent(OnboardActivity.this, AuthLoginActivity.class);
+//                    startActivity(i);
+//                }
+//            }
 
             //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (!isDeviceID()) {
@@ -83,6 +110,7 @@ public class OnboardActivity extends AppCompatActivity {
                 Utils.setStrReferer(refererUrl);
             }
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
             AutoScrollPagerAdapter autoScrollPagerAdapter =
                     new AutoScrollPagerAdapter(getSupportFragmentManager());
             AutoScrollViewPager viewPager = findViewById(R.id.view_pager);
@@ -98,29 +126,7 @@ public class OnboardActivity extends AppCompatActivity {
             // enable recycling using true
             viewPager.setCycle(true);
 //            viewPager.setStopScrollWhenTouch(false);
-            Log.e("Stop Scroll", viewPager.isStopScrollWhenTouch()+"");
-//            viewPager.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent event) {
-//
-//
-//                    int action = event.getActionMasked();
-//
-//                    switch(action) {
-//                        case (MotionEvent.ACTION_DOWN) :
-//                            viewPager.stopAutoScroll();
-//                            return true;
-//                        case (MotionEvent.ACTION_UP) :
-//                            viewPager.startAutoScroll();
-//                            return true;
-//                        case (MotionEvent.ACTION_SCROLL) :
-//                            viewPager.startAutoScroll();
-//                            return true;
-//                        default :
-//                            return false;
-//                    }
-//                }
-//            });
+
             getStarted.setOnClickListener(view -> {
                 try {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -128,11 +134,11 @@ public class OnboardActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(OnboardActivity.this, AccountTypeActivity.class));
-//                    startActivity(new Intent(OnboardActivity.this, CreatePasswordActivity.class));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             });
+
             layoutLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -142,7 +148,12 @@ public class OnboardActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
-                            Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
+                                Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
+                            }
                         } else {
                             Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
                             startActivity(i);
@@ -153,27 +164,16 @@ public class OnboardActivity extends AppCompatActivity {
                 }
             });
 
-            if (Utils.checkAuthentication(OnboardActivity.this)) {
-                if (Utils.isFingerPrint(OnboardActivity.this)) {
-                    Utils.setIsTouchEnabled(true);
-                    Utils.setIsFaceEnabled(false);
-                } else {
-                    Utils.setIsTouchEnabled(false);
-                    Utils.setIsFaceEnabled(true);
-                }
-            } else {
-                Utils.setIsTouchEnabled(false);
-                Utils.setIsFaceEnabled(false);
-            }
-            SetToken();
-            SetFaceLock();
-            SetTouchId();
             initObserver();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -200,32 +200,6 @@ public class OnboardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public void toastTimer(Dialog dialog) {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(3500);
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.dismiss();
-                            }
-                        });
-
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            ;
-        }.start();
     }
 
     private void initObserver() {

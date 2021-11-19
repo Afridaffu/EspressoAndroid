@@ -65,7 +65,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             layoutMain = findViewById(R.id.layoutMain);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
-            etEmail.requestFocus();
+
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,15 +164,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
             });
 
-            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        Utils.hideKeypad(ForgotPasswordActivity.this);
-                    }
-                    return false;
-                }
-            });
+//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                        Utils.hideKeypad(ForgotPasswordActivity.this);
+//                    }
+//                    return false;
+//                }
+//            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -223,5 +223,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            etEmail.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

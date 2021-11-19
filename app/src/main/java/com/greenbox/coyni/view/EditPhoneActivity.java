@@ -95,7 +95,7 @@ public class EditPhoneActivity extends AppCompatActivity {
             saveEmailCV = findViewById(R.id.saveEmailCV);
 
             currentEmailET.setText(myApplicationObj.getMyProfile().getData().getEmail());
-            newEmailET.requestFocus();
+
 
             editEmailSV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -272,5 +272,15 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            newEmailET.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

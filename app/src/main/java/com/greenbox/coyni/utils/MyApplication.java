@@ -19,6 +19,7 @@ public class MyApplication extends Application {
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     List<States> listStates = new ArrayList<>();
+    Boolean isBiometric = false;
 
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
@@ -301,5 +302,13 @@ public class MyApplication extends Application {
 
     public void setListStates(List<States> listStates) {
         this.listStates = listStates;
+    }
+
+    public Boolean getBiometric() {
+        return isBiometric;
+    }
+
+    public void setBiometric(Boolean biometric) {
+        isBiometric = biometric;
     }
 }

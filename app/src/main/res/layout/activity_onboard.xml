@@ -17,8 +17,7 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -50,12 +49,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
                 android:text="Get Started"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp"
-                android:layout_gravity="center" />
+                android:textSize="@dimen/_12ssp" />
 
         </LinearLayout>
 
@@ -65,8 +64,8 @@
             android:layout_height="@dimen/_43sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:background="@drawable/shape_green_round_rect_core"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
