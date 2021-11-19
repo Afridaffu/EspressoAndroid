@@ -49,7 +49,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     String phoneNumber = "";
     public LinearLayout phoneErrorLL, firstNameErrorLL, lastNameErrorLL;
     public TextView phoneErrorTV, firstNameErrorTV, lastNameErrorTV;
-    Boolean isInvalid = false;
     private long mLastClickTime = 0;
 
     @Override
@@ -73,7 +72,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         super.onResume();
         try {
             phoneNumberET.requestFocus();
-            isInvalid = false;
             if (dialog != null) {
                 dialog.dismiss();
             }
@@ -198,7 +196,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             firstNameErrorLL.setVisibility(GONE);
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
-                        } else if (!isInvalid) {
+                        } else  {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);
@@ -219,7 +217,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             lastNameErrorLL.setVisibility(GONE);
                             lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_black));
-                        } else if (!isInvalid) {
+                        } else {
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
@@ -243,10 +241,10 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             public void onChanged(RetrieveEmailResponse retrieveEmailResponse) {
                 if (retrieveEmailResponse != null) {
                     if (!retrieveEmailResponse.getStatus().toLowerCase().equals("error")) {
-                        SMSResend resend = new SMSResend();
-                        resend.setCountryCode(Utils.getStrCCode());
-                        resend.setPhoneNumber(phoneNumber);
-                        loginViewModel.smsotpresend(resend);
+//                        SMSResend resend = new SMSResend();
+//                        resend.setCountryCode(Utils.getStrCCode());
+//                        resend.setPhoneNumber(phoneNumber);
+//                        loginViewModel.smsotpresend(resend);
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "MOBILE");
                         i.putExtra("MOBILE", phoneNumber);
@@ -333,37 +331,14 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 
     private void displayNoAccount() {
         try {
-//            dialog = new Dialog(RetrieveEmailActivity.this);
-//            dialog.setContentView(R.layout.retrieve_email_tryagain_layout);
-//            dialog.getWindow().setBackgroundDrawableResource(R.color.white);
-//            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            dialog.show();
-//            CardView reTryAgainBtn = dialog.findViewById(R.id.reTryAgainBtn);
-//            reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                }
-//            });
             if (dialog != null) {
                 dialog.dismiss();
             }
             Intent i = new Intent(RetrieveEmailActivity.this, BindingLayoutActivity.class);
             i.putExtra("screen", "retEmailfail");
             startActivity(i);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        phoneNumberET.setText("");
-                        firstName.setText("");
-                        lastName.setText("");
-                        isInvalid = true;
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }, 1000);
+            finish();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
