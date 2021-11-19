@@ -88,7 +88,7 @@
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".view.Filters"
+            android:name=".view.AddNewDebitCard2"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

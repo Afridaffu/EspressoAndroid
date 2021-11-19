@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Authorization Failed"
         android:gravity="center"
+        android:textColor="@color/black"
         android:fontFamily="@font/opensans_bold"
         android:textSize="@dimen/_16ssp"
         android:layout_marginBottom="@dimen/_21sdp"
@@ -40,6 +41,7 @@
 this account and associated email address, \nphone number, and credit/debit card\n
 number have locked. You will need to \ncontact Coyni customer support to unlock"
         android:gravity="center"
+        android:textColor="@color/primary_black"
         android:fontFamily="@font/opensans_regular"
         />
         </LinearLayout>

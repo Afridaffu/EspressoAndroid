@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:text="Error With Bank Account \nVerification"
         android:gravity="center"
+        android:textColor="@color/black"
         android:fontFamily="@font/opensans_bold"
         android:textSize="@dimen/_16ssp"
         android:layout_marginBottom="@dimen/_13sdp"
@@ -40,6 +41,8 @@
         android:text="There was an error with verifying your \nbank account information. Please re-enter  \nyour bank information or try a different \npayment method."
         android:textSize="@dimen/_12ssp"
         android:gravity="center"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="@color/primary_black"
         android:layout_marginBottom="@dimen/_130sdp"
         />
     <androidx.cardview.widget.CardView

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
+    android:padding="@dimen/_20sdp"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
 
     >
@@ -28,7 +29,7 @@
         android:layout_marginStart="@dimen/_21sdp"
         />
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_in_progress_icon"
         android:layout_gravity="center"
@@ -40,8 +41,6 @@
         android:layout_height="wrap_content"
         android:text="@string/ivtitle"
         android:textSize="@dimen/_16ssp"
-        android:layout_marginStart="@dimen/_63sdp"
-        android:layout_marginEnd="@dimen/_63sdp"
         android:textColor="@color/primary_black"
         android:textAlignment="center"
         android:layout_gravity="center"
@@ -54,8 +53,6 @@
         android:text="@string/ivunder_review"
         android:textSize="@dimen/_11ssp"
         android:textColor="@color/primary_black"
-        android:layout_marginLeft="@dimen/_21sdp"
-        android:layout_marginRight="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:textAlignment="center"
         android:textStyle="normal"
@@ -66,8 +63,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_marginTop="@dimen/_145sdp"
-                android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginEnd="@dimen/_21sdp"
                 app:cardBackgroundColor="@color/primary_color"
                 app:cardCornerRadius="@dimen/_21sdp"
                 android:layout_marginBottom="@dimen/_21sdp"

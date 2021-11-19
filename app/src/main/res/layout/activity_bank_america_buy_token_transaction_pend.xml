@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BankAmericaBuyTokenTransactionPend"
     android:orientation="vertical"
     android:padding="@dimen/_12sdp">
 
@@ -18,8 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
-
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -146,20 +143,33 @@
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="left"
                     android:paddingLeft="@dimen/_10sdp"
-                    android:text="We submitted  your request, please allow a 3-5 \nbusiness days for your coyni purchase to be reflected in\nyour token account."
+                    android:text="We submitted  your request, please allow a 3-5 \nbusiness days for your coyni purchase to be reflected in "
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_9ssp" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_33sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="left"
-                    android:paddingLeft="@dimen/_8sdp"
-                    android:text="@string/learn_more1"
-                    android:textColor="@color/primary_color"
-                    android:textSize="@dimen/_9ssp" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="reflected in your token account. "
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/primary_black"
+                        android:paddingLeft="@dimen/_10sdp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/learn"
+                        android:textSize="@dimen/_10sdp"
+                        android:textColor="@color/teal_200"
+                        android:gravity="left"
+                        android:layout_weight="1"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

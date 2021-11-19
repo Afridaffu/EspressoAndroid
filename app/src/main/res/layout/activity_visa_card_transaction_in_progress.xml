@@ -65,7 +65,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="This total amount of [Amount] will appear on your \nbank statement as {description}."
+                    android:text="This total amount of [Amount] will appear on your\nbank statement as {description}."
                     android:textSize="@dimen/_11ssp"
                     android:gravity="center"
                     android:textColor="@color/primary_black"
@@ -120,7 +120,6 @@
                         android:textSize="@dimen/_11ssp"
                         android:textColor="@color/primary_black"
                         android:fontFamily="@font/opensans_regular"
-
                         />
                     <TextView
                         android:layout_width="match_parent"
@@ -137,22 +136,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_30sdp"
-                    android:text="We are processing your request, please allow a few \nminutes for your coyni debit/credit card purchase to be \nreflected in your token account."
+                    android:text="We are processing your request, please allow a few \nminutes for your coyni debit/credit card purchase to be "
                     android:textSize="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:paddingLeft="@dimen/_10sdp"
                     android:gravity="left"
+                    android:paddingLeft="@dimen/_10sdp"
                     />
-                <TextView
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/learn"
-                    android:textSize="@dimen/_10sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:textColor="@color/teal_200"
-                    android:gravity="left"
-                    />
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="reflected in your token account. "
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/primary_black"
+                        android:paddingLeft="@dimen/_10sdp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/learn"
+                        android:textSize="@dimen/_10sdp"
+                        android:textColor="@color/teal_200"
+                        android:gravity="left"
+                        android:layout_weight="1"
+                        />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

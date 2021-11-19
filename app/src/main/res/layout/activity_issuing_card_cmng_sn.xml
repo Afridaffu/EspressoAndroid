@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_21sdp"
+    android:background="#e5f3e5"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_44sdp"
+        android:layout_marginRight="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_14sdp"
+        android:src="@drawable/ic_x">
+
+    </ImageView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Issuing Card Coming Soon…"
+        android:layout_marginTop="@dimen/_61sdp"
+        android:paddingLeft="@dimen/_14sdp"
+        android:textColor="@color/primary_color"
+        android:textSize="@dimen/_16ssp"
+        android:fontFamily="@font/opensans_bold"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/issuecard"
+        android:layout_marginTop="@dimen/_37sdp"
+        />
+
+</LinearLayout>

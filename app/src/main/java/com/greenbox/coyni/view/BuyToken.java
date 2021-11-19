@@ -1,5 +1,4 @@
 package com.greenbox.coyni.view;
-
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
