@@ -24,7 +24,6 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
@@ -39,7 +38,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class RetrieveEmailActivity extends AppCompatActivity implements TextWatcher {
     OutLineBoxPhoneNumberEditText phoneNumberET;
-    MaterialCardView nextBtn;
+    CardView nextBtn;
     TextInputEditText firstName, lastName;
     TextInputLayout firstTIL, lastTIL;
     LinearLayout layoutClose, layoutMain;

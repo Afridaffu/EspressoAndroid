@@ -154,7 +154,7 @@
 
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/secureNextCV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
@@ -173,7 +173,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 </LinearLayout>

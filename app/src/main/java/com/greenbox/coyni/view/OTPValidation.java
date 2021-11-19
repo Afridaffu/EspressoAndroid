@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,8 +35,6 @@ import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
@@ -69,11 +68,11 @@ public class OTPValidation extends AppCompatActivity {
     private Vibrator vibrator;
     String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "", oldEmail = "", newEmail = "", isOldEmail = "";
     LinearLayout layoutEntry, layoutFailure, layoutMain;
-    MaterialCardView tryAgainCV;
+    CardView tryAgainCV;
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
-    MaterialCardView secureNextCV;
+    CardView secureNextCV;
     MyApplication objMyApplication;
 
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code

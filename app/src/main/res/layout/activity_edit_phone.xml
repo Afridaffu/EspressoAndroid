@@ -172,7 +172,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/saveEmailCV"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_43sdp"
@@ -192,5 +192,5 @@
             android:text="Save"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

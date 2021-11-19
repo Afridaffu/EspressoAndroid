@@ -69,7 +69,7 @@
         android:fontFamily="@font/opensans_regular"
         />
             </LinearLayout>
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/idveriDoneBtn"
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                     android:textSize="@dimen/_12ssp"
                     android:fontFamily="@font/opensans_bold"
                     />
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
             </RelativeLayout>
         </LinearLayout>
 
