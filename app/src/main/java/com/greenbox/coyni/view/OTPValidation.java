@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,6 +77,9 @@ public class OTPValidation extends AppCompatActivity {
     RelativeLayout secureAccountRL;
     MaterialCardView secureNextCV;
     MyApplication objMyApplication;
+    SQLiteDatabase mydatabase;
+    Cursor dsUserDetails;
+    String strFirstUser = "";
 
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
@@ -98,7 +103,7 @@ public class OTPValidation extends AppCompatActivity {
             MOBILE = getIntent().getStringExtra("MOBILE");
             EMAIL = getIntent().getStringExtra("EMAIL");
             strScreen = getIntent().getStringExtra("screen");
-
+            SetDB();
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             resendTV = findViewById(R.id.resendTV);
             headerTV = findViewById(R.id.headerTV);
@@ -118,14 +123,6 @@ public class OTPValidation extends AppCompatActivity {
 
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
-//            otpPV.requestFocus();
-//            new Handler().post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-//                }
-//            });
             objMyApplication = (MyApplication) getApplicationContext();
 
             if (strScreen != null && !strScreen.equals("")) {
@@ -468,7 +465,7 @@ public class OTPValidation extends AppCompatActivity {
                                         layoutType = "SECURE";
                                         layoutEntry.setVisibility(View.GONE);
                                         layoutFailure.setVisibility(View.GONE);
-
+                                        saveFirstUser();
                                     }
                                     break;
                             }
@@ -806,5 +803,25 @@ public class OTPValidation extends AppCompatActivity {
         }
     }
 
+    private void SetDB() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+            }
+        }
+    }
+
+    private void saveFirstUser() {
+        try {
+            mydatabase.execSQL("Delete from tblUserDetails");
+            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + EMAIL.toLowerCase() + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

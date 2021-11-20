@@ -17,6 +17,8 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -183,12 +185,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             if (!isPwdEye) {
                                 isPwdEye = true;
                                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeopen));
-                                etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                                etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                             } else {
                                 isPwdEye = false;
                                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeclose));
-                                etPassword.setInputType(InputType.TYPE_CLASS_TEXT |
-                                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                                etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                             }
                             if (etPassword.getText().length() > 0) {
                                 etPassword.setSelection(etPassword.getText().length());
@@ -425,15 +426,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
                             strPwd = etPassword.getText().toString().trim();
-//                            if (chkRemember.isChecked()) {
-//                                saveCredentials();
-//                            } else {
-//                                mydatabase.execSQL("Delete from tblRemember");
-//                            }
                             if (compareCredentials()) {
                                 login();
                             } else {
-                                Utils.displayAlert("Invalid user credentials", LoginActivity.this);
+                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this);

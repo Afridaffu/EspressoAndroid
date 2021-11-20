@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -365,17 +367,15 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         if (!isPwdEye) {
                             isPwdEye = true;
                             passwordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
-                            passwordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         } else {
                             isPwdEye = false;
                             passwordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
-                            passwordET.setInputType(InputType.TYPE_CLASS_TEXT |
-                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         }
                         if (passwordET.getText().length() > 0) {
                             passwordET.setSelection(passwordET.getText().length());
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -389,17 +389,15 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         if (!isCPwdEye) {
                             isCPwdEye = true;
                             confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
-                            confirmPasswordET.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            confirmPasswordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         } else {
                             isCPwdEye = false;
                             confPasswordTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
-                            confirmPasswordET.setInputType(InputType.TYPE_CLASS_TEXT |
-                                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            confirmPasswordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         }
                         if (confirmPasswordET.getText().length() > 0) {
                             confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

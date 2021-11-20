@@ -12,7 +12,7 @@
     <string name="forgotpwdtxt">Forgot Password</string>
     <string name="retrievemail">Retrieve Email</string>
     <string name="epincorrecttext">Email or password is incorrect</string>
-    <string name="epincorrectdescri">Either your email or password is incorrect. please try again, or use Forgot password and retrieve email.</string>
+    <string name="epincorrectdescri">Either your email or password is incorrect. Please try again, or use forgot password and retrieve email.</string>
     <string name="faceidnotavaitxt">Face ID Not available</string>
     <string name="faceidnotavaidescri">Please Log in and go to your profile setting to set up the Face ID.</string>
     <string name="faceiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Face ID.</string>
@@ -24,7 +24,7 @@
     <string name="previous">Previous</string>
     <string name="chpwdmsg">Look like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
 
-    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. please enter the\n information below.</string>
+    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. Please enter the\n information below.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="processing">Processing…</string>

@@ -52,7 +52,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
-    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL,pinLL;
+    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     SQLiteDatabase mydatabase;
     Cursor dsDontRemind;
@@ -201,7 +201,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     startActivity(i);
                                     break;
                                 case "login":
-                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
+//                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
+                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
                                         Intent d = new Intent(PINActivity.this, DashboardActivity.class);
                                         d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(d);
@@ -439,7 +440,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 if (!strChoose.equals(strConfirm)) {
 //                                    Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
 //                                    setErrorPIN();
-                                    setErrorPINMismatch(strChoose,strConfirm);
+                                    setErrorPINMismatch(strChoose, strConfirm);
                                 } else {
 
                                     dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
@@ -547,52 +548,52 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     public void setErrorPINMismatch(String strChoose, String strConfirm) {
-        Log.e("char", strChoose.substring(0,1));
-        if(strChoose.substring(0,1).equals(strConfirm.substring(0,1))){
+        Log.e("char", strChoose.substring(0, 1));
+        if (strChoose.substring(0, 1).equals(strConfirm.substring(0, 1))) {
             circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
-        }else{
+        } else {
             circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
-        if(strChoose.substring(1,2).equals(strConfirm.substring(1,2))){
+        if (strChoose.substring(1, 2).equals(strConfirm.substring(1, 2))) {
             circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
-        }else{
+        } else {
             circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
-        if(strChoose.substring(2,3).equals(strConfirm.substring(2,3))){
+        if (strChoose.substring(2, 3).equals(strConfirm.substring(2, 3))) {
             circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
-        }else{
+        } else {
             circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
-        if(strChoose.substring(3,4).equals(strConfirm.substring(3,4))){
+        if (strChoose.substring(3, 4).equals(strConfirm.substring(3, 4))) {
             circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
-        }else{
+        } else {
             circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
 
-        if(strChoose.substring(4,5).equals(strConfirm.substring(4,5))){
+        if (strChoose.substring(4, 5).equals(strConfirm.substring(4, 5))) {
             circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
-        }else{
+        } else {
             circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
-        if(strChoose.substring(5,6).equals(strConfirm.substring(5,6))){
+        if (strChoose.substring(5, 6).equals(strConfirm.substring(5, 6))) {
             circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
-        }else{
+        } else {
             circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
