@@ -53,7 +53,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
     TextView tvPasswordInfo, tvHead, tvMessage,tvchangepass;
     TextInputLayout passwordTIL, confPasswordTIL;
     TextInputEditText passwordET, confirmPasswordET;
-    TextView tvPasswordInfo, tvHead, tvMessage;
     LinearLayout layoutIndicator;
     ProgressDialog dialog;
     private Pattern strong, medium;
@@ -444,7 +443,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 //                            dashboardViewModel.se;
                             ChangePasswordRequest request=new ChangePasswordRequest();
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));
-                            request.setNewPassword(etCPassword.getText().toString().trim());
+                            request.setNewPassword(confirmPasswordET.getText().toString().trim());
                             dashboardViewModel.meChangePassword(request);
 
                         } else {
@@ -513,7 +512,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
             @Override
             public void onChanged(ChangePassword changePassword) {
                 dialog.dismiss();
-                Log.e("Resp", new Gson().toJson(changePassword));
                 if (changePassword != null) {
                     if (changePassword.getStatus().equals("SUCCESS")) {
 
