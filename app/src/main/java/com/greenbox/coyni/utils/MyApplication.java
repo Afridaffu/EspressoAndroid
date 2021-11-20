@@ -24,9 +24,64 @@ public class MyApplication extends Application {
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     List<States> listStates = new ArrayList<>();
-    Boolean isBiometric = false;
-    public AccountLimitsData getObjAcc() {
-        return objAcc;
+    //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
+    Boolean isBiometric = false, isLocalBiometric = false;
+
+    //Account Limits
+    private double tokenWithdrawalBankDayLimit;
+    private double tokenWithdrawalBankWeekLimit;
+
+    private double tokenWithdrawalInstantpayDayLimit;
+    private double tokenWithdrawalInstantpayWeekLimit;
+
+    private double tokenWithdrawalGiftcardDayLimit;
+    private double tokenWithdrawalGiftcardWeekLimit;
+
+    private double tokenSendDayLimit;
+    private double tokenSendWeekLimit;
+
+    private double tokenBuyBankDayLimit;
+    private double tokenBuyBankWeeekLimit;
+
+    private double tokenBuyCardDayLimit;
+    private double tokenBuyCardWeekLimit;
+
+    private double tokenWithdrawalSignetDayLimit;
+    private double tokenWithdrawalSignetWeekLimit;
+
+    int intUserId;
+    String strCity, strPhoneNum, strState, strCountry, strAddressLine1, strAddressLine2, strZipCode, strProfileImg;
+
+    public int getIntUserId() {
+        return intUserId;
+    }
+
+    public void setIntUserId(int intUserId) {
+        this.intUserId = intUserId;
+    }
+
+    public String getStrCity() {
+        return strCity;
+    }
+
+    public void setStrCity(String strCity) {
+        this.strCity = strCity;
+    }
+
+    public String getStrPhoneNum() {
+        return strPhoneNum;
+    }
+
+    public void setStrPhoneNum(String strPhoneNum) {
+        this.strPhoneNum = strPhoneNum;
+    }
+
+    public String getStrState() {
+        return strState;
+    }
+
+    public void setStrState(String strState) {
+        this.strState = strState;
     }
 
     public void setObjAcc(AccountLimitsData objAcc) {
@@ -122,5 +177,13 @@ public class MyApplication extends Application {
 
     public void setBiometric(Boolean biometric) {
         isBiometric = biometric;
+    }
+
+    public Boolean getLocalBiometric() {
+        return isLocalBiometric;
+    }
+
+    public void setLocalBiometric(Boolean localBiometric) {
+        isLocalBiometric = localBiometric;
     }
 }

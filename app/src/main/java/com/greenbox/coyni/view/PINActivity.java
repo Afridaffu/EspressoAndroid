@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
-    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL;
+    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     SQLiteDatabase mydatabase;
     Cursor dsDontRemind;
@@ -139,6 +140,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             circleFiveLL = findViewById(R.id.circleFiveLL);
             circleSixLL = findViewById(R.id.circleSixLL);
 
+            pinLL = findViewById(R.id.pinLL);
+
             keyZeroTV = (TextView) findViewById(R.id.keyZeroTV);
             keyOneTV = (TextView) findViewById(R.id.keyOneTV);
             keyTwoTV = (TextView) findViewById(R.id.keyTwoTV);
@@ -186,6 +189,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     dialog.dismiss();
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                            shakeAnimateUpDown();//new
                             String strScreen = "";
                             if (getIntent().getStringExtra("screen") != null) {
                                 strScreen = getIntent().getStringExtra("screen");
@@ -197,25 +201,32 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     startActivity(i);
                                     break;
                                 case "login":
-                                    if (objMyApplication.getBiometric()) {
+//                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
+                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
                                         Intent d = new Intent(PINActivity.this, DashboardActivity.class);
                                         d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(d);
                                     } else {
                                         if (!isDontRemind) {
-                                            if (Utils.checkAuthentication(PINActivity.this)) {
-                                                if (Utils.isFingerPrint(PINActivity.this)) {
-                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                            .putExtra("ENABLE_TYPE", "TOUCH")
-                                                            .putExtra("screen", strScreen));
+                                            if (Utils.checkBiometric(PINActivity.this)) {
+                                                if (Utils.checkAuthentication(PINActivity.this)) {
+                                                    if (Utils.isFingerPrint(PINActivity.this)) {
+                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                .putExtra("screen", strScreen));
+                                                    } else {
+                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                .putExtra("ENABLE_TYPE", "FACE")
+                                                                .putExtra("screen", strScreen));
+                                                    }
                                                 } else {
                                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                            .putExtra("ENABLE_TYPE", "FACE")
+                                                            .putExtra("ENABLE_TYPE", "SUCCESS")
                                                             .putExtra("screen", strScreen));
                                                 }
                                             } else {
                                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                        .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                        .putExtra("ENABLE_TYPE", "TOUCH")
                                                         .putExtra("screen", strScreen));
                                             }
                                         } else {
@@ -254,6 +265,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 if (pinRegisterResponse != null) {
                     Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
                     if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
+                        String strScreen = "";
+                        if (getIntent().getStringExtra("screen") != null) {
+                            strScreen = getIntent().getStringExtra("screen");
+                        }
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPin")) {
                             Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
                             new Handler().postDelayed(new Runnable() {
@@ -270,22 +285,26 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                             }, 2000);
 
                         } else {
-                            if(Utils.checkBiometric(PINActivity.this)){
+                            if (Utils.checkBiometric(PINActivity.this)) {
                                 if (Utils.checkAuthentication(PINActivity.this)) {
                                     if (Utils.isFingerPrint(PINActivity.this)) {
                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                .putExtra("ENABLE_TYPE", "TOUCH"));
-                                      } else {
+                                                .putExtra("ENABLE_TYPE", "TOUCH")
+                                                .putExtra("screen", strScreen));
+                                    } else {
                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                .putExtra("ENABLE_TYPE", "FACE"));
+                                                .putExtra("ENABLE_TYPE", "FACE")
+                                                .putExtra("screen", strScreen));
                                     }
                                 } else {
                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                            .putExtra("ENABLE_TYPE", "SUCCESS"));
+                                            .putExtra("ENABLE_TYPE", "SUCCESS")
+                                            .putExtra("screen", strScreen));
                                 }
-                            }else{
+                            } else {
                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "TOUCH"));
+                                        .putExtra("ENABLE_TYPE", "TOUCH")
+                                        .putExtra("screen", strScreen));
                             }
                         }
                     }
@@ -418,14 +437,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 strChoose = passcode;
                                 passcode = "";
                                 TYPE = "CONFIRM";
-                                tvHead.setText("Confrim your PIN");
+                                tvHead.setText("Confirm your PIN");
                                 clearPassCode();
                                 break;
                             case "CONFIRM":
                                 strConfirm = passcode;
                                 if (!strChoose.equals(strConfirm)) {
 //                                    Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
-                                    setErrorPIN();
+//                                    setErrorPIN();
+                                    setErrorPINMismatch(strChoose, strConfirm);
                                 } else {
 
                                     dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
@@ -530,6 +550,68 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+    }
+
+    public void setErrorPINMismatch(String strChoose, String strConfirm) {
+        Log.e("char", strChoose.substring(0, 1));
+        if (strChoose.substring(0, 1).equals(strConfirm.substring(0, 1))) {
+            circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(1, 2).equals(strConfirm.substring(1, 2))) {
+            circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(2, 3).equals(strConfirm.substring(2, 3))) {
+            circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(3, 4).equals(strConfirm.substring(3, 4))) {
+            circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+
+        if (strChoose.substring(4, 5).equals(strConfirm.substring(4, 5))) {
+            circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(5, 6).equals(strConfirm.substring(5, 6))) {
+            circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        shakeAnimateLeftRight();
+    }
+
+    public void shakeAnimateLeftRight() {
+        pinLL.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+    }
+
+    public void shakeAnimateUpDown() {
+        pinLL.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
     }
 
     private void clearControls() {

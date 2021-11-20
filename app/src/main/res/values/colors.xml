@@ -29,5 +29,6 @@
     <color name="toast_bg">#7cabaa</color>
     <color name="toast_icon">#ebffd0</color>
     <color name="default_red">#FFDD2C00</color>
+    <color name="price">#009c98</color>
 
 </resources>

@@ -86,7 +86,9 @@ public class BindingLayoutActivity extends AppCompatActivity {
             reTryAgainBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBackPressed();
+                    Intent i = new Intent(BindingLayoutActivity.this, RetrieveEmailActivity.class);
+                    startActivity(i);
+                    finish();
                 }
             });
         } catch (Exception ex) {
@@ -118,4 +120,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

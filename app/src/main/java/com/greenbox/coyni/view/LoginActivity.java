@@ -15,7 +15,10 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -60,12 +63,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     CardView cvNext, cvEmailOK;
     LinearLayout layoutEmailError, layoutPwdError;
     TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
-    String strEmail = "", strPwd = "", strMsg = "", strToken = "";
+    String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
-    Boolean isFaceLock = false, isThumb = false, isTouchId = false;
+    Boolean isFaceLock = false, isTouchId = false, isPwdEye = false;
     ImageView loginBGIV, endIconIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
@@ -90,11 +93,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        objMyApplication.setStrRetrEmail("");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (dialog != null) {
             dialog.dismiss();
         }
+        isPwdEye = false;
     }
 
     @Override
@@ -147,9 +157,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
 
-            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-                etEmail.setText(objMyApplication.getStrRetrEmail());
-            }
+//            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+//                etEmail.setText(objMyApplication.getStrRetrEmail());
+//            }
 
             endIconIV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,16 +169,31 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
-                            if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
-                                Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        if (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled()) {
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
+                                if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
+                                    Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    FaceIdDisabled_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                                }
                             } else {
-                                FaceIdDisabled_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
                                 faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
                             }
                         } else {
-                            FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-                            faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                            if (!isPwdEye) {
+                                isPwdEye = true;
+                                endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeopen));
+                                etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            } else {
+                                isPwdEye = false;
+                                endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeclose));
+                                etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            }
+                            if (etPassword.getText().length() > 0) {
+                                etPassword.setSelection(etPassword.getText().length());
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -401,12 +426,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
                             strPwd = etPassword.getText().toString().trim();
-//                            if (chkRemember.isChecked()) {
-//                                saveCredentials();
-//                            } else {
-//                                mydatabase.execSQL("Delete from tblRemember");
-//                            }
-                            login();
+                            if (compareCredentials()) {
+                                login();
+                            } else {
+                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                            }
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
                         }
@@ -419,33 +444,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    objMyApplication.setStrRetrEmail("");
                     onBackPressed();
                 }
             });
-
-//            chkRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    try {
-//                        if (isChecked) {
-//                            if (!etEmail.getText().toString().trim().equals("") && !etPassword.getText().toString().trim().equals("")) {
-//                                saveCredentials();
-//                            }
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                        Utils.hideKeypad(LoginActivity.this);
-//                    }
-//                    return false;
-//                }
-//            });
 
             enableIcon();
             SetDB();
@@ -453,6 +455,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             SetFaceLock();
             SetTouchId();
             SetRemember();
+
+            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+                if (chkRemember.isChecked()) {
+                    etEmail.setText("");
+                    etPassword.setText("");
+                    chkRemember.setChecked(false);
+                }
+                etEmail.setText(objMyApplication.getStrRetrEmail());
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -463,14 +474,13 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
             dsUserDetails.moveToFirst();
-            if (dsUserDetails.getCount() > 0 && Utils.checkAuthentication(LoginActivity.this)) {
-                strEmail = dsUserDetails.getString(1);
-                strPwd = dsUserDetails.getString(2);
+            if (dsUserDetails.getCount() > 0) {
+                strFirstUser = dsUserDetails.getString(1);
             }
         } catch (Exception ex) {
             if (ex.getMessage().toString().contains("no such table")) {
                 mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, username TEXT, password TEXT);");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
             }
         }
     }
@@ -573,6 +583,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 } else {
                                     mydatabase.execSQL("Delete from tblRemember");
                                 }
+                                saveFirstUser();
                                 if (login.getData().getCoyniPin()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
@@ -580,7 +591,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     startActivity(i);
                                 } else {
                                     Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-                                    i.putExtra("screen", "Login");
+                                    i.putExtra("screen", "login");
                                     i.putExtra("OTP_TYPE", "MOBILE");
                                     i.putExtra("MOBILE", login.getData().getPhoneNumber());
                                     i.putExtra("EMAIL", login.getData().getEmail());
@@ -771,6 +782,34 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         }
     }
 
+    private void saveFirstUser() {
+        try {
+            if (strFirstUser.equals("")) {
+                strFirstUser = etEmail.getText().toString().trim().toLowerCase();
+            }
+            mydatabase.execSQL("Delete from tblUserDetails");
+            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Boolean compareCredentials() {
+        Boolean value = true;
+        try {
+            if (!strFirstUser.equals("")) {
+                if (!etEmail.getText().toString().trim().toLowerCase().equals("") && !etEmail.getText().toString().trim().toLowerCase().equals(strFirstUser.trim().toLowerCase())) {
+                    value = false;
+                } else {
+                    value = true;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
     private void enableIcon() {
         try {
             endIconIV.setVisibility(VISIBLE);
@@ -783,9 +822,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
-                etlPassword.setPasswordVisibilityToggleEnabled(true);
+                etlPassword.setPasswordVisibilityToggleEnabled(false);
 //                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-                endIconIV.setVisibility(GONE);
+                endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeclose));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -817,7 +856,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
         });
     }
-
 
     @Override
     public void onVisibilityChanged(boolean visible) {

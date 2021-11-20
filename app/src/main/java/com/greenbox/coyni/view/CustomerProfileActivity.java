@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Gravity;
@@ -16,11 +17,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class CustomerProfileActivity extends AppCompatActivity {
 //    LabeledSwitch labeledSwitch;
@@ -34,6 +39,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
     boolean isSwitchEnabled=false;
     LinearLayout cpUserDetailsLL,cpAccountLimitsLL,cpAgreementsLL,cpChangePasswordLL;
     Long mLastClickTime = 0L;
+    SQLiteDatabase mydatabase;
+    CoyniViewModel coyniViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -58,6 +66,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOff=findViewById(R.id.switchOff);
             switchOn=findViewById(R.id.switchOn);
             cpChangePasswordLL=findViewById(R.id.cpChangePassword);
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
             cpChangePasswordLL.setOnClickListener(view -> {
@@ -103,6 +112,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     startActivity(new Intent(CustomerProfileActivity.this,AccountLimitsActivity.class));
                 }
             });
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -122,11 +132,16 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cvLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                    finish();
+                    try {
+                        dropAllTables();
+                        Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                        finish();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -169,6 +184,30 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void dropAllTables() {
+        try {
+            enableBiometric(false);
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void enableBiometric(Boolean value) {
+        try {
+            BiometricRequest biometricRequest = new BiometricRequest();
+            biometricRequest.setBiometricEnabled(value);
+            biometricRequest.setDeviceId(Utils.getDeviceID());
+            coyniViewModel.saveBiometric(biometricRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_lock_main"
+        android:layout_margin="20dp"
+        android:elevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/shape_round_rectable"
+        app:layoutDescription="@xml/activity_swipe_unloack_scene"
+        >
+
+        <TextView
+            android:id="@+id/tv_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Slide to Confirm"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/im_lock"
+            app:layout_constraintStart_toEndOf="@+id/im_lock"
+            app:layout_constraintTop_toTopOf="@+id/im_lock" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/im_lock"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/teal_700"
+            app:cardCornerRadius="@dimen/_30sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="16dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_chevron_right"
+                android:tint="@color/white"
+
+                />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/im_lock_"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="@dimen/_20sdp"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:layout_gravity="center"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                />
+
+        </androidx.cardview.widget.CardView>
+<!--        <androidx.constraintlayout.utils.widget.ImageFilterView-->
+<!--            android:id="@+id/image"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:background="@color/white"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            android:src="@drawable/right"-->
+<!--            app:altSrc="@drawable/left"-->
+<!--            android:layout_width="@dimen/_30sdp"-->
+<!--            android:layout_height="@dimen/_30sdp"-->
+<!--            />-->
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <RelativeLayout
+        android:id="@+id/successRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_round_rectable">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Success"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:cardBackgroundColor="@color/teal_700"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentRight="true"
+            app:cardCornerRadius="@dimen/_20sdp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/white" />
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+</LinearLayout>
