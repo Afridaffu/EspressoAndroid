@@ -1,5 +1,9 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.ChangePassword;
+import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -34,8 +38,11 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -80,8 +87,14 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
-//    @GET("api/v2/profile/me/signedagreements")
-//    Call<Agreements> meAgreementsByType();
+    @GET("api/v2/profile/me/signedagreements")
+    Call<Agreements> meAgreementsByType();
+
+    @GET("api/v2/agreements/active/type")
+    Call<AgreementsPdf> agreementsByType(@Query("agreementType") String agreetype);
+
+    @PATCH("/api/v2/user/change-password")
+    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
 
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
@@ -110,5 +123,7 @@ public interface ApiService {
     @PATCH("api/v2/user/set-password")
     Call<ManagePasswordResponse> setExpiryPassword(@Body ManagePasswordRequest request);
 
+    @POST("api/v2/user/change-password")
+    Call<ChangePassword> setPassword();
 
 }

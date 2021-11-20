@@ -230,6 +230,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     startActivity(ee);
                                     finish();
                                     break;
+                                case "ChangePassword":
+                                    Intent cp=new Intent(PINActivity.this,ConfirmPasswordActivity.class);
+                                    startActivity(cp);
+                                    finish();
+                                    break;
                             }
                         } else {
                             //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
@@ -361,7 +366,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.imgBack:
                 if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
                         || getIntent().getStringExtra("screen").equals("loginExpiry") ||
-                        getIntent().getStringExtra("screen").equals("UserDetails"))) {
+                        getIntent().getStringExtra("screen").equals("UserDetails") || getIntent().getStringExtra("screen").equals("ChangePassword"))) {
                     onBackPressed();
                 } else {
                     if (TYPE.equals("CHOOSE")) {

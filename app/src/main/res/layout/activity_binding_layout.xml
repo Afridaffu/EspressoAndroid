@@ -22,5 +22,9 @@
         android:id="@+id/editEmailSuccessLayout"
         layout="@layout/edit_email_successful_layout"
         android:visibility="gone" />
-
+    <include
+        android:id="@+id/changePasswordLayout"
+        layout="@layout/change_password_successful_layout"
+        android:visibility="gone"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

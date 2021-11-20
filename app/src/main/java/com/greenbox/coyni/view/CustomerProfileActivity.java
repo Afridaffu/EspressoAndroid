@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -22,16 +23,17 @@ import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
 import com.greenbox.coyni.utils.MyApplication;
 
 public class CustomerProfileActivity extends AppCompatActivity {
-    LabeledSwitch labeledSwitch;
+//    LabeledSwitch labeledSwitch;
     View viewFaceBottom;
     ImageView imgQRCode;
     Dialog dialog;
     TextView customerNameTV;
     MyApplication objMyApplication;
     CardView cvLogout;
-    LinearLayout cpUserDetailsLL;
+    LinearLayout switchOff,switchOn;
+    boolean isSwitchEnabled=false;
+    LinearLayout cpUserDetailsLL,cpAccountLimitsLL,cpAgreementsLL,cpChangePasswordLL;
     Long mLastClickTime = 0L;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -46,14 +48,61 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            labeledSwitch = findViewById(R.id.switchbtn);
-            viewFaceBottom = findViewById(R.id.viewSetupFaceBottom);
+//            labeledSwitch = findViewById(R.id.switchbtn);
             imgQRCode = findViewById(R.id.imgQRCode);
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
             cpUserDetailsLL = findViewById(R.id.cpUserDetailsLL);
-
+            cpAccountLimitsLL=findViewById(R.id.cpAccountLimitsLL);
+            cpAgreementsLL=findViewById(R.id.cpAgreementsLL);
+            switchOff=findViewById(R.id.switchOff);
+            switchOn=findViewById(R.id.switchOn);
+            cpChangePasswordLL=findViewById(R.id.cpChangePassword);
             objMyApplication = (MyApplication) getApplicationContext();
+
+            cpChangePasswordLL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+            Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
+                    .putExtra("TYPE","ENTER")
+                    .putExtra("screen","ChangePassword");
+            startActivity(i);
+
+            });
+
+            switchOff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isSwitchEnabled=true;
+                    switchOff.setVisibility(View.GONE);
+                    switchOn.setVisibility(View.VISIBLE);
+                    isSwitchEnable();
+                }
+            });
+            switchOn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isSwitchEnabled=false;
+                    switchOn.setVisibility(View.GONE);
+                    switchOff.setVisibility(View.VISIBLE);
+                    isSwitchEnable();
+                }
+            });
+
+            cpAgreementsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this,AgreementsActivity.class));
+                }
+            });
+            cpAccountLimitsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this,AccountLimitsActivity.class));
+                }
+            });
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -61,14 +110,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
                 }
             });
-            labeledSwitch.setOnToggledListener((labeledSwitch, isOn) -> {
-            });
             imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 //                    displayQRCode();
+
                 }
             });
+
 
             cvLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,18 +132,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             customerNameTV.setText(objMyApplication.getStrUserName());
 
-            cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
-                }
-            });
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void isSwitchEnable() {
+        if (isSwitchEnabled){
+            Toast.makeText(CustomerProfileActivity.this, "Switch On", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(CustomerProfileActivity.this, "Switch Off", Toast.LENGTH_SHORT).show();
         }
     }
 

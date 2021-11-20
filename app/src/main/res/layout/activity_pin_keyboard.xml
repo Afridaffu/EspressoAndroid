@@ -45,11 +45,11 @@
 
             <LinearLayout
                 android:id="@+id/circleOneLL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_27sdp"
+                android:layout_height="@dimen/_27sdp"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/_3sdp"
-                android:background="@drawable/ic_outline_circle"
+                android:background="@drawable/ic_pin_circle_logo"
                 android:gravity="center">
 
                 <View
