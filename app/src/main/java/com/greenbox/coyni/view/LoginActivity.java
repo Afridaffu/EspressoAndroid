@@ -4,7 +4,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,14 +19,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -118,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 biometricLogin();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
                         }
                     }
                 });
@@ -433,10 +429,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             if (compareCredentials()) {
                                 login();
                             } else {
-                                Utils.displayAlert("Invalid user credentials", LoginActivity.this);
+                                Utils.displayAlert("Invalid user credentials", LoginActivity.this, "");
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -609,7 +605,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this);
+                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "");
                             }
                         }
                     }
@@ -660,7 +656,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this);
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "");
                             }
                         }
                     }

@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="@dimen/_21sdp"
     android:paddingRight="@dimen/_21sdp"
+    android:background="@drawable/roundeddialog"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
@@ -30,9 +31,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/opensans_bold"
-        android:text="Face ID Temporarily disabled"
+        android:text="Alert!"
         android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp" />
+        android:textSize="@dimen/_16ssp"
+        android:visibility="visible"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/tvMessage"
@@ -42,10 +45,11 @@
         android:fontFamily="@font/opensans_regular"
         android:text="@string/faceiddisable"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp" />
+        android:textSize="@dimen/_12ssp"
+        android:gravity="center"/>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cvOK"
+        android:id="@+id/cvAction"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_44sdp"
         android:layout_marginTop="@dimen/_40sdp"
@@ -53,7 +57,7 @@
         app:cardCornerRadius="@dimen/_22sdp">
 
         <TextView
-            android:id="@+id/okBtn"
+            android:id="@+id/tvAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -6,19 +6,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile;
@@ -47,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity {
             if (Utils.checkInternet(DashboardActivity.this)) {
                 dashboardViewModel.meProfile();
             } else {
-                Utils.displayAlert(getString(R.string.internet), DashboardActivity.this);
+                Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
             }
             layoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override

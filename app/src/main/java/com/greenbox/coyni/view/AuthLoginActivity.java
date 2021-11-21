@@ -96,7 +96,7 @@ public class AuthLoginActivity extends AppCompatActivity {
                                 login();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), AuthLoginActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), AuthLoginActivity.this, "");
                         }
                     }
                 });
@@ -135,7 +135,7 @@ public class AuthLoginActivity extends AppCompatActivity {
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), AuthLoginActivity.this);
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), AuthLoginActivity.this, "");
                             }
                         }
                     }

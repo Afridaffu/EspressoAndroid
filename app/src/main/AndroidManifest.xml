@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".utils.MyApplication"
@@ -28,25 +32,25 @@
             android:name=".view.UserDetailsActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditPhoneActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditAddressActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditEmailActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EnableAuthID"

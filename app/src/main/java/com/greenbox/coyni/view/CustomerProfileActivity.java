@@ -88,7 +88,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             });
 
-            customerNameTV.setText(objMyApplication.getStrUserName());
+            if (objMyApplication.getStrUserName().length() > 21) {
+                customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
+            } else {
+                customerNameTV.setText(objMyApplication.getStrUserName());
+            }
 
             cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
                 @Override

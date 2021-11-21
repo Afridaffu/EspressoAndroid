@@ -240,6 +240,17 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     startActivity(ee);
                                     finish();
                                     break;
+                                case "EditPhone":
+                                    Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
+                                    ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
+                                    startActivity(ep);
+                                    finish();
+                                    break;
+                                case "EditAddress":
+                                    Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
+                                    startActivity(ea);
+                                    finish();
+                                    break;
                             }
                         } else {
                             //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);

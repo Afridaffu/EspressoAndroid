@@ -6,6 +6,7 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class MyApplication extends Application {
     String strUserName = "", strRetrEmail = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
+    UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     List<States> listStates = new ArrayList<>();
     Boolean isBiometric = false;
 
@@ -311,4 +313,13 @@ public class MyApplication extends Application {
     public void setBiometric(Boolean biometric) {
         isBiometric = biometric;
     }
+
+    public UpdatePhoneResponse getUpdatePhoneResponse() {
+        return updatePhoneResponse;
+    }
+
+    public void setUpdatePhoneResponse(UpdatePhoneResponse updatePhoneResponse) {
+        this.updatePhoneResponse = updatePhoneResponse;
+    }
+
 }

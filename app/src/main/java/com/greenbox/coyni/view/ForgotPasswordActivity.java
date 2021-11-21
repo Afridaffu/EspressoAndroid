@@ -9,15 +9,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +23,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -191,7 +186,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this);
+                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "");
                     }
                 }
 

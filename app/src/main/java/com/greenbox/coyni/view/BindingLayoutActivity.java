@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -22,8 +23,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
     LinearLayout llCoyniAct, lyClose;
     TextView tvEmail;
     MyApplication objMyApplication;
-    CardView reTryAgainBtn;
-
+    CardView reTryAgainBtn,editEmailLogoutCV;
+    SQLiteDatabase mydatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -45,6 +46,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
             lyClose = findViewById(R.id.lyClose);
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
+            editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
@@ -78,6 +81,19 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     finish();
                 }
             });
+
+            editEmailLogoutCV.setOnClickListener(view -> {
+                try {
+                    dropAllTables();
+                    Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                    finish();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -89,11 +105,19 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 case "retEmailfound": {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
                 }
                 break;
                 case "retEmailfail": {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.VISIBLE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                }
+                break;
+                case "EditEmail": {
+                    findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
+                    findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.VISIBLE);
                 }
                 break;
             }
@@ -105,5 +129,17 @@ public class BindingLayoutActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+
+    private void dropAllTables() {
+        try {
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

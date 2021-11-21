@@ -18,10 +18,15 @@
         android:paddingTop="@dimen/_45sdp"
         android:paddingBottom="@dimen/_12sdp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back" />
+        <LinearLayout
+            android:id="@+id/userDetailsCloseLL"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -108,6 +113,57 @@
                     app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="@dimen/_9sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_7sdp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="User Name"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/userNameTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp"
+                        android:maxLines="2" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:src="@drawable/ic_rightarrow" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@color/light_gray" />
 
             <LinearLayout
                 android:id="@+id/emailLL"

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.EditEmailActivity"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context=".view.EditEmailActivity">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/editEmailSV"
@@ -25,10 +25,16 @@
             android:paddingTop="@dimen/_45sdp"
             android:paddingEnd="@dimen/_21sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_back" />
+            <LinearLayout
+                android:id="@+id/editEmailCloseLL"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,11 +62,15 @@
                     android:id="@+id/currentEmailET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,_."
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Current Email"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:maxLines="1"
                     android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
@@ -110,11 +120,15 @@
                     android:id="@+id/newEmailET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,_."
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Enter New Email"
                     android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:maxLines="1"
                     android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"

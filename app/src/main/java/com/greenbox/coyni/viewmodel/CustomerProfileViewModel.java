@@ -19,6 +19,8 @@ import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -32,6 +34,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     private MutableLiveData<UpdateEmailResponse> updateEmailSendOTPResponse = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<UpdatePhoneResponse> updatePhoneSendOTPResponse = new MutableLiveData<>();
 
     public CustomerProfileViewModel(@NonNull Application application) {
         super(application);
@@ -44,6 +47,11 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     public MutableLiveData<APIError> getApiErrorMutableLiveData() {
         return apiErrorMutableLiveData;
     }
+
+    public MutableLiveData<UpdatePhoneResponse> getUpdatePhoneSendOTPResponse() {
+        return updatePhoneSendOTPResponse;
+    }
+
 
     public void updateEmailSendOTP(UpdateEmailRequest request) {
         try {
@@ -69,6 +77,39 @@ public class CustomerProfileViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<UpdateEmailResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public void updatePhoneSendOTP(UpdatePhoneRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdatePhoneResponse> mCall = apiService.updatePhoneSendOTP(request);
+            mCall.enqueue(new Callback<UpdatePhoneResponse>() {
+                @Override
+                public void onResponse(Call<UpdatePhoneResponse> call, Response<UpdatePhoneResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdatePhoneResponse obj = response.body();
+                        updatePhoneSendOTPResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdatePhoneResponse>() {
+                        }.getType();
+                        UpdatePhoneResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updatePhoneSendOTPResponse.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdatePhoneResponse> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }
             });
