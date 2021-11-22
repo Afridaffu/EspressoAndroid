@@ -18,8 +18,10 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,12 +29,17 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.ChangePassword;
+import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
+import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Pattern;
@@ -41,9 +48,11 @@ public class CreatePasswordActivity extends AppCompatActivity {
     ImageView imgClose;
     CardView cvSave, cvLogin;
     RelativeLayout layoutNewPassword, layoutDone;
+    TextInputLayout etlPassword, etlCPassword;
+    TextInputEditText etPassword, etCPassword;
+    TextView tvPasswordInfo, tvHead, tvMessage,tvchangepass;
     TextInputLayout passwordTIL, confPasswordTIL;
     TextInputEditText passwordET, confirmPasswordET;
-    TextView tvPasswordInfo, tvHead, tvMessage;
     LinearLayout layoutIndicator;
     ProgressDialog dialog;
     private Pattern strong, medium;
@@ -56,6 +65,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     View strengthOne, strengthTwo, strengthThree;
     String strCode = "", strNewPwd = "";
     LoginViewModel loginViewModel;
+    DashboardViewModel dashboardViewModel;
     RelativeLayout layoutMain;
 
     @Override
@@ -99,23 +109,31 @@ public class CreatePasswordActivity extends AppCompatActivity {
             layoutDone = findViewById(R.id.layoutDone);
             layoutMain = findViewById(R.id.layoutMain);
             layoutIndicator = findViewById(R.id.layoutIndicator);
+            tvchangepass=findViewById(R.id.tvMessageChangePass);
             tvHead = findViewById(R.id.tvHead);
             tvMessage = findViewById(R.id.tvMessage);
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
             cvSave.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                 tvMessage.setVisibility(VISIBLE);
                 tvHead.setText("Welcome Back!");
+            }else if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equals("ConfirmPassword")){
+                tvHead.setText("Change Password");
+                tvchangepass.setVisibility(VISIBLE);
+                tvMessage.setVisibility(GONE);
             } else {
                 tvMessage.setVisibility(View.GONE);
                 tvHead.setText("Create New Password");
+                tvchangepass.setVisibility(GONE);
             }
             if (getIntent().getStringExtra("code") != null && !getIntent().getStringExtra("code").equals("")) {
                 strCode = getIntent().getStringExtra("code");
             }
+
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -418,6 +436,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
                             ManagePasswordRequest request = new ManagePasswordRequest();
                             request.setPassword(passwordET.getText().toString().trim());
                             loginViewModel.setExpiryPassword(request);
+                        }else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
+//                            ManagePasswordRequest request = new ManagePasswordRequest();
+//                            request.setPassword(etPassword.getText().toString().trim());
+//                            loginViewModel.setExpiryPassword(request);
+//                            dashboardViewModel.se;
+                            ChangePasswordRequest request=new ChangePasswordRequest();
+                            request.setOldPassword(getIntent().getStringExtra("oldpassword"));
+                            request.setNewPassword(confirmPasswordET.getText().toString().trim());
+                            dashboardViewModel.meChangePassword(request);
+
                         } else {
                             SetPassword setPassword = new SetPassword();
                             setPassword.setCode(strCode);
@@ -478,6 +506,26 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         layoutDone.setVisibility(VISIBLE);
                     }
                 }
+            }
+        });
+        dashboardViewModel.getChangePasswordMutableLiveData().observe(this, new Observer<ChangePassword>() {
+            @Override
+            public void onChanged(ChangePassword changePassword) {
+                dialog.dismiss();
+                if (changePassword != null) {
+                    if (changePassword.getStatus().equals("SUCCESS")) {
+
+                                startActivity(new Intent(CreatePasswordActivity.this,BindingLayoutActivity.class)
+                                        .putExtra("screen","ChangePassword")
+                                );
+
+
+                    }else{
+                        Utils.displayAlertNew(changePassword.getError().getErrorDescription(),CreatePasswordActivity.this);
+                    }
+                }
+
+
             }
         });
     }

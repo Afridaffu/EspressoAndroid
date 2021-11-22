@@ -16,7 +16,6 @@ public class IdentityVerificationTest {
         String mailAdd="5-26,california,usa";
         assertTrue(mailAdd.length()<=30&&mailAdd.length()>0);
     }
-
     @Test
     public void isCityNameValid(){
         String cityName="New York";
