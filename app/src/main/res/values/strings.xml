@@ -15,6 +15,7 @@
     <string name="epincorrectdescri">Either your email or password is incorrect. Please try again, or use forgot password and retrieve email.</string>
     <string name="faceidnotavaitxt">Face ID Not available</string>
     <string name="faceidnotavaidescri">Please Log in and go to your profile setting to set up the Face ID.</string>
+    <string name="touchidnotavaidescri">Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="faceiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Face ID.</string>
     <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
     <!-- Strings used for fragments for navigation -->

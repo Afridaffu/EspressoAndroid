@@ -171,12 +171,12 @@ public class EnableAuthID extends AppCompatActivity {
             });
 
             enableTouchCV.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.isHardwareDetected()) {
                         Log.e("Not support", "Not support");
@@ -195,6 +195,8 @@ public class EnableAuthID extends AppCompatActivity {
                         biometricRequest.setDeviceId(Utils.getDeviceID());
                         coyniViewModel.saveBiometric(biometricRequest);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
 
