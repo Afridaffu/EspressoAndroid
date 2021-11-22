@@ -2,6 +2,9 @@ package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.RetEmailAdapter;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
 
@@ -25,6 +29,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     CardView reTryAgainBtn,editEmailLogoutCV;
     SQLiteDatabase mydatabase;
+    RetEmailAdapter retEmailAdapter;
+    RecyclerView retEmailRV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -47,24 +53,30 @@ public class BindingLayoutActivity extends AppCompatActivity {
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
+            retEmailRV = findViewById(R.id.retEmailRV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
                 usersData = objMyApplication.getObjRetUsers().getData();
                 if (usersData != null && usersData.size() > 0) {
-                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
-                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
+                    retEmailAdapter = new RetEmailAdapter(usersData,this);
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+                    retEmailRV.setLayoutManager(mLayoutManager);
+                    retEmailRV.setItemAnimator(new DefaultItemAnimator());
+                    retEmailRV.setAdapter(retEmailAdapter);
+//                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+//                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
-            llCoyniAct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                }
-            });
+//            llCoyniAct.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(i);
+//                }
+//            });
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
