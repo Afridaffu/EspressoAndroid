@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_12sdp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_68sdp"
+                android:layout_marginBottom="@dimen/_19sdp"
+                android:src="@drawable/ic_hourglass_pending_icon" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_7sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="Transaction Pending"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_90sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="159.40"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_35ssp"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CYN"
+                    android:textColor="#151515"
+                    android:textSize="@dimen/_11sdp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:paddingLeft="@dimen/_5sdp"
+                android:text="This total amount of [Amount] will appear on your\nbank statement as {description}."
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Reference ID"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_61sdp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="right"
+                    android:text="SND34239274DANN"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <ImageView
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_11sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:src="@drawable/ic_copy" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_39sdp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Account Balance"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_94sdp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="right"
+                    android:text="1,000.00 CYN"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="left"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:text="We submitted  your request, please allow a 3-5 \nbusiness days for your coyni purchase to be reflected in "
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_9ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="reflected in your token account. "
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/primary_black"
+                        android:paddingLeft="@dimen/_10sdp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/learn"
+                        android:textSize="@dimen/_10sdp"
+                        android:textColor="@color/teal_200"
+                        android:gravity="left"
+                        android:layout_weight="1"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/nextCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                app:cardBackgroundColor="#00a6a2"
+                app:cardCornerRadius="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_32sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/_13sdp"
+                    android:paddingBottom="@dimen/_13sdp"
+                    android:text="Done"
+                    android:textColor="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

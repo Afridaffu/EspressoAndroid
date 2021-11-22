@@ -21,7 +21,8 @@ public class MyApplication extends Application {
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     List<States> listStates = new ArrayList<>();
-    Boolean isBiometric = false;
+    //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
+    Boolean isBiometric = false, isLocalBiometric = false;
 
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
@@ -312,6 +313,14 @@ public class MyApplication extends Application {
 
     public void setBiometric(Boolean biometric) {
         isBiometric = biometric;
+    }
+
+    public Boolean getLocalBiometric() {
+        return isLocalBiometric;
+    }
+
+    public void setLocalBiometric(Boolean localBiometric) {
+        isLocalBiometric = localBiometric;
     }
 
     public UpdatePhoneResponse getUpdatePhoneResponse() {

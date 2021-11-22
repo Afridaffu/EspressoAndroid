@@ -1,21 +1,32 @@
 package com.greenbox.coyni.view;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,10 +35,16 @@ import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
 import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
+import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.register.CustRegisRequest;
+import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -46,6 +63,8 @@ public class OnboardActivity extends AppCompatActivity {
     ProgressDialog dialog;
     public static OnboardActivity onboardActivity;
     Boolean isBiometric = false;
+    RelativeLayout layoutOnBoarding, layoutAuth;
+    MyApplication objMyApplication;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +75,9 @@ public class OnboardActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
             onboardActivity = this;
-
+            layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
+            layoutAuth = findViewById(R.id.layoutAuth);
+            objMyApplication = (MyApplication) getApplicationContext();
             if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (Utils.isFingerPrint(OnboardActivity.this)) {
                     Utils.setIsTouchEnabled(true);
@@ -73,14 +94,20 @@ public class OnboardActivity extends AppCompatActivity {
             SetFaceLock();
             SetTouchId();
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
-//            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
-//                if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
-//                    Intent i = new Intent(OnboardActivity.this, AuthLoginActivity.class);
-//                    startActivity(i);
-//                }
-//            }
+            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
+                if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
+                    layoutOnBoarding.setVisibility(View.GONE);
+                    layoutAuth.setVisibility(View.VISIBLE);
+                    Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                } else {
+                    FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+                    faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
+                }
+            } else {
+                layoutOnBoarding.setVisibility(View.VISIBLE);
+                layoutAuth.setVisibility(View.GONE);
+            }
 
-            //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (!isDeviceID()) {
                 generateUUID();
             }
@@ -247,8 +274,10 @@ public class OnboardActivity extends AppCompatActivity {
                 String value = dsFacePin.getString(1);
                 if (value.equals("true")) {
                     isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
                 } else {
                     isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
                 }
             }
         } catch (Exception ex) {
@@ -266,8 +295,10 @@ public class OnboardActivity extends AppCompatActivity {
                 String value = dsTouchID.getString(1);
                 if (value.equals("true")) {
                     isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
                 } else {
                     isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
                 }
             }
         } catch (Exception ex) {

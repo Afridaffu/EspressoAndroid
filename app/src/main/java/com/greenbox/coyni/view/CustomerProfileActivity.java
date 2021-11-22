@@ -16,11 +16,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     LabeledSwitch labeledSwitch;
@@ -33,6 +37,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     LinearLayout cpUserDetailsLL,cpResetPin;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
+    CoyniViewModel coyniViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpResetPin = findViewById(R.id.cpResetPin);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -149,11 +155,23 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
+            enableBiometric(false);
             mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void enableBiometric(Boolean value) {
+        try {
+            BiometricRequest biometricRequest = new BiometricRequest();
+            biometricRequest.setBiometricEnabled(value);
+            biometricRequest.setDeviceId(Utils.getDeviceID());
+            coyniViewModel.saveBiometric(biometricRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
