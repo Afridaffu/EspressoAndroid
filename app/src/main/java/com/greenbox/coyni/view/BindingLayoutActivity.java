@@ -67,6 +67,14 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 if (usersData != null && usersData.size() > 0) {
                     tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
                     objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
+                    retEmailAdapter = new RetEmailAdapter(usersData,this);
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+                    retEmailRV.setLayoutManager(mLayoutManager);
+                    retEmailRV.setItemAnimator(new DefaultItemAnimator());
+                    retEmailRV.setAdapter(retEmailAdapter);
+
+//                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+//                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
 //            llCoyniAct.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +127,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                    finish();
+                    finishAffinity();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
