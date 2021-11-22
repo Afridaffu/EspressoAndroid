@@ -168,10 +168,11 @@ public class OTPValidation extends AppCompatActivity {
                             headerTV.setText("Please Verify Your Phone Number");
                             subHeaderTV.setText("We have sent you 6-digit code to the registered phone number " + maskedPhone);
                         }
-                        SMSResend resend = new SMSResend();
-                        resend.setCountryCode(Utils.getStrCCode());
-                        resend.setPhoneNumber(MOBILE);
-                        loginViewModel.smsotpresend(resend);
+                        resendCounter = resendCounter+1;
+//                        SMSResend resend = new SMSResend();
+//                        resend.setCountryCode(Utils.getStrCCode());
+//                        resend.setPhoneNumber(MOBILE);
+//                        loginViewModel.smsotpresend(resend);
                         break;
                     case "EditEmail":
                         isOldEmail = getIntent().getStringExtra("IS_OLD_EMAIL");
@@ -540,9 +541,15 @@ public class OTPValidation extends AppCompatActivity {
                     if (smsValidate.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
-                        if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
-                                smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
-                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                        if (strScreen != null && strScreen.equals("login")){
+                            if(resendCounter>=5){
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                            }
+                        }else{
+                            if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
+                                    smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
+                                Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                            }
                         }
                     } else {
                         if (strScreen != null && !strScreen.equals("")) {
@@ -605,12 +612,18 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (smsResponse != null) {
                     if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("login")) {
+//                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("login")) {
                             resendTV.setVisibility(View.GONE);
                             newCodeTV.setVisibility(View.VISIBLE);
                             resendCounter++;
                             startTimer();
+//                        }
+                        if (strScreen != null && strScreen.equals("login")) {
+                            if (resendCounter >= 5) {
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                            }
                         }
+
                     } else {
                         Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "");
                     }
