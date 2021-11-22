@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 biometricLogin();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this,"");
                         }
                     }
                 });
@@ -606,7 +606,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this);
+                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this,"");
                             }
                         }
                     }
