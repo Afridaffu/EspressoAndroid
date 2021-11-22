@@ -160,5 +160,6 @@
     <string name="bank_acount"><b>Bank Accounts:</b> All Bank account transactions typically take up to 3 business days to process.</string>
     <string name="learn_more1"> <u>Learn More</u></string>
     <string name="learn"><u>Learn More</u></string>
+    <string name="view_all">View all</string>
 
 </resources>
