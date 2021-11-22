@@ -65,6 +65,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     retEmailRV.setLayoutManager(mLayoutManager);
                     retEmailRV.setItemAnimator(new DefaultItemAnimator());
                     retEmailRV.setAdapter(retEmailAdapter);
+
 //                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
 //                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
@@ -101,7 +102,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                    finish();
+                    finishAffinity();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

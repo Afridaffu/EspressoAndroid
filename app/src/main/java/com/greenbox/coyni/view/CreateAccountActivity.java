@@ -418,10 +418,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
-                        } else if (str.length() > 0 && str.contains(" ")) {
-                            firstNameET.setText(str.replaceAll(" ", ""));
-                            firstNameET.setSelection(firstNameET.getText().length());
-                        }else if (str.length() > 0 && str.contains(".")) {
+                        } else if (str.length() > 0 && str.contains(".")) {
                             firstNameET.setText(lastNameET.getText().toString().replaceAll("\\.", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
                         }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
