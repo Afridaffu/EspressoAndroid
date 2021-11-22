@@ -30,7 +30,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     TextView customerNameTV;
     MyApplication objMyApplication;
     CardView cvLogout;
-    LinearLayout cpUserDetailsLL;
+    LinearLayout cpUserDetailsLL,cpResetPin;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
 
@@ -54,6 +54,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
             cpUserDetailsLL = findViewById(R.id.cpUserDetailsLL);
+            cpResetPin = findViewById(R.id.cpResetPin);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +103,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                }
+            });
+
+            cpResetPin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this, PINActivity.class)
+                            .putExtra("TYPE","ENTER")
+                            .putExtra("screen","ResetPIN"));
                 }
             });
         } catch (Exception ex) {
