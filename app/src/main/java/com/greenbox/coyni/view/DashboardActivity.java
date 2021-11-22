@@ -27,6 +27,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile, layoutCrypto, layoutCard;
+    LinearLayout scanQr;
     DashboardViewModel dashboardViewModel;
     TextView tvUserName;
     MyApplication objMyApplication;
@@ -50,6 +51,7 @@ public class DashboardActivity extends AppCompatActivity {
             layoutCrypto = findViewById(R.id.layoutCrypto);
             layoutCard = findViewById(R.id.layoutCard);
             tvUserName = findViewById(R.id.tvUserName);
+            scanQr=findViewById(R.id.scanQrLL);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             if (Utils.checkInternet(DashboardActivity.this)) {
@@ -78,6 +80,13 @@ public class DashboardActivity extends AppCompatActivity {
                     issueCards();
                 }
             });
+            scanQr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this,PayRequestScanActivity.class));
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -3,6 +3,7 @@
     package="com.greenbox.coyni">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
@@ -17,6 +18,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.SetAmountActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.PayRequestScanActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.AuthLoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -26,13 +34,12 @@
         <activity
             android:name=".view.PayRequestTransactionActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".view.ConfirmPasswordActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.IdVeAdditionalActionActivity"
             android:exported="true"
@@ -71,12 +78,12 @@
             android:name=".view.CustomerProfileActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountLimitsActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.BindingLayoutActivity"
             android:exported="false"
@@ -96,7 +103,7 @@
             android:name=".view.PINActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.OTPValidation"
             android:exported="true"
@@ -113,7 +120,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

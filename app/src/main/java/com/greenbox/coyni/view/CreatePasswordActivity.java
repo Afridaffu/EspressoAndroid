@@ -31,6 +31,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
@@ -526,6 +527,18 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 }
 
 
+            }
+        });
+
+        dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                dialog.dismiss();
+                if (apiError != null) {
+                    if (!apiError.getStatus().equals("SUCCESS")) {
+                        Utils.displayAlertNew(apiError.getError().getErrorDescription(),CreatePasswordActivity.this);
+                    }
+                }
             }
         });
     }

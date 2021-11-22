@@ -166,6 +166,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
+                    android:id="@+id/scanQrLL"
                     android:layout_width="@dimen/_71sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:layout_marginLeft="@dimen/_24sdp"
