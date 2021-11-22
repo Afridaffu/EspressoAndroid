@@ -12,8 +12,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 //import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -27,14 +29,13 @@ import retrofit2.Response;
 public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Profile> profileMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ImageResponse> imageResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<WalletResponse> walletResponseMutableLiveData = new MutableLiveData<>();
 
-    public void setApiErrorMutableLiveData(MutableLiveData<APIError> apiErrorMutableLiveData) {
-        this.apiErrorMutableLiveData = apiErrorMutableLiveData;
-    }
 
-    public void setProfileMutableLiveData(MutableLiveData<Profile> profileMutableLiveData) {
-        this.profileMutableLiveData = profileMutableLiveData;
+    public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
+        return paymentMethodsResponseMutableLiveData;
     }
 
     public MutableLiveData<ImageResponse> getImageResponseMutableLiveData() {
@@ -62,6 +63,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<Profile> getProfileMutableLiveData() {
         return profileMutableLiveData;
+    }
+
+    public MutableLiveData<WalletResponse> getWalletResponseMutableLiveData() {
+        return walletResponseMutableLiveData;
     }
 
     public void meProfile() {
@@ -99,6 +104,7 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
 //    public void meAgreementsById(){
 //        try {
 //            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -137,6 +143,40 @@ public class DashboardViewModel extends AndroidViewModel {
 //
 //    }
 
+    public void mePaymentMethods() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<PaymentMethodsResponse> mCall = apiService.mePaymentMethods();
+            mCall.enqueue(new Callback<PaymentMethodsResponse>() {
+                @Override
+                public void onResponse(Call<PaymentMethodsResponse> call, Response<PaymentMethodsResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            PaymentMethodsResponse obj = response.body();
+                            paymentMethodsResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PaymentMethodsResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public void updateProfile(MultipartBody.Part body) {
         try {
@@ -209,4 +249,40 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void meWallet() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<WalletResponse> mCall = apiService.meWallet();
+            mCall.enqueue(new Callback<WalletResponse>() {
+                @Override
+                public void onResponse(Call<WalletResponse> call, Response<WalletResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            WalletResponse obj = response.body();
+                            walletResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WalletResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

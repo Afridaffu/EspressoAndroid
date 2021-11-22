@@ -92,9 +92,7 @@
                                         android:fontFamily="@font/opensans_semibold"
                                         android:text="@string/accountid"
                                         android:textColor="#767676"
-                                        android:textSize="@dimen/_10ssp"
-
-                                        />
+                                        android:textSize="@dimen/_10ssp" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -109,18 +107,16 @@
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/status_unverified"
                                             android:textColor="@color/primary_black"
-                                            android:textSize="@dimen/_11ssp"
-
-                                            />
+                                            android:textSize="@dimen/_11ssp" />
 
                                         <TextView
-                                            android:id="@+id/cpStatusTV"
+                                            android:id="@+id/tvACStatus"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="5dp"
                                             android:layout_marginTop="@dimen/_6sdp"
                                             android:fontFamily="@font/opensans_semibold"
-                                            android:text="@string/unveri"
+                                            android:text=""
                                             android:textColor="#FFA70F"
                                             android:textSize="@dimen/_11ssp" />
 
@@ -354,7 +350,6 @@
                         android:id="@+id/cpPaymentMethodsLL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_16sdp"
                         android:paddingBottom="@dimen/_16sdp">

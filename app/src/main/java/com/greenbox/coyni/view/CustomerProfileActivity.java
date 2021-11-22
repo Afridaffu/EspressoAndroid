@@ -31,10 +31,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
     View viewFaceBottom;
     ImageView imgQRCode;
     Dialog dialog;
-    TextView customerNameTV;
+    TextView customerNameTV, tvACStatus;
     MyApplication objMyApplication;
     CardView cvLogout;
-    LinearLayout cpUserDetailsLL,cpResetPin;
+    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
     CoyniViewModel coyniViewModel;
@@ -59,6 +59,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
             cpUserDetailsLL = findViewById(R.id.cpUserDetailsLL);
+            cpPaymentMethodsLL = findViewById(R.id.cpPaymentMethodsLL);
+            tvACStatus = findViewById(R.id.tvACStatus);
             cpResetPin = findViewById(R.id.cpResetPin);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -88,13 +90,19 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i);
-                        finish();
+                        finishAffinity();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
 
+            customerNameTV.setText(objMyApplication.getStrUserName());
+            if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+                tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+            } else {
+                tvACStatus.setText("");
+            }
             if (objMyApplication.getStrUserName().length() > 21) {
                 customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
             } else {
@@ -104,11 +112,26 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                }
+            });
+
+            cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -116,8 +139,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(CustomerProfileActivity.this, PINActivity.class)
-                            .putExtra("TYPE","ENTER")
-                            .putExtra("screen","ResetPIN"));
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "ResetPIN"));
                 }
             });
         } catch (Exception ex) {

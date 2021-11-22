@@ -15,6 +15,8 @@ public class ProfileData {
     private String message;
     private int addressType;
     private String image;
+    private String accountStatus;
+    private String status;
 
     public int getId() {
         return id;
@@ -126,5 +128,21 @@ public class ProfileData {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
