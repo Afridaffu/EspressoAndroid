@@ -96,7 +96,7 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
-   @GET("api/v2/profile/me/signedagreements")
+    @GET("api/v2/profile/me/signedagreements")
     Call<Agreements> meAgreementsByType();
 
     @PATCH("/api/v2/user/change-password")

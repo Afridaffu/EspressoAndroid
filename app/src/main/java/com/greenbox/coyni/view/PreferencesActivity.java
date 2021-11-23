@@ -91,7 +91,7 @@ public class PreferencesActivity extends AppCompatActivity {
             accountTIL = findViewById(R.id.accountTIL);
             accountET = findViewById(R.id.accountET);
 
-            dashboardViewModel.mePreferences();
+            //dashboardViewModel.mePreferences();
 
         } catch (Exception e) {
             e.printStackTrace();

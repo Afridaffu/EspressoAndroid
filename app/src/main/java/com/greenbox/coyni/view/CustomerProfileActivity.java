@@ -44,16 +44,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
     View viewFaceBottom;
     ImageView imgQRCode;
     ProgressDialog dialog;
-//    Dialog dialog;
     TextView customerNameTV, tvACStatus;
     MyApplication objMyApplication;
     CardView cvLogout;
-    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn;
-    boolean isSwitchEnabled = false;
-    LinearLayout  cpPreferencesLL;
+    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
     CoyniViewModel coyniViewModel;
+    Boolean isSwitchEnabled = false;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
 
     @Override
@@ -81,11 +79,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPaymentMethodsLL = findViewById(R.id.cpPaymentMethodsLL);
             tvACStatus = findViewById(R.id.tvACStatus);
             cpResetPin = findViewById(R.id.cpResetPin);
-            cpAccountLimitsLL=findViewById(R.id.cpAccountLimitsLL);
-            cpAgreementsLL=findViewById(R.id.cpAgreementsLL);
-            switchOff=findViewById(R.id.switchOff);
-            switchOn=findViewById(R.id.switchOn);
-            cpChangePasswordLL=findViewById(R.id.cpChangePassword);
+            cpAccountLimitsLL = findViewById(R.id.cpAccountLimitsLL);
+            cpAgreementsLL = findViewById(R.id.cpAgreementsLL);
+            switchOff = findViewById(R.id.switchOff);
+            switchOn = findViewById(R.id.switchOn);
+            cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -111,8 +109,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     try {
                         dropAllTables();
                         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                         finishAffinity();
                     } catch (Exception ex) {
@@ -126,9 +123,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
-                        .putExtra("TYPE","ENTER")
-                        .putExtra("screen","ChangePassword");
+                Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("screen", "ChangePassword");
                 startActivity(i);
 
             });
@@ -136,7 +133,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOff.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    isSwitchEnabled=true;
+                    isSwitchEnabled = true;
                     switchOff.setVisibility(View.GONE);
                     switchOn.setVisibility(View.VISIBLE);
                     isSwitchEnable();
@@ -145,7 +142,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    isSwitchEnabled=false;
+                    isSwitchEnabled = false;
                     switchOn.setVisibility(View.GONE);
                     switchOff.setVisibility(View.VISIBLE);
                     isSwitchEnable();
@@ -155,13 +152,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpAgreementsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(CustomerProfileActivity.this,AgreementsActivity.class));
+                    startActivity(new Intent(CustomerProfileActivity.this, AgreementsActivity.class));
                 }
             });
             cpAccountLimitsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(CustomerProfileActivity.this,AccountLimitsActivity.class));
+                    startActivity(new Intent(CustomerProfileActivity.this, AccountLimitsActivity.class));
                 }
             });
 
