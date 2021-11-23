@@ -1,12 +1,9 @@
 package com.greenbox.coyni.model;
 
-
-
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-    public class Item {
+public class Item {
 
         @SerializedName("id")
         @Expose
@@ -93,7 +90,8 @@ import com.google.gson.annotations.SerializedName;
             return documentVersion;
         }
 
-        public void setDocumentVersion(String documentVersion) {
-            this.documentVersion = documentVersion;
-        }
+    public void setDocumentVersion(String documentVersion) {
+        this.documentVersion = documentVersion;
     }
+}
+

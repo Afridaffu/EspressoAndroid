@@ -15,12 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
-import com.greenbox.coyni.model.AgreementsData;
-import com.greenbox.coyni.model.AgreementsPdf;
-import com.greenbox.coyni.view.PdfViewAgreementsActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
-import java.util.List;
 
 public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyViewHolder> {
 

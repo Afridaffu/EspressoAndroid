@@ -6,11 +6,11 @@
 
     <LinearLayout
         android:id="@+id/lyClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="@dimen/_21sdp"
         android:layout_marginTop="?attr/actionBarSize"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView

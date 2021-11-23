@@ -65,11 +65,14 @@ public class FaceIdNotAvailable_BottomSheet extends BottomSheetDialogFragment {
 //        return inflater.inflate(R.layout.fragment_face_id_not_available__bottom_sheet, container, false);
         View view = inflater.inflate(R.layout.fragment_face_id_not_available__bottom_sheet, container, false);
         TextView tvHead = view.findViewById(R.id.tvHead);
+        TextView message = view.findViewById(R.id.tvMessage);
         CardView cvOK = view.findViewById(R.id.cvOK);
         if (Utils.getIsTouchEnabled()) {
             tvHead.setText("Touch ID Not available");
+            message.setText(getResources().getString(R.string.touchidnotavaidescri));
         } else if (Utils.getIsFaceEnabled()) {
             tvHead.setText("Face ID Not available");
+            message.setText(getResources().getString(R.string.faceidnotavaidescri));
         }
         cvOK.setOnClickListener(new View.OnClickListener() {
             @Override
