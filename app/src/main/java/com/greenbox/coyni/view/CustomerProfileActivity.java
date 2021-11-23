@@ -45,8 +45,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode;
     ProgressDialog dialog;
     TextView customerNameTV;
+    Dialog dialog;
+    TextView customerNameTV, tvACStatus;
     MyApplication objMyApplication;
     CardView cvLogout;
+    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn;
     LinearLayout switchOff, switchOn;
     boolean isSwitchEnabled = false;
     LinearLayout cpUserDetailsLL, cpResetPin, cpPreferencesLL;
@@ -54,6 +57,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     SQLiteDatabase mydatabase;
     CoyniViewModel coyniViewModel;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
+    Boolean isSwitchEnabled=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPreferencesLL = findViewById(R.id.cpPreferencesLL);
             switchOff = findViewById(R.id.switchOff);
             switchOn = findViewById(R.id.switchOn);
+            cpPaymentMethodsLL = findViewById(R.id.cpPaymentMethodsLL);
+            tvACStatus = findViewById(R.id.tvACStatus);
             cpResetPin = findViewById(R.id.cpResetPin);
+            cpAccountLimitsLL=findViewById(R.id.cpAccountLimitsLL);
+            cpAgreementsLL=findViewById(R.id.cpAgreementsLL);
+            switchOff=findViewById(R.id.switchOff);
+            switchOn=findViewById(R.id.switchOn);
+            cpChangePasswordLL=findViewById(R.id.cpChangePassword);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -113,6 +124,56 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             });
 
+            cpChangePasswordLL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
+                        .putExtra("TYPE","ENTER")
+                        .putExtra("screen","ChangePassword");
+                startActivity(i);
+
+            });
+
+            switchOff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isSwitchEnabled=true;
+                    switchOff.setVisibility(View.GONE);
+                    switchOn.setVisibility(View.VISIBLE);
+                    isSwitchEnable();
+                }
+            });
+            switchOn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isSwitchEnabled=false;
+                    switchOn.setVisibility(View.GONE);
+                    switchOff.setVisibility(View.VISIBLE);
+                    isSwitchEnable();
+                }
+            });
+
+            cpAgreementsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this,AgreementsActivity.class));
+                }
+            });
+            cpAccountLimitsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this,AccountLimitsActivity.class));
+                }
+            });
+
+            customerNameTV.setText(objMyApplication.getStrUserName());
+            if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+                tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+            } else {
+                tvACStatus.setText("");
+            }
             if (objMyApplication.getStrUserName().length() > 21) {
                 customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
             } else {
@@ -122,11 +183,26 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpUserDetailsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                }
+            });
+
+            cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -142,6 +218,30 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             .putExtra("screen", "ResetPIN"));
                 }
             });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void isSwitchEnable() {
+        if (isSwitchEnabled){
+            Toast.makeText(CustomerProfileActivity.this, "Switch On", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(CustomerProfileActivity.this, "Switch Off", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayQRCode() {
+        try {
+            ImageView imgClose;
+            dialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.profileqrcode);
+            Window window = dialog.getWindow();
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            window.setGravity(Gravity.CENTER);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
 
             cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
                 @Override

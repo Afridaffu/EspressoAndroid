@@ -47,6 +47,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     public LinearLayout phoneErrorLL, firstNameErrorLL, lastNameErrorLL;
     public TextView phoneErrorTV, firstNameErrorTV, lastNameErrorTV;
     private long mLastClickTime = 0;
+    Boolean isDel = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        if (after < count) {
+            isDel = true;
+        }
     }
 
     @Override
@@ -95,12 +98,14 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                     firstNameErrorLL.setVisibility(GONE);
                 }
                 String str = firstName.getText().toString();
-                if (str.length() > 0) {
+                if (str.length() > 0 && !isDel) {
                     firstName.removeTextChangedListener(RetrieveEmailActivity.this);
                     firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
                     firstName.setSelection(firstName.getText().toString().trim().length());
                     firstName.addTextChangedListener(RetrieveEmailActivity.this);
 
+                } else {
+                    isDel = false;
                 }
                 enableButton();
             } catch (Exception ex) {
@@ -112,12 +117,14 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                     lastNameErrorLL.setVisibility(GONE);
                 }
                 String str = lastName.getText().toString();
-                if (str.length() > 0) {
+                if (str.length() > 0 && !isDel) {
                     lastName.removeTextChangedListener(RetrieveEmailActivity.this);
                     lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
                     lastName.setSelection(lastName.getText().length());
                     lastName.addTextChangedListener(RetrieveEmailActivity.this);
 
+                } else {
+                    isDel = false;
                 }
                 enableButton();
             } catch (Exception ex) {
@@ -193,7 +200,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             firstNameErrorLL.setVisibility(GONE);
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
-                        } else  {
+                        } else {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);

@@ -254,18 +254,23 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     finish();
                                     break;
                                 case "ResetPIN":
-                                    if(resetPINValue.equals("CHOOSE")){
+                                    if (resetPINValue.equals("CHOOSE")) {
                                         tvHead.setText("Choose your PIN");
                                         tvForgot.setVisibility(View.GONE);
                                         passcode = "";
                                         resetPINValue = "CONFIRM";
                                         clearPassCode();
                                         TYPE = "CHOOSE";
-                                    }else{
+                                    } else {
                                         tvHead.setText("Confirm your PIN");
                                         tvForgot.setVisibility(View.GONE);
                                         passcode = "";
                                     }
+                                    break;
+                                case "ChangePassword":
+                                    Intent cp = new Intent(PINActivity.this, ConfirmPasswordActivity.class);
+                                    startActivity(cp);
+                                    finish();
                                     break;
                             }
                         } else {
@@ -305,8 +310,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 }
                             }, 2000);
 
-                        }else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
-                            Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
+//                            Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
                             Intent d = new Intent(PINActivity.this, DashboardActivity.class);
                             d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             PINActivity.this.startActivity(d);
@@ -412,7 +417,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.imgBack:
                 if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
                         || getIntent().getStringExtra("screen").equals("loginExpiry") ||
-                        getIntent().getStringExtra("screen").equals("UserDetails"))) {
+                        getIntent().getStringExtra("screen").equals("UserDetails") || getIntent().getStringExtra("screen").equals("ChangePassword"))) {
                     onBackPressed();
                 } else {
                     if (TYPE.equals("CHOOSE")) {
@@ -577,6 +582,17 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    clearControls();
+                    passcode = "";
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }, 2000);
     }
 
     public void setErrorPINMismatch(String strChoose, String strConfirm) {
