@@ -44,20 +44,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
     View viewFaceBottom;
     ImageView imgQRCode;
     ProgressDialog dialog;
-    TextView customerNameTV;
-    Dialog dialog;
+//    Dialog dialog;
     TextView customerNameTV, tvACStatus;
     MyApplication objMyApplication;
     CardView cvLogout;
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn;
-    LinearLayout switchOff, switchOn;
     boolean isSwitchEnabled = false;
-    LinearLayout cpUserDetailsLL, cpResetPin, cpPreferencesLL;
+    LinearLayout  cpPreferencesLL;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
     CoyniViewModel coyniViewModel;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
-    Boolean isSwitchEnabled=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,77 +220,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void isSwitchEnable() {
-        if (isSwitchEnabled){
-            Toast.makeText(CustomerProfileActivity.this, "Switch On", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(CustomerProfileActivity.this, "Switch Off", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void displayQRCode() {
-        try {
-            ImageView imgClose;
-            dialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.profileqrcode);
-            Window window = dialog.getWindow();
-            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            window.setGravity(Gravity.CENTER);
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-
-            cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(CustomerProfileActivity.this, PreferencesActivity.class));
-                }
-            });
-
-            switchOff.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    isSwitchEnabled = true;
-                    switchOff.setVisibility(View.GONE);
-                    switchOn.setVisibility(View.VISIBLE);
-                    isSwitchEnable();
-                }
-            });
-            switchOn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    isSwitchEnabled = false;
-                    switchOn.setVisibility(View.GONE);
-                    switchOff.setVisibility(View.VISIBLE);
-                    isSwitchEnable();
-                }
-            });
-
-            if (objMyApplication.getBiometric()) {
-                isSwitchEnabled = true;
-                switchOff.setVisibility(View.GONE);
-                switchOn.setVisibility(View.VISIBLE);
-            } else {
-                isSwitchEnabled = false;
-                switchOn.setVisibility(View.GONE);
-                switchOff.setVisibility(View.VISIBLE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
 //    private void displayQRCode() {
 //        try {

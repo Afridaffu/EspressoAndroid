@@ -55,6 +55,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public void setApiErrorMutableLiveData(MutableLiveData<APIError> apiErrorMutableLiveData) {
         this.apiErrorMutableLiveData = apiErrorMutableLiveData;
+    }
     public void setAgreementsPdfMutableLiveData(MutableLiveData<AgreementsPdf> agreementsPdfMutableLiveData) {
         this.agreementsPdfMutableLiveData = agreementsPdfMutableLiveData;
     }
