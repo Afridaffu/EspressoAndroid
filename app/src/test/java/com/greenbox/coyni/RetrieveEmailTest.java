@@ -51,6 +51,7 @@ public class RetrieveEmailTest {
     {
         String otp = "423234";
         assertTrue(otp.length() == 6 );
+        assertEquals("423234", otp);
     }
     @Test
     public void otpIsEmpty()
