@@ -522,7 +522,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
 
                     }else{
-                        Utils.displayAlertNew(changePassword.getError().getErrorDescription(),CreatePasswordActivity.this);
+                        Utils.displayAlertNew(changePassword.getError().getErrorDescription(),CreatePasswordActivity.this,"");
                     }
                 }
 
@@ -536,7 +536,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getStatus().equals("SUCCESS")) {
-                        Utils.displayAlertNew(apiError.getError().getErrorDescription(),CreatePasswordActivity.this);
+                        Utils.displayAlertNew(apiError.getError().getErrorDescription(),CreatePasswordActivity.this,"");
                     }
                 }
             }

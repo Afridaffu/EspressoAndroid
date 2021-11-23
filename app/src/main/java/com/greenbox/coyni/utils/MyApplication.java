@@ -144,7 +144,6 @@ public class MyApplication extends Application {
         this.strRetrEmail = strRetrEmail;
     }
 
-    private String fromWhichFragment;
 
     public String getFromWhichFragment() {
         return fromWhichFragment;

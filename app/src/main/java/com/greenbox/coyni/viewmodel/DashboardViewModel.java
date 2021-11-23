@@ -197,148 +197,13 @@ public class DashboardViewModel extends AndroidViewModel {
                 }
             });
 
-    public void mePaymentMethods() {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<PaymentMethodsResponse> mCall = apiService.mePaymentMethods();
-            mCall.enqueue(new Callback<PaymentMethodsResponse>() {
-                @Override
-                public void onResponse(Call<PaymentMethodsResponse> call, Response<PaymentMethodsResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            PaymentMethodsResponse obj = response.body();
-                            paymentMethodsResponseMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<PaymentMethodsResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+
+
         }
-    }
-
-    public void updateProfile(MultipartBody.Part body) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ImageResponse> mCall = apiService.updateProfile(body);
-            mCall.enqueue(new Callback<ImageResponse>() {
-                @Override
-                public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            ImageResponse obj = response.body();
-                            imageResponseMutableLiveData.setValue(obj);
-                            Log.e("success","success");
-                        } else {
-                            Log.e("failed","failed");
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ImageResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
+        catch (Exception ex){
             ex.printStackTrace();
-        }
-    }
-
-    public void removeImage(String filename) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ImageResponse> mCall = apiService.removeImage(filename);
-            mCall.enqueue(new Callback<ImageResponse>() {
-                @Override
-                public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            ImageResponse obj = response.body();
-                            imageResponseMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ImageResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void meWallet() {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<WalletResponse> mCall = apiService.meWallet();
-            mCall.enqueue(new Callback<WalletResponse>() {
-                @Override
-                public void onResponse(Call<WalletResponse> call, Response<WalletResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            WalletResponse obj = response.body();
-                            walletResponseMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<WalletResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
         }
 
 
@@ -380,5 +245,143 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
 
+    }
+    public void meWallet() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<WalletResponse> mCall = apiService.meWallet();
+            mCall.enqueue(new Callback<WalletResponse>() {
+                @Override
+                public void onResponse(Call<WalletResponse> call, Response<WalletResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            WalletResponse obj = response.body();
+                            walletResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WalletResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void mePaymentMethods() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<PaymentMethodsResponse> mCall = apiService.mePaymentMethods();
+            mCall.enqueue(new Callback<PaymentMethodsResponse>() {
+                @Override
+                public void onResponse(Call<PaymentMethodsResponse> call, Response<PaymentMethodsResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            PaymentMethodsResponse obj = response.body();
+                            paymentMethodsResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PaymentMethodsResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void removeImage(String filename) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ImageResponse> mCall = apiService.removeImage(filename);
+            mCall.enqueue(new Callback<ImageResponse>() {
+                @Override
+                public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            ImageResponse obj = response.body();
+                            imageResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ImageResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void updateProfile(MultipartBody.Part body) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ImageResponse> mCall = apiService.updateProfile(body);
+            mCall.enqueue(new Callback<ImageResponse>() {
+                @Override
+                public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            ImageResponse obj = response.body();
+                            imageResponseMutableLiveData.setValue(obj);
+                            Log.e("success","success");
+                        } else {
+                            Log.e("failed","failed");
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ImageResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
