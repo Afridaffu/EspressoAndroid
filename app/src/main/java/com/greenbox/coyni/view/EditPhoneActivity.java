@@ -65,6 +65,7 @@ public class EditPhoneActivity extends AppCompatActivity {
             editPhoneActivity = this;
             currentPhoneET = findViewById(R.id.currentPhoneET);
             currentPhoneET.setHint("Current Phone Number");
+            currentPhoneET.disable();
             newPhoneET = findViewById(R.id.newPhoneET);
             newPhoneET.setHint("Phone Number");
             editPhoneSV = findViewById(R.id.editPhoneSV);

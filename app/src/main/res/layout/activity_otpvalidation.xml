@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_38sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="We sent you 6-digit code to the register phone number"
+            android:text="We sent you 6-digit code to the registered phone number"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 

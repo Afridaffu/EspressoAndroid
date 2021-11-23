@@ -12,6 +12,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 //import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.preferences.Preferences;
+import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.Agreements;
@@ -46,6 +49,12 @@ public class DashboardViewModel extends AndroidViewModel {
         return agreementsPdfMutableLiveData;
     }
 
+    private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Preferences> preferenceMutableLiveData = new MutableLiveData<>();
+
+
+    public void setApiErrorMutableLiveData(MutableLiveData<APIError> apiErrorMutableLiveData) {
+        this.apiErrorMutableLiveData = apiErrorMutableLiveData;
     public void setAgreementsPdfMutableLiveData(MutableLiveData<AgreementsPdf> agreementsPdfMutableLiveData) {
         this.agreementsPdfMutableLiveData = agreementsPdfMutableLiveData;
     }
@@ -90,6 +99,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<WalletResponse> getWalletResponseMutableLiveData() {
         return walletResponseMutableLiveData;
+    }
+
+    public MutableLiveData<Preferences> getPreferenceMutableLiveData() {
+        return preferenceMutableLiveData;
     }
 
     public void meProfile() {
@@ -384,4 +397,42 @@ public class DashboardViewModel extends AndroidViewModel {
         }
 
     }
+
+    public void mePreferences() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<Preferences> mCall = apiService.mePreferences();
+            mCall.enqueue(new Callback<Preferences>() {
+                @Override
+                public void onResponse(Call<Preferences> call, Response<Preferences> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            Preferences obj = response.body();
+                            preferenceMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<Preferences>() {
+                            }.getType();
+                            Preferences errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                preferenceMutableLiveData.setValue(errorResponse);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Preferences> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
