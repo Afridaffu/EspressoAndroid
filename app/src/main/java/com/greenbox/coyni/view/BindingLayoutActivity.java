@@ -27,14 +27,14 @@ import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout llCoyniAct, lyClose;
+    LinearLayout lyClose;
     TextView tvEmail;
     MyApplication objMyApplication;
-    CardView reTryAgainBtn,btnChangePassCV;
-    CardView reTryAgainBtn,editEmailLogoutCV;
+    CardView reTryAgainBtn, btnChangePassCV, editEmailLogoutCV;
     SQLiteDatabase mydatabase;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -52,39 +52,26 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            llCoyniAct = findViewById(R.id.llCoyniAct);
             lyClose = findViewById(R.id.lyClose);
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
             retEmailRV = findViewById(R.id.retEmailRV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            btnChangePassCV=findViewById(R.id.btnCV);
+            btnChangePassCV = findViewById(R.id.btnCV);
             objMyApplication = (MyApplication) getApplicationContext();
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
                 usersData = objMyApplication.getObjRetUsers().getData();
                 if (usersData != null && usersData.size() > 0) {
-                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
-                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
-                    retEmailAdapter = new RetEmailAdapter(usersData,this);
+                    retEmailAdapter = new RetEmailAdapter(usersData, this);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
                     retEmailRV.setLayoutManager(mLayoutManager);
                     retEmailRV.setItemAnimator(new DefaultItemAnimator());
                     retEmailRV.setAdapter(retEmailAdapter);
-
-//                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
-//                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
-//            llCoyniAct.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(i);
-//                }
-//            });
+
             btnChangePassCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -95,14 +82,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            llCoyniAct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                }
-            });
+
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -22,13 +22,8 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.model.Agreements;
-import com.greenbox.coyni.model.AgreementsData;
-import com.greenbox.coyni.model.AgreementsPdf;
-import com.greenbox.coyni.model.Item;
-import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-import java.util.List;
 
 public class AgreementsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;

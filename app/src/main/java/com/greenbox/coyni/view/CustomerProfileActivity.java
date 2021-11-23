@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -27,17 +28,17 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class CustomerProfileActivity extends AppCompatActivity {
-    LabeledSwitch labeledSwitch;
     View viewFaceBottom;
     ImageView imgQRCode;
     Dialog dialog;
     TextView customerNameTV, tvACStatus;
     MyApplication objMyApplication;
     CardView cvLogout;
-    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin;
+    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
     CoyniViewModel coyniViewModel;
+    Boolean isSwitchEnabled=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_customer_profile);
             initialization();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -53,7 +53,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            labeledSwitch = findViewById(R.id.switchbtn);
             viewFaceBottom = findViewById(R.id.viewSetupFaceBottom);
             imgQRCode = findViewById(R.id.imgQRCode);
             customerNameTV = findViewById(R.id.customerNameTV);
@@ -62,6 +61,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPaymentMethodsLL = findViewById(R.id.cpPaymentMethodsLL);
             tvACStatus = findViewById(R.id.tvACStatus);
             cpResetPin = findViewById(R.id.cpResetPin);
+            cpAccountLimitsLL=findViewById(R.id.cpAccountLimitsLL);
+            cpAgreementsLL=findViewById(R.id.cpAgreementsLL);
+            switchOff=findViewById(R.id.switchOff);
+            switchOn=findViewById(R.id.switchOn);
+            cpChangePasswordLL=findViewById(R.id.cpChangePassword);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -72,8 +76,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
                 }
             });
-            labeledSwitch.setOnToggledListener((labeledSwitch, isOn) -> {
-            });
+
             imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -94,6 +97,50 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            cpChangePasswordLL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
+                        .putExtra("TYPE","ENTER")
+                        .putExtra("screen","ChangePassword");
+                startActivity(i);
+
+            });
+
+            switchOff.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isSwitchEnabled=true;
+                    switchOff.setVisibility(View.GONE);
+                    switchOn.setVisibility(View.VISIBLE);
+                    isSwitchEnable();
+                }
+            });
+            switchOn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isSwitchEnabled=false;
+                    switchOn.setVisibility(View.GONE);
+                    switchOff.setVisibility(View.VISIBLE);
+                    isSwitchEnable();
+                }
+            });
+
+            cpAgreementsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this,AgreementsActivity.class));
+                }
+            });
+            cpAccountLimitsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CustomerProfileActivity.this,AccountLimitsActivity.class));
                 }
             });
 
@@ -148,6 +195,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void isSwitchEnable() {
+        if (isSwitchEnabled){
+            Toast.makeText(CustomerProfileActivity.this, "Switch On", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(CustomerProfileActivity.this, "Switch Off", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void displayQRCode() {
         try {
             ImageView imgClose;
@@ -199,8 +255,4 @@ public class CustomerProfileActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
-
-
-    
 }
