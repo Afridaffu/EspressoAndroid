@@ -831,6 +831,7 @@ public class OTPValidation extends AppCompatActivity {
 //        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 //        mLastClickTime = 0L;
 
+//        otpPV.setText("");
         otpPV.requestFocus();
         new Handler().post(new Runnable() {
             @Override
