@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -24,13 +23,11 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.utils.Utils;
@@ -39,7 +36,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class RetrieveEmailActivity extends AppCompatActivity implements TextWatcher {
     OutLineBoxPhoneNumberEditText phoneNumberET;
-    MaterialCardView nextBtn;
+    CardView nextBtn;
     TextInputEditText firstName, lastName;
     TextInputLayout firstTIL, lastTIL;
     LinearLayout layoutClose, layoutMain;
@@ -169,7 +166,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             if (Utils.checkInternet(RetrieveEmailActivity.this)) {
                                 retrieveEmail();
                             } else {
-                                Utils.displayAlert(getString(R.string.internet), RetrieveEmailActivity.this);
+                                Utils.displayAlert(getString(R.string.internet), RetrieveEmailActivity.this, "");
                             }
                         }
                     } catch (Exception ex) {
@@ -261,7 +258,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                                 emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
-                            Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this);
+                            Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this, "");
                         }
                     }
                 }

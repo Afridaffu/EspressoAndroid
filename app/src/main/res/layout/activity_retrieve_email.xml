@@ -213,7 +213,7 @@
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/reCardViewNextBtn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_44sdp"
@@ -230,7 +230,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
             <View
                 android:layout_width="match_parent"

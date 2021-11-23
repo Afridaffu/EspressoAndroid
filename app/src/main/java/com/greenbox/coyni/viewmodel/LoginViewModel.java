@@ -23,6 +23,8 @@ import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -68,6 +70,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateEmailResponse> updateEmailValidateResponse = new MutableLiveData<>();
+    private MutableLiveData<UpdatePhoneResponse> updatePhoneValidateResponse = new MutableLiveData<>();
     private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailExistsResponse> emailExistsResponseMutableLiveData = new MutableLiveData<>();
 
@@ -141,6 +144,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<UpdateEmailResponse> getUpdateEmailValidateResponse() {
         return updateEmailValidateResponse;
+    }
+
+    public MutableLiveData<UpdatePhoneResponse> getUpdatePhoneValidateResponse() {
+        return updatePhoneValidateResponse;
     }
 
     public MutableLiveData<EmailExistsResponse> getEmailExistsResponseMutableLiveData() {
@@ -607,6 +614,38 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<UpdateEmailResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updatePhoneotpValidate(UpdatePhoneValidateRequest updatePhoneValidateRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdatePhoneResponse> mCall = apiService.updatePhoneValidateOTP(updatePhoneValidateRequest);
+            mCall.enqueue(new Callback<UpdatePhoneResponse>() {
+                @Override
+                public void onResponse(Call<UpdatePhoneResponse> call, Response<UpdatePhoneResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdatePhoneResponse obj = response.body();
+                        updatePhoneValidateResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<EmailValidateResponse>() {
+                        }.getType();
+                        UpdatePhoneResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updatePhoneValidateResponse.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdatePhoneResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

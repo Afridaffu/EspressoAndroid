@@ -4,17 +4,13 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -31,34 +27,24 @@ import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Base64;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -67,25 +53,13 @@ import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
-import com.greenbox.coyni.utils.CutCopyPasteEditText;
-import com.greenbox.coyni.utils.EmojiExcludeFilter;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.crypto.Cipher;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -94,11 +68,11 @@ public class CreateAccountActivity extends AppCompatActivity {
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
     public LinearLayout emailErrorLL, phoneErrorLL, firstNameErrorLL, lastNameErrorLL, passwordErrorLL, confPassErrorLL;
     public TextView emailErrorTV, phoneErrorTV, firstNameErrorTV, lastNameErrorTV, passwordErrorTV, confPassErrorTV;
-    TextView passwordInfoTV, spannableText;
+    TextView passwordInfoTV, spannableText,privacyPolicyTV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
-    public MaterialCardView nextCV;
+    public CardView nextCV;
     Long mLastClickTime = 0L;
 
     private LinearLayout stregnthViewLL;
@@ -143,7 +117,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
             initFields();
-            intiObserver();
+            initObservers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,6 +158,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             passwordInfoTV = findViewById(R.id.passwordInfoTV);
             spannableText = findViewById(R.id.spannableTV);
+            privacyPolicyTV = findViewById(R.id.privacyTV);
             nextCV = findViewById(R.id.nextCV);
             layoutClose = findViewById(R.id.layoutClose);
             createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
@@ -311,7 +286,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
-    private void intiObserver() {
+    private void initObservers() {
 
         loginViewModel.getCustRegisResponseMutableLiveData().observe(this, new Observer<CustRegisterResponse>() {
             @Override
@@ -385,7 +360,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         isPhoneError = false;
                         phoneErrorLL.setVisibility(GONE);
                         emailErrorLL.setVisibility(GONE);
-                        Utils.displayAlert(s, CreateAccountActivity.this);
+                        Utils.displayAlert(s, CreateAccountActivity.this, "");
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -428,7 +403,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                         isFirstName = true;
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        firstNameTIL.setHintTextColor(colorState);
+                        Utils.setUpperHintColor(firstNameTIL,getResources().getColor(R.color.primary_green));
+//                        firstNameTIL.setHintTextColor(colorState);
                     } else {
                         isFirstName = false;
                     }
@@ -440,10 +416,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                     try {
                         String str = firstNameET.getText().toString();
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
-                            firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
+                            firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
-                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
-                            firstNameET.setText(firstNameET.getText().toString().replaceAll(".", ""));
+                        } else if (str.length() > 0 && str.contains(" ")) {
+                            firstNameET.setText(str.replaceAll(" ", ""));
+                            firstNameET.setSelection(firstNameET.getText().length());
+                        }else if (str.length() > 0 && str.contains(".")) {
+                            firstNameET.setText(lastNameET.getText().toString().replaceAll("\\.", ""));
+                            firstNameET.setSelection(firstNameET.getText().length());
+                        }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
                         }
 
@@ -465,7 +447,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                         isLastName = true;
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        lastNameTIL.setHintTextColor(colorState);
+                        Utils.setUpperHintColor(lastNameTIL,getResources().getColor(R.color.primary_green));
+//                        lastNameTIL.setHintTextColor(colorState);
                     } else {
                         isLastName = false;
                     }
@@ -502,7 +485,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         isEmailError = false;
                         emailErrorLL.setVisibility(GONE);
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        emailTIL.setHintTextColor(colorState);
+//                        emailTIL.setHintTextColor(colorState);
+                        Utils.setUpperHintColor(emailTIL,getResources().getColor(R.color.primary_green));
+
                     } else if (emailET.getText().toString().trim().length() == 0) {
                         emailErrorLL.setVisibility(VISIBLE);
                         emailErrorTV.setText("Field Required");
@@ -787,6 +772,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                            passwordTIL.setHint("Password doesn’t match");
+                            confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
@@ -821,6 +808,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+                            passwordTIL.setHint("Password doesn’t match");
+                            confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
@@ -984,7 +973,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void setSpannableText() {
 
-        SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & Privacy Policy");
+        SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & ");
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -1011,10 +1000,11 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         };
 
-        ClickableSpan clickableSpan2 = new ClickableSpan() {
+        privacyPolicyTV.setText("Privacy Policy");
+        privacyPolicyTV.setPaintFlags(privacyPolicyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        privacyPolicyTV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View textView) {
-                Log.e("Click", "click");
+            public void onClick(View view) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -1027,19 +1017,26 @@ public class CreateAccountActivity extends AppCompatActivity {
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
+        });
+//        ClickableSpan clickableSpan2 = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("Click", "click");
+//
+//
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
         ss.setSpan(clickableSpan, 31, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 49, 63, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 49, 63, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 
         spannableText.setText(ss);

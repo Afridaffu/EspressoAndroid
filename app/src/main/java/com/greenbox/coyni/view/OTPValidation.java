@@ -18,7 +18,6 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -29,24 +28,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneValidateRequest;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
-import com.greenbox.coyni.model.register.InitCustomerRequest;
 import com.greenbox.coyni.model.register.InitializeCustomerResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
@@ -59,7 +57,6 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,13 +66,14 @@ public class OTPValidation extends AppCompatActivity {
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
     private Vibrator vibrator;
-    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "", oldEmail = "", newEmail = "", isOldEmail = "";
+    String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "",
+            oldEmail = "", newEmail = "", isOldEmail = "", oldPhone = "", newPhone = "", oldPhoneMasked = "", newPhoneMasked = "", isOldPhone = "";
     LinearLayout layoutEntry, layoutFailure, layoutMain;
-    MaterialCardView tryAgainCV;
+    CardView tryAgainCV;
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
-    MaterialCardView secureNextCV;
+    CardView secureNextCV;
     MyApplication objMyApplication;
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails;
@@ -99,6 +97,7 @@ public class OTPValidation extends AppCompatActivity {
             IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
             registerReceiver(smsVerificationReceiver, intentFilter);
 
+            layoutType = "OTP";
             OTP_TYPE = getIntent().getStringExtra("OTP_TYPE");
             MOBILE = getIntent().getStringExtra("MOBILE");
             EMAIL = getIntent().getStringExtra("EMAIL");
@@ -167,12 +166,13 @@ public class OTPValidation extends AppCompatActivity {
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
                             headerTV.setText("Please Verify Your Phone Number");
-                            subHeaderTV.setText("We have sent you 6 digits code to the registered phone number " + maskedPhone);
+                            subHeaderTV.setText("We have sent you 6-digit code to the registered phone number " + maskedPhone);
                         }
-                        SMSResend resend = new SMSResend();
-                        resend.setCountryCode(Utils.getStrCCode());
-                        resend.setPhoneNumber(MOBILE);
-                        loginViewModel.smsotpresend(resend);
+                        resendCounter = resendCounter+1;
+//                        SMSResend resend = new SMSResend();
+//                        resend.setCountryCode(Utils.getStrCCode());
+//                        resend.setPhoneNumber(MOBILE);
+//                        loginViewModel.smsotpresend(resend);
                         break;
                     case "EditEmail":
                         isOldEmail = getIntent().getStringExtra("IS_OLD_EMAIL");
@@ -185,7 +185,24 @@ public class OTPValidation extends AppCompatActivity {
                         } else {
                             headerTV.setText("Please Verify New Email");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + newEmail);
-                            loginViewModel.emailotpresend(newEmail);
+//                            loginViewModel.emailotpresend(newEmail);
+                        }
+                        break;
+                    case "EditPhone":
+                        isOldPhone = getIntent().getStringExtra("IS_OLD_PHONE");
+                        oldPhone = getIntent().getStringExtra("OLD_PHONE");
+                        newPhone = getIntent().getStringExtra("NEW_PHONE");
+                        oldPhoneMasked = getIntent().getStringExtra("OLD_PHONE_MASKED");
+                        newPhoneMasked = getIntent().getStringExtra("NEW_PHONE_MASKED");
+
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
+                        if (isOldPhone.equals("true")) {
+                            headerTV.setText("Please Verify Your Current Phone Number");
+                            subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + oldPhoneMasked);
+                        } else {
+                            headerTV.setText("Please Verify Your New Phone Number");
+                            subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + newPhoneMasked);
+//                            loginViewModel.emailotpresend(newEmail);
                         }
                         break;
                 }
@@ -222,6 +239,19 @@ public class OTPValidation extends AppCompatActivity {
                             SMSResend resend = new SMSResend();
                             resend.setCountryCode(Utils.getStrCCode());
                             resend.setPhoneNumber(MOBILE);
+                            loginViewModel.smsotpresend(resend);
+                        } else if (strScreen.equals("EditEmail")) {
+                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                            dialog.setIndeterminate(false);
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                            SMSResend resend = new SMSResend();
+                            resend.setCountryCode(Utils.getStrCCode());
+                            if (isOldPhone.equals("true")) {
+                                resend.setPhoneNumber(oldPhone);
+                            } else {
+                                resend.setPhoneNumber(newPhone);
+                            }
                             loginViewModel.smsotpresend(resend);
                         }
                     } else {
@@ -307,6 +337,31 @@ public class OTPValidation extends AppCompatActivity {
                                         updateEmailValidateRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
                                         updateEmailValidateRequest.setOtp(charSequence.toString().trim());
                                         loginViewModel.updateEmailotpValidate(updateEmailValidateRequest);
+                                    }
+                                }
+                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditPhone")) {
+                                if (charSequence.length() == 6) {
+                                    Utils.hideKeypad(OTPValidation.this);
+                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
+                                    dialog.setIndeterminate(false);
+                                    dialog.setMessage("Please wait...");
+                                    dialog.show();
+                                    if (isOldPhone.equals("true")) {
+                                        UpdatePhoneValidateRequest updatePhoneValidateRequest = new UpdatePhoneValidateRequest();
+                                        updatePhoneValidateRequest.setCountryCode(Utils.getStrCCode());
+                                        updatePhoneValidateRequest.setCurrentNumber(true);
+                                        updatePhoneValidateRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
+                                        updatePhoneValidateRequest.setOtp(charSequence.toString().trim());
+                                        updatePhoneValidateRequest.setPhoneNumber(oldPhone);
+                                        loginViewModel.updatePhoneotpValidate(updatePhoneValidateRequest);
+                                    } else {
+                                        UpdatePhoneValidateRequest updatePhoneValidateRequest = new UpdatePhoneValidateRequest();
+                                        updatePhoneValidateRequest.setCountryCode(Utils.getStrCCode());
+                                        updatePhoneValidateRequest.setCurrentNumber(false);
+                                        updatePhoneValidateRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
+                                        updatePhoneValidateRequest.setOtp(charSequence.toString().trim());
+                                        updatePhoneValidateRequest.setPhoneNumber(newPhone);
+                                        loginViewModel.updatePhoneotpValidate(updatePhoneValidateRequest);
                                     }
                                 }
                             } else {
@@ -486,9 +541,15 @@ public class OTPValidation extends AppCompatActivity {
                     if (smsValidate.getStatus().toLowerCase().equals("error")) {
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
-                        if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
-                                smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
-                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this);
+                        if (strScreen != null && strScreen.equals("login")){
+                            if(resendCounter>=5){
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                            }
+                        }else{
+                            if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
+                                    smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
+                                Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                            }
                         }
                     } else {
                         if (strScreen != null && !strScreen.equals("")) {
@@ -551,14 +612,20 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (smsResponse != null) {
                     if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("login")) {
+//                        if (strScreen != null && !strScreen.equals("") && !strScreen.equals("login")) {
                             resendTV.setVisibility(View.GONE);
                             newCodeTV.setVisibility(View.VISIBLE);
                             resendCounter++;
                             startTimer();
+//                        }
+                        if (strScreen != null && strScreen.equals("login")) {
+                            if (resendCounter >= 5) {
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                            }
                         }
+
                     } else {
-                        Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this);
+                        Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "");
                     }
                 }
 
@@ -576,7 +643,7 @@ public class OTPValidation extends AppCompatActivity {
                         resendCounter++;
                         startTimer();
                     } else {
-                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this);
+                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
                     }
                 }
             }
@@ -596,7 +663,7 @@ public class OTPValidation extends AppCompatActivity {
                         layoutEntry.setVisibility(View.GONE);
                         layoutFailure.setVisibility(View.GONE);
                     } else {
-                        Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this);
+                        Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this, "");
                     }
                 }
             }
@@ -613,7 +680,7 @@ public class OTPValidation extends AppCompatActivity {
                             startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
                                     .putExtra("screen", "retEmailfound"));
                         } else {
-                            Utils.displayAlert(retrieveUsersResponse.getError().getErrorDescription(), OTPValidation.this);
+                            Utils.displayAlert(retrieveUsersResponse.getError().getErrorDescription(), OTPValidation.this, "");
                         }
                     }
                 } catch (Exception ex) {
@@ -630,9 +697,9 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this);
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this, "");
                     } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this);
+                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this, "");
                     }
                 }
             }
@@ -651,12 +718,64 @@ public class OTPValidation extends AppCompatActivity {
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
                             resendCounter = 0;
-                            startActivity(new Intent(OTPValidation.this, OTPValidation.class)
-                                    .putExtra("screen", "EditEmail")
-                                    .putExtra("IS_OLD_EMAIL", "false")
-                                    .putExtra("OLD_EMAIL", oldEmail)
-                                    .putExtra("NEW_EMAIL", newEmail));
-                            finish();
+                            try {
+                                if (getIntent().getStringExtra("IS_OLD_EMAIL").equalsIgnoreCase("true")) {
+                                    startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                            .putExtra("screen", "EditEmail")
+                                            .putExtra("OTP_TYPE", "OTP")
+                                            .putExtra("IS_OLD_EMAIL", "false")
+                                            .putExtra("OLD_EMAIL", oldEmail)
+                                            .putExtra("NEW_EMAIL", newEmail));
+                                    finish();
+                                } else {
+                                    startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                            .putExtra("screen", "EditEmail"));
+                                    finish();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        loginViewModel.getUpdatePhoneValidateResponse().observe(this, new Observer<UpdatePhoneResponse>() {
+            @Override
+            public void onChanged(UpdatePhoneResponse updatePhoneResponse) {
+                try {
+                    dialog.dismiss();
+                    if (updatePhoneResponse != null) {
+                        if (updatePhoneResponse.getStatus().toLowerCase().equals("error")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+                        } else {
+                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                            shakeAnimateUpDown();
+                            resendCounter = 0;
+                            try {
+                                if (getIntent().getStringExtra("IS_OLD_PHONE").equalsIgnoreCase("true")) {
+                                    startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                            .putExtra("screen", "EditPhone")
+                                            .putExtra("OTP_TYPE", "OTP")
+                                            .putExtra("IS_OLD_PHONE", "false")
+                                            .putExtra("OLD_PHONE_MASKED", oldPhoneMasked)
+                                            .putExtra("NEW_PHONE_MASKED", newPhoneMasked)
+                                            .putExtra("OLD_PHONE", oldPhone)
+                                            .putExtra("NEW_PHONE", newPhone));
+                                    finish();
+                                } else {
+                                    finish();
+                                    Utils.showCustomToast(UserDetailsActivity.userDetailsActivity,"Phone number updated",R.drawable.ic_custom_tick,"EditPhone");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                 } catch (Exception ex) {
@@ -709,7 +828,7 @@ public class OTPValidation extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 //        mLastClickTime = 0L;
 
         otpPV.requestFocus();

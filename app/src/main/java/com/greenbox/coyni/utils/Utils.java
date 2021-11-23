@@ -23,20 +23,17 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.biometric.BiometricManager;
+import androidx.cardview.widget.CardView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.EnableAuthID;
@@ -259,7 +256,7 @@ public class Utils {
         return strDate;
     }
 
-    public static void displayAlert(String msg, Activity activity) {
+    public static void displayAlert(String msg, Activity activity, String header) {
 //        Context context = new ContextThemeWrapper(activity, R.style.Theme_Coyni);
 //        new MaterialAlertDialogBuilder(context)
 //                .setTitle(R.string.app_name)
@@ -269,7 +266,7 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        displayAlertNew(msg, activity);
+        displayAlertNew(msg, activity,header);
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -318,7 +315,7 @@ public class Utils {
                     context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
                 }
             } else
-                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context);
+                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context,"");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -453,36 +450,46 @@ public class Utils {
         }
     }
 
-    public static void displayAlertNew(String msg, final Context context) {
+    public static void displayAlertNew(String msg, final Context context, String headerText) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.alert_dialog);
+        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         DisplayMetrics mertics = context.getResources().getDisplayMetrics();
         int width = mertics.widthPixels;
 
-        TextView message = dialog.findViewById(R.id.textTV);
-        TextView ok = dialog.findViewById(R.id.okTV);
+        TextView header = dialog.findViewById(R.id.tvHead);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
 
-        ok.setOnClickListener(new View.OnClickListener() {
+        if(!headerText.equals("")){
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
+
         message.setText(msg);
         Window window = dialog.getWindow();
-        window.setLayout((int) (width * 0.80), WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity = Gravity.CENTER;
+        wlp.gravity = Gravity.BOTTOM;
         wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
 

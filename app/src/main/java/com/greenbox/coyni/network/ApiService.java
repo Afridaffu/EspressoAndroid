@@ -18,10 +18,15 @@ import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -38,12 +43,17 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -125,5 +135,25 @@ public interface ApiService {
 
     @GET("api/v2/user/validate-email")
     Call<EmailExistsResponse> validateEmail(@Query("email") String email);
+
+    @GET("api/v2/profile/payment-methods")
+    Call<PaymentMethodsResponse> mePaymentMethods();
+
+    @POST("api/v2/user/update-phone/otp/send")
+    Call<UpdatePhoneResponse> updatePhoneSendOTP(@Body UpdatePhoneRequest request);
+
+    @POST("api/v2/user/update-phone/otp/validate")
+    Call<UpdatePhoneResponse> updatePhoneValidateOTP(@Body UpdatePhoneValidateRequest request);
+
+    @Multipart
+    @PATCH("api/v2/profile/me/uploadImage")
+    Call<ImageResponse> updateProfile(@Part MultipartBody.Part image);
+
+    @DELETE("api/v2/profile/me/removeImage")
+    Call<ImageResponse> removeImage(@Query("filename") String filename);
+
+    @GET("api/v2/profile/me/wallets")
+    Call<WalletResponse> meWallet();
+
 
 }

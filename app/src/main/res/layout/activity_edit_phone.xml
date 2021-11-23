@@ -10,7 +10,7 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/editEmailSV"
+        android:id="@+id/editPhoneSV"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -25,10 +25,16 @@
             android:paddingTop="@dimen/_45sdp"
             android:paddingEnd="@dimen/_21sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_back" />
+            <LinearLayout
+                android:id="@+id/editPhoneCloseLL"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back" />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,37 +45,14 @@
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/currentEmailTIL"
-                style="@style/TextInputLayout.OutlinedBox"
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
+                android:id="@+id/currentPhoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_40sdp"
-                android:hint="Current Phone Number"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary_green"
-                app:errorTextColor="@color/error_red"
-                app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_green">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/currentEmailET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:hint="Current Phone Number"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:padding="@dimen/_14sdp"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/_14sdp" />
 
             <LinearLayout
-                android:id="@+id/currentEmailErrorLL"
+                android:id="@+id/currentPhoneErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -83,7 +66,7 @@
                     android:src="@drawable/ic_erro" />
 
                 <TextView
-                    android:id="@+id/currentEmailErrorTV"
+                    android:id="@+id/currentPhoneErrorTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -93,37 +76,14 @@
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/newEmailTIL"
-                style="@style/TextInputLayout.OutlinedBox"
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
+                android:id="@+id/newPhoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:hint="Phone Number"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary_green"
-                app:errorTextColor="@color/error_red"
-                app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_green">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/newEmailET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:hint="Phone Number"
-                    android:imeOptions="actionDone"
-                    android:inputType="textEmailAddress"
-                    android:padding="@dimen/_14sdp"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/_14sdp" />
 
             <LinearLayout
-                android:id="@+id/newEmailErrorLL"
+                android:id="@+id/newPhoneErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -137,7 +97,7 @@
                     android:src="@drawable/ic_erro" />
 
                 <TextView
-                    android:id="@+id/newEmailErrorTV"
+                    android:id="@+id/newPhoneErrorTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -172,8 +132,8 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/saveEmailCV"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/savePhoneCV"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
@@ -192,5 +152,5 @@
             android:text="Save"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

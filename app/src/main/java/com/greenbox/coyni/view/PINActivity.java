@@ -57,6 +57,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     SQLiteDatabase mydatabase;
     Cursor dsDontRemind;
     Boolean isDontRemind = false;
+    String resetPINValue = "CHOOSE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,6 +247,31 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     startActivity(cp);
                                     finish();
                                     break;
+                                case "EditPhone":
+                                    Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
+                                    ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
+                                    startActivity(ep);
+                                    finish();
+                                    break;
+                                case "EditAddress":
+                                    Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
+                                    startActivity(ea);
+                                    finish();
+                                    break;
+                                case "ResetPIN":
+                                    if(resetPINValue.equals("CHOOSE")){
+                                        tvHead.setText("Choose your PIN");
+                                        tvForgot.setVisibility(View.GONE);
+                                        passcode = "";
+                                        resetPINValue = "CONFIRM";
+                                        clearPassCode();
+                                        TYPE = "CHOOSE";
+                                    }else{
+                                        tvHead.setText("Confirm your PIN");
+                                        tvForgot.setVisibility(View.GONE);
+                                        passcode = "";
+                                    }
+                                    break;
                             }
                         } else {
                             //Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
@@ -283,6 +309,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     }
                                 }
                             }, 2000);
+
+                        }else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
+//                            Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PINActivity.this.startActivity(d);
 
                         } else {
                             if (Utils.checkBiometric(PINActivity.this)) {

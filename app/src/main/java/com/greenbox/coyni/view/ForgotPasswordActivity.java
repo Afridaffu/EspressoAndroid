@@ -9,15 +9,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,9 +21,9 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.utils.outline_et.OutLineBoxEditText;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -88,26 +84,25 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
                     try {
                         String str = etEmail.getText().toString();
                         if(str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" ") )) {
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ",""));
                             etEmail.setSelection(etEmail.getText().length());
+                        }else if(s.length()==0){
+                            layoutEmailError.setVisibility(GONE);
+                        }else if(Utils.isValidEmail(etEmail.getText().toString().trim())){
+                            layoutEmailError.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }
 
-                @Override
-                public void afterTextChanged(Editable s) {
-//                    try {
-//                        etlEmail.setErrorEnabled(false);
-//                        etlEmail.setError("");
-//                        layoutEmailError.setVisibility(View.GONE);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
                 }
             });
 
@@ -117,7 +112,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     if (b) {
                         etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
-
                     }
                 }
             });
@@ -191,12 +185,18 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this);
+                        etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                        layoutEmailError.setVisibility(VISIBLE);
+                        tvEmailError.setText("Incorrect information");
+                        etEmail.clearFocus();
                     }
                 }
 
             }
         });
+
+
     }
 
     private Boolean validation() {

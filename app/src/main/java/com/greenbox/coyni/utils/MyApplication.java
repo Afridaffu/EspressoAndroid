@@ -6,9 +6,12 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.cards.CardsDataItem;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
 
 import java.util.ArrayList;
@@ -23,9 +26,12 @@ public class MyApplication extends Application {
     String strUserName = "", strRetrEmail = "",listAgree="";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
+    UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false;
+    PaymentMethodsResponse paymentMethodsResponse;
+    WalletResponse walletResponse;
 
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
@@ -138,6 +144,7 @@ public class MyApplication extends Application {
         this.strRetrEmail = strRetrEmail;
     }
 
+    private String fromWhichFragment;
 
     public String getFromWhichFragment() {
         return fromWhichFragment;
@@ -185,5 +192,29 @@ public class MyApplication extends Application {
 
     public void setLocalBiometric(Boolean localBiometric) {
         isLocalBiometric = localBiometric;
+    }
+
+    public PaymentMethodsResponse getPaymentMethodsResponse() {
+        return paymentMethodsResponse;
+    }
+
+    public void setPaymentMethodsResponse(PaymentMethodsResponse paymentMethodsResponse) {
+        this.paymentMethodsResponse = paymentMethodsResponse;
+    }
+
+    public UpdatePhoneResponse getUpdatePhoneResponse() {
+        return updatePhoneResponse;
+    }
+
+    public void setUpdatePhoneResponse(UpdatePhoneResponse updatePhoneResponse) {
+        this.updatePhoneResponse = updatePhoneResponse;
+    }
+
+    public WalletResponse getWalletResponse() {
+        return walletResponse;
+    }
+
+    public void setWalletResponse(WalletResponse walletResponse) {
+        this.walletResponse = walletResponse;
     }
 }

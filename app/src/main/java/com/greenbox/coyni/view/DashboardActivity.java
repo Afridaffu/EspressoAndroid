@@ -5,7 +5,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,7 +21,9 @@ import android.widget.Toast;
 
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -57,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity {
             if (Utils.checkInternet(DashboardActivity.this)) {
                 dashboardViewModel.meProfile();
             } else {
-                Utils.displayAlert(getString(R.string.internet), DashboardActivity.this);
+                Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
             }
             layoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,6 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void initObserver() {
+
         dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
@@ -105,6 +110,25 @@ public class DashboardActivity extends AppCompatActivity {
                     } else {
                         tvUserName.setText("Hi " + strName);
                     }
+                }
+                new FetchData(DashboardActivity.this).execute();
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                }
+            }
+        });
+
+        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
+            @Override
+            public void onChanged(WalletResponse walletResponse) {
+                if (walletResponse != null) {
+                    objMyApplication.setWalletResponse(walletResponse);
                 }
             }
         });
@@ -163,6 +187,33 @@ public class DashboardActivity extends AppCompatActivity {
             });
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public class FetchData extends AsyncTask<Void, Void, Boolean> {
+
+        public FetchData(Context context) {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+//                buyViewModel.meBanks();
+//                notificationsViewModel.meNotifications();
+//                payViewModel.getReceiveRequests();
+//                buyViewModel.meSignOn();
+                dashboardViewModel.mePaymentMethods();
+                dashboardViewModel.meWallet();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean list) {
+            super.onPostExecute(list);
+
         }
     }
 

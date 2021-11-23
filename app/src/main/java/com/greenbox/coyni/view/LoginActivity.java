@@ -52,6 +52,8 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.register.SMSResend;
+import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -76,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     RelativeLayout layoutMain;
     private long mLastClickTime = 0;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
-
+    LoginResponse loginResponse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -120,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 biometricLogin();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this,"");
                         }
                     }
                 });
@@ -433,7 +435,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -590,13 +592,19 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     i.putExtra("screen", "login");
                                     startActivity(i);
                                 } else {
-                                    Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-                                    i.putExtra("screen", "login");
-                                    i.putExtra("OTP_TYPE", "MOBILE");
-                                    i.putExtra("MOBILE", login.getData().getPhoneNumber());
-                                    i.putExtra("EMAIL", login.getData().getEmail());
-                                    i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
-                                    startActivity(i);
+                                    loginResponse = login;
+//                                    Intent i = new Intent(LoginActivity.this, OTPValidation.class);
+//                                    i.putExtra("screen", "login");
+//                                    i.putExtra("OTP_TYPE", "MOBILE");
+//                                    i.putExtra("MOBILE", login.getData().getPhoneNumber());
+//                                    i.putExtra("EMAIL", login.getData().getEmail());
+//                                    i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
+//                                    startActivity(i);
+                                    SMSResend resend = new SMSResend();
+                                    resend.setCountryCode(Utils.getStrCCode());
+                                    resend.setPhoneNumber(login.getData().getPhoneNumber());
+                                    loginViewModel.smsotpresend(resend);
+
                                 }
                             }
                         } else {
@@ -606,7 +614,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this);
+                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this,"");
                             }
                         }
                     }
@@ -657,13 +665,36 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this);
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "");
                             }
                         }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
+            @Override
+            public void onChanged(SMSResponse smsResponse) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if (smsResponse != null) {
+                    if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        Intent i = new Intent(LoginActivity.this, OTPValidation.class);
+                        i.putExtra("screen", "login");
+                        i.putExtra("OTP_TYPE", "MOBILE");
+                        i.putExtra("MOBILE", loginResponse.getData().getPhoneNumber());
+                        i.putExtra("EMAIL", loginResponse.getData().getEmail());
+                        i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(loginResponse.getData().getPhoneNumber()));
+                        startActivity(i);
+                    } else {
+                        Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error");
+                    }
+                }
+
             }
         });
     }

@@ -11,7 +11,7 @@
     <include
         android:id="@+id/retfoundactcontainer"
         layout="@layout/retrieve_email_foundaccount_layout"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <include
         android:id="@+id/retfailaccontainer"

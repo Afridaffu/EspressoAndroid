@@ -201,7 +201,7 @@ public class OnboardActivity extends AppCompatActivity {
                                 login();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), OnboardActivity.this);
+                            Utils.displayAlert(getString(R.string.internet), OnboardActivity.this, "");
                         }
                     }
                 });
@@ -240,7 +240,7 @@ public class OnboardActivity extends AppCompatActivity {
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this);
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "");
                             }
                         }
                     }
