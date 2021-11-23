@@ -18,7 +18,6 @@ import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
-import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -96,7 +95,7 @@ public interface ApiService {
     @GET("api/v2/profile/me/accountlimits/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
-   @GET("api/v2/profile/me/signedagreements")
+    @GET("api/v2/profile/me/signedagreements")
     Call<Agreements> meAgreementsByType();
 
     @PATCH("/api/v2/user/change-password")
@@ -156,8 +155,7 @@ public interface ApiService {
     @GET("api/v2/profile/me/wallets")
     Call<WalletResponse> meWallet();
 
-    @GET("api/v2/profile/me/preferences")
-    Call<Preferences> mePreferences();
-
+//    @GET("api/v2/profile/me/preferences")
+//    Call<Preferences> mePreferences();
 
 }

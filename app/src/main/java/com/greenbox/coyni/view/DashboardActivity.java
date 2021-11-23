@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
+import com.greenbox.coyni.fragments.Menu_BottomSheet;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.wallet.WalletResponse;
@@ -30,7 +32,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class DashboardActivity extends AppCompatActivity {
-    LinearLayout layoutProfile, layoutCrypto, layoutCard;
+    LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
     DashboardViewModel dashboardViewModel;
     TextView tvUserName;
     MyApplication objMyApplication;
@@ -53,6 +55,7 @@ public class DashboardActivity extends AppCompatActivity {
             layoutProfile = findViewById(R.id.layoutProfile);
             layoutCrypto = findViewById(R.id.layoutCrypto);
             layoutCard = findViewById(R.id.layoutCard);
+            layoutMainMenu = findViewById(R.id.layoutMainMenu);
             tvUserName = findViewById(R.id.tvUserName);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -82,6 +85,18 @@ public class DashboardActivity extends AppCompatActivity {
                     issueCards();
                 }
             });
+
+//            layoutMainMenu.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//                        Menu_BottomSheet menu_bottomSheet = new Menu_BottomSheet();
+//                        menu_bottomSheet.show(getSupportFragmentManager(), menu_bottomSheet.getTag());
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
