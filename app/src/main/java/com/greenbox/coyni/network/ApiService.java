@@ -14,6 +14,7 @@ import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
@@ -134,6 +135,9 @@ public interface ApiService {
 
     @DELETE("api/v2/profile/me/removeImage")
     Call<ImageResponse> removeImage(@Query("filename") String filename);
+
+    @GET("api/v2/profile/me/preferences")
+    Call<Preferences> mePreferences();
 
 
 }

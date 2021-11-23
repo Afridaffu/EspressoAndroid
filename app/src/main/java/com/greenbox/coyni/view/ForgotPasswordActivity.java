@@ -185,17 +185,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                        layoutEmailError.setVisibility(VISIBLE);
-                        tvEmailError.setText("Incorrect information");
-                        etEmail.clearFocus();
+                        if(emailResponse.getError().getErrorDescription().toLowerCase().contains("not found")){
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                            layoutEmailError.setVisibility(VISIBLE);
+                            tvEmailError.setText("Incorrect information");
+                            etEmail.clearFocus();
+                        }else{
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(),ForgotPasswordActivity.this,"");
+                        }
+
                     }
                 }
 
             }
         });
-
 
     }
 

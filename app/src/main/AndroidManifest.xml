@@ -20,6 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".view.PreferencesActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullSCreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.AuthLoginActivity"
             android:exported="false"

@@ -200,4 +200,10 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
     public void setFocus() {
         pnET.requestFocus();
     }
+
+    public void disable(){
+        pnET.setFocusable(false);
+        pnET.setClickable(false);
+        pnET.setEnabled(false);
+    }
 }

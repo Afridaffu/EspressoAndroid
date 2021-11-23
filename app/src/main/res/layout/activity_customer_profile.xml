@@ -616,21 +616,67 @@
                                 android:paddingBottom="@dimen/_16sdp"
                                 android:text="@string/security_faceid"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12sdp" />
+                                android:textSize="@dimen/_12ssp" />
 
-                            <com.github.angads25.toggle.widget.LabeledSwitch
-                                android:id="@+id/switchbtn"
+                            <LinearLayout
+                                android:id="@+id/switchOff"
                                 android:layout_width="@dimen/_55sdp"
                                 android:layout_height="@dimen/_26sdp"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginTop="@dimen/_11sdp"
-                                android:layout_marginBottom="@dimen/_11sdp"
-                                android:textSize="@dimen/text_size_11sp"
-                                app:colorBorder="@color/primary_color"
-                                app:colorOn="@color/primary_color"
-                                app:textOff="Off"
-                                app:textOn="On" />
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_10sdp"
+                                android:background="@drawable/switchbtn_strokecolor"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
 
+                                <ImageView
+                                    android:layout_width="@dimen/_22sdp"
+                                    android:layout_height="@dimen/_22sdp"
+                                    android:layout_marginStart="@dimen/_2sdp"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:src="@drawable/ic_baseline_circle" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_3sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Off"
+                                    android:textColor="@color/black"
+
+                                    android:textSize="@dimen/_11sdp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/switchOn"
+                                android:layout_width="@dimen/_55sdp"
+                                android:layout_height="@dimen/_26sdp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_10sdp"
+                                android:background="@drawable/switchbtn_fillcolorbg"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_9sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="On"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_11sdp" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/_22sdp"
+                                    android:layout_height="@dimen/_22sdp"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:src="@drawable/ic_baseline_circle_white" />
+
+                            </LinearLayout>
 
                         </RelativeLayout>
                     </LinearLayout>
