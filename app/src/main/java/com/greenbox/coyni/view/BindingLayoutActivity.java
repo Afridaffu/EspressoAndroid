@@ -77,6 +77,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             btnChangePassCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dropAllTables();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);

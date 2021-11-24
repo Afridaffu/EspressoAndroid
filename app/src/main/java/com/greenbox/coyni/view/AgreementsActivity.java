@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class AgreementsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
+    LinearLayout backIV;
     RecyclerView recyclerView;
     AgreeListAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -42,12 +45,20 @@ public class AgreementsActivity extends AppCompatActivity {
         dashboardViewModel=new ViewModelProvider(this).get(DashboardViewModel.class);
         setContentView(R.layout.activity_agreements);
         recyclerView=findViewById(R.id.recyclerview);
+        backIV=findViewById(R.id.backAgreeIV);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initObserver();
         dashboardViewModel.meAgreementsById();
         setOnClickListener();
+
+        backIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
