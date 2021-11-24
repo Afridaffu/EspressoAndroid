@@ -71,11 +71,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     RelativeLayout layoutMain;
     boolean isSuccessLayout = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_password);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -561,7 +566,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!isSuccessLayout){
+        if (!isSuccessLayout) {
             super.onBackPressed();
         }
     }
