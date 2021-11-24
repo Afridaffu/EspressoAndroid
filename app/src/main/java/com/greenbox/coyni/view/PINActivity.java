@@ -82,6 +82,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
                     break;
             }
+            String strScreen = getIntent().getStringExtra("screen");
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             SetDontRemind();
             initObserver();
@@ -158,7 +159,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
             objMyApplication = (MyApplication) getApplicationContext();
-            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
+                    getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
+                    || getIntent().getStringExtra("screen").equals("EditAddress"))) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -239,10 +242,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                     }
                                                 }
                                                 break;
-                                            case "UserDetails":
+                                            case "EditEmail":
                                                 Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
                                                 startActivity(ee);
-                                                finish();
+//                                                finish();
                                                 break;
                                             case "EditPhone":
                                                 Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
@@ -428,10 +431,13 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.imgBack:
                 if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
-                        || getIntent().getStringExtra("screen").equals("loginExpiry") ||
-                        getIntent().getStringExtra("screen").equals("UserDetails") || getIntent().getStringExtra("screen").equals("ChangePassword"))) {
+                        || getIntent().getStringExtra("screen").equals("loginExpiry")
+                        || getIntent().getStringExtra("screen").equals("ChangePassword")
+                        || getIntent().getStringExtra("screen").equals("EditEmail")
+                        || getIntent().getStringExtra("screen").equals("EditPhone")
+                        || getIntent().getStringExtra("screen").equals("EditAddress"))) {
                     onBackPressed();
-                } else {
+                }else {
                     if (TYPE.equals("CHOOSE")) {
                         onBackPressed();
                     } else {

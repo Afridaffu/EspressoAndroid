@@ -257,8 +257,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
                             strengthOne.setVisibility(VISIBLE);
                             strengthTwo.setVisibility(VISIBLE);
                             strengthThree.setVisibility(INVISIBLE);
-                            strengthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-                            strengthTwo.setBackgroundColor(getResources().getColor(R.color.error_red));
+                            strengthOne.setBackgroundColor(getResources().getColor(R.color.orange));
+                            strengthTwo.setBackgroundColor(getResources().getColor(R.color.orange));
                             tvPasswordInfo.setVisibility(VISIBLE);
                             tvPasswordInfo.setTextColor(getResources().getColor(R.color.error_red));
 

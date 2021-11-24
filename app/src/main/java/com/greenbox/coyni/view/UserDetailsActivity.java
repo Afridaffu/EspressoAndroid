@@ -144,7 +144,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
                         .putExtra("TYPE","ENTER")
-                        .putExtra("screen","UserDetails"));
+                        .putExtra("screen","EditEmail"));
                     }
                 });
 

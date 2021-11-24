@@ -422,7 +422,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL,getResources().getColor(R.color.primary_green));
-//                        firstNameTIL.setHintTextColor(colorState);
                     } else {
                         isFirstName = false;
                     }
@@ -458,12 +457,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
+
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31 ) {
                         isLastName = true;
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL,getResources().getColor(R.color.primary_green));
-//                        lastNameTIL.setHintTextColor(colorState);
                     } else {
                         isLastName = false;
                     }
@@ -553,8 +552,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                             stregnthOne.setVisibility(VISIBLE);
                             stregnthTwo.setVisibility(VISIBLE);
                             stregnthThree.setVisibility(INVISIBLE);
-                            stregnthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-                            stregnthTwo.setBackgroundColor(getResources().getColor(R.color.error_red));
+                            stregnthOne.setBackgroundColor(getResources().getColor(R.color.orange));
+                            stregnthTwo.setBackgroundColor(getResources().getColor(R.color.orange));
                             passwordInfoTV.setVisibility(VISIBLE);
                             passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
 
