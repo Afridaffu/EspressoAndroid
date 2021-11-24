@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Order Preview"
+            android:text="Order Overview"
             android:gravity="center"
             android:fontFamily="@font/opensans_semibold"
             android:textSize="@dimen/_12ssp"
