@@ -76,6 +76,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
             }
 
+            if (getIntent().getStringExtra("email") != null && !getIntent().getStringExtra("email").equals("")) {
+                etEmail.setText(getIntent().getStringExtra("email"));
+            }
+
             etEmail.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -91,12 +95,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     try {
                         String str = etEmail.getText().toString();
-                        if(str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" ") )) {
-                            etEmail.setText(etEmail.getText().toString().replaceAll(" ",""));
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
                             etEmail.setSelection(etEmail.getText().length());
-                        }else if(s.length()==0){
+                        } else if (s.length() == 0) {
                             layoutEmailError.setVisibility(GONE);
-                        }else if(Utils.isValidEmail(etEmail.getText().toString().trim())){
+                        } else if (Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             layoutEmailError.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
@@ -185,17 +189,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                        layoutEmailError.setVisibility(VISIBLE);
-                        tvEmailError.setText("Incorrect information");
-                        etEmail.clearFocus();
+                        if (emailResponse.getError().getErrorDescription().toLowerCase().contains("not found")) {
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                            layoutEmailError.setVisibility(VISIBLE);
+                            tvEmailError.setText("Incorrect information");
+                            etEmail.clearFocus();
+                        } else {
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "");
+                        }
+
                     }
                 }
 
             }
         });
-
 
     }
 

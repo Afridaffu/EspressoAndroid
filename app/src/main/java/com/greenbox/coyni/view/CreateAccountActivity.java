@@ -970,7 +970,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void setSpannableText() {
 
-        SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & ");
+        SpannableString ss = new SpannableString("By clicking next, you agree to Terms of Service & ");
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -1030,9 +1030,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 //                ds.setUnderlineText(true);
 //            }
 //        };
-        ss.setSpan(clickableSpan, 31, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan, 31, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 47, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 49, 63, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 

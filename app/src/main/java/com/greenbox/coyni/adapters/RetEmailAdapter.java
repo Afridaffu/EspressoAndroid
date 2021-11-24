@@ -51,7 +51,8 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             RetUserResData objData = listEmails.get(position);
-            holder.tvEmail.setText(objData.getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+//            holder.tvEmail.setText(objData.getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+            holder.tvEmail.setText(objData.getEmail());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

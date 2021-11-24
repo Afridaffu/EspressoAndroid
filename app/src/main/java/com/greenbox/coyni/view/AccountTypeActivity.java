@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +16,7 @@ import com.greenbox.coyni.utils.Utils;
 
 public class AccountTypeActivity extends AppCompatActivity {
 
-    LinearLayout personalAccontLL, layoutClose;
+    LinearLayout personalAccontLL, layoutClose, businessAccontLL;
     Long mLastClickTime = 0L;
 
     @Override
@@ -27,6 +28,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             setContentView(R.layout.activity_account_type);
 
             personalAccontLL = findViewById(R.id.personalAccontLL);
+            businessAccontLL = findViewById(R.id.businessAccontLL);
             layoutClose = findViewById(R.id.layoutClose);
             personalAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -41,12 +43,21 @@ public class AccountTypeActivity extends AppCompatActivity {
 
                 }
             });
+
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
                 }
             });
+
+            businessAccontLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

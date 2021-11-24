@@ -116,7 +116,8 @@
                 android:fontFamily="@font/opensans_bold"
                 android:text="Available Balance"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_12ssp"></TextView>
+                android:textSize="@dimen/_12ssp"
+                android:visibility="invisible"></TextView>
 
             <TextView
                 android:id="@+id/tvBalance"
@@ -241,6 +242,26 @@
                 android:text="Finish the set up your account in less than 5 min."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp"></TextView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_40sdp"
+                app:cardBackgroundColor="@color/primary_green"
+                app:cardCornerRadius="@dimen/_21sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Get Started"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"></TextView>
+            </androidx.cardview.widget.CardView>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
@@ -301,6 +322,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutMainMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
