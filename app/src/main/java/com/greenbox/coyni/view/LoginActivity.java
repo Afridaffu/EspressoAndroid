@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     private long mLastClickTime = 0;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginResponse loginResponse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 biometricLogin();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this,"");
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
                         }
                     }
                 });
@@ -307,25 +308,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-//                        if (emailValidation() && passwordValidation()) {
-//                            cvNext.setEnabled(true);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//                        } else if (emailValidation()) {
-//                            etlEmail.setErrorEnabled(false);
-//                            etlEmail.setError("");
-//                            layoutEmailError.setVisibility(View.GONE);
-//                        } else {
-//                            cvNext.setEnabled(false);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-//                        if (s.toString().length() == 0) {
-//                            etlEmail.setErrorEnabled(false);
-//                            etlEmail.setError("");
-//                            layoutEmailError.setVisibility(View.GONE);
-//                            cvNext.setEnabled(false);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-
                         if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length() >= 8) {
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
@@ -365,25 +347,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-//                        if (emailValidation() && passwordValidation()) {
-//                            cvNext.setEnabled(true);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//                        } else if (passwordValidation()) {
-//                            etlPassword.setErrorEnabled(false);
-//                            etlPassword.setError("");
-//                            layoutPwdError.setVisibility(View.GONE);
-//                        } else {
-//                            cvNext.setEnabled(false);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-//                        if (s.toString().length() == 0) {
-//                            etlPassword.setErrorEnabled(false);
-//                            etlPassword.setError("");
-//                            layoutPwdError.setVisibility(View.GONE);
-//                            cvNext.setEnabled(false);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-
                         if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length() >= 8) {
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
@@ -404,6 +367,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onClick(View v) {
                     Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                     i.putExtra("screen", "ForgotPwd");
+                    i.putExtra("email", etEmail.getText().toString().trim());
                     startActivity(i);
                 }
             });
@@ -614,7 +578,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this,"");
+                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "");
                             }
                         }
                     }

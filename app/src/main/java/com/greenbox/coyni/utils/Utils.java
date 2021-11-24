@@ -95,6 +95,7 @@ public class Utils {
     public static final int pageSize = 25;
     public static String deviceID = "";
     public static Long mLastClickTime = 0L;
+    public static final int duration = 1000;
 
     public static int[][] errorState, state;
     public static int[] errorColor, color;
