@@ -55,6 +55,7 @@
     <string name="security">Security</string>
     <string name="security_resetpin">"Reset PIN Code "</string>
     <string name="security_faceid">Face ID Setting</string>
+    <string name="security_touchid">Touch ID Setting</string>
     <string name="security_changepass">Change Password</string>
     <string name="faceidsetuptxt">Set Up Face ID</string>
     <string name="faceidsetup">Enable Face ID to Use face recognition to complete payments quickly and securely.</string>

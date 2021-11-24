@@ -44,10 +44,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
     View viewFaceBottom;
     ImageView imgQRCode;
     ProgressDialog dialog;
-    TextView customerNameTV, tvACStatus;
+    TextView customerNameTV, tvACStatus, tvBMSetting;
     MyApplication objMyApplication;
     CardView cvLogout;
-
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
@@ -85,6 +84,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOff = findViewById(R.id.switchOff);
             switchOn = findViewById(R.id.switchOn);
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
+            tvBMSetting = findViewById(R.id.tvBMSetting);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -96,7 +96,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
                 }
             });
-
+            Utils.setIsTouchEnabled(false);
+            Utils.setIsFaceEnabled(false);
+            if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
+                tvBMSetting.setText(getString(R.string.security_touchid));
+            } else {
+                tvBMSetting.setText(getString(R.string.security_faceid));
+            }
             imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
