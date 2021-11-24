@@ -106,10 +106,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return preferenceMutableLiveData;
     }
 
-    public MutableLiveData<WalletResponse> getWalletResponseMutableLiveData() {
-        return walletResponseMutableLiveData;
-    }
-
     public void meProfile() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

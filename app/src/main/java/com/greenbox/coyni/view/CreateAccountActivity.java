@@ -105,7 +105,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     RelativeLayout mainRL;
     ScrollView mainSV;
-
+    public static int focusedID = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -126,9 +126,27 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        firstNameET.requestFocus();
+//        firstNameET.requestFocus();
         isPwdEye = false;
         isCPwdEye = false;
+
+        if(firstNameET.getId()==focusedID){
+            firstNameET.requestFocus();
+        }else if(lastNameET.getId()==focusedID){
+            lastNameET.requestFocus();
+        }else if(emailET.getId()==focusedID){
+            emailET.requestFocus();
+        }else if(confirmPasswordET.getId()==focusedID){
+            confirmPasswordET.requestFocus();
+        }else if(passwordET.getId()==focusedID){
+            passwordET.requestFocus();
+        }else if(phoneNumberET.getETID()==focusedID){
+            phoneNumberET.requestETFocus();
+        }else{
+            firstNameET.requestFocus();
+        }
+
+        Log.e("ID",""+focusedID);
     }
 
     public void initFields() {
@@ -707,6 +725,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             firstNameErrorLL.setVisibility(GONE);
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_black));
+
                         } else {
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
@@ -714,6 +733,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             firstNameErrorTV.setText("Field Required");
                         }
                     } else {
+                        focusedID = firstNameET.getId();
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
                     }
@@ -728,13 +748,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                             lastNameErrorLL.setVisibility(GONE);
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_black));
+
                         } else {
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
+
                         }
                     } else {
+                        focusedID = lastNameET.getId();
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
                     }
@@ -750,7 +773,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
                         passwordTIL.setHint("Password");
+                        focusedID = passwordET.getId();
                     } else {
+
                         stregnthViewLL.setVisibility(GONE);
 //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
 //                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -787,7 +812,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                         confPasswordTIL.setHint("Confirm Password");
+                        focusedID = confirmPasswordET.getId();
                     } else {
+
 //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
 //                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
@@ -820,6 +847,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
+
                         if (emailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
@@ -837,6 +865,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             emailErrorTV.setText("Field Required");
                         }
                     } else {
+                        focusedID = emailET.getId();
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
                     }
@@ -945,6 +974,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        focusedID = 0;
         Singleton.setCustRegisterResponse(new CustRegisterResponse());
     }
 
@@ -970,7 +1000,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void setSpannableText() {
 
-        SpannableString ss = new SpannableString("By clicking next, you agree to Term of Service & ");
+        SpannableString ss = new SpannableString("By clicking next, you agree to Terms of Service & ");
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -1091,4 +1121,5 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        }
 //        return super.dispatchTouchEvent(ev);
 //    }
+
 }

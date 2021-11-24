@@ -212,6 +212,18 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             .putExtra("screen", "ResetPIN"));
                 }
             });
+
+            cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    startActivity(new Intent(CustomerProfileActivity.this, PreferencesActivity.class));
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -403,6 +415,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

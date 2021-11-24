@@ -91,7 +91,7 @@ public class PreferencesActivity extends AppCompatActivity {
             accountTIL = findViewById(R.id.accountTIL);
             accountET = findViewById(R.id.accountET);
 
-            //dashboardViewModel.mePreferences();
+            dashboardViewModel.mePreferences();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,11 +99,10 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
     public void initObservers(){
-
         dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
             @Override
             public void onChanged(Preferences user) {
-                dialog.dismiss();
+//                dialog.dismiss();
 //                if (user.getData().getTimeZone() == 0) {
 //                    timeZoneET.setText(getString(R.string.PST));
 //                } else if (user.getData().getTimeZone() == 1) {
