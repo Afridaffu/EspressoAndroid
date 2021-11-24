@@ -294,10 +294,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_11sdp"
                     android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
                     android:text="You’re almost there! Before you can start tokenizing your money. Please follow the instructions below."
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:gravity="center"/>
+                    android:textSize="@dimen/_12ssp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

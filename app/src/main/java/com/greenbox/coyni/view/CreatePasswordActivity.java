@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -21,6 +22,8 @@ import android.util.Log;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,11 +71,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     RelativeLayout layoutMain;
     boolean isSuccessLayout = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_password);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -554,7 +562,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!isSuccessLayout){
+        if (!isSuccessLayout) {
             super.onBackPressed();
         }
     }

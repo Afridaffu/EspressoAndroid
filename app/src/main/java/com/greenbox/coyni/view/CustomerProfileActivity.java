@@ -47,6 +47,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     TextView customerNameTV, tvACStatus;
     MyApplication objMyApplication;
     CardView cvLogout;
+
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
