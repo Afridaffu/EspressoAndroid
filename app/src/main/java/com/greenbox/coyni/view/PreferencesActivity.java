@@ -102,6 +102,7 @@ public class PreferencesActivity extends AppCompatActivity {
         dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
             @Override
             public void onChanged(Preferences user) {
+
 //                dialog.dismiss();
 //                if (user.getData().getTimeZone() == 0) {
 //                    timeZoneET.setText(getString(R.string.PST));

@@ -410,6 +410,8 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Preferences obj = response.body();
                             preferenceMutableLiveData.setValue(obj);
+                            Log.e("preferences", new Gson().toJson(obj));
+                            Log.e("respo", new Gson().toJson(response.body()));
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Preferences>() {

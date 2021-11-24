@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/backIV"
         android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
 
         <ImageView

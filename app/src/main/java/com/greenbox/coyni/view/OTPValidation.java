@@ -770,7 +770,7 @@ public class OTPValidation extends AppCompatActivity {
                                     finish();
                                 } else {
                                     finish();
-                                    Utils.showCustomToast(UserDetailsActivity.userDetailsActivity,"Phone number updated",R.drawable.ic_custom_tick,"EditPhone");
+                                    Utils.showCustomToast(UserDetailsActivity.userDetailsActivity,"Phone number updated",R.drawable.ic_phone,"EditPhone");
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

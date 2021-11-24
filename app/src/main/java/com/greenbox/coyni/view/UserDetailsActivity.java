@@ -133,7 +133,11 @@ public class UserDetailsActivity extends AppCompatActivity {
                     addressFormatted = addressFormatted + profile.getData().getZipCode()+", ";
                 }
 
-                userAddressTV.setText(addressFormatted);
+                if(addressFormatted.trim().endsWith(",")){
+                    userAddressTV.setText(addressFormatted.trim().substring(0,addressFormatted.trim().length()-1));
+                }else{
+                    userAddressTV.setText(addressFormatted);
+                }
 
                 emailLL.setOnClickListener(new View.OnClickListener() {
                     @Override
