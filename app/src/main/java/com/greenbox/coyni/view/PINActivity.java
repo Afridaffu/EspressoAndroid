@@ -193,6 +193,88 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
                             shakeAnimateUpDown();//new
+                            String strScreen = "";
+                            if (getIntent().getStringExtra("screen") != null) {
+                                strScreen = getIntent().getStringExtra("screen");
+                            }
+                            switch (strScreen) {
+                                case "loginExpiry":
+                                    Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+                                    i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                    startActivity(i);
+                                    break;
+                                case "login":
+//                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
+                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(d);
+                                    } else {
+                                        if (!isDontRemind) {
+                                            if (Utils.checkBiometric(PINActivity.this)) {
+                                                if (Utils.checkAuthentication(PINActivity.this)) {
+                                                    if (Utils.isFingerPrint(PINActivity.this)) {
+                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                .putExtra("screen", strScreen));
+                                                    } else {
+                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                .putExtra("ENABLE_TYPE", "FACE")
+                                                                .putExtra("screen", strScreen));
+                                                    }
+                                                } else {
+                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                            .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                            .putExtra("screen", strScreen));
+                                                }
+                                            } else {
+                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                        .putExtra("ENABLE_TYPE", "TOUCH")
+                                                        .putExtra("screen", strScreen));
+                                            }
+                                        } else {
+                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(d);
+                                        }
+                                    }
+                                    break;
+                                case "UserDetails":
+                                    Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+                                    startActivity(ee);
+                                    finish();
+                                    break;
+                                case "ChangePassword":
+                                    Intent cp=new Intent(PINActivity.this,ConfirmPasswordActivity.class);
+                                    startActivity(cp);
+                                    finish();
+                                    break;
+                                case "EditPhone":
+                                    Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
+                                    ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
+                                    startActivity(ep);
+                                    finish();
+                                    break;
+                                case "EditAddress":
+                                    Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
+                                    startActivity(ea);
+                                    finish();
+                                    break;
+                                case "ResetPIN":
+                                    if(resetPINValue.equals("CHOOSE")){
+                                        tvHead.setText("Choose your PIN");
+                                        tvForgot.setVisibility(View.GONE);
+                                        passcode = "";
+                                        resetPINValue = "CONFIRM";
+                                        clearPassCode();
+                                        TYPE = "CHOOSE";
+                                    }else{
+                                        tvHead.setText("Confirm your PIN");
+                                        tvForgot.setVisibility(View.GONE);
+                                        passcode = "";
+                                    }
+                                    break;
+                            }
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {

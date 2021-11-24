@@ -29,14 +29,14 @@
                     android:id="@+id/cpProfileLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/card_bottomradius"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/cardviewProfile"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_164sdp"
+                        android:layout_height="@dimen/_180sdp"
                         android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/_15sdp"
                         android:background="@drawable/ic_backgound_top_customer_profile"
                         android:orientation="vertical">
 
@@ -75,9 +75,9 @@
                                         android:id="@+id/profileCredLL"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentStart="true"
                                         android:layout_alignParentTop="true"
                                         android:layout_marginTop="@dimen/_11sdp"
+                                        android:layout_alignParentStart="true"
                                         android:layout_toStartOf="@+id/profilePicCL"
                                         android:orientation="vertical"
                                         android:paddingLeft="@dimen/_21sdp"
@@ -100,7 +100,9 @@
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/accountid"
                                             android:textColor="#767676"
-                                            android:textSize="@dimen/_10ssp" />
+                                            android:textSize="@dimen/_10ssp"
+
+                                            />
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
@@ -115,16 +117,18 @@
                                                 android:fontFamily="@font/opensans_semibold"
                                                 android:text="@string/status_unverified"
                                                 android:textColor="@color/primary_black"
-                                                android:textSize="@dimen/_11ssp" />
+                                                android:textSize="@dimen/_11ssp"
+
+                                                />
 
                                             <TextView
-                                                android:id="@+id/tvACStatus"
+                                                android:id="@+id/cpStatusTV"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginStart="5dp"
                                                 android:layout_marginTop="@dimen/_6sdp"
                                                 android:fontFamily="@font/opensans_semibold"
-                                                android:text=""
+                                                android:text="@string/unveri"
                                                 android:textColor="#FFA70F"
                                                 android:textSize="@dimen/_11ssp" />
 
@@ -144,8 +148,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentRight="true"
+                                        android:layout_marginEnd="@dimen/_30ssp"
                                         android:layout_marginTop="@dimen/_15sdp"
-                                        android:layout_marginEnd="@dimen/_30ssp">
+                                        >
 
                                         <androidx.constraintlayout.widget.ConstraintLayout
                                             android:id="@+id/linearLayout"
@@ -611,7 +616,6 @@
                             android:layout_gravity="center">
 
                             <TextView
-                                android:id="@+id/tvBMSetting"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="170dp"
@@ -734,11 +738,11 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvLogout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_42sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_36sdp"
                 android:layout_marginEnd="@dimen/_21sdp"
-                android:layout_marginBottom="@dimen/_28sdp"
+                android:layout_marginBottom="@dimen/_100sdp"
                 app:cardCornerRadius="@dimen/_21sdp">
 
                 <TextView
@@ -755,15 +759,6 @@
 
 
             </androidx.cardview.widget.CardView>
-
-            <View
-                android:id="@+id/viewSetupFaceBottom"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="20dp"
-                android:background="@color/primary_color"
-                android:visibility="gone" />
-
 
         </LinearLayout>
 

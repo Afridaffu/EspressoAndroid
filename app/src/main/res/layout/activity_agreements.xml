@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f2f4f5"
     android:orientation="vertical"
     tools:context=".view.AgreementsActivity">
 
@@ -15,18 +16,26 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/_12sdp">
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/backAgreeIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_45sdp"
-            android:src="@drawable/ic_back" />
+            android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_marginRight="@dimen/_10sdp"/>
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_11sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="@string/cp_agreements"
             android:textColor="@color/black"
@@ -38,7 +47,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_21sdp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -62,6 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -71,7 +81,12 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_21sdp"
                     android:background="@drawable/round_background" />
+
             </androidx.cardview.widget.CardView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_2sdp"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -79,6 +94,7 @@
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_bold"
+                android:visibility="visible"
                 android:text="@string/pastagree"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
@@ -87,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
                 android:layout_marginTop="@dimen/_11sdp"
+                android:visibility="gone"
                 android:layout_marginBottom="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_11sdp">
 

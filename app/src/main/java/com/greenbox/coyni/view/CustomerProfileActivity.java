@@ -130,9 +130,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                        .putExtra("TYPE", "ENTER")
-                        .putExtra("screen", "ChangePassword");
+                Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
+                        .putExtra("TYPE","ENTER")
+                        .putExtra("screen","ChangePassword");
                 startActivity(i);
 
             });
@@ -219,6 +219,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             .putExtra("screen", "ResetPIN"));
                 }
             });
+            customerNameTV.setText(objMyApplication.getStrUserName());
+
 
             cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
                 @Override
