@@ -19,7 +19,7 @@
         android:paddingBottom="@dimen/_12sdp">
 
         <LinearLayout
-            android:id="@+id/userDetailsCloseLL"
+            android:id="@+id/preferencesCloseLL"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="wrap_content">
 
@@ -111,7 +111,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:cursorVisible="false"/>
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -129,7 +130,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_39sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
                     android:background="@drawable/disable_bg" />
 
                 <com.google.android.material.textfield.TextInputLayout

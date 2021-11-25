@@ -3,12 +3,15 @@ package com.greenbox.coyni.utils;
 import static android.content.Context.KEYGUARD_SERVICE;
 
 import static android.content.Context.FINGERPRINT_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.KeyguardManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
@@ -28,14 +31,20 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
@@ -45,8 +54,10 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -559,4 +570,81 @@ public class Utils {
         return isBiometric;
     }
 
+    public static ProgressDialog showProgressDialog(Context context){
+        ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
+        dialog.setIndeterminate(false);
+        dialog.setMessage("Please wait...");
+        dialog.show();
+        return dialog;
+    }
+
+
+
+    public static void populateTimeZones(final Context context, EditText editText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.timezones_bottom_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
+        RecyclerView timezones = dialog.findViewById(R.id.timezonesRV);
+
+        try {
+            ArrayList<String> arrZonesList = new ArrayList<>();
+            arrZonesList.add(context.getString(R.string.EST));
+            arrZonesList.add(context.getString(R.string.CST));
+            arrZonesList.add(context.getString(R.string.MST));
+            arrZonesList.add(context.getString(R.string.PST));
+            arrZonesList.add(context.getString(R.string.AST));
+            arrZonesList.add(context.getString(R.string.HST));
+
+            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context,editText);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+            timezones.setLayoutManager(mLayoutManager);
+            timezones.setItemAnimator(new DefaultItemAnimator());
+            timezones.setAdapter(customerTimeZonesAdapter);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public static void generateUUID(Context context) {
+        try {
+            String uuid = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = context.getSharedPreferences("DeviceID", MODE_PRIVATE).edit();
+            editor.putString("deviceId", uuid);
+            editor.putBoolean("isDevice", true);
+            editor.apply();
+            Utils.setDeviceID(uuid);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -68,8 +68,10 @@ public class FaceIdDisabled_BottomSheet extends BottomSheetDialogFragment {
         CardView cvOK = view.findViewById(R.id.cvOK);
         if (isFaceId) {
             tvHead.setText("Face ID Temporarily disabled");
+            tvMessage.setText(getResources().getString(R.string.faceiddisable));
         } else if (isTouchId) {
             tvHead.setText("Touch ID Temporarily disabled");
+            tvMessage.setText(getResources().getString(R.string.touchiddisable));
         }
         cvOK.setOnClickListener(new View.OnClickListener() {
             @Override

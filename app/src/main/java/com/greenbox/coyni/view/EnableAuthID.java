@@ -285,6 +285,7 @@ public class EnableAuthID extends AppCompatActivity {
                 if (biometricResponse != null) {
                     Log.e("bio resp", new Gson().toJson(biometricResponse));
                     saveToken(biometricResponse.getData().getToken());
+                    Utils.generateUUID(EnableAuthID.this);
                     if (enableType.equals("FACE")) {
                         saveFace("true");
                         saveThumb("false");
@@ -359,6 +360,7 @@ public class EnableAuthID extends AppCompatActivity {
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+            mydatabase.execSQL("Delete from tblThumbPinLock");
             mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -369,6 +371,7 @@ public class EnableAuthID extends AppCompatActivity {
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+            mydatabase.execSQL("Delete from tblFacePinLock");
             mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -379,6 +382,7 @@ public class EnableAuthID extends AppCompatActivity {
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+            mydatabase.execSQL("Delete from tblPermanentToken");
             mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -389,6 +393,7 @@ public class EnableAuthID extends AppCompatActivity {
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+            mydatabase.execSQL("Delete from tblDontRemind");
             mydatabase.execSQL("INSERT INTO tblDontRemind(id,isDontRemind) VALUES(null,'" + value + "')");
         } catch (Exception ex) {
             ex.printStackTrace();

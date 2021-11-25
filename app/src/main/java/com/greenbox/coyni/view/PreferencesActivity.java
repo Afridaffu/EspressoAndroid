@@ -25,10 +25,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -37,6 +40,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.preferences.Preferences;
@@ -57,6 +61,7 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.internal.Util;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -66,6 +71,8 @@ public class PreferencesActivity extends AppCompatActivity {
     boolean isProfile = false;
     TextInputLayout timeZoneTIL,accountTIL;
     TextInputEditText timeZoneET,accountET;
+    ConstraintLayout timeZoneCL;
+    LinearLayout preferencesCloseLL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -90,6 +97,29 @@ public class PreferencesActivity extends AppCompatActivity {
             timeZoneET = findViewById(R.id.timeZoneET);
             accountTIL = findViewById(R.id.accountTIL);
             accountET = findViewById(R.id.accountET);
+            timeZoneCL = findViewById(R.id.timeZoneCL);
+            preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
+
+            timeZoneCL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET);
+                }
+            });
+
+            timeZoneET.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET);
+                }
+            });
+
+            preferencesCloseLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
 
             dashboardViewModel.mePreferences();
 
@@ -104,19 +134,28 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(Preferences user) {
 
 //                dialog.dismiss();
-//                if (user.getData().getTimeZone() == 0) {
-//                    timeZoneET.setText(getString(R.string.PST));
-//                } else if (user.getData().getTimeZone() == 1) {
-//                    timeZoneET.setText(getString(R.string.MST));
-//                } else if (user.getData().getTimeZone() == 2) {
-//                    timeZoneET.setText(getString(R.string.CST));
-//                } else if (user.getData().getTimeZone() == 3) {
-//                    timeZoneET.setText(getString(R.string.EST));
-//                } else if (user.getData().getTimeZone() == 4) {
-//                    timeZoneET.setText(getString(R.string.HST));
-//                }
+                if (user.getData().getTimeZone() == 0) {
+                    timeZoneET.setText(getString(R.string.PST));
+                    myApplicationObj.setTimezone("PST");
+                } else if (user.getData().getTimeZone() == 1) {
+                    timeZoneET.setText(getString(R.string.MST));
+                    myApplicationObj.setTimezone("MST");
+                } else if (user.getData().getTimeZone() == 2) {
+                    timeZoneET.setText(getString(R.string.CST));
+                    myApplicationObj.setTimezone("CST");
+                } else if (user.getData().getTimeZone() == 3) {
+                    timeZoneET.setText(getString(R.string.EST));
+                    myApplicationObj.setTimezone("EST");
+                } else if (user.getData().getTimeZone() == 4) {
+                    timeZoneET.setText(getString(R.string.HST));
+                    myApplicationObj.setTimezone("HST");
+                }else if (user.getData().getTimeZone() == 5) {
+                    timeZoneET.setText(getString(R.string.AST));
+                    myApplicationObj.setTimezone("AST");
+                }
             }
         });
     }
+
 
 }

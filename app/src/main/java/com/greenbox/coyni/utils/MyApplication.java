@@ -33,6 +33,7 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
 
+    String timezone = "";
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
     private double tokenWithdrawalBankWeekLimit;
@@ -215,5 +216,13 @@ public class MyApplication extends Application {
 
     public void setWalletResponse(WalletResponse walletResponse) {
         this.walletResponse = walletResponse;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }
