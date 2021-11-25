@@ -537,6 +537,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     if (login != null) {
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
+                            objMyApplication.setStrEmail(login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);

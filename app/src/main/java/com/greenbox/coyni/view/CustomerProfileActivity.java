@@ -1,12 +1,13 @@
 package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import com.bumptech.glide.Glide;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.profile.Profile;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -32,6 +32,7 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
@@ -47,6 +48,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     Boolean isSwitchEnabled = false;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     Cursor cursor;
+    DashboardViewModel dashboardViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 customerNameTV.setText(objMyApplication.getStrUserName());
             }
 
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            viewFaceBottom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FaceIdSetupBottomSheet faceIdSetupBottomSheet = new FaceIdSetupBottomSheet();
+                    faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
+                }
+            });
             if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 tvBMSetting.setText(getString(R.string.security_touchid));
             } else {
@@ -135,9 +145,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                        .putExtra("TYPE", "ENTER")
-                        .putExtra("screen", "ChangePassword");
+                Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
+                        .putExtra("TYPE","ENTER")
+                        .putExtra("screen","ChangePassword");
                 startActivity(i);
 
             });
@@ -208,6 +218,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             .putExtra("screen", "ResetPIN"));
                 }
             });
+            customerNameTV.setText(objMyApplication.getStrUserName());
+
 
             cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -237,6 +249,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             });
 
+            if (Utils.checkInternet(CustomerProfileActivity.this)) {
+                dashboardViewModel.mePaymentMethods();
+            } else {
+                Utils.displayAlert(getString(R.string.internet), CustomerProfileActivity.this, "");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -451,7 +468,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                }
+            }
+        });
     }
+
 
     private boolean getLocalBiometricEnabled() {
         boolean isFace = false;
@@ -564,4 +591,5 @@ public class CustomerProfileActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
 }

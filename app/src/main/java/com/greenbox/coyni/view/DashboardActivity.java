@@ -21,8 +21,6 @@ import android.widget.Toast;
 
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
-import com.greenbox.coyni.fragments.Menu_BottomSheet;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.wallet.WalletResponse;
@@ -32,7 +30,8 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class DashboardActivity extends AppCompatActivity {
-    LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
+    LinearLayout layoutProfile, layoutCrypto, layoutCard;
+    LinearLayout scanQr;
     DashboardViewModel dashboardViewModel;
     TextView tvUserName;
     MyApplication objMyApplication;
@@ -55,8 +54,8 @@ public class DashboardActivity extends AppCompatActivity {
             layoutProfile = findViewById(R.id.layoutProfile);
             layoutCrypto = findViewById(R.id.layoutCrypto);
             layoutCard = findViewById(R.id.layoutCard);
-            layoutMainMenu = findViewById(R.id.layoutMainMenu);
             tvUserName = findViewById(R.id.tvUserName);
+            scanQr=findViewById(R.id.scanQrLL);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             if (Utils.checkInternet(DashboardActivity.this)) {
@@ -85,18 +84,13 @@ public class DashboardActivity extends AppCompatActivity {
                     issueCards();
                 }
             });
+            scanQr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this,PayRequestScanActivity.class));
+                }
+            });
 
-//            layoutMainMenu.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        Menu_BottomSheet menu_bottomSheet = new Menu_BottomSheet();
-//                        menu_bottomSheet.show(getSupportFragmentManager(), menu_bottomSheet.getTag());
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -118,15 +112,6 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                 }
                 new FetchData(DashboardActivity.this).execute();
-            }
-        });
-
-        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
-            @Override
-            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
-                if (paymentMethodsResponse != null) {
-                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
-                }
             }
         });
 
@@ -208,7 +193,7 @@ public class DashboardActivity extends AppCompatActivity {
 //                notificationsViewModel.meNotifications();
 //                payViewModel.getReceiveRequests();
 //                buyViewModel.meSignOn();
-                dashboardViewModel.mePaymentMethods();
+//                dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
             } catch (Exception ex) {
                 ex.printStackTrace();

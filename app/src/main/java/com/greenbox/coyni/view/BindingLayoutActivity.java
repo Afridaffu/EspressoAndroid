@@ -28,14 +28,14 @@ import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout lyClose;
+    LinearLayout llCoyniAct, lyClose;
     TextView tvEmail;
     MyApplication objMyApplication;
-    CardView reTryAgainBtn, btnChangePassCV, editEmailLogoutCV;
+    CardView reTryAgainBtn,btnChangePassCV;
+    CardView editEmailLogoutCV;
     SQLiteDatabase mydatabase;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -53,36 +53,54 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            llCoyniAct = findViewById(R.id.llCoyniAct);
             lyClose = findViewById(R.id.lyClose);
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
+            btnChangePassCV=findViewById(R.id.btnCV);
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
             retEmailRV = findViewById(R.id.retEmailRV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            btnChangePassCV = findViewById(R.id.btnCV);
             objMyApplication = (MyApplication) getApplicationContext();
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
                 usersData = objMyApplication.getObjRetUsers().getData();
                 if (usersData != null && usersData.size() > 0) {
-                    retEmailAdapter = new RetEmailAdapter(usersData, this);
+                    retEmailAdapter = new RetEmailAdapter(usersData,this);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
                     retEmailRV.setLayoutManager(mLayoutManager);
                     retEmailRV.setItemAnimator(new DefaultItemAnimator());
                     retEmailRV.setAdapter(retEmailAdapter);
+//                    tvEmail.setText(usersData.get(0).getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
+//                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
-
             btnChangePassCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dropAllTables();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                     finish();
                 }
             });
-
+            llCoyniAct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+            });
+//            llCoyniAct.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(i);
+//                }
+//            });
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,7 +125,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                    finishAffinity();
+                    finish();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

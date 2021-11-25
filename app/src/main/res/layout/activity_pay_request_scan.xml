@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".view.PayRequestScanActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.budiyev.android.codescanner.CodeScannerView
+            android:id="@+id/scanner_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:autoFocusButtonColor="@android:color/white"
+            app:autoFocusButtonVisible="false"
+            app:flashButtonColor="@android:color/white"
+            app:flashButtonVisible="false"
+            app:frameAspectRatioHeight="1"
+            app:frameAspectRatioWidth="1"
+            app:frameColor="#FFFEFE"
+            app:frameCornersRadius="0dp"
+            app:frameCornersSize="30dp"
+            app:frameSize="0.45"
+            app:frameThickness="5dp"
+            app:maskColor="#2CFDFBFB" />
+
+        <ImageView
+            android:id="@+id/closeBtnSC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:src="@drawable/ic_closewhite"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/layoutHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottomradius"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_21sdp"
+            android:paddingBottom="@dimen/_25sdp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgCloseSM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_45sdp"
+                android:src="@drawable/ic_close" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewSideBarCV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_80sdp"
+            android:layout_marginEnd="@dimen/_21sdp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_19sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/scanCodeTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_core_colorfill"
+                    android:fontFamily="@font/opensans_bold"
+                    android:paddingTop="@dimen/_11sdp"
+                    android:paddingBottom="@dimen/_11sdp"
+                    android:text="Scan Code"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/scanMeTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_bold"
+                    android:paddingTop="@dimen/_11sdp"
+                    android:paddingBottom="@dimen/_11sdp"
+                    android:text="Scan Me"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/flashBtnLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/toglebtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_50sdp"
+                    android:layout_marginTop="550sp"
+                    android:src="@drawable/ic_flashicon"
+                    android:text="Flash ON" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Flashlight"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_50sdp"
+                    android:layout_marginTop="550sp"
+                    android:src="@drawable/ic_group_albumicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_52sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Album"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"
+
+                    />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/scannerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <View
+                android:id="@+id/lineView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_55sdp"
+                android:background="@drawable/scananim11" />
+
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scanmeScrlView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/viewSideBarCV"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvQRcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_11sdp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/_28sdp">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cvProfile"
+                            android:layout_width="@dimen/_40ssp"
+                            android:layout_height="@dimen/_40ssp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_14sdp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_20sdp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/tvUserInfo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text=""
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/text_size_20sp" />
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/cvProfilePic"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:visibility="gone"
+                                    app:cardCornerRadius="30dp">
+
+                                    <ImageView
+                                        android:id="@+id/imgProfile"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scaleType="centerCrop"
+                                        android:visibility="visible" />
+                                </androidx.cardview.widget.CardView>
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/cvProfile"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Jonathan Joestar"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_14ssp" />
+
+                        <RelativeLayout
+                            android:id="@+id/qrViewRL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvName"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_13sdp"
+                            android:background="@drawable/ic_qr_img_outline">
+
+                            <ImageView
+                                android:id="@+id/idIVQrcode"
+                                android:layout_width="@dimen/_145sdp"
+                                android:layout_height="@dimen/_145sdp"
+                                android:layout_centerInParent="true"
+                                android:contentDescription="@string/qr_code"
+                                android:src="@drawable/qr" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/qrViewRL"
+                            android:layout_marginTop="@dimen/_32sdp"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/scanMesetAmountTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginStart="@dimen/_20sdp"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Set Amount"
+                                    android:textColor="@color/primary_green"
+                                    android:textSize="@dimen/_12ssp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginEnd="@dimen/_20sdp"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Save to Album"
+                                    android:textColor="@color/primary_green"
+                                    android:textSize="@dimen/_12ssp" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cvQRcode"
+                    android:layout_marginLeft="@dimen/_11sdp"
+                    android:layout_marginRight="@dimen/_11sdp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_10sdp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="30dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Recipient’s Address"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvWalletAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="f4184fc596403b9d6…"
+                            android:textColor="#404040"
+                            android:textSize="@dimen/_10ssp" />
+
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@+id/tvWalletAddress"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:background="@color/at_gray" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/divider"
+                            android:layout_marginTop="@dimen/_25sdp"
+                            android:paddingLeft="@dimen/_40sdp"
+                            android:paddingRight="@dimen/_35sdp">
+
+                            <ImageView
+                                android:id="@+id/imgCopy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_copy" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/imgCopy"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Copy"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <ImageView
+                                android:id="@+id/imgShare"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/ic_share" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/imgShare"
+                                android:layout_alignParentRight="true"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Share"
+
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
+</LinearLayout>

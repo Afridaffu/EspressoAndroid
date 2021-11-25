@@ -23,6 +23,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -35,6 +36,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
     RelativeLayout layoutMain;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             layoutMain = findViewById(R.id.layoutMain);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
-
+            objMyApplication = (MyApplication) getApplicationContext();
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -74,6 +76,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             } else {
                 tvHead.setText("Forgot Your PIN?");
                 tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
+                etEmail.setText(objMyApplication.getStrEmail());
+                etEmail.setEnabled(false);
             }
 
             if (getIntent().getStringExtra("email") != null && !getIntent().getStringExtra("email").equals("")) {
