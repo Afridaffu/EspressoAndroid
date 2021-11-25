@@ -115,15 +115,6 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
-            @Override
-            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
-                if (paymentMethodsResponse != null) {
-                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
-                }
-            }
-        });
-
         dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
             @Override
             public void onChanged(WalletResponse walletResponse) {
@@ -202,7 +193,7 @@ public class DashboardActivity extends AppCompatActivity {
 //                notificationsViewModel.meNotifications();
 //                payViewModel.getReceiveRequests();
 //                buyViewModel.meSignOn();
-                dashboardViewModel.mePaymentMethods();
+//                dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
             } catch (Exception ex) {
                 ex.printStackTrace();

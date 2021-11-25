@@ -29,16 +29,16 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.github.angads25.toggle.widget.LabeledSwitch;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     View viewFaceBottom;
@@ -53,6 +53,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     CoyniViewModel coyniViewModel;
     Boolean isSwitchEnabled = false;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
+    DashboardViewModel dashboardViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            viewFaceBottom = findViewById(R.id.viewSetupFaceBottom);
             imgQRCode = findViewById(R.id.imgQRCode);
             customerNameTV = findViewById(R.id.customerNameTV);
             cvLogout = findViewById(R.id.cvLogout);
@@ -88,7 +88,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
-
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             viewFaceBottom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -96,8 +96,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
                 }
             });
-            Utils.setIsTouchEnabled(false);
-            Utils.setIsFaceEnabled(false);
             if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 tvBMSetting.setText(getString(R.string.security_touchid));
             } else {
@@ -232,7 +230,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     startActivity(new Intent(CustomerProfileActivity.this, PreferencesActivity.class));
                 }
             });
-
+            if (Utils.checkInternet(CustomerProfileActivity.this)) {
+                dashboardViewModel.mePaymentMethods();
+            } else {
+                Utils.displayAlert(getString(R.string.internet), CustomerProfileActivity.this, "");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -423,8 +425,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                }
+            }
+        });
+
+    }
 
 
 }

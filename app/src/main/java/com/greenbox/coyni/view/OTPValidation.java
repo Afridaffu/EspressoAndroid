@@ -608,6 +608,7 @@ public class OTPValidation extends AppCompatActivity {
                                 public void run() {
                                     try {
                                         startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+                                        finish();
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }

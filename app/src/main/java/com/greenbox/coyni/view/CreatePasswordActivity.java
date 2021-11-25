@@ -54,7 +54,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     RelativeLayout layoutNewPassword, layoutDone;
     TextInputLayout etlPassword, etlCPassword;
     TextInputEditText etPassword, etCPassword;
-    TextView tvPasswordInfo, tvHead, tvMessage,tvchangepass;
+    TextView tvPasswordInfo, tvHead, tvMessage, tvchangepass;
     TextInputLayout passwordTIL, confPasswordTIL;
     TextInputEditText passwordET, confirmPasswordET;
     LinearLayout layoutIndicator;
@@ -122,7 +122,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             layoutDone = findViewById(R.id.layoutDone);
             layoutMain = findViewById(R.id.layoutMain);
             layoutIndicator = findViewById(R.id.layoutIndicator);
-            tvchangepass=findViewById(R.id.tvMessageChangePass);
+            tvchangepass = findViewById(R.id.tvMessageChangePass);
             tvHead = findViewById(R.id.tvHead);
             tvMessage = findViewById(R.id.tvMessage);
             strong = Pattern.compile(STRONG_PATTERN);
@@ -134,7 +134,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                 tvMessage.setVisibility(VISIBLE);
                 tvHead.setText("Welcome Back!");
-            }else if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equals("ConfirmPassword")){
+            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
                 tvHead.setText("Change Password");
                 tvchangepass.setVisibility(VISIBLE);
                 tvMessage.setVisibility(GONE);
@@ -151,6 +151,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
+                    finish();
                 }
             });
 
@@ -454,12 +455,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
                             ManagePasswordRequest request = new ManagePasswordRequest();
                             request.setPassword(passwordET.getText().toString().trim());
                             loginViewModel.setExpiryPassword(request);
-                        }else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
 //                            ManagePasswordRequest request = new ManagePasswordRequest();
 //                            request.setPassword(etPassword.getText().toString().trim());
 //                            loginViewModel.setExpiryPassword(request);
 //                            dashboardViewModel.se;
-                            ChangePasswordRequest request=new ChangePasswordRequest();
+                            ChangePasswordRequest request = new ChangePasswordRequest();
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));
                             request.setNewPassword(confirmPasswordET.getText().toString().trim());
                             dashboardViewModel.meChangePassword(request);
@@ -533,13 +534,13 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 if (changePassword != null) {
                     if (changePassword.getStatus().equals("SUCCESS")) {
 
-                                startActivity(new Intent(CreatePasswordActivity.this,BindingLayoutActivity.class)
-                                        .putExtra("screen","ChangePassword")
-                                );
+                        startActivity(new Intent(CreatePasswordActivity.this, BindingLayoutActivity.class)
+                                .putExtra("screen", "ChangePassword")
+                        );
 
 
-                    }else{
-                        Utils.displayAlertNew(changePassword.getError().getErrorDescription(),CreatePasswordActivity.this,"");
+                    } else {
+                        Utils.displayAlertNew(changePassword.getError().getErrorDescription(), CreatePasswordActivity.this, "");
                     }
                 }
 
@@ -553,7 +554,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (apiError != null) {
                     if (!apiError.getStatus().equals("SUCCESS")) {
-                        Utils.displayAlertNew(apiError.getError().getErrorDescription(),CreatePasswordActivity.this,"");
+                        Utils.displayAlertNew(apiError.getError().getErrorDescription(), CreatePasswordActivity.this, "");
                     }
                 }
             }
