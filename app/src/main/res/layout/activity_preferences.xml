@@ -209,7 +209,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_39sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
                     android:background="@drawable/disable_bg" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -235,7 +235,6 @@
                         android:enabled="false"
                         android:focusable="false"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="@string/countryhint"
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:padding="@dimen/_12sdp"

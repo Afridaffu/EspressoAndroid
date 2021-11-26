@@ -34,6 +34,10 @@ public class MyApplication extends Application {
     WalletResponse walletResponse;
 
     String timezone = "";
+    int timezoneID = 0;
+    String tempTimezone = "";
+    int tempTimezoneID = 0;
+
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
     private double tokenWithdrawalBankWeekLimit;
@@ -233,5 +237,29 @@ public class MyApplication extends Application {
 
     public void setStrEmail(String strEmail) {
         this.strEmail = strEmail;
+    }
+
+    public int getTimezoneID() {
+        return timezoneID;
+    }
+
+    public void setTimezoneID(int timezoneID) {
+        this.timezoneID = timezoneID;
+    }
+
+    public String getTempTimezone() {
+        return tempTimezone;
+    }
+
+    public void setTempTimezone(String tempTimezone) {
+        this.tempTimezone = tempTimezone;
+    }
+
+    public int getTempTimezoneID() {
+        return tempTimezoneID;
+    }
+
+    public void setTempTimezoneID(int tempTimezoneID) {
+        this.tempTimezoneID = tempTimezoneID;
     }
 }

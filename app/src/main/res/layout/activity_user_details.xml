@@ -156,7 +156,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:src="@drawable/ic_rightarrow" />
+                    android:src="@drawable/ic_rightarrow"
+                    android:visibility="gone"/>
 
 
             </LinearLayout>

@@ -20,6 +20,7 @@ import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
@@ -44,6 +45,9 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
+import com.greenbox.coyni.model.users.User;
+import com.greenbox.coyni.model.users.UserData;
+import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 
 import okhttp3.MultipartBody;
@@ -102,13 +106,11 @@ public interface ApiService {
     @PATCH("/api/v2/user/change-password")
     Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
 
-
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
 
     @GET("api/v2/agreements/active/type")
     Call<AgreementsPdf> agreementsByType(@Query("agreementType") String agreetype);
-
 
     @PATCH("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Query("id") int id);
@@ -159,5 +161,10 @@ public interface ApiService {
     @GET("api/v2/profile/me/preferences")
     Call<Preferences> mePreferences();
 
+    @POST("api/v2/profile/me/preferences")
+    Call<UserPreference> meUpdatePreferences(@Body UserPreferenceModel request);
+
+    @PATCH("api/v2/profile/me/update-address")
+    Call<User> meUpdateAddress(@Body UserData request);
 
 }

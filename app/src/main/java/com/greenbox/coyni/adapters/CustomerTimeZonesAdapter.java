@@ -1,6 +1,7 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +9,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.utils.MyApplication;
 
 import java.util.List;
 
 public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZonesAdapter.MyViewHolder> {
-    List<String> listCountries;
+    List<TimeZoneModel> listCountries;
     Context mContext;
     MyApplication objMyApplication;
     EditText editText;
+    RecyclerView timezonesRV;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //        public TextInputEditText etCurrencyPST;
@@ -37,10 +42,11 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     }
 
 
-    public CustomerTimeZonesAdapter(List<String> list, Context context, EditText editText) {
+    public CustomerTimeZonesAdapter(List<TimeZoneModel> list, Context context, EditText editText, RecyclerView timezonesRV) {
         this.mContext = context;
         this.listCountries = list;
         this.editText = editText;
+        this.timezonesRV = timezonesRV;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -54,9 +60,8 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-            String objData = listCountries.get(position);
-            holder.tvPreference.setText(objData);
-            if(objMyApplication.getTimezone().equals(objData)){
+            holder.tvPreference.setText(listCountries.get(position).getTimezone());
+            if(listCountries.get(position).isSelected()){
                 holder.tickIcon.setVisibility(View.VISIBLE);
             }else{
                 holder.tickIcon.setVisibility(View.GONE);
@@ -64,9 +69,24 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
             holder.tvPreference.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    editText.setText(objData);
-                    objMyApplication.setTimezone(objData);
+                    Log.e("text", ""+position);
+                    objMyApplication.setTempTimezoneID(listCountries.get(position).getTimezoneID());
+                    objMyApplication.setTempTimezone(listCountries.get(position).getTimezone());
 
+                    for(int i = 0;i<listCountries.size();i++) {
+                        Log.e("Pos, i", position+" "+i);
+                        if(position == i){
+                            listCountries.get(i).setSelected(true);
+                        }else{
+                            listCountries.get(i).setSelected(false);
+                        }
+                    }
+
+                    CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(listCountries,mContext,editText,timezonesRV);
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+                    timezonesRV.setLayoutManager(mLayoutManager);
+                    timezonesRV.setItemAnimator(new DefaultItemAnimator());
+                    timezonesRV.setAdapter(customerTimeZonesAdapter);
                 }
             });
 
@@ -85,7 +105,7 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
         return listCountries.size();
     }
 
-    public void updateList(List<String> list){
+    public void updateList(List<TimeZoneModel> list){
         listCountries = list;
         notifyDataSetChanged();
     }

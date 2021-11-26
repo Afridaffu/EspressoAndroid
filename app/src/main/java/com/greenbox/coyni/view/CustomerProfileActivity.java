@@ -5,16 +5,23 @@ import com.bumptech.glide.Glide;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,7 +56,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     Cursor cursor;
     DashboardViewModel dashboardViewModel;
-
+    CardView cardviewYourAccount;
+    Dialog enablePopup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -84,34 +92,33 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOn = findViewById(R.id.switchOn);
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             tvBMSetting = findViewById(R.id.tvBMSetting);
+            cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
-
-            customerNameTV.setText(objMyApplication.getStrUserName());
 
             bindImage(objMyApplication.getMyProfile().getData().getImage());
 
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
                 tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
                 cpAccountIDTV.setText("Account ID " + objMyApplication.getMyProfile().getData().getId());
+                if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")){
+                    cardviewYourAccount.setVisibility(View.VISIBLE);
+                }else{
+                    cardviewYourAccount.setVisibility(View.GONE);
+                }
             } else {
                 tvACStatus.setText("");
             }
-            if (objMyApplication.getStrUserName().length() > 21) {
-                customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
-            } else {
+
+            if (objMyApplication.getStrUserName().length() > 16) {
+                customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
+            }else if (objMyApplication.getStrUserName().length() < 16) {
                 customerNameTV.setText(objMyApplication.getStrUserName());
             }
 
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            viewFaceBottom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    FaceIdSetupBottomSheet faceIdSetupBottomSheet = new FaceIdSetupBottomSheet();
-                    faceIdSetupBottomSheet.show(getSupportFragmentManager(), faceIdSetupBottomSheet.getTag());
-                }
-            });
+
             if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 tvBMSetting.setText(getString(R.string.security_touchid));
             } else {
@@ -218,8 +225,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             .putExtra("screen", "ResetPIN"));
                 }
             });
-            customerNameTV.setText(objMyApplication.getStrUserName());
-
 
             cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -254,6 +259,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
             } else {
                 Utils.displayAlert(getString(R.string.internet), CustomerProfileActivity.this, "");
             }
+
+
+            customerNameTV.setOnClickListener(view -> {
+                if (objMyApplication.getStrUserName().length() > 16 && objMyApplication.getStrUserName().length() < 21) {
+                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
+                }else if (objMyApplication.getStrUserName().length() > 21) {
+                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21)+"...");
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -319,13 +333,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private void isSwitchEnable() {
         try {
             if (!isSwitchEnabled) {
-                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
+//                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
+                if (tvBMSetting.getText().toString().toLowerCase().contains("touch")){
                     FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
-                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                BIOMETRIC_STRONG);
-                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                        enablePopup = showFaceTouchEnabledDialog(this,"TOUCH");
                     } else {
                         dialog = Utils.showProgressDialog(this);
                         BiometricRequest biometricRequest = new BiometricRequest();
@@ -334,14 +346,22 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         coyniViewModel.saveBiometric(biometricRequest);
                     }
                 } else {
-                    dialog = Utils.showProgressDialog(this);
-                    BiometricRequest biometricRequest = new BiometricRequest();
-                    biometricRequest.setBiometricEnabled(true);
-                    biometricRequest.setDeviceId(Utils.getDeviceID());
-                    coyniViewModel.saveBiometric(biometricRequest);
+
+                    if (Utils.checkBiometric(CustomerProfileActivity.this)) {
+                        if (!Utils.isFingerPrint(CustomerProfileActivity.this)) {
+                            dialog = Utils.showProgressDialog(this);
+                            BiometricRequest biometricRequest = new BiometricRequest();
+                            biometricRequest.setBiometricEnabled(true);
+                            biometricRequest.setDeviceId(Utils.getDeviceID());
+                            coyniViewModel.saveBiometric(biometricRequest);
+                        }
+                    }else{
+                        enablePopup = showFaceTouchEnabledDialog(this,"FACE");
+                    }
                 }
             } else {
-                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
+//                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
+                if (tvBMSetting.getText().toString().toLowerCase().contains("face")){
                     dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
@@ -365,6 +385,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
         try {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
+                if(enablePopup!=null){
+                    enablePopup.dismiss();
+                }
                 dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
                 dialog.setIndeterminate(false);
                 dialog.setMessage("Please wait...");
@@ -479,7 +502,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         });
     }
 
-
     private boolean getLocalBiometricEnabled() {
         boolean isFace = false;
         boolean isTouch = false;
@@ -521,7 +543,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
         return isBiometric;
     }
-
 
     public boolean isTouchEnabled() {
         boolean touch = false;
@@ -590,6 +611,79 @@ public class CustomerProfileActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public Dialog showFaceTouchEnabledDialog(final Context context,String type) {
+        // custom dialog
+        final Dialog dDialog = new Dialog(context);
+        dDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dDialog.setContentView(R.layout.enable_disable_face_touch_dialog);
+        dDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        CardView enableCV = dDialog.findViewById(R.id.enableCV);
+        TextView tvEnable = dDialog.findViewById(R.id.tvEnable);
+        TextView tvHead = dDialog.findViewById(R.id.tvHead);
+        TextView tvMessage = dDialog.findViewById(R.id.tvMessage);
+        LinearLayout notNowLL = dDialog.findViewById(R.id.notNowLL);
+
+        if(type.equals("FACE")){
+            tvHead.setText(context.getString(R.string.set_up_face_id));
+            tvEnable.setText(context.getString(R.string.set_up_face_id));
+            tvMessage.setText(context.getString(R.string.enable_face_message));
+        }else{
+            tvHead.setText(context.getString(R.string.set_up_touch_id));
+            tvEnable.setText(context.getString(R.string.set_up_touch_id));
+            tvMessage.setText(context.getString(R.string.enable_touch_message));
+        }
+
+        notNowLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dDialog.dismiss();
+            }
+        });
+
+        enableCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(type.equals("TOUCH")){
+                    FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
+                    if (!fingerprintManager.hasEnrolledFingerprints()) {
+                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                BIOMETRIC_STRONG);
+                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                    } else {
+                        dialog = Utils.showProgressDialog(context);
+                        BiometricRequest biometricRequest = new BiometricRequest();
+                        biometricRequest.setBiometricEnabled(true);
+                        biometricRequest.setDeviceId(Utils.getDeviceID());
+                        coyniViewModel.saveBiometric(biometricRequest);
+                    }
+                }else{
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                }
+            }
+        });
+
+        Window window = dDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dDialog.setCanceledOnTouchOutside(true);
+        dDialog.show();
+
+        return dDialog;
     }
 
 }

@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
+import android.preference.PreferenceActivity;
 import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -41,13 +42,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
+import com.greenbox.coyni.model.users.TimeZoneModel;
+import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PreferencesActivity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -580,34 +583,63 @@ public class Utils {
 
 
 
-    public static void populateTimeZones(final Context context, EditText editText) {
+    public static void populateTimeZones(PreferencesActivity preferenceActivity, EditText editText, MyApplication myApplicationObj) {
         // custom dialog
-        final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(preferenceActivity);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.timezones_bottom_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        DisplayMetrics mertics = preferenceActivity.getResources().getDisplayMetrics();
         int width = mertics.widthPixels;
 
         CardView actionCV = dialog.findViewById(R.id.cvAction);
         TextView actionText = dialog.findViewById(R.id.tvAction);
-        RecyclerView timezones = dialog.findViewById(R.id.timezonesRV);
+        RecyclerView timezonesRV = dialog.findViewById(R.id.timezonesRV);
 
         try {
-            ArrayList<String> arrZonesList = new ArrayList<>();
-            arrZonesList.add(context.getString(R.string.EST));
-            arrZonesList.add(context.getString(R.string.CST));
-            arrZonesList.add(context.getString(R.string.MST));
-            arrZonesList.add(context.getString(R.string.PST));
-            arrZonesList.add(context.getString(R.string.AST));
-            arrZonesList.add(context.getString(R.string.HST));
+            ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
+            TimeZoneModel tzm = new TimeZoneModel();
+            tzm.setTimezone(preferenceActivity.getString(R.string.EST));
+            tzm.setTimezoneID(3);
+            arrZonesList.add(tzm);
 
-            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context,editText);
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
-            timezones.setLayoutManager(mLayoutManager);
-            timezones.setItemAnimator(new DefaultItemAnimator());
-            timezones.setAdapter(customerTimeZonesAdapter);
+            tzm = new TimeZoneModel();
+            tzm.setTimezone(preferenceActivity.getString(R.string.CST));
+            tzm.setTimezoneID(2);
+            arrZonesList.add(tzm);
+
+            tzm = new TimeZoneModel();
+            tzm.setTimezone(preferenceActivity.getString(R.string.MST));
+            tzm.setTimezoneID(1);
+            arrZonesList.add(tzm);
+
+            tzm = new TimeZoneModel();
+            tzm.setTimezone(preferenceActivity.getString(R.string.PST));
+            tzm.setTimezoneID(0);
+            arrZonesList.add(tzm);
+
+            tzm = new TimeZoneModel();
+            tzm.setTimezone(preferenceActivity.getString(R.string.AST));
+            tzm.setTimezoneID(5);
+            arrZonesList.add(tzm);
+
+            tzm = new TimeZoneModel();
+            tzm.setTimezone(preferenceActivity.getString(R.string.HST));
+            tzm.setTimezoneID(4);
+            arrZonesList.add(tzm);
+
+            for(int i = 0;i<arrZonesList.size()-1;i++) {
+                if(myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()){
+                    arrZonesList.get(i).setSelected(true);
+                }
+            }
+
+            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, preferenceActivity,editText,timezonesRV);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(preferenceActivity);
+            timezonesRV.setLayoutManager(mLayoutManager);
+            timezonesRV.setItemAnimator(new DefaultItemAnimator());
+            timezonesRV.setAdapter(customerTimeZonesAdapter);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -617,6 +649,12 @@ public class Utils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+
+                UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
+                userPreferenceModel.setLocalCurrency(0);
+                userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
+                userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
+                preferenceActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
             }
         });
 
@@ -647,4 +685,6 @@ public class Utils {
             ex.printStackTrace();
         }
     }
+
+
 }

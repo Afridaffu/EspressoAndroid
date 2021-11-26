@@ -221,9 +221,9 @@
                 android:layout_below="@id/cardviewProfile"
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginRight="@dimen/_11sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:background="@color/white"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
