@@ -22,6 +22,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.util.regex.Pattern;
+
 public class ConfirmPasswordActivity extends AppCompatActivity {
     TextInputEditText currentPassET;
     TextInputLayout currentTIL;
@@ -29,6 +31,10 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     boolean btnEnabled=false;
     ImageView backBtn;
     String oldPassword;
+    private Pattern strong;
+    private static final String STRONG_PATTERN =
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
             currentTIL = findViewById(R.id.currentPassTIL);
             saveBtn = findViewById(R.id.saveBtnCV);
             backBtn=findViewById(R.id.cpConfirmBackIV);
+            strong = Pattern.compile(STRONG_PATTERN);
             backBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -57,21 +64,34 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() >= 8) {
+                    if (charSequence.length() >= 8&&strong.matcher(currentPassET.getText().toString().trim()).matches()) {
                         btnEnabled = true;
                         oldPassword = currentPassET.getText().toString().trim();
                         saveBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                        btnEnableNext();
-                    } else {
+                    } else{
                         btnEnabled = false;
                         saveBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                        btnEnableNext();
                     }
 
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+            saveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(btnEnabled){
+                        startActivity(new Intent(ConfirmPasswordActivity.this, CreatePasswordActivity.class)
+                                .putExtra("screen", "ConfirmPassword")
+                                .putExtra("oldpassword", oldPassword)
+                        );
+
+                        Log.e("oldPass", "" + oldPassword);
+                    }
 
                 }
             });
@@ -82,25 +102,20 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
 
     }
 
-    private void btnEnableNext() {
+    @Override
+    protected void onResume() {
+        super.onResume();
         try {
-            if (btnEnabled) {
-                saveBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(ConfirmPasswordActivity.this, CreatePasswordActivity.class)
-                                .putExtra("screen", "ConfirmPassword")
-                                .putExtra("oldpassword", oldPassword)
-                        );
+            clearField();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                        Log.e("oldPass", "" + oldPassword);
-                    }
-                });
-            } else {
-            }
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-        }
+
+    }
+
+
+    private void clearField() {
+        currentPassET.setText("");
     }
 }
