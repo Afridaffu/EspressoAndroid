@@ -17,7 +17,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.preferences.Preferences;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -88,6 +90,7 @@ public class PreferencesActivity extends AppCompatActivity {
             });
 
             dashboardViewModel.mePreferences();
+            dashboardViewModel.getProfiles();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,6 +105,8 @@ public class PreferencesActivity extends AppCompatActivity {
 
                 try {
                     if (preferences != null) {
+
+
                         timeZoneID = preferences.getData().getTimeZone();
                         myApplicationObj.setTimezoneID(timeZoneID);
                         if (preferences.getData().getTimeZone() == 0) {
@@ -153,6 +158,24 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
+            @Override
+            public void onChanged(ProfilesResponse profilesResponse) {
+
+                if(profilesResponse!=null){
+                    if(profilesResponse.getStatus().equals("success")){
+                        if(profilesResponse.getData().size() > 1){
+
+                        }else{
+
+                        }
+                    }
+                }
+            }
+        });
+
+
     }
 
 

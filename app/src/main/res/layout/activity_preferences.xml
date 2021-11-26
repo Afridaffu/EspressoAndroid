@@ -212,36 +212,100 @@
                     android:layout_marginTop="@dimen/_6sdp"
                     android:background="@drawable/disable_bg" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/accountTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/accountCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Account"
-                    android:textColorHint="@color/black"
-                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/primary_color"
-                    app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black">
+                    android:layout_marginTop="@dimen/_22sdp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/accountET"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_down"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/accountTIL"
+                        app:layout_constraintHorizontal_bias="0.952"
+                        app:layout_constraintStart_toStartOf="@+id/accountTIL"
+                        app:layout_constraintTop_toTopOf="@+id/accountTIL"
+                        app:layout_constraintVertical_bias="0.507"
+                        app:layout_editor_absoluteX="336.24dp"
+                        app:layout_editor_absoluteY="26.28dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/accountTIL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
-                        android:enabled="false"
-                        android:focusable="false"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:padding="@dimen/_12sdp"
-                        android:textColor="@color/xdark_gray"
-                        android:textSize="@dimen/_12ssp" />
+                        android:hint="Time Zone"
+                        android:textColorHint="@color/black"
+                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                        app:boxStrokeColor="@color/primary_color"
+                        app:expandedHintEnabled="false"
+                        app:hintTextColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/accountET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:hint=""
+                            android:imeOptions="actionNext"
+                            android:inputType="textEmailAddress|textNoSuggestions"
+                            android:maxLines="1"
+                            android:padding="@dimen/_14sdp"
+                            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                            android:singleLine="true"
+                            android:textColor="@color/text_color"
+                            android:textColorHint="@color/light_gray"
+                            android:textCursorDrawable="@drawable/cursor_color"
+                            android:textSize="@dimen/_12ssp"
+                            android:cursorVisible="false"/>
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:id="@+id/accountTIL"-->
+<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:hint="Account"-->
+<!--                    android:textColorHint="@color/black"-->
+<!--                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"-->
+<!--                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"-->
+<!--                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"-->
+<!--                    app:boxCornerRadiusTopStart="@dimen/_10sdp"-->
+<!--                    app:boxStrokeColor="@color/primary_color"-->
+<!--                    app:expandedHintEnabled="false"-->
+<!--                    app:hintTextColor="@color/black">-->
+
+<!--                    <com.google.android.material.textfield.TextInputEditText-->
+<!--                        android:id="@+id/accountET"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:clickable="false"-->
+<!--                        android:enabled="false"-->
+<!--                        android:focusable="false"-->
+<!--                        android:fontFamily="@font/opensans_semibold"-->
+<!--                        android:imeOptions="actionDone"-->
+<!--                        android:inputType="text"-->
+<!--                        android:padding="@dimen/_12sdp"-->
+<!--                        android:textColor="@color/xdark_gray"-->
+<!--                        android:textSize="@dimen/_12ssp" />-->
+
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
             </RelativeLayout>
 
