@@ -106,8 +106,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            currentTIL.requestFocus();
-            currentPassET.requestFocus();
+            clearField();
         } catch (Exception e) {
             e.printStackTrace();
         }
