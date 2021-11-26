@@ -603,7 +603,7 @@ public class LoginViewModel extends AndroidViewModel {
                         updateEmailValidateResponse.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<EmailValidateResponse>() {
+                        Type type = new TypeToken<UpdateEmailResponse>() {
                         }.getType();
                         UpdateEmailResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
@@ -635,7 +635,7 @@ public class LoginViewModel extends AndroidViewModel {
                         updatePhoneValidateResponse.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<EmailValidateResponse>() {
+                        Type type = new TypeToken<UpdatePhoneResponse>() {
                         }.getType();
                         UpdatePhoneResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
