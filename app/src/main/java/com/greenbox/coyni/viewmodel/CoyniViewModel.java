@@ -23,6 +23,7 @@ import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.Utils;
 
 import java.lang.reflect.Type;
 

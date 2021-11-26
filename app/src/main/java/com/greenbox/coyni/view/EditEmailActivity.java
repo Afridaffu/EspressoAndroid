@@ -126,6 +126,7 @@ public class EditEmailActivity extends AppCompatActivity {
             editEmailCloseLL.setOnClickListener(view -> {
                 finish();
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,6 +152,11 @@ public class EditEmailActivity extends AppCompatActivity {
                     } else if (currentEmailET.getText().toString().trim().length() == 0) {
                         currentEmailErrorLL.setVisibility(VISIBLE);
                         currentEmailErrorTV.setText("Field Required");
+                        isCurrentEmail = false;
+                    }
+                    if (Utils.isValidEmail(charSequence.toString().trim())) {
+                        isCurrentEmail = true;
+                    } else {
                         isCurrentEmail = false;
                     }
                     enableOrDisableSave();
@@ -191,6 +197,11 @@ public class EditEmailActivity extends AppCompatActivity {
                     } else if (newEmailET.getText().toString().trim().length() == 0) {
                         newEmailErrorLL.setVisibility(VISIBLE);
                         newEmailErrorTV.setText("Field Required");
+                        isNewEmail = false;
+                    }
+                    if (Utils.isValidEmail(charSequence.toString().trim())) {
+                        isNewEmail = true;
+                    } else {
                         isNewEmail = false;
                     }
                     enableOrDisableSave();
@@ -314,18 +325,22 @@ public class EditEmailActivity extends AppCompatActivity {
         customerProfileViewModel.getUpdateEmailSendOTPResponse().observe(this, new Observer<UpdateEmailResponse>() {
             @Override
             public void onChanged(UpdateEmailResponse updateEmailResponse) {
-                dialog.dismiss();
-                if (updateEmailResponse != null && updateEmailResponse.getStatus().toLowerCase().equals("success")) {
-                    myApplicationObj.setUpdateEmailResponse(updateEmailResponse);
-                    startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
-                            .putExtra("screen", "EditEmail")
-                            .putExtra("OTP_TYPE", "OTP")
-                            .putExtra("IS_OLD_EMAIL", "true")
-                            .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
-                            .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
-                    );
-                } else {
-                    Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "");
+                try {
+                    dialog.dismiss();
+                    if (updateEmailResponse != null && updateEmailResponse.getStatus().toLowerCase().equals("success")) {
+                        myApplicationObj.setUpdateEmailResponse(updateEmailResponse);
+                        startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
+                                .putExtra("screen", "EditEmail")
+                                .putExtra("OTP_TYPE", "OTP")
+                                .putExtra("IS_OLD_EMAIL", "true")
+                                .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
+                                .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
+                        );
+                    } else {
+                        Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -333,17 +348,21 @@ public class EditEmailActivity extends AppCompatActivity {
         loginViewModel.getEmailExistsResponseMutableLiveData().observe(this, new Observer<EmailExistsResponse>() {
             @Override
             public void onChanged(EmailExistsResponse emailExistsResponse) {
-                if (emailExistsResponse != null) {
-                    if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
-                        newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
-                        newEmailErrorLL.setVisibility(GONE);
-                    } else {
-                        newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
-                        newEmailErrorLL.setVisibility(VISIBLE);
-                        newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                try {
+                    if (emailExistsResponse != null) {
+                        if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
+                            newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
+                            newEmailErrorLL.setVisibility(GONE);
+                        } else {
+                            newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
+                            newEmailErrorLL.setVisibility(VISIBLE);
+                            newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

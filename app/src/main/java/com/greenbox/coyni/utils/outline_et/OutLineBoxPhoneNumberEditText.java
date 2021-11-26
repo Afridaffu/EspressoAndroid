@@ -48,8 +48,10 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
             @Override
             public void onFocusChange(View view, boolean b) {
                 try {
+
                     if (isPhoneError) {
                         if (b) {
+                            CreateAccountActivity.focusedID = pnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
@@ -58,6 +60,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         }
                     } else {
                         if (b) {
+                            CreateAccountActivity.focusedID = pnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
@@ -106,7 +109,6 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                 }
             }
         });
-
 
         pnET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -194,5 +196,11 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         return pnET.getText().toString().trim();
     }
 
+    public int getETID() {
+        return pnET.getId();
+    }
 
+    public void requestETFocus(){
+        pnET.requestFocus();
+    }
 }

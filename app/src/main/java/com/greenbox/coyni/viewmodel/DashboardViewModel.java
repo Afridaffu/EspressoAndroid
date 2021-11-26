@@ -45,27 +45,15 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<Agreements> agreementsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<AgreementsPdf> agreementsPdfMutableLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Preferences> preferenceMutableLiveData = new MutableLiveData<>();
+
     public MutableLiveData<AgreementsPdf> getAgreementsPdfMutableLiveData() {
         return agreementsPdfMutableLiveData;
     }
 
-    private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Preferences> preferenceMutableLiveData = new MutableLiveData<>();
-
-
-    public void setApiErrorMutableLiveData(MutableLiveData<APIError> apiErrorMutableLiveData) {
-        this.apiErrorMutableLiveData = apiErrorMutableLiveData;
-    }
-    public void setAgreementsPdfMutableLiveData(MutableLiveData<AgreementsPdf> agreementsPdfMutableLiveData) {
-        this.agreementsPdfMutableLiveData = agreementsPdfMutableLiveData;
-    }
-
     public MutableLiveData<ChangePassword> getChangePasswordMutableLiveData() {
         return changePasswordMutableLiveData;
-    }
-
-    public void setChangePasswordMutableLiveData(MutableLiveData<ChangePassword> changePasswordMutableLiveData) {
-        this.changePasswordMutableLiveData = changePasswordMutableLiveData;
     }
 
     public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
@@ -410,6 +398,8 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Preferences obj = response.body();
                             preferenceMutableLiveData.setValue(obj);
+                            Log.e("preferences", new Gson().toJson(obj));
+                            Log.e("respo", new Gson().toJson(response.body()));
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Preferences>() {
@@ -434,6 +424,7 @@ public class DashboardViewModel extends AndroidViewModel {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
     }
 
 }

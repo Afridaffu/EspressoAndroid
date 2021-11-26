@@ -6,6 +6,7 @@ public class PreferencesResponse {
     private int timeZone;
     private int localCurrency;
     private String message;
+    private String preferredAccount;
 
     public int getUserId() {
         return userId;
@@ -37,5 +38,13 @@ public class PreferencesResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getPreferredAccount() {
+        return preferredAccount;
+    }
+
+    public void setPreferredAccount(String preferredAccount) {
+        this.preferredAccount = preferredAccount;
     }
 }

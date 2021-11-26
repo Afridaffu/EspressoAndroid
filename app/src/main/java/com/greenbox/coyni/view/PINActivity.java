@@ -57,7 +57,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     SQLiteDatabase mydatabase;
     Cursor dsDontRemind;
     Boolean isDontRemind = false;
-    String resetPINValue = "CHOOSE";
+    String resetPINValue = "ENTER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +82,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
                     break;
             }
+            String strScreen = getIntent().getStringExtra("screen");
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             SetDontRemind();
             initObserver();
@@ -158,7 +159,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
             objMyApplication = (MyApplication) getApplicationContext();
-            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
+                    getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
+                    || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN"))) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -190,88 +193,88 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
                             shakeAnimateUpDown();//new
-                            String strScreen = "";
-                            if (getIntent().getStringExtra("screen") != null) {
-                                strScreen = getIntent().getStringExtra("screen");
-                            }
-                            switch (strScreen) {
-                                case "loginExpiry":
-                                    Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
-                                    i.putExtra("screen", getIntent().getStringExtra("screen"));
-                                    startActivity(i);
-                                    break;
-                                case "login":
-//                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
-                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
-                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(d);
-                                    } else {
-                                        if (!isDontRemind) {
-                                            if (Utils.checkBiometric(PINActivity.this)) {
-                                                if (Utils.checkAuthentication(PINActivity.this)) {
-                                                    if (Utils.isFingerPrint(PINActivity.this)) {
-                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                .putExtra("ENABLE_TYPE", "TOUCH")
-                                                                .putExtra("screen", strScreen));
-                                                    } else {
-                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                .putExtra("ENABLE_TYPE", "FACE")
-                                                                .putExtra("screen", strScreen));
-                                                    }
-                                                } else {
-                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                            .putExtra("ENABLE_TYPE", "SUCCESS")
-                                                            .putExtra("screen", strScreen));
-                                                }
-                                            } else {
-                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                        .putExtra("ENABLE_TYPE", "TOUCH")
-                                                        .putExtra("screen", strScreen));
-                                            }
-                                        } else {
-                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(d);
-                                        }
-                                    }
-                                    break;
-                                case "UserDetails":
-                                    Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
-                                    startActivity(ee);
-                                    finish();
-                                    break;
-                                case "ChangePassword":
-                                    Intent cp=new Intent(PINActivity.this,ConfirmPasswordActivity.class);
-                                    startActivity(cp);
-                                    finish();
-                                    break;
-                                case "EditPhone":
-                                    Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
-                                    ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
-                                    startActivity(ep);
-                                    finish();
-                                    break;
-                                case "EditAddress":
-                                    Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
-                                    startActivity(ea);
-                                    finish();
-                                    break;
-                                case "ResetPIN":
-                                    if(resetPINValue.equals("CHOOSE")){
-                                        tvHead.setText("Choose your PIN");
-                                        tvForgot.setVisibility(View.GONE);
-                                        passcode = "";
-                                        resetPINValue = "CONFIRM";
-                                        clearPassCode();
-                                        TYPE = "CHOOSE";
-                                    }else{
-                                        tvHead.setText("Confirm your PIN");
-                                        tvForgot.setVisibility(View.GONE);
-                                        passcode = "";
-                                    }
-                                    break;
-                            }
+//                            String strScreen = "";
+//                            if (getIntent().getStringExtra("screen") != null) {
+//                                strScreen = getIntent().getStringExtra("screen");
+//                            }
+//                            switch (strScreen) {
+//                                case "loginExpiry":
+//                                    Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+//                                    i.putExtra("screen", getIntent().getStringExtra("screen"));
+//                                    startActivity(i);
+//                                    break;
+//                                case "login":
+////                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
+//                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+//                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+//                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                        startActivity(d);
+//                                    } else {
+//                                        if (!isDontRemind) {
+//                                            if (Utils.checkBiometric(PINActivity.this)) {
+//                                                if (Utils.checkAuthentication(PINActivity.this)) {
+//                                                    if (Utils.isFingerPrint(PINActivity.this)) {
+//                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                                .putExtra("ENABLE_TYPE", "TOUCH")
+//                                                                .putExtra("screen", strScreen));
+//                                                    } else {
+//                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                                .putExtra("ENABLE_TYPE", "FACE")
+//                                                                .putExtra("screen", strScreen));
+//                                                    }
+//                                                } else {
+//                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                            .putExtra("ENABLE_TYPE", "SUCCESS")
+//                                                            .putExtra("screen", strScreen));
+//                                                }
+//                                            } else {
+//                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                        .putExtra("ENABLE_TYPE", "TOUCH")
+//                                                        .putExtra("screen", strScreen));
+//                                            }
+//                                        } else {
+//                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+//                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                            startActivity(d);
+//                                        }
+//                                    }
+//                                    break;
+//                                case "UserDetails":
+//                                    Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+//                                    startActivity(ee);
+//                                    finish();
+//                                    break;
+//                                case "ChangePassword":
+//                                    Intent cp=new Intent(PINActivity.this,ConfirmPasswordActivity.class);
+//                                    startActivity(cp);
+//                                    finish();
+//                                    break;
+//                                case "EditPhone":
+//                                    Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
+//                                    ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
+//                                    startActivity(ep);
+//                                    finish();
+//                                    break;
+//                                case "EditAddress":
+//                                    Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
+//                                    startActivity(ea);
+//                                    finish();
+//                                    break;
+//                                case "ResetPIN":
+//                                    if(resetPINValue.equals("CHOOSE")){
+//                                        tvHead.setText("Choose your PIN");
+//                                        tvForgot.setVisibility(View.GONE);
+//                                        passcode = "";
+//                                        resetPINValue = "CONFIRM";
+//                                        clearPassCode();
+//                                        TYPE = "CHOOSE";
+//                                    }else{
+//                                        tvHead.setText("Confirm your PIN");
+//                                        tvForgot.setVisibility(View.GONE);
+//                                        passcode = "";
+//                                    }
+//                                    break;
+//                            }
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -321,10 +324,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                     }
                                                 }
                                                 break;
-                                            case "UserDetails":
+                                            case "EditEmail":
                                                 Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
                                                 startActivity(ee);
-                                                finish();
+//                                                finish();
                                                 break;
                                             case "EditPhone":
                                                 Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
@@ -338,17 +341,22 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 finish();
                                                 break;
                                             case "ResetPIN":
-                                                if (resetPINValue.equals("CHOOSE")) {
+                                                imgBack.setImageResource(R.drawable.ic_back);
+                                                Log.e("resetPin", resetPINValue);
+                                                if (resetPINValue.equals("ENTER")) {
                                                     tvHead.setText("Choose your PIN");
+                                                    tvForgot.setVisibility(View.GONE);
+                                                    passcode = "";
+                                                    resetPINValue = "CHOOSE";
+                                                    clearPassCode();
+                                                    TYPE = "CHOOSE";
+                                                }else if (resetPINValue.equals("CHOOSE")) {
+                                                    tvHead.setText("Confirm your PIN");
                                                     tvForgot.setVisibility(View.GONE);
                                                     passcode = "";
                                                     resetPINValue = "CONFIRM";
                                                     clearPassCode();
                                                     TYPE = "CHOOSE";
-                                                } else {
-                                                    tvHead.setText("Confirm your PIN");
-                                                    tvForgot.setVisibility(View.GONE);
-                                                    passcode = "";
                                                 }
                                                 break;
                                             case "ChangePassword":
@@ -400,12 +408,22 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 }, 2000);
 
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
-//                            Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
-                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
-                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
-                                Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                PINActivity.this.startActivity(d);
+//                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                                Utils.showCustomToast(PINActivity.this, "PIN code has updated", R.drawable.ic_custom_tick, "pin");
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            PINActivity.this.startActivity(d);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                }, 2000);
+
 
                             } else {
                                 if (Utils.checkBiometric(PINActivity.this)) {
@@ -510,10 +528,36 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.imgBack:
                 if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
-                        || getIntent().getStringExtra("screen").equals("loginExpiry") ||
-                        getIntent().getStringExtra("screen").equals("UserDetails") || getIntent().getStringExtra("screen").equals("ChangePassword"))) {
+                        || getIntent().getStringExtra("screen").equals("loginExpiry")
+                        || getIntent().getStringExtra("screen").equals("ChangePassword")
+                        || getIntent().getStringExtra("screen").equals("EditEmail")
+                        || getIntent().getStringExtra("screen").equals("EditPhone")
+                        || getIntent().getStringExtra("screen").equals("EditAddress"))) {
                     onBackPressed();
-                } else {
+                }else if (getIntent().getStringExtra("screen") != null &&
+                        (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
+                    Log.e("resetPin", resetPINValue);
+                    Log.e("Type", TYPE);
+                    if (resetPINValue.equals("ENTER")) {
+                        onBackPressed();
+                    }else if (resetPINValue.equals("CHOOSE")) {
+                        tvForgot.setVisibility(View.VISIBLE);
+                        TYPE = "ENTER";
+                        tvHead.setText("Enter your PIN");
+                        clearControls();
+                        passcode = "";
+                        resetPINValue = "ENTER";
+                        imgBack.setImageResource(R.drawable.ic_close);
+                    }else if (resetPINValue.equals("CONFIRM")) {
+                        tvForgot.setVisibility(View.GONE);
+                        TYPE = "CHOOSE";
+                        tvHead.setText("Choose your PIN");
+                        clearControls();
+                        passcode = "";
+                        imgBack.setImageResource(R.drawable.ic_back);
+                        resetPINValue = "CHOOSE";
+                    }
+                }else {
                     if (TYPE.equals("CHOOSE")) {
                         onBackPressed();
                     } else {
@@ -558,6 +602,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         break;
                     case 6:
                         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+
                         switch (TYPE) {
                             case "CHOOSE":
                                 strChoose = passcode;
@@ -565,6 +610,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 TYPE = "CONFIRM";
                                 tvHead.setText("Confirm your PIN");
                                 clearPassCode();
+                                resetPINValue = "CONFIRM";
                                 break;
                             case "CONFIRM":
                                 strConfirm = passcode;

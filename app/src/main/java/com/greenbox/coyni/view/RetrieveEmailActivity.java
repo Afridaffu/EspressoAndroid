@@ -86,47 +86,95 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 
+        if (charSequence == firstName.getEditableText()) {
+            if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                firstNameErrorLL.setVisibility(GONE);
+                firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                Utils.setUpperHintColor(firstTIL,getResources().getColor(R.color.primary_green));
+            }
+            enableButton();
+        } else if (charSequence == lastName.getEditableText()){
+            if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                lastNameErrorLL.setVisibility(GONE);
+                lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                Utils.setUpperHintColor(lastTIL,getResources().getColor(R.color.primary_green));
+            }
+            enableButton();
+        }
     }
 
     @Override
     public void afterTextChanged(Editable s) {
         if (s == firstName.getEditableText()) {
-            try {
-                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
-                    firstNameErrorLL.setVisibility(GONE);
-                }
-                String str = firstName.getText().toString();
-                if (str.length() > 0 && !isDel) {
-                    firstName.removeTextChangedListener(RetrieveEmailActivity.this);
-                    firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
-                    firstName.setSelection(firstName.getText().toString().trim().length());
-                    firstName.addTextChangedListener(RetrieveEmailActivity.this);
+//            try {
+//                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
+//                    firstNameErrorLL.setVisibility(GONE);
+//                }
+//                String str = firstName.getText().toString();
+//                if (str.length() > 0 && !isDel) {
+//                    firstName.removeTextChangedListener(RetrieveEmailActivity.this);
+//                    firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
+//                    firstName.setSelection(firstName.getText().toString().trim().length());
+//                    firstName.addTextChangedListener(RetrieveEmailActivity.this);
+//
+//                } else {
+//                    isDel = false;
+//                }
+//                enableButton();
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
 
-                } else {
-                    isDel = false;
+
+            try {
+                String str = firstName.getText().toString();
+                if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    firstName.setText("");
+                    firstName.setSelection(firstName.getText().length());
+                } else if (str.length() > 0 && str.contains(".")) {
+                    firstName.setText(firstName.getText().toString().replaceAll("\\.", ""));
+                    firstName.setSelection(firstName.getText().length());
+                }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                    firstName.setText("");
+                    firstName.setSelection(firstName.getText().length());
                 }
-                enableButton();
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+
         } else if (s == lastName.getEditableText()) {
+//            try {
+//                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
+//                    lastNameErrorLL.setVisibility(GONE);
+//                }
+//                String str = lastName.getText().toString();
+//                if (str.length() > 0 && !isDel) {
+//                    lastName.removeTextChangedListener(RetrieveEmailActivity.this);
+//                    lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
+//                    lastName.setSelection(lastName.getText().length());
+//                    lastName.addTextChangedListener(RetrieveEmailActivity.this);
+//
+//                } else {
+//                    isDel = false;
+//                }
+//                enableButton();
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+
             try {
-                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
-                    lastNameErrorLL.setVisibility(GONE);
-                }
                 String str = lastName.getText().toString();
-                if (str.length() > 0 && !isDel) {
-                    lastName.removeTextChangedListener(RetrieveEmailActivity.this);
+                if (str.length() > 0 && str.substring(0).equals(" ")) {
                     lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
                     lastName.setSelection(lastName.getText().length());
-                    lastName.addTextChangedListener(RetrieveEmailActivity.this);
-
-                } else {
-                    isDel = false;
+                } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
+                    lastName.setText(lastName.getText().toString().replaceAll(".", ""));
+                    lastName.setSelection(lastName.getText().length());
                 }
-                enableButton();
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

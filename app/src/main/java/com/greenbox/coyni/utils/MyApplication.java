@@ -23,7 +23,7 @@ public class MyApplication extends Application {
     List<Agreements> agreementsList;
     AccountLimitsData objAcc;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "",listAgree="";
+    String strUserName = "", strRetrEmail = "", listAgree = "", strEmail = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
@@ -32,6 +32,11 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
+
+    String timezone = "";
+    int timezoneID = 0;
+    String tempTimezone = "";
+    int tempTimezoneID = 0;
 
     //Account Limits
     private double tokenWithdrawalBankDayLimit;
@@ -128,6 +133,7 @@ public class MyApplication extends Application {
     public void setStrUserName(String strUserName) {
         this.strUserName = strUserName;
     }
+
     public RetrieveUsersResponse getObjRetUsers() {
         return objRetUsers;
     }
@@ -215,5 +221,45 @@ public class MyApplication extends Application {
 
     public void setWalletResponse(WalletResponse walletResponse) {
         this.walletResponse = walletResponse;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public String getStrEmail() {
+        return strEmail;
+    }
+
+    public void setStrEmail(String strEmail) {
+        this.strEmail = strEmail;
+    }
+
+    public int getTimezoneID() {
+        return timezoneID;
+    }
+
+    public void setTimezoneID(int timezoneID) {
+        this.timezoneID = timezoneID;
+    }
+
+    public String getTempTimezone() {
+        return tempTimezone;
+    }
+
+    public void setTempTimezone(String tempTimezone) {
+        this.tempTimezone = tempTimezone;
+    }
+
+    public int getTempTimezoneID() {
+        return tempTimezoneID;
+    }
+
+    public void setTempTimezoneID(int tempTimezoneID) {
+        this.tempTimezoneID = tempTimezoneID;
     }
 }

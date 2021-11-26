@@ -17,6 +17,7 @@
     <string name="faceidnotavaidescri">Please Log in and go to your profile setting to set up the Face ID.</string>
     <string name="touchidnotavaidescri">Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="faceiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Face ID.</string>
+    <string name="touchiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -163,5 +164,17 @@
     <string name="learn_more1"> <u>Learn More</u></string>
     <string name="learn"><u>Learn More</u></string>
     <string name="privay_policy"><u>Privay Policy</u></string>
+
+    <string name="EST">Eastern (EST)</string>
+    <string name="CST">Central (CST)</string>
+    <string name="MST">Mountain (MST)</string>
+    <string name="PST">Pacific (PST)</string>
+    <string name="AST">Alaskan (AST)</string>
+    <string name="HST">Hawaii (HST)</string>
+    <string name="set_up_face_id">Set Up Face ID</string>
+    <string name="enable_face_message">Enable Face ID to use face recognition to complete payments quickly and securely.</string>
+    <string name="set_up_touch_id">Set Up Touch ID</string>
+    <string name="enable_touch_message">Enable Touch ID to use touch recognition to complete payments quickly and securely.</string>
+
 
 </resources>

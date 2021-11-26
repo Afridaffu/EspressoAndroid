@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/backIV"
         android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
 
         <ImageView
@@ -67,16 +67,18 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black">
+                    app:hintTextColor="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/addressLineOneET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="Address Line 1"
                         android:imeOptions="actionNext"
                         android:inputType="textPostalAddress|textNoSuggestions"
+                        android:maxLength="100"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -129,16 +131,18 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black">
+                    app:hintTextColor="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/addressLineTwoET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="Address Line 2"
                         android:imeOptions="actionNext"
                         android:inputType="textPostalAddress|textNoSuggestions"
+                        android:maxLength="100"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -192,16 +196,18 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black">
+                    app:hintTextColor="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cityET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/cityhint"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -274,7 +280,7 @@
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
                         app:boxStrokeColor="@color/primary_color"
                         app:expandedHintEnabled="false"
-                        app:hintTextColor="@color/black"
+                        app:hintTextColor="@color/primary_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
@@ -283,6 +289,7 @@
                             android:id="@+id/stateET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:cursorVisible="false"
                             android:editable="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
@@ -317,7 +324,7 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black">
+                    app:hintTextColor="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/zipcodeET"
@@ -325,10 +332,10 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/ziphint"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionDone"
                         android:inputType="number|textNoSuggestions"
+                        android:maxLength="7"
                         android:maxLines="1"
-                        android:maxLength="6"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
@@ -376,8 +383,8 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_39sdp"
-                        android:background="@drawable/disable_bg"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:background="@drawable/disable_bg" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/countryTIL"
@@ -392,13 +399,14 @@
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
                         app:boxStrokeColor="@color/primary_color"
                         app:expandedHintEnabled="false"
-                        app:hintTextColor="@color/black">
+                        app:hintTextColor="@color/primary_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/countryET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="false"
+                            android:cursorVisible="false"
                             android:enabled="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
@@ -409,8 +417,7 @@
                             android:padding="@dimen/_12sdp"
                             android:text="United States"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_12ssp"
-                            />
+                            android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

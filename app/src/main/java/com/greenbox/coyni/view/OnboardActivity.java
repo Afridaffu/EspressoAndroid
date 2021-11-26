@@ -109,7 +109,7 @@ public class OnboardActivity extends AppCompatActivity {
             }
 
             if (!isDeviceID()) {
-                generateUUID();
+                Utils.generateUUID(OnboardActivity.this);
             }
             strDeviceID = Utils.getDeviceID();
             getStarted = findViewById(R.id.getStartedLL);
@@ -318,19 +318,6 @@ public class OnboardActivity extends AppCompatActivity {
             request.setEnableBiometic(true);
             request.setMobileToken(strToken);
             loginViewModel.biometricLogin(request);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void generateUUID() {
-        try {
-            String uuid = UUID.randomUUID().toString();
-            SharedPreferences.Editor editor = getSharedPreferences("DeviceID", MODE_PRIVATE).edit();
-            editor.putString("deviceId", uuid);
-            editor.putBoolean("isDevice", true);
-            editor.apply();
-            Utils.setDeviceID(uuid);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
