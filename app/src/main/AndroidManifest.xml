@@ -56,7 +56,7 @@
             android:name=".view.UserDetailsActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditPhoneActivity"

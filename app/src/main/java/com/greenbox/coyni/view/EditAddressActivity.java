@@ -139,11 +139,29 @@ public class EditAddressActivity extends AppCompatActivity {
                 }
             });
 
-            stateCL.setOnClickListener(view -> statesPopup());
+            stateCL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this,stateET,myApplicationObj);
+            });
 
-            stateTIL.setOnClickListener(view -> statesPopup());
+            stateTIL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this,stateET,myApplicationObj);
+            });
 
-            stateET.setOnClickListener(view -> statesPopup());
+            stateET.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this,stateET,myApplicationObj);
+            });
 
             backIV.setOnClickListener(view -> finish());
 

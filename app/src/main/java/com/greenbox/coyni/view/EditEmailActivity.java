@@ -332,6 +332,7 @@ public class EditEmailActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (updateEmailResponse != null && updateEmailResponse.getStatus().toLowerCase().equals("success")) {
                         myApplicationObj.setUpdateEmailResponse(updateEmailResponse);
+                        Utils.hideKeypad(EditEmailActivity.this);
                         startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
                                 .putExtra("screen", "EditEmail")
                                 .putExtra("OTP_TYPE", "OTP")

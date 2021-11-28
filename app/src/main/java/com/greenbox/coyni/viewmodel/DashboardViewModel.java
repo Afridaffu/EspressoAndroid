@@ -54,14 +54,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return profileRespMutableLiveData;
     }
 
-    public void setProfileRespMutableLiveData(MutableLiveData<ProfilesResponse> profileRespMutableLiveData) {
-        this.profileRespMutableLiveData = profileRespMutableLiveData;
-    }
-
-    public void setProfileMutableLiveData(MutableLiveData<Profile> profileMutableLiveData) {
-        this.profileMutableLiveData = profileMutableLiveData;
-    }
-
     public MutableLiveData<AgreementsPdf> getAgreementsPdfMutableLiveData() {
         return agreementsPdfMutableLiveData;
     }
@@ -412,8 +404,6 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Preferences obj = response.body();
                             preferenceMutableLiveData.setValue(obj);
-                            Log.e("preferences", new Gson().toJson(obj));
-                            Log.e("respo", new Gson().toJson(response.body()));
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Preferences>() {
@@ -453,7 +443,6 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             ProfilesResponse obj = response.body();
                             profileRespMutableLiveData.setValue(obj);
-                            Log.e("respo", new Gson().toJson(response.body()));
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<ProfilesResponse>() {

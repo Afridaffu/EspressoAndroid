@@ -40,7 +40,6 @@ public class EditPhoneActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     public static EditPhoneActivity editPhoneActivity;
     String currentPhoneNumber, newPhoneNumber;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -151,6 +150,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
                         myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
+                        Utils.hideKeypad(EditPhoneActivity.this);
                         startActivity(new Intent(EditPhoneActivity.this, OTPValidation.class)
                                 .putExtra("screen", "EditPhone")
                                 .putExtra("OTP_TYPE", "OTP")
@@ -159,7 +159,6 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 .putExtra("NEW_PHONE_MASKED", newPhoneET.getText().toString().trim())
                                 .putExtra("OLD_PHONE", currentPhoneNumber)
                                 .putExtra("NEW_PHONE", newPhoneNumber));
-                        finish();
                     } else {
                         Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "");
                     }
@@ -178,5 +177,11 @@ public class EditPhoneActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        newPhoneET.clearFocus();
     }
 }

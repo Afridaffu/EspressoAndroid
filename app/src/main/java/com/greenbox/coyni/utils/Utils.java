@@ -20,10 +20,12 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceActivity;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
@@ -45,6 +47,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
+import com.greenbox.coyni.adapters.StatesListAdapter;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.view.EnableAuthID;
@@ -59,6 +63,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -114,6 +119,7 @@ public class Utils {
     public static int[][] errorState, state;
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
+    public static String tempState = "";
 
 
     public static String getStrLang() {
@@ -281,7 +287,7 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        displayAlertNew(msg, activity,header);
+        displayAlertNew(msg, activity, header);
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -330,7 +336,7 @@ public class Utils {
                     context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
                 }
             } else
-                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context,"");
+                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context, "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -480,7 +486,7 @@ public class Utils {
         CardView actionCV = dialog.findViewById(R.id.cvAction);
         TextView actionText = dialog.findViewById(R.id.tvAction);
 
-        if(!headerText.equals("")){
+        if (!headerText.equals("")) {
             header.setVisibility(View.VISIBLE);
             header.setText(headerText);
         }
@@ -573,14 +579,13 @@ public class Utils {
         return isBiometric;
     }
 
-    public static ProgressDialog showProgressDialog(Context context){
+    public static ProgressDialog showProgressDialog(Context context) {
         ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
         dialog.setIndeterminate(false);
         dialog.setMessage("Please wait...");
         dialog.show();
         return dialog;
     }
-
 
 
     public static void populateTimeZones(PreferencesActivity preferenceActivity, EditText editText, MyApplication myApplicationObj) {
@@ -629,13 +634,13 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for(int i = 0;i<arrZonesList.size()-1;i++) {
-                if(myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()){
+            for (int i = 0; i < arrZonesList.size() - 1; i++) {
+                if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                     arrZonesList.get(i).setSelected(true);
                 }
             }
 
-            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, preferenceActivity,editText,timezonesRV);
+            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, preferenceActivity);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(preferenceActivity);
             timezonesRV.setLayoutManager(mLayoutManager);
             timezonesRV.setItemAnimator(new DefaultItemAnimator());
@@ -681,6 +686,112 @@ public class Utils {
             editor.putBoolean("isDevice", true);
             editor.apply();
             Utils.setDeviceID(uuid);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void setUserEmail(Context context,String email) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences("DeviceID", MODE_PRIVATE).edit();
+            editor.putString("userEmail", email);
+            editor.apply();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static String getUserEmail(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("DeviceID", MODE_PRIVATE);
+        return sharedPreferences.getString("userEmail","");
+    }
+
+    public static void populateStates(Context context, EditText editText, MyApplication myApplicationObj) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.states_bottom_dialog);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            Log.e("editext", editText.getText().toString());
+            CardView actionCV = dialog.findViewById(R.id.cvAction);
+            TextView actionText = dialog.findViewById(R.id.tvAction);
+            RecyclerView statesRV = dialog.findViewById(R.id.statesRV);
+            EditText searchET = dialog.findViewById(R.id.searchET);
+            StatesListAdapter statesListAdapter = new StatesListAdapter(null, context, "EditAddress");
+
+            List<States> listStates = myApplicationObj.getListStates();
+
+            for (int i = 0; i < listStates.size() - 1; i++) {
+                if (editText.getText().toString().trim().equals(listStates.get(i).getName())) {
+                    listStates.get(i).setSelected(true);
+                }
+            }
+            if (listStates.size() > 0) {
+                statesListAdapter = new StatesListAdapter(listStates, context, "EditAddress");
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+                statesRV.setLayoutManager(mLayoutManager);
+                statesRV.setItemAnimator(new DefaultItemAnimator());
+                statesRV.setAdapter(statesListAdapter);
+            }
+
+            StatesListAdapter finalStatesListAdapter = statesListAdapter;
+            searchET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    try {
+                        String search_key = s.toString();
+                        List<States> filterList = new ArrayList<>();
+                        int sIndex = 0;
+                        if (listStates.size() > 0) {
+                            for (int i = 0; i < listStates.size(); i++) {
+                                sIndex = listStates.get(i).getName().toLowerCase().indexOf(search_key.toLowerCase());
+                                if (sIndex == 0) {
+                                    filterList.add(listStates.get(i));
+                                }
+                            }
+                            if (filterList.size() > 0) {
+                                finalStatesListAdapter.updateList(filterList);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) { }
+            });
+
+            actionCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    editText.setText(tempState);
+                }
+            });
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.80));
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

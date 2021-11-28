@@ -1,9 +1,11 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.EditAddressActivity;
 
 import java.util.List;
@@ -22,12 +25,15 @@ public class StatesListAdapter extends RecyclerView.Adapter<StatesListAdapter.My
     String strScreen = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvCountry, tvCode;
+        public TextView tvState, tvCode;
+        ImageView tickIcon;
+        View viewLine;
 
         public MyViewHolder(View view) {
             super(view);
-            tvCountry = (TextView) view.findViewById(R.id.tvCountry);
-            tvCode = (TextView) view.findViewById(R.id.tvCode);
+            tvState = (TextView) view.findViewById(R.id.tvState);
+            tickIcon = (ImageView) view.findViewById(R.id.tickIcon);
+            viewLine = (View) view.findViewById(R.id.viewLine);
         }
     }
 
@@ -50,19 +56,36 @@ public class StatesListAdapter extends RecyclerView.Adapter<StatesListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             States objData = listStates.get(position);
-            holder.tvCountry.setText(objData.getName());
+            holder.tvState.setText(objData.getName());
+            if (listStates.get(position).isSelected()) {
+                holder.tickIcon.setVisibility(View.VISIBLE);
+            } else {
+                holder.tickIcon.setVisibility(View.GONE);
+            }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (strScreen.equals("EditAddress")) {
-                            ((EditAddressActivity) mContext).populateState(objData.getName());
+                        Utils.tempState = objData.getName();
+                        for (int i = 0; i < listStates.size(); i++) {
+                            if (position == i) {
+                                listStates.get(i).setSelected(true);
+                            } else {
+                                listStates.get(i).setSelected(false);
+                            }
                         }
+                        notifyDataSetChanged();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
+
+            if (position == listStates.size() - 1) {
+                holder.viewLine.setVisibility(View.GONE);
+            } else {
+                holder.viewLine.setVisibility(View.VISIBLE);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

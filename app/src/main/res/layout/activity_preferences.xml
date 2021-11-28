@@ -45,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginRight="@dimen/_11sdp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
@@ -56,8 +57,9 @@
             android:layout_marginRight="@dimen/_11sdp"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/timeZoneCL"
+
+            <RelativeLayout
+                android:id="@+id/timezoneRL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_22sdp">
@@ -65,16 +67,10 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:src="@drawable/ic_down"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/timeZoneTIL"
-                    app:layout_constraintHorizontal_bias="0.952"
-                    app:layout_constraintStart_toStartOf="@+id/timeZoneTIL"
-                    app:layout_constraintTop_toTopOf="@+id/timeZoneTIL"
-                    app:layout_constraintVertical_bias="0.507"
-                    app:layout_editor_absoluteX="336.24dp"
-                    app:layout_editor_absoluteY="26.28dp" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:src="@drawable/ic_down" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/timeZoneTIL"
@@ -89,35 +85,24 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:hintTextColor="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/timeZoneET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
+                        android:cursorVisible="false"
                         android:focusable="false"
-                        android:fontFamily="@font/opensans_semibold"
                         android:hint="Time Zone"
-                        android:imeOptions="actionNext"
-                        android:inputType="textEmailAddress|textNoSuggestions"
-                        android:maxLines="1"
-                        android:padding="@dimen/_14sdp"
-                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                        android:singleLine="true"
-                        android:textColor="@color/text_color"
-                        android:textColorHint="@color/light_gray"
-                        android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:cursorVisible="false"/>
-
+                        android:fontFamily="@font/opensans_semibold"
+                        android:inputType="text"
+                        android:padding="@dimen/_12sdp"
+                        android:text=""
+                        android:textColor="@color/xdark_gray"
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/currencyRL"
@@ -153,6 +138,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
+                        android:cursorVisible="false"
                         android:enabled="false"
                         android:focusable="false"
                         android:fontFamily="@font/opensans_semibold"
@@ -174,13 +160,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_24sdp"
         android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginBottom="@dimen/_11sdp"
         android:fontFamily="@font/opensans_bold"
         android:text="Default Account"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp"
-        android:layout_marginStart="@dimen/_24sdp"/>
+        android:textSize="@dimen/_12ssp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -207,37 +193,33 @@
 
 
                 <View
+                    android:id="@+id/disableView"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_39sdp"
                     android:layout_marginTop="@dimen/_6sdp"
                     android:background="@drawable/disable_bg" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <RelativeLayout
                     android:id="@+id/accountCL"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_22sdp">
+                    android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/accountDDICon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:src="@drawable/ic_down"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/accountTIL"
-                        app:layout_constraintHorizontal_bias="0.952"
-                        app:layout_constraintStart_toStartOf="@+id/accountTIL"
-                        app:layout_constraintTop_toTopOf="@+id/accountTIL"
-                        app:layout_constraintVertical_bias="0.507"
-                        app:layout_editor_absoluteX="336.24dp"
-                        app:layout_editor_absoluteY="26.28dp" />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/accountTIL"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Time Zone"
+                        android:hint="Account"
                         android:textColorHint="@color/black"
                         app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                         app:boxCornerRadiusBottomStart="@dimen/_10sdp"
@@ -245,67 +227,25 @@
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
                         app:boxStrokeColor="@color/primary_color"
                         app:expandedHintEnabled="false"
-                        app:hintTextColor="@color/black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/accountET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:editable="false"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:enabled="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint=""
-                            android:imeOptions="actionNext"
-                            android:inputType="textEmailAddress|textNoSuggestions"
-                            android:maxLines="1"
-                            android:padding="@dimen/_14sdp"
-                            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                            android:singleLine="true"
-                            android:textColor="@color/text_color"
-                            android:textColorHint="@color/light_gray"
-                            android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp"
-                            android:cursorVisible="false"/>
-
+                            android:inputType="text"
+                            android:padding="@dimen/_12sdp"
+                            android:text=""
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/accountTIL"-->
-<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:hint="Account"-->
-<!--                    android:textColorHint="@color/black"-->
-<!--                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"-->
-<!--                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"-->
-<!--                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"-->
-<!--                    app:boxCornerRadiusTopStart="@dimen/_10sdp"-->
-<!--                    app:boxStrokeColor="@color/primary_color"-->
-<!--                    app:expandedHintEnabled="false"-->
-<!--                    app:hintTextColor="@color/black">-->
-
-<!--                    <com.google.android.material.textfield.TextInputEditText-->
-<!--                        android:id="@+id/accountET"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:clickable="false"-->
-<!--                        android:enabled="false"-->
-<!--                        android:focusable="false"-->
-<!--                        android:fontFamily="@font/opensans_semibold"-->
-<!--                        android:imeOptions="actionDone"-->
-<!--                        android:inputType="text"-->
-<!--                        android:padding="@dimen/_12sdp"-->
-<!--                        android:textColor="@color/xdark_gray"-->
-<!--                        android:textSize="@dimen/_12ssp" />-->
-
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
+                </RelativeLayout>
 
             </RelativeLayout>
 

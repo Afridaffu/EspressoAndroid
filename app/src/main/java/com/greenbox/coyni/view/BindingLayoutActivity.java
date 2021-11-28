@@ -28,7 +28,7 @@ import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout llCoyniAct, lyClose;
+    LinearLayout lyClose;
     TextView tvEmail;
     MyApplication objMyApplication;
     CardView reTryAgainBtn,btnChangePassCV;
@@ -53,7 +53,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            llCoyniAct = findViewById(R.id.llCoyniAct);
             lyClose = findViewById(R.id.lyClose);
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
@@ -85,22 +84,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            llCoyniAct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                }
-            });
-//            llCoyniAct.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(i);
-//                }
-//            });
+
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -185,6 +169,14 @@ public class BindingLayoutActivity extends AppCompatActivity {
             editor.apply();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(strScreen.equals("EditEmail") || strScreen.equals("ChangePassword")){
+            dropAllTables();
         }
     }
 }
