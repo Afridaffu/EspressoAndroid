@@ -1,11 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/_22sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/lyAPayClose"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_x" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginBottom="@dimen/_22sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="left"
+            android:text="Add Payment Method"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,22 +47,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_45sdp"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:src="@drawable/ic_x" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_22sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:gravity="left"
-                android:text="Add Payment Method"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16ssp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -51,6 +65,7 @@
                 android:textSize="@dimen/_12ssp" />
 
             <LinearLayout
+                android:id="@+id/lyExternal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/paymentsborder"
@@ -89,6 +104,17 @@
                         android:text="Can be used for making Coyni purchases\nor withdrawing funds."
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_10ssp" />
+
+                    <TextView
+                        android:id="@+id/tvBankError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="This method has reached maximum 4 banks"
+                        android:textColor="@color/error"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <ImageView
@@ -141,6 +167,17 @@
                         android:text="Visa or Mastercard debit cards"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/tvDCardError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="This method has reached maximum 4 cards"
+                        android:textColor="@color/error"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <ImageView
@@ -194,6 +231,17 @@
                         android:text="Visa, MasterCard, Discover, and American \nExpress credit cards"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/tvCCardError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="This method has reached maximum 4 cards"
+                        android:textColor="@color/error"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <ImageView

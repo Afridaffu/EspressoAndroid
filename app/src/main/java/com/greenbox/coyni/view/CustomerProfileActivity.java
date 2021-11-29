@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -58,6 +59,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     CardView cardviewYourAccount;
     Dialog enablePopup;
+    Dialog qrDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -105,18 +108,18 @@ public class CustomerProfileActivity extends AppCompatActivity {
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
                 tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
                 cpAccountIDTV.setText("Account ID " + objMyApplication.getMyProfile().getData().getId());
-                if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")){
+                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
                     cardviewYourAccount.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     cardviewYourAccount.setVisibility(View.GONE);
                 }
             } else {
                 tvACStatus.setText("");
             }
 
-            if (objMyApplication.getStrUserName().length() > 16) {
+            if (objMyApplication.getStrUserName().length() > 18) {
                 customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
-            }else if (objMyApplication.getStrUserName().length() < 16) {
+            } else if (objMyApplication.getStrUserName().length() < 18) {
                 customerNameTV.setText(objMyApplication.getStrUserName());
             }
 
@@ -131,7 +134,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    displayQRCode();
+                    displayQRCode();
                 }
             });
 
@@ -155,9 +158,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i=new Intent(CustomerProfileActivity.this,PINActivity.class)
-                        .putExtra("TYPE","ENTER")
-                        .putExtra("screen","ChangePassword");
+                Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("screen", "ChangePassword");
                 startActivity(i);
 
             });
@@ -209,7 +212,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -267,8 +274,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             customerNameTV.setOnClickListener(view -> {
                 if (objMyApplication.getStrUserName().length() > 16 && objMyApplication.getStrUserName().length() < 21) {
                     customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
-                }else if (objMyApplication.getStrUserName().length() > 21) {
-                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21)+"...");
+                } else if (objMyApplication.getStrUserName().length() > 21) {
+                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
                 }
             });
         } catch (Exception ex) {
@@ -277,33 +284,33 @@ public class CustomerProfileActivity extends AppCompatActivity {
     }
 
 
-//    private void displayQRCode() {
-//        try {
-//            ImageView imgClose;
-//            dialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
-//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            dialog.setContentView(R.layout.profileqrcode);
-//            Window window = dialog.getWindow();
-//            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//            window.setGravity(Gravity.CENTER);
-//            window.setBackgroundDrawableResource(android.R.color.transparent);
-//
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            dialog.getWindow().setAttributes(lp);
-//            dialog.show();
-//            imgClose = dialog.findViewById(R.id.imgClose);
-//            imgClose.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dialog.dismiss();
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    private void displayQRCode() {
+        try {
+            ImageView imgClose;
+            qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
+            qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            qrDialog.setContentView(R.layout.profileqrcode);
+            Window window = qrDialog.getWindow();
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            window.setGravity(Gravity.CENTER);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.dimAmount = 0.7f;
+            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            qrDialog.getWindow().setAttributes(lp);
+            qrDialog.show();
+            imgClose = qrDialog.findViewById(R.id.imgClose);
+            imgClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    qrDialog.dismiss();
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private void dropAllTables() {
         try {
@@ -337,10 +344,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
         try {
             if (!isSwitchEnabled) {
 //                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
-                if (tvBMSetting.getText().toString().toLowerCase().contains("touch")){
+                if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
                     FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
-                        enablePopup = showFaceTouchEnabledDialog(this,"TOUCH");
+                        enablePopup = showFaceTouchEnabledDialog(this, "TOUCH");
                     } else {
                         dialog = Utils.showProgressDialog(this);
                         BiometricRequest biometricRequest = new BiometricRequest();
@@ -358,13 +365,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             biometricRequest.setDeviceId(Utils.getDeviceID());
                             coyniViewModel.saveBiometric(biometricRequest);
                         }
-                    }else{
-                        enablePopup = showFaceTouchEnabledDialog(this,"FACE");
+                    } else {
+                        enablePopup = showFaceTouchEnabledDialog(this, "FACE");
                     }
                 }
             } else {
 //                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
-                if (tvBMSetting.getText().toString().toLowerCase().contains("face")){
+                if (tvBMSetting.getText().toString().toLowerCase().contains("face")) {
                     dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
@@ -388,7 +395,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         try {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-                if(enablePopup!=null){
+                if (enablePopup != null) {
                     enablePopup.dismiss();
                 }
                 dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
@@ -616,7 +623,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
-    public Dialog showFaceTouchEnabledDialog(final Context context,String type) {
+    public Dialog showFaceTouchEnabledDialog(final Context context, String type) {
         // custom dialog
         final Dialog dDialog = new Dialog(context);
         dDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -632,11 +639,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
         TextView tvMessage = dDialog.findViewById(R.id.tvMessage);
         LinearLayout notNowLL = dDialog.findViewById(R.id.notNowLL);
 
-        if(type.equals("FACE")){
+        if (type.equals("FACE")) {
             tvHead.setText(context.getString(R.string.set_up_face_id));
             tvEnable.setText(context.getString(R.string.set_up_face_id));
             tvMessage.setText(context.getString(R.string.enable_face_message));
-        }else{
+        } else {
             tvHead.setText(context.getString(R.string.set_up_touch_id));
             tvEnable.setText(context.getString(R.string.set_up_touch_id));
             tvMessage.setText(context.getString(R.string.enable_touch_message));
@@ -652,7 +659,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         enableCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(type.equals("TOUCH")){
+                if (type.equals("TOUCH")) {
                     FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
                         final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
@@ -666,7 +673,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         biometricRequest.setDeviceId(Utils.getDeviceID());
                         coyniViewModel.saveBiometric(biometricRequest);
                     }
-                }else{
+                } else {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             }

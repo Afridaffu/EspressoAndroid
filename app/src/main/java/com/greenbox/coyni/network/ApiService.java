@@ -4,6 +4,7 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -170,5 +171,8 @@ public interface ApiService {
 
     @GET("api/v2/profile/me/profile-accounts")
     Call<ProfilesResponse> getProfiles();
+
+    @POST("api/v2/fiserv/signon")
+    Call<SignOn> meSignOn();
 
 }
