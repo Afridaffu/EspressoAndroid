@@ -41,7 +41,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/_69sdp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvQRcode"
@@ -134,6 +135,7 @@
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginRight="@dimen/_11sdp"
                 app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <RelativeLayout
