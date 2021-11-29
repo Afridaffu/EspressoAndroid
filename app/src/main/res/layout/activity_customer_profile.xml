@@ -125,14 +125,15 @@
                                             android:layout_marginTop="@dimen/_6sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text=""
-                                            android:textColor="#FFA70F"
+                                            android:textColor="@color/orange"
                                             android:textSize="@dimen/_11ssp" />
 
                                         <androidx.cardview.widget.CardView
+                                            android:id="@+id/statusDotCV"
                                             android:layout_width="@dimen/_8sdp"
                                             android:layout_height="@dimen/_8sdp"
                                             android:layout_marginTop="@dimen/_2sdp"
-                                            app:cardBackgroundColor="#FFA70F"
+                                            app:cardBackgroundColor="@color/orange"
                                             app:cardCornerRadius="@dimen/_4sdp" />
                                     </LinearLayout>
 

@@ -57,7 +57,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     Cursor cursor;
     DashboardViewModel dashboardViewModel;
-    CardView cardviewYourAccount;
+    CardView cardviewYourAccount,statusDotCV;
     Dialog enablePopup;
     Dialog qrDialog;
 
@@ -99,6 +99,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             tvBMSetting = findViewById(R.id.tvBMSetting);
             cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
+            statusDotCV = findViewById(R.id.statusDotCV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -106,13 +107,24 @@ public class CustomerProfileActivity extends AppCompatActivity {
             bindImage(objMyApplication.getMyProfile().getData().getImage());
 
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
-                tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
-                cpAccountIDTV.setText("Account ID " + objMyApplication.getMyProfile().getData().getId());
-                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
+                    cardviewYourAccount.setVisibility(View.GONE);
+                    tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
                     cardviewYourAccount.setVisibility(View.VISIBLE);
+                    tvACStatus.setTextColor(getResources().getColor(R.color.orange));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                }else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                    cardviewYourAccount.setVisibility(View.GONE);
+                    tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
                 } else {
                     cardviewYourAccount.setVisibility(View.GONE);
                 }
+                tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+                cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+
             } else {
                 tvACStatus.setText("");
             }
@@ -168,6 +180,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOff.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     isSwitchEnable();
                 }
             });
@@ -175,6 +191,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     isSwitchEnable();
                 }
             });
@@ -293,7 +313,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
-
     private void displayQRCode() {
         try {
             ImageView imgClose;
@@ -330,6 +349,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
@@ -404,10 +424,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
+            if (enablePopup != null) {
+                enablePopup.dismiss();
+            }
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-                if (enablePopup != null) {
-                    enablePopup.dismiss();
-                }
                 dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
                 dialog.setIndeterminate(false);
                 dialog.setMessage("Please wait...");
@@ -470,6 +490,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
             @Override
             public void onChanged(BiometricResponse biometricResponse) {
                 try {
+                    if (enablePopup != null) {
+                        enablePopup.dismiss();
+                    }
                     dialog.dismiss();
                     if (biometricResponse != null) {
                         saveToken(biometricResponse.getData().getToken());

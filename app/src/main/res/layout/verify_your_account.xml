@@ -31,14 +31,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/succesCloseIV"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
+                <LinearLayout
+                    android:id="@+id/verifyAccountCloseLL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_32sdp"
-                    android:layout_marginTop="@dimen/_37sdp"
-                    android:src="@drawable/ic_x"
-                    app:tint="@color/white" />
+                    android:layout_marginTop="@dimen/_37sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:src="@drawable/ic_x"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

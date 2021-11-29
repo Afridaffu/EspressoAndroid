@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
@@ -118,6 +119,8 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             });
 
+            dialog =Utils.showProgressDialog(this);
+
             dashboardViewModel.mePreferences();
 
             dashboardViewModel.getProfiles();
@@ -190,7 +193,7 @@ public class PreferencesActivity extends AppCompatActivity {
         dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
-
+                dialog.dismiss();
                 if(profilesResponse!=null){
                     accountET.setText(profilesResponse.getData().get(0).getEntityName());
 
@@ -215,6 +218,14 @@ public class PreferencesActivity extends AppCompatActivity {
             }
         });
 
+        dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                if(apiError==null){
+                    dialog.dismiss();
+                }
+            }
+        });
 
     }
 

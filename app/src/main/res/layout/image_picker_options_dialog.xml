@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/_21sdp"
+    android:paddingRight="@dimen/_21sdp"
+    android:background="@drawable/roundeddialog"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_3sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_green_round_rect" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/chooseLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_36sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Choose From Library"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/text_size_14sp"
+            android:layout_weight="1"/>
+
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginTop="@dimen/_16sdp"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/takePhotoLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_16sdp"
+        >
+
+        <TextView
+            android:id="@+id/tvPreference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Take a Photo"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/text_size_14sp"
+            android:layout_weight="1"/>
+
+        <View
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginBottom="@dimen/_36sdp"
+            />
+    </LinearLayout>
+
+</LinearLayout>

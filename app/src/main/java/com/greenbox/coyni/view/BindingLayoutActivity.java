@@ -28,10 +28,10 @@ import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout lyClose;
+    LinearLayout lyClose,verifyAccountCloseLL;
     TextView tvEmail;
     MyApplication objMyApplication;
-    CardView reTryAgainBtn,btnChangePassCV;
+    CardView reTryAgainBtn,btnChangePassCV,nextGetStartedCV;
     CardView editEmailLogoutCV;
     SQLiteDatabase mydatabase;
     RetEmailAdapter retEmailAdapter;
@@ -57,7 +57,9 @@ public class BindingLayoutActivity extends AppCompatActivity {
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
             btnChangePassCV=findViewById(R.id.btnCV);
+            nextGetStartedCV=findViewById(R.id.nextGetStartedCV);
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
+            verifyAccountCloseLL = findViewById(R.id.verifyAccountCloseLL);
             retEmailRV = findViewById(R.id.retEmailRV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -112,6 +114,22 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     finish();
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+            });
+
+            nextGetStartedCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+
+            verifyAccountCloseLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
                 }
             });
         } catch (Exception ex) {
@@ -180,6 +198,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
