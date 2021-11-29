@@ -31,6 +31,7 @@
     <color name="default_red">#FFDD2C00</color>
     <color name="price">#009c98</color>
     <color name="orange">#FFA70F</color>
+    <color name="dark_color_bg">#E5E5E5</color>
     <color name="active_green">#008A05</color>
     <color name="under_review_blue">#1D86BE</color>
 

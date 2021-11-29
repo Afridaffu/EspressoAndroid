@@ -8,28 +8,41 @@ import com.greenbox.coyni.model.profile.Profile;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.fingerprint.FingerprintManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,10 +50,16 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+
+import java.util.Locale;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
@@ -49,9 +68,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
     TextView customerNameTV, tvACStatus, tvBMSetting, cpAccountIDTV, imageTextTV;
     MyApplication objMyApplication;
     CardView cvLogout;
+    ConstraintLayout userProfile;
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
+    QRGEncoder qrgEncoder;
+    Bitmap bitmap;
     CoyniViewModel coyniViewModel;
     Boolean isSwitchEnabled = false;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
@@ -60,7 +82,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     CardView cardviewYourAccount,statusDotCV;
     Dialog enablePopup;
     Dialog qrDialog;
-
+    String strWallet = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -98,6 +120,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOn = findViewById(R.id.switchOn);
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             tvBMSetting = findViewById(R.id.tvBMSetting);
+            userProfile=findViewById(R.id.linearLayout);
             cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
             statusDotCV = findViewById(R.id.statusDotCV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
@@ -115,7 +138,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     cardviewYourAccount.setVisibility(View.VISIBLE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                }else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                }else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
                     cardviewYourAccount.setVisibility(View.GONE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
@@ -162,6 +185,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+            userProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    displayQRCode();
                 }
             });
 
@@ -313,10 +342,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
+
     private void displayQRCode() {
         try {
-            ImageView imgClose;
-            qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
+            ImageView imgClose,copyRecipientAddress;
+            ImageView meQrCode,shareImage;
+            TextView userFullName,userInfo,walletAddress;
+            qrDialog= new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             qrDialog.setContentView(R.layout.profileqrcode);
             Window window = qrDialog.getWindow();
@@ -330,12 +362,67 @@ public class CustomerProfileActivity extends AppCompatActivity {
             qrDialog.getWindow().setAttributes(lp);
             qrDialog.show();
             imgClose = qrDialog.findViewById(R.id.imgClose);
+            meQrCode=qrDialog.findViewById(R.id.idIVQrcode);
+            userFullName=qrDialog.findViewById(R.id.tvName);
+            userInfo=qrDialog.findViewById(R.id.tvUserInfo);
+            walletAddress=qrDialog.findViewById(R.id.tvWalletAddress);
+            shareImage=qrDialog.findViewById(R.id.imgShare);
+            WalletResponse walletResponse = objMyApplication.getWalletResponse();
+            if (walletResponse != null) {
+                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
+                generateQRCode(strWallet);
+                meQrCode.setImageBitmap(bitmap);
+                walletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
+
+            }
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     qrDialog.dismiss();
                 }
             });
+
+            String strUserName=Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+""+objMyApplication.getMyProfile().getData().getLastName().substring(0,1).toUpperCase());
+            String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+            userInfo.setText(strUserName.toUpperCase(Locale.US));
+            if (strName != null && strName.length() > 21) {
+                userFullName.setText(strName.substring(0, 21) + "...");
+            }
+            else {
+                userFullName.setText(strName);
+            }
+
+            shareImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Drawable mDrawable = meQrCode.getDrawable();
+                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+
+                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
+                    Uri uri = Uri.parse(path);
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("image/jpeg");
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    intent.putExtra(Intent.EXTRA_TEXT,strWallet);
+                    startActivity(Intent.createChooser(intent, "Share via"));
+                }
+            });
+
+            copyRecipientAddress=qrDialog.findViewById(R.id.imgCopy);
+            copyRecipientAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ClipboardManager myClipboard;
+                    myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+
+                    ClipData myClip;
+                    String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
+                    myClip = ClipData.newPlainText("text", text);
+                    myClipboard.setPrimaryClip(myClip);
+                    showToast();
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -349,7 +436,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
@@ -727,6 +813,51 @@ public class CustomerProfileActivity extends AppCompatActivity {
         dDialog.show();
 
         return dDialog;
+    }
+    private void generateQRCode(String wallet) {
+        try {
+            WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+            // initializing a variable for default display.
+            Display display = manager.getDefaultDisplay();
+
+            // creating a variable for point which
+            // is to be displayed in QR Code.
+            Point point = new Point();
+            display.getSize(point);
+
+            // getting width and
+            // height of a point
+            int width = point.x;
+            int height = point.y;
+
+            // generating dimension from width and height.
+            int dimen = width < height ? width : height;
+            dimen = dimen * 3 / 4;
+
+            // setting this dimensions inside our qr code
+            // encoder to generate our qr code.
+            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, dimen);
+            // getting our qrcode in the form of bitmap.
+            bitmap = qrgEncoder.encodeAsBitmap();
+            // the bitmap is set inside our image
+            // view using .setimagebitmap method.
+//            qrDialog.idIVQrcode.setImageBitmap(bitmap);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    private void showToast(){
+        LayoutInflater inflater=getLayoutInflater();
+        View layout=inflater.inflate(R.layout.custom_toast_recipientaddress,(ViewGroup) findViewById(R.id.toastRootLL));
+
+        Toast toast=new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+
+
     }
 
 }

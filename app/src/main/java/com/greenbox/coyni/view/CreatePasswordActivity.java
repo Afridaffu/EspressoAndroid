@@ -163,7 +163,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         layoutIndicator.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-                        passwordTIL.setHint("Password");
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")){
+                            passwordTIL.setHint("New Password");
+                        }
+                        else {
+                            passwordTIL.setHint("Password");
+                        }
                     } else {
                         layoutIndicator.setVisibility(GONE);
 
