@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +33,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     boolean btnEnabled=false;
     ImageView backBtn;
     String oldPassword;
+    Boolean isCPwdEye = false;
     private Pattern strong;
     private static final String STRONG_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
@@ -50,6 +53,31 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
             saveBtn = findViewById(R.id.saveBtnCV);
             backBtn=findViewById(R.id.cpConfirmBackIV);
             strong = Pattern.compile(STRONG_PATTERN);
+
+              currentTIL.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (!isCPwdEye) {
+                            isCPwdEye = true;
+                            currentTIL.setEndIconDrawable(R.drawable.ic_eyeopen);
+                            currentPassET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        } else {
+                            isCPwdEye = false;
+                            currentTIL.setEndIconDrawable(R.drawable.ic_eyeclose);
+                            currentPassET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        }
+                        if (currentPassET.getText().length() > 0) {
+                            currentPassET.setSelection(currentPassET.getText().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+
+
             backBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -110,10 +138,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-
 
     private void clearField() {
         currentPassET.setText("");
