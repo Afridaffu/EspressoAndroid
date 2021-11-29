@@ -220,8 +220,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardviewProfile"
                 android:layout_marginLeft="@dimen/_11sdp"
-                android:layout_marginRight="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
                 android:background="@color/white"
                 android:visibility="visible"
                 app:cardCornerRadius="@dimen/_10sdp">
@@ -235,8 +235,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/_15sdp">
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -259,8 +259,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_7sdp"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="@dimen/_22sdp">
+                            android:layout_marginBottom="@dimen/_22sdp"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -288,9 +288,9 @@
                         android:id="@+id/spAccountImage"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="@dimen/_90sdp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="@dimen/_11sdp"
-                        android:src="@drawable/ic_customerprofile"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/ic_customerprofile" />
 
 
                 </LinearLayout>
@@ -302,12 +302,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cardviewYourAccount"
                 android:layout_marginStart="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/setting"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp"
-                android:layout_marginTop="@dimen/_11sdp"
-                />
+                android:textSize="@dimen/_12ssp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardviewSetting"
@@ -370,7 +369,6 @@
                         android:id="@+id/cpPaymentMethodsLL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_16sdp"
                         android:paddingBottom="@dimen/_16sdp">

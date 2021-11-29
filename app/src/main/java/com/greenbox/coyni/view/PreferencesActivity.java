@@ -3,10 +3,14 @@ package com.greenbox.coyni.view;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,9 +19,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.preferences.Preferences;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -31,11 +38,14 @@ public class PreferencesActivity extends AppCompatActivity {
     boolean isProfile = false;
     TextInputLayout timeZoneTIL, accountTIL;
     TextInputEditText timeZoneET, accountET;
-    ConstraintLayout timeZoneCL;
+    RelativeLayout timeZoneRL;
     LinearLayout preferencesCloseLL;
+    ImageView accountDDIV;
+    View disableView;
     public static CustomerProfileViewModel customerProfileViewModel;
     int timeZoneID = 0;
     public static PreferencesActivity preferencesActivity;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +73,29 @@ public class PreferencesActivity extends AppCompatActivity {
             timeZoneET = findViewById(R.id.timeZoneET);
             accountTIL = findViewById(R.id.accountTIL);
             accountET = findViewById(R.id.accountET);
-            timeZoneCL = findViewById(R.id.timeZoneCL);
+            timeZoneRL = findViewById(R.id.timezoneRL);
+            accountDDIV = findViewById(R.id.accountDDICon);
+            disableView = findViewById(R.id.disableView);
             preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
 
-            timeZoneCL.setOnClickListener(new View.OnClickListener() {
+            timeZoneRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
+                }
+            });
+
+            timeZoneTIL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
                 }
             });
@@ -76,6 +103,10 @@ public class PreferencesActivity extends AppCompatActivity {
             timeZoneET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
                 }
             });
@@ -88,6 +119,8 @@ public class PreferencesActivity extends AppCompatActivity {
             });
 
             dashboardViewModel.mePreferences();
+
+            dashboardViewModel.getProfiles();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,6 +135,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
                 try {
                     if (preferences != null) {
+
                         timeZoneID = preferences.getData().getTimeZone();
                         myApplicationObj.setTimezoneID(timeZoneID);
                         if (preferences.getData().getTimeZone() == 0) {
@@ -129,7 +163,6 @@ public class PreferencesActivity extends AppCompatActivity {
 //                            myApplicationObj.setTimezone("AST");
                             myApplicationObj.setTimezone(getString(R.string.AST));
                         }
-                        accountET.setText(preferences.getData().getPreferredAccount());
 
                     }
                 } catch (Exception e) {
@@ -153,6 +186,36 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
+            @Override
+            public void onChanged(ProfilesResponse profilesResponse) {
+
+                if(profilesResponse!=null){
+                    accountET.setText(profilesResponse.getData().get(0).getEntityName());
+
+                    if(profilesResponse.getStatus().equals("SUCCESS")){
+                        if(profilesResponse.getData().size() > 1){
+                            disableView.setVisibility(View.GONE);
+                            accountDDIV.setVisibility(View.VISIBLE);
+                            accountET.setClickable(true);
+                            accountET.setEnabled(true);
+                        }else{
+                            Log.e("else","else");
+                            accountDDIV.setVisibility(View.GONE);
+                            disableView.setVisibility(View.VISIBLE);
+                            accountET.setClickable(false);
+                            accountET.setEnabled(false);
+                            Log.e("else","else");
+                        }
+
+
+                    }
+                }
+            }
+        });
+
+
     }
 
 

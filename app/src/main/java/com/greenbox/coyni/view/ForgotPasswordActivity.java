@@ -76,7 +76,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             } else {
                 tvHead.setText("Forgot Your PIN?");
                 tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
-                etEmail.setText(objMyApplication.getStrEmail());
+                etEmail.setText(Utils.getUserEmail(this));
                 etEmail.setEnabled(false);
             }
 

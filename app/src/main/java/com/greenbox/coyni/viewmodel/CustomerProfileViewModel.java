@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -46,9 +47,8 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         return userMutableLiveData;
     }
 
-    public void setUserMutableLiveData(MutableLiveData<User> userMutableLiveData) {
-        this.userMutableLiveData = userMutableLiveData;
-    }
+    private MutableLiveData<SignOn> signOnMutableLiveData = new MutableLiveData<>();
+
 
     public MutableLiveData<UpdateEmailResponse> getUpdateEmailSendOTPResponse() {
         return updateEmailSendOTPResponse;
@@ -66,8 +66,8 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         return userPreferenceMutableLiveData;
     }
 
-    public void setUserPreferenceMutableLiveData(MutableLiveData<UserPreference> userPreferenceMutableLiveData) {
-        this.userPreferenceMutableLiveData = userPreferenceMutableLiveData;
+    public MutableLiveData<SignOn> getSignOnMutableLiveData() {
+        return signOnMutableLiveData;
     }
 
     public void updateEmailSendOTP(UpdateEmailRequest request) {
@@ -204,5 +204,39 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
+    public void meSignOn() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<SignOn> mCall = apiService.meSignOn();
+            mCall.enqueue(new Callback<SignOn>() {
+                @Override
+                public void onResponse(Call<SignOn> call, Response<SignOn> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            SignOn obj = response.body();
+                            signOnMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SignOn> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

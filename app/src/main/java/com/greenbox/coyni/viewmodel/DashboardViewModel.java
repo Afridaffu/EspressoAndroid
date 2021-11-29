@@ -14,6 +14,7 @@ import com.greenbox.coyni.model.APIError;
 //import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
@@ -47,6 +48,11 @@ public class DashboardViewModel extends AndroidViewModel {
 
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Preferences> preferenceMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ProfilesResponse> profileRespMutableLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
+        return profileRespMutableLiveData;
+    }
 
     public MutableLiveData<AgreementsPdf> getAgreementsPdfMutableLiveData() {
         return agreementsPdfMutableLiveData;
@@ -398,8 +404,6 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Preferences obj = response.body();
                             preferenceMutableLiveData.setValue(obj);
-                            Log.e("preferences", new Gson().toJson(obj));
-                            Log.e("respo", new Gson().toJson(response.body()));
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Preferences>() {
@@ -426,5 +430,45 @@ public class DashboardViewModel extends AndroidViewModel {
         }
 
     }
+
+
+    public void getProfiles() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ProfilesResponse> mCall = apiService.getProfiles();
+            mCall.enqueue(new Callback<ProfilesResponse>() {
+                @Override
+                public void onResponse(Call<ProfilesResponse> call, Response<ProfilesResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            ProfilesResponse obj = response.body();
+                            profileRespMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<ProfilesResponse>() {
+                            }.getType();
+                            ProfilesResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                profileRespMutableLiveData.setValue(errorResponse);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProfilesResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
 
 }

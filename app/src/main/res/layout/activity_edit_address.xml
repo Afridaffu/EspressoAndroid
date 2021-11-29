@@ -11,42 +11,55 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.EditAddressActivity">
 
-    <LinearLayout
-        android:id="@+id/backIV"
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/headerTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/backIV"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:fontFamily="@font/opensans_bold"
-        android:text="Edit Address"
-        android:textColor="@color/primary_black"
-        android:textSize="@dimen/_16ssp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/headerTV"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        >
+
+        <LinearLayout
+            android:id="@+id/topLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/backIV"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true">
+
+                <ImageView
+                    android:id="@+id/imgBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/headerTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/backIV"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Edit Address"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_16ssp" />
+
+        </LinearLayout>
 
         <ScrollView
             android:id="@+id/scrlViewIV2nd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:visibility="visible">
+            android:layout_below="@+id/topLL"
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/_32sdp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -58,7 +71,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_marginTop="@dimen/_32sdp"
                     android:hint="Address Line 1"
                     android:textColorHint="@color/black"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
@@ -196,7 +208,8 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/primary_color">
+                    app:hintTextColor="@color/primary_color"
+                    android:importantForAutofill="no">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cityET"
@@ -303,7 +316,9 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:text="State"
+                            android:importantForAutofill="no"/>
 
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -342,7 +357,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:importantForAutofill="no"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

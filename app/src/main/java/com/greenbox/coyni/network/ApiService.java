@@ -4,6 +4,7 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -20,6 +21,7 @@ import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -166,5 +168,11 @@ public interface ApiService {
 
     @PATCH("api/v2/profile/me/update-address")
     Call<User> meUpdateAddress(@Body UserData request);
+
+    @GET("api/v2/profile/me/profile-accounts")
+    Call<ProfilesResponse> getProfiles();
+
+    @POST("api/v2/fiserv/signon")
+    Call<SignOn> meSignOn();
 
 }

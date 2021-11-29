@@ -139,11 +139,29 @@ public class EditAddressActivity extends AppCompatActivity {
                 }
             });
 
-            stateCL.setOnClickListener(view -> statesPopup());
+            stateCL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this,stateET,myApplicationObj);
+            });
 
-            stateTIL.setOnClickListener(view -> statesPopup());
+            stateTIL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this,stateET,myApplicationObj);
+            });
 
-            stateET.setOnClickListener(view -> statesPopup());
+            stateET.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this,stateET,myApplicationObj);
+            });
 
             backIV.setOnClickListener(view -> finish());
 
@@ -289,7 +307,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() >=6 ){
+                if(charSequence.length() >=5 ){
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -359,12 +377,12 @@ public class EditAddressActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    if (zipcodeET.getText().toString().trim().length() >= 6) {
+                    if (zipcodeET.getText().toString().trim().length() >= 5) {
                         zipcodeErrorLL.setVisibility(GONE);
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
 
-                    }else if (zipcodeET.getText().toString().trim().length() < 6 && zipcodeET.getText().toString().trim().length() > 0) {
+                    }else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -89,6 +90,8 @@ public class EditEmailActivity extends AppCompatActivity {
             saveEmailCV = findViewById(R.id.saveEmailCV);
 
             currentEmailET.setText(myApplicationObj.getMyProfile().getData().getEmail());
+
+            newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
 
 //            editEmailSV.setOnClickListener(new View.OnClickListener() {
@@ -329,6 +332,7 @@ public class EditEmailActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (updateEmailResponse != null && updateEmailResponse.getStatus().toLowerCase().equals("success")) {
                         myApplicationObj.setUpdateEmailResponse(updateEmailResponse);
+                        Utils.hideKeypad(EditEmailActivity.this);
                         startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
                                 .putExtra("screen", "EditEmail")
                                 .putExtra("OTP_TYPE", "OTP")

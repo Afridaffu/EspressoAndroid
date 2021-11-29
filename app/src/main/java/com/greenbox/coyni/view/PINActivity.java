@@ -327,7 +327,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                             case "EditEmail":
                                                 Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
                                                 startActivity(ee);
-//                                                finish();
+                                                finish();
                                                 break;
                                             case "EditPhone":
                                                 Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
@@ -398,7 +398,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            Intent d = new Intent(PINActivity.this, LoginActivity.class);
+                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
                                             d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             PINActivity.this.startActivity(d);
                                         } catch (Exception ex) {

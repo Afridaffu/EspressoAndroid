@@ -63,7 +63,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     LinearLayout emailLL,phoneLL,addressLL,userDetailsCloseLL;
     public static UserDetailsActivity userDetailsActivity;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    String strFileName = "";
+    String strFileName = "",phoneFormat = "",phoneNumber="";
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
@@ -71,6 +71,9 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_user_details);
             initFields();
             getStates();
@@ -82,10 +85,6 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     public void initFields(){
         try {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             myApplicationObj = (MyApplication) getApplicationContext();
             userDetailsActivity = this;
@@ -100,12 +99,49 @@ public class UserDetailsActivity extends AppCompatActivity {
             phoneLL = findViewById(R.id.phoneLL);
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
-            Profile profile = myApplicationObj.getMyProfile();
+
+            editProfileIV.setOnClickListener(view -> {
+                if (checkAndRequestPermissions(this)) {
+                    chooseImage(this);
+                }
+            });
+
+            emailLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                            .putExtra("TYPE","ENTER")
+                            .putExtra("screen","EditEmail"));
+                }
+            });
+
+            addressLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                            .putExtra("TYPE","ENTER")
+                            .putExtra("screen","EditAddress"));
+                }
+            });
+
+            phoneLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                            .putExtra("TYPE","ENTER")
+                            .putExtra("OLD_PHONE",phoneFormat)
+                            .putExtra("screen","EditPhone"));
+                }
+            });
+
+            userDetailsCloseLL.setOnClickListener(view -> {
+                finish();
+            });
 
             if(myApplicationObj.getMyProfile().getData().getFirstName()!=null){
-                String phoneNumber  = profile.getData().getPhoneNumber().split(" ")[1];
-                String phoneFormat = "("+phoneNumber.substring(0, 3)+") "+phoneNumber.substring(3, 6)+"-"+phoneNumber.substring(6, 10);
-                Log.e("Phone",phoneNumber);
+                Profile profile = myApplicationObj.getMyProfile();
+                phoneNumber  = profile.getData().getPhoneNumber().split(" ")[1];
+                phoneFormat = "("+phoneNumber.substring(0, 3)+") "+phoneNumber.substring(3, 6)+"-"+phoneNumber.substring(6, 10);
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 strFileName = myApplicationObj.getMyProfile().getData().getImage();
                 userEmailIdTV.setText(profile.getData().getEmail());
@@ -139,45 +175,9 @@ public class UserDetailsActivity extends AppCompatActivity {
                     userAddressTV.setText(addressFormatted);
                 }
 
-                emailLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                        .putExtra("TYPE","ENTER")
-                        .putExtra("screen","EditEmail"));
-                    }
-                });
-
-                addressLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                .putExtra("TYPE","ENTER")
-                                .putExtra("screen","EditAddress"));
-                    }
-                });
-
-                phoneLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                .putExtra("TYPE","ENTER")
-                                .putExtra("OLD_PHONE",phoneFormat)
-                                .putExtra("screen","EditPhone"));
-                    }
-                });
-
-                userDetailsCloseLL.setOnClickListener(view -> {
-                    finish();
-                });
             }
 
 
-            editProfileIV.setOnClickListener(view -> {
-                if (checkAndRequestPermissions(this)) {
-                    chooseImage(this);
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -226,20 +226,60 @@ public class UserDetailsActivity extends AppCompatActivity {
             public void onChanged(Profile profile) {
                 if (profile != null) {
                     myApplicationObj.setMyProfile(profile);
-                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
-                        userProfileIV.setVisibility(View.VISIBLE);
-                        imageTextTV.setVisibility(View.GONE);
-                        Glide.with(UserDetailsActivity.this)
-                                .load(profile.getData().getImage())
-                                .into(userProfileIV);
-                    } else {
-                        userProfileIV.setVisibility(View.GONE);
-                        imageTextTV.setVisibility(View.VISIBLE);
-                        String imageText ="";
-                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
-                                profile.getData().getLastName().substring(0,1).toUpperCase();
-                        imageTextTV.setText(imageText);
+                    if(myApplicationObj.getMyProfile().getData().getFirstName()!=null){
+                        phoneNumber  = profile.getData().getPhoneNumber().split(" ")[1];
+                        phoneFormat = "("+phoneNumber.substring(0, 3)+") "+phoneNumber.substring(3, 6)+"-"+phoneNumber.substring(6, 10);
+                        bindImage(myApplicationObj.getMyProfile().getData().getImage());
+                        strFileName = myApplicationObj.getMyProfile().getData().getImage();
+                        userEmailIdTV.setText(profile.getData().getEmail());
+                        userNameTV.setText(profile.getData().getFirstName()+" "+profile.getData().getLastName());
+
+                        userPhoneNumTV.setText(phoneFormat);
+
+                        String addressFormatted = "";
+                        if(profile.getData().getAddressLine1()!=null && !profile.getData().getAddressLine1().equals("")){
+                            addressFormatted = addressFormatted + profile.getData().getAddressLine1()+", ";
+                        }
+                        if(profile.getData().getAddressLine2()!=null && !profile.getData().getAddressLine2().equals("")){
+                            addressFormatted = addressFormatted + profile.getData().getAddressLine2()+", ";
+                        }
+                        if(profile.getData().getCity()!=null && !profile.getData().getCity().equals("")){
+                            addressFormatted = addressFormatted + profile.getData().getCity()+", ";
+                        }
+                        if(profile.getData().getState()!=null && !profile.getData().getState().equals("")){
+                            addressFormatted = addressFormatted + profile.getData().getState()+", ";
+                        }
+
+                        addressFormatted = addressFormatted + "United States, ";
+
+                        if(profile.getData().getZipCode()!=null && !profile.getData().getZipCode().equals("")){
+                            addressFormatted = addressFormatted + profile.getData().getZipCode()+", ";
+                        }
+
+                        if(addressFormatted.trim().endsWith(",")){
+                            userAddressTV.setText(addressFormatted.trim().substring(0,addressFormatted.trim().length()-1));
+                        }else{
+                            userAddressTV.setText(addressFormatted);
+                        }
+
                     }
+
+
+//                    myApplicationObj.setMyProfile(profile);
+//                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
+//                        userProfileIV.setVisibility(View.VISIBLE);
+//                        imageTextTV.setVisibility(View.GONE);
+//                        Glide.with(UserDetailsActivity.this)
+//                                .load(profile.getData().getImage())
+//                                .into(userProfileIV);
+//                    } else {
+//                        userProfileIV.setVisibility(View.GONE);
+//                        imageTextTV.setVisibility(View.VISIBLE);
+//                        String imageText ="";
+//                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
+//                                profile.getData().getLastName().substring(0,1).toUpperCase();
+//                        imageTextTV.setText(imageText);
+//                    }
                 }
             }
         });
@@ -492,4 +532,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dashboardViewModel.meProfile();
+    }
 }

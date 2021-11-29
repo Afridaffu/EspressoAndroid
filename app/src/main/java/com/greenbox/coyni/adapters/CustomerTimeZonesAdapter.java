@@ -23,8 +23,6 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     List<TimeZoneModel> listCountries;
     Context mContext;
     MyApplication objMyApplication;
-    EditText editText;
-    RecyclerView timezonesRV;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //        public TextInputEditText etCurrencyPST;
@@ -42,11 +40,9 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     }
 
 
-    public CustomerTimeZonesAdapter(List<TimeZoneModel> list, Context context, EditText editText, RecyclerView timezonesRV) {
+    public CustomerTimeZonesAdapter(List<TimeZoneModel> list, Context context) {
         this.mContext = context;
         this.listCountries = list;
-        this.editText = editText;
-        this.timezonesRV = timezonesRV;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -82,11 +78,12 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
                         }
                     }
 
-                    CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(listCountries,mContext,editText,timezonesRV);
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-                    timezonesRV.setLayoutManager(mLayoutManager);
-                    timezonesRV.setItemAnimator(new DefaultItemAnimator());
-                    timezonesRV.setAdapter(customerTimeZonesAdapter);
+                    notifyDataSetChanged();
+//                    CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(listCountries,mContext,editText,timezonesRV);
+//                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+//                    timezonesRV.setLayoutManager(mLayoutManager);
+//                    timezonesRV.setItemAnimator(new DefaultItemAnimator());
+//                    timezonesRV.setAdapter(customerTimeZonesAdapter);
                 }
             });
 
