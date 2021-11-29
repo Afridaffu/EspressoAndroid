@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-,_."
                     android:fontFamily="@font/opensans_semibold"
-                    android:hint="Enter New Email"
+                    android:hint="New Email"
                     android:imeOptions="actionDone"
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:maxLines="1"

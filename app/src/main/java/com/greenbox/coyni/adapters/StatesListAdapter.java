@@ -56,7 +56,7 @@ public class StatesListAdapter extends RecyclerView.Adapter<StatesListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             States objData = listStates.get(position);
-            holder.tvState.setText(objData.getName());
+            holder.tvState.setText(objData.getIsocode());
             if (listStates.get(position).isSelected()) {
                 holder.tickIcon.setVisibility(View.VISIBLE);
             } else {
@@ -66,7 +66,7 @@ public class StatesListAdapter extends RecyclerView.Adapter<StatesListAdapter.My
                 @Override
                 public void onClick(View v) {
                     try {
-                        Utils.tempState = objData.getName();
+                        Utils.tempState = objData.getIsocode();
                         for (int i = 0; i < listStates.size(); i++) {
                             if (position == i) {
                                 listStates.get(i).setSelected(true);

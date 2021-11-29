@@ -503,6 +503,7 @@ public class OTPValidation extends AppCompatActivity {
                                                 case "ForgotPin":
                                                     startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
                                                             .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                    finish();
                                                     break;
                                                 case "SignUp":
                                                     if (OTP_TYPE.equals("EMAIL")) {

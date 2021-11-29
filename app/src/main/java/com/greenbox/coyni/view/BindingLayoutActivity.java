@@ -126,25 +126,42 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
                 }
                 break;
                 case "retEmailfail": {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
                 }
                 break;
                 case "EditEmail": {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.VISIBLE);
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
                 }
                 break;
                 case "ChangePassword": {
                     findViewById(R.id.changePasswordLayout).setVisibility(View.VISIBLE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
                 }
+                break;
+                case "profileGetStarted": {
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
+                    findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.VISIBLE);
+                }
+                break;
             }
         } catch (Exception ex) {
             ex.printStackTrace();

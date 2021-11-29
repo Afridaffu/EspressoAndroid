@@ -271,6 +271,16 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21)+"...");
                 }
             });
+
+
+            cardviewYourAccount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(CustomerProfileActivity.this, BindingLayoutActivity.class);
+                    i.putExtra("screen", "profileGetStarted");
+                    startActivity(i);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
