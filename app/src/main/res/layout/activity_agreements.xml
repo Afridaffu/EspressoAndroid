@@ -108,10 +108,34 @@
                 app:cardCornerRadius="@dimen/_11sdp">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclPastAgree"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/round_background" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/noPastCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:visibility="visible"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_1sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                app:cardCornerRadius="@dimen/_11sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/light_gray"
+                    android:textAlignment="center"
+                    android:text="No Past Agreements"/>
+
+
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </ScrollView>

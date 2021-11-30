@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,8 +25,9 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 public class AgreementsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     LinearLayout backIV;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,recyclerpastAgree;
     AgreeListAdapter adapter;
+    CardView noPastAgree;
     LinearLayoutManager linearLayoutManager;
     AgreeListAdapter.RecyclerClickListener listener;
     String status;
@@ -40,6 +42,8 @@ public class AgreementsActivity extends AppCompatActivity {
         dashboardViewModel=new ViewModelProvider(this).get(DashboardViewModel.class);
         setContentView(R.layout.activity_agreements);
         recyclerView=findViewById(R.id.recyclerview);
+        recyclerpastAgree=findViewById(R.id.recyclPastAgree);
+        noPastAgree=findViewById(R.id.noPastCV);
         backIV=findViewById(R.id.backAgreeIV);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
