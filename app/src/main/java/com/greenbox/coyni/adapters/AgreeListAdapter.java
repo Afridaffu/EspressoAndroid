@@ -17,6 +17,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.util.Locale;
+
 public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyViewHolder> {
 
     Context context;
@@ -56,17 +58,16 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
             if (pos==0){
-                holder.agreementTV.setText("Privacy Policy "+agreements.getData().getItems().get(pos+1).getDocumentVersion());
+                holder.agreementTV.setText("Privacy Policy "+agreements.getData().getItems().get(pos+1).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ",""));
             }
             else if (pos==1){
-                holder.agreementTV.setText("Terms of Service "+agreements.getData().getItems().get(pos-1).getDocumentVersion());
+                holder.agreementTV.setText("Terms of Service "+agreements.getData().getItems().get(pos-1).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ",""));
             }
     }
 
     @Override
     public int getItemCount() {
-        Log.e("Agreemen",""+agreements.getData().getTotalItems()+" dfdfdf");
-        if (this.agreements!=null){
+       if (this.agreements!=null){
             return agreements.getData().getItems().size();
         }
         return 0;

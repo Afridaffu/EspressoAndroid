@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
+import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -18,10 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyApplication extends Application {
-    static String strEncryptedPublicKey;
+    static String strEncryptedPublicKey, strUser = "", strUserCode;
     List<CardsDataItem> listCards = new ArrayList<>();
     List<Agreements> agreementsList;
     AccountLimitsData objAcc;
+    AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
     String strUserName = "", strRetrEmail = "", listAgree = "", strEmail = "";
     Profile myProfile = new Profile();
@@ -60,8 +62,31 @@ public class MyApplication extends Application {
     private double tokenWithdrawalSignetDayLimit;
     private double tokenWithdrawalSignetWeekLimit;
 
+    public AgreementsPdf getAgreementsPdf() {
+        return agreementsPdf;
+    }
+
+    public void setAgreementsPdf(AgreementsPdf agreementsPdf) {
+        this.agreementsPdf = agreementsPdf;
+    }
+
     int intUserId;
     String strCity, strPhoneNum, strState, strCountry, strAddressLine1, strAddressLine2, strZipCode, strProfileImg;
+    public String getStrUser() {
+        return strUser;
+    }
+
+    public void setStrUser(String strUser) {
+        this.strUser = strUser;
+    }
+
+    public String getStrUserCode() {
+        return strUserCode;
+    }
+
+    public void setStrUserCode(String strUserCode) {
+        this.strUserCode = strUserCode;
+    }
 
     public int getIntUserId() {
         return intUserId;

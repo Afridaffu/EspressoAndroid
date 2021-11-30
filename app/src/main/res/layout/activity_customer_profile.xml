@@ -159,18 +159,18 @@
                                         app:layout_constraintTop_toTopOf="parent">
 
 
-                                            <androidx.cardview.widget.CardView
-                                                android:id="@+id/userProfileCV"
-                                                android:layout_width="@dimen/_48sdp"
-                                                android:layout_height="@dimen/_48sdp"
-                                                android:layout_alignParentRight="true"
-                                                android:layout_gravity="center"
-                                                app:cardBackgroundColor="@color/white"
-                                                app:cardCornerRadius="@dimen/_24sdp"
-                                                app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintEnd_toEndOf="parent"
-                                                app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toTopOf="parent">
+                                        <androidx.cardview.widget.CardView
+                                            android:id="@+id/userProfileCV"
+                                            android:layout_width="@dimen/_48sdp"
+                                            android:layout_height="@dimen/_48sdp"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_gravity="center"
+                                            app:cardBackgroundColor="@color/white"
+                                            app:cardCornerRadius="@dimen/_24sdp"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent">
 
 
                                             <ImageView
@@ -233,7 +233,7 @@
                     android:padding="@dimen/_10sdp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:orientation="vertical">
@@ -508,7 +508,6 @@
                         android:id="@+id/cpAgreementsLL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_16sdp"
                         android:paddingBottom="@dimen/_16sdp">

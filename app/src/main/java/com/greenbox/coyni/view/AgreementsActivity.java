@@ -7,23 +7,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 
@@ -38,6 +32,7 @@ public class AgreementsActivity extends AppCompatActivity {
     String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     Agreements agreements;
+    MyApplication objMyApplication;
     int i=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +46,9 @@ public class AgreementsActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initObserver();
         dashboardViewModel.meAgreementsById();
+      
+        objMyApplication = (MyApplication) getApplicationContext();
+
         setOnClickListener();
 
         backIV.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +73,17 @@ public class AgreementsActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
+                @Override
+                public void onChanged(AgreementsPdf agreementsPdf) {
+                    if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")){
+                        objMyApplication.setAgreementsPdf(agreementsPdf);
+                        adapter=new AgreeListAdapter(AgreementsActivity.this,agreements,dashboardViewModel,listener);
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
+            });
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -91,8 +100,9 @@ public class AgreementsActivity extends AppCompatActivity {
                             Uri.parse(tosURL),
                             "application/pdf");
                     startActivity(inte);
+
                 }
-                else if (position==0){
+                if (position==0){
                     Intent inte = new Intent(Intent.ACTION_VIEW);
                     inte.setDataAndType(
                             Uri.parse(privacyURL),

@@ -154,9 +154,10 @@
                             android:textSize="@dimen/_54ssp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.393"
+                            app:layout_constraintHorizontal_bias="0.222"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -283,6 +284,7 @@
                 android:background="@drawable/round_background" />
 
             <TextView
+                android:id="@+id/payTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_bold"
