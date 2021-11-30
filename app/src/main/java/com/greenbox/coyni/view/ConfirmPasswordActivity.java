@@ -36,7 +36,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     Boolean isCPwdEye = false;
     private Pattern strong;
     private static final String STRONG_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*!?]).{8,})";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

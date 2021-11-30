@@ -192,7 +192,11 @@ public class UserDetailsActivity extends AppCompatActivity {
                 if (addressFormatted.trim().endsWith(",")) {
                     userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1)+".");
                 } else {
-                    userAddressTV.setText(addressFormatted+".");
+                    if(!addressFormatted.equals("")){
+                        userAddressTV.setText(addressFormatted+".");
+                    }else{
+                        userAddressTV.setText("");
+                    }
                 }
 
             }

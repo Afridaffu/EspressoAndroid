@@ -264,16 +264,16 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() > 0){
-                    isAddress2 = true;
-                    address2ErrorLL.setVisibility(GONE);
-                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
-                }else{
-                    address2ErrorLL.setVisibility(VISIBLE);
-                    address2ErrorTV.setText("Field Required");
-                    isAddress2 = false;
-                }
+//                if(charSequence.length() > 0){
+//                    isAddress2 = true;
+//                    address2ErrorLL.setVisibility(GONE);
+//                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
+//                }else{
+//                    address2ErrorLL.setVisibility(VISIBLE);
+//                    address2ErrorTV.setText("Field Required");
+//                    isAddress2 = false;
+//                }
                 enableOrDisableSave();
             }
 
@@ -375,6 +375,11 @@ public class EditAddressActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() >= 5) {
                     isZipcode = true;
+                    zipcodeErrorLL.setVisibility(GONE);
+                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                }else if (charSequence.length() < 5) {
+                    isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));

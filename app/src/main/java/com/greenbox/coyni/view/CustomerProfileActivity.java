@@ -64,7 +64,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
     LinearLayout cpbackBtn;
-    ProgressDialog dialog;
+//    ProgressDialog dialog;
     TextView customerNameTV, tvACStatus, tvBMSetting, cpAccountIDTV, imageTextTV;
     MyApplication objMyApplication;
     CardView cvLogout;
@@ -374,7 +374,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
-
     private void displayQRCode() {
         try {
             ImageView imgClose, copyRecipientAddress;
@@ -546,10 +545,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 enablePopup.dismiss();
             }
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-                dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
-                dialog.setIndeterminate(false);
-                dialog.setMessage("Please wait...");
-                dialog.show();
+//                dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
+//                dialog.setIndeterminate(false);
+//                dialog.setMessage("Please wait...");
+//                dialog.show();
                 BiometricRequest biometricRequest = new BiometricRequest();
                 biometricRequest.setBiometricEnabled(true);
                 biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -611,7 +610,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     if (enablePopup != null) {
                         enablePopup.dismiss();
                     }
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     if (biometricResponse != null) {
                         saveToken(biometricResponse.getData().getToken());
                         Utils.generateUUID(CustomerProfileActivity.this);

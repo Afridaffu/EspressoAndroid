@@ -51,7 +51,8 @@ import java.util.regex.Pattern;
 public class CreatePasswordActivity extends AppCompatActivity {
     ImageView imgClose;
     CardView cvSave, cvLogin;
-    RelativeLayout layoutNewPassword, layoutDone;
+    LinearLayout layoutNewPassword;
+    RelativeLayout layoutDone;
     TextInputLayout etlPassword, etlCPassword;
     TextInputEditText etPassword, etCPassword;
     TextView tvPasswordInfo, tvHead, tvMessage, tvchangepass;
@@ -61,16 +62,18 @@ public class CreatePasswordActivity extends AppCompatActivity {
     ProgressDialog dialog;
     private Pattern strong, medium;
     Boolean isPassword = false, isConfirm = false, isPwdEye = false, isCPwdEye = false;
+    //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&'()*+,-./:;<=>?@^_`{|}~]).{8,})";
 
     private static final String MEDIUM_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,})";
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&'()*+,-./:;<=>?@^_`{|}~]).{6,})";
+
     View strengthOne, strengthTwo, strengthThree;
     String strCode = "", strNewPwd = "";
     LoginViewModel loginViewModel;
     DashboardViewModel dashboardViewModel;
-    RelativeLayout layoutMain;
+    LinearLayout layoutMain;
     boolean isSuccessLayout = false;
 
     @Override
@@ -163,10 +166,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         layoutIndicator.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")){
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
                             passwordTIL.setHint("New Password");
-                        }
-                        else {
+                        } else {
                             passwordTIL.setHint("Password");
                         }
                     } else {
