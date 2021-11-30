@@ -79,10 +79,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     Cursor cursor;
     DashboardViewModel dashboardViewModel;
-    CardView cardviewYourAccount,statusDotCV;
+    CardView cardviewYourAccount, statusDotCV;
     Dialog enablePopup;
     Dialog qrDialog;
     String strWallet = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -120,7 +121,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             switchOn = findViewById(R.id.switchOn);
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             tvBMSetting = findViewById(R.id.tvBMSetting);
-            userProfile=findViewById(R.id.linearLayout);
+            userProfile = findViewById(R.id.linearLayout);
             cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
             statusDotCV = findViewById(R.id.statusDotCV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
@@ -138,7 +139,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     cardviewYourAccount.setVisibility(View.VISIBLE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                }else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
                     cardviewYourAccount.setVisibility(View.GONE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
@@ -169,14 +170,34 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     displayQRCode();
                 }
             });
+
+            userProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    displayQRCode();
+                }
+            });
+
 
             cvLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         dropAllTables();
                         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -185,12 +206,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }
-            });
-            userProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    displayQRCode();
                 }
             });
 
@@ -231,6 +246,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpAgreementsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(CustomerProfileActivity.this, AgreementsActivity.class));
                 }
             });
@@ -238,6 +257,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpAccountLimitsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(CustomerProfileActivity.this, AccountLimitsActivity.class));
                 }
             });
@@ -332,6 +355,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cardviewYourAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Intent i = new Intent(CustomerProfileActivity.this, BindingLayoutActivity.class);
                     i.putExtra("screen", "profileGetStarted");
                     startActivity(i);
@@ -345,10 +372,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void displayQRCode() {
         try {
-            ImageView imgClose,copyRecipientAddress;
-            ImageView meQrCode,shareImage;
-            TextView userFullName,userInfo,walletAddress;
-            qrDialog= new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
+            ImageView imgClose, copyRecipientAddress;
+            ImageView meQrCode, shareImage;
+            TextView userFullName, userInfo, walletAddress;
+            qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             qrDialog.setContentView(R.layout.profileqrcode);
             Window window = qrDialog.getWindow();
@@ -362,11 +389,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
             qrDialog.getWindow().setAttributes(lp);
             qrDialog.show();
             imgClose = qrDialog.findViewById(R.id.imgClose);
-            meQrCode=qrDialog.findViewById(R.id.idIVQrcode);
-            userFullName=qrDialog.findViewById(R.id.tvName);
-            userInfo=qrDialog.findViewById(R.id.tvUserInfo);
-            walletAddress=qrDialog.findViewById(R.id.tvWalletAddress);
-            shareImage=qrDialog.findViewById(R.id.imgShare);
+            meQrCode = qrDialog.findViewById(R.id.idIVQrcode);
+            userFullName = qrDialog.findViewById(R.id.tvName);
+            userInfo = qrDialog.findViewById(R.id.tvUserInfo);
+            walletAddress = qrDialog.findViewById(R.id.tvWalletAddress);
+            shareImage = qrDialog.findViewById(R.id.imgShare);
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
             if (walletResponse != null) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
@@ -382,13 +409,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             });
 
-            String strUserName=Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+""+objMyApplication.getMyProfile().getData().getLastName().substring(0,1).toUpperCase());
+            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             userInfo.setText(strUserName.toUpperCase(Locale.US));
             if (strName != null && strName.length() > 21) {
                 userFullName.setText(strName.substring(0, 21) + "...");
-            }
-            else {
+            } else {
                 userFullName.setText(strName);
             }
 
@@ -403,17 +429,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("image/jpeg");
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    intent.putExtra(Intent.EXTRA_TEXT,strWallet);
+                    intent.putExtra(Intent.EXTRA_TEXT, strWallet);
                     startActivity(Intent.createChooser(intent, "Share via"));
                 }
             });
 
-            copyRecipientAddress=qrDialog.findViewById(R.id.imgCopy);
+            copyRecipientAddress = qrDialog.findViewById(R.id.imgCopy);
             copyRecipientAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ClipboardManager myClipboard;
-                    myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+                    myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                     ClipData myClip;
                     String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
@@ -436,6 +462,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
@@ -587,11 +614,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
                                 saveFace("false");
                                 saveThumb("true");
-//                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_faceid, "authid");
+                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
                             } else {
                                 saveFace("true");
                                 saveThumb("false");
-//                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_touch_id, "authid");
+                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
                             }
 
                             isSwitchEnabled = true;
@@ -599,11 +626,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             switchOff.setVisibility(View.GONE);
                             objMyApplication.setBiometric(true);
                         } else {
-//                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-//                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_faceid, "authid");
-//                            } else {
-//                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_touch_id, "authid");
-//                            }
+                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
+                            } else {
+                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
+                            }
                             objMyApplication.setBiometric(false);
                             saveFace("false");
                             saveThumb("false");
@@ -814,6 +841,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
         return dDialog;
     }
+
     private void generateQRCode(String wallet) {
         try {
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -847,12 +875,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-    private void showToast(){
-        LayoutInflater inflater=getLayoutInflater();
-        View layout=inflater.inflate(R.layout.custom_toast_recipientaddress,(ViewGroup) findViewById(R.id.toastRootLL));
 
-        Toast toast=new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER,0,0);
+    private void showToast() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast_recipientaddress, (ViewGroup) findViewById(R.id.toastRootLL));
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();

@@ -168,7 +168,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             try {
                 String str = lastName.getText().toString();
                 if (str.length() > 0 && str.substring(0).equals(" ")) {
-                    lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
+                    lastName.setText("");
                     lastName.setSelection(lastName.getText().length());
                 } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
                     lastName.setText(lastName.getText().toString().replaceAll(".", ""));

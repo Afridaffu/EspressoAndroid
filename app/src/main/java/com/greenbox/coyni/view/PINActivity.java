@@ -541,13 +541,14 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (resetPINValue.equals("ENTER")) {
                         onBackPressed();
                     }else if (resetPINValue.equals("CHOOSE")) {
-                        tvForgot.setVisibility(View.VISIBLE);
-                        TYPE = "ENTER";
-                        tvHead.setText("Enter your PIN");
-                        clearControls();
-                        passcode = "";
-                        resetPINValue = "ENTER";
-                        imgBack.setImageResource(R.drawable.ic_close);
+//                        tvForgot.setVisibility(View.VISIBLE);
+//                        TYPE = "ENTER";
+//                        tvHead.setText("Enter your PIN");
+//                        clearControls();
+//                        passcode = "";
+//                        resetPINValue = "ENTER";
+//                        imgBack.setImageResource(R.drawable.ic_close);
+                        onBackPressed();
                     }else if (resetPINValue.equals("CONFIRM")) {
                         tvForgot.setVisibility(View.GONE);
                         TYPE = "CHOOSE";

@@ -185,6 +185,8 @@ public class PreferencesActivity extends AppCompatActivity {
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         timeZoneET.setText(myApplicationObj.getTimezone());
+                        Utils.showCustomToast(PreferencesActivity.this, "Timezone has been updated", R.drawable.ic_custom_tick, "authid");
+
                     }
                 }
             }

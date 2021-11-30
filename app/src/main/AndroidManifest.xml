@@ -167,6 +167,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:permission="@string/crop_image_menu_crop"
+            android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 
 </manifest>

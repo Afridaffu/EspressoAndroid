@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,9 +21,12 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -42,6 +46,7 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,15 +63,17 @@ import okhttp3.RequestBody;
 public class UserDetailsActivity extends AppCompatActivity {
 
     ImageView editProfileIV, userProfileIV;
-    TextView userAddressTV,userPhoneNumTV,userEmailIdTV,imageTextTV,userNameTV;
+    TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV;
     MyApplication myApplicationObj;
-    LinearLayout emailLL,phoneLL,addressLL,userDetailsCloseLL;
+    LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL;
     public static UserDetailsActivity userDetailsActivity;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    String strFileName = "",phoneFormat = "",phoneNumber="";
+    String strFileName = "", phoneFormat = "", phoneNumber = "";
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
+    Long mLastClickTime = 0L;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -83,7 +90,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void initFields(){
+    public void initFields() {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             myApplicationObj = (MyApplication) getApplicationContext();
@@ -102,35 +109,48 @@ public class UserDetailsActivity extends AppCompatActivity {
 
             editProfileIV.setOnClickListener(view -> {
                 if (checkAndRequestPermissions(this)) {
-                    chooseImage(this);
+//                    chooseImage(this);
+                    showImagePickerDialog(this);
                 }
             });
 
             emailLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                            .putExtra("TYPE","ENTER")
-                            .putExtra("screen","EditEmail"));
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "EditEmail"));
                 }
             });
 
             addressLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                            .putExtra("TYPE","ENTER")
-                            .putExtra("screen","EditAddress"));
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "EditAddress"));
                 }
             });
 
             phoneLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                            .putExtra("TYPE","ENTER")
-                            .putExtra("OLD_PHONE",phoneFormat)
-                            .putExtra("screen","EditPhone"));
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("OLD_PHONE", phoneFormat)
+                            .putExtra("screen", "EditPhone"));
                 }
             });
 
@@ -138,40 +158,40 @@ public class UserDetailsActivity extends AppCompatActivity {
                 finish();
             });
 
-            if(myApplicationObj.getMyProfile().getData().getFirstName()!=null){
+            if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
                 Profile profile = myApplicationObj.getMyProfile();
-                phoneNumber  = profile.getData().getPhoneNumber().split(" ")[1];
-                phoneFormat = "("+phoneNumber.substring(0, 3)+") "+phoneNumber.substring(3, 6)+"-"+phoneNumber.substring(6, 10);
+                phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
+                phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 strFileName = myApplicationObj.getMyProfile().getData().getImage();
                 userEmailIdTV.setText(profile.getData().getEmail());
-                userNameTV.setText(profile.getData().getFirstName()+" "+profile.getData().getLastName());
+                userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
 
                 userPhoneNumTV.setText(phoneFormat);
 
                 String addressFormatted = "";
-                if(profile.getData().getAddressLine1()!=null && !profile.getData().getAddressLine1().equals("")){
-                    addressFormatted = addressFormatted + profile.getData().getAddressLine1()+", ";
+                if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
                 }
-                if(profile.getData().getAddressLine2()!=null && !profile.getData().getAddressLine2().equals("")){
-                    addressFormatted = addressFormatted + profile.getData().getAddressLine2()+", ";
+                if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
                 }
-                if(profile.getData().getCity()!=null && !profile.getData().getCity().equals("")){
-                    addressFormatted = addressFormatted + profile.getData().getCity()+", ";
+                if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
                 }
-                if(profile.getData().getState()!=null && !profile.getData().getState().equals("")){
-                    addressFormatted = addressFormatted + profile.getData().getState()+", ";
+                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                 }
 
                 addressFormatted = addressFormatted + "United States, ";
 
-                if(profile.getData().getZipCode()!=null && !profile.getData().getZipCode().equals("")){
-                    addressFormatted = addressFormatted + profile.getData().getZipCode()+", ";
+                if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                 }
 
-                if(addressFormatted.trim().endsWith(",")){
-                    userAddressTV.setText(addressFormatted.trim().substring(0,addressFormatted.trim().length()-1));
-                }else{
+                if (addressFormatted.trim().endsWith(",")) {
+                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1));
+                } else {
                     userAddressTV.setText(addressFormatted);
                 }
 
@@ -183,7 +203,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void initObservers(){
+    public void initObservers() {
 
         dashboardViewModel.getImageResponseMutableLiveData().observe(this, new Observer<ImageResponse>() {
             @Override
@@ -192,17 +212,17 @@ public class UserDetailsActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
                 if (imageResponse != null) {
-                    if(imageResponse.getStatus().toLowerCase().equals("success")){
+                    if (imageResponse.getStatus().toLowerCase().equals("success")) {
                         userProfileIV.setVisibility(View.GONE);
                         imageTextTV.setVisibility(View.VISIBLE);
-                        String imageTextNew ="";
-                        imageTextNew = imageTextNew+myApplicationObj.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+
-                                myApplicationObj.getMyProfile().getData().getLastName().substring(0,1).toUpperCase();
+                        String imageTextNew = "";
+                        imageTextNew = imageTextNew + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                                myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                         imageTextTV.setText(imageTextNew);
                         dashboardViewModel.meProfile();
-                        Utils.displayAlert(imageResponse.getData().getMessage(),UserDetailsActivity.this,"");
-                    }else{
-                        Utils.displayAlert(imageResponse.getError().getErrorDescription(),UserDetailsActivity.this,"");
+                        Utils.displayAlert(imageResponse.getData().getMessage(), UserDetailsActivity.this, "");
+                    } else {
+                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
                     }
 
                 }
@@ -216,7 +236,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
                 if (imageResponse != null) {
-                        Utils.displayAlert(imageResponse.getError().getErrorDescription(),UserDetailsActivity.this,"");
+                    Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
                 }
             }
         });
@@ -226,39 +246,39 @@ public class UserDetailsActivity extends AppCompatActivity {
             public void onChanged(Profile profile) {
                 if (profile != null) {
                     myApplicationObj.setMyProfile(profile);
-                    if(myApplicationObj.getMyProfile().getData().getFirstName()!=null){
-                        phoneNumber  = profile.getData().getPhoneNumber().split(" ")[1];
-                        phoneFormat = "("+phoneNumber.substring(0, 3)+") "+phoneNumber.substring(3, 6)+"-"+phoneNumber.substring(6, 10);
+                    if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
+                        phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
+                        phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
                         bindImage(myApplicationObj.getMyProfile().getData().getImage());
                         strFileName = myApplicationObj.getMyProfile().getData().getImage();
                         userEmailIdTV.setText(profile.getData().getEmail());
-                        userNameTV.setText(profile.getData().getFirstName()+" "+profile.getData().getLastName());
+                        userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
 
                         userPhoneNumTV.setText(phoneFormat);
 
                         String addressFormatted = "";
-                        if(profile.getData().getAddressLine1()!=null && !profile.getData().getAddressLine1().equals("")){
-                            addressFormatted = addressFormatted + profile.getData().getAddressLine1()+", ";
+                        if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
                         }
-                        if(profile.getData().getAddressLine2()!=null && !profile.getData().getAddressLine2().equals("")){
-                            addressFormatted = addressFormatted + profile.getData().getAddressLine2()+", ";
+                        if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
                         }
-                        if(profile.getData().getCity()!=null && !profile.getData().getCity().equals("")){
-                            addressFormatted = addressFormatted + profile.getData().getCity()+", ";
+                        if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
                         }
-                        if(profile.getData().getState()!=null && !profile.getData().getState().equals("")){
-                            addressFormatted = addressFormatted + profile.getData().getState()+", ";
+                        if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                         }
 
                         addressFormatted = addressFormatted + "United States, ";
 
-                        if(profile.getData().getZipCode()!=null && !profile.getData().getZipCode().equals("")){
-                            addressFormatted = addressFormatted + profile.getData().getZipCode()+", ";
+                        if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                         }
 
-                        if(addressFormatted.trim().endsWith(",")){
-                            userAddressTV.setText(addressFormatted.trim().substring(0,addressFormatted.trim().length()-1));
-                        }else{
+                        if (addressFormatted.trim().endsWith(",")) {
+                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1));
+                        } else {
                             userAddressTV.setText(addressFormatted);
                         }
 
@@ -290,9 +310,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         try {
             userProfileIV.setVisibility(View.GONE);
             imageTextTV.setVisibility(View.VISIBLE);
-            String imageTextNew ="";
-            imageTextNew = imageTextNew+myApplicationObj.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+
-                    myApplicationObj.getMyProfile().getData().getLastName().substring(0,1).toUpperCase();
+            String imageTextNew = "";
+            imageTextNew = imageTextNew + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                    myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
             imageTextTV.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
@@ -304,9 +324,9 @@ public class UserDetailsActivity extends AppCompatActivity {
             } else {
                 userProfileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);
-                String imageText ="";
-                imageText = imageText+myApplicationObj.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+
-                        myApplicationObj.getMyProfile().getData().getLastName().substring(0,1).toUpperCase();
+                String imageText = "";
+                imageText = imageText + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 imageTextTV.setText(imageText);
             }
 
@@ -329,7 +349,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             }.getType();
             List<States> listStates = gson.fromJson(json, type);
             myApplicationObj.setListStates(listStates);
-            Log.e("list states", listStates.size()+"");
+            Log.e("list states", listStates.size() + "");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -390,7 +410,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                                     })
                                     .show();
                         } else {
-                            Utils.displayAlert("No Profile image found to remove", UserDetailsActivity.this,"");
+                            Utils.displayAlert("No Profile image found to remove", UserDetailsActivity.this, "");
                         }
                     } else if (optionsMenu[i].equals("Cancel")) {
                         dialogInterface.dismiss();
@@ -415,7 +435,6 @@ public class UserDetailsActivity extends AppCompatActivity {
             ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
             scaled.compress(Bitmap.CompressFormat.JPEG, 100, stream1);
             byte[] imgInByte = stream1.toByteArray();
-
             //End
 
 //            Uri tempUri = getImageUri(context, bitmap);
@@ -470,7 +489,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 dialog.setIndeterminate(false);
                 dialog.setMessage("Please wait...");
                 dialog.show();
-                Log.e("filename",""+filename);
+                Log.e("filename", "" + filename);
                 dashboardViewModel.removeImage(filename);
             }
         } catch (Exception ex) {
@@ -485,14 +504,15 @@ public class UserDetailsActivity extends AppCompatActivity {
             case REQUEST_ID_MULTIPLE_PERMISSIONS:
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this,"");
+                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "");
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Your Storage.",UserDetailsActivity.this,"");
+                    Utils.displayAlert("Requires Access to Your Storage.", UserDetailsActivity.this, "");
 
                 } else {
-                    chooseImage(this);
+//                    chooseImage(this);
+                    showImagePickerDialog(this);
                 }
                 break;
         }
@@ -506,10 +526,12 @@ public class UserDetailsActivity extends AppCompatActivity {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        userProfileIV.setVisibility(View.VISIBLE);
-                        imageTextTV.setVisibility(View.GONE);
-                        userProfileIV.setImageBitmap(selectedImage);
-                        uploadImage();
+                        Uri uri = getImageUri(this, selectedImage);
+                        CropImage.activity(uri).start(this);
+//                        userProfileIV.setVisibility(View.VISIBLE);
+//                        imageTextTV.setVisibility(View.GONE);
+//                        userProfileIV.setImageBitmap(selectedImage);
+//                        uploadImage();
                     }
                     break;
                 case 1:
@@ -518,16 +540,30 @@ public class UserDetailsActivity extends AppCompatActivity {
                             Uri selectedImage = data.getData();
                             if (selectedImage != null) {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                                userProfileIV.setImageBitmap(bitmap);
-                                userProfileIV.setVisibility(View.VISIBLE);
-                                imageTextTV.setVisibility(View.GONE);
-                                uploadImage();
+//                                userProfileIV.setImageBitmap(bitmap);
+//                                userProfileIV.setVisibility(View.VISIBLE);
+//                                imageTextTV.setVisibility(View.GONE);
+//                                uploadImage();
+                                Uri uri = getImageUri(this, bitmap);
+                                CropImage.activity(uri).start(this);
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
                     break;
+            }
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                userProfileIV.setVisibility(View.VISIBLE);
+                imageTextTV.setVisibility(View.GONE);
+                userProfileIV.setImageURI(resultUri);
+                uploadImage();
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
     }
@@ -537,4 +573,50 @@ public class UserDetailsActivity extends AppCompatActivity {
         super.onResume();
         dashboardViewModel.meProfile();
     }
+
+    public static void showImagePickerDialog(Activity activity) {
+        // custom dialog
+        final Dialog dialog = new Dialog(activity);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.image_picker_options_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = activity.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+
+        LinearLayout chooseLL = dialog.findViewById(R.id.chooseLL);
+        LinearLayout takePhotoLL = dialog.findViewById(R.id.takePhotoLL);
+
+        chooseLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CropImage.activity().start(activity);
+            }
+        });
+
+        takePhotoLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                activity.startActivityForResult(takePicture, 0);
+
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
 }

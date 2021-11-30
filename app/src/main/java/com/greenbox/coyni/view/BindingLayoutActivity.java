@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -41,11 +42,13 @@ public class BindingLayoutActivity extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_binding_layout);
+            initialization();
             if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
                 strScreen = getIntent().getStringExtra("screen");
                 ControlMethod(strScreen);
             }
-            initialization();
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -108,8 +111,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 try {
                     dropAllTables();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                     finish();
                 } catch (Exception ex) {
@@ -162,6 +164,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.VISIBLE);
                     findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
                     findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
+                    dropAllTables();
                 }
                 break;
                 case "ChangePassword": {
@@ -170,6 +173,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
                     findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
+                    dropAllTables();
                 }
                 break;
                 case "profileGetStarted": {
@@ -193,6 +197,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
+            Log.e("dropAllTables","dropAllTables");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
@@ -203,6 +208,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
             editor.apply();
+            Log.e("dropAllTables","dropAllTables");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -211,8 +217,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(strScreen.equals("EditEmail") || strScreen.equals("ChangePassword")){
-            dropAllTables();
-        }
+
     }
 }

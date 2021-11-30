@@ -51,20 +51,21 @@ import java.util.List;
 
 public class EditAddressActivity extends AppCompatActivity {
 
-    TextInputEditText address1ET, address2ET,cityET,stateET,zipcodeET;
-    TextInputLayout address1TIL, address2TIL,cityTIL,stateTIL,zipcodeTIL;
+    TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
+    TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL;
     ConstraintLayout stateCL;
     MyApplication myApplicationObj;
     CardView editAddressSaveCV;
-    boolean isAddress1, isAddress2,isCity,isState,isZipcode,isSaveEnabled;
+    boolean isAddress1, isAddress2, isCity, isState, isZipcode, isSaveEnabled;
     Dialog popupStates;
     StatesListAdapter statesListAdapter;
     List<States> listStates = new ArrayList<>();
-    LinearLayout backIV,address1ErrorLL,address2ErrorLL,cityErrorLL,zipcodeErrorLL;
-    TextView address1ErrorTV,address2ErrorTV,cityErrorTV,zipcodeErrorTV;
+    LinearLayout backIV, address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
+    TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -83,7 +84,7 @@ public class EditAddressActivity extends AppCompatActivity {
         }
     }
 
-    public void initfields(){
+    public void initfields() {
 
         try {
 
@@ -125,7 +126,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
 
             editAddressSaveCV.setOnClickListener(view -> {
-                if(isSaveEnabled){
+                if (isSaveEnabled) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -144,7 +145,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Utils.populateStates(this,stateET,myApplicationObj);
+                Utils.populateStates(this, stateET, myApplicationObj);
             });
 
             stateTIL.setOnClickListener(view -> {
@@ -152,7 +153,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Utils.populateStates(this,stateET,myApplicationObj);
+                Utils.populateStates(this, stateET, myApplicationObj);
             });
 
             stateET.setOnClickListener(view -> {
@@ -160,33 +161,49 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Utils.populateStates(this,stateET,myApplicationObj);
+                Utils.populateStates(this, stateET, myApplicationObj);
             });
 
             backIV.setOnClickListener(view -> finish());
 
-            if(myApplicationObj.getMyProfile().getData().getFirstName()!=null){
-                if(myApplicationObj.getMyProfile().getData().getAddressLine1()!=null
-                        && !myApplicationObj.getMyProfile().getData().getAddressLine1().equals("")){
-                    address1ET.setText( myApplicationObj.getMyProfile().getData().getAddressLine1());
+            if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
+                if (myApplicationObj.getMyProfile().getData().getAddressLine1() != null
+                        && !myApplicationObj.getMyProfile().getData().getAddressLine1().equals("")) {
+                    address1ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine1());
+                    isAddress1 = true;
+                }else{
+                    isAddress1 = false;
                 }
-                if(myApplicationObj.getMyProfile().getData().getAddressLine2()!=null
-                        && !myApplicationObj.getMyProfile().getData().getAddressLine2().equals("")){
-                    address2ET.setText( myApplicationObj.getMyProfile().getData().getAddressLine2());
+                if (myApplicationObj.getMyProfile().getData().getAddressLine2() != null
+                        && !myApplicationObj.getMyProfile().getData().getAddressLine2().equals("")) {
+                    address2ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine2());
+                    isAddress2 = true;
+                }else{
+                    isAddress2 = false;
                 }
-                if(myApplicationObj.getMyProfile().getData().getCity()!=null
-                        && !myApplicationObj.getMyProfile().getData().getCity().equals("")){
-                    cityET.setText( myApplicationObj.getMyProfile().getData().getCity());
+                if (myApplicationObj.getMyProfile().getData().getCity() != null
+                        && !myApplicationObj.getMyProfile().getData().getCity().equals("")) {
+                    cityET.setText(myApplicationObj.getMyProfile().getData().getCity());
+                    isCity = true;
+                }else{
+                    isCity = false;
                 }
-                if(myApplicationObj.getMyProfile().getData().getState()!=null
-                        && !myApplicationObj.getMyProfile().getData().getState().equals("")){
-                    stateET.setText( myApplicationObj.getMyProfile().getData().getState());
+                if (myApplicationObj.getMyProfile().getData().getState() != null
+                        && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
+                    stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+                    isState = true;
+                }else{
+                    isState = false;
                 }
-                if(myApplicationObj.getMyProfile().getData().getZipCode()!=null
-                        && !myApplicationObj.getMyProfile().getData().getZipCode().equals("")){
-                    zipcodeET.setText( myApplicationObj.getMyProfile().getData().getZipCode());
+                if (myApplicationObj.getMyProfile().getData().getZipCode() != null
+                        && !myApplicationObj.getMyProfile().getData().getZipCode().equals("")) {
+                    zipcodeET.setText(myApplicationObj.getMyProfile().getData().getZipCode());
+                    isZipcode = true;
+                }else{
+                    isZipcode = false;
                 }
 
+                enableOrDisableSave();
             }
 
         } catch (Exception e) {
@@ -194,7 +211,7 @@ public class EditAddressActivity extends AppCompatActivity {
         }
     }
 
-    public void textWatchers(){
+    public void textWatchers() {
         address1ET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -203,12 +220,12 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() > 0){
+                if (charSequence.length() > 0) {
                     isAddress1 = true;
                     address1ErrorLL.setVisibility(GONE);
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(address1TIL,getResources().getColor(R.color.primary_green));
-                }else{
+                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
+                } else {
                     address1ErrorLL.setVisibility(VISIBLE);
                     address1ErrorTV.setText("Field Required");
                     isAddress1 = false;
@@ -219,6 +236,21 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                try {
+                    String str = address1ET.getText().toString();
+                    if (str.substring(0).equals(" ")) {
+                        address1ET.setText("");
+                        address1ET.setSelection(address1ET.getText().length());
+                        address1ErrorLL.setVisibility(GONE);
+                    }else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        address1ET.setText("");
+                        address1ET.setSelection(address1ET.getText().length());
+                        address1ErrorLL.setVisibility(GONE);
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
@@ -231,22 +263,36 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if(charSequence.length() > 0){
-//                    isAddress2 = true;
-//                    address2ErrorLL.setVisibility(GONE);
-//                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
-//                }else{
-//                    address2ErrorLL.setVisibility(VISIBLE);
-//                    address2ErrorTV.setText("Field Required");
-//                    isAddress2 = false;
-//                }
+                if(charSequence.length() > 0){
+                    isAddress2 = true;
+                    address2ErrorLL.setVisibility(GONE);
+                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
+                }else{
+                    address2ErrorLL.setVisibility(VISIBLE);
+                    address2ErrorTV.setText("Field Required");
+                    isAddress2 = false;
+                }
                 enableOrDisableSave();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                try {
+                    String str = address2ET.getText().toString();
+                    if (str.substring(0).equals(" ")) {
+                        address2ET.setText("");
+                        address2ET.setSelection(address2ET.getText().length());
+                        address2ErrorLL.setVisibility(GONE);
+                    }else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        address2ET.setText("");
+                        address2ET.setSelection(address2ET.getText().length());
+                        address2ErrorLL.setVisibility(GONE);
+                    }
 
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -258,12 +304,12 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() > 0){
+                if (charSequence.length() > 0) {
                     isCity = true;
                     cityErrorLL.setVisibility(GONE);
                     cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(cityTIL,getResources().getColor(R.color.primary_green));
-                }else{
+                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
+                } else {
                     cityErrorLL.setVisibility(VISIBLE);
                     cityErrorTV.setText("Field Required");
                     isCity = false;
@@ -273,7 +319,26 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                try {
+                    String str = cityET.getText().toString();
+                    if (str.substring(0).equals(" ")) {
+                        cityET.setText("");
+                        cityET.setSelection(cityET.getText().length());
+                        cityErrorLL.setVisibility(GONE);
+                    }else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        cityET.setText("");
+                        cityET.setSelection(cityET.getText().length());
+                        cityErrorLL.setVisibility(GONE);
+                    } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
+                        cityET.setText(cityET.getText().toString().replaceAll(".", ""));
+                        cityET.setSelection(cityET.getText().length());
+                        cityErrorLL.setVisibility(GONE);
+                    }
 
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -285,9 +350,9 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() > 0){
+                if (charSequence.length() > 0) {
                     isState = true;
-                }else{
+                } else {
                     isState = false;
                 }
                 enableOrDisableSave();
@@ -307,12 +372,12 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() >=5 ){
+                if (charSequence.length() >= 5) {
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(zipcodeTIL,getResources().getColor(R.color.primary_green));
-                }else if(charSequence.length() ==0){
+                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                } else if (charSequence.length() == 0) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(VISIBLE);
                     zipcodeErrorTV.setText("Field Required");
@@ -327,7 +392,7 @@ public class EditAddressActivity extends AppCompatActivity {
         });
     }
 
-    public void focusWatchers(){
+    public void focusWatchers() {
 
         address1ET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -382,7 +447,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
 
-                    }else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
+                    } else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
@@ -520,21 +585,21 @@ public class EditAddressActivity extends AppCompatActivity {
             userData.setZipCode(zipcodeET.getText().toString().trim());
 
             customerProfileViewModel.meUpdateAddress(userData);
-            } catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void initObservers(){
+    public void initObservers() {
 
         customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 try {
                     dialog.dismiss();
-                    if(user!=null){
-                        if(user.getStatus().toString().toLowerCase().equals("success")){
-                            Utils.showCustomToast(EditAddressActivity.this,"Address has been updated",R.drawable.ic_location,"EditAddress");
+                    if (user != null) {
+                        if (user.getStatus().toString().toLowerCase().equals("success")) {
+                            Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -545,8 +610,8 @@ public class EditAddressActivity extends AppCompatActivity {
                                     }
                                 }
                             }, 2000);
-                        }else{
-                            Utils.displayAlert(user.getError().getErrorDescription(),EditAddressActivity.this,"");
+                        } else {
+                            Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "");
                         }
                     }
                 } catch (Exception e) {

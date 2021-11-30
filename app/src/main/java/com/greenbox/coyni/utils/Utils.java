@@ -721,6 +721,7 @@ public class Utils {
             TextView actionText = dialog.findViewById(R.id.tvAction);
             RecyclerView statesRV = dialog.findViewById(R.id.statesRV);
             EditText searchET = dialog.findViewById(R.id.searchET);
+            TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
             StatesListAdapter statesListAdapter = new StatesListAdapter(null, context, "EditAddress");
 
             List<States> listStates = myApplicationObj.getListStates();
@@ -731,11 +732,16 @@ public class Utils {
                 }
             }
             if (listStates.size() > 0) {
+                statesRV.setVisibility(View.VISIBLE);
+                notFoundTV.setVisibility(View.GONE);
                 statesListAdapter = new StatesListAdapter(listStates, context, "EditAddress");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
                 statesRV.setLayoutManager(mLayoutManager);
                 statesRV.setItemAnimator(new DefaultItemAnimator());
                 statesRV.setAdapter(statesListAdapter);
+            }else{
+                statesRV.setVisibility(View.GONE);
+                notFoundTV.setVisibility(View.VISIBLE);
             }
 
             StatesListAdapter finalStatesListAdapter = statesListAdapter;
@@ -759,7 +765,12 @@ public class Utils {
                                 }
                             }
                             if (filterList.size() > 0) {
+                                statesRV.setVisibility(View.VISIBLE);
+                                notFoundTV.setVisibility(View.GONE);
                                 finalStatesListAdapter.updateList(filterList);
+                            }else{
+                                statesRV.setVisibility(View.GONE);
+                                notFoundTV.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (Exception ex) {
@@ -797,48 +808,6 @@ public class Utils {
         }
     }
 
-    public static void showImagePickerDialog(Context context) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.image_picker_options_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
-        int width = mertics.widthPixels;
-
-
-        LinearLayout chooseLL = dialog.findViewById(R.id.chooseLL);
-        LinearLayout takePhotoLL = dialog.findViewById(R.id.takePhotoLL);
-
-        chooseLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        takePhotoLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        WindowManager.LayoutParams wlp = window.getAttributes();
-
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
 
 
 }
