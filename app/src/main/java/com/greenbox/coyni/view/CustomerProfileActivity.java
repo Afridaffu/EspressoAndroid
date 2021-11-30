@@ -283,15 +283,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+//                    try {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                            return;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
                 }
             });
 
@@ -497,7 +497,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
                         enablePopup = showFaceTouchEnabledDialog(this, "TOUCH");
                     } else {
-                        dialog = Utils.showProgressDialog(this);
+//                        dialog = Utils.showProgressDialog(this);
                         BiometricRequest biometricRequest = new BiometricRequest();
                         biometricRequest.setBiometricEnabled(true);
                         biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -507,7 +507,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
                     if (Utils.checkBiometric(CustomerProfileActivity.this)) {
                         if (!Utils.isFingerPrint(CustomerProfileActivity.this)) {
-                            dialog = Utils.showProgressDialog(this);
+//                            dialog = Utils.showProgressDialog(this);
                             BiometricRequest biometricRequest = new BiometricRequest();
                             biometricRequest.setBiometricEnabled(true);
                             biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -520,13 +520,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
             } else {
 //                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 if (tvBMSetting.getText().toString().toLowerCase().contains("face")) {
-                    dialog = Utils.showProgressDialog(this);
+//                    dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
                     coyniViewModel.saveBiometric(biometricRequest);
                 } else {
-                    dialog = Utils.showProgressDialog(this);
+//                    dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -818,7 +818,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                                 BIOMETRIC_STRONG);
                         startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                     } else {
-                        dialog = Utils.showProgressDialog(context);
+//                        dialog = Utils.showProgressDialog(context);
                         BiometricRequest biometricRequest = new BiometricRequest();
                         biometricRequest.setBiometricEnabled(true);
                         biometricRequest.setDeviceId(Utils.getDeviceID());

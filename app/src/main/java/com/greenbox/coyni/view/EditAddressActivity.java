@@ -191,6 +191,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
                     stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+                    Utils.tempState = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
                 }else{
                     isState = false;

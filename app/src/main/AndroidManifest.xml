@@ -148,8 +148,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.CreatePasswordActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.ForgotPasswordActivity"

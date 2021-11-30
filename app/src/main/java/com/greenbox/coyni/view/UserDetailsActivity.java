@@ -183,16 +183,16 @@ public class UserDetailsActivity extends AppCompatActivity {
                     addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                 }
 
-                addressFormatted = addressFormatted + "United States, ";
+//                addressFormatted = addressFormatted + "United States, ";
 
                 if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
                     addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                 }
 
                 if (addressFormatted.trim().endsWith(",")) {
-                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1));
+                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1)+".");
                 } else {
-                    userAddressTV.setText(addressFormatted);
+                    userAddressTV.setText(addressFormatted+".");
                 }
 
             }
@@ -270,16 +270,16 @@ public class UserDetailsActivity extends AppCompatActivity {
                             addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                         }
 
-                        addressFormatted = addressFormatted + "United States, ";
+//                        addressFormatted = addressFormatted + "United States, ";
 
                         if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                         }
 
                         if (addressFormatted.trim().endsWith(",")) {
-                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1));
+                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1)+".");
                         } else {
-                            userAddressTV.setText(addressFormatted);
+                            userAddressTV.setText(addressFormatted+".");
                         }
 
                     }

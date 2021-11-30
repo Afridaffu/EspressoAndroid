@@ -59,8 +59,8 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cvProfile"
-                        android:layout_width="@dimen/_60sdp"
-                        android:layout_height="@dimen/_60sdp"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_14sdp"
                         android:layout_centerHorizontal="true"
                         app:cardBackgroundColor="@color/white"
@@ -111,8 +111,8 @@
                         android:textSize="@dimen/_14ssp"></TextView>
 
                     <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="210dp"
+                        android:layout_height="210dp"
                         android:layout_below="@+id/tvName"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_26sdp"
@@ -120,9 +120,11 @@
 
                         <ImageView
                             android:id="@+id/idIVQrcode"
-                            android:layout_width="210dp"
-                            android:layout_height="210dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
                             android:layout_centerInParent="true"
+                            android:scaleType="fitCenter"
                             android:contentDescription="@string/qr_code" />
                     </RelativeLayout>
                 </RelativeLayout>

@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -371,6 +372,11 @@ public class EditEmailActivity extends AppCompatActivity {
             }
         });
 
+        customerProfileViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                            }
+        });
     }
 
     @Override

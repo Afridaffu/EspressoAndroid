@@ -727,7 +727,7 @@ public class Utils {
             List<States> listStates = myApplicationObj.getListStates();
 
             for (int i = 0; i < listStates.size() - 1; i++) {
-                if (editText.getText().toString().trim().equals(listStates.get(i).getName())) {
+                if (editText.getText().toString().trim().equals(listStates.get(i).getIsocode())) {
                     listStates.get(i).setSelected(true);
                 }
             }
