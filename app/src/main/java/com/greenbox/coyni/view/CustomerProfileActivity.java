@@ -344,10 +344,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
 
             customerNameTV.setOnClickListener(view -> {
-                if (objMyApplication.getStrUserName().length() > 16 && objMyApplication.getStrUserName().length() < 21) {
-                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
-                } else if (objMyApplication.getStrUserName().length() > 21) {
-                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
+
+                if (objMyApplication.getStrUserName().length() > 18) {
+                    if(customerNameTV.getText().toString().contains("...")){
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
+                    }else{
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18)+"...");
+                    }
+                } else  {
+                    customerNameTV.setText(objMyApplication.getStrUserName());
                 }
             });
 
