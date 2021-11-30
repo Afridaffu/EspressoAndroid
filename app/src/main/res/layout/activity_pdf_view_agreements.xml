@@ -8,16 +8,6 @@
     android:background="@color/white"
     tools:context=".view.PdfViewAgreementsActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:padding="@dimen/_20sdp">
-    <TextView
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pdfagreementsTV"
-        />
-    </ScrollView>
+
 </LinearLayout>

@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
     tools:context=".view.PayRequestScanActivity">
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <com.budiyev.android.codescanner.CodeScannerView
             android:id="@+id/scanner_view"
@@ -25,151 +26,143 @@
             app:frameColor="#FFFEFE"
             app:frameCornersRadius="0dp"
             app:frameCornersSize="30dp"
-            app:frameSize="0.45"
+            app:frameSize="0.65"
             app:frameThickness="5dp"
             app:maskColor="#2CFDFBFB" />
-
         <ImageView
             android:id="@+id/closeBtnSC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_45sdp"
             android:src="@drawable/ic_closewhite"
-            android:visibility="visible" />
-
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginStart="@dimen/_21sdp"
+            />
         <LinearLayout
             android:id="@+id/layoutHead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bottomradius"
             android:orientation="vertical"
+            android:visibility="gone"
+            android:background="@drawable/bottomradius"
             android:paddingLeft="@dimen/_21sdp"
-            android:paddingBottom="@dimen/_25sdp"
-            android:visibility="gone">
+            android:paddingBottom="@dimen/_25sdp">
 
             <ImageView
                 android:id="@+id/imgCloseSM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_45sdp"
-                android:src="@drawable/ic_close" />
+                android:src="@drawable/ic_close"/>
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/viewSideBarCV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_19sdp"
+            android:layout_marginTop="@dimen/_90sdp"
             android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_80sdp"
-            android:layout_marginEnd="@dimen/_21sdp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/_19sdp">
-
+            android:layout_marginEnd="@dimen/_21sdp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_2sdp"
                 android:orientation="horizontal">
-
                 <TextView
                     android:id="@+id/scanCodeTV"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:text="Scan Code"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_core_colorfill"
-                    android:fontFamily="@font/opensans_bold"
                     android:paddingTop="@dimen/_11sdp"
                     android:paddingBottom="@dimen/_11sdp"
-                    android:text="Scan Code"
                     android:textAlignment="center"
+                    android:fontFamily="@font/opensans_bold"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_11ssp" />
-
+                    android:background="@drawable/bg_core_colorfill"
+                    android:textSize="@dimen/_11ssp"
+                    />
                 <TextView
                     android:id="@+id/scanMeTV"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/opensans_bold"
-                    android:paddingTop="@dimen/_11sdp"
-                    android:paddingBottom="@dimen/_11sdp"
                     android:text="Scan Me"
                     android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:paddingTop="@dimen/_11sdp"
+                    android:paddingBottom="@dimen/_11sdp"
+                    android:fontFamily="@font/opensans_bold"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_11ssp"
+                    />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/flashBtnLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_450sdp"
             android:visibility="visible">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/toglebtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_50sdp"
-                    android:layout_marginTop="550sp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_marginStart="@dimen/_40sdp"
                     android:src="@drawable/ic_flashicon"
                     android:text="Flash ON" />
 
+                <ImageView
+                    android:id="@+id/album"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_marginRight="@dimen/_18sdp"
+                    android:src="@drawable/ic_group_albumicon" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_40sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/_35sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:text="Flashlight"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"
 
                     />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/album"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_50sdp"
-                    android:layout_marginTop="550sp"
-                    android:src="@drawable/ic_group_albumicon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_52sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_alignParentRight="true"
                     android:fontFamily="@font/opensans_regular"
                     android:text="Album"
+                    android:layout_marginRight="@dimen/_35ssp"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"
 
                     />
 
+                </RelativeLayout>
 
-            </LinearLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/scannerLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_height="@dimen/_240sdp"
             android:layout_centerInParent="true"
             android:orientation="horizontal"
             android:visibility="visible">
@@ -189,8 +182,8 @@
             android:layout_height="match_parent"
             android:layout_below="@id/viewSideBarCV"
             android:fillViewport="true"
-            android:scrollbars="none"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:scrollbars="none">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -202,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_10sdp"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_11sdp">
+                    app:cardCornerRadius="@dimen/_10sdp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -211,10 +204,11 @@
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cvProfile"
-                            android:layout_width="@dimen/_40ssp"
-                            android:layout_height="@dimen/_40ssp"
-                            android:layout_centerHorizontal="true"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
                             android:layout_marginTop="@dimen/_14sdp"
+                            android:visibility="visible"
+                            android:layout_centerHorizontal="true"
                             app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="@dimen/_20sdp">
 
@@ -228,9 +222,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:text=""
                                     android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/text_size_20sp" />
+                                    android:textSize="@dimen/text_size_20sp"/>
 
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/cvProfilePic"
@@ -238,14 +231,14 @@
                                     android:layout_height="match_parent"
                                     android:layout_centerInParent="true"
                                     android:visibility="gone"
-                                    app:cardCornerRadius="30dp">
+                                    app:cardCornerRadius="@dimen/_20sdp">
 
                                     <ImageView
                                         android:id="@+id/imgProfile"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:scaleType="centerCrop"
-                                        android:visibility="visible" />
+                                        android:visibility="visible"/>
                                 </androidx.cardview.widget.CardView>
                             </RelativeLayout>
                         </androidx.cardview.widget.CardView>
@@ -257,14 +250,15 @@
                             android:layout_below="@+id/cvProfile"
                             android:layout_centerHorizontal="true"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="Jonathan Joestar"
+                            android:text=""
+                            android:layout_marginTop="@dimen/_6sdp"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_14ssp" />
+                            android:textSize="@dimen/_14ssp"/>
 
                         <RelativeLayout
                             android:id="@+id/qrViewRL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_146sdp"
+                            android:layout_height="@dimen/_144sdp"
                             android:layout_below="@+id/tvName"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/_13sdp"
@@ -272,36 +266,66 @@
 
                             <ImageView
                                 android:id="@+id/idIVQrcode"
-                                android:layout_width="@dimen/_145sdp"
-                                android:layout_height="@dimen/_145sdp"
+                                android:layout_width="@dimen/_142sdp"
+                                android:layout_height="@dimen/_140sdp"
                                 android:layout_centerInParent="true"
                                 android:contentDescription="@string/qr_code"
-                                android:src="@drawable/qr" />
+                                android:padding="@dimen/_3sdp" />
                         </RelativeLayout>
+                        <LinearLayout
+                            android:id="@+id/scanAmountLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/qrViewRL"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:layout_marginTop="@dimen/_9sdp"
+                            android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/scanMeRequestAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="160.00"
+                            android:textSize="@dimen/_34sdp"
+                            android:textColor="@color/primary_black"
+                            android:fontFamily="@font/opensans_bold"
+                            />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CYN"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11sdp"
+                                android:layout_marginTop="@dimen/_6sdp"
+                                android:layout_marginStart="@dimen/_6sdp"
+                                android:layout_gravity="center_vertical"
+                                android:fontFamily="@font/opensans_bold"
+                                />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/qrViewRL"
-                            android:layout_marginTop="@dimen/_32sdp"
+                            android:layout_marginTop="@dimen/_27sdp"
+                            android:layout_below="@id/scanAmountLL"
                             android:orientation="horizontal">
-
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-
                                 <TextView
                                     android:id="@+id/scanMesetAmountTV"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_marginStart="@dimen/_20sdp"
-                                    android:fontFamily="@font/opensans_semibold"
                                     android:text="Set Amount"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:textSize="@dimen/_12ssp"
+                                    android:layout_marginStart="@dimen/_20sdp"
+                                    android:layout_alignParentStart="true"
                                     android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_12ssp" />
+                                    />
 
                                 <TextView
+                                    android:id="@+id/saveToAlbumTV"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
@@ -339,7 +363,7 @@
                             android:fontFamily="@font/opensans_regular"
                             android:text="Recipient’s Address"
                             android:textColor="@color/xdark_gray"
-                            android:textSize="@dimen/_11ssp" />
+                            android:textSize="@dimen/_11ssp"/>
 
                         <TextView
                             android:id="@+id/tvWalletAddress"
@@ -347,9 +371,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="f4184fc596403b9d6…"
+                            android:text=""
                             android:textColor="#404040"
-                            android:textSize="@dimen/_10ssp" />
+                            android:textSize="@dimen/_10ssp"/>
 
                         <View
                             android:id="@+id/divider"
@@ -357,7 +381,7 @@
                             android:layout_height="1dp"
                             android:layout_below="@+id/tvWalletAddress"
                             android:layout_marginTop="@dimen/_20sdp"
-                            android:background="@color/at_gray" />
+                            android:background="@color/at_gray"/>
 
                         <RelativeLayout
                             android:layout_width="match_parent"

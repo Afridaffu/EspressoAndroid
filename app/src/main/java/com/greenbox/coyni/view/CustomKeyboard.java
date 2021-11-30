@@ -114,7 +114,6 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         keyBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String chatSet = (String) inputConnection.getSelectedText(0);
                 try {
                     inputConnection.deleteSurroundingText(1,0);
                 }catch (Exception e){

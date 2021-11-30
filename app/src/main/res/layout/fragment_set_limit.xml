@@ -5,81 +5,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.SetAmountActivity">
+    tools:context=".fragments.SetLimitFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <View
-            android:layout_width="@dimen/_80sdp"
+            android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_3sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:background="@drawable/button_background"
             android:layout_gravity="center"
-            />
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/button_background" />
 
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Set Amount"
-        android:gravity="center"
         android:fontFamily="@font/opensans_semibold"
+        android:gravity="center"
+        android:text="Set Amount"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp"
-        />
+        android:textSize="@dimen/_12ssp" />
 
     <LinearLayout
         android:id="@+id/payLL"
-        android:layout_marginTop="@dimen/_26sdp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_72sdp"
+        android:layout_marginTop="@dimen/_26sdp"
         android:orientation="horizontal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/payrequestET"
+                android:id="@+id/setAmountET"
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:digits="0123456789."
                 android:fontFamily="@font/opensans_bold"
-                android:gravity="right"
                 android:hint="0.00"
+                android:gravity="bottom"
+                android:editable="false"
+                android:clickable="false"
+                android:focusable="false"
                 android:inputType="number"
-                android:maxLength="15"
                 android:singleLine="true"
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/light_gray"
+                android:textDirection="rtl"
                 android:textCursorDrawable="@drawable/cursor_color_text"
-                android:textDirection="ltr"
                 android:textSize="@dimen/_54ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.267"
+                app:layout_constraintHorizontal_bias="0.753"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_bold"
-                android:text="CYN"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.142"
-                app:layout_constraintStart_toEndOf="@+id/payrequestET"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.635" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:text="CYN"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.652"
+            app:layout_constraintStart_toStartOf="@+id/setAmountET"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.78" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,50 +98,50 @@
             android:weightSum="4">
 
             <TextView
-                android:layout_weight="1"
                 android:id="@+id/keyOneTV"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_margin="4dp"
+                android:layout_weight="1"
                 android:background="@drawable/custom_keyboard_key_bg"
+                android:gravity="center"
                 android:text="1"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_weight="1"
                 android:id="@+id/keyTwoTV"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_margin="4dp"
+                android:layout_weight="1"
                 android:background="@drawable/custom_keyboard_key_bg"
+                android:gravity="center"
                 android:text="2"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_weight="1"
                 android:id="@+id/keyThreeTV"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_margin="4dp"
+                android:layout_weight="1"
                 android:background="@drawable/custom_keyboard_key_bg"
+                android:gravity="center"
                 android:text="3"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/keyBackLL"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_margin="4dp"
+                android:layout_weight="1"
                 android:background="@drawable/custom_keyboard_key_bg"
                 android:gravity="center">
 
@@ -145,8 +151,6 @@
                     android:src="@drawable/ic_outline_backspace" />
 
             </LinearLayout>
-
-
 
 
         </LinearLayout>
@@ -159,53 +163,53 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="0.34">
+                android:layout_weight="0.34"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="0.34">
+                    android:layout_weight="0.34"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/keyFourTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="4"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/keyFiveTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="5"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/keySixTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="6"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>
@@ -213,47 +217,47 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="0.34">
+                    android:layout_weight="0.34"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/keySevenTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="7"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/keyEightTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="8"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/keyNineTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="9"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>
@@ -261,35 +265,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="0.34">
+                    android:layout_weight="0.34"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/keyZeroTV"
-                        android:layout_weight="2"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="2"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="0"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/keyDotTV"
-                        android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="@drawable/custom_keyboard_key_bg"
+                        android:gravity="center"
                         android:text="."
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
-
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>
@@ -301,26 +304,24 @@
                 android:id="@+id/keyActionLL"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:layout_margin="6dp"
-                android:background="@color/inactive_color">
+                android:layout_weight="1"
+                android:background="@color/inactive_color"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/keyActionTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ok"
-                    android:textSize="@dimen/text_size_16sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
                     android:gravity="center"
-                    />
+                    android:text="Ok"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
 
-
-
     </LinearLayout>
+
 </LinearLayout>
