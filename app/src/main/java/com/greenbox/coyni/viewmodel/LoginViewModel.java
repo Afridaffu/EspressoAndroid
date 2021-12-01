@@ -40,6 +40,8 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
+import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
@@ -73,6 +75,15 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<UpdatePhoneResponse> updatePhoneValidateResponse = new MutableLiveData<>();
     private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailExistsResponse> emailExistsResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<UpdateResendOTPResponse> getUpdateResendOTPMutableLiveData() {
+        return updateResendOTPMutableLiveData;
+    }
+
+    public void setUpdateResendOTPMutableLiveData(MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData) {
+        this.updateResendOTPMutableLiveData = updateResendOTPMutableLiveData;
+    }
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -706,6 +717,39 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<EmailExistsResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateOtpResend(UpdateResendRequest resendRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdateResendOTPResponse> mCall = apiService.updateOtpResend(resendRequest);
+            mCall.enqueue(new Callback<UpdateResendOTPResponse>() {
+                @Override
+                public void onResponse(Call<UpdateResendOTPResponse> call, Response<UpdateResendOTPResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdateResendOTPResponse obj = response.body();
+                        updateResendOTPMutableLiveData.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdateResendOTPResponse>() {
+                        }.getType();
+                        UpdateResendOTPResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updateResendOTPMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdateResendOTPResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

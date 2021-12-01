@@ -64,7 +64,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
     LinearLayout cpbackBtn;
-//    ProgressDialog dialog;
+    //    ProgressDialog dialog;
     TextView customerNameTV, tvACStatus, tvBMSetting, cpAccountIDTV, imageTextTV;
     MyApplication objMyApplication;
     CardView cvLogout;
@@ -153,9 +153,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 tvACStatus.setText("");
             }
 
-            if (objMyApplication.getStrUserName().length() > 18) {
-                customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
-            } else if (objMyApplication.getStrUserName().length() < 18) {
+            if (objMyApplication.getStrUserName().length() > 20) {
+                customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20));
+            } else {
                 customerNameTV.setText(objMyApplication.getStrUserName());
             }
 
@@ -345,29 +345,32 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             customerNameTV.setOnClickListener(view -> {
 
-                if (objMyApplication.getStrUserName().length() > 18) {
-                    if(customerNameTV.getText().toString().contains("...")){
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18));
-                    }else{
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 18)+"...");
+                if (customerNameTV.getText().toString().contains("...")) {
+                    if (objMyApplication.getStrUserName().length() == 21 || objMyApplication.getStrUserName().length() > 21) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20));
+                    } else {
+                        customerNameTV.setText(objMyApplication.getStrUserName());
                     }
-                } else  {
-                    customerNameTV.setText(objMyApplication.getStrUserName());
+                } else {
+                    if (objMyApplication.getStrUserName().length() == 21 ) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20)+"...");
+                    } else if(objMyApplication.getStrUserName().length() > 22) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 22)+"...");
+                    }else{
+                        customerNameTV.setText(objMyApplication.getStrUserName());
+                    }
                 }
             });
 
 
-            cardviewYourAccount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(CustomerProfileActivity.this, BindingLayoutActivity.class);
-                    i.putExtra("screen", "profileGetStarted");
-                    startActivity(i);
+            cardviewYourAccount.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
                 }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Intent i = new Intent(CustomerProfileActivity.this, BindingLayoutActivity.class);
+                i.putExtra("screen", "profileGetStarted");
+                startActivity(i);
             });
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -377,7 +380,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private void displayQRCode() {
         try {
             ImageView imgClose, copyRecipientAddress;
-            ImageView meQrCode, shareImage;
+            ImageView meQrCode, shareImage,imgProfile;
             TextView userFullName, userInfo, walletAddress;
             qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -396,15 +399,45 @@ public class CustomerProfileActivity extends AppCompatActivity {
             meQrCode = qrDialog.findViewById(R.id.idIVQrcode);
             userFullName = qrDialog.findViewById(R.id.tvName);
             userInfo = qrDialog.findViewById(R.id.tvUserInfo);
+            imgProfile = qrDialog.findViewById(R.id.imgProfile);
             walletAddress = qrDialog.findViewById(R.id.tvWalletAddress);
             shareImage = qrDialog.findViewById(R.id.imgShare);
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
+
+            try {
+                imgProfile.setVisibility(View.GONE);
+                userInfo.setVisibility(View.VISIBLE);
+                String imageString = objMyApplication.getMyProfile().getData().getImage();
+                String imageTextNew = "";
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                userInfo.setText(imageTextNew);
+
+                if (imageString != null && !imageString.trim().equals("")) {
+                    imgProfile.setVisibility(View.VISIBLE);
+                    userInfo.setVisibility(View.GONE);
+                    Glide.with(this)
+                            .load(imageString)
+                            .placeholder(R.drawable.ic_profile_male_user)
+                            .into(imgProfile);
+                } else {
+                    imgProfile.setVisibility(View.GONE);
+                    userInfo.setVisibility(View.VISIBLE);
+                    String imageText = "";
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                    userInfo.setText(imageText);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
             if (walletResponse != null) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);
                 walletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
-
             }
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -449,7 +482,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
                     myClip = ClipData.newPlainText("text", text);
                     myClipboard.setPrimaryClip(myClip);
-                    showToast();
+//                    showToast();
+                    Utils.showCustomToast(CustomerProfileActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
                 }
             });
 
@@ -660,6 +694,16 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                if (profile != null) {
+                    objMyApplication.setMyProfile(profile);
+                    bindImage(objMyApplication.getMyProfile().getData().getImage());
+                }
+            }
+        });
     }
 
     private boolean getLocalBiometricEnabled() {
@@ -758,6 +802,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 imageTextTV.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
                         .into(profileIV);
             } else {
                 profileIV.setVisibility(View.GONE);
@@ -890,7 +935,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
 
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dashboardViewModel.meProfile();
+    }
 }

@@ -324,6 +324,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 imageTextTV.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
                         .into(userProfileIV);
             } else {
                 userProfileIV.setVisibility(View.GONE);
@@ -556,18 +557,20 @@ public class UserDetailsActivity extends AppCompatActivity {
                         }
                     }
                     break;
-            }
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                userProfileIV.setVisibility(View.VISIBLE);
-                imageTextTV.setVisibility(View.GONE);
-                userProfileIV.setImageURI(resultUri);
-                uploadImage();
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE: {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        Uri resultUri = result.getUri();
+                        userProfileIV.setVisibility(View.VISIBLE);
+                        imageTextTV.setVisibility(View.GONE);
+                        userProfileIV.setImageURI(resultUri);
+                        uploadImage();
+
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Exception error = result.getError();
+                    }
+                }
             }
         }
     }
@@ -595,16 +598,18 @@ public class UserDetailsActivity extends AppCompatActivity {
         chooseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity().start(activity);
+                dialog.dismiss();
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activity.startActivityForResult(pickPhoto, 1);
             }
         });
 
         takePhotoLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 activity.startActivityForResult(takePicture, 0);
-
             }
         });
 

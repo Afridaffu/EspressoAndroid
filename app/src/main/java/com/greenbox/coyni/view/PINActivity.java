@@ -409,7 +409,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
 //                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
-                                Utils.showCustomToast(PINActivity.this, "PIN code has updated", R.drawable.ic_custom_tick, "pin");
+                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
 
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -716,12 +716,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     public void setErrorPIN() {
-        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
 
         chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);

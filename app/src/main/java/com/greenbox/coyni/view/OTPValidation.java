@@ -58,6 +58,8 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
+import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
@@ -230,9 +232,19 @@ public class OTPValidation extends AppCompatActivity {
                             dialog.show();
                             if (strScreen.equals("EditEmail")) {
                                 if (isOldEmail.equals("true")) {
-                                    loginViewModel.emailotpresend(oldEmail);
+                                    UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                                    updateResendRequest.setEmail(true);
+                                    updateResendRequest.setNew(false);
+                                    updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
+                                    loginViewModel.updateOtpResend(updateResendRequest);
+//                                    loginViewModel.emailotpresend(oldEmail);
                                 } else {
-                                    loginViewModel.emailotpresend(newEmail);
+//                                    loginViewModel.emailotpresend(newEmail);
+                                    UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                                    updateResendRequest.setEmail(true);
+                                    updateResendRequest.setNew(true);
+                                    updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
+                                    loginViewModel.updateOtpResend(updateResendRequest);
                                 }
                             } else {
                                 loginViewModel.emailotpresend(EMAIL.trim());
@@ -252,14 +264,24 @@ public class OTPValidation extends AppCompatActivity {
                             dialog.setIndeterminate(false);
                             dialog.setMessage("Please wait...");
                             dialog.show();
-                            SMSResend resend = new SMSResend();
-                            resend.setCountryCode(Utils.getStrCCode());
+//                            SMSResend resend = new SMSResend();
+//                            resend.setCountryCode(Utils.getStrCCode());
                             if (isOldPhone.equals("true")) {
-                                resend.setPhoneNumber(oldPhone);
+                                UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                                updateResendRequest.setEmail(false);
+                                updateResendRequest.setNew(false);
+                                updateResendRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
+                                loginViewModel.updateOtpResend(updateResendRequest);
+//                                resend.setPhoneNumber(oldPhone);
                             } else {
-                                resend.setPhoneNumber(newPhone);
+                                UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                                updateResendRequest.setEmail(false);
+                                updateResendRequest.setNew(true);
+                                updateResendRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
+                                loginViewModel.updateOtpResend(updateResendRequest);
+//                                resend.setPhoneNumber(newPhone);
                             }
-                            loginViewModel.smsotpresend(resend);
+//                            loginViewModel.smsotpresend(resend);
                         }
                     } else {
                         layoutEntry.setVisibility(View.GONE);
@@ -824,6 +846,28 @@ public class OTPValidation extends AppCompatActivity {
                 }
             }
         });
+
+        loginViewModel.getUpdateResendOTPMutableLiveData().observe(this, new Observer<UpdateResendOTPResponse>() {
+            @Override
+            public void onChanged(UpdateResendOTPResponse emailResponse) {
+                try {
+                    dialog.dismiss();
+                    if (emailResponse != null) {
+                        if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            resendTV.setVisibility(View.GONE);
+                            newCodeTV.setVisibility(View.VISIBLE);
+                            resendCounter++;
+                            startTimer();
+                        } else {
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     public void shakeAnimateLeftRight() {

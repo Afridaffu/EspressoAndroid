@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -45,7 +46,7 @@ public class EditEmailActivity extends AppCompatActivity {
     NestedScrollView editEmailSV;
     public boolean isSaveEnabled = false, isCurrentEmail = true, isNewEmail = false;
     LinearLayout currentEmailErrorLL, newEmailErrorLL;
-    TextView currentEmailErrorTV, newEmailErrorTV;
+    TextView currentEmailErrorTV, newEmailErrorTV,contactUsTV;
     CardView saveEmailCV;
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
@@ -89,6 +90,7 @@ public class EditEmailActivity extends AppCompatActivity {
             currentEmailErrorTV = findViewById(R.id.currentEmailErrorTV);
             newEmailErrorTV = findViewById(R.id.newEmailErrorTV);
             saveEmailCV = findViewById(R.id.saveEmailCV);
+            contactUsTV = findViewById(R.id.contactUsTV);
 
             currentEmailET.setText(myApplicationObj.getMyProfile().getData().getEmail());
 
@@ -129,6 +131,20 @@ public class EditEmailActivity extends AppCompatActivity {
 
             editEmailCloseLL.setOnClickListener(view -> {
                 finish();
+            });
+
+            contactUsTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.hideKeypad(EditEmailActivity.this);
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(Utils.mondayURL));
+                        startActivity(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             });
 
         } catch (Exception e) {

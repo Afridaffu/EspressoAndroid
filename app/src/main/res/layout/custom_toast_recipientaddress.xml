@@ -38,7 +38,7 @@
                 android:textSize="@dimen/_13ssp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Your address has successfully                                        ">
+                android:text="Your address has successfully ">
             </TextView>
 
             <TextView

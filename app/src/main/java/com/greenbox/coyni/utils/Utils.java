@@ -121,6 +121,7 @@ public class Utils {
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
     public static String tempState = "";
+    public static String mondayURL = "https://monday.com/";
 
 
     public static String getStrLang() {

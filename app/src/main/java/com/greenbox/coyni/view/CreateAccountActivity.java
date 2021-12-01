@@ -394,11 +394,15 @@ public class CreateAccountActivity extends AppCompatActivity {
                         emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                         emailErrorLL.setVisibility(GONE);
+                        isEmail = true;
+                        enableOrDisableNext();
                     } else {
                         emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                         emailErrorLL.setVisibility(VISIBLE);
                         emailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                        isEmail = false;
+                        enableOrDisableNext();
                     }
                 }
             }
