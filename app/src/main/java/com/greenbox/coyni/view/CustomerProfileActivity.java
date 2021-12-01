@@ -350,7 +350,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             userInfo.setText(strUserName.toUpperCase(Locale.US));
             if (strName != null && strName.length() > 21) {
-                userFullName.setText(strName.substring(0, 21) + "...");
+                userFullName.setText(strName.substring(0, 22) + "...");
             }
             else {
                 userFullName.setText(strName);
@@ -359,16 +359,26 @@ public class CustomerProfileActivity extends AppCompatActivity {
             shareImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Drawable mDrawable = meQrCode.getDrawable();
-                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+//                    Drawable mDrawable = meQrCode.getDrawable();
+//                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+//
+//                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
+//                    Uri uri = Uri.parse(path);
 
-                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
-                    Uri uri = Uri.parse(path);
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/jpeg");
-                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    intent.putExtra(Intent.EXTRA_TEXT,strWallet);
-                    startActivity(Intent.createChooser(intent, "Share via"));
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
+                    sendIntent.setType("text/plain");
+
+                    Intent shareIntent = Intent.createChooser(sendIntent, null);
+                    startActivity(shareIntent);
+
+
+//                    Intent intent = new Intent(Intent.ACTION_SEND);
+//
+//                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+//                    intent.putExtra(Intent.EXTRA_TEXT,strWallet);
+//                    startActivity(Intent.createChooser(intent, "Share via"));
                 }
             });
 
