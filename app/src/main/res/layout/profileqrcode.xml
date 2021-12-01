@@ -41,8 +41,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/_69sdp">
+            android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvQRcode"
@@ -108,6 +107,7 @@
                         android:layout_below="@+id/tvName"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_26sdp"
+                        android:padding="@dimen/_2sdp"
                         android:background="@drawable/ic_qr_img_outline">
 
                         <ImageView
@@ -115,7 +115,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:layout_margin="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
                             android:contentDescription="@string/qr_code"
                             android:scaleType="fitCenter" />
                     </RelativeLayout>

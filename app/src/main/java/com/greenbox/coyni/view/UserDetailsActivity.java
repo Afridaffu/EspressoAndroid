@@ -183,21 +183,17 @@ public class UserDetailsActivity extends AppCompatActivity {
                     addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                 }
 
-//                addressFormatted = addressFormatted + "United States, ";
-
                 if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
                     addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                 }
 
-                if (addressFormatted.trim().endsWith(",")) {
-                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1)+".");
+                if (addressFormatted.equals("")) {
+                    addressFormatted = addressFormatted + "United States";
+                    userAddressTV.setText(addressFormatted);
                 } else {
-                    if(!addressFormatted.equals("")){
-                        userAddressTV.setText(addressFormatted+".");
-                    }else{
-                        userAddressTV.setText("");
-                    }
+                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
                 }
+
 
             }
 
@@ -224,7 +220,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                                 myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                         imageTextTV.setText(imageTextNew);
                         dashboardViewModel.meProfile();
-                        Utils.displayAlert(imageResponse.getData().getMessage(), UserDetailsActivity.this, "");
+                        Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                     } else {
                         Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
                     }
@@ -274,16 +270,15 @@ public class UserDetailsActivity extends AppCompatActivity {
                             addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                         }
 
-//                        addressFormatted = addressFormatted + "United States, ";
-
                         if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                         }
 
-                        if (addressFormatted.trim().endsWith(",")) {
-                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1)+".");
+                        if (addressFormatted.equals("")) {
+                            addressFormatted = addressFormatted + "United States";
+                            userAddressTV.setText(addressFormatted);
                         } else {
-                            userAddressTV.setText(addressFormatted+".");
+                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
                         }
 
                     }
