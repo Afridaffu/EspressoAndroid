@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:paddingStart="@dimen/_21sdp"
-    android:background="@color/white"
     android:paddingEnd="@dimen/_21sdp"
     android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".view.IdentityVerificationActivity">
@@ -16,8 +16,7 @@
         android:id="@+id/topbarll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_32sdp"
-        >
+        android:layout_marginEnd="@dimen/_32sdp">
 
         <ImageButton
             android:id="@+id/closeBtn"
@@ -29,13 +28,14 @@
             android:src="@drawable/ic_close"
             android:visibility="visible"
             app:tint="@color/black" />
+
         <ImageButton
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_45sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
             android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
             android:background="@color/white"
             android:src="@drawable/ic_back"
             android:visibility="gone"
@@ -46,17 +46,17 @@
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_4sdp"
             android:layout_marginStart="@dimen/_28sdp"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/_50sdp"
+            android:layout_weight="1"
             android:background="@drawable/button_background" />
 
         <View
             android:id="@+id/viewBarRight"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_18sdp"
             android:layout_marginTop="@dimen/_50sdp"
             android:layout_weight="1"
-            android:layout_marginStart="@dimen/_18sdp"
             android:background="@drawable/button_background1" />
 
     </LinearLayout>
@@ -68,163 +68,107 @@
         android:fontFamily="@font/opensans_bold"
         android:text="@string/identity"
         android:textColor="@color/black"
-        android:textSize="@dimen/_16sdp"
-        />
+        android:textSize="@dimen/_16sdp" />
 
 
+    <LinearLayout
+        android:id="@+id/linearLayoutIdVe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-        <LinearLayout
-            android:id="@+id/linearLayoutIdVe"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:background="@color/white"
-            android:layout_marginTop="@dimen/_14sdp">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_above="@id/bottomNaviLL"
+                android:layout_alignParentTop="true"
                 android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/upidentityTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_regular"
-                android:text="@string/uploadid"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12sdp" />
-
-
-            <LinearLayout
-                android:id="@+id/clickBottomSheet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/_19sdp"
-                android:background="@drawable/card_background">
-
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_13sdp"
-                    android:layout_marginBottom="@dimen/_13sdp"
-                    android:backgroundTint="@color/white"
-                    android:src="@drawable/ic_upload_id" />
-
-
                 <TextView
-                    android:id="@+id/idveriUpIdTxt"
+                    android:id="@+id/upidentityTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:lineSpacingExtra="5dp"
-                    android:visibility="visible"
-                    android:text="@string/contentuploadid"
+                    android:text="@string/uploadid"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    />
-                <TextView
-                    android:id="@+id/idveriUpIdSuccessTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_17sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_18sdp"
-                    android:layout_marginEnd="5dp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:lineSpacingExtra="@dimen/_6sdp"
-                    android:text="@string/contentuploadidsuccess"
-                    android:textColor="@color/primary_color"
-                    android:textSize="@dimen/_11ssp"
-                    android:visibility="gone" />
-                <ImageView
-                    android:id="@+id/idveriUpIdSuccessImg"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:src="@drawable/ic_complete"
-                    android:layout_marginStart="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
 
-
-            </LinearLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/idveriSSNTIL"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:hint="@string/ssnlast"
-                android:textColorHint="@color/black"
-                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxStrokeColor="@color/primary_color"
-                app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_color">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/idVeriSSNET"
+                <LinearLayout
+                    android:id="@+id/clickBottomSheet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:hint="@string/digits4"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:imeOptions="actionDone"
-                    android:padding="@dimen/_14sdp"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="@dimen/_19sdp"
+                    android:background="@drawable/card_background"
+                    android:orientation="horizontal">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/idveriDOBCL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_21sdp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_13sdp"
+                        android:layout_marginBottom="@dimen/_13sdp"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_upload_id" />
 
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:src="@drawable/ic_down"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/idveriDOBTIL"
-                    app:layout_constraintHorizontal_bias="0.952"
-                    app:layout_constraintStart_toStartOf="@+id/idveriDOBTIL"
-                    app:layout_constraintTop_toTopOf="@+id/idveriDOBTIL"
-                    app:layout_constraintVertical_bias="0.557"
-                    app:layout_editor_absoluteX="336.24dp"
-                    app:layout_editor_absoluteY="26.28dp" />
+
+                    <TextView
+                        android:id="@+id/idveriUpIdTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:lineSpacingExtra="5dp"
+                        android:text="@string/contentuploadid"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/idveriUpIdSuccessTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_17sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="@dimen/_18sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:lineSpacingExtra="@dimen/_6sdp"
+                        android:text="@string/contentuploadidsuccess"
+                        android:textColor="@color/primary_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/idveriUpIdSuccessImg"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_25sdp"
+                        android:src="@drawable/ic_complete"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/idveriDOBTIL"
+                    android:id="@+id/idveriSSNTIL"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:hint="@string/dobol"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:hint="@string/ssnlast"
                     android:textColorHint="@color/black"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
@@ -232,95 +176,149 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    android:focusable="false"
-                    app:hintTextColor="@color/primary_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:hintTextColor="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/idveriDOBET"
+                        android:id="@+id/idVeriSSNET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="@string/dobhint"
+                        android:hint="@string/digits4"
                         android:imeOptions="actionDone"
-                        android:inputType="none"
-                        android:textColorHint="@color/light_gray"
-                        android:maxLength="30"
+                        android:inputType="number"
+                        android:maxLength="4"
                         android:padding="@dimen/_14sdp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/primary_black"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp" />
-
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/bottomNaviLL"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/idveriDOBCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:paddingBottom="@dimen/_37sdp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/_21sdp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/nextBtn"
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_down"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/idveriDOBTIL"
+                        app:layout_constraintHorizontal_bias="0.952"
+                        app:layout_constraintStart_toStartOf="@+id/idveriDOBTIL"
+                        app:layout_constraintTop_toTopOf="@+id/idveriDOBTIL"
+                        app:layout_constraintVertical_bias="0.557"
+                        app:layout_editor_absoluteX="336.24dp"
+                        app:layout_editor_absoluteY="26.28dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/idveriDOBTIL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="@string/dobol"
+                        android:textColorHint="@color/black"
+                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                        app:boxStrokeColor="@color/primary_color"
+                        app:expandedHintEnabled="false"
+                        app:hintTextColor="@color/primary_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/idveriDOBET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:hint="@string/dobhint"
+                            android:imeOptions="actionDone"
+                            android:inputType="none"
+                            android:maxLength="30"
+                            android:padding="@dimen/_14sdp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/light_gray"
+                            android:textSize="@dimen/_12ssp" />
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bottomNaviLL"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_43sdp"
-                app:cardBackgroundColor="@color/inactive_color"
-                app:cardCornerRadius="@dimen/_21sdp">
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/_37sdp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/nextBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_43sdp"
+                    app:cardBackgroundColor="@color/inactive_color"
+                    app:cardCornerRadius="@dimen/_21sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_13sdp"
+                        android:layout_marginBottom="@dimen/_13sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="@string/next"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp" />
+                </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/exitBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_bold"
-                    android:layout_marginTop="@dimen/_13sdp"
-                    android:layout_marginBottom="@dimen/_13sdp"
-                    android:text="@string/next"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="@string/exit"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/primary_color"
                     android:textSize="@dimen/_12ssp" />
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/exitBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:paddingTop="@dimen/_15sdp"
-                android:text="@string/exit"
-                android:textAlignment="center"
-                android:textColor="@color/primary_color"
-                android:textSize="@dimen/_12ssp" />
-                </LinearLayout>
+        </RelativeLayout>
 
-            </RelativeLayout>
-
-        </LinearLayout>
+    </LinearLayout>
 
 
     <ScrollView
         android:id="@+id/scrlViewIV2nd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:background="@color/white"
+        android:scrollbars="none"
         android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/linearLayoutIdVeNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-           >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -351,16 +349,16 @@
                     android:id="@+id/mailingAddET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                   android:fontFamily="@font/opensans_semibold"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/_"
+                    android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint"
                     android:imeOptions="actionNext"
-                    android:singleLine="true"
-                    android:textColorHint="@color/light_gray"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/_"
                     android:maxLength="255"
-                    android:textCursorDrawable="@drawable/cursor_color"
                     android:padding="@dimen/_12sdp"
+                    android:singleLine="true"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -390,12 +388,12 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint2"
                     android:imeOptions="actionNext"
-                    android:singleLine="true"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
                     android:maxLength="255"
                     android:padding="@dimen/_12sdp"
+                    android:singleLine="true"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -424,13 +422,13 @@
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/cityhint"
-                    android:textColorHint="@color/light_gray"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLength="30"
-                    android:textCursorDrawable="@drawable/cursor_color"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -484,10 +482,10 @@
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLength="30"
-                        android:textColorHint="@color/light_gray"
-                        android:textCursorDrawable="@drawable/cursor_color"
                         android:padding="@dimen/_12sdp"
                         android:textColor="@color/black"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp" />
 
 
@@ -520,10 +518,10 @@
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="10"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -537,11 +535,11 @@
                 android:layout_marginTop="20sp"
                 android:hint="@string/country"
                 android:textColorHint="@color/black"
+                app:boxBackgroundColor="@color/boxbackgroundgray"
                 app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                app:boxBackgroundColor="@color/boxbackgroundgray"
                 app:boxStrokeColor="@color/primary_color"
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/black">
@@ -550,16 +548,16 @@
                     android:id="@+id/countryET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:focusable="false"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/countryhint"
                     android:imeOptions="actionDone"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:editable="false"
-                    android:textColorHint="@color/light_gray"
-                    android:enabled="false"
                     android:padding="@dimen/_12sdp"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -585,11 +583,11 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:layout_marginBottom="@dimen/_26sdp"
                 android:id="@+id/btnExit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_26sdp"
                 android:background="@drawable/exitbtnbackgroundcolor"
                 android:fontFamily="@font/opensans_bold"
                 android:paddingTop="@dimen/_14sdp"

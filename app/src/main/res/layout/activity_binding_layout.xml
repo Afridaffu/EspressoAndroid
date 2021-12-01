@@ -27,4 +27,11 @@
         layout="@layout/change_password_successful_layout"
         android:visibility="gone"
         />
+
+    <include
+        android:id="@+id/verifyYourAccount"
+        layout="@layout/verify_your_account"
+        android:visibility="visible"
+        />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     public static EditPhoneActivity editPhoneActivity;
     String currentPhoneNumber, newPhoneNumber;
+    TextView contactUsTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -74,6 +76,7 @@ public class EditPhoneActivity extends AppCompatActivity {
             newPhoneErrorTV = findViewById(R.id.newPhoneErrorTV);
             savePhoneCV = findViewById(R.id.savePhoneCV);
             editPhoneCloseLL = findViewById(R.id.editPhoneCloseLL);
+            contactUsTV = findViewById(R.id.contactUsTV);
 
             currentPhoneET.setText(getIntent().getStringExtra("OLD_PHONE"));
 
@@ -101,6 +104,20 @@ public class EditPhoneActivity extends AppCompatActivity {
 
             editPhoneCloseLL.setOnClickListener(view -> {
                 finish();
+            });
+
+            contactUsTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.hideKeypad(EditPhoneActivity.this);
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(Utils.mondayURL));
+                        startActivity(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             });
         } catch (Exception e) {
             e.printStackTrace();

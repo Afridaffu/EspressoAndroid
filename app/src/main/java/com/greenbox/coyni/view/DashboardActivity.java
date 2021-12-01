@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,8 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
+import okhttp3.internal.Util;
+
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile, layoutCrypto, layoutCard;
     LinearLayout scanQr;
@@ -36,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity {
     TextView tvUserName;
     MyApplication objMyApplication;
     Dialog dialog;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class DashboardActivity extends AppCompatActivity {
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             if (Utils.checkInternet(DashboardActivity.this)) {
+                progressDialog = Utils.showProgressDialog(this);
                 dashboardViewModel.meProfile();
             } else {
                 Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
@@ -102,6 +108,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onChanged(Profile profile) {
                 if (profile != null) {
+                    progressDialog.dismiss();
                     objMyApplication.setMyProfile(profile);
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                     String strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());

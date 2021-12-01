@@ -34,30 +34,34 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_38sdp"
         android:layout_below="@+id/vieww"
+        android:layout_marginTop="@dimen/_20sdp"
         android:background="@drawable/bg_core_search_et_"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="@dimen/_20sdp">
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search_icon"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_9sdp"/>
+            android:layout_marginEnd="@dimen/_9sdp"
+            android:src="@drawable/ic_search_icon" />
 
         <EditText
             android:id="@+id/searchET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:focusable="true"
             android:fontFamily="@font/opensans_semibold"
             android:hint="States Name"
             android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
             android:maxLines="1"
+            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
             android:singleLine="true"
-            android:background="@android:color/transparent"
             android:textColor="@color/primary_black"
+            android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="@dimen/_10sdp" />
     </LinearLayout>
 
@@ -68,7 +72,21 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/cvAction"
         android:layout_below="@id/searchLL"
-        />
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/notFoundTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/cvAction"
+        android:layout_below="@id/searchLL"
+        android:fontFamily="@font/opensans_bold"
+        android:gravity="center"
+        android:text="No state is found"
+        android:textColor="@color/xdark_gray"
+        android:textSize="@dimen/_14ssp"
+        android:visibility="gone"/>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvAction"

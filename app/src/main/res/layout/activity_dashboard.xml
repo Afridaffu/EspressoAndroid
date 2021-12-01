@@ -10,6 +10,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cvHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-20dp"
@@ -126,7 +127,7 @@
                 android:layout_marginLeft="19dp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="19,999.00"
+                android:text="0.00"
                 android:textColor="@color/price"
                 android:textSize="@dimen/_30ssp"></TextView>
 
@@ -266,6 +267,7 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
+        android:id="@+id/layoutMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

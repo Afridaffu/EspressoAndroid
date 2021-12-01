@@ -317,7 +317,6 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textSize="@dimen/_12ssp"
-                            android:text="State"
                             android:importantForAutofill="no"/>
 
 
@@ -351,6 +350,7 @@
                         android:inputType="number|textNoSuggestions"
                         android:maxLength="7"
                         android:maxLines="1"
+                        android:digits="0123456789"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"

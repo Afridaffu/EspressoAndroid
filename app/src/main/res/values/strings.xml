@@ -40,7 +40,7 @@
 
 
     <string name="cu_profile_name">Jonathan Joestar</string>
-    <string name="accountid">Account ID M-1234</string>
+    <string name="accountid">Account ID </string>
     <string name="status_unverified">Account Status: </string>
     <string name="unveri">Unverified</string>
     <string name="cp_almost">You’re almost there!</string>

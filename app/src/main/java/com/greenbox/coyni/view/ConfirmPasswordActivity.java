@@ -36,8 +36,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     Boolean isCPwdEye = false;
     private Pattern strong;
     private static final String STRONG_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,})";
-
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*!?]).{8,})";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +116,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                                 .putExtra("screen", "ConfirmPassword")
                                 .putExtra("oldpassword", oldPassword)
                         );
-
+                        clearField();
                         Log.e("oldPass", "" + oldPassword);
                     }
 
@@ -133,11 +132,11 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            clearField();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            clearField();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void clearField() {

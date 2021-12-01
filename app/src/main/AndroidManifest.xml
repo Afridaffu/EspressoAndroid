@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -43,8 +43,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.PdfViewAgreementsActivity"
-            android:exported="true"
-            />
+            android:exported="true" />
         <activity
             android:name=".view.PayRequestTransactionActivity"
             android:exported="true"
@@ -117,7 +116,8 @@
             android:name=".view.PINActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.OTPValidation"
             android:exported="true"
@@ -148,8 +148,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.CreatePasswordActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.ForgotPasswordActivity"
@@ -170,6 +171,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:permission="@string/crop_image_menu_crop"
+            android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 
 </manifest>

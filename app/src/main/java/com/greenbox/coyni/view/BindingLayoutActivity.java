@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -28,10 +29,10 @@ import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout lyClose;
+    LinearLayout lyClose,verifyAccountCloseLL;
     TextView tvEmail;
     MyApplication objMyApplication;
-    CardView reTryAgainBtn,btnChangePassCV;
+    CardView reTryAgainBtn,btnChangePassCV,nextGetStartedCV;
     CardView editEmailLogoutCV;
     SQLiteDatabase mydatabase;
     RetEmailAdapter retEmailAdapter;
@@ -41,11 +42,13 @@ public class BindingLayoutActivity extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_binding_layout);
+            initialization();
             if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
                 strScreen = getIntent().getStringExtra("screen");
                 ControlMethod(strScreen);
             }
-            initialization();
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -57,7 +60,9 @@ public class BindingLayoutActivity extends AppCompatActivity {
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
             btnChangePassCV=findViewById(R.id.btnCV);
+            nextGetStartedCV=findViewById(R.id.nextGetStartedCV);
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
+            verifyAccountCloseLL = findViewById(R.id.verifyAccountCloseLL);
             retEmailRV = findViewById(R.id.retEmailRV);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -106,12 +111,27 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 try {
                     dropAllTables();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                     finish();
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+            });
+
+            nextGetStartedCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+
+            verifyAccountCloseLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
                 }
             });
         } catch (Exception ex) {
@@ -126,25 +146,44 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
                 }
                 break;
                 case "retEmailfail": {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
                 }
                 break;
                 case "EditEmail": {
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.VISIBLE);
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
+                    dropAllTables();
                 }
                 break;
                 case "ChangePassword": {
                     findViewById(R.id.changePasswordLayout).setVisibility(View.VISIBLE);
                     findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
                     findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
+                    dropAllTables();
                 }
+                break;
+                case "profileGetStarted": {
+                    findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+                    findViewById(R.id.retfailaccontainer).setVisibility(View.GONE);
+                    findViewById(R.id.retfoundactcontainer).setVisibility(View.GONE);
+                    findViewById(R.id.editEmailSuccessLayout).setVisibility(View.GONE);
+                    findViewById(R.id.verifyYourAccount).setVisibility(View.VISIBLE);
+                }
+                break;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -158,15 +197,18 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
+            Log.e("dropAllTables","dropAllTables");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
             editor.apply();
+            Log.e("dropAllTables","dropAllTables");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -175,8 +217,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(strScreen.equals("EditEmail") || strScreen.equals("ChangePassword")){
-            dropAllTables();
-        }
+
     }
 }

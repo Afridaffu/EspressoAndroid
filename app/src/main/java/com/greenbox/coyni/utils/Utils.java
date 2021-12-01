@@ -36,6 +36,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.biometric.BiometricManager;
@@ -120,6 +121,7 @@ public class Utils {
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
     public static String tempState = "";
+    public static String mondayURL = "https://monday.com/";
 
 
     public static String getStrLang() {
@@ -448,7 +450,6 @@ public class Utils {
         return colorState;
     }
 
-
     public static void setUpperHintColor(TextInputLayout til, int color) {
         try {
             Field field = til.getClass().getDeclaredField("defaultHintTextColor");
@@ -721,21 +722,27 @@ public class Utils {
             TextView actionText = dialog.findViewById(R.id.tvAction);
             RecyclerView statesRV = dialog.findViewById(R.id.statesRV);
             EditText searchET = dialog.findViewById(R.id.searchET);
+            TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
             StatesListAdapter statesListAdapter = new StatesListAdapter(null, context, "EditAddress");
 
             List<States> listStates = myApplicationObj.getListStates();
 
             for (int i = 0; i < listStates.size() - 1; i++) {
-                if (editText.getText().toString().trim().equals(listStates.get(i).getName())) {
+                if (editText.getText().toString().trim().equals(listStates.get(i).getIsocode())) {
                     listStates.get(i).setSelected(true);
                 }
             }
             if (listStates.size() > 0) {
+                statesRV.setVisibility(View.VISIBLE);
+                notFoundTV.setVisibility(View.GONE);
                 statesListAdapter = new StatesListAdapter(listStates, context, "EditAddress");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
                 statesRV.setLayoutManager(mLayoutManager);
                 statesRV.setItemAnimator(new DefaultItemAnimator());
                 statesRV.setAdapter(statesListAdapter);
+            }else{
+                statesRV.setVisibility(View.GONE);
+                notFoundTV.setVisibility(View.VISIBLE);
             }
 
             StatesListAdapter finalStatesListAdapter = statesListAdapter;
@@ -759,7 +766,12 @@ public class Utils {
                                 }
                             }
                             if (filterList.size() > 0) {
+                                statesRV.setVisibility(View.VISIBLE);
+                                notFoundTV.setVisibility(View.GONE);
                                 finalStatesListAdapter.updateList(filterList);
+                            }else{
+                                statesRV.setVisibility(View.GONE);
+                                notFoundTV.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (Exception ex) {
@@ -796,6 +808,7 @@ public class Utils {
             ex.printStackTrace();
         }
     }
+
 
 
 }

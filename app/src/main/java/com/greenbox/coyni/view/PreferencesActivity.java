@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
@@ -118,6 +119,8 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             });
 
+            dialog =Utils.showProgressDialog(this);
+
             dashboardViewModel.mePreferences();
 
             dashboardViewModel.getProfiles();
@@ -140,28 +143,28 @@ public class PreferencesActivity extends AppCompatActivity {
                         myApplicationObj.setTimezoneID(timeZoneID);
                         if (preferences.getData().getTimeZone() == 0) {
                             timeZoneET.setText(getString(R.string.PST));
-//                            myApplicationObj.setTimezone("PST");
-                            myApplicationObj.setTimezone(getString(R.string.PST));
+                            myApplicationObj.setTempTimezone(getString(R.string.PST));
+                            myApplicationObj.setTempTimezoneID(0);
                         } else if (preferences.getData().getTimeZone() == 1) {
                             timeZoneET.setText(getString(R.string.MST));
-//                            myApplicationObj.setTimezone("MST");
-                            myApplicationObj.setTimezone(getString(R.string.MST));
+                            myApplicationObj.setTempTimezone(getString(R.string.MST));
+                            myApplicationObj.setTempTimezoneID(1);
                         } else if (preferences.getData().getTimeZone() == 2) {
                             timeZoneET.setText(getString(R.string.CST));
-//                            myApplicationObj.setTimezone("CST");
-                            myApplicationObj.setTimezone(getString(R.string.CST));
+                            myApplicationObj.setTempTimezone(getString(R.string.CST));
+                            myApplicationObj.setTempTimezoneID(2);
                         } else if (preferences.getData().getTimeZone() == 3) {
                             timeZoneET.setText(getString(R.string.EST));
-//                            myApplicationObj.setTimezone("EST");
-                            myApplicationObj.setTimezone(getString(R.string.EST));
+                            myApplicationObj.setTempTimezone(getString(R.string.EST));
+                            myApplicationObj.setTempTimezoneID(3);
                         } else if (preferences.getData().getTimeZone() == 4) {
                             timeZoneET.setText(getString(R.string.HST));
-//                            myApplicationObj.setTimezone("HST");
-                            myApplicationObj.setTimezone(getString(R.string.HST));
+                            myApplicationObj.setTempTimezone(getString(R.string.HST));
+                            myApplicationObj.setTempTimezoneID(4);
                         } else if (preferences.getData().getTimeZone() == 5) {
                             timeZoneET.setText(getString(R.string.AST));
-//                            myApplicationObj.setTimezone("AST");
-                            myApplicationObj.setTimezone(getString(R.string.AST));
+                            myApplicationObj.setTempTimezone(getString(R.string.AST));
+                            myApplicationObj.setTempTimezoneID(5);
                         }
 
                     }
@@ -182,6 +185,8 @@ public class PreferencesActivity extends AppCompatActivity {
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         timeZoneET.setText(myApplicationObj.getTimezone());
+                        Utils.showCustomToast(PreferencesActivity.this, "Timezone has been updated", R.drawable.ic_custom_tick, "authid");
+
                     }
                 }
             }
@@ -190,7 +195,7 @@ public class PreferencesActivity extends AppCompatActivity {
         dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
-
+                dialog.dismiss();
                 if(profilesResponse!=null){
                     accountET.setText(profilesResponse.getData().get(0).getEntityName());
 
@@ -215,6 +220,14 @@ public class PreferencesActivity extends AppCompatActivity {
             }
         });
 
+        dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                if(apiError==null){
+                    dialog.dismiss();
+                }
+            }
+        });
 
     }
 
