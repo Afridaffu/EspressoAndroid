@@ -33,13 +33,12 @@ import java.util.Locale;
 public class AgreementsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     LinearLayout backIV;
-    RecyclerView recyclerView, recyclerpastAgree;
+    RecyclerView recyclerView, recyclPastAgree;
     AgreeListAdapter adapter;
     PastAgreeListAdapter pastAdapter;
-    CardView noPastAgree;
+    CardView noPastAgree, cvPast;
     LinearLayoutManager linearLayoutManager;
     AgreeListAdapter.RecyclerClickListener listener;
-    PastAgreeListAdapter.RecyclerClickListener pastListener;
     String status;
     String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
@@ -53,8 +52,9 @@ public class AgreementsActivity extends AppCompatActivity {
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         setContentView(R.layout.activity_agreements);
         recyclerView = findViewById(R.id.recyclerview);
-        recyclerpastAgree = findViewById(R.id.recyclPastAgree);
+        recyclPastAgree = findViewById(R.id.recyclPastAgree);
         noPastAgree = findViewById(R.id.noPastCV);
+        cvPast = findViewById(R.id.cvPast);
         backIV = findViewById(R.id.backAgreeIV);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -119,8 +119,18 @@ public class AgreementsActivity extends AppCompatActivity {
                             adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, dashboardViewModel, listener);
                             recyclerView.setAdapter(adapter);
 
-                            pastAdapter = new PastAgreeListAdapter(AgreementsActivity.this, pastItems, dashboardViewModel, pastListener);
-                            recyclerpastAgree.setAdapter(pastAdapter);
+                            if (pastItems != null && pastItems.size() > 0) {
+                                cvPast.setVisibility(View.VISIBLE);
+                                noPastAgree.setVisibility(View.GONE);
+                                pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
+                                recyclPastAgree.setLayoutManager(mLayoutManager);
+                                recyclPastAgree.setItemAnimator(new DefaultItemAnimator());
+                                recyclPastAgree.setAdapter(pastAdapter);
+                            } else {
+                                cvPast.setVisibility(View.GONE);
+                                noPastAgree.setVisibility(View.VISIBLE);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
