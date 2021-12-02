@@ -102,6 +102,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         return inflater.inflate(R.layout.fragment_camera, container, false);
     }
 
