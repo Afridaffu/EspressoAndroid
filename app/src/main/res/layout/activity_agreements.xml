@@ -24,11 +24,11 @@
             android:layout_marginTop="@dimen/_45sdp"
             android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            android:layout_marginRight="@dimen/_10sdp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:src="@drawable/ic_back" />
         </LinearLayout>
 
         <TextView
@@ -60,17 +60,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/cpactive_agreements"
-                android:layout_marginStart="@dimen/_10sdp"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -83,57 +83,58 @@
                     android:background="@drawable/round_background" />
 
             </androidx.cardview.widget.CardView>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_2sdp"
-                />
+                android:layout_height="@dimen/_2sdp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:visibility="visible"
                 android:text="@string/pastagree"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_12ssp"
+                android:visibility="visible" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cvPast"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_22sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:visibility="gone"
                 android:layout_marginBottom="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_11sdp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclPastAgree"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/round_background" />
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/noPastCV"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:visibility="visible"
-                android:layout_marginRight="@dimen/_1sdp"
                 android:layout_marginLeft="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_1sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/_11sdp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_bold"
-                    android:textSize="@dimen/_12ssp"
                     android:layout_gravity="center"
-                    android:textColor="@color/light_gray"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="No Past Agreements"
                     android:textAlignment="center"
-                    android:text="No Past Agreements"/>
+                    android:textColor="@color/light_gray"
+                    android:textSize="@dimen/_12ssp" />
 
 
             </androidx.cardview.widget.CardView>
