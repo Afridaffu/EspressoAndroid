@@ -1,13 +1,23 @@
 package com.greenbox.coyni.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,16 +29,25 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.fragments.IdVeBottomSheetFragment;
 import com.greenbox.coyni.utils.Utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class IdentityVerificationActivity extends AppCompatActivity {
     TextInputLayout dobTIL,ssnTIL;
@@ -51,6 +70,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     boolean isupload=false,isSnn=false,isDOB=false,isNext=false;
     boolean isMailAddr1=true,isCity=false,isState=false,isZip=false,isSubmit=false;
+
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,17 +98,16 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         bottomSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IdVeBottomSheetFragment idVeBottomSheetFragment = new IdVeBottomSheetFragment();
-                idVeBottomSheetFragment.show(getSupportFragmentManager(), idVeBottomSheetFragment.getTag());
-                idveriUItext.setVisibility(View.GONE);
-                idveriUItextSuc.setVisibility(View.VISIBLE);
-                upIdSuccessImg.setVisibility(View.VISIBLE);
-                isupload=true;
+//                IdVeBottomSheetFragment idVeBottomSheetFragment = new IdVeBottomSheetFragment();
+//                idVeBottomSheetFragment.show(getSupportFragmentManager(), idVeBottomSheetFragment.getTag());
+//                idveriUItext.setVisibility(View.GONE);
+//                idveriUItextSuc.setVisibility(View.VISIBLE);
+//                upIdSuccessImg.setVisibility(View.VISIBLE);
+//                isupload=true;
+                showIdentityTypePopup(IdentityVerificationActivity.this);
 
             }
         });
-
-
 
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -431,6 +452,13 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     viewRight.setBackgroundResource(R.drawable.button_background);
                     closebtn.setVisibility(View.GONE);
                     backbtn.setVisibility(View.VISIBLE);
+                }else{
+//                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//
+//                    MultipartBody.Part body =MultipartBody.Part.createFormData("identityFile", file.getName(), requestBody);
+//
+//                    RequestBody ItemId = RequestBody.create(okhttp3.MultipartBody.FORM, "22");
+//                    RequestBody ImageNumber = RequestBody.create(okhttp3.MultipartBody.FORM,"1");
                 }
             }
         });
@@ -441,9 +469,107 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     btnNext.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     finish();
                 }
-
             }
         });
+    }
+
+    public static void showIdentityTypePopup(final Context context) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.fragment_id_ve_bottom_sheet);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        LinearLayout driverlicensell = dialog.findViewById(R.id.driverlicensell);
+        LinearLayout passportll = dialog.findViewById(R.id.passportll);
+        LinearLayout sicardll = dialog.findViewById(R.id.sicardll);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        driverlicensell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+//                context.startActivity(new Intent(context, CameraActivity.class));
+                if (checkAndRequestPermissions((Activity) context)) {
+                    context.startActivity(new Intent(context, CameraActivity.class));
+                }
+            }
+        });
+
+        passportll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                context.startActivity(new Intent(context, CameraActivity.class));
+            }
+        });
+
+        sicardll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                context.startActivity(new Intent(context, CameraActivity.class));
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public static boolean checkAndRequestPermissions(final Activity context) {
+        try {
+            int WExtstorePermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.CAMERA);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
+            }
+            if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded
+                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                                .toArray(new String[listPermissionsNeeded.size()]),
+                        REQUEST_ID_MULTIPLE_PERMISSIONS);
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_ID_MULTIPLE_PERMISSIONS:
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    Utils.displayAlert("Requires Access to Camera.", IdentityVerificationActivity.this, "");
+
+                } else if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Utils.displayAlert("Requires Access to Your Storage.", IdentityVerificationActivity.this, "");
+
+                } else {
+                    startActivity(new Intent(this, CameraActivity.class));
+                }
+                break;
+        }
     }
 
 }

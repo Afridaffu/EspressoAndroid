@@ -284,8 +284,15 @@ public class OTPValidation extends AppCompatActivity {
 //                            loginViewModel.smsotpresend(resend);
                         }
                     } else {
-                        layoutEntry.setVisibility(View.GONE);
-                        layoutFailure.setVisibility(View.VISIBLE);
+                        if(strScreen.equals("SignUp")){
+                            layoutEntry.setVisibility(View.GONE);
+                            layoutFailure.setVisibility(View.VISIBLE);
+                        }else{
+                            layoutEntry.setVisibility(View.VISIBLE);
+                            layoutFailure.setVisibility(View.GONE);
+                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again",OTPValidation.this,"");
+                        }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

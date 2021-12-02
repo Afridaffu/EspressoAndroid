@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_40sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="Error: Look like we are having an issue with your OTP request, please retry again later."
+            android:text="Error: Looks like we are having an issue with your OTP request, please retry again later."
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>

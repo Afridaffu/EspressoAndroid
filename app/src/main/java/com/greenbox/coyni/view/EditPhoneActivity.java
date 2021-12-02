@@ -110,7 +110,8 @@ public class EditPhoneActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        Utils.hideKeypad(EditPhoneActivity.this);
+//                        Utils.hideKeypad(EditPhoneActivity.this);
+                        Utils.hideSoftKeyboard(EditPhoneActivity.this);
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(Utils.mondayURL));
                         startActivity(i);

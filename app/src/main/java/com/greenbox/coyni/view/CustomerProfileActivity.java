@@ -458,6 +458,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
             shareImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
 //                    Drawable mDrawable = meQrCode.getDrawable();
 //                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
