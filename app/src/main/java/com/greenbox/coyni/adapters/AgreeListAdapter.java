@@ -15,21 +15,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.util.List;
 import java.util.Locale;
 
 public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyViewHolder> {
 
     Context context;
-    Agreements agreements;
+    List<Item> items;
     DashboardViewModel dashboardViewModel;
-   private RecyclerClickListener recyclerClickListener;
-    public AgreeListAdapter(Context context, Agreements agreementsList, DashboardViewModel dashboardViewModel,RecyclerClickListener listener) {
+    private RecyclerClickListener recyclerClickListener;
+
+    public AgreeListAdapter(Context context, List<Item> agreementsList, DashboardViewModel dashboardViewModel, RecyclerClickListener listener) {
         this.context = context;
-        this.agreements = agreementsList;
+        this.items = agreementsList;
         this.dashboardViewModel = dashboardViewModel;
-        this.recyclerClickListener=listener;
+        this.recyclerClickListener = listener;
     }
 
     public Context getContext() {
@@ -40,54 +43,49 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
         this.context = context;
     }
 
-    public Agreements getAgreementsList() {
-        return agreements;
-    }
-
-    public void setAgreementsList(Agreements agreementsList) {
-        this.agreements = agreementsList;
-    }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view= LayoutInflater.from(context).inflate(R.layout.list_items,parent,false);
-       return new MyViewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_items, parent, false);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
-            if (pos==0){
-                holder.agreementTV.setText("Privacy Policy "+agreements.getData().getItems().get(pos+1).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ",""));
-            }
-            else if (pos==1){
-                holder.agreementTV.setText("Terms of Service "+agreements.getData().getItems().get(pos-1).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ",""));
-            }
+        if (items.get(pos).getSignatureType() == 1) {
+            holder.agreementTV.setText("Privacy Policy " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+        } else if (pos == 1) {
+            holder.agreementTV.setText("Terms of Service " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+        }
+
     }
 
     @Override
     public int getItemCount() {
-       if (this.agreements!=null){
-            return agreements.getData().getItems().size();
+        if (this.items != null) {
+            return items.size();
         }
         return 0;
     }
-    public interface RecyclerClickListener{
-        void click(View view,int position);
+
+    public interface RecyclerClickListener {
+        void click(View view, int position);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView agreementTV;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            agreementTV=itemView.findViewById(R.id.listagreementsTV);
+            agreementTV = itemView.findViewById(R.id.listagreementsTV);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            recyclerClickListener.click(view,getAdapterPosition());
+            recyclerClickListener.click(view, getAdapterPosition());
         }
     }
 }
