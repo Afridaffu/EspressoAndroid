@@ -1,34 +1,29 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
 import java.util.Locale;
 
-public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyViewHolder> {
+public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdapter.MyViewHolder> {
 
     Context context;
     List<Item> items;
     DashboardViewModel dashboardViewModel;
     private RecyclerClickListener recyclerClickListener;
 
-    public AgreeListAdapter(Context context, List<Item> agreementsList, DashboardViewModel dashboardViewModel, RecyclerClickListener listener) {
+    public PastAgreeListAdapter(Context context, List<Item> agreementsList, DashboardViewModel dashboardViewModel, RecyclerClickListener listener) {
         this.context = context;
         this.items = agreementsList;
         this.dashboardViewModel = dashboardViewModel;
@@ -89,3 +84,4 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
         }
     }
 }
+
