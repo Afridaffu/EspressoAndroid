@@ -57,6 +57,14 @@ public class DashboardViewModel extends AndroidViewModel {
         return userDetailsMutableLiveData;
     }
 
+    public MutableLiveData<UserPreference> getUserPreferenceMutableLiveData() {
+        return userPreferenceMutableLiveData;
+    }
+
+    public MutableLiveData<String> getErrorMutableLiveData() {
+        return errorMutableLiveData;
+    }
+
     public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
         return profileRespMutableLiveData;
     }
@@ -502,11 +510,12 @@ public class DashboardViewModel extends AndroidViewModel {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    if (!response.message().toLowerCase().equals("")) {
+                        errorMutableLiveData.setValue("Wallet data not found.");
+                    } else {
+                        apiErrorMutableLiveData.setValue(null);
                 }
-                if (!response.message().toLowerCase().equals("")) {
-                    errorMutableLiveData.setValue("Wallet data not found.");
-                } else {
-                    apiErrorMutableLiveData.setValue(null);
+
                 }
             }
 

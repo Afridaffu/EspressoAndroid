@@ -2,20 +2,26 @@ package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.widget.EditText;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.AddNoteBottomSheet;
 public class PayRequestTransactionActivity extends AppCompatActivity {
     EditText payreqET;
+    LinearLayout addNoteClick;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        addNoteClick=findViewById(R.id.addNoteClickLL);
+
+        addNoteClick.setOnClickListener(view -> {
+            AddNoteBottomSheet addNoteBottomSheet = new AddNoteBottomSheet();
+            addNoteBottomSheet.show(getSupportFragmentManager(), addNoteBottomSheet.getTag());
+        });
         setContentView(R.layout.activity_pay_request_transaction);
         initialization();
         TextWathcers();
@@ -27,7 +33,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
     public void TextWathcers(){
         payreqET.addTextChangedListener(new TextWatcher() {
             boolean hint;
-            int height;
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

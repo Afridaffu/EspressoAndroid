@@ -452,7 +452,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             if (strName != null && strName.length() > 21) {
                 userFullName.setText(strName.substring(0, 22) + "...");
             } else {
-                userFullName.setText(strName.substring(0, 22) + "...");
+                userFullName.setText(strName);
             }
 
             shareImage.setOnClickListener(new View.OnClickListener() {
