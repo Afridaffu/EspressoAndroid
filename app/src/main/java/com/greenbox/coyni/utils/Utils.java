@@ -588,7 +588,6 @@ public class Utils {
         return dialog;
     }
 
-
     public static void populateTimeZones(PreferencesActivity preferenceActivity, EditText editText, MyApplication myApplicationObj) {
         // custom dialog
         final Dialog dialog = new Dialog(preferenceActivity);
@@ -808,7 +807,6 @@ public class Utils {
             ex.printStackTrace();
         }
     }
-
 
 
 }

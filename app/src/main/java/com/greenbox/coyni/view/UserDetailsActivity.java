@@ -110,6 +110,10 @@ public class UserDetailsActivity extends AppCompatActivity {
             editProfileIV.setOnClickListener(view -> {
                 if (checkAndRequestPermissions(this)) {
 //                    chooseImage(this);
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     showImagePickerDialog(this);
                 }
             });

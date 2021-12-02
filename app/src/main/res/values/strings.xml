@@ -24,7 +24,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="chpwdmsg">Look like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
+    <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
 
     <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. Please enter the\n information below.</string>
     <string name="firstName">First Name</string>
@@ -137,7 +137,7 @@
     <string name="forgot_content">Before we can reset your password, we will \nneed to verify your identity.\nPlease enter the email register with your\naccount.</string>
     <string name="email">Email</string>
     <string name="retry_create_account">Retry Create Account</string>
-    <string name="retry_account">Error: Look like we are having an issue with \nyour OTP request, please retry again later.</string>
+    <string name="retry_account">Error: Looks like we are having an issue with \nyour OTP request, please retry again later.</string>
     <string name="try_again">Try Again</string>
     <string name="qr_code">qr_code</string>
     <string name="user_details">User Details</string>

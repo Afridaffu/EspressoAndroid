@@ -177,7 +177,8 @@
                 android:paddingTop="@dimen/_9sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_7sdp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -228,7 +229,8 @@
                 android:paddingTop="@dimen/_9sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_7sdp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -280,7 +282,8 @@
                 android:paddingTop="@dimen/_9sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_7sdp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="wrap_content"

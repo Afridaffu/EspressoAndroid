@@ -207,7 +207,9 @@ public class OnboardActivity extends AppCompatActivity {
                 });
             } else {
                 Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                i.putExtra("auth", "cancel");
                 startActivity(i);
+                finish();
             }
         } catch (Exception ex) {
             ex.printStackTrace();

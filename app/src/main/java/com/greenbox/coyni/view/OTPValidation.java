@@ -148,17 +148,17 @@ public class OTPValidation extends AppCompatActivity {
                     case "retEmail":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
-                        headerTV.setText("Please Verify Your Phone Number");
+                        headerTV.setText("Please Verify your Phone Number");
                         subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + maskedPhone);
                         break;
                     case "SignUp":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (OTP_TYPE.equals("MOBILE")) {
-                            headerTV.setText("Please Verify Your Phone Number");
+                            headerTV.setText("Please Verify your Phone Number");
                             subHeaderTV.setText("We sent you a 6-digit code to the registered phone number " + maskedPhone);
                         } else if (OTP_TYPE.equals("EMAIL")) {
-                            headerTV.setText("Please Verify Your Email");
+                            headerTV.setText("Please Verify your Email");
                             subHeaderTV.setText("We sent you a 6-digit code to the registered email address: " + EMAIL);
                         } else if (OTP_TYPE.equals("SECURE")) {
                             Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
@@ -174,7 +174,7 @@ public class OTPValidation extends AppCompatActivity {
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
-                            headerTV.setText("Please Verify Your Phone Number");
+                            headerTV.setText("Please Verify your Phone Number");
                             subHeaderTV.setText("We have sent you 6-digit code to the registered phone number " + maskedPhone);
                         }
                         resendCounter = resendCounter + 1;
@@ -189,7 +189,7 @@ public class OTPValidation extends AppCompatActivity {
                         newEmail = getIntent().getStringExtra("NEW_EMAIL");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldEmail.equals("true")) {
-                            headerTV.setText("Please Verify Your Current Email");
+                            headerTV.setText("Please Verify your Current Email");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + oldEmail);
                         } else {
                             headerTV.setText("Please Verify New Email");
@@ -206,10 +206,10 @@ public class OTPValidation extends AppCompatActivity {
 
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldPhone.equals("true")) {
-                            headerTV.setText("Please Verify Your Current Phone Number");
+                            headerTV.setText("Please Verify your Current Phone Number");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + oldPhoneMasked);
                         } else {
-                            headerTV.setText("Please Verify Your New Phone Number");
+                            headerTV.setText("Please Verify your New Phone Number");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + newPhoneMasked);
 //                            loginViewModel.emailotpresend(newEmail);
                         }
@@ -284,8 +284,15 @@ public class OTPValidation extends AppCompatActivity {
 //                            loginViewModel.smsotpresend(resend);
                         }
                     } else {
-                        layoutEntry.setVisibility(View.GONE);
-                        layoutFailure.setVisibility(View.VISIBLE);
+                        if(strScreen.equals("SignUp")){
+                            layoutEntry.setVisibility(View.GONE);
+                            layoutFailure.setVisibility(View.VISIBLE);
+                        }else{
+                            layoutEntry.setVisibility(View.VISIBLE);
+                            layoutFailure.setVisibility(View.GONE);
+                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again",OTPValidation.this,"");
+                        }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -728,7 +735,9 @@ public class OTPValidation extends AppCompatActivity {
                             startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
                                     .putExtra("screen", "retEmailfound"));
                         } else {
-                            Utils.displayAlert(retrieveUsersResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+//                            Utils.displayAlert(retrieveUsersResponse.getError().getErrorDescription(), OTPValidation.this, "");
                         }
                     }
                 } catch (Exception ex) {
