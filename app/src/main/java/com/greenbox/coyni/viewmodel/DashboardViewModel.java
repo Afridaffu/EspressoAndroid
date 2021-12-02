@@ -23,6 +23,8 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.model.wallet.UserDetailsData;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
@@ -49,6 +51,11 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Preferences> preferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ProfilesResponse> profileRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UserDetails> userDetailsMutableLiveData=new MutableLiveData<>();
+    private MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
+        return userDetailsMutableLiveData;
+    }
 
     public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
         return profileRespMutableLiveData;
@@ -465,6 +472,52 @@ public class DashboardViewModel extends AndroidViewModel {
                 }
             });
         } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+    public void getUserDetail(String walletId) {
+        try{
+
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<UserDetails> mcall = apiService.getUserDetails(walletId);
+        mcall.enqueue(new Callback<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        UserDetails obj = response.body();
+                        userDetailsMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        } else {
+                            errorMutableLiveData.setValue("Wallet data not found.");
+                        }
+
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                if (!response.message().toLowerCase().equals("")) {
+                    errorMutableLiveData.setValue("Wallet data not found.");
+                } else {
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDetails> call, Throwable t) {
+                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                apiErrorMutableLiveData.setValue(null);
+            }
+        });
+    }
+        catch (Exception ex){
             ex.printStackTrace();
         }
 
