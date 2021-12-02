@@ -122,20 +122,16 @@ public class PayRequestScanActivity extends AppCompatActivity {
             imageShare=findViewById(R.id.imgShare);
             userNameTV=findViewById(R.id.tvUserInfo);
               copyRecipientAddress=findViewById(R.id.imgCopy);
-
-
-           listeners();
-           initObserveres();
-
             String strUserName=Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+""+objMyApplication.getMyProfile().getData().getLastName().substring(0,1).toUpperCase());
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-           userNameTV.setText(strUserName.toUpperCase(Locale.US));
+            userNameTV.setText(strUserName.toUpperCase(Locale.US));
             if (strName != null && strName.length() > 21) {
                 tvName.setText(strName.substring(0, 21) + "...");
             }
             else {
                 tvName.setText(strName);
             }
+
 
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
             if (walletResponse != null) {
@@ -149,6 +145,8 @@ public class PayRequestScanActivity extends AppCompatActivity {
  //           tvName.setText(Utils.capitalize(objMyApplication.getStrUser()));
  //           tvNameHead.setText(objMyApplication.getStrUserCode());
             tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
+            listeners();
+            initObserveres();
 
         }
         catch (Exception ex){
@@ -162,24 +160,76 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
 
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_DENIED) {
-                if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
-                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},123);
-                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
-                        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},123);
-                    }
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 123);
                 }
-
-        }
-//            if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
-//                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},123);
-//            }
-//            if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
-//                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},123);
-//            }
-        else {
+            else {
                 StartScaaner();
         }
+            copyRecipientAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ClipboardManager myClipboard;
+                    myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+
+                    ClipData myClip;
+                    String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
+                    myClip = ClipData.newPlainText("text", text);
+                    myClipboard.setPrimaryClip(myClip);
+                    showToast();
+                }
+            });
+            imageShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
+                    sendIntent.setType("text/plain");
+
+                    Intent shareIntent = Intent.createChooser(sendIntent, null);
+                    startActivity(shareIntent);
+                }
+            });
+            scanmeSetAmountTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                        SetLimitFragment setLimitFragment = new SetLimitFragment();
+                        setLimitFragment.show(getSupportFragmentManager(), setLimitFragment.getTag());
+                }
+            });
+            closeBtnScanCode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcodeScanner.setFlashEnabled(false);
+                    finish();
+                }
+            });
+            closeBtnScanMe.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   mcodeScanner.startPreview();
+                   scanCode.setTextColor(getResources().getColor(R.color.white));
+                   scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
+                   scanMe.setBackgroundResource(R.drawable.bg_white);
+                   scanMe.setTextColor(getResources().getColor(R.color.primary_black));
+                   scanMeSV.setVisibility(View.GONE);
+                   layoutHead.setVisibility(View.GONE);
+                   closeBtnScanMe.setVisibility(View.GONE);
+                   //ScanCode Visible
+                   mycodeScannerView.setVisibility(View.VISIBLE);
+                   scannerLayout.setVisibility(View.VISIBLE);
+                   flashLL.setVisibility(View.VISIBLE);
+                   closeBtnScanCode.setVisibility(View.VISIBLE);
+
+
+               }
+           });
+
             scanMe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -219,92 +269,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                 }
             });
-            copyRecipientAddress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ClipboardManager myClipboard;
-                    myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-
-                    ClipData myClip;
-                    String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
-                    myClip = ClipData.newPlainText("text", text);
-                    myClipboard.setPrimaryClip(myClip);
-                    showToast();
-                }
-            });
-            imageShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                        Drawable mDrawable = idIVQrcode.getDrawable();
-//                        Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
-//
-//                        String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
-//                        Uri uri = Uri.parse(path);
-//
-//                        Intent intent = new Intent(Intent.ACTION_SEND);
-//                        intent.setType("image/jpeg");
-//                        intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                        intent.putExtra(Intent.EXTRA_TEXT, strWallet);
-//                        startActivity(Intent.createChooser(intent, "Share QrCode Image"));
-
-
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    Drawable mDrawable = meQrCode.getDrawable();
-//                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
-
-//                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
-//                    Uri uri = Uri.parse(path);
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
-                    sendIntent.setType("text/plain");
-
-                    Intent shareIntent = Intent.createChooser(sendIntent, null);
-                    startActivity(shareIntent);
-//                    Intent intent = new Intent(Intent.ACTION_SEND);
-//                    intent.setType("image/jpeg");
-//                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                    intent.putExtra(Intent.EXTRA_TEXT, strWallet);
-//                    startActivity(Intent.createChooser(intent, "Share via"));
-                }
-            });
-            scanmeSetAmountTV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                        SetLimitFragment setLimitFragment = new SetLimitFragment();
-                        setLimitFragment.show(getSupportFragmentManager(), setLimitFragment.getTag());
-                }
-            });
-            closeBtnScanCode.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mcodeScanner.setFlashEnabled(false);
-                    finish();
-                }
-            });
-            closeBtnScanMe.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                   mcodeScanner.startPreview();
-                   scanCode.setTextColor(getResources().getColor(R.color.white));
-                   scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
-                   scanMe.setBackgroundResource(R.drawable.bg_white);
-                   scanMe.setTextColor(getResources().getColor(R.color.primary_black));
-                   scanMeSV.setVisibility(View.GONE);
-                   layoutHead.setVisibility(View.GONE);
-                   closeBtnScanMe.setVisibility(View.GONE);
-                   //ScanCode Visible
-                   mycodeScannerView.setVisibility(View.VISIBLE);
-                   scannerLayout.setVisibility(View.VISIBLE);
-                   flashLL.setVisibility(View.VISIBLE);
-                   closeBtnScanCode.setVisibility(View.VISIBLE);
-
-
-               }
-           });
                   savetoAlbum.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -329,34 +293,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 }
             });
 
-//            imageShare.setOnClickListener(new View.OnClickListener() {
-//
-//                @Override
-//                public void onClick(View b) {
-//                    // TODO Auto-generated method stub
-//                    //attempt to save the image
-//
-//                    b = findViewById(R.id.idIVQrcode);
-//                    b.setDrawingCacheEnabled(true);
-//                    Bitmap bitmap = b.getDrawingCache();
-//                    //File file = new File("/DCIM/Camera/image.jpg");
-//                    File root = Environment.getExternalStorageDirectory();
-//                    File cachePath = new File(root.getAbsolutePath() + "/DCIM/Camera/image.jpg");
-//                    try
-//                    {
-//                        cachePath.createNewFile();
-//                        FileOutputStream ostream = new FileOutputStream(cachePath);
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-//                        ostream.close();
-//                    }
-//                    catch (Exception e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//
-//        });
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -380,34 +316,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         Bitmap b = idIVQrcode.getDrawingCache();
 
         MediaStore.Images.Media.insertImage(getContentResolver(), b,"Coyni-PayQr", "this is QR");
-//        BitmapDrawable bitmapDrawable=(BitmapDrawable) idIVQrcode.getDrawable();
-//        Bitmap bitmap=bitmapDrawable.getBitmap();
-//        FileOutputStream outputStream=null;
-//        File file= Environment.getExternalStorageDirectory();
-//        File dir=new File(file.getAbsolutePath()+"/mypics");
-//        dir.mkdirs();
-//        String filename=String.format("%d.png",System.currentTimeMillis());
-//        File outfile=new File(dir,filename);
-//        try {
-//            outputStream=new FileOutputStream(outfile);
-//
-//        }
-//        catch (Exception fileNotFoundException){
-//            fileNotFoundException.printStackTrace();
-//        }
-//        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
-//        try {
-//            outputStream.flush();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            outputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
     }
 
 

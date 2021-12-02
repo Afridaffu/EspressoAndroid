@@ -458,27 +458,23 @@ public class CustomerProfileActivity extends AppCompatActivity {
             shareImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
+                        sendIntent.setType("text/plain");
+
+                        Intent shareIntent = Intent.createChooser(sendIntent, null);
+                        startActivity(shareIntent);
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    Drawable mDrawable = meQrCode.getDrawable();
-//                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
-
-//                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
-//                    Uri uri = Uri.parse(path);
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
-                    sendIntent.setType("text/plain");
-
-                    Intent shareIntent = Intent.createChooser(sendIntent, null);
-                    startActivity(shareIntent);
-//                    Intent intent = new Intent(Intent.ACTION_SEND);
-//                    intent.setType("image/jpeg");
-//                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                    intent.putExtra(Intent.EXTRA_TEXT, strWallet);
-//                    startActivity(Intent.createChooser(intent, "Share via"));
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
             });
 
