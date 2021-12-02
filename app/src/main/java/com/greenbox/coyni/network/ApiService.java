@@ -46,12 +46,14 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.users.AccountLimits;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 
 import okhttp3.MultipartBody;
@@ -179,5 +181,11 @@ public interface ApiService {
 
     @POST("api/v2/user/update/otp/resend")
     Call<UpdateResendOTPResponse> updateOtpResend(@Body UpdateResendRequest request);
+
+    @GET("api/v2/user-requests/user-details/{walletId}")
+    Call<UserDetails> getUserDetails(@Path("walletId") String walletId);
+
+    @POST("api/v2/transactions/token/info")
+    Call<TransactionDetails> getTransactionDt();
 
 }
