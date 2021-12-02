@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
@@ -49,6 +50,7 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.IdVeBottomSheetFragment;
 import com.greenbox.coyni.fragments.SetLimitFragment;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -94,62 +96,60 @@ public class PayRequestScanActivity extends AppCompatActivity {
     ObjectAnimator animator;
     View scannerLayout;
     View scannerBar;
-    boolean isPermissionEnable=true;
+    boolean isPermissionEnable = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_request_scan);
         try {
 
-            closeBtnScanCode=findViewById(R.id.closeBtnSC);
-            closeBtnScanMe=findViewById(R.id.imgCloseSM);
-            scanCode=findViewById(R.id.scanCodeTV);
-            scanMe=findViewById(R.id.scanMeTV);
-            toglebtn1=findViewById(R.id.toglebtn);
-            tvWalletAddress=findViewById(R.id.tvWalletAddress);
+            closeBtnScanCode = findViewById(R.id.closeBtnSC);
+            closeBtnScanMe = findViewById(R.id.imgCloseSM);
+            scanCode = findViewById(R.id.scanCodeTV);
+            scanMe = findViewById(R.id.scanMeTV);
+            toglebtn1 = findViewById(R.id.toglebtn);
+            tvWalletAddress = findViewById(R.id.tvWalletAddress);
             objMyApplication = (MyApplication) getApplicationContext();
-            mycodeScannerView=findViewById(R.id.scanner_view);
+            mycodeScannerView = findViewById(R.id.scanner_view);
             scannerLayout = findViewById(R.id.scannerLayout);
             scannerBar = findViewById(R.id.lineView);
-            flashLL=findViewById(R.id.flashBtnLL);
+            flashLL = findViewById(R.id.flashBtnLL);
             idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
             tvName = findViewById(R.id.tvName);
             tvNameHead = findViewById(R.id.tvUserInfo);
-            layoutHead=findViewById(R.id.layoutHead);
-            scanMeSV=findViewById(R.id.scanmeScrlView);
-            savetoAlbum=findViewById(R.id.saveToAlbumTV);
-            scanmeSetAmountTV=findViewById(R.id.scanMesetAmountTV);
-            imageShare=findViewById(R.id.imgShare);
-            userNameTV=findViewById(R.id.tvUserInfo);
-              copyRecipientAddress=findViewById(R.id.imgCopy);
-            String strUserName=Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0,1).toUpperCase()+""+objMyApplication.getMyProfile().getData().getLastName().substring(0,1).toUpperCase());
+            layoutHead = findViewById(R.id.layoutHead);
+            scanMeSV = findViewById(R.id.scanmeScrlView);
+            savetoAlbum = findViewById(R.id.saveToAlbumTV);
+            scanmeSetAmountTV = findViewById(R.id.scanMesetAmountTV);
+            imageShare = findViewById(R.id.imgShare);
+            userNameTV = findViewById(R.id.tvUserInfo);
+            copyRecipientAddress = findViewById(R.id.imgCopy);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             userNameTV.setText(strUserName.toUpperCase(Locale.US));
             if (strName != null && strName.length() > 21) {
                 tvName.setText(strName.substring(0, 21) + "...");
-            }
-            else {
+            } else {
                 tvName.setText(strName);
             }
-
 
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
             if (walletResponse != null) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 //   generateCode();
-               generateQRCode(strWallet);
+                generateQRCode(strWallet);
 //                Log.e("responce",""+strWallet);
 //               tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
 
             }
- //           tvName.setText(Utils.capitalize(objMyApplication.getStrUser()));
- //           tvNameHead.setText(objMyApplication.getStrUserCode());
+            //           tvName.setText(Utils.capitalize(objMyApplication.getStrUser()));
+            //           tvNameHead.setText(objMyApplication.getStrUserCode());
             tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
             listeners();
             initObserveres();
-
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -157,51 +157,129 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
     private void listeners() {
         try {
-
-
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 123);
-                }
-            else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 123);
+            } else {
                 StartScaaner();
-        }
+            }
+
+            scanMe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        scanMe.setTextColor(getResources().getColor(R.color.white));
+                        scanMe.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        scanCode.setBackgroundColor(getResources().getColor(R.color.white));
+                        scanCode.setTextColor(getResources().getColor(R.color.primary_black));
+
+                        layoutHead.setVisibility(View.VISIBLE);
+                        scanMeSV.setVisibility(View.VISIBLE);
+                        closeBtnScanMe.setVisibility(View.VISIBLE);
+                        //Scan Code Visibility Gone
+                        mycodeScannerView.setVisibility(View.GONE);
+                        scannerLayout.setVisibility(View.GONE);
+                        flashLL.setVisibility(View.GONE);
+                        closeBtnScanCode.setVisibility(View.GONE);
+                        mcodeScanner.setFlashEnabled(false);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            scanCode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        mcodeScanner.startPreview();
+                        scanCode.setTextColor(getResources().getColor(R.color.white));
+                        scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        scanMe.setBackgroundColor(getResources().getColor(R.color.white));
+                        scanMe.setTextColor(getResources().getColor(R.color.primary_black));
+                        scanMeSV.setVisibility(View.GONE);
+                        layoutHead.setVisibility(View.GONE);
+                        closeBtnScanMe.setVisibility(View.GONE);
+                        //ScanCode Visible
+                        mycodeScannerView.setVisibility(View.VISIBLE);
+                        scannerLayout.setVisibility(View.VISIBLE);
+                        flashLL.setVisibility(View.VISIBLE);
+                        closeBtnScanCode.setVisibility(View.VISIBLE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
             copyRecipientAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ClipboardManager myClipboard;
-                    myClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+                    try {
+                        ClipboardManager myClipboard;
+                        myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
-                    ClipData myClip;
-                    String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
-                    myClip = ClipData.newPlainText("text", text);
-                    myClipboard.setPrimaryClip(myClip);
-                    showToast();
+                        ClipData myClip;
+                        String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
+                        myClip = ClipData.newPlainText("text", text);
+                        myClipboard.setPrimaryClip(myClip);
+                        showToast();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
+
             imageShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+//                        Drawable mDrawable = idIVQrcode.getDrawable();
+//                        Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+//
+//                        String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
+//                        Uri uri = Uri.parse(path);
+//
+//                        Intent intent = new Intent(Intent.ACTION_SEND);
+//                        intent.setType("image/jpeg");
+//                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+//                        intent.putExtra(Intent.EXTRA_TEXT, strWallet);
+//                        startActivity(Intent.createChooser(intent, "Share QrCode Image"));
 
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+//                    Drawable mDrawable = meQrCode.getDrawable();
+//                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
+
+//                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
+//                    Uri uri = Uri.parse(path);
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
+                        sendIntent.setType("text/plain");
+
+                        Intent shareIntent = Intent.createChooser(sendIntent, null);
+                        startActivity(shareIntent);
+//                    Intent intent = new Intent(Intent.ACTION_SEND);
+//                    intent.setType("image/jpeg");
+//                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+//                    intent.putExtra(Intent.EXTRA_TEXT, strWallet);
+//                    startActivity(Intent.createChooser(intent, "Share via"));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
-                    sendIntent.setType("text/plain");
-
-                    Intent shareIntent = Intent.createChooser(sendIntent, null);
-                    startActivity(shareIntent);
                 }
             });
+
             scanmeSetAmountTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                        SetLimitFragment setLimitFragment = new SetLimitFragment();
-                        setLimitFragment.show(getSupportFragmentManager(), setLimitFragment.getTag());
+                    SetLimitFragment setLimitFragment = new SetLimitFragment();
+                    setLimitFragment.show(getSupportFragmentManager(), setLimitFragment.getTag());
                 }
             });
+
             closeBtnScanCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -209,208 +287,273 @@ public class PayRequestScanActivity extends AppCompatActivity {
                     finish();
                 }
             });
+
             closeBtnScanMe.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                   mcodeScanner.startPreview();
-                   scanCode.setTextColor(getResources().getColor(R.color.white));
-                   scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
-                   scanMe.setBackgroundResource(R.drawable.bg_white);
-                   scanMe.setTextColor(getResources().getColor(R.color.primary_black));
-                   scanMeSV.setVisibility(View.GONE);
-                   layoutHead.setVisibility(View.GONE);
-                   closeBtnScanMe.setVisibility(View.GONE);
-                   //ScanCode Visible
-                   mycodeScannerView.setVisibility(View.VISIBLE);
-                   scannerLayout.setVisibility(View.VISIBLE);
-                   flashLL.setVisibility(View.VISIBLE);
-                   closeBtnScanCode.setVisibility(View.VISIBLE);
-
-
-               }
-           });
-
-            scanMe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    scanMe.setTextColor(getResources().getColor(R.color.white));
-                    scanMe.setBackgroundResource(R.drawable.bg_core_colorfill);
-                    scanCode.setBackgroundColor(getResources().getColor(R.color.white));
-                    scanCode.setTextColor(getResources().getColor(R.color.primary_black));
-
-                    layoutHead.setVisibility(View.VISIBLE);
-                    scanMeSV.setVisibility(View.VISIBLE);
-                    closeBtnScanMe.setVisibility(View.VISIBLE);
-                    //Scan Code Visibility Gone
-                    mycodeScannerView.setVisibility(View.GONE);
-                    scannerLayout.setVisibility(View.GONE);
-                    flashLL.setVisibility(View.GONE);
-                    closeBtnScanCode.setVisibility(View.GONE);
-                    mcodeScanner.setFlashEnabled(false);
+                    try {
+                        mcodeScanner.startPreview();
+                        scanCode.setTextColor(getResources().getColor(R.color.white));
+                        scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        scanMe.setBackgroundResource(R.drawable.bg_white);
+                        scanMe.setTextColor(getResources().getColor(R.color.primary_black));
+                        scanMeSV.setVisibility(View.GONE);
+                        layoutHead.setVisibility(View.GONE);
+                        closeBtnScanMe.setVisibility(View.GONE);
+                        //ScanCode Visible
+                        mycodeScannerView.setVisibility(View.VISIBLE);
+                        scannerLayout.setVisibility(View.VISIBLE);
+                        flashLL.setVisibility(View.VISIBLE);
+                        closeBtnScanCode.setVisibility(View.VISIBLE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
-            scanCode.setOnClickListener(new View.OnClickListener() {
+            savetoAlbum.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mcodeScanner.startPreview();
-                    scanCode.setTextColor(getResources().getColor(R.color.white));
-                    scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
-                    scanMe.setBackgroundColor(getResources().getColor(R.color.white));
-                    scanMe.setTextColor(getResources().getColor(R.color.primary_black));
-                    scanMeSV.setVisibility(View.GONE);
-                    layoutHead.setVisibility(View.GONE);
-                    closeBtnScanMe.setVisibility(View.GONE);
-                    //ScanCode Visible
-                    mycodeScannerView.setVisibility(View.VISIBLE);
-                    scannerLayout.setVisibility(View.VISIBLE);
-                    flashLL.setVisibility(View.VISIBLE);
-                    closeBtnScanCode.setVisibility(View.VISIBLE);
-
-
+                    saveToGallery();
+                    Toast.makeText(PayRequestScanActivity.this, "saved to Gallery successfully", Toast.LENGTH_SHORT).show();
                 }
+
             });
-                  savetoAlbum.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            saveToGallery();
-                            Toast.makeText(PayRequestScanActivity.this,"saved to Gallery successfully",Toast.LENGTH_SHORT).show();
-                        }
-
-                    });
 
             toglebtn1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isTorchOn){
-                        mcodeScanner.setFlashEnabled(true);
-                        torchTogle(isTorchOn);
-                    }else {
-                        mcodeScanner.setFlashEnabled(false);
-                        torchTogle(isTorchOn);
+                    try {
+                        if (isTorchOn) {
+                            mcodeScanner.setFlashEnabled(true);
+                            torchTogle(isTorchOn);
+                        } else {
+                            mcodeScanner.setFlashEnabled(false);
+                            torchTogle(isTorchOn);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-
                 }
             });
 
-        }catch (Exception e) {
+//            imageShare.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View b) {
+//                    // TODO Auto-generated method stub
+//                    //attempt to save the image
+//
+//                    b = findViewById(R.id.idIVQrcode);
+//                    b.setDrawingCacheEnabled(true);
+//                    Bitmap bitmap = b.getDrawingCache();
+//                    //File file = new File("/DCIM/Camera/image.jpg");
+//                    File root = Environment.getExternalStorageDirectory();
+//                    File cachePath = new File(root.getAbsolutePath() + "/DCIM/Camera/image.jpg");
+//                    try
+//                    {
+//                        cachePath.createNewFile();
+//                        FileOutputStream ostream = new FileOutputStream(cachePath);
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+//                        ostream.close();
+//                    }
+//                    catch (Exception e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//
+//        });
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void initObserveres() {
-            dashboardViewModel.getUserDetailsMutableLiveData().observe(this, new Observer<UserDetails>() {
-                @Override
-                public void onChanged(UserDetails userDetails) {
-                    dialog.dismiss();
-                    if (userDetails != null) {
-                        Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
-                        i.putExtra("walletId", strScanWallet);
-                        i.putExtra("screen", "scan");
-                        startActivity(i);
+        dashboardViewModel.getUserDetailsMutableLiveData().observe(this, new Observer<UserDetails>() {
+            @Override
+            public void onChanged(UserDetails userDetails) {
+                dialog.dismiss();
+                if (userDetails != null) {
+                    Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
+                    i.putExtra("walletId", strScanWallet);
+                    i.putExtra("screen", "scan");
+                    startActivity(i);
+                }
+            }
+        });
+
+        dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                dialog.dismiss();
+                if (apiError != null) {
+                    String strMsg = "";
+                    if (!apiError.getError().getErrorDescription().equals("")) {
+                        strMsg = apiError.getError().getErrorDescription();
+                    } else {
+                        strMsg = apiError.getError().getFieldErrors().get(0);
+                    }
+                    if (strMsg.toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
+
+                    } else {
+                        if (mycodeScannerView.getVisibility() == View.VISIBLE) {
+                            Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+                        }
                     }
                 }
-            });
+            }
+        });
+
+        dashboardViewModel.getErrorMutableLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                dialog.dismiss();
+                if (s != null && !s.equals("")) {
+                    if (mycodeScannerView.getVisibility() == View.VISIBLE) {
+                        Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+                    }
+                }
+            }
+        });
     }
+
     private void saveToGallery() {
-        idIVQrcode.setDrawingCacheEnabled(true);
-        Bitmap b = idIVQrcode.getDrawingCache();
+        try {
+            idIVQrcode.setDrawingCacheEnabled(true);
+            Bitmap b = idIVQrcode.getDrawingCache();
 
-        MediaStore.Images.Media.insertImage(getContentResolver(), b,"Coyni-PayQr", "this is QR");
+            MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-PayQr", "this is QR");
+//        BitmapDrawable bitmapDrawable=(BitmapDrawable) idIVQrcode.getDrawable();
+//        Bitmap bitmap=bitmapDrawable.getBitmap();
+//        FileOutputStream outputStream=null;
+//        File file= Environment.getExternalStorageDirectory();
+//        File dir=new File(file.getAbsolutePath()+"/mypics");
+//        dir.mkdirs();
+//        String filename=String.format("%d.png",System.currentTimeMillis());
+//        File outfile=new File(dir,filename);
+//        try {
+//            outputStream=new FileOutputStream(outfile);
+//
+//        }
+//        catch (Exception fileNotFoundException){
+//            fileNotFoundException.printStackTrace();
+//        }
+//        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+//        try {
+//            outputStream.flush();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            outputStream.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
-
 
     private void torchTogle(boolean command) {
-
-        if(command){
-            mcodeScanner.setFlashEnabled(true);
-            isTorchOn=false;
-        }else {
-            mcodeScanner.setFlashEnabled(false);
-            isTorchOn=true;
+        try {
+            if (command) {
+                mcodeScanner.setFlashEnabled(true);
+                isTorchOn = false;
+            } else {
+                mcodeScanner.setFlashEnabled(false);
+                isTorchOn = true;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
     }
 
-
     private void StartScaaner() {
-        mcodeScanner=new CodeScanner(this,mycodeScannerView);
-        mcodeScanner.startPreview();
-        BarcodeFormat barcodeFormat=BarcodeFormat.QR_CODE;
-        List<BarcodeFormat> barcodeFormatList= Collections.singletonList(barcodeFormat);
-        mcodeScanner.setFormats(barcodeFormatList);
-        mcodeScanner.setDecodeCallback(new DecodeCallback() {
-            @Override
-            public void onDecoded(@NonNull final Result result) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (result != null && !result.toString().trim().equals("")) {
-                                strScanWallet = "";
-                                if (isJSONValid(result.toString())) {
-                                    JSONObject jsonObject = new JSONObject(result.toString());
-                                    strScanWallet = jsonObject.get("address").toString();
+        try {
+            mcodeScanner = new CodeScanner(this, mycodeScannerView);
+            mcodeScanner.startPreview();
+            BarcodeFormat barcodeFormat = BarcodeFormat.QR_CODE;
+            List<BarcodeFormat> barcodeFormatList = Collections.singletonList(barcodeFormat);
+            mcodeScanner.setFormats(barcodeFormatList);
+            mcodeScanner.setDecodeCallback(new DecodeCallback() {
+                @Override
+                public void onDecoded(@NonNull final Result result) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (result != null && !result.toString().trim().equals("")) {
+                                    strScanWallet = "";
+                                    if (isJSONValid(result.toString())) {
+                                        JSONObject jsonObject = new JSONObject(result.toString());
+                                        strScanWallet = jsonObject.get("address").toString();
+                                    } else {
+                                        strScanWallet = result.toString();
+                                    }
+                                    getUserDetails(strScanWallet);
                                 } else {
-                                    strScanWallet = result.toString();
+                                    Utils.displayAlert("Unable to scan the QR code.", PayRequestScanActivity.this, "");
                                 }
-                                getUserDetails(strScanWallet);
-                            } else {
-                                Utils.displayAlert("Unable to scan the QR code.", PayRequestScanActivity.this,"");
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                            scannerLayout.setVisibility(View.GONE);
                         }
-                        Toast.makeText(PayRequestScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
-                        scannerLayout.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });
-        mycodeScannerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mcodeScanner.startPreview();
-                scannerLayout.setVisibility(View.VISIBLE);
+                    });
+                }
+            });
+            mycodeScannerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcodeScanner.startPreview();
+                    scannerLayout.setVisibility(View.VISIBLE);
 
-            }
-        });
+                }
+            });
 
-        scannerBar.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animate_scanner_line));
-
+            scannerBar.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animate_scanner_line));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==123){
-            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
-               StartScaaner();
+        if (requestCode == 123) {
+            try {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    StartScaaner();
 
-                toglebtn1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(isTorchOn){
-                            mcodeScanner.setFlashEnabled(true);
-                            torchTogle(isTorchOn);
-                        }else {
-                            mcodeScanner.setFlashEnabled(false);
-                            torchTogle(isTorchOn);
+                    toglebtn1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (isTorchOn) {
+                                mcodeScanner.setFlashEnabled(true);
+                                torchTogle(isTorchOn);
+                            } else {
+                                mcodeScanner.setFlashEnabled(false);
+                                torchTogle(isTorchOn);
+                            }
+
                         }
-
-                    }
-                });
-            }
-            else {
-                Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
+                    });
+                } else {
+                    Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
-
     }
+
     @Override
     protected void onResume() {
         try {
             super.onResume();
-           mcodeScanner.startPreview();
+            mcodeScanner.startPreview();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -434,6 +577,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
         return true;
     }
+
     private void generateQRCode(String wallet) {
         try {
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -467,18 +611,22 @@ public class PayRequestScanActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-    private void showToast(){
-        LayoutInflater inflater=getLayoutInflater();
-        View layout=inflater.inflate(R.layout.custom_toast_recipientaddress,(ViewGroup) findViewById(R.id.toastRootLL));
 
-        Toast toast=new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER,0,0);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
-        toast.show();
+    private void showToast() {
+        try {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.custom_toast_recipientaddress, (ViewGroup) findViewById(R.id.toastRootLL));
 
-
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
+
     private void getUserDetails(String strWalletId) {
         try {
             if (Utils.checkInternet(PayRequestScanActivity.this)) {
@@ -489,7 +637,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.show();
                 dashboardViewModel.getUserDetail(strWalletId);
             } else {
-                Utils.displayAlert(getString(R.string.internet), PayRequestScanActivity.this,"");
+                Utils.displayAlert(getString(R.string.internet), PayRequestScanActivity.this, "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
