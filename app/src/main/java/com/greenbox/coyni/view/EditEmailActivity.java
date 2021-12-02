@@ -359,7 +359,15 @@ public class EditEmailActivity extends AppCompatActivity {
                                 .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
                         );
                     } else {
-                        Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "");
+                        if (updateEmailResponse.getError().getErrorDescription().equals("")) {
+                            try {
+                                Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0), EditEmailActivity.this,"");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "");
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

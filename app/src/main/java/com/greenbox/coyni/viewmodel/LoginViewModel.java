@@ -548,11 +548,11 @@ public class LoginViewModel extends AndroidViewModel {
                         retrieveUsersResponseMutableLiveData.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
+                        Type type = new TypeToken<RetrieveUsersResponse>() {
                         }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        RetrieveUsersResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            retrieveUsersResponseMutableLiveData.setValue(errorResponse);
                         }
                     }
                 }
