@@ -87,7 +87,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
     Bitmap bitmap;
     Long mLastClickTime = 0L;
     ImageView idIVQrcode, imageShare, copyRecipientAddress;
-    ImageView closeBtnScanCode, closeBtnScanMe;
+    ImageView closeBtnScanCode, closeBtnScanMe,imgProfile;
     private CodeScanner mcodeScanner;
     private CodeScannerView mycodeScannerView;
     MyApplication objMyApplication;
@@ -129,10 +129,12 @@ public class PayRequestScanActivity extends AppCompatActivity {
             imageShare = findViewById(R.id.imgShare);
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
+            imgProfile = findViewById(R.id.imgProfile);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
+//            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-            userNameTV.setText(strUserName.toUpperCase(Locale.US));
+//            userNameTV.setText(strUserName.toUpperCase(Locale.US));
+            bindImage();
             if (strName != null && strName.length() > 21) {
                 tvName.setText(strName.substring(0, 21) + "...");
             } else {
@@ -695,5 +697,36 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public void bindImage(){
+        try {
+            imgProfile.setVisibility(View.GONE);
+            userNameTV.setVisibility(View.VISIBLE);
+            String imageString = objMyApplication.getMyProfile().getData().getImage();
+            String imageTextNew = "";
+            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            userNameTV.setText(imageTextNew);
+
+            if (imageString != null && !imageString.trim().equals("")) {
+                imgProfile.setVisibility(View.VISIBLE);
+                userNameTV.setVisibility(View.GONE);
+                Glide.with(this)
+                        .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
+                        .into(imgProfile);
+            } else {
+                imgProfile.setVisibility(View.GONE);
+                userNameTV.setVisibility(View.VISIBLE);
+                String imageText = "";
+                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                userNameTV.setText(imageText);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

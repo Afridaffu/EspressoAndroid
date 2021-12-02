@@ -729,6 +729,8 @@ public class Utils {
             for (int i = 0; i < listStates.size() - 1; i++) {
                 if (editText.getText().toString().trim().equals(listStates.get(i).getIsocode())) {
                     listStates.get(i).setSelected(true);
+                }else{
+                    listStates.get(i).setSelected(false);
                 }
             }
             if (listStates.size() > 0) {

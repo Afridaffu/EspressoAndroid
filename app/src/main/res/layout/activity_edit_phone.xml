@@ -120,14 +120,15 @@
 
             <TextView
                 android:id="@+id/contactUsTV"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
                 android:text="@string/contact_us"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_12ssp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 

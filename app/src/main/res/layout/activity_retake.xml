@@ -8,19 +8,28 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".custom_camera.RetakeActivity">
 
-    <ImageView
+    <LinearLayout
+        android:id="@+id/retakeCloseIV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_32sdp"
-        android:layout_marginTop="@dimen/_67sdp"
-        android:src="@drawable/ic_close"
-        app:tint="@color/white" />
+        android:paddingEnd="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_45sdp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            app:tint="@color/white"
+            />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:padding="@dimen/_20sdp">
+        android:padding="@dimen/_30sdp">
 
         <ImageView
             android:id="@+id/croppedIV"
@@ -70,7 +79,7 @@
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
                 android:text="Retake"
-                android:textColor="@color/primary_color"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 

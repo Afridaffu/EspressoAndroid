@@ -45,8 +45,9 @@
                 android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:textColorHint="@color/light_gray"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/text_size_14sp"></EditText>
+                android:textSize="@dimen/text_size_14sp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
