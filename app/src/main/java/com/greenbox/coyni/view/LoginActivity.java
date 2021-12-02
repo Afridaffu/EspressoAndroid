@@ -106,6 +106,26 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dialog.dismiss();
         }
         isPwdEye = false;
+
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
+            cursor.moveToFirst();
+            if (cursor.getCount() > 0) {
+                String value = cursor.getString(1);
+                String value2 = cursor.getString(2);
+                etEmail.setText(value);
+                etPassword.setText(value2);
+                etPassword.setSelection(value2.length());
+            }else{
+                etEmail.setText("");
+                etPassword.setText("");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            etEmail.setText("");
+            etPassword.setText("");
+        }
     }
 
     @Override

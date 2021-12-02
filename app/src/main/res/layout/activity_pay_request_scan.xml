@@ -237,13 +237,6 @@
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/text_size_20sp" />
 
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/cvProfilePic"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_centerInParent="true"
-                                android:visibility="gone"
-                                app:cardCornerRadius="@dimen/_20sdp">
 
                                 <ImageView
                                     android:id="@+id/imgProfile"
@@ -251,7 +244,6 @@
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
                                     android:visibility="visible" />
-                            </androidx.cardview.widget.CardView>
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 

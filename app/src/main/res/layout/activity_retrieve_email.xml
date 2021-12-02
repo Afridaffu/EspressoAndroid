@@ -114,6 +114,7 @@
                         android:id="@+id/reFirstNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="First Name"
                         android:imeOptions="actionNext"
@@ -128,8 +129,7 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -178,6 +178,7 @@
                         android:id="@+id/reLastNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="Last Name"
                         android:imeOptions="actionDone"
@@ -191,8 +192,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -224,7 +224,7 @@
                     android:id="@+id/reCardViewNextBtn"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_44sdp"
-                    android:layout_marginTop="@dimen/_188sdp"
+                    android:layout_marginTop="@dimen/_50sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_22sdp">
 

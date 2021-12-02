@@ -361,11 +361,25 @@ public class EditEmailActivity extends AppCompatActivity {
                     } else {
                         if (updateEmailResponse.getError().getErrorDescription().equals("")) {
                             try {
-                                Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0), EditEmailActivity.this,"");
+                                Utils.hideSoftKeyboard(EditEmailActivity.this);
+                                if(updateEmailResponse.getError().getFieldErrors().get(0).contains(":")){
+                                    int counter = 0;
+                                    for(int i =0 ; i < updateEmailResponse.getError().getFieldErrors().get(0).length();i++ ){
+                                        if(String.valueOf(updateEmailResponse.getError().getFieldErrors().get(0).charAt(i)).equals(":")){
+                                            counter = i;
+                                            break;
+                                        }
+                                    }
+                                    Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0).substring(counter+1), EditEmailActivity.this,"");
+
+                                }else{
+                                    Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0), EditEmailActivity.this,"");
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         } else {
+                            Utils.hideSoftKeyboard(EditEmailActivity.this);
                             Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "");
                         }
                     }
@@ -408,9 +422,11 @@ public class EditEmailActivity extends AppCompatActivity {
 //                        if (apiError.getError().getErrorDescription().toLowerCase().contains("token expired") || apiError.getError().getErrorDescription().toLowerCase().contains("invalid token")) {
 ////                            objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
 //                        } else {
+                        Utils.hideSoftKeyboard(EditEmailActivity.this);
                             Utils.displayAlert(apiError.getError().getErrorDescription(), EditEmailActivity.this,"");
 //                        }
                     } else {
+                        Utils.hideSoftKeyboard(EditEmailActivity.this);
                         Utils.displayAlert(apiError.getError().getFieldErrors().get(0), EditEmailActivity.this,"");
                     }
                 }

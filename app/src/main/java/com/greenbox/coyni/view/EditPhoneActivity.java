@@ -178,6 +178,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 .putExtra("OLD_PHONE", currentPhoneNumber)
                                 .putExtra("NEW_PHONE", newPhoneNumber));
                     } else {
+                        Utils.hideSoftKeyboard(EditPhoneActivity.this);
                         Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "");
                     }
                 } catch (Exception e) {

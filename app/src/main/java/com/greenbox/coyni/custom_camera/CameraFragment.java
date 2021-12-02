@@ -27,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -38,7 +39,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class CameraFragment extends Fragment implements SurfaceHolder.Callback, Camera.PictureCallback {
-
 
     public static int globalImageHeight;
     public static int globalImageWidth;
@@ -102,10 +102,18 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        return inflater.inflate(R.layout.fragment_camera, container, false);
+//        getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        View view =  inflater.inflate(R.layout.fragment_camera, container, false);
+        LinearLayout cameraCloseIV = view.findViewById(R.id.cameraCloseIV);
+        cameraCloseIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+        return view;
     }
 
     @Override
