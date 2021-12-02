@@ -85,8 +85,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_login);
             initialization();
             initObserver();
@@ -160,9 +158,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
 
-//            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-//                etEmail.setText(objMyApplication.getStrRetrEmail());
-//            }
+            if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
+                layoutClose.setVisibility(GONE);
+            } else {
+                layoutClose.setVisibility(VISIBLE);
+            }
 
             endIconIV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -538,7 +538,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
-                            Utils.setUserEmail(LoginActivity.this,login.getData().getEmail());
+                            Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
