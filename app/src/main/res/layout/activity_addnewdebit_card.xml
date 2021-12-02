@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     android:orientation="vertical"
     android:padding="@dimen/_20sdp">
     <RelativeLayout
@@ -67,59 +68,40 @@
                 android:text="Please enter card details"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL5"
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:hint="Name on card"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:errorIconDrawable="@null"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
 
-                <LinearLayout
-                    android:id="@+id/hintdHolderll"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="John Joestar"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/hintTVV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@android:color/white"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="Name on card"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderll"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolderll"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:hint="John Joestar"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_12ssp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -159,13 +141,14 @@
                             android:layout_marginStart="5dp"
                             android:background="@color/light_gray" />
 
-                        <TextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_6sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:text="XXXX XXXX XXXX XXXX"
                             android:textColor="#c5c5c5"
+                            android:background="@color/white"
                             android:textSize="@dimen/_12ssp" />
 
 
@@ -208,117 +191,75 @@
                 android:layout_marginTop="@dimen/_14sdp"
                 android:orientation="horizontal">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/firstNameTIL4"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_14sdp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:hint="Card Exp"
+                    android:layout_marginRight="@dimen/_4sdp"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:errorIconDrawable="@null"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green">
 
-                    <LinearLayout
-                        android:id="@+id/hintdHolderll1"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/firstNameET4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/outline_box_unfocused"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:weightSum="1"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:hint="MM/YY"
-                                android:inputType="number"
-                                android:textSize="@dimen/_12ssp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/hintTV1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:background="@android:color/white"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:text="Card Exp"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp"
-                        app:layout_constraintBottom_toTopOf="@+id/hintdHolderll1"
-                        app:layout_constraintStart_toStartOf="@+id/hintdHolderll1"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:hint="MM/YY"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textNoSuggestions"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/_12ssp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/firstNameTIL"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_14sdp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:hint="CVV/CVC"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:textColorHint="@color/black"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:errorIconDrawable="@null"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green">
 
-                    <LinearLayout
-                        android:id="@+id/hintdHolderll11"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/firstNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:background="@drawable/outline_box_unfocused"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:weightSum="1"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:hint="123"
-                                android:inputType="number"
-                                android:textSize="@dimen/_12ssp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/hintTV11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:background="@android:color/white"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:text="CVV/CVC"
-                        android:inputType="number"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp"
-                        app:layout_constraintBottom_toTopOf="@+id/hintdHolderll11"
-                        app:layout_constraintStart_toStartOf="@+id/hintdHolderll11"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:hint="123"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textNoSuggestions"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/_12ssp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
         </LinearLayout>

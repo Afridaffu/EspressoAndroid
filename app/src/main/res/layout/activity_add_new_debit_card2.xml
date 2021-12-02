@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     android:orientation="vertical"
     android:padding="@dimen/_20sdp">
     <ScrollView
@@ -67,337 +68,237 @@
                 android:layout_marginLeft="@dimen/_4sdp"
                 />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL1"
+                style="@style/TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:hint="Billing Address Line 1"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:errorIconDrawable="@null"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="3131 Camino Del Rio North"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_12ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL2"
+                style="@style/TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:hint="Billing Address Line 2(Optional)"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:errorIconDrawable="@null"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="Suite 1400"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_12ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL4"
+                style="@style/TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:hint="City"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:errorIconDrawable="@null"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:hint="San Diego"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_12ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
-
-                <LinearLayout
-                    android:id="@+id/hintdHolder1"
-                    android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_16sdp">
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:background="@color/white"
+                    android:src="@drawable/ic_down"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/firstNameTIL8"
+                    app:layout_constraintHorizontal_bias="0.952"
+                    app:layout_constraintStart_toStartOf="@+id/firstNameTIL8"
+                    app:layout_constraintTop_toTopOf="@+id/firstNameTIL8"
+                    app:layout_constraintVertical_bias="0.507"
+                    app:layout_editor_absoluteX="336.24dp"
+                    app:layout_editor_absoluteY="26.28dp" />
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/firstNameTIL8"
+                        style="@style/TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_14sdp"
+                        android:hint="State"
+                        android:textColorHint="@color/black"
+                        app:boxStrokeColor="@color/primary_green"
+                        app:errorIconDrawable="@null"
+                        app:expandedHintEnabled="false"
+                        app:hintTextColor="@color/primary_green"
+                        tools:ignore="MissingConstraints">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/firstNameET8"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="3131 Camino Del Rio North "
-                            android:textColor="@color/primary_black"
+                            android:hint="CA"
+                            android:imeOptions="actionNext"
+                            android:inputType="text|textNoSuggestions"
+                            android:maxLength="30"
+                            android:maxLines="1"
+                            android:padding="@dimen/_14sdp"
+                            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                            android:singleLine="true"
+                            android:textColor="@color/text_color"
+                            android:textColorHint="@color/light_gray"
+                            android:textCursorDrawable="@drawable/cursor_color"
+                            android:textIsSelectable="false"
                             android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/hintTV1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="Biling Address Line 1"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolder1"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolder1"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolder1" />
 
+                    </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL5"
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
+                android:hint="Zipcode"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:errorIconDrawable="@null"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
 
-                <LinearLayout
-                    android:id="@+id/hintdHolde"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Suite 1400"
-                            android:textSize="@dimen/_12ssp"
-                            android:textColor="@color/primary_black"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/hintTV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/white"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="Biling Address Line 2(Optional)"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolde"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolde"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolde" />
+                    android:hint="92108"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_12ssp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameTIL7"
+                style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
+                android:layout_marginTop="@dimen/_14sdp"
+                android:hint="Country"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/primary_green"
+                app:errorIconDrawable="@null"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_green">
 
-                <LinearLayout
-                    android:id="@+id/hintdHolderll"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstNameET7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="San Diego"
-                            android:textSize="@dimen/_12ssp"
-                            android:textColor="@color/primary_black"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/hintTVV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@android:color/white"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="City"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderll"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolderll"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:hint="United States"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_12ssp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
-
-                <LinearLayout
-                    android:id="@+id/hintdHolderLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="CA"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/hintTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="State"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderLL"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolderLL"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_9sdp"
-                    android:src="@drawable/ic_chevron_down"
-                    app:layout_constraintBottom_toBottomOf="@+id/hintdHolderLL"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
-
-                <LinearLayout
-                    android:id="@+id/hintdHolderL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="92108"
-                            android:textSize="@dimen/_12ssp"
-                            android:textColor="@color/primary_black"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/hintTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="Zipcode"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderL"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolderL"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolderL" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp">
-
-                <LinearLayout
-                    android:id="@+id/hintdHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/outline_box_unfocused"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="United States"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/hintT"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/white"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="Country"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolder"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolder"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolder" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
         <androidx.cardview.widget.CardView
