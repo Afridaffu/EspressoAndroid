@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dialog.dismiss();
         }
         isPwdEye = false;
-
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
@@ -117,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etEmail.setText(value);
                 etPassword.setText(value2);
                 etPassword.setSelection(value2.length());
-            }else{
+            } else {
                 etEmail.setText("");
                 etPassword.setText("");
             }
@@ -125,6 +124,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             e.printStackTrace();
             etEmail.setText("");
             etPassword.setText("");
+        }
+        if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+            if (chkRemember.isChecked()) {
+                etEmail.setText("");
+                etPassword.setText("");
+                chkRemember.setChecked(false);
+            }
+            etEmail.setText(objMyApplication.getStrRetrEmail());
         }
     }
 
@@ -442,14 +449,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             SetTouchId();
             SetRemember();
 
-            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-                if (chkRemember.isChecked()) {
-                    etEmail.setText("");
-                    etPassword.setText("");
-                    chkRemember.setChecked(false);
-                }
-                etEmail.setText(objMyApplication.getStrRetrEmail());
-            }
+//            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+//                if (chkRemember.isChecked()) {
+//                    etEmail.setText("");
+//                    etPassword.setText("");
+//                    chkRemember.setChecked(false);
+//                }
+//                etEmail.setText(objMyApplication.getStrRetrEmail());
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
