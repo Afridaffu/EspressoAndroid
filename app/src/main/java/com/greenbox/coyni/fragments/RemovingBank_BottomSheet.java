@@ -36,6 +36,7 @@ public class RemovingBank_BottomSheet extends BottomSheetDialogFragment {
 
     public RemovingBank_BottomSheet() {
         // Required empty public constructor
+
     }
 
     /**
@@ -51,7 +52,6 @@ public class RemovingBank_BottomSheet extends BottomSheetDialogFragment {
             Bundle args = new Bundle();
             objPayment = paymentsList;
             context = objContext;
-            paymentMethodsViewModel = new ViewModelProvider((PaymentMethodsActivity)context).get(PaymentMethodsViewModel.class);
             fragment.setArguments(args);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -68,37 +68,46 @@ public class RemovingBank_BottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_removing_btm_sheet, container, false);
-        TextView tvBankName = view.findViewById(R.id.tvBankName);
-        TextView tvAccount = view.findViewById(R.id.tvAccount);
-        TextView tvNo = view.findViewById(R.id.tvNo);
-        TextView tvYes = view.findViewById(R.id.tvYes);
-        initObserver();
-        if (objPayment != null) {
-            tvBankName.setText(objPayment.getBankName());
-            if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
-                tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
-            } else {
-                tvAccount.setText(objPayment.getAccountNumber());
+        try {
+            TextView tvBankName = view.findViewById(R.id.tvBankName);
+            TextView tvAccount = view.findViewById(R.id.tvAccount);
+            TextView tvNo = view.findViewById(R.id.tvNo);
+            TextView tvYes = view.findViewById(R.id.tvYes);
+            if (paymentMethodsViewModel == null) {
+                paymentMethodsViewModel = new ViewModelProvider(getActivity()).get(PaymentMethodsViewModel.class);
+                initObserver();
             }
-        }
-        tvNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        tvYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    progressDialog = Utils.showProgressDialog(context);
-                    paymentMethodsViewModel.deleteBanks(String.valueOf(objPayment.getId()));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            if (objPayment != null) {
+                tvBankName.setText(objPayment.getBankName());
+                if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
+                    tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                } else {
+                    tvAccount.setText(objPayment.getAccountNumber());
                 }
             }
-        });
+            tvNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+            tvYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        dismiss();
+                        initObserver();
+                        progressDialog = Utils.showProgressDialog(context);
+                        paymentMethodsViewModel.deleteBanks(String.valueOf(objPayment.getId()));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return view;
     }
 
@@ -107,7 +116,7 @@ public class RemovingBank_BottomSheet extends BottomSheetDialogFragment {
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 progressDialog.dismiss();
-                if (bankDeleteResponseData != null) {
+                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
                     ((PaymentMethodsActivity) context).getPaymentMethods();
                 }
             }
