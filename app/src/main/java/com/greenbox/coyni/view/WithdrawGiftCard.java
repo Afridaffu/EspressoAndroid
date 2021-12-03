@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
 
-public class AddNewDebitCard2 extends AppCompatActivity {
+public class WithdrawGiftCard extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_debit_card2);
+        setContentView(R.layout.activity_withdraw_gift_card);
     }
 }

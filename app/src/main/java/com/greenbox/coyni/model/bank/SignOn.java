@@ -1,5 +1,8 @@
 package com.greenbox.coyni.model.bank;
 
+
+import com.greenbox.coyni.model.Error;
+
 public class SignOn {
     private String status;
     private String timestamp;

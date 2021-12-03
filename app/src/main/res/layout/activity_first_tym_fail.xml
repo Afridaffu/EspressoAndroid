@@ -1,71 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/_21sdp">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_caution_exclaimation_mark__icon"
-        android:layout_marginLeft="@dimen/_64sdp"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_above="@+id/tvErrorHead"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/_34sdp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Error With Bank Account \nVerification"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:fontFamily="@font/opensans_bold"
-        android:textSize="@dimen/_16ssp"
-        android:layout_marginBottom="@dimen/_13sdp"
-        />
+        android:src="@drawable/ic_caution_exclaimation_mark__icon" />
 
     <TextView
+        android:id="@+id/tvErrorHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="There was an error with verifying your \nbank account information. Please re-enter  \nyour bank information or try a different \npayment method."
-        android:textSize="@dimen/_12ssp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/_13sdp"
+        android:fontFamily="@font/opensans_bold"
         android:gravity="center"
+        android:text="Error With Bank Account \nVerification"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
+    <TextView
+        android:id="@+id/tvErrorMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvErrorHead"
         android:fontFamily="@font/opensans_regular"
+        android:gravity="center"
+        android:text="There was an error with verifying your \nbank account information. Please re-enter  \nyour bank information or try a different \npayment method."
         android:textColor="@color/primary_black"
-        android:layout_marginBottom="@dimen/_130sdp"
-        />
+        android:textSize="@dimen/_12ssp" />
+
     <androidx.cardview.widget.CardView
-        android:id="@+id/nextCV"
+        android:id="@+id/cvTryAgain"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_43sdp"
-        app:cardBackgroundColor="@color/primary_green"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
-        app:cardCornerRadius="@dimen/_21sdp"
-        >
+        android:gravity="center"
+        app:cardBackgroundColor="@color/primary_green"
+        app:cardCornerRadius="@dimen/_21sdp">
+
         <TextView
             android:id="@+id/authorTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="Try Again"
             android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp"
-            android:layout_gravity="center"
-            />
+            android:textSize="@dimen/_12ssp" />
     </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
-    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

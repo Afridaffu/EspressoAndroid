@@ -121,6 +121,9 @@ public class Utils {
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
     public static String tempState = "";
+    public static String[] for_Apptoved = {"1111","2222","3333","5555","7777","8888","9999","GP01","RT00","RT03","RT05","ND00"};
+    public static String[] for_Declined = {"RT01","RT02"};
+    public static String[] for_Error = {"GN05","GS01","GS02","GS03","GS04","RT04"};
     public static String mondayURL = "https://monday.com/";
 
 

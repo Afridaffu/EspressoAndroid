@@ -126,6 +126,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setText("");
             etPassword.setText("");
         }
+        if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+            if (chkRemember.isChecked()) {
+                etEmail.setText("");
+                etPassword.setText("");
+                chkRemember.setChecked(false);
+            }
+            etEmail.setText(objMyApplication.getStrRetrEmail());
+        }
     }
 
     @Override
@@ -315,7 +323,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
-
                         String str = etEmail.getText().toString();
                         if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
@@ -351,7 +358,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
-
                         if (s.length() > 0 && s.toString().trim().length() == 0) {
                             etPassword.setText("");
                         } else if (s.length() > 0 && s.toString().contains(" ")) {
@@ -451,14 +457,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             SetTouchId();
             SetRemember();
 
-            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-                if (chkRemember.isChecked()) {
-                    etEmail.setText("");
-                    etPassword.setText("");
-                    chkRemember.setChecked(false);
-                }
-                etEmail.setText(objMyApplication.getStrRetrEmail());
-            }
+//            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+//                if (chkRemember.isChecked()) {
+//                    etEmail.setText("");
+//                    etPassword.setText("");
+//                    chkRemember.setChecked(false);
+//                }
+//                etEmail.setText(objMyApplication.getStrRetrEmail());
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -567,6 +573,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
+                            objMyApplication.setUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             if (login.getData().getPasswordExpired()) {
