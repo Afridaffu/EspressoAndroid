@@ -283,15 +283,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    try {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                            return;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -341,7 +341,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
             } else {
                 Utils.displayAlert(getString(R.string.internet), CustomerProfileActivity.this, "");
             }
-
 
             customerNameTV.setOnClickListener(view -> {
 

@@ -4,7 +4,9 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -187,5 +189,11 @@ public interface ApiService {
 
     @POST("api/v2/transactions/token/info")
     Call<TransactionDetails> getTransactionDt();
+
+    @POST("api/v2/fiserv/sync-account")
+    Call<SyncAccount> meSyncAccount();
+
+    @GET("api/v2/encryption/publickey")
+    Call<PublicKeyResponse> getPublicKey(@Query("userId") int userId);
 
 }

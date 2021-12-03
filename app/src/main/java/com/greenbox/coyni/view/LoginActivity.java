@@ -558,6 +558,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
+                            objMyApplication.setUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             if (login.getData().getPasswordExpired()) {

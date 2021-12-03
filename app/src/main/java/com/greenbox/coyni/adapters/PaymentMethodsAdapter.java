@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +84,57 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.tvCardNumber.setVisibility(View.VISIBLE);
-                holder.tvCardNumber.setText(objData.getFirstSix()+"****"+objData.getLastFour());
+                holder.tvCardNumber.setText(objData.getFirstSix() + "****" + objData.getLastFour());
+                if (!objData.getExpired()) {
+                    holder.tvBankExpire.setVisibility(View.GONE);
+                    switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
+                        case "VISA":
+                            holder.tvBankHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType() + " Card"));
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_visaactive);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_activevisa);
+                            break;
+                        case "MASTERCARD":
+                            holder.tvBankHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType() + " Card"));
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_masteractive);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_activemaster);
+                            break;
+                        case "AMERICANEXPRESS":
+                            holder.tvBankHead.setText("American Express Card");
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_amexactive);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_activeamex);
+                            break;
+                        case "DISCOVER":
+                            holder.tvBankHead.setText("Discover Card");
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_discoveractive);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_activediscover);
+                            break;
+                    }
+                } else {
+                    holder.tvBankExpire.setVisibility(View.VISIBLE);
+                    holder.tvBankExpire.setText("Expired");
+                    switch (objData.getCardBrand().toUpperCase()) {
+                        case "VISA":
+                            holder.tvBankHead.setText(objData.getCardBrand() + " " + objData.getCardType() + " Card");
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_visaexpire);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_expiredvisa);
+                            break;
+                        case "MASTERCARD":
+                            holder.tvBankHead.setText(objData.getCardBrand() + " " + objData.getCardType() + " Card");
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_masterexpire);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_expiredmaster);
+                            break;
+                        case "AMERICAN EXPRESS":
+                            holder.tvBankHead.setText("American Express Card");
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_amexexpire);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_expiredamex);
+                            break;
+                        case "DISCOVER":
+                            holder.tvBankHead.setText("Discover Card");
+                            holder.imgBankIcon.setImageResource(R.drawable.ic_discoverexpire);
+                            holder.layoutBack.setBackgroundResource(R.drawable.ic_expireddiscover);
+                            break;
+                    }
+                }
             }
 
         } catch (Exception ex) {

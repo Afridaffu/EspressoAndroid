@@ -7,6 +7,9 @@ public class PaymentMethodsData {
     private int creditCardCount;
     private int debitCardCount;
     private int bankCount;
+    private int maxDebitCardsAllowed;
+    private int maxCreditCardsAllowed;
+    private int maxBankAccountsAllowed;
 
     public List<PaymentsList> getData() {
         return data;
@@ -38,5 +41,29 @@ public class PaymentMethodsData {
 
     public void setBankCount(int bankCount) {
         this.bankCount = bankCount;
+    }
+
+    public int getMaxDebitCardsAllowed() {
+        return maxDebitCardsAllowed;
+    }
+
+    public void setMaxDebitCardsAllowed(int maxDebitCardsAllowed) {
+        this.maxDebitCardsAllowed = maxDebitCardsAllowed;
+    }
+
+    public int getMaxCreditCardsAllowed() {
+        return maxCreditCardsAllowed;
+    }
+
+    public void setMaxCreditCardsAllowed(int maxCreditCardsAllowed) {
+        this.maxCreditCardsAllowed = maxCreditCardsAllowed;
+    }
+
+    public int getMaxBankAccountsAllowed() {
+        return maxBankAccountsAllowed;
+    }
+
+    public void setMaxBankAccountsAllowed(int maxBankAccountsAllowed) {
+        this.maxBankAccountsAllowed = maxBankAccountsAllowed;
     }
 }

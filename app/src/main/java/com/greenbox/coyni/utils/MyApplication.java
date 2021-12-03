@@ -6,6 +6,7 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -25,42 +26,18 @@ public class MyApplication extends Application {
     AccountLimitsData objAcc;
     AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", listAgree = "", strEmail = "";
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false;
+    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-
-    String timezone = "";
-    int timezoneID = 0;
-    String tempTimezone = "";
-    int tempTimezoneID = 0;
-
-    //Account Limits
-    private double tokenWithdrawalBankDayLimit;
-    private double tokenWithdrawalBankWeekLimit;
-
-    private double tokenWithdrawalInstantpayDayLimit;
-    private double tokenWithdrawalInstantpayWeekLimit;
-
-    private double tokenWithdrawalGiftcardDayLimit;
-    private double tokenWithdrawalGiftcardWeekLimit;
-
-    private double tokenSendDayLimit;
-    private double tokenSendWeekLimit;
-
-    private double tokenBuyBankDayLimit;
-    private double tokenBuyBankWeeekLimit;
-
-    private double tokenBuyCardDayLimit;
-    private double tokenBuyCardWeekLimit;
-
-    private double tokenWithdrawalSignetDayLimit;
-    private double tokenWithdrawalSignetWeekLimit;
+    String timezone = "", tempTimezone = "";
+    int timezoneID = 0, tempTimezoneID = 0,userId;
+    SignOnData objSignOnData = new SignOnData();
 
     public AgreementsPdf getAgreementsPdf() {
         return agreementsPdf;
@@ -69,87 +46,6 @@ public class MyApplication extends Application {
     public void setAgreementsPdf(AgreementsPdf agreementsPdf) {
         this.agreementsPdf = agreementsPdf;
     }
-
-    int intUserId;
-    String strCity, strPhoneNum, strState, strCountry, strAddressLine1, strAddressLine2, strZipCode, strProfileImg;
-    public String getStrUser() {
-        return strUser;
-    }
-
-    public void setStrUser(String strUser) {
-        this.strUser = strUser;
-    }
-
-    public String getStrUserCode() {
-        return strUserCode;
-    }
-
-    public void setStrUserCode(String strUserCode) {
-        this.strUserCode = strUserCode;
-    }
-
-    public int getIntUserId() {
-        return intUserId;
-    }
-
-    public void setIntUserId(int intUserId) {
-        this.intUserId = intUserId;
-    }
-
-    public String getStrCity() {
-        return strCity;
-    }
-
-    public void setStrCity(String strCity) {
-        this.strCity = strCity;
-    }
-
-    public String getStrPhoneNum() {
-        return strPhoneNum;
-    }
-
-    public void setStrPhoneNum(String strPhoneNum) {
-        this.strPhoneNum = strPhoneNum;
-    }
-
-    public String getStrState() {
-        return strState;
-    }
-
-    public void setStrState(String strState) {
-        this.strState = strState;
-    }
-
-    public void setObjAcc(AccountLimitsData objAcc) {
-        this.objAcc = objAcc;
-    }
-
-    public List<Agreements> getAgreementsList() {
-        return agreementsList;
-    }
-
-    public void setAgreementsList(List<Agreements> agreementsList) {
-        this.agreementsList = agreementsList;
-    }
-
-    public String getListAgree() {
-        return listAgree;
-    }
-
-    public void setListAgree(String listAgree) {
-        this.listAgree = listAgree;
-    }
-
-    public List<CardsDataItem> getListCards() {
-        return listCards;
-    }
-
-    public void setListCards(List<CardsDataItem> listCards) {
-        this.listCards = listCards;
-    }
-
-    private String fromWhichFragment;
-
 
     public String getStrUserName() {
         return strUserName;
@@ -173,15 +69,6 @@ public class MyApplication extends Application {
 
     public void setStrRetrEmail(String strRetrEmail) {
         this.strRetrEmail = strRetrEmail;
-    }
-
-
-    public String getFromWhichFragment() {
-        return fromWhichFragment;
-    }
-
-    public void setFromWhichFragment(String fromWhichFragment) {
-        this.fromWhichFragment = fromWhichFragment;
     }
 
     public Profile getMyProfile() {
@@ -286,5 +173,45 @@ public class MyApplication extends Application {
 
     public void setTempTimezoneID(int tempTimezoneID) {
         this.tempTimezoneID = tempTimezoneID;
+    }
+
+    public String getStrSignOnError() {
+        return strSignOnError;
+    }
+
+    public void setStrSignOnError(String strSignOnError) {
+        this.strSignOnError = strSignOnError;
+    }
+
+    public SignOnData getSignOnData() {
+        return objSignOnData;
+    }
+
+    public void setSignOnData(SignOnData objSignOnData) {
+        this.objSignOnData = objSignOnData;
+    }
+
+    public Boolean getResolveUrl() {
+        return isResolveUrl;
+    }
+
+    public void setResolveUrl(Boolean resolveUrl) {
+        isResolveUrl = resolveUrl;
+    }
+
+    public String getStrFiservError() {
+        return strFiservError;
+    }
+
+    public void setStrFiservError(String strFiservError) {
+        this.strFiservError = strFiservError;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

@@ -11,11 +11,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
@@ -30,13 +32,9 @@ import retrofit2.Response;
 
 public class CustomerProfileViewModel extends AndroidViewModel {
     private MutableLiveData<UpdateEmailResponse> updateEmailSendOTPResponse = new MutableLiveData<>();
-
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
-
     private MutableLiveData<UpdatePhoneResponse> updatePhoneSendOTPResponse = new MutableLiveData<>();
-
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
-
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
 
     public CustomerProfileViewModel(@NonNull Application application) {
@@ -48,7 +46,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     }
 
     private MutableLiveData<SignOn> signOnMutableLiveData = new MutableLiveData<>();
-
+    private MutableLiveData<SyncAccount> syncAccountMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<UpdateEmailResponse> getUpdateEmailSendOTPResponse() {
         return updateEmailSendOTPResponse;
@@ -68,6 +66,10 @@ public class CustomerProfileViewModel extends AndroidViewModel {
 
     public MutableLiveData<SignOn> getSignOnMutableLiveData() {
         return signOnMutableLiveData;
+    }
+
+    public MutableLiveData<SyncAccount> getSyncAccountMutableLiveData() {
+        return syncAccountMutableLiveData;
     }
 
     public void updateEmailSendOTP(UpdateEmailRequest request) {
@@ -239,4 +241,44 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
+    public void meSyncAccount() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<SyncAccount> mCall = apiService.meSyncAccount();
+            mCall.enqueue(new Callback<SyncAccount>() {
+                @Override
+                public void onResponse(Call<SyncAccount> call, Response<SyncAccount> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            SyncAccount obj = response.body();
+                            syncAccountMutableLiveData.setValue(obj);
+                        } else if (response.code() == 500) {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SyncAccount>() {
+                            }.getType();
+                            SyncAccount errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            syncAccountMutableLiveData.setValue(errorResponse);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SyncAccount> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

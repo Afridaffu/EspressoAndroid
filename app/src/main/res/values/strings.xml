@@ -175,6 +175,7 @@
     <string name="enable_face_message">Enable Face ID to use face recognition to complete payments quickly and securely.</string>
     <string name="set_up_touch_id">Set Up Touch ID</string>
     <string name="enable_touch_message">Enable Touch ID to use touch recognition to complete payments quickly and securely.</string>
-
+    <string name="error_code">117004</string>
+    <string name="view_all">View all</string>
 
 </resources>

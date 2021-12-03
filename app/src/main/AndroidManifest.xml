@@ -33,6 +33,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
+            android:name=".view.AddCardActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.WebViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
             android:name=".view.PaymentMethodsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -48,10 +58,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.AuthLoginActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".view.PdfViewAgreementsActivity"
             android:exported="true" />
