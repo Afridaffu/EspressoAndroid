@@ -204,6 +204,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
@@ -212,6 +215,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                         paymentMethods();
+                    } else if (isPayments) {
+                        isPayments = false;
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                        if (payMethodsResponse.getData() != null) {
+                            tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
+                            tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
+                            tvCCardHead.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
+                        }
                     }
                 }
             }
@@ -361,7 +373,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             rvPaymentMethods = findViewById(R.id.rvPaymentMethods);
             lyPayBack = findViewById(R.id.lyPayBack);
             cvAddPayment = findViewById(R.id.cvAddPayment);
-            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+            if (paymentMethodsResponse.getData() != null) {
                 tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
                 tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
                 tvCCardHead.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
