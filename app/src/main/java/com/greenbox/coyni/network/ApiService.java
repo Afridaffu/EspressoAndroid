@@ -4,6 +4,7 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
@@ -195,5 +196,8 @@ public interface ApiService {
 
     @GET("api/v2/encryption/publickey")
     Call<PublicKeyResponse> getPublicKey(@Query("userId") int userId);
+
+    @DELETE("api/v2/banks/me")
+    Call<BankDeleteResponseData> deleteBank(@Query("accountId") String accountId);
 
 }

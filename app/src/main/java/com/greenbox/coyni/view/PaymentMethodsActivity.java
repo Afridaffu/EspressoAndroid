@@ -45,7 +45,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     LinearLayout lyAPayClose, lyExternal, lyExternalClose, lyPayBack;
     CardView cvNext, cvAddPayment;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
-    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead;
+    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead;
     String strCurrent = "", strSignOn = "";
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow;
     RecyclerView rvPaymentMethods;
@@ -53,7 +53,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     ProgressDialog dialog;
     SignOnData signOnData;
-    Boolean isBank = false;
+    Boolean isBank = false, isPayments = false;
     RelativeLayout layoutDCard;
     CardView cvTryAgain, cvDone;
 
@@ -158,14 +158,19 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                                 Utils.displayAlert(apiError.getError().getFieldErrors().get(0), PaymentMethodsActivity.this, "");
                             }
                         } else {
-                            String strError = "";
-                            if (!apiError.getError().getErrorDescription().equals("")) {
-                                strError = apiError.getError().getErrorDescription();
-                            } else {
-                                strError = apiError.getError().getFieldErrors().get(0);
-                            }
                             isBank = false;
-                            displayError(strError);
+                            if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "Error");
+                            } else {
+//                                String strError = "";
+//                                if (!apiError.getError().getErrorDescription().equals("")) {
+//                                    strError = apiError.getError().getErrorDescription();
+//                                } else {
+//                                    strError = apiError.getError().getFieldErrors().get(0);
+//                                }
+//                                displayError(strError);
+                                displayError();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -202,11 +207,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-//                    if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                        ControlMethod("paymentMethods");
-//                        strCurrent = "paymentMethods";
-//                        paymentMethods();
-//                    }
+                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                        isPayments = false;
+                        ControlMethod("paymentMethods");
+                        strCurrent = "paymentMethods";
+                        paymentMethods();
+                    }
                 }
             }
         });
@@ -381,12 +387,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    private void displayError(String strError) {
+    private void displayError() {
         try {
             ControlMethod("firstError");
+            tvErrorHead = findViewById(R.id.tvErrorHead);
             tvErrorMessage = findViewById(R.id.tvErrorMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
-            tvErrorMessage.setText(strError);
+            tvErrorHead.setText(getString(R.string.bank_exhausthead));
+            tvErrorMessage.setText(getString(R.string.bank_exhaust));
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -471,7 +479,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
-                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this, "buy");
+                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(PaymentMethodsActivity.this);
                 rvPaymentMethods.setLayoutManager(mLayoutManager);
                 rvPaymentMethods.setItemAnimator(new DefaultItemAnimator());
@@ -510,6 +518,16 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             object.put("name", "Krishna");
             object.put("state", "state");
             object.put("zipCode", "5467362");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getPaymentMethods() {
+        try {
+            isPayments = true;
+            dialog = Utils.showProgressDialog(this);
+            dashboardViewModel.mePaymentMethods();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

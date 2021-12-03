@@ -3,10 +3,10 @@
 
     <item>
         <shape>
-            <stroke android:color="#00a6a2"
-                android:width="@dimen/_3sdp"/>
-            <corners android:radius="@dimen/_30sdp"
-                />
+            <stroke
+                android:width="@dimen/_1sdp"
+                android:color="@color/primary_green" />
+            <corners android:radius="@dimen/_21sdp" />
 
 
         </shape>

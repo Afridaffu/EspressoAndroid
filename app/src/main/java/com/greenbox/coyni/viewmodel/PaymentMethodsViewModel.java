@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
@@ -27,6 +28,7 @@ import retrofit2.Response;
 public class PaymentMethodsViewModel extends AndroidViewModel {
     private MutableLiveData<PublicKeyResponse> publicKeyResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BankDeleteResponseData> delBankResponseMutableLiveData = new MutableLiveData<>();
 
     public PaymentMethodsViewModel(@NonNull Application application) {
         super(application);
@@ -38,6 +40,10 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
     public MutableLiveData<APIError> getApiErrorMutableLiveData() {
         return apiErrorMutableLiveData;
+    }
+
+    public MutableLiveData<BankDeleteResponseData> getDelBankResponseMutableLiveData() {
+        return delBankResponseMutableLiveData;
     }
 
     public void getPublicKey(int userId) {
@@ -71,4 +77,40 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void deleteBanks(String bankId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BankDeleteResponseData> mCall = apiService.deleteBank(bankId);
+            mCall.enqueue(new Callback<BankDeleteResponseData>() {
+                @Override
+                public void onResponse(Call<BankDeleteResponseData> call, Response<BankDeleteResponseData> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BankDeleteResponseData obj = response.body();
+                            delBankResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BankDeleteResponseData> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

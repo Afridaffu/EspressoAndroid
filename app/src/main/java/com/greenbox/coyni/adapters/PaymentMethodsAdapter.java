@@ -13,9 +13,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.FiservLearnMore_BottomSheet;
+import com.greenbox.coyni.fragments.RemovingBank_BottomSheet;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.PaymentMethodsActivity;
 
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +27,6 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     List<PaymentsList> listPayments;
     Context mContext;
     MyApplication objMyApplication;
-    String strScreen = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankHead, tvBankExpire, tvCardNumber, tvBankName, tvAccNumber;
@@ -46,11 +48,10 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     }
 
 
-    public PaymentMethodsAdapter(List<PaymentsList> list, Context context, String screen) {
+    public PaymentMethodsAdapter(List<PaymentsList> list, Context context) {
         this.mContext = context;
         this.listPayments = list;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
-        this.strScreen = screen;
     }
 
     @Override
@@ -136,6 +137,20 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                     }
                 }
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                            RemovingBank_BottomSheet removeBank_bottomSheet = RemovingBank_BottomSheet.newInstance(objData, mContext);
+                            removeBank_bottomSheet.show(((PaymentMethodsActivity) mContext).getSupportFragmentManager(), removeBank_bottomSheet.getTag());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
