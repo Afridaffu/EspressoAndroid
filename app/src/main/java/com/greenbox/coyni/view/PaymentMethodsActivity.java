@@ -9,11 +9,16 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,9 +26,8 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.PaymentMethodsAdapter;
-import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
-import com.greenbox.coyni.fragments.FiservLearnMore_BottomSheet;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.bank.SyncAccount;
@@ -33,16 +37,16 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class PaymentMethodsActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
-    LinearLayout lyAPayClose, lyExternal, lyExternalClose, lyPayBack;
+    LinearLayout lyAPayClose, lyExternalClose, lyPayBack;
     CardView cvNext, cvAddPayment;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead;
@@ -51,10 +55,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     RecyclerView rvPaymentMethods;
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
-    ProgressDialog dialog;
+    PaymentMethodsViewModel paymentMethodsViewModel;
+    ProgressDialog dialog, pDialog;
     SignOnData signOnData;
     Boolean isBank = false, isPayments = false;
-    RelativeLayout layoutDCard;
+    RelativeLayout layoutDCard, lyExternal;
     CardView cvTryAgain, cvDone;
 
     @Override
@@ -94,6 +99,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             if (Utils.checkInternet(PaymentMethodsActivity.this)) {
                 dialog = Utils.showProgressDialog(this);
                 customerProfileViewModel.meSignOn();
@@ -219,12 +225,36 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         isPayments = false;
                         ControlMethod("addpayment");
                         strCurrent = "addpayment";
-                        if (payMethodsResponse.getData() != null) {
-                            tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
-                            tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
-                            tvCCardHead.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
+                        numberOfAccounts();
+                    }
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+            @Override
+            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                pDialog.dismiss();
+                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                    getPaymentMethods();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                try {
+                    pDialog.dismiss();
+                    if (apiError != null) {
+                        if (!apiError.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "");
+                        } else {
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), PaymentMethodsActivity.this, "");
                         }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -323,46 +353,47 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        FiservLearnMore_BottomSheet learnMore_bottomSheet = FiservLearnMore_BottomSheet.newInstance();
-                        learnMore_bottomSheet.show(getSupportFragmentManager(), learnMore_bottomSheet.getTag());
+//                        FiservLearnMore_BottomSheet learnMore_bottomSheet = FiservLearnMore_BottomSheet.newInstance();
+//                        learnMore_bottomSheet.show(getSupportFragmentManager(), learnMore_bottomSheet.getTag());
+                        Utils.populateLearnMore(PaymentMethodsActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
-
-            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                    tvBankError.setVisibility(View.VISIBLE);
-                    tvExtBHead.setTextColor(getColor(R.color.light_gray));
-                    tvExtBankHead.setTextColor(getColor(R.color.light_gray));
-                    tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
-                    imgBankArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgBankIcon.setColorFilter(getColor(R.color.light_gray));
-                } else {
-                    tvBankError.setVisibility(View.GONE);
-                }
-                if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                    tvDCardError.setVisibility(View.VISIBLE);
-                    tvDCHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardMsg.setTextColor(getColor(R.color.light_gray));
-                    imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgDCardLogo.setColorFilter(getColor(R.color.light_gray));
-                } else {
-                    tvDCardError.setVisibility(View.GONE);
-                }
-                if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                    tvCCardError.setVisibility(View.VISIBLE);
-                    tvCCHead.setTextColor(getColor(R.color.light_gray));
-                    tvCCardHead.setTextColor(getColor(R.color.light_gray));
-                    tvCCardMsg.setTextColor(getColor(R.color.light_gray));
-                    imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgCCardLogo.setColorFilter(getColor(R.color.light_gray));
-                } else {
-                    tvCCardError.setVisibility(View.GONE);
-                }
-            }
+            numberOfAccounts();
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+//                    tvBankError.setVisibility(View.VISIBLE);
+//                    tvExtBHead.setTextColor(getColor(R.color.light_gray));
+//                    tvExtBankHead.setTextColor(getColor(R.color.light_gray));
+//                    tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
+//                    imgBankArrow.setColorFilter(getColor(R.color.light_gray));
+//                    imgBankIcon.setColorFilter(getColor(R.color.light_gray));
+//                } else {
+//                    tvBankError.setVisibility(View.GONE);
+//                }
+//                if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+//                    tvDCardError.setVisibility(View.VISIBLE);
+//                    tvDCHead.setTextColor(getColor(R.color.light_gray));
+//                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
+//                    tvDCardMsg.setTextColor(getColor(R.color.light_gray));
+//                    imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
+//                    imgDCardLogo.setColorFilter(getColor(R.color.light_gray));
+//                } else {
+//                    tvDCardError.setVisibility(View.GONE);
+//                }
+//                if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+//                    tvCCardError.setVisibility(View.VISIBLE);
+//                    tvCCHead.setTextColor(getColor(R.color.light_gray));
+//                    tvCCardHead.setTextColor(getColor(R.color.light_gray));
+//                    tvCCardMsg.setTextColor(getColor(R.color.light_gray));
+//                    imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
+//                    imgCCardLogo.setColorFilter(getColor(R.color.light_gray));
+//                } else {
+//                    tvCCardError.setVisibility(View.GONE);
+//                }
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -373,10 +404,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             rvPaymentMethods = findViewById(R.id.rvPaymentMethods);
             lyPayBack = findViewById(R.id.lyPayBack);
             cvAddPayment = findViewById(R.id.cvAddPayment);
-            if (paymentMethodsResponse.getData() != null) {
-                tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
-                tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
-                tvCCardHead.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
+//            if (paymentMethodsResponse.getData() != null) {
+//                tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
+//                tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
+//                tvCCardHead.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
+//                bindPaymentMethods(paymentMethodsResponse.getData().getData());
+//            }
+            numberOfAccounts();
+            if (paymentMethodsResponse.getData() != null && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 bindPaymentMethods(paymentMethodsResponse.getData().getData());
             }
             lyPayBack.setOnClickListener(new View.OnClickListener() {
@@ -390,6 +425,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             cvAddPayment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    numberOfAccounts();
                     ControlMethod("addpayment");
                     strCurrent = "addpay";
                 }
@@ -406,12 +442,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvErrorMessage = findViewById(R.id.tvErrorMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
             tvErrorHead.setText(getString(R.string.bank_exhausthead));
-            tvErrorMessage.setText(getString(R.string.bank_exhaust));
+//            tvErrorMessage.setText(getString(R.string.bank_exhaust));
+            tvErrorMessage.setText("There is an account limit of " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.");
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ControlMethod("addpayment");
-                    strCurrent = "addpay";
+//                    ControlMethod("addpayment");
+//                    strCurrent = "addpay";
+                    ControlMethod("externalBank");
+                    strCurrent = "externalBank";
                 }
             });
         } catch (Exception ex) {
@@ -535,11 +574,128 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    public void getPaymentMethods() {
+    private void getPaymentMethods() {
         try {
             isPayments = true;
             dialog = Utils.showProgressDialog(this);
             dashboardViewModel.mePaymentMethods();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void numberOfAccounts() {
+        try {
+            if (paymentMethodsResponse.getData() != null) {
+                tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
+                tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
+                tvCCardHead.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
+
+                tvBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
+                tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
+                tvCCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + " cards");
+            }
+            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                    tvBankError.setVisibility(View.VISIBLE);
+                    tvExtBHead.setTextColor(getColor(R.color.light_gray));
+                    tvExtBankHead.setTextColor(getColor(R.color.light_gray));
+                    tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
+                    imgBankArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgBankIcon.setColorFilter(getColor(R.color.light_gray));
+                } else {
+                    tvBankError.setVisibility(View.GONE);
+                    tvExtBHead.setTextColor(getColor(R.color.primary_black));
+                    tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
+                    tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgBankArrow.clearColorFilter();
+                    imgBankIcon.clearColorFilter();
+                }
+                if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                    tvDCardError.setVisibility(View.VISIBLE);
+                    tvDCHead.setTextColor(getColor(R.color.light_gray));
+                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
+                    tvDCardMsg.setTextColor(getColor(R.color.light_gray));
+                    imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgDCardLogo.setColorFilter(getColor(R.color.light_gray));
+                } else {
+                    tvDCardError.setVisibility(View.GONE);
+                    tvDCHead.setTextColor(getColor(R.color.primary_black));
+                    tvDCardHead.setTextColor(getColor(R.color.dark_grey));
+                    tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgDCardArrow.clearColorFilter();
+                    imgDCardLogo.clearColorFilter();
+                }
+                if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                    tvCCardError.setVisibility(View.VISIBLE);
+                    tvCCHead.setTextColor(getColor(R.color.light_gray));
+                    tvCCardHead.setTextColor(getColor(R.color.light_gray));
+                    tvCCardMsg.setTextColor(getColor(R.color.light_gray));
+                    imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgCCardLogo.setColorFilter(getColor(R.color.light_gray));
+                } else {
+                    tvCCardError.setVisibility(View.GONE);
+                    tvCCHead.setTextColor(getColor(R.color.primary_black));
+                    tvCCardHead.setTextColor(getColor(R.color.dark_grey));
+                    tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgCCardArrow.clearColorFilter();
+                    imgCCardLogo.clearColorFilter();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteBank(Context context, PaymentsList objPayment) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.activity_removing_btm_sheet);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvBankName = dialog.findViewById(R.id.tvBankName);
+            TextView tvAccount = dialog.findViewById(R.id.tvAccount);
+            TextView tvNo = dialog.findViewById(R.id.tvNo);
+            TextView tvYes = dialog.findViewById(R.id.tvYes);
+            if (objPayment != null) {
+                tvBankName.setText(objPayment.getBankName());
+                if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
+                    tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                } else {
+                    tvAccount.setText(objPayment.getAccountNumber());
+                }
+            }
+            tvNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            tvYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    pDialog = Utils.showProgressDialog(context);
+                    paymentMethodsViewModel.deleteBanks(String.valueOf(objPayment.getId()));
+                }
+            });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
