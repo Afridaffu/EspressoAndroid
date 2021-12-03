@@ -637,7 +637,7 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size() - 1; i++) {
+            for (int i = 0; i < arrZonesList.size() ; i++) {
                 if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                     arrZonesList.get(i).setSelected(true);
                 }

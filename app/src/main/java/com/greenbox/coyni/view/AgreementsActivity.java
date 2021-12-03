@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AgreeListAdapter;
@@ -44,6 +45,7 @@ public class AgreementsActivity extends AppCompatActivity {
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     Agreements agreements;
     MyApplication objMyApplication;
+    TextView pastTV;
     int i = 0;
 
     @Override
@@ -56,6 +58,7 @@ public class AgreementsActivity extends AppCompatActivity {
         noPastAgree = findViewById(R.id.noPastCV);
         cvPast = findViewById(R.id.cvPast);
         backIV = findViewById(R.id.backAgreeIV);
+        pastTV = findViewById(R.id.pastTV);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -121,15 +124,15 @@ public class AgreementsActivity extends AppCompatActivity {
 
                             if (pastItems != null && pastItems.size() > 0) {
                                 cvPast.setVisibility(View.VISIBLE);
-                                noPastAgree.setVisibility(View.GONE);
+                                pastTV.setVisibility(View.VISIBLE);
                                 pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
                                 recyclPastAgree.setLayoutManager(mLayoutManager);
                                 recyclPastAgree.setItemAnimator(new DefaultItemAnimator());
                                 recyclPastAgree.setAdapter(pastAdapter);
                             } else {
+                                pastTV.setVisibility(View.GONE);
                                 cvPast.setVisibility(View.GONE);
-                                noPastAgree.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (Exception ex) {

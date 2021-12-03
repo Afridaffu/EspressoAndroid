@@ -5,6 +5,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
@@ -60,6 +61,7 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -199,5 +201,8 @@ public interface ApiService {
 
     @DELETE("api/v2/banks/me")
     Call<BankDeleteResponseData> deleteBank(@Query("accountId") String accountId);
+
+    @POST("api/v2/user/authenticate")
+    Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
 
 }
