@@ -10,7 +10,7 @@ public class Item {
         private String id;
         @SerializedName("signatureType")
         @Expose
-        private String signatureType;
+        private int signatureType;
         @SerializedName("refId")
         @Expose
         private String refId;
@@ -38,11 +38,11 @@ public class Item {
             this.id = id;
         }
 
-        public String getSignatureType() {
+        public int getSignatureType() {
             return signatureType;
         }
 
-        public void setSignatureType(String signatureType) {
+        public void setSignatureType(int signatureType) {
             this.signatureType = signatureType;
         }
 

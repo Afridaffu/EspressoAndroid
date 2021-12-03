@@ -115,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 String value = cursor.getString(1);
                 String value2 = cursor.getString(2);
                 etEmail.setText(value);
-                etPassword.setText(value2);
-                etPassword.setSelection(value2.length());
+//                etPassword.setText(value2);
+//                etPassword.setSelection(value2.length());
             }else{
                 etEmail.setText("");
                 etPassword.setText("");
@@ -315,6 +315,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
+
                         String str = etEmail.getText().toString();
                         if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
@@ -350,6 +351,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
+
                         if (s.length() > 0 && s.toString().trim().length() == 0) {
                             etPassword.setText("");
                         } else if (s.length() > 0 && s.toString().contains(" ")) {
@@ -358,6 +360,13 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         }
                         if (etPassword.getText().toString().length() >= 8) {
                             layoutPwdError.setVisibility(GONE);
+                        }
+
+                        if (s.length() == 0) {
+                            // No entered text so will show hint
+                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                        } else {
+                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -535,7 +544,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dsRemember.moveToFirst();
             if (dsRemember.getCount() > 0) {
                 etEmail.setText(dsRemember.getString(1));
-                etPassword.setText(dsRemember.getString(2));
+//                etPassword.setText(dsRemember.getString(2));
                 chkRemember.setChecked(true);
             } else {
                 chkRemember.setChecked(false);
