@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -75,7 +76,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     LinearLayout layoutMain;
     boolean isSuccessLayout = false;
-
+    String strScreen = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -134,6 +135,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
+            strScreen = getIntent().getStringExtra("screen");
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                 tvMessage.setVisibility(VISIBLE);
                 tvHead.setText("Welcome Back!");
@@ -163,13 +165,19 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        layoutIndicator.setVisibility(VISIBLE);
-                        passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
+                        try {
+                            layoutIndicator.setVisibility(VISIBLE);
+                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+//                            if ((getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword"))
+//                                    || (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd"))) {
+//                                passwordTIL.setHint("New Password");
+//                            } else {
+//                                passwordTIL.setHint("Password");
+//                            }
                             passwordTIL.setHint("New Password");
-                        } else {
-                            passwordTIL.setHint("Password");
+                        } catch (Resources.NotFoundException e) {
+                            e.printStackTrace();
                         }
                     } else {
                         layoutIndicator.setVisibility(GONE);
@@ -198,7 +206,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                            passwordTIL.setHint("Password doesn’t match");
+//                            passwordTIL.setHint("Password doesn’t match");
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -232,7 +240,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-                            passwordTIL.setHint("Password doesn’t match");
+//                            passwordTIL.setHint("Password doesn’t match");
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -308,7 +316,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
                             if (confirmPasswordET.getText().toString().trim().length() > 0) {
                                 passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                passwordTIL.setHint("Password doesn’t match");
+//                                passwordTIL.setHint("Password doesn’t match");
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
                                 confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -376,9 +384,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         } else {
                             isConfirm = false;
 
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            passwordTIL.setHint("Password doesn’t match");
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            passwordTIL.setHint("Password doesn’t match");
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
 
                             confPasswordTIL.setHint("Password doesn’t match");
 

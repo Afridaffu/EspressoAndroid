@@ -178,4 +178,5 @@ public class AgreementsActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
 }

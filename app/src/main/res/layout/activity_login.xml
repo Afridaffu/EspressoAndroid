@@ -164,7 +164,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="center_vertical"
-                        android:hint="************"
+                        android:hint="\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword|textNoSuggestions"
                         android:longClickable="false"
@@ -175,7 +175,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_10ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 

@@ -527,7 +527,8 @@ public class OTPValidation extends AppCompatActivity {
                                         if (strScreen != null && !strScreen.equals("")) {
                                             switch (strScreen) {
                                                 case "ForgotPwd":
-                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class));
+                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class)
+                                                    .putExtra("screen","ForgotPwd"));
                                                     break;
                                                 case "ForgotPin":
                                                     startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
