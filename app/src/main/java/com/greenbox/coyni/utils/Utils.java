@@ -122,9 +122,9 @@ public class Utils {
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
     public static String tempState = "";
-    public static String[] for_Apptoved = {"1111","2222","3333","5555","7777","8888","9999","GP01","RT00","RT03","RT05","ND00"};
-    public static String[] for_Declined = {"RT01","RT02"};
-    public static String[] for_Error = {"GN05","GS01","GS02","GS03","GS04","RT04"};
+    public static String[] for_Apptoved = {"1111", "2222", "3333", "5555", "7777", "8888", "9999", "GP01", "RT00", "RT03", "RT05", "ND00"};
+    public static String[] for_Declined = {"RT01", "RT02"};
+    public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
 
 
@@ -695,7 +695,7 @@ public class Utils {
         }
     }
 
-    public static void setUserEmail(Context context,String email) {
+    public static void setUserEmail(Context context, String email) {
         try {
             SharedPreferences.Editor editor = context.getSharedPreferences("DeviceID", MODE_PRIVATE).edit();
             editor.putString("userEmail", email);
@@ -705,9 +705,9 @@ public class Utils {
         }
     }
 
-    public static String getUserEmail(Context context){
+    public static String getUserEmail(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("DeviceID", MODE_PRIVATE);
-        return sharedPreferences.getString("userEmail","");
+        return sharedPreferences.getString("userEmail", "");
     }
 
     public static void populateStates(Context context, EditText editText, MyApplication myApplicationObj) {
@@ -733,7 +733,7 @@ public class Utils {
             for (int i = 0; i < listStates.size() - 1; i++) {
                 if (editText.getText().toString().trim().equals(listStates.get(i).getIsocode())) {
                     listStates.get(i).setSelected(true);
-                }else{
+                } else {
                     listStates.get(i).setSelected(false);
                 }
             }
@@ -745,7 +745,7 @@ public class Utils {
                 statesRV.setLayoutManager(mLayoutManager);
                 statesRV.setItemAnimator(new DefaultItemAnimator());
                 statesRV.setAdapter(statesListAdapter);
-            }else{
+            } else {
                 statesRV.setVisibility(View.GONE);
                 notFoundTV.setVisibility(View.VISIBLE);
             }
@@ -774,7 +774,7 @@ public class Utils {
                                 statesRV.setVisibility(View.VISIBLE);
                                 notFoundTV.setVisibility(View.GONE);
                                 finalStatesListAdapter.updateList(filterList);
-                            }else{
+                            } else {
                                 statesRV.setVisibility(View.GONE);
                                 notFoundTV.setVisibility(View.VISIBLE);
                             }
@@ -785,7 +785,8 @@ public class Utils {
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) { }
+                public void afterTextChanged(Editable s) {
+                }
             });
 
             actionCV.setOnClickListener(new View.OnClickListener() {
@@ -814,40 +815,39 @@ public class Utils {
         }
     }
 
-    public static Bitmap trimLeave5Percent(Bitmap bitmap, int trimColor) {
-        int minX = Integer.MAX_VALUE;
-        int maxX = 0;
-        int minY = Integer.MAX_VALUE;
-        int maxY = 0;
+    public static void populateLearnMore(Context context) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.activity_leran_more);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        for (int x = 0; x < bitmap.getWidth(); x++) {
-            for (int y = 0; y < bitmap.getHeight(); y++) {
-                if (bitmap.getPixel(x, y) != trimColor) {
-                    if (x < minX) {
-                        minX = x;
-                    }
-                    if (x > maxX) {
-                        maxX = x;
-                    }
-                    if (y < minY) {
-                        minY = y;
-                    }
-                    if (y > maxY) {
-                        maxY = y;
-                    }
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            LinearLayout layoutClose = dialog.findViewById(R.id.layoutClose);
+            layoutClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
                 }
-            }
+            });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.80));
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        int xPc = (int) (bitmap.getWidth() * 0.50);
-        int yPc = (int) (bitmap.getHeight() * 0.50);
-
-        minX -= xPc;
-        minY -= yPc;
-        maxX += xPc;
-        maxY += yPc;
-        return Bitmap.createBitmap(bitmap, Math.max(minX, 0), Math.max(minY, 0),
-                Math.min(maxX - minX + 1, bitmap.getWidth()), Math.min(maxY - minY + 1, bitmap.getHeight()));
     }
-
 
 }
