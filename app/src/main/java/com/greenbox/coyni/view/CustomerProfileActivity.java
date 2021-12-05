@@ -7,7 +7,6 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -17,13 +16,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.fingerprint.FingerprintManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -47,7 +42,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.FaceIdSetupBottomSheet;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.wallet.WalletResponse;
@@ -924,9 +918,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             // setting this dimensions inside our qr code
             // encoder to generate our qr code.
-            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, dimen);
+//            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, dimen);
+            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, 600);
+//            qrgEncoder = new NewQRGEncoder(wallet, null, QRGContents.Type.TEXT, 1024);
             // getting our qrcode in the form of bitmap.
-            bitmap = qrgEncoder.encodeAsBitmap();
+//            bitmap = qrgEncoder.encodeAsBitmap();
+            bitmap = Bitmap.createBitmap(qrgEncoder.encodeAsBitmap(), 50, 50, 500, 500);
+//            bitmap  = Utils.trimLeave5Percent(bitmap, R.color.white);
             // the bitmap is set inside our image
             // view using .setimagebitmap method.
 //            qrDialog.idIVQrcode.setImageBitmap(bitmap);
@@ -952,4 +950,5 @@ public class CustomerProfileActivity extends AppCompatActivity {
         super.onResume();
         dashboardViewModel.meProfile();
     }
+
 }

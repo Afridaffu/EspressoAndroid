@@ -5,6 +5,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.bank.SignOn;
@@ -61,6 +62,7 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -204,5 +206,14 @@ public interface ApiService {
 
     @POST("api/v2/user/authenticate")
     Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
+
+    @Multipart
+    @POST("api/v2/profile/me/upload-identity")
+    Call<IdentityImageResponse> uploadIdentityImage(@Part MultipartBody.Part filee,
+                                                    @Part("identityType") RequestBody type,
+                                                    @Part("identityNumber") RequestBody number);
+
+    @DELETE("/api/v2/profile/me/remove-identity")
+    Call<ImageResponse> removeIdentityImage(@Query("identityType") String identityType);
 
 }

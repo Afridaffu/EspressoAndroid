@@ -189,12 +189,12 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         swapCameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCameraID == CameraInfo.CAMERA_FACING_FRONT) {
-                    mCameraID = getBackCameraID();
-                } else {
-                    mCameraID = getFrontCameraID();
-                }
-                restartPreview();
+//                if (mCameraID == CameraInfo.CAMERA_FACING_FRONT) {
+//                    mCameraID = getBackCameraID();
+//                } else {
+//                    mCameraID = getFrontCameraID();
+//                }
+//                restartPreview();
             }
         });
 
@@ -202,16 +202,16 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         changeCameraFlashModeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_AUTO)) {
-                    mFlashMode = Camera.Parameters.FLASH_MODE_ON;
-                } else if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_ON)) {
-                    mFlashMode = Camera.Parameters.FLASH_MODE_OFF;
-                } else if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_OFF)) {
-                    mFlashMode = Camera.Parameters.FLASH_MODE_AUTO;
-                }
-
-                setupFlashMode();
-                setupCamera();
+//                if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_AUTO)) {
+//                    mFlashMode = Camera.Parameters.FLASH_MODE_ON;
+//                } else if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_ON)) {
+//                    mFlashMode = Camera.Parameters.FLASH_MODE_OFF;
+//                } else if (mFlashMode.equalsIgnoreCase(Camera.Parameters.FLASH_MODE_OFF)) {
+//                    mFlashMode = Camera.Parameters.FLASH_MODE_AUTO;
+//                }
+//
+//                setupFlashMode();
+//                setupCamera();
             }
         });
         setupFlashMode();

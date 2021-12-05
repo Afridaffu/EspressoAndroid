@@ -31,6 +31,13 @@
              />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:src="@drawable/bounding_box"
+        android:layout_marginTop="@dimen/_110sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"/>
     <View
         android:id="@+id/cover_top_view"
         android:layout_width="match_parent"
@@ -92,7 +99,8 @@
                 android:layout_marginRight="5dp"
                 android:text="Auto"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

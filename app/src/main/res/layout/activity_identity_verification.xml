@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:paddingStart="@dimen/_21sdp"
     android:paddingEnd="@dimen/_21sdp"
+    android:id="@+id/swipeLL"
     android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".view.IdentityVerificationActivity">
 
