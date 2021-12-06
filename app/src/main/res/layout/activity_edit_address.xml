@@ -12,12 +12,10 @@
     tools:context=".view.EditAddressActivity">
 
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        >
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:id="@+id/topLL"
@@ -25,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/backIV"
                 android:layout_width="@dimen/_30sdp"
@@ -56,10 +55,10 @@
             android:id="@+id/scrlViewIV2nd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
             android:layout_below="@+id/topLL"
-            android:visibility="visible"
-            android:layout_marginTop="@dimen/_32sdp">
+            android:layout_marginTop="@dimen/_32sdp"
+            android:scrollbars="none"
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -201,6 +200,7 @@
                     android:layout_below="@+id/address2ErrorLL"
                     android:layout_marginTop="20sp"
                     android:hint="@string/city"
+                    android:importantForAutofill="no"
                     android:textColorHint="@color/black"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
@@ -208,8 +208,7 @@
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/primary_color"
-                    android:importantForAutofill="no">
+                    app:hintTextColor="@color/primary_color">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cityET"
@@ -308,6 +307,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="@string/statehint"
                             android:imeOptions="actionNext"
+                            android:importantForAutofill="no"
                             android:inputType="textEmailAddress|textNoSuggestions"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
@@ -316,8 +316,7 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp"
-                            android:importantForAutofill="no"/>
+                            android:textSize="@dimen/_12ssp" />
 
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -344,21 +343,21 @@
                         android:id="@+id/zipcodeET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="0123456789"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/ziphint"
                         android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
                         android:inputType="number|textNoSuggestions"
                         android:maxLength="7"
                         android:maxLines="1"
-                        android:digits="0123456789"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:importantForAutofill="no"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

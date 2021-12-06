@@ -59,7 +59,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     ProgressDialog dialog, pDialog;
     SignOnData signOnData;
     Boolean isBank = false, isPayments = false;
-    RelativeLayout layoutDCard, lyExternal;
+    RelativeLayout layoutDCard, lyExternal, layoutCCard;
     CardView cvTryAgain, cvDone;
 
     @Override
@@ -284,6 +284,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvCCardHead = findViewById(R.id.tvCCardHead);
             tvCCardMsg = findViewById(R.id.tvCCardMsg);
             layoutDCard = findViewById(R.id.layoutDCard);
+            layoutCCard = findViewById(R.id.layoutCCard);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
@@ -315,8 +316,26 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-                        startActivity(i);
+                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
+                            i.putExtra("card", "debit");
+                            startActivity(i);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            layoutCCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
+                            i.putExtra("card", "credit");
+                            startActivity(i);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
