@@ -6,7 +6,7 @@ import com.greenbox.coyni.model.login.LoginData;
 
 public class IdentityAddressRequest {
 
-    private AddressObj addressObj;
+    private AddressObj address;
     private String dateOfBirth;
     private String email;
     private String firstName;
@@ -16,11 +16,11 @@ public class IdentityAddressRequest {
     private PhotoIDEntityObject photoIDEntityObject;
 
     public AddressObj getAddressObj() {
-        return addressObj;
+        return address;
     }
 
     public void setAddressObj(AddressObj addressObj) {
-        this.addressObj = addressObj;
+        this.address = addressObj;
     }
 
     public String getDateOfBirth() {

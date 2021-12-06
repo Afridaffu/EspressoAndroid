@@ -42,23 +42,32 @@ public class IdentityAddressResponse {
     }
 
     public class Daata{
-        private String identityUrl;
-        private String message;
+        private String giactResponseCode;
+        private String giactResponseName;
+        private String giactResponseDescription;
 
-        public String getMessage() {
-            return message;
+        public String getGiactResponseCode() {
+            return giactResponseCode;
         }
 
-        public void setMessage(String message) {
-            this.message = message;
+        public void setGiactResponseCode(String giactResponseCode) {
+            this.giactResponseCode = giactResponseCode;
         }
 
-        public String getIdentityUrl() {
-            return identityUrl;
+        public String getGiactResponseName() {
+            return giactResponseName;
         }
 
-        public void setIdentityUrl(String identityUrl) {
-            this.identityUrl = identityUrl;
+        public void setGiactResponseName(String giactResponseName) {
+            this.giactResponseName = giactResponseName;
+        }
+
+        public String getGiactResponseDescription() {
+            return giactResponseDescription;
+        }
+
+        public void setGiactResponseDescription(String giactResponseDescription) {
+            this.giactResponseDescription = giactResponseDescription;
         }
     }
 }

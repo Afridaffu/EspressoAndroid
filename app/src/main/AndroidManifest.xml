@@ -176,7 +176,8 @@
         <activity
             android:name=".view.DashboardActivity"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.IdentityVerificationActivity"
             android:exported="true"
@@ -194,6 +195,12 @@
         <activity
             android:name=".custom_camera.CameraActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
+            android:name=".view.IdentityVerificationBindingLayoutActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
     </application>
