@@ -7,6 +7,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,8 +45,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.fragments.IdVeBottomSheetFragment;
+import com.greenbox.coyni.model.identity_verification.AddressObj;
+import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
+import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
+import com.greenbox.coyni.model.profile.TrackerResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.OnSwipeTouchListener;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -61,38 +68,35 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.internal.Util;
 
 public class IdentityVerificationActivity extends AppCompatActivity {
-    TextInputLayout dobTIL, ssnTIL;
-    TextInputEditText dobET, ssnET, cityET;
+    TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL;
+    TextInputEditText dobET, ssnET, cityET,mailAddr1, mailAddr2, state, zipcode;
     TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
-    TextInputEditText mailAddr1, city, state, zipcode;
-    ConstraintLayout idveriDOBConLayout;
-    LinearLayout bottomSheet, fileSelectedLL;
+    ConstraintLayout idveriDOBConLayout,stateCL;
+    LinearLayout bottomSheet, fileSelectedLL,firstIVeri,ssnErrorLL, swipeLL;
     public static CardView btnNext, btnSubmit;
     ScrollView secondIVeri;
-    LinearLayout firstIVeri;
     View viewLeft, viewRight;
     ImageButton closebtn, backbtn;
     ImageView upIdSuccessImg;
-    final Calendar myCalendar = Calendar.getInstance();
     int mYear, mMonth, mDay;
-    CardView buttonSubmit;
-    String dateFormat, date;
-    DatePickerDialog.OnDateSetListener onDateSetListener;
     public static boolean isMailAddr1 = true, isCity = false, isState = false, isZip = false, isSubmit = false, isNext = false;
-
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-
     public static File identityFile;
-    public static String identityNumber;
+    public static String dateOfBirth;
     public static int identityType = 0;
     public static boolean isFileSelected = false, isSSNSelected = false, isDOBSelected = false;
 
     public static IdentityVerificationActivity identityVerificationActivity;
-    LinearLayout ssnErrorLL, swipeLL;
-
     IdentityVerificationViewModel identityVerificationViewModel;
+    ProgressDialog dialog;
+
+    LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
+    TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
+    MyApplication myApplicationObj;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,92 +105,14 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
             setContentView(R.layout.activity_identity_verification);
 
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             identityVerificationActivity = this;
+            myApplicationObj = (MyApplication) getApplicationContext();
+
             initFields();
             initObservers();
-
-            bottomSheet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showIdentityTypePopup(IdentityVerificationActivity.this);
-                }
-            });
-
-            backbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    firstIVeri.setVisibility(View.VISIBLE);
-                    secondIVeri.setVisibility(View.GONE);
-                    backbtn.setVisibility(View.GONE);
-                    closebtn.setVisibility(View.VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background);
-                    viewRight.setBackgroundResource(R.drawable.button_background1);
-                }
-            });
-
-            closebtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-            exitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-            btnExit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-            viewLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    firstIVeri.setVisibility(View.VISIBLE);
-                    secondIVeri.setVisibility(View.GONE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background);
-                    viewRight.setBackgroundResource(R.drawable.button_background1);
-                    backbtn.setVisibility(View.GONE);
-                    closebtn.setVisibility(View.VISIBLE);
-                }
-
-            });
-
-
-            swipeLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-                public void onSwipeRight() {
-                    firstIVeri.setVisibility(View.VISIBLE);
-                    secondIVeri.setVisibility(View.GONE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background);
-                    viewRight.setBackgroundResource(R.drawable.button_background1);
-                    backbtn.setVisibility(View.GONE);
-                    closebtn.setVisibility(View.VISIBLE);
-                }
-
-                public void onSwipeLeft() {
-                    if (isNext) {
-                        firstIVeri.setVisibility(GONE);
-                        secondIVeri.setVisibility(VISIBLE);
-                        viewLeft.setBackgroundResource(R.drawable.button_background1);
-                        viewRight.setBackgroundResource(R.drawable.button_background);
-                        backbtn.setVisibility(VISIBLE);
-                        closebtn.setVisibility(GONE);
-                    }
-                }
-
-
-            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -224,6 +150,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                 String convertedDate = convertDate(dateToConvert);
                                 dob.setText(convertedDate);
                                 isDOBSelected = true;
+                                dateOfBirth = year+"-"+Utils.changeFormat((monthOfYear + 1))+"-"+Utils.changeFormat(dayOfMonth);
                                 enableNext();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -288,7 +215,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 }
             });
 
-            city.addTextChangedListener(new TextWatcher() {
+            cityET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -310,6 +237,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 }
             });
+
             state.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -332,6 +260,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 }
             });
+
             zipcode.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -359,6 +288,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (ssnET.getText().toString().trim().length() == 4) {
                             ssnErrorLL.setVisibility(GONE);
                             ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -409,6 +339,190 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             });
 
 
+            mailAddr1.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length() > 0) {
+                        isMailAddr1 = true;
+                        address1ErrorLL.setVisibility(GONE);
+                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_green));
+                    } else {
+                        address1ErrorLL.setVisibility(VISIBLE);
+                        address1ErrorTV.setText("Field Required");
+                        isMailAddr1 = false;
+                    }
+                    enableORdiableSubmit();
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = mailAddr1.getText().toString();
+                        if (str.substring(0).equals(" ")) {
+                            mailAddr1.setText("");
+                            mailAddr1.setSelection(mailAddr1.getText().length());
+                            address1ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            mailAddr1.setText("");
+                            mailAddr1.setSelection(mailAddr1.getText().length());
+                            address1ErrorLL.setVisibility(GONE);
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+            });
+
+            mailAddr2.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                if(charSequence.length() > 0){
+//                    isAddress2 = true;
+//                    address2ErrorLL.setVisibility(GONE);
+//                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
+//                }else{
+//                    address2ErrorLL.setVisibility(VISIBLE);
+//                    address2ErrorTV.setText("Field Required");
+//                    isAddress2 = false;
+//                }
+                    enableORdiableSubmit();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = mailAddr2.getText().toString();
+                        if (str.substring(0).equals(" ")) {
+                            mailAddr2.setText("");
+                            mailAddr2.setSelection(mailAddr2.getText().length());
+                            address2ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            mailAddr2.setText("");
+                            mailAddr2.setSelection(mailAddr2.getText().length());
+                            address2ErrorLL.setVisibility(GONE);
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            cityET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length() > 0) {
+                        isCity = true;
+                        cityErrorLL.setVisibility(GONE);
+                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
+                    } else {
+                        cityErrorLL.setVisibility(VISIBLE);
+                        cityErrorTV.setText("Field Required");
+                        isCity = false;
+                    }
+                    enableORdiableSubmit();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = cityET.getText().toString();
+                        if (str.substring(0).equals(" ")) {
+                            cityET.setText("");
+                            cityET.setSelection(cityET.getText().length());
+                            cityErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            cityET.setText("");
+                            cityET.setSelection(cityET.getText().length());
+                            cityErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
+                            cityET.setText(cityET.getText().toString().replaceAll(".", ""));
+                            cityET.setSelection(cityET.getText().length());
+                            cityErrorLL.setVisibility(GONE);
+                        }
+
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            state.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length() > 0) {
+                        isState = true;
+                    } else {
+                        isState = false;
+                    }
+                    enableORdiableSubmit();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+            zipcode.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length() >= 5) {
+                        isZip = true;
+                        zipcodeErrorLL.setVisibility(GONE);
+                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                    } else if (charSequence.length() < 5) {
+                        isZip = false;
+                        zipcodeErrorLL.setVisibility(GONE);
+                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                    } else if (charSequence.length() == 0) {
+                        isZip = false;
+                        zipcodeErrorLL.setVisibility(VISIBLE);
+                        zipcodeErrorTV.setText("Field Required");
+                    }
+                    enableORdiableSubmit();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -416,8 +530,83 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     }
 
-    private void enableORdiableSubmit() {
+    public void focusWatchers() {
 
+        mailAddr1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    if (mailAddr1.getText().toString().trim().length() > 0) {
+                        address1ErrorLL.setVisibility(GONE);
+                        mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_black));
+
+                    } else {
+                        mailingAddTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.error_red));
+                        address1ErrorLL.setVisibility(VISIBLE);
+                        address1ErrorTV.setText("Field Required");
+                    }
+                } else {
+                    mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
+                }
+            }
+        });
+
+        cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    if (cityET.getText().toString().trim().length() > 0) {
+                        cityErrorLL.setVisibility(GONE);
+                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
+
+                    } else {
+                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(cityTIL, getColor(R.color.error_red));
+                        cityErrorLL.setVisibility(VISIBLE);
+                        cityErrorTV.setText("Field Required");
+                    }
+                } else {
+                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
+                }
+            }
+        });
+
+        zipcode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    if (zipcode.getText().toString().trim().length() >= 5) {
+                        zipcodeErrorLL.setVisibility(GONE);
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
+
+                    } else if (zipcode.getText().toString().trim().length() < 5 && zipcode.getText().toString().trim().length() > 0) {
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
+                        zipcodeErrorLL.setVisibility(VISIBLE);
+                        zipcodeErrorTV.setText("Invalid Zipcode");
+
+                    } else {
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
+                        zipcodeErrorLL.setVisibility(VISIBLE);
+                        zipcodeErrorTV.setText("Field Required");
+                    }
+                } else {
+                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
+                }
+            }
+        });
+
+    }
+
+    private void enableORdiableSubmit() {
         try {
             if (isMailAddr1 && isCity && isState && isZip) {
                 isSubmit = true;
@@ -456,39 +645,164 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             ssnET = findViewById(R.id.idVeriSSNET);
 
             mailAddr1 = findViewById(R.id.mailingAddET);
-            city = findViewById(R.id.cityET);
+            mailAddr2 = findViewById(R.id.mailingAddlineoptET);
+            cityET = findViewById(R.id.cityET);
             state = findViewById(R.id.stateET);
+            stateCL = findViewById(R.id.stateCL);
             zipcode = findViewById(R.id.zipcodeET);
             fileSelectedLL = findViewById(R.id.fileSelectedLL);
             ssnErrorLL = findViewById(R.id.ssnErrorLL);
             ssnErrorTV = findViewById(R.id.ssnErrorTV);
             swipeLL = findViewById(R.id.swipeLL);
 
+            mailingAddTIL = findViewById(R.id.mailingAddTIL);
+            mailingAddlineoptTIL = findViewById(R.id.mailingAddlineoptTIL);
+            cityTIL = findViewById(R.id.cityTIL);
+            stateTIL = findViewById(R.id.stateTIL);
+            zipcodeTIL = findViewById(R.id.zipcodeTIL);
+
+            address1ErrorLL = findViewById(R.id.address1ErrorLL);
+            address1ErrorTV = findViewById(R.id.address1ErrorTV);
+
+            address2ErrorLL = findViewById(R.id.address2ErrorLL);
+            address2ErrorTV = findViewById(R.id.address2ErrorTV);
+
+            cityErrorLL = findViewById(R.id.cityErrorLL);
+            cityErrorTV = findViewById(R.id.cityErrorTV);
+
+            zipcodeErrorLL = findViewById(R.id.zipcodeErrorLL);
+            zipcodeErrorTV = findViewById(R.id.zipcodeErrorTV);
+
+
             TextWatchers();
+
+            focusWatchers();
 
             idveriDOBConLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.hideSoftKeyboard(IdentityVerificationActivity.this);
                     setToDate(dobET);
                 }
             });
+
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.hideSoftKeyboard(IdentityVerificationActivity.this);
                     setToDate(dobET);
                 }
             });
+
             dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        Utils.hideSoftKeyboard(IdentityVerificationActivity.this);
                         setToDate(dobET);
                     }
                 }
             });
+
+            bottomSheet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showIdentityTypePopup(IdentityVerificationActivity.this);
+                }
+            });
+
+            backbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    firstIVeri.setVisibility(View.VISIBLE);
+                    secondIVeri.setVisibility(View.GONE);
+                    backbtn.setVisibility(View.GONE);
+                    closebtn.setVisibility(View.VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background);
+                    viewRight.setBackgroundResource(R.drawable.button_background1);
+                }
+            });
+
+            closebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+
+            exitBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+
+            btnExit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+
+            viewLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    firstIVeri.setVisibility(View.VISIBLE);
+                    secondIVeri.setVisibility(View.GONE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background);
+                    viewRight.setBackgroundResource(R.drawable.button_background1);
+                    backbtn.setVisibility(View.GONE);
+                    closebtn.setVisibility(View.VISIBLE);
+                }
+
+            });
+
+            stateCL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this, state, myApplicationObj);
+            });
+
+            stateTIL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this, state, myApplicationObj);
+            });
+
+            state.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                Utils.populateStates(this, state, myApplicationObj);
+            });
+
+//            swipeLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+//
+//                public void onSwipeRight() {
+//                    firstIVeri.setVisibility(View.VISIBLE);
+//                    secondIVeri.setVisibility(View.GONE);
+//                    viewLeft.setBackgroundResource(R.drawable.button_background);
+//                    viewRight.setBackgroundResource(R.drawable.button_background1);
+//                    backbtn.setVisibility(View.GONE);
+//                    closebtn.setVisibility(View.VISIBLE);
+//                }
+//
+//                public void onSwipeLeft() {
+//                    if (isNext) {
+//                        firstIVeri.setVisibility(GONE);
+//                        secondIVeri.setVisibility(VISIBLE);
+//                        viewLeft.setBackgroundResource(R.drawable.button_background1);
+//                        viewRight.setBackgroundResource(R.drawable.button_background);
+//                        backbtn.setVisibility(VISIBLE);
+//                        closebtn.setVisibility(GONE);
+//                    }
+//                }
+//
+//
+//            });
+
 
             btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -499,23 +813,51 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 //                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identityType+"");
 //                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText().toString());
 //                        identityVerificationViewModel.uploadIdentityImage(idFile,idType,idNumber);
+//
+//                        firstIVeri.setVisibility(GONE);
+//                        secondIVeri.setVisibility(VISIBLE);
+//                        viewLeft.setBackgroundResource(R.drawable.button_background1);
+//                        viewRight.setBackgroundResource(R.drawable.button_background);
+//                        backbtn.setVisibility(VISIBLE);
+//                        closebtn.setVisibility(GONE);
 
-                        firstIVeri.setVisibility(GONE);
-                        secondIVeri.setVisibility(VISIBLE);
-                        viewLeft.setBackgroundResource(R.drawable.button_background1);
-                        viewRight.setBackgroundResource(R.drawable.button_background);
-                        backbtn.setVisibility(VISIBLE);
-                        closebtn.setVisibility(GONE);
-
+                        dialog = Utils.showProgressDialog(IdentityVerificationActivity.this);
+                        identityVerificationViewModel.removeIdentityImage(identityType + "");
                     }
                 }
             });
+
             btnSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (isSubmit) {
-                        btnNext.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                        finish();
+                        dialog = Utils.showProgressDialog(IdentityVerificationActivity.this);
+                        IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
+                        identityAddressRequest.setFirstName(myApplicationObj.getMyProfile().getData().getFirstName());
+                        identityAddressRequest.setLastName(myApplicationObj.getMyProfile().getData().getLastName());
+                        identityAddressRequest.setPhoneNumber(myApplicationObj.getMyProfile().getData().getPhoneNumber().split(" ")[1]);
+                        identityAddressRequest.setEmail(myApplicationObj.getMyProfile().getData().getEmail());
+                        identityAddressRequest.setDateOfBirth(dateOfBirth);
+                        identityAddressRequest.setSsn(ssnET.getText().toString().trim());
+
+                        AddressObj addressObj = new AddressObj();
+                        addressObj.setAddressLine1(mailAddr1.getText().toString().trim());
+                        addressObj.setAddressLine2(mailAddr2.getText().toString().trim());
+                        addressObj.setAddressType(0);
+                        addressObj.setCity(cityET.getText().toString().trim());
+                        addressObj.setState(state.getText().toString().trim());
+                        addressObj.setCountry("us");
+                        addressObj.setZipCode(zipcode.getText().toString().trim());
+
+                        PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
+                        photoIDEntityObject.setNumber(ssnET.getText().toString().trim());
+                        photoIDEntityObject.setType(identityType);
+                        photoIDEntityObject.setIssuer(state.getText().toString().trim());
+
+                        identityAddressRequest.setAddressObj(addressObj);
+                        identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);
+
+                        identityVerificationViewModel.uploadIdentityAddress(identityAddressRequest);
                     }
                 }
             });
@@ -683,6 +1025,19 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(IdentityImageResponse identityImageResponse) {
 
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        firstIVeri.setVisibility(GONE);
+                        secondIVeri.setVisibility(VISIBLE);
+                        viewLeft.setBackgroundResource(R.drawable.button_background1);
+                        viewRight.setBackgroundResource(R.drawable.button_background);
+                        backbtn.setVisibility(VISIBLE);
+                        closebtn.setVisibility(GONE);
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
+                    }
                 }
             });
         } catch (Exception e) {
@@ -691,9 +1046,51 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
 
         try {
-            identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<ImageResponse>() {
+            identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
+                @Override
+                public void onChanged(RemoveIdentityResponse imageResponse) {
+                    if (imageResponse != null) {
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), identityFile);
+                        MultipartBody.Part idFile = MultipartBody.Part.createFormData("identityFile", identityFile.getName(), requestBody);
+                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identityType + "");
+                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText().toString().trim());
+                        identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            identityVerificationViewModel.getUploadIdentityAddressResponse().observe(this, new Observer<ImageResponse>() {
                 @Override
                 public void onChanged(ImageResponse imageResponse) {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                    if (imageResponse.getStatus().equalsIgnoreCase("success")) {
+
+                    } else {
+                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
+                    }
+
+                    identityVerificationViewModel.getStatusTracker();
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
+                @Override
+                public void onChanged(TrackerResponse trackerResponse) {
+
+                    if (trackerResponse!=null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                        myApplicationObj.setTrackerResponse(trackerResponse);
+                    }
 
                 }
             });

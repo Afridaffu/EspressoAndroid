@@ -145,26 +145,32 @@ public class PreferencesActivity extends AppCompatActivity {
                             timeZoneET.setText(getString(R.string.PST));
                             myApplicationObj.setTempTimezone(getString(R.string.PST));
                             myApplicationObj.setTempTimezoneID(0);
+                            myApplicationObj.setStrPreference("PST");
                         } else if (preferences.getData().getTimeZone() == 1) {
                             timeZoneET.setText(getString(R.string.MST));
                             myApplicationObj.setTempTimezone(getString(R.string.MST));
                             myApplicationObj.setTempTimezoneID(1);
+                            myApplicationObj.setStrPreference("MST");
                         } else if (preferences.getData().getTimeZone() == 2) {
                             timeZoneET.setText(getString(R.string.CST));
                             myApplicationObj.setTempTimezone(getString(R.string.CST));
                             myApplicationObj.setTempTimezoneID(2);
+                            myApplicationObj.setStrPreference("CST");
                         } else if (preferences.getData().getTimeZone() == 3) {
                             timeZoneET.setText(getString(R.string.EST));
                             myApplicationObj.setTempTimezone(getString(R.string.EST));
                             myApplicationObj.setTempTimezoneID(3);
+                            myApplicationObj.setStrPreference("EST");
                         } else if (preferences.getData().getTimeZone() == 4) {
                             timeZoneET.setText(getString(R.string.HST));
                             myApplicationObj.setTempTimezone(getString(R.string.HST));
                             myApplicationObj.setTempTimezoneID(4);
+                            myApplicationObj.setStrPreference("HST");
                         } else if (preferences.getData().getTimeZone() == 5) {
                             timeZoneET.setText(getString(R.string.AST));
                             myApplicationObj.setTempTimezone(getString(R.string.AST));
                             myApplicationObj.setTempTimezoneID(5);
+                            myApplicationObj.setStrPreference("AST");
                         }
 
                     }
@@ -184,6 +190,19 @@ public class PreferencesActivity extends AppCompatActivity {
                     }else{
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
+                        if (myApplicationObj.getTempTimezoneID() == 0) {
+                            myApplicationObj.setStrPreference("PST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 1) {
+                            myApplicationObj.setStrPreference("MST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 2) {
+                            myApplicationObj.setStrPreference("CST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 3) {
+                            myApplicationObj.setStrPreference("EST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 4) {
+                            myApplicationObj.setStrPreference("HST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 5) {
+                            myApplicationObj.setStrPreference("AST");
+                        }
                         timeZoneET.setText(myApplicationObj.getTimezone());
                         Utils.showCustomToast(PreferencesActivity.this, "Timezone has been updated", R.drawable.ic_custom_tick, "authid");
 

@@ -3,7 +3,7 @@ package com.greenbox.coyni.model.identity_verification;
 
 import com.greenbox.coyni.model.Error;
 
-public class IdentityImageResponse {
+public class IdentityAddressResponse {
     private String status;
     private String timestamp;
     private Daata data;

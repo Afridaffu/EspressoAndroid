@@ -1,12 +1,17 @@
-package com.greenbox.coyni.model.users;
+package com.greenbox.coyni.model.identity_verification;
 
-public class UserData {
+
+import com.greenbox.coyni.model.Error;
+import com.greenbox.coyni.model.login.LoginData;
+
+public class AddressObj {
     private String addressLine1;
     private String addressLine2;
+    private int addressType;
     private String city;
+    private String country;
     private String state;
     private String zipCode;
-    private String country;
 
     public String getAddressLine1() {
         return addressLine1;
@@ -24,12 +29,28 @@ public class UserData {
         this.addressLine2 = addressLine2;
     }
 
+    public int getAddressType() {
+        return addressType;
+    }
+
+    public void setAddressType(int addressType) {
+        this.addressType = addressType;
+    }
+
     public String getCity() {
         return city;
     }
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getState() {
@@ -47,12 +68,5 @@ public class UserData {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
 }
+

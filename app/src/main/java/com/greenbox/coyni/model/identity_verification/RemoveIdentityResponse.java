@@ -3,7 +3,7 @@ package com.greenbox.coyni.model.identity_verification;
 
 import com.greenbox.coyni.model.Error;
 
-public class IdentityImageResponse {
+public class RemoveIdentityResponse {
     private String status;
     private String timestamp;
     private Daata data;
@@ -42,7 +42,6 @@ public class IdentityImageResponse {
     }
 
     public class Daata{
-        private String identityUrl;
         private String message;
 
         public String getMessage() {
@@ -51,14 +50,6 @@ public class IdentityImageResponse {
 
         public void setMessage(String message) {
             this.message = message;
-        }
-
-        public String getIdentityUrl() {
-            return identityUrl;
-        }
-
-        public void setIdentityUrl(String identityUrl) {
-            this.identityUrl = identityUrl;
         }
     }
 }

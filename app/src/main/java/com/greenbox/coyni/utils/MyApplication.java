@@ -10,6 +10,7 @@ import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
@@ -26,7 +27,7 @@ public class MyApplication extends Application {
     AccountLimitsData objAcc;
     AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "";
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
@@ -38,6 +39,7 @@ public class MyApplication extends Application {
     String timezone = "", tempTimezone = "";
     int timezoneID = 0, tempTimezoneID = 0,userId;
     SignOnData objSignOnData = new SignOnData();
+    TrackerResponse trackerResponse = new TrackerResponse();
 
     public AgreementsPdf getAgreementsPdf() {
         return agreementsPdf;
@@ -213,5 +215,21 @@ public class MyApplication extends Application {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public TrackerResponse getTrackerResponse() {
+        return trackerResponse;
+    }
+
+    public void setTrackerResponse(TrackerResponse trackerResponse) {
+        this.trackerResponse = trackerResponse;
+    }
+
+    public String getStrPreference() {
+        return strPreference;
+    }
+
+    public void setStrPreference(String strPreference) {
+        this.strPreference = strPreference;
     }
 }
