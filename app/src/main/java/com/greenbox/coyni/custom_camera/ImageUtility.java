@@ -16,6 +16,8 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.greenbox.coyni.view.IdentityVerificationActivity;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,48 +64,36 @@ public class ImageUtility {
 
         Uri fileContentUri = null;
         try {
-            Log.e("Save","Save");
-            int halvedRectangularHeight = (int)(CameraFragment.globalImageHeight);
-            int height = (int)(halvedRectangularHeight);
-
-//        bitmap = ThumbnailUtils.extractThumbnail(bitmap, cropHeight, (int) (cropHeight* 0.75), ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-            bitmap = ThumbnailUtils.extractThumbnail(bitmap, CameraFragment.globalImageWidth, (int) (height* 2));
-            Log.e("Save","Save");
+            int halvedRectangularHeight = (int) (CameraFragment.globalImageHeight);
+            int height = (int) (halvedRectangularHeight);
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap, CameraFragment.globalImageWidth, (int) (height * 2));
             photoImageView.setImageBitmap(bitmap);
             File mediaStorageDir = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    "SquareCamera"
-            );
-            Log.e("Save","Save");
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Coyni");
             if (!mediaStorageDir.exists()) {
                 if (!mediaStorageDir.mkdirs()) {
                     return null;
                 }
             }
-            Log.e("Save","Save");
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            File mediaFile = new File(
-                    mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg"
-            );
-            Log.e("Save","Save");
+            File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
             // Saving the bitmap
             try {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                Log.e("Save","Save");
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
                 FileOutputStream stream = new FileOutputStream(mediaFile);
                 stream.write(out.toByteArray());
                 stream.close();
-                Log.e("Save","Save");
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
-            Log.e("Save","Save");
 //             Mediascanner need to scan for the image saved
             Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             fileContentUri = Uri.fromFile(mediaFile);
             mediaScannerIntent.setData(fileContentUri);
             context.sendBroadcast(mediaScannerIntent);
+            IdentityVerificationActivity.identityFile = mediaFile;
+            IdentityVerificationActivity.isFileSelected = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,6 +119,7 @@ public class ImageUtility {
 
         return BitmapFactory.decodeFile(path, options);
     }
+
     /**
      * Decode and sample down a bitmap from a byte stream
      */
@@ -147,7 +138,7 @@ public class ImageUtility {
             reqHeight = display.getHeight();
         }
 
-        Log.e("req w and h",reqWidth+"  "+reqHeight);
+        Log.e("req w and h", reqWidth + "  " + reqHeight);
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -178,7 +169,7 @@ public class ImageUtility {
      * bitmaps using the decode* methods from {@link BitmapFactory}. This implementation calculates
      * the closest inSampleSize that is a power of 2 and will result in the final decoded bitmap
      * having a width and height equal to or larger than the requested width and height
-     *
+     * <p>
      * The function rounds up the sample size to a power of 2 or multiple
      * of 8 because BitmapFactory only honors sample size this way.
      * For example, BitmapFactory downsamples an image by 2 even though the
@@ -187,7 +178,7 @@ public class ImageUtility {
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         int initialInSampleSize = computeInitialSampleSize(options, reqWidth, reqHeight);
 
-        Log.e("initialInSampleSize",initialInSampleSize+"");
+        Log.e("initialInSampleSize", initialInSampleSize + "");
         int roundedInSampleSize;
         if (initialInSampleSize <= 8) {
             roundedInSampleSize = 1;
@@ -198,7 +189,7 @@ public class ImageUtility {
         } else {
             roundedInSampleSize = (initialInSampleSize + 7) / 8 * 8;
         }
-        Log.e("roundedInSampleSize",roundedInSampleSize+"");
+        Log.e("roundedInSampleSize", roundedInSampleSize + "");
 
 
         return roundedInSampleSize;

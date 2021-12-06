@@ -58,6 +58,7 @@
             android:paddingEnd="@dimen/_11sdp">
 
             <TextView
+                android:id="@+id/activeTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -97,7 +98,8 @@
                 android:text="@string/pastagree"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:id="@+id/pastTV"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvPast"

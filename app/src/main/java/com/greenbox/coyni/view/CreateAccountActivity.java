@@ -598,7 +598,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                             if (confirmPasswordET.getText().toString().trim().length() > 0) {
                                 passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                passwordTIL.setHint("Password doesn’t match");
+//                                passwordTIL.setHint("Password doesn’t match");
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
                                 confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -666,9 +666,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         } else {
                             isConfirmPassword = false;
 
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            passwordTIL.setHint("Password doesn’t match");
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            passwordTIL.setHint("Password doesn’t match");
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
 
                             confPasswordTIL.setHint("Password doesn’t match");
 
@@ -797,7 +797,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                            passwordTIL.setHint("Password doesn’t match");
+//                            passwordTIL.setHint("Password doesn’t match");
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -835,7 +835,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-                            passwordTIL.setHint("Password doesn’t match");
+//                            passwordTIL.setHint("Password doesn’t match");
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());

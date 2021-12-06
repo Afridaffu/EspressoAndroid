@@ -106,6 +106,34 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dialog.dismiss();
         }
         isPwdEye = false;
+
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
+            cursor.moveToFirst();
+            if (cursor.getCount() > 0) {
+                String value = cursor.getString(1);
+                String value2 = cursor.getString(2);
+                etEmail.setText(value);
+//                etPassword.setText(value2);
+//                etPassword.setSelection(value2.length());
+            }else{
+                etEmail.setText("");
+                etPassword.setText("");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            etEmail.setText("");
+            etPassword.setText("");
+        }
+        if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+            if (chkRemember.isChecked()) {
+                etEmail.setText("");
+                etPassword.setText("");
+                chkRemember.setChecked(false);
+            }
+            etEmail.setText(objMyApplication.getStrRetrEmail());
+        }
     }
 
     @Override
@@ -339,6 +367,13 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (etPassword.getText().toString().length() >= 8) {
                             layoutPwdError.setVisibility(GONE);
                         }
+
+                        if (s.length() == 0) {
+                            // No entered text so will show hint
+                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                        } else {
+                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -422,14 +457,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             SetTouchId();
             SetRemember();
 
-            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-                if (chkRemember.isChecked()) {
-                    etEmail.setText("");
-                    etPassword.setText("");
-                    chkRemember.setChecked(false);
-                }
-                etEmail.setText(objMyApplication.getStrRetrEmail());
-            }
+//            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+//                if (chkRemember.isChecked()) {
+//                    etEmail.setText("");
+//                    etPassword.setText("");
+//                    chkRemember.setChecked(false);
+//                }
+//                etEmail.setText(objMyApplication.getStrRetrEmail());
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -515,7 +550,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dsRemember.moveToFirst();
             if (dsRemember.getCount() > 0) {
                 etEmail.setText(dsRemember.getString(1));
-                etPassword.setText(dsRemember.getString(2));
+//                etPassword.setText(dsRemember.getString(2));
                 chkRemember.setChecked(true);
             } else {
                 chkRemember.setChecked(false);
@@ -538,6 +573,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
+                            objMyApplication.setUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             if (login.getData().getPasswordExpired()) {

@@ -6,15 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.IdentityVerificationActivity;
 
 public class RetakeActivity extends AppCompatActivity {
 
     ImageView croppedIV;
+    LinearLayout retakeCloseIV,saveLL,retakeLL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +27,38 @@ public class RetakeActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_retake);
         croppedIV = findViewById(R.id.croppedIV);
+        retakeCloseIV = findViewById(R.id.retakeCloseIV);
+        saveLL = findViewById(R.id.saveLL);
+        retakeLL = findViewById(R.id.retakeLL);
+
+        retakeCloseIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                IdentityVerificationActivity.identityFile = null;
+                IdentityVerificationActivity.isFileSelected = false;
+                IdentityVerificationActivity.enableNext();
+            }
+        });
+
+        saveLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CameraActivity.cameraActivity.finish();
+                finish();
+                IdentityVerificationActivity.enableNext();
+            }
+        });
+
+        retakeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                IdentityVerificationActivity.identityFile = null;
+                IdentityVerificationActivity.isFileSelected = false;
+                IdentityVerificationActivity.enableNext();
+            }
+        });
 
         rotatePicture(getIntent().getIntExtra("rotation",0),CameraFragment.cameraByteData,croppedIV);
     }
@@ -46,18 +82,14 @@ public class RetakeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
-////        Matrix matrix = new Matrix();
-////        matrix.postRotate((float) rotation);
-////
-////        Bitmap rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-////                matrix, false);
-//
-//            photoImageView.setImageBitmap(bitmap);
-
             ImageUtility.savePicture(this, bitmap,photoImageView);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

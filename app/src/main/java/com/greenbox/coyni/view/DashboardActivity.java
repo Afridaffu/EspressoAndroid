@@ -21,15 +21,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import okhttp3.internal.Util;
 
@@ -37,6 +47,7 @@ public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile, layoutCrypto, layoutCard;
     LinearLayout scanQr,viewMoreLL;
     DashboardViewModel dashboardViewModel;
+    IdentityVerificationViewModel identityVerificationViewModel;
     TextView tvUserName;
     MyApplication objMyApplication;
     Dialog dialog;
@@ -49,6 +60,7 @@ public class DashboardActivity extends AppCompatActivity {
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
+            getStates();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -64,9 +76,11 @@ public class DashboardActivity extends AppCompatActivity {
             scanQr=findViewById(R.id.scanQrLL);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             if (Utils.checkInternet(DashboardActivity.this)) {
                 progressDialog = Utils.showProgressDialog(this);
                 dashboardViewModel.meProfile();
+                identityVerificationViewModel.getStatusTracker();
             } else {
                 Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
             }
@@ -142,6 +156,21 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        try {
+            identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
+                @Override
+                public void onChanged(TrackerResponse trackerResponse) {
+
+                    if (trackerResponse!=null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                        objMyApplication.setTrackerResponse(trackerResponse);
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void cryptoAssets() {
@@ -227,4 +256,23 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    private void getStates() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("states.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(json, type);
+            objMyApplication.setListStates(listStates);
+            Log.e("list states", listStates.size() + "");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

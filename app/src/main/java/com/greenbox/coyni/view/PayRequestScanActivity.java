@@ -87,12 +87,12 @@ public class PayRequestScanActivity extends AppCompatActivity {
     Bitmap bitmap;
     Long mLastClickTime = 0L;
     ImageView idIVQrcode, imageShare, copyRecipientAddress;
-    ImageView closeBtnScanCode, closeBtnScanMe;
+    ImageView closeBtnScanCode, closeBtnScanMe,imgProfile;
     private CodeScanner mcodeScanner;
     private CodeScannerView mycodeScannerView;
     MyApplication objMyApplication;
     DashboardViewModel dashboardViewModel;
-    TextView tvWalletAddress, tvName;
+    TextView scancode, tvWalletAddress, tvName, tvNameHead;
     boolean isTorchOn = true;
     private ImageView toglebtn1;
     String strWallet = "", strScanWallet = "";
@@ -105,6 +105,10 @@ public class PayRequestScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         setContentView(R.layout.activity_pay_request_scan);
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -229,6 +233,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
 //                        showToast();
 
                         Utils.showCustomToast(PayRequestScanActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -390,7 +395,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                     } else {
                         if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-//                            Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
                             invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
                         }
                     }
@@ -404,7 +408,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (s != null && !s.equals("")) {
                     if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-//                        Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
                         invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
                     }
                 }
@@ -569,9 +572,12 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
             // setting this dimensions inside our qr code
             // encoder to generate our qr code.
-            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, dimen);
+            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, 600);
+            bitmap = Bitmap.createBitmap(qrgEncoder.encodeAsBitmap(), 50, 50, 500, 500);
+//            bitmap  = Utils.trimLeave5Percent(bitmap, R.color.white);
+
             // getting our qrcode in the form of bitmap.
-            bitmap = qrgEncoder.encodeAsBitmap();
+//            bitmap = qrgEncoder.encodeAsBitmap();
             // the bitmap is set inside our image
             // view using .setimagebitmap method.
             idIVQrcode.setImageBitmap(bitmap);
@@ -598,27 +604,27 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
-   private void invalidQRCode(String msg, final Context context, String headerText) {
-              // custom dialog
-                        final Dialog dialog = new Dialog(context);
-               dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-               dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
-               dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    private void invalidQRCode(String msg, final Context context, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-                       DisplayMetrics mertics = context.getResources().getDisplayMetrics();
-                int width = mertics.widthPixels;
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
 
-                        TextView header = dialog.findViewById(R.id.tvHead);
-                TextView message = dialog.findViewById(R.id.tvMessage);
-                CardView actionCV = dialog.findViewById(R.id.cvAction);
-                TextView actionText = dialog.findViewById(R.id.tvAction);
+        TextView header = dialog.findViewById(R.id.tvHead);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
 
-                       if (!headerText.equals("")) {
-                       header.setVisibility(View.VISIBLE);
-                        header.setText(headerText);
-                    }
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
 
-                        actionCV.setOnClickListener(new View.OnClickListener() {
+        actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                                         dialog.dismiss();
@@ -627,20 +633,50 @@ public class PayRequestScanActivity extends AppCompatActivity {
                                     }
         });
 
-                        message.setText(msg);
-               Window window = dialog.getWindow();
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                        WindowManager.LayoutParams wlp = window.getAttributes();
+        WindowManager.LayoutParams wlp = window.getAttributes();
 
-                        wlp.gravity = Gravity.BOTTOM;
-                wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wlp);
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
 
-                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-                        dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public void bindImage(){
+        try {
+            imgProfile.setVisibility(View.GONE);
+            userNameTV.setVisibility(View.VISIBLE);
+            String imageString = objMyApplication.getMyProfile().getData().getImage();
+            String imageTextNew = "";
+            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            userNameTV.setText(imageTextNew);
+
+            if (imageString != null && !imageString.trim().equals("")) {
+                imgProfile.setVisibility(View.VISIBLE);
+                userNameTV.setVisibility(View.GONE);
+                Glide.with(this)
+                        .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
+                        .into(imgProfile);
+            } else {
+                imgProfile.setVisibility(View.GONE);
+                userNameTV.setVisibility(View.VISIBLE);
+                String imageText = "";
+                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                userNameTV.setText(imageText);
             }
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

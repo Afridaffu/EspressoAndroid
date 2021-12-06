@@ -17,9 +17,20 @@
         android:id="@+id/paymentMethods"
         layout="@layout/paymentmethods"
         android:visibility="gone" />
+
     <include
         android:id="@+id/externalBank"
         layout="@layout/activity_add_external_bank_acc"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/firstError"
+        layout="@layout/activity_first_tym_fail"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/banksuccess"
+        layout="@layout/activity_all_done_success"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

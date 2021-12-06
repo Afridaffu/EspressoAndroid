@@ -15,6 +15,7 @@ import com.greenbox.coyni.viewmodel.AccountLimitsViewModel;
 
 public class CameraActivity extends AppCompatActivity {
 
+    public static CameraActivity cameraActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +23,8 @@ public class CameraActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_camera);
+
+        cameraActivity = this;
         try {
             getSupportFragmentManager()
                     .beginTransaction()

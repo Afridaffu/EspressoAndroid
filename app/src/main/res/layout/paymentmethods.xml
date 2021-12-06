@@ -14,22 +14,23 @@
         android:paddingLeft="@dimen/_22sdp">
 
         <LinearLayout
-            android:id="@+id/layoutBack"
+            android:id="@+id/lyPayBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_45sdp"
-                android:layout_marginBottom="@dimen/_14sdp"
                 android:src="@drawable/ic_back" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
             android:layout_marginBottom="@dimen/_11sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="left"
@@ -38,57 +39,58 @@
             android:textSize="@dimen/_16ssp" />
     </LinearLayout>
 
-    <ScrollView
+    <!--    <ScrollView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:scrollbars="none">-->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/_11sdp"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingRight="@dimen/_11sdp"
+        android:paddingBottom="@dimen/_20sdp">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvAddPayment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/_11sdp"
-            android:paddingTop="@dimen/_12sdp"
-            android:paddingRight="@dimen/_11sdp">
+            android:layout_height="@dimen/_48sdp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="4dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvAddPayment"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_48sdp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/_10sdp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_add_circle"></ImageView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:text="Add New Payment Method"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp"></TextView>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPaymentMethods"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_11sdp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/_10sdp">
 
-            </androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_circle"></ImageView>
 
-    </ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_11sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Add New Payment Method"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp"></TextView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPaymentMethods"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_11sdp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <!--    </ScrollView>-->
 </LinearLayout>

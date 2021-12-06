@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:paddingStart="@dimen/_21sdp"
     android:paddingEnd="@dimen/_21sdp"
+    android:id="@+id/swipeLL"
     android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".view.IdentityVerificationActivity">
 
@@ -134,29 +135,41 @@
                         android:textSize="@dimen/_11ssp"
                         android:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/idveriUpIdSuccessTxt"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/fileSelectedLL"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_17sdp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="@dimen/_18sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:lineSpacingExtra="@dimen/_6sdp"
-                        android:text="@string/contentuploadidsuccess"
-                        android:textColor="@color/primary_color"
-                        android:textSize="@dimen/_11ssp"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
-                    <ImageView
-                        android:id="@+id/idveriUpIdSuccessImg"
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_25sdp"
-                        android:src="@drawable/ic_complete"
-                        android:visibility="gone" />
+                        <TextView
+                            android:id="@+id/idveriUpIdSuccessTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_17sdp"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="@dimen/_18sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:lineSpacingExtra="@dimen/_6sdp"
+                            android:text="@string/contentuploadidsuccess"
+                            android:textColor="@color/primary_color"
+                            android:textSize="@dimen/_11ssp"
+                            android:visibility="visible"
+                            android:layout_weight="1"
+                            android:singleLine="true"/>
+
+                        <ImageView
+                            android:id="@+id/idveriUpIdSuccessImg"
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_complete"
+                            android:visibility="visible"
+                            android:layout_marginEnd="@dimen/_15sdp"/>
+
+
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -195,6 +208,29 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <LinearLayout
+                    android:id="@+id/ssnErrorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_erro" />
+
+                    <TextView
+                        android:id="@+id/ssnErrorTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10ssp" />
+                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/idveriDOBCL"
@@ -250,7 +286,9 @@
                             android:padding="@dimen/_14sdp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/light_gray"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:cursorVisible="false"
+                            android:editable="false"/>
 
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -363,6 +401,31 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/address1ErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressLineOneTIL"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/address1ErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text=""
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/mailingAddlineoptTIL"
@@ -398,6 +461,31 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/address2ErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressLineTwoTIL"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/address2ErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text=""
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cityTIL"
@@ -433,11 +521,37 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/cityErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cityTIL"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/cityErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text=""
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp">
+                android:layout_marginTop="@dimen/_14sdp"
+                android:id="@+id/stateCL">
 
                 <ImageButton
                     android:id="@+id/stateimg"
@@ -486,7 +600,9 @@
                         android:textColor="@color/black"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:focusable="false"
+                        android:cursorVisible="false"/>
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -526,6 +642,31 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/zipcodeErrorLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/zipcodeTIL"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:src="@drawable/ic_erro" />
+
+                <TextView
+                    android:id="@+id/zipcodeErrorTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text=""
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/countryTIL"

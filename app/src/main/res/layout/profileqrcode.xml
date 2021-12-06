@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="My QR code"
+            android:text="My QR Code"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp"></TextView>
     </LinearLayout>

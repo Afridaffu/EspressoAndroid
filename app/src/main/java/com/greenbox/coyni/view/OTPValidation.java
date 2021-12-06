@@ -527,7 +527,8 @@ public class OTPValidation extends AppCompatActivity {
                                         if (strScreen != null && !strScreen.equals("")) {
                                             switch (strScreen) {
                                                 case "ForgotPwd":
-                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class));
+                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class)
+                                                    .putExtra("screen","ForgotPwd"));
                                                     break;
                                                 case "ForgotPin":
                                                     startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
@@ -580,7 +581,15 @@ public class OTPValidation extends AppCompatActivity {
                             } else {
                                 if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
                                         smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
-                                    Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                                    try {
+                                        if(smsValidate.getError().getErrorDescription().equals("")){
+                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                        }else{
+                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         } else {
@@ -676,8 +685,15 @@ public class OTPValidation extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "");
-                    }
+                        try {
+                            if(smsResponse.getError().getErrorDescription().equals("")){
+                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                            }else{
+                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }                    }
                 }
 
             }
@@ -695,7 +711,15 @@ public class OTPValidation extends AppCompatActivity {
                             resendCounter++;
                             startTimer();
                         } else {
-                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                            try {
+                                if(emailResponse.getError().getErrorDescription().equals("")){
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                }else{
+                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -868,7 +892,15 @@ public class OTPValidation extends AppCompatActivity {
                             resendCounter++;
                             startTimer();
                         } else {
-                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                            try {
+                                if(emailResponse.getError().getErrorDescription().equals("")){
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                }else{
+                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } catch (Exception e) {

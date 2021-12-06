@@ -4,7 +4,15 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
+import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.profile.TrackerResponse;
+import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -47,7 +55,6 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
-import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.users.AccountLimits;
@@ -58,6 +65,8 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -191,4 +200,31 @@ public interface ApiService {
 
     @POST("/api/v2/transactions/me/pending-posted-txns")
     Call<TransactionList> meTransactionList();
+    @POST("api/v2/fiserv/sync-account")
+    Call<SyncAccount> meSyncAccount();
+
+    @GET("api/v2/encryption/publickey")
+    Call<PublicKeyResponse> getPublicKey(@Query("userId") int userId);
+
+    @DELETE("api/v2/banks/me")
+    Call<BankDeleteResponseData> deleteBank(@Query("accountId") String accountId);
+
+    @POST("api/v2/user/authenticate")
+    Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
+
+    @Multipart
+    @POST("api/v2/profile/me/upload-identity")
+    Call<IdentityImageResponse> uploadIdentityImage(@Part MultipartBody.Part filee,
+                                                    @Part("identityType") RequestBody type,
+                                                    @Part("identityNumber") RequestBody number);
+
+    @DELETE("api/v2/profile/me/remove-identity")
+    Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
+
+    @POST("api/v2/profile/identity")
+    Call<ImageResponse> uploadIdentityAddress(@Body IdentityAddressRequest identityAddressRequest);
+
+    @POST("api/v2/profile/me/tracker")
+    Call<TrackerResponse> statusTracker();
+
 }

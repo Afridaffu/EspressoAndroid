@@ -6,6 +6,7 @@ public class UserData {
     private String city;
     private String state;
     private String zipCode;
+    private String country;
 
     public String getAddressLine1() {
         return addressLine1;
@@ -45,5 +46,13 @@ public class UserData {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

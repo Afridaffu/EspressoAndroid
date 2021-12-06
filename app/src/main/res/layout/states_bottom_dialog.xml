@@ -60,6 +60,7 @@
             android:maxLines="1"
             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
             android:singleLine="true"
+            android:textColorHint="@color/light_gray"
             android:textColor="@color/primary_black"
             android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="@dimen/_10sdp" />
