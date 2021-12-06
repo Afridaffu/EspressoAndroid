@@ -23,10 +23,11 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/imgCardType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_7sdp"
-                android:src="@drawable/ic_disable_visa" />
+                android:src="@drawable/ic_masteractive" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,25 +46,28 @@
 
         </LinearLayout>
 
-        <EditText
+        <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/pnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:background="@android:color/transparent"
             android:digits="0123456789"
             android:fontFamily="@font/opensans_semibold"
             android:hint="XXXX XXXX XXXX XXXX"
             android:imeOptions="actionNext"
             android:inputType="number|textNoSuggestions"
+            android:maxLength="19"
             android:maxLines="1"
             android:padding="14dp"
             android:singleLine="true"
             android:textColor="@color/primary_black"
             android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/cursor_color"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_12ssp"
+            app:mask="____ ____ ____ ____" />
+
 
         <ImageView
             android:layout_width="wrap_content"

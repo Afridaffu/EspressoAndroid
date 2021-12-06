@@ -850,4 +850,9 @@ public class Utils {
         }
     }
 
+    public static void hideSoftKeypad(Context context, View view) {
+        InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
 }

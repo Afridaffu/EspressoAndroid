@@ -1,5 +1,6 @@
 package com.greenbox.coyni.utils.keyboards;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -136,7 +137,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 try {
                     Toast.makeText(mContext, "Verify click", Toast.LENGTH_LONG).show();
                     if (strScreen.equals("addcard")) {
-                        ((AddCardActivity) mContext).verifyClick();
+                        AddCardActivity.addCardActivity.verifyClick();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -154,8 +155,8 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         keyActionText.setText(actionName);
     }
 
+
     public void setScreenName(String screenName) {
         strScreen = screenName;
     }
-
 }

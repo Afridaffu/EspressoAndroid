@@ -11,6 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.cards.CardRequest;
+import com.greenbox.coyni.model.cards.CardResponse;
+import com.greenbox.coyni.model.cards.CardTypeRequest;
+import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.preauth.PreAuthRequest;
+import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
@@ -29,6 +35,9 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
     private MutableLiveData<PublicKeyResponse> publicKeyResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BankDeleteResponseData> delBankResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CardResponse> cardResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<PreAuthResponse> preAuthResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CardTypeResponse> cardTypeResponseMutableLiveData = new MutableLiveData<>();
 
     public PaymentMethodsViewModel(@NonNull Application application) {
         super(application);
@@ -44,6 +53,18 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
     public MutableLiveData<BankDeleteResponseData> getDelBankResponseMutableLiveData() {
         return delBankResponseMutableLiveData;
+    }
+
+    public MutableLiveData<CardResponse> getCardResponseMutableLiveData() {
+        return cardResponseMutableLiveData;
+    }
+
+    public MutableLiveData<PreAuthResponse> getPreAuthResponseMutableLiveData() {
+        return preAuthResponseMutableLiveData;
+    }
+
+    public MutableLiveData<CardTypeResponse> getCardTypeResponseMutableLiveData() {
+        return cardTypeResponseMutableLiveData;
     }
 
     public void getPublicKey(int userId) {
@@ -104,6 +125,102 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<BankDeleteResponseData> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void saveCards(CardRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CardResponse> mCall = apiService.saveCards(request);
+            mCall.enqueue(new Callback<CardResponse>() {
+                @Override
+                public void onResponse(Call<CardResponse> call, Response<CardResponse> response) {
+                    if (response.isSuccessful()) {
+                        CardResponse obj = response.body();
+                        cardResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CardResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void preAuthVerify(PreAuthRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<PreAuthResponse> mCall = apiService.preAuthVerify(request);
+            mCall.enqueue(new Callback<PreAuthResponse>() {
+                @Override
+                public void onResponse(Call<PreAuthResponse> call, Response<PreAuthResponse> response) {
+                    if (response.isSuccessful()) {
+                        PreAuthResponse obj = response.body();
+                        preAuthResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PreAuthResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void cardType(CardTypeRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CardTypeResponse> mCall = apiService.cardType(request);
+            mCall.enqueue(new Callback<CardTypeResponse>() {
+                @Override
+                public void onResponse(Call<CardTypeResponse> call, Response<CardTypeResponse> response) {
+                    if (response.isSuccessful()) {
+                        CardTypeResponse obj = response.body();
+                        cardTypeResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CardTypeResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

@@ -1,8 +1,12 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -19,10 +23,20 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.Error;
+import com.greenbox.coyni.model.cards.CardRequest;
+import com.greenbox.coyni.model.cards.CardResponse;
+import com.greenbox.coyni.model.cards.CardResponseData;
+import com.greenbox.coyni.model.cards.CardTypeRequest;
+import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.preauth.PreAuthData;
+import com.greenbox.coyni.model.preauth.PreAuthRequest;
+import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -35,6 +49,7 @@ import com.santalu.maskara.widget.MaskEditText;
 
 import org.json.JSONObject;
 
+import java.util.Base64;
 import java.util.UUID;
 
 public class AddCardActivity extends AppCompatActivity {
@@ -54,12 +69,17 @@ public class AddCardActivity extends AppCompatActivity {
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
     Dialog preDialog;
+    CardResponseData cardResponseData;
+    ProgressDialog progressDialog;
+    public static AddCardActivity addCardActivity;
+    CardTypeResponse objCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_addcard);
+            addCardActivity = this;
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -98,6 +118,7 @@ public class AddCardActivity extends AppCompatActivity {
             } else {
                 tvCardHead.setText("Add New Credit Card");
             }
+
             clStates.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -139,6 +160,10 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         layoutCard.setVisibility(View.GONE);
                         layoutAddress.setVisibility(View.VISIBLE);
                         divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
@@ -157,6 +182,11 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        progressDialog = Utils.showProgressDialog(AddCardActivity.this);
                         strAdd1 = etAddress1.getText().toString().trim();
                         strAdd2 = etAddress2.getText().toString().trim();
                         strCity = etCity.getText().toString().trim();
@@ -165,7 +195,6 @@ public class AddCardActivity extends AppCompatActivity {
 //                        strCountry = etCountry.getText().toString().trim();
                         strCountry = Utils.getStrCCode();
                         prepareJson();
-                        displayPreAuth();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -196,10 +225,38 @@ public class AddCardActivity extends AppCompatActivity {
             }
         });
 
+        paymentMethodsViewModel.getCardResponseMutableLiveData().observe(this, new Observer<CardResponse>() {
+            @Override
+            public void onChanged(CardResponse cardResponse) {
+                try {
+                    progressDialog.dismiss();
+                    if (cardResponse != null) {
+                        cardResponseData = cardResponse.getData();
+                        Error errData = cardResponse.getError();
+                        if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
+                            if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
+                                displayPreAuth();
+                            } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
+                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "");
+                            }
+                        } else {
+                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "");
+                        }
+                    }
+                } catch (
+                        Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         paymentMethodsViewModel.getApiErrorMutableLiveData().observe(AddCardActivity.this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
                 try {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "");
@@ -209,6 +266,36 @@ public class AddCardActivity extends AppCompatActivity {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getPreAuthResponseMutableLiveData().observe(this, new Observer<PreAuthResponse>() {
+            @Override
+            public void onChanged(PreAuthResponse preAuthResponse) {
+                progressDialog.dismiss();
+                if (preAuthResponse != null) {
+                    PreAuthData objData = preAuthResponse.getData();
+                    Error errData = preAuthResponse.getError();
+                    if (errData == null) {
+                        if (objData.getStatus().toLowerCase().equals("success")) {
+                            displayPreAuthSuccess();
+                        } else {
+                            displayPreAuthFail();
+                        }
+                    } else {
+                        Utils.displayAlert(errData.getErrorDescription().toString(), AddCardActivity.this, "");
+                    }
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getCardTypeResponseMutableLiveData().observe(this, new Observer<CardTypeResponse>() {
+            @Override
+            public void onChanged(CardTypeResponse cardTypeResponse) {
+                if (cardTypeResponse != null) {
+                    objCard = cardTypeResponse;
+                    etCardNumber.setImage(cardTypeResponse.getData().getCardBrand());
                 }
             }
         });
@@ -231,10 +318,15 @@ public class AddCardActivity extends AppCompatActivity {
             String strUUID = UUID.randomUUID().toString();
             EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
             if (encrypt != null) {
-
+                CardRequest request = new CardRequest();
+                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+                request.setPayload(encrypt.getEncryptData());
+                paymentMethodsViewModel.saveCards(request);
+            } else {
+                progressDialog.dismiss();
             }
-
         } catch (Exception ex) {
+            progressDialog.dismiss();
             ex.printStackTrace();
         }
     }
@@ -242,6 +334,7 @@ public class AddCardActivity extends AppCompatActivity {
     private void displayPreAuth() {
         try {
             LinearLayout layoutPClose;
+            TextView tvMessage;
             CustomKeyboard ctKey = new CustomKeyboard(AddCardActivity.this);
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -257,12 +350,15 @@ public class AddCardActivity extends AppCompatActivity {
             preDialog.getWindow().setAttributes(lp);
             preDialog.show();
             layoutPClose = preDialog.findViewById(R.id.layoutPClose);
+            tvMessage = preDialog.findViewById(R.id.tvMessage);
             etPreAmount = preDialog.findViewById(R.id.etAmount);
             ctKey = preDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify");
             ctKey.setScreenName("addcard");
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            etPreAmount.setShowSoftInputOnFocus(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -272,9 +368,13 @@ public class AddCardActivity extends AppCompatActivity {
             etPreAmount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    etPreAmount.clearFocus();
-                    Utils.hideKeypad(AddCardActivity.this, v);
-
+                    Utils.hideSoftKeypad(AddCardActivity.this, v);
+                }
+            });
+            etPreAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    Utils.hideSoftKeypad(AddCardActivity.this, view);
                 }
             });
         } catch (Exception ex) {
@@ -284,9 +384,110 @@ public class AddCardActivity extends AppCompatActivity {
 
     public void verifyClick() {
         try {
-            if (etPreAmount.getText().toString().trim().equals("")) {
-
+            if (!etPreAmount.getText().toString().trim().equals("")) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("transactionId", cardResponseData.getTransactionId());
+                jsonObject.put("name", strName);
+                jsonObject.put("state", strState);
+                jsonObject.put("zipCode", strZip);
+                jsonObject.put("city", strCity);
+                jsonObject.put("country", strCountry);
+                jsonObject.put("addressLine1", strAdd1);
+                jsonObject.put("addressLine2", strAdd2);
+                jsonObject.put("cardNumber", strCardNo);
+                String strUUID = UUID.randomUUID().toString();
+                EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
+                if (encrypt != null) {
+                    progressDialog = Utils.showProgressDialog(AddCardActivity.this);
+                    PreAuthRequest request = new PreAuthRequest();
+                    request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+                    request.setPayload(encrypt.getEncryptData());
+                    paymentMethodsViewModel.preAuthVerify(request);
+                }
+            } else {
+                Utils.displayAlert("Please enter Amount", AddCardActivity.this, "");
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void displayPreAuthSuccess() {
+        try {
+            CardView cvDone;
+            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
+            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            preDialog.setContentView(R.layout.activity_all_done_card);
+            Window window = preDialog.getWindow();
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            window.setGravity(Gravity.CENTER);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.dimAmount = 0.7f;
+            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            preDialog.getWindow().setAttributes(lp);
+            preDialog.show();
+            cvDone = preDialog.findViewById(R.id.cvDone);
+
+            cvDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    preDialog.dismiss();
+                    onBackPressed();
+                    finish();
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void displayPreAuthFail() {
+        try {
+            CardView cvDone;
+            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
+            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            preDialog.setContentView(R.layout.activity_cards_authorization_failed);
+            Window window = preDialog.getWindow();
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            window.setGravity(Gravity.CENTER);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.dimAmount = 0.7f;
+            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            preDialog.getWindow().setAttributes(lp);
+            preDialog.show();
+            cvDone = preDialog.findViewById(R.id.cvDone);
+
+            cvDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    preDialog.dismiss();
+                    onBackPressed();
+                    finish();
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getCardype(String strCard) {
+        try {
+            CardTypeRequest request = new CardTypeRequest();
+            request.setCardNumber(strCard.toString().replace(" ", ""));
+            paymentMethodsViewModel.cardType(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void clearControls() {
+        try {
+            etExpiry.setText("");
+            etCVV.setText("");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
