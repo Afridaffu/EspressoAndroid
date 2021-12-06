@@ -333,7 +333,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     try {
-
                         if (s.length() > 0 && s.toString().trim().length() == 0) {
                             etPassword.setText("");
                         } else if (s.length() > 0 && s.toString().contains(" ")) {

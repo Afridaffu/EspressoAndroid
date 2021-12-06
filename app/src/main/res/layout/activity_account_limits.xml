@@ -69,7 +69,7 @@
                     android:layout_marginStart="6dp"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center"
-                    android:text="Pay/Request"
+                    android:text="Pay/Request (CYN)"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
@@ -209,7 +209,7 @@
                             android:layout_marginStart="@dimen/_11sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:gravity="left"
-                            android:text="@string/bebit_card"
+                            android:text="Credit/Debit Card"
                             android:textColor="#767676"
                             android:textSize="@dimen/_11ssp" />
 
@@ -232,6 +232,7 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
+                        android:visibility="gone"
                         android:paddingBottom="@dimen/_10sdp">
 
                         <TextView

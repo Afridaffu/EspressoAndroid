@@ -79,14 +79,14 @@
     <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
     <string name="city">City</string>
     <string name="state">State</string>
-    <string name="zip">Zipcode</string>
+    <string name="zip">Zip Code</string>
     <string name="country">Country</string>
     <string name="contentuploadidsuccess">Uploaded Driver’s License</string>
     <string name="mailingaddresshint">Street Address</string>
     <string name="mailingaddresshint2">Apt#, Suit, Floor</string>
     <string name="statehint">State</string>
     <string name="cityhint">City</string>
-    <string name="ziphint">Zipcode</string>
+    <string name="ziphint">Zip Code</string>
     <string name="countryhint">United States</string>
 
     <string name="contentidtype">Choose ID Type</string>
@@ -118,10 +118,10 @@
     <string name="daylimittext">250,000.00/Day</string>
     <string name="bebit_card">Debit Card </string>
     <string name="credit_card">Credit Card </string>
-    <string name="withdraw">Withdraw</string>
+    <string name="withdraw">Withdraw (CYN)</string>
     <string name="instant">Instant Pay</string>
     <string name="giftcard">Gift Card</string>
-    <string name="buytoken">Buy Tokens</string>
+    <string name="buytoken">Buy Tokens (CYN)</string>
     <string name="ok">OK</string>
     <string name="create_new_password">Create New Password</string>
     <string name="new_password">New Password</string>
@@ -179,8 +179,6 @@
     <string name="view_all">View all</string>
     <string name="bank_exhausthead">Too Many Bank Accounts</string>
     <string name="bank_exhaust">There is an account limit of 4 total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.</string>
-
-    <string name="edittext_hint"><font size="40">************</font></string>
 
 
 </resources>

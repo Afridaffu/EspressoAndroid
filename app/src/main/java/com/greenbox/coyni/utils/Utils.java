@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
@@ -637,7 +638,7 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size() - 1; i++) {
+            for (int i = 0; i < arrZonesList.size() ; i++) {
                 if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                     arrZonesList.get(i).setSelected(true);
                 }

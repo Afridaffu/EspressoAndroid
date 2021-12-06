@@ -171,21 +171,21 @@ public class EditAddressActivity extends AppCompatActivity {
                         && !myApplicationObj.getMyProfile().getData().getAddressLine1().equals("")) {
                     address1ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine1());
                     isAddress1 = true;
-                }else{
+                } else {
                     isAddress1 = false;
                 }
                 if (myApplicationObj.getMyProfile().getData().getAddressLine2() != null
                         && !myApplicationObj.getMyProfile().getData().getAddressLine2().equals("")) {
                     address2ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine2());
                     isAddress2 = true;
-                }else{
+                } else {
                     isAddress2 = false;
                 }
                 if (myApplicationObj.getMyProfile().getData().getCity() != null
                         && !myApplicationObj.getMyProfile().getData().getCity().equals("")) {
                     cityET.setText(myApplicationObj.getMyProfile().getData().getCity());
                     isCity = true;
-                }else{
+                } else {
                     isCity = false;
                 }
                 if (myApplicationObj.getMyProfile().getData().getState() != null
@@ -193,14 +193,14 @@ public class EditAddressActivity extends AppCompatActivity {
                     stateET.setText(myApplicationObj.getMyProfile().getData().getState());
                     Utils.tempState = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
-                }else{
+                } else {
                     isState = false;
                 }
                 if (myApplicationObj.getMyProfile().getData().getZipCode() != null
                         && !myApplicationObj.getMyProfile().getData().getZipCode().equals("")) {
                     zipcodeET.setText(myApplicationObj.getMyProfile().getData().getZipCode());
                     isZipcode = true;
-                }else{
+                } else {
                     isZipcode = false;
                 }
 
@@ -243,7 +243,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         address1ET.setText("");
                         address1ET.setSelection(address1ET.getText().length());
                         address1ErrorLL.setVisibility(GONE);
-                    }else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         address1ET.setText("");
                         address1ET.setSelection(address1ET.getText().length());
                         address1ErrorLL.setVisibility(GONE);
@@ -285,7 +285,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         address2ET.setText("");
                         address2ET.setSelection(address2ET.getText().length());
                         address2ErrorLL.setVisibility(GONE);
-                    }else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         address2ET.setText("");
                         address2ET.setSelection(address2ET.getText().length());
                         address2ErrorLL.setVisibility(GONE);
@@ -326,7 +326,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         cityET.setText("");
                         cityET.setSelection(cityET.getText().length());
                         cityErrorLL.setVisibility(GONE);
-                    }else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         cityET.setText("");
                         cityET.setSelection(cityET.getText().length());
                         cityErrorLL.setVisibility(GONE);
@@ -378,7 +378,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                }else if (charSequence.length() < 5) {
+                } else if (charSequence.length() < 5) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -589,6 +589,7 @@ public class EditAddressActivity extends AppCompatActivity {
             userData.setCity(cityET.getText().toString().trim());
             userData.setState(stateET.getText().toString().trim());
             userData.setZipCode(zipcodeET.getText().toString().trim());
+            userData.setCountry("United States");
 
             customerProfileViewModel.meUpdateAddress(userData);
         } catch (Exception ex) {

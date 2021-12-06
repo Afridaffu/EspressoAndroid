@@ -80,7 +80,7 @@ public class ImageUtility {
             // Saving the bitmap
             try {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
                 FileOutputStream stream = new FileOutputStream(mediaFile);
                 stream.write(out.toByteArray());
                 stream.close();

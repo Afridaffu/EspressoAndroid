@@ -21,6 +21,7 @@ import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
@@ -49,6 +50,7 @@ import com.greenbox.coyni.utils.Singleton;
 
 import java.lang.reflect.Type;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +78,11 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailExistsResponse> emailExistsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
+
+    public MutableLiveData<LoginResponse> getAuthenticatePasswordResponse() {
+        return authenticatePasswordResponse;
+    }
 
     public MutableLiveData<UpdateResendOTPResponse> getUpdateResendOTPMutableLiveData() {
         return updateResendOTPMutableLiveData;
@@ -750,6 +757,39 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<UpdateResendOTPResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void authenticatePassword(PasswordRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<LoginResponse> mCall = apiService.authenticatePassword(request);
+            mCall.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.isSuccessful()) {
+                        LoginResponse obj = response.body();
+                        authenticatePasswordResponse.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<LoginResponse>() {
+                        }.getType();
+                        LoginResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            authenticatePasswordResponse.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

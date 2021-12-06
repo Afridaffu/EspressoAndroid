@@ -105,6 +105,10 @@ public class PayRequestScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         setContentView(R.layout.activity_pay_request_scan);
         try {
 
@@ -611,9 +615,12 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
             // setting this dimensions inside our qr code
             // encoder to generate our qr code.
-            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, dimen);
+            qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, 600);
+            bitmap = Bitmap.createBitmap(qrgEncoder.encodeAsBitmap(), 50, 50, 500, 500);
+//            bitmap  = Utils.trimLeave5Percent(bitmap, R.color.white);
+
             // getting our qrcode in the form of bitmap.
-            bitmap = qrgEncoder.encodeAsBitmap();
+//            bitmap = qrgEncoder.encodeAsBitmap();
             // the bitmap is set inside our image
             // view using .setimagebitmap method.
             idIVQrcode.setImageBitmap(bitmap);
