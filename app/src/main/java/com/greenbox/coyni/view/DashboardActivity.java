@@ -35,7 +35,7 @@ import okhttp3.internal.Util;
 
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile, layoutCrypto, layoutCard;
-    LinearLayout scanQr;
+    LinearLayout scanQr,viewMoreLL;
     DashboardViewModel dashboardViewModel;
     TextView tvUserName;
     MyApplication objMyApplication;
@@ -60,6 +60,7 @@ public class DashboardActivity extends AppCompatActivity {
             layoutCrypto = findViewById(R.id.layoutCrypto);
             layoutCard = findViewById(R.id.layoutCard);
             tvUserName = findViewById(R.id.tvUserName);
+            viewMoreLL=findViewById(R.id.viewMoreLL);
             scanQr=findViewById(R.id.scanQrLL);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -76,7 +77,18 @@ public class DashboardActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-
+            viewMoreLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Intent intent = new Intent(DashboardActivity.this, TransactionDetailsActivity.class);
+                        startActivity(intent);
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            });
             layoutCrypto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

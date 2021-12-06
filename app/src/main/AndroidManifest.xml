@@ -39,18 +39,21 @@
             android:name=".view.PayRequestScanActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.AuthLoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.PdfViewAgreementsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.PayRequestTransactionActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".view.ConfirmPasswordActivity"
             android:exported="true"

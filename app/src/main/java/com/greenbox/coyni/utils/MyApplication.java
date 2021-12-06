@@ -12,6 +12,7 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
 
@@ -34,33 +35,16 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
+    TransactionList transactionList;
 
     String timezone = "";
     int timezoneID = 0;
     String tempTimezone = "";
     int tempTimezoneID = 0;
 
-    //Account Limits
-    private double tokenWithdrawalBankDayLimit;
-    private double tokenWithdrawalBankWeekLimit;
-
-    private double tokenWithdrawalInstantpayDayLimit;
-    private double tokenWithdrawalInstantpayWeekLimit;
-
-    private double tokenWithdrawalGiftcardDayLimit;
-    private double tokenWithdrawalGiftcardWeekLimit;
-
-    private double tokenSendDayLimit;
-    private double tokenSendWeekLimit;
-
-    private double tokenBuyBankDayLimit;
-    private double tokenBuyBankWeeekLimit;
-
-    private double tokenBuyCardDayLimit;
-    private double tokenBuyCardWeekLimit;
-
-    private double tokenWithdrawalSignetDayLimit;
-    private double tokenWithdrawalSignetWeekLimit;
+    public TransactionList getTransactionList() {
+        return transactionList;
+    }
 
     public AgreementsPdf getAgreementsPdf() {
         return agreementsPdf;

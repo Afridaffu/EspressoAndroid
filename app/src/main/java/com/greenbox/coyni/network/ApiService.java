@@ -47,6 +47,7 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
+import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.users.AccountLimits;
@@ -188,4 +189,6 @@ public interface ApiService {
     @POST("api/v2/transactions/token/info")
     Call<TransactionDetails> getTransactionDt();
 
+    @POST("/api/v2/transactions/me/pending-posted-txns")
+    Call<TransactionList> meTransactionList();
 }

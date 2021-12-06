@@ -23,6 +23,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.UserDetailsData;
 import com.greenbox.coyni.model.wallet.WalletResponse;
@@ -53,7 +54,12 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<ProfilesResponse> profileRespMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UserDetails> userDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<TransactionList> transactionListMutableLiveData=new MutableLiveData<>();
 
+
+    public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
+        return transactionListMutableLiveData;
+    }
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
         return userDetailsMutableLiveData;
     }
@@ -62,9 +68,9 @@ public class DashboardViewModel extends AndroidViewModel {
         return userPreferenceMutableLiveData;
     }
 
-    public MutableLiveData<String> getErrorMutableLiveData() {
-        return errorMutableLiveData;
-    }
+//    public MutableLiveData<String> getErrorMutableLiveData() {
+//        return errorMutableLiveData;
+//    }
 
     public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
         return profileRespMutableLiveData;
@@ -532,6 +538,26 @@ public class DashboardViewModel extends AndroidViewModel {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+    }
+    public void getTransactionList(){
+
+        ApiService apiService=AuthApiClient.getInstance().create(ApiService.class);
+        Call<TransactionList> mcall=apiService.meTransactionList();
+        mcall.enqueue(new Callback<TransactionList>() {
+            @Override
+            public void onResponse(Call<TransactionList> call, Response<TransactionList> response) {
+                if (response.isSuccessful()){
+                    TransactionList obj=response.body();
+                    transactionListMutableLiveData.setValue(obj);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransactionList> call, Throwable t) {
+
+            }
+        });
 
     }
 

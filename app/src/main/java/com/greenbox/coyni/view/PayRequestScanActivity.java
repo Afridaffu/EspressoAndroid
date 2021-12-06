@@ -92,7 +92,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
     private CodeScannerView mycodeScannerView;
     MyApplication objMyApplication;
     DashboardViewModel dashboardViewModel;
-    TextView scancode, tvWalletAddress, tvName, tvNameHead;
+    TextView tvWalletAddress, tvName;
     boolean isTorchOn = true;
     private ImageView toglebtn1;
     String strWallet = "", strScanWallet = "";
@@ -107,21 +107,21 @@ public class PayRequestScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_request_scan);
         try {
-
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            objMyApplication = (MyApplication) getApplicationContext();
             closeBtnScanCode = findViewById(R.id.closeBtnSC);
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
             scanCode = findViewById(R.id.scanCodeTV);
             scanMe = findViewById(R.id.scanMeTV);
             toglebtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.tvWalletAddress);
-            objMyApplication = (MyApplication) getApplicationContext();
             mycodeScannerView = findViewById(R.id.scanner_view);
             scannerLayout = findViewById(R.id.scannerLayout);
             scannerBar = findViewById(R.id.lineView);
             flashLL = findViewById(R.id.flashBtnLL);
             idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
             tvName = findViewById(R.id.tvName);
-            tvNameHead = findViewById(R.id.tvUserInfo);
+//            tvNameHead = findViewById(R.id.tvUserInfo);
             layoutHead = findViewById(R.id.layoutHead);
             scanMeSV = findViewById(R.id.scanmeScrlView);
             savetoAlbum = findViewById(R.id.saveToAlbumTV);
@@ -129,12 +129,13 @@ public class PayRequestScanActivity extends AppCompatActivity {
             imageShare = findViewById(R.id.imgShare);
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
+
+
+            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             userNameTV.setText(strUserName.toUpperCase(Locale.US));
-            if (strName != null && strName.length() > 21) {
-                tvName.setText(strName.substring(0, 21) + "...");
+            if (strName != null && strName.length() > 22) {
+                tvName.setText(strName.substring(0, 22) + "...");
             } else {
                 tvName.setText(strName);
             }
@@ -359,12 +360,17 @@ public class PayRequestScanActivity extends AppCompatActivity {
         dashboardViewModel.getUserDetailsMutableLiveData().observe(this, new Observer<UserDetails>() {
             @Override
             public void onChanged(UserDetails userDetails) {
+
                 dialog.dismiss();
-                if (userDetails != null) {
-                    Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
-                    i.putExtra("walletId", strScanWallet);
-                    i.putExtra("screen", "scan");
-                    startActivity(i);
+                try {
+                    if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
+                        i.putExtra("walletId", strScanWallet);
+                        i.putExtra("screen", "scan");
+                        startActivity(i);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -412,32 +418,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
             Bitmap b = idIVQrcode.getDrawingCache();
 
             MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-PayQr", "this is QR");
-//        BitmapDrawable bitmapDrawable=(BitmapDrawable) idIVQrcode.getDrawable();
-//        Bitmap bitmap=bitmapDrawable.getBitmap();
-//        FileOutputStream outputStream=null;
-//        File file= Environment.getExternalStorageDirectory();
-//        File dir=new File(file.getAbsolutePath()+"/mypics");
-//        dir.mkdirs();
-//        String filename=String.format("%d.png",System.currentTimeMillis());
-//        File outfile=new File(dir,filename);
-//        try {
-//            outputStream=new FileOutputStream(outfile);
-//
-//        }
-//        catch (Exception fileNotFoundException){
-//            fileNotFoundException.printStackTrace();
-//        }
-//        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
-//        try {
-//            outputStream.flush();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            outputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -600,20 +580,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
-    private void showToast() {
-        try {
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast_recipientaddress, (ViewGroup) findViewById(R.id.toastRootLL));
-
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setView(layout);
-            toast.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     private void getUserDetails(String strWalletId) {
         try {
