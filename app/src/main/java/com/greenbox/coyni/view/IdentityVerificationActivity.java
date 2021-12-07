@@ -42,15 +42,20 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.fragments.IdVeBottomSheetFragment;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
+import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.OnSwipeTouchListener;
@@ -59,11 +64,15 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -72,10 +81,10 @@ import okhttp3.internal.Util;
 
 public class IdentityVerificationActivity extends AppCompatActivity {
     TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL;
-    TextInputEditText dobET, ssnET, cityET,mailAddr1, mailAddr2, state, zipcode;
+    TextInputEditText dobET, ssnET, cityET, mailAddr1, mailAddr2, state, zipcode;
     TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
-    ConstraintLayout idveriDOBConLayout,stateCL;
-    LinearLayout bottomSheet, fileSelectedLL,firstIVeri,ssnErrorLL, swipeLL;
+    ConstraintLayout idveriDOBConLayout, stateCL;
+    LinearLayout bottomSheet, fileSelectedLL, firstIVeri, ssnErrorLL, swipeLL;
     public static CardView btnNext, btnSubmit;
     ScrollView secondIVeri;
     View viewLeft, viewRight;
@@ -97,6 +106,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
     MyApplication myApplicationObj;
     Long mLastClickTime = 0L;
+    DashboardViewModel dashboardViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +118,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             setContentView(R.layout.activity_identity_verification);
 
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             identityVerificationActivity = this;
             myApplicationObj = (MyApplication) getApplicationContext();
-
+            dashboardViewModel.meProfile();
+            setStates();
             initFields();
             initObservers();
 
@@ -150,7 +162,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                 String convertedDate = convertDate(dateToConvert);
                                 dob.setText(convertedDate);
                                 isDOBSelected = true;
-                                dateOfBirth = year+"-"+Utils.changeFormat((monthOfYear + 1))+"-"+Utils.changeFormat(dayOfMonth);
+                                dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
                                 enableNext();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -1063,16 +1075,42 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         }
 
         try {
-            identityVerificationViewModel.getUploadIdentityAddressResponse().observe(this, new Observer<ImageResponse>() {
+            identityVerificationViewModel.getUploadIdentityAddressResponse().observe(this, new Observer<IdentityAddressResponse>() {
                 @Override
-                public void onChanged(ImageResponse imageResponse) {
+                public void onChanged(IdentityAddressResponse identityAddressResponse) {
                     if (dialog != null) {
                         dialog.dismiss();
                     }
-                    if (imageResponse.getStatus().equalsIgnoreCase("success")) {
+                    if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
+                        String respCode = identityAddressResponse.getData().getGiactResponseName();
+                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+                                || respCode.equalsIgnoreCase("CI24")) {
+                            //Success
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "SUCCESS"));
+                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+                            //SSN Error
+//                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                    .putExtra("screen","SUCCESS"));
 
+                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+                            //Under Review
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "UNDER_REVIEW"));
+
+                        } else {
+                            //Failed
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "FAILED"));
+
+                        }
                     } else {
-                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
+                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
                     }
 
                     identityVerificationViewModel.getStatusTracker();
@@ -1087,15 +1125,48 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
                 @Override
                 public void onChanged(TrackerResponse trackerResponse) {
-
-                    if (trackerResponse!=null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                    if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
                         myApplicationObj.setTrackerResponse(trackerResponse);
                     }
-
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+
+        try {
+            dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+                @Override
+                public void onChanged(Profile profile) {
+                    if (profile != null && profile.getStatus().equalsIgnoreCase("success")) {
+                        myApplicationObj.setMyProfile(profile);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void setStates() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("states.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(json, type);
+            myApplicationObj.setListStates(listStates);
+            Log.e("list states", listStates.size() + "");
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

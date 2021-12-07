@@ -126,19 +126,25 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
                 if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
-                    cardviewYourAccount.setVisibility(View.GONE);
+//                    cardviewYourAccount.setVisibility(View.GONE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
                 } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                    cardviewYourAccount.setVisibility(View.VISIBLE);
+//                    cardviewYourAccount.setVisibility(View.VISIBLE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
                 } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
-                    cardviewYourAccount.setVisibility(View.GONE);
+//                    cardviewYourAccount.setVisibility(View.GONE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
                 } else {
+//                    cardviewYourAccount.setVisibility(View.GONE);
+                }
+
+                if(objMyApplication.getTrackerResponse().getData().isPersonIdentified()){
                     cardviewYourAccount.setVisibility(View.GONE);
+                }else{
+                    cardviewYourAccount.setVisibility(View.VISIBLE);
                 }
                 tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
                 cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());

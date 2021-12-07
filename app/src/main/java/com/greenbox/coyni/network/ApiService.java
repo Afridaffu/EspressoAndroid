@@ -10,6 +10,7 @@ import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
+import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
@@ -226,7 +227,7 @@ public interface ApiService {
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
 
     @POST("api/v2/profile/identity")
-    Call<ImageResponse> uploadIdentityAddress(@Body IdentityAddressRequest identityAddressRequest);
+    Call<IdentityAddressResponse> uploadIdentityAddress(@Body IdentityAddressRequest identityAddressRequest);
 
     @POST("api/v2/profile/me/tracker")
     Call<TrackerResponse> statusTracker();

@@ -1,111 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    >
-        <RelativeLayout
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    <LinearLayout
+        android:id="@+id/topll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:layout_above="@id/idveriCardViewExitBtn">
+
+        <ImageView
+            android:id="@+id/veriFailed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_116sdp"
+            android:src="@drawable/ic_failed" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_47sdp"
-            >
+            android:layout_marginTop="30.5dp"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="@string/iv_failed"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_16ssp" />
 
-            <LinearLayout
-                android:id="@+id/topll"
+        <TextView
+            android:id="@+id/failedcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/iv_failedcontent"
+            android:textAlignment="center"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/failedcontent1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/idveriCardViewExitBtn"
-                android:layout_alignParentTop="true"
-                android:orientation="vertical"
-                >
+                android:layout_marginLeft="@dimen/_52sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/iv_failedcontentextention"
+                android:textAlignment="center"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
 
-                <ImageView
-                    android:id="@+id/veriFailed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_116sdp"
-                    android:src="@drawable/ic_failed" />
+            <TextView
+                android:id="@+id/contactUSTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_21sdp"
+                android:layout_toRightOf="@id/failedcontent1"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/iv_failedcontactex"
+                android:textColor="@color/primary_color"
+                android:textSize="@dimen/_12ssp" />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30.5dp"
-                    android:fontFamily="@font/opensans_bold"
-                    android:gravity="center"
-                    android:text="@string/iv_failed"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_16ssp" />
+    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/failedcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_21sdp"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:layout_marginRight="@dimen/_21sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="@string/iv_failedcontent"
-                    android:textAlignment="center"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/idveriCardViewExitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_21sdp"
+        app:cardBackgroundColor="@color/primary_color"
+        app:cardCornerRadius="@dimen/_21sdp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/failedcontent1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_52sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="@string/iv_failedcontentextention"
-                        android:textAlignment="center"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <TextView
-                        android:id="@+id/failedcontent2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_21sdp"
-                        android:layout_toRightOf="@id/failedcontent1"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="@string/iv_failedcontactex"
-                        android:textColor="@color/primary_color"
-                        android:textSize="@dimen/_12ssp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/idveriCardViewExitBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_44sdp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginEnd="@dimen/_21sdp"
-                app:cardBackgroundColor="@color/primary_color"
-                app:cardCornerRadius="@dimen/_21sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="@string/exit"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:text="@string/exit"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
 
 
-            </androidx.cardview.widget.CardView>
-        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+
+</RelativeLayout>
