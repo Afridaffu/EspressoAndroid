@@ -141,9 +141,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
 //                    cardviewYourAccount.setVisibility(View.GONE);
                 }
 
-                if(objMyApplication.getTrackerResponse().getData().isPersonIdentified()){
+                if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
                     cardviewYourAccount.setVisibility(View.GONE);
-                }else{
+                } else {
                     cardviewYourAccount.setVisibility(View.VISIBLE);
                 }
                 tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
@@ -351,11 +351,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         customerNameTV.setText(objMyApplication.getStrUserName());
                     }
                 } else {
-                    if (objMyApplication.getStrUserName().length() == 21 ) {
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20)+"...");
-                    } else if(objMyApplication.getStrUserName().length() > 22) {
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 22)+"...");
-                    }else{
+                    if (objMyApplication.getStrUserName().length() == 21) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20) + "...");
+                    } else if (objMyApplication.getStrUserName().length() > 22) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 22) + "...");
+                    } else {
                         customerNameTV.setText(objMyApplication.getStrUserName());
                     }
                 }
@@ -379,7 +379,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private void displayQRCode() {
         try {
             ImageView imgClose, copyRecipientAddress;
-            ImageView meQrCode, shareImage,imgProfile;
+            ImageView meQrCode, shareImage, imgProfile;
             TextView userFullName, userInfo, walletAddress;
             qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
