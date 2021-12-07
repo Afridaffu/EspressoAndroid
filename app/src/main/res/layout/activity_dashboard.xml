@@ -45,7 +45,8 @@
                         android:layout_width="@dimen/_29sdp"
                         android:layout_height="@dimen/_29sdp"
                         app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="18dp">
+                        app:cardCornerRadius="18dp"
+                        >
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -328,7 +329,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_margin="1dp"
-                android:background="@color/white"
+                app:cardBackgroundColor="@color/white"
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -409,7 +410,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_margin="1dp"
-                android:background="@color/white"
+                app:cardBackgroundColor="@color/white"
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -487,7 +488,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_margin="1dp"
-                android:background="@color/white"
+                app:cardBackgroundColor="@color/white"
                 android:visibility="gone"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -592,6 +593,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="1dp"
                 android:layout_marginTop="@dimen/_4sdp"
+                app:cardBackgroundColor="@color/white"
                 android:layout_marginEnd="1dp"
                 android:layout_marginBottom="@dimen/_11sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
@@ -630,6 +632,7 @@
         android:layout_marginTop="@dimen/_14sdp"
         android:layout_marginRight="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_12sdp"
+        app:cardBackgroundColor="@color/white"
         android:visibility="gone"
         app:cardCornerRadius="@dimen/_10sdp">
 

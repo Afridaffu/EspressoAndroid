@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -39,10 +40,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -73,6 +76,15 @@ public class UserDetailsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
     Long mLastClickTime = 0L;
+
+    static SQLiteDatabase mydatabase;
+    static Cursor dsPermanentToken, dsFacePin, dsTouchID;
+    static String strToken = "";
+    static String strDeviceID = "";
+    static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    static MyApplication objMyApplication;
+    String authenticateType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +119,11 @@ public class UserDetailsActivity extends AppCompatActivity {
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
 
+            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
+            SetToken(myApplicationObj, this);
+            SetFaceLock(myApplicationObj, this);
+            SetTouchId(myApplicationObj, this);
+
             editProfileIV.setOnClickListener(view -> {
                 if (checkAndRequestPermissions(this)) {
 //                    chooseImage(this);
@@ -125,9 +142,24 @@ public class UserDetailsActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "EditEmail"));
+//                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                            .putExtra("TYPE", "ENTER")
+//                            .putExtra("screen", "EditEmail"));
+                    authenticateType = "EMAIL";
+
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        } else {
+                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "EditEmail"));
+                        }
+                    } else {
+                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "EditEmail"));
+                    }
                 }
             });
 
@@ -138,9 +170,26 @@ public class UserDetailsActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "EditAddress"));
+//                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                            .putExtra("TYPE", "ENTER")
+//                            .putExtra("screen", "EditAddress"));
+
+                    authenticateType = "ADDRESS";
+
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        } else {
+                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "EditAddress"));
+                        }
+                    } else {
+                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "EditAddress"));
+                    }
+
                 }
             });
 
@@ -151,10 +200,29 @@ public class UserDetailsActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("OLD_PHONE", phoneFormat)
-                            .putExtra("screen", "EditPhone"));
+//                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                            .putExtra("TYPE", "ENTER")
+//                            .putExtra("OLD_PHONE", phoneFormat)
+//                            .putExtra("screen", "EditPhone"));
+
+                    authenticateType = "PHONE";
+
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        } else {
+                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("OLD_PHONE", phoneFormat)
+                                    .putExtra("screen", "EditPhone"));
+                        }
+                    } else {
+                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("OLD_PHONE", phoneFormat)
+                                .putExtra("screen", "EditPhone"));
+                    }
+
                 }
             });
 
@@ -570,6 +638,40 @@ public class UserDetailsActivity extends AppCompatActivity {
                         Exception error = result.getError();
                     }
                 }
+                break;
+                case 251: {
+                    if (resultCode == RESULT_OK) {
+                        if (authenticateType.equals("EMAIL")) {
+                            Intent ee = new Intent(UserDetailsActivity.this, EditEmailActivity.class);
+                            startActivity(ee);
+                        } else if (authenticateType.equals("ADDRESS")) {
+                            Intent ea = new Intent(UserDetailsActivity.this, EditAddressActivity.class);
+                            startActivity(ea);
+                        } else if (authenticateType.equals("PHONE")) {
+                            Intent ep = new Intent(UserDetailsActivity.this, EditPhoneActivity.class);
+                            ep.putExtra("OLD_PHONE", phoneFormat);
+                            startActivity(ep);
+
+                        }
+                    } else {
+                        if (authenticateType.equals("EMAIL")) {
+                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "EditEmail"));
+                        } else if (authenticateType.equals("ADDRESS")) {
+                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "EditAddress"));
+                        } else if (authenticateType.equals("PHONE")) {
+                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("OLD_PHONE", phoneFormat)
+                                    .putExtra("screen", "EditPhone"));
+
+                        }
+                    }
+                }
+                break;
             }
         }
     }
@@ -625,6 +727,61 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public static void SetToken(MyApplication objMyApplication, Activity activity) {
+        try {
+            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+            dsPermanentToken.moveToFirst();
+            if (dsPermanentToken.getCount() > 0) {
+                strToken = dsPermanentToken.getString(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
+        try {
+            isFaceLock = false;
+            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
+        try {
+            isTouchId = false;
+            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

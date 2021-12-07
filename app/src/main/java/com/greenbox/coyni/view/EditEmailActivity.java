@@ -163,7 +163,7 @@ public class EditEmailActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (charSequence.length() > 0 && Utils.isValidEmail(charSequence.toString().trim())) {
+                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         currentEmailErrorLL.setVisibility(GONE);
                         currentEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        currentEmailTIL.setHintTextColor(colorState);
@@ -175,7 +175,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         currentEmailErrorTV.setText("Field Required");
                         isCurrentEmail = false;
                     }
-                    if (Utils.isValidEmail(charSequence.toString().trim())) {
+                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                         isCurrentEmail = true;
                     } else {
                         isCurrentEmail = false;
@@ -209,7 +209,7 @@ public class EditEmailActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (charSequence.length() > 0 && Utils.isValidEmail(charSequence.toString().trim())) {
+                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         newEmailErrorLL.setVisibility(GONE);
                         newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        newEmailTIL.setHintTextColor(colorState);
@@ -220,7 +220,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         newEmailErrorTV.setText("Field Required");
                         isNewEmail = false;
                     }
-                    if (Utils.isValidEmail(charSequence.toString().trim())) {
+                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                         isNewEmail = true;
                     } else {
                         isNewEmail = false;
@@ -253,12 +253,12 @@ public class EditEmailActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        if (newEmailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(newEmailET.getText().toString().trim())) {
+                        if (newEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(newEmailET.getText().toString().trim())) {
                             newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
                             newEmailErrorLL.setVisibility(VISIBLE);
                             newEmailErrorTV.setText("Invalid Email");
-                        } else if (newEmailET.getText().toString().trim().length() > 0 && Utils.isValidEmail(newEmailET.getText().toString().trim())) {
+                        } else if (newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(newEmailET.getText().toString().trim())) {
                             newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
                             newEmailErrorLL.setVisibility(GONE);
@@ -284,12 +284,12 @@ public class EditEmailActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        if (currentEmailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
+                        if (currentEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
                             currentEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.error_red));
                             currentEmailErrorLL.setVisibility(VISIBLE);
                             currentEmailErrorTV.setText("Invalid Email");
-                        } else if (currentEmailET.getText().toString().trim().length() > 0 && Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
+                        } else if (currentEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
                             currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
                             currentEmailErrorLL.setVisibility(GONE);

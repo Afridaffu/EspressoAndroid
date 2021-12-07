@@ -499,7 +499,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (charSequence.length() > 0 && Utils.isValidEmail(charSequence.toString().trim())) {
+                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         isEmailError = false;
                         emailErrorLL.setVisibility(GONE);
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -510,7 +510,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         emailErrorLL.setVisibility(VISIBLE);
                         emailErrorTV.setText("Field Required");
                     }
-                    if (Utils.isValidEmail(charSequence.toString().trim())) {
+                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                         isEmail = true;
                     } else {
                         isEmail = false;
@@ -851,12 +851,12 @@ public class CreateAccountActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
 
-                        if (emailET.getText().toString().trim().length() > 0 && !Utils.isValidEmail(emailET.getText().toString().trim())) {
+                        if (emailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Invalid Email");
-                        } else if (emailET.getText().toString().trim().length() > 0 && Utils.isValidEmail(emailET.getText().toString().trim())) {
+                        } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);

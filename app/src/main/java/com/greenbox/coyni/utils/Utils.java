@@ -13,6 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
@@ -127,6 +129,13 @@ public class Utils {
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
 
+    static SQLiteDatabase mydatabase;
+    static Cursor dsPermanentToken, dsFacePin, dsTouchID;
+    static String strToken = "";
+    static String strDeviceID = "";
+    static Boolean isFaceLock = false, isTouchId = false, isBiometric = false;
+    static int CODE_AUTHENTICATION_VERIFICATION = 241;
+    static MyApplication objMyApplication;
 
     public static String getStrLang() {
         return strLang;
@@ -638,7 +647,7 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size() ; i++) {
+            for (int i = 0; i < arrZonesList.size(); i++) {
                 if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                     arrZonesList.get(i).setSelected(true);
                 }
@@ -849,5 +858,67 @@ public class Utils {
             ex.printStackTrace();
         }
     }
+
+    public static void biometricAuthentication(MyApplication objMyApplication, Activity activity) {
+        SetToken(objMyApplication, activity);
+        SetFaceLock(objMyApplication, activity);
+        SetTouchId(objMyApplication, activity);
+    }
+
+    public static void SetToken(MyApplication objMyApplication, Activity activity) {
+        try {
+            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+            dsPermanentToken.moveToFirst();
+            if (dsPermanentToken.getCount() > 0) {
+                strToken = dsPermanentToken.getString(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
+        try {
+            isFaceLock = false;
+            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
+        try {
+            isTouchId = false;
+            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
 }

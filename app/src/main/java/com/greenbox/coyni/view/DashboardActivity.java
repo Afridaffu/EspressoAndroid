@@ -51,12 +51,12 @@ public class DashboardActivity extends AppCompatActivity {
     LinearLayout scanQr;
     DashboardViewModel dashboardViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
-    TextView tvUserName, tvUserNameSmall,tvUserInfoSmall,tvUserInfo;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo;
     MyApplication objMyApplication;
     Dialog dialog;
     ProgressDialog progressDialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, transactionsRL;
-    CardView getStartedCV, welcomeCoyniCV, underReviewCV,additionalActionCV;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV;
     ImageView imgProfileSmall, imgProfile;
 
     @Override

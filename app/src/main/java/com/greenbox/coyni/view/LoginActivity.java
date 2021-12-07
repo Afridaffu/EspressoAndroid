@@ -248,12 +248,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //                        }
 
                         if (!hasFocus) {
-                            if (etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                            if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                                 layoutEmailError.setVisibility(VISIBLE);
                                 tvEmailError.setText("Invalid Email");
-                            } else if (etEmail.getText().toString().trim().length() > 0 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                            } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                                 layoutEmailError.setVisibility(GONE);
@@ -336,7 +336,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length() >= 8) {
+                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5  && etPassword.getText().toString().length() >= 8) {
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                         } else {
@@ -382,7 +382,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etPassword.getText().toString().length() >= 8) {
+                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5 && etPassword.getText().toString().length() >= 8) {
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                             layoutEmailError.setVisibility(GONE);

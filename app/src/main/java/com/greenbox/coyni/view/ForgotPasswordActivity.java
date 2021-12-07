@@ -104,7 +104,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             etEmail.setSelection(etEmail.getText().length());
                         } else if (s.length() == 0) {
                             layoutEmailError.setVisibility(GONE);
-                        } else if (Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                        } else if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5) {
                             layoutEmailError.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
@@ -129,13 +129,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         Utils.hideKeypad(ForgotPasswordActivity.this, v);
-                        if (etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                        if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Invalid Email");
                             etEmail.clearFocus();
-                        } else if (etEmail.getText().toString().trim().length() > 0 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                        } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                             layoutEmailError.setVisibility(GONE);
