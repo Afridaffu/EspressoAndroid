@@ -109,7 +109,7 @@
 
     <string name="iv_failed">Identity Verification Failed</string>
     <string name="iv_failedcontent">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
-    <string name="iv_failedcontentextention"> If you need any help Please</string>
+    <string name="iv_failedcontentextention"> If you need any help please</string>
     <string name="iv_failedcontactex"><u>Contact Us</u></string>
 
     <string name="exit">Exit</string>

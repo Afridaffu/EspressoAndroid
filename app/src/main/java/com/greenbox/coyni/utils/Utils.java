@@ -730,7 +730,7 @@ public class Utils {
 
             List<States> listStates = myApplicationObj.getListStates();
 
-            for (int i = 0; i < listStates.size() - 1; i++) {
+            for (int i = 0; i < listStates.size(); i++) {
                 if (editText.getText().toString().trim().equals(listStates.get(i).getIsocode())) {
                     listStates.get(i).setSelected(true);
                 } else {
@@ -848,6 +848,11 @@ public class Utils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static void hideSoftKeypad(Context context, View view) {
+        InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }

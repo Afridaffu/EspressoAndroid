@@ -126,19 +126,25 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
                 if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
-                    cardviewYourAccount.setVisibility(View.GONE);
+//                    cardviewYourAccount.setVisibility(View.GONE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
                 } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                    cardviewYourAccount.setVisibility(View.VISIBLE);
+//                    cardviewYourAccount.setVisibility(View.VISIBLE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
                 } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
-                    cardviewYourAccount.setVisibility(View.GONE);
+//                    cardviewYourAccount.setVisibility(View.GONE);
                     tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
                 } else {
+//                    cardviewYourAccount.setVisibility(View.GONE);
+                }
+
+                if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
                     cardviewYourAccount.setVisibility(View.GONE);
+                } else {
+                    cardviewYourAccount.setVisibility(View.VISIBLE);
                 }
                 tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
                 cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
@@ -277,15 +283,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    try {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                            return;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -345,11 +351,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         customerNameTV.setText(objMyApplication.getStrUserName());
                     }
                 } else {
-                    if (objMyApplication.getStrUserName().length() == 21 ) {
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20)+"...");
-                    } else if(objMyApplication.getStrUserName().length() > 22) {
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 22)+"...");
-                    }else{
+                    if (objMyApplication.getStrUserName().length() == 21) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20) + "...");
+                    } else if (objMyApplication.getStrUserName().length() > 22) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 22) + "...");
+                    } else {
                         customerNameTV.setText(objMyApplication.getStrUserName());
                     }
                 }
@@ -373,7 +379,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private void displayQRCode() {
         try {
             ImageView imgClose, copyRecipientAddress;
-            ImageView meQrCode, shareImage,imgProfile;
+            ImageView meQrCode, shareImage, imgProfile;
             TextView userFullName, userInfo, walletAddress;
             qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

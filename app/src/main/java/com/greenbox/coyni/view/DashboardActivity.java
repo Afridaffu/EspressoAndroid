@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,9 +19,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
@@ -48,15 +51,22 @@ public class DashboardActivity extends AppCompatActivity {
     LinearLayout scanQr,viewMoreLL;
     DashboardViewModel dashboardViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
-    TextView tvUserName;
+    TextView tvUserName, tvUserNameSmall,tvUserInfoSmall,tvUserInfo;
     MyApplication objMyApplication;
     Dialog dialog;
     ProgressDialog progressDialog;
+    RelativeLayout cvHeaderRL, cvSmallHeaderRL, transactionsRL;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV,additionalActionCV;
+    ImageView imgProfileSmall, imgProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
@@ -68,22 +78,32 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            cvHeaderRL = findViewById(R.id.cvHeaderRL);
+            cvSmallHeaderRL = findViewById(R.id.cvSmallHeaderRL);
+            getStartedCV = findViewById(R.id.getStartedCV);
+            transactionsRL = findViewById(R.id.transactionsRL);
+            imgProfileSmall = findViewById(R.id.imgProfileSmall);
+            imgProfile = findViewById(R.id.imgProfile);
+
+            welcomeCoyniCV = findViewById(R.id.welcomeCoyniCV);
+            underReviewCV = findViewById(R.id.underReviewCV);
+            additionalActionCV = findViewById(R.id.additionalActionCV);
+
             layoutProfile = findViewById(R.id.layoutProfile);
             layoutCrypto = findViewById(R.id.layoutCrypto);
             layoutCard = findViewById(R.id.layoutCard);
             tvUserName = findViewById(R.id.tvUserName);
             viewMoreLL=findViewById(R.id.viewMoreLL);
             scanQr=findViewById(R.id.scanQrLL);
+            tvUserNameSmall = findViewById(R.id.tvUserNameSmall);
+            tvUserInfo = findViewById(R.id.tvUserInfo);
+            tvUserInfoSmall = findViewById(R.id.tvUserInfoSmall);
+            scanQr = findViewById(R.id.scanQrLL);
+
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
-            if (Utils.checkInternet(DashboardActivity.this)) {
-                progressDialog = Utils.showProgressDialog(this);
-                dashboardViewModel.meProfile();
-                identityVerificationViewModel.getStatusTracker();
-            } else {
-                Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
-            }
+
             layoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,7 +139,7 @@ public class DashboardActivity extends AppCompatActivity {
             scanQr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(DashboardActivity.this,PayRequestScanActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
                 }
             });
 
@@ -140,9 +160,12 @@ public class DashboardActivity extends AppCompatActivity {
                     String strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
                     if (strName != null && strName.length() > 21) {
                         tvUserName.setText("Hi " + strName.substring(0, 21) + "...");
+                        tvUserNameSmall.setText("Hi " + strName.substring(0, 21) + "...");
                     } else {
                         tvUserName.setText("Hi " + strName);
+                        tvUserNameSmall.setText("Hi " + strName);
                     }
+                    bindImage();
                 }
                 new FetchData(DashboardActivity.this).execute();
             }
@@ -162,8 +185,30 @@ public class DashboardActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(TrackerResponse trackerResponse) {
 
-                    if (trackerResponse!=null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                    if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
                         objMyApplication.setTrackerResponse(trackerResponse);
+
+                        if (trackerResponse.getData().isPersonIdentified()) {
+                            cvHeaderRL.setVisibility(View.VISIBLE);
+                            cvSmallHeaderRL.setVisibility(View.GONE);
+                            getStartedCV.setVisibility(View.GONE);
+                            transactionsRL.setVisibility(View.VISIBLE);
+
+                            if (trackerResponse.getData().isPaymentModeAdded()) {
+                                welcomeCoyniCV.setVisibility(View.GONE);
+                                underReviewCV.setVisibility(View.GONE);
+                                additionalActionCV.setVisibility(View.GONE);
+                            } else {
+                                welcomeCoyniCV.setVisibility(View.VISIBLE);
+                                underReviewCV.setVisibility(View.GONE);
+                                additionalActionCV.setVisibility(View.GONE);
+                            }
+                        } else {
+                            cvHeaderRL.setVisibility(View.GONE);
+                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
+                            getStartedCV.setVisibility(View.VISIBLE);
+                            transactionsRL.setVisibility(View.GONE);
+                        }
                     }
 
                 }
@@ -273,6 +318,66 @@ public class DashboardActivity extends AppCompatActivity {
             Log.e("list states", listStates.size() + "");
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void bindImage() {
+        try {
+            imgProfile.setVisibility(View.GONE);
+            tvUserInfo.setVisibility(View.VISIBLE);
+
+            imgProfileSmall.setVisibility(View.GONE);
+            tvUserInfoSmall.setVisibility(View.VISIBLE);
+
+            String imageString = objMyApplication.getMyProfile().getData().getImage();
+            String imageTextNew = "";
+            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            tvUserInfo.setText(imageTextNew);
+            tvUserInfoSmall.setText(imageTextNew);
+
+            if (imageString != null && !imageString.trim().equals("")) {
+                imgProfile.setVisibility(View.VISIBLE);
+                tvUserInfo.setVisibility(View.GONE);
+                imgProfileSmall.setVisibility(View.VISIBLE);
+                tvUserInfoSmall.setVisibility(View.GONE);
+
+                Glide.with(this)
+                        .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
+                        .into(imgProfile);
+                Glide.with(this)
+                        .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
+                        .into(imgProfileSmall);
+
+            } else {
+                imgProfile.setVisibility(View.GONE);
+                tvUserInfo.setVisibility(View.VISIBLE);
+                imgProfileSmall.setVisibility(View.GONE);
+                tvUserInfoSmall.setVisibility(View.VISIBLE);
+
+                String imageText = "";
+                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                tvUserInfo.setText(imageText);
+                tvUserInfoSmall.setText(imageText);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Utils.checkInternet(DashboardActivity.this)) {
+            progressDialog = Utils.showProgressDialog(this);
+            dashboardViewModel.meProfile();
+            identityVerificationViewModel.getStatusTracker();
+        } else {
+            Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
         }
     }
 }

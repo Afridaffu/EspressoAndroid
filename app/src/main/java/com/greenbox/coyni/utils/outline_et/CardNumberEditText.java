@@ -7,12 +7,15 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.cards.CardTypeRequest;
+import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
 
@@ -21,6 +24,7 @@ public class CardNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private EditText cnET;
+    private ImageView imgCardType;
     boolean isPhoneError = false;
 
     public String FROM = "";
@@ -43,69 +47,10 @@ public class CardNumberEditText extends ConstraintLayout {
         hintName = findViewById(R.id.hintTV);
         hintHolder = findViewById(R.id.hintdHolderLL);
         cnET = findViewById(R.id.pnET);
+        imgCardType = findViewById(R.id.imgCardType);
         cnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                try {
-
-                    if (isPhoneError) {
-                        if (b) {
-                            CreateAccountActivity.focusedID = cnET.getId();
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        }
-                    } else {
-                        if (b) {
-                            CreateAccountActivity.focusedID = cnET.getId();
-                            hintName.setTextColor(getResources().getColor(R.color.primary_color));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        }
-
-                    }
-                    if (FROM.equals("Retrieve") && !b) {
-                        if ((cnET.getText().length() > 0 && cnET.getText().length() < 14)) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
-                            rea.phoneErrorLL.setVisibility(VISIBLE);
-                            rea.phoneErrorTV.setText("Invalid Phone Number");
-                        } else if ((cnET.getText().length() == 0)) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
-                            rea.phoneErrorLL.setVisibility(VISIBLE);
-                            rea.phoneErrorTV.setText("Field Required");
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        }
-                    }else if (FROM.equals("CREATE_ACCOUNT") && !b) {
-                        if ((cnET.getText().length() > 0 && cnET.getText().length() < 14)) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
-                            caa.phoneErrorLL.setVisibility(VISIBLE);
-                            caa.phoneErrorTV.setText("Invalid Phone Number");
-                        } else if ((cnET.getText().length() == 0)) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
-                            caa.phoneErrorLL.setVisibility(VISIBLE);
-                            caa.phoneErrorTV.setText("Field Required");
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
             }
         });
 
@@ -117,55 +62,25 @@ public class CardNumberEditText extends ConstraintLayout {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                if (FROM.equals("CREATE_ACCOUNT")) {
-                    CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
-                    if (charSequence.length() == 14) {
-                        isPhoneError = false;
-//                        hintName.setTextColor(getResources().getColor(R.color.primary_green));
-//                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
-                        createAccountAct.phoneErrorLL.setVisibility(GONE);
+                try {
+                    if (i2 > 2) {
+                        if (charSequence != null && charSequence.length() >= 15) {
+                            AddCardActivity.addCardActivity.getCardype(charSequence.toString());
+                        }
                     }
-
-                    createAccountAct.isPhoneNumber = cnET.getText().toString().trim().length() > 13;
-
-                    if (createAccountAct.isFirstName && createAccountAct.isLastName &&
-                            createAccountAct.isEmail && createAccountAct.isPhoneNumber &&
-                            createAccountAct.isPassword && createAccountAct.isConfirmPassword) {
-                        createAccountAct.isNextEnabled = true;
-                        createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-
-                    } else {
-                        createAccountAct.isNextEnabled = false;
-                        createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                    }
-
-                    if ((cnET.getText().length() == 0)) {
-                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
-                        caa.phoneErrorLL.setVisibility(VISIBLE);
-                        caa.phoneErrorTV.setText("Field Required");
-                    }
-                }else if (FROM.equals("Retrieve")) {
-                    RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
-                    if (charSequence.length() == 14) {
-                        isPhoneError = false;
-                        rea.phoneErrorLL.setVisibility(GONE);
-                    }
-
-                    if ((cnET.getText().length() == 0)) {
-                        rea.phoneErrorLL.setVisibility(VISIBLE);
-                        rea.phoneErrorTV.setText("Field Required");
-                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable s) {
                 try {
-                    if (FROM.equals("Retrieve")) {
-                        RetrieveEmailActivity retrieveEmailActivity = RetrieveEmailActivity.retrieveEmailActivity;
-                        retrieveEmailActivity.enableButton();
+                    if (s.length() == 7) {
+                        AddCardActivity.addCardActivity.getCardype(s.toString());
+                    } else if (s.toString().trim().length() == 0) {
+                        imgCardType.setVisibility(View.GONE);
+                        AddCardActivity.addCardActivity.clearControls();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -195,11 +110,22 @@ public class CardNumberEditText extends ConstraintLayout {
         return cnET.getText().toString().trim();
     }
 
-    public int getETID() {
-        return cnET.getId();
-    }
-
-    public void requestETFocus(){
-        cnET.requestFocus();
+    public void setImage(String cardBrand) {
+        try {
+            if (!cardBrand.equals("")) {
+                imgCardType.setVisibility(VISIBLE);
+                if (cardBrand.toLowerCase().equals("visa")) {
+                    imgCardType.setImageResource(R.drawable.ic_visaactive);
+                } else if (cardBrand.toLowerCase().contains("master")) {
+                    imgCardType.setImageResource(R.drawable.ic_masteractive);
+                } else if (cardBrand.toLowerCase().contains("american")) {
+                    imgCardType.setImageResource(R.drawable.ic_amexactive);
+                } else if (cardBrand.toLowerCase().contains("discover")) {
+                    imgCardType.setImageResource(R.drawable.ic_discoveractive);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

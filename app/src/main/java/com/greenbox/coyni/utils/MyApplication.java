@@ -2,7 +2,10 @@ package com.greenbox.coyni.utils;
 
 import android.app.Application;
 import android.os.Build;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
@@ -26,6 +29,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -241,6 +247,27 @@ public class MyApplication extends Application {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    public void getStates() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("states.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(json, type);
+            setListStates(listStates);
+            Log.e("list states", listStates.size() + "");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     public TrackerResponse getTrackerResponse() {
         return trackerResponse;

@@ -18,6 +18,7 @@ import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
+import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
@@ -37,7 +38,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<IdentityImageResponse> uploadIdentityImageResponse = new MutableLiveData<>();
     private MutableLiveData<RemoveIdentityResponse> removeIdentityImageResponse = new MutableLiveData<>();
-    private MutableLiveData<ImageResponse> uploadIdentityAddressResponse = new MutableLiveData<>();
+    private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressResponse = new MutableLiveData<>();
     private MutableLiveData<TrackerResponse> getStatusTracker = new MutableLiveData<>();
 
     public IdentityVerificationViewModel(@NonNull Application application) {
@@ -52,7 +53,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
         return getStatusTracker;
     }
 
-    public MutableLiveData<ImageResponse> getUploadIdentityAddressResponse() {
+    public MutableLiveData<IdentityAddressResponse> getUploadIdentityAddressResponse() {
         return uploadIdentityAddressResponse;
     }
 
@@ -134,19 +135,19 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     public void uploadIdentityAddress(IdentityAddressRequest identityAddressRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ImageResponse> mCall = apiService.uploadIdentityAddress(identityAddressRequest);
-            mCall.enqueue(new Callback<ImageResponse>() {
+            Call<IdentityAddressResponse> mCall = apiService.uploadIdentityAddress(identityAddressRequest);
+            mCall.enqueue(new Callback<IdentityAddressResponse>() {
                 @Override
-                public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                public void onResponse(Call<IdentityAddressResponse> call, Response<IdentityAddressResponse> response) {
                     try {
                         if (response.isSuccessful()) {
-                            ImageResponse obj = response.body();
+                            IdentityAddressResponse obj = response.body();
                             uploadIdentityAddressResponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<ImageResponse>() {
+                            Type type = new TypeToken<IdentityAddressResponse>() {
                             }.getType();
-                            ImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            IdentityAddressResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
                             uploadIdentityAddressResponse.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
@@ -156,7 +157,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<ImageResponse> call, Throwable t) {
+                public void onFailure(Call<IdentityAddressResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

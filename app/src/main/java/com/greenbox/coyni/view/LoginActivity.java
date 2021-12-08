@@ -61,8 +61,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlEmail, etlPassword;
     TextInputEditText etEmail, etPassword;
-    TextView faceidNotAvail;
-    CardView cvNext, cvEmailOK;
+    CardView cvNext;
     LinearLayout layoutEmailError, layoutPwdError;
     TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
     String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
@@ -113,11 +112,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 String value = cursor.getString(1);
-                String value2 = cursor.getString(2);
                 etEmail.setText(value);
-//                etPassword.setText(value2);
-//                etPassword.setSelection(value2.length());
-            }else{
+            } else {
                 etEmail.setText("");
                 etPassword.setText("");
             }
@@ -236,17 +232,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-//                        if (emailValidation() && passwordValidation()) {
-//                            cvNext.setEnabled(true);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//                        } else {
-//                            cvNext.setEnabled(false);
-//                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                        }
-//                        if (!hasFocus && etEmail.getText().toString().trim().equals("")) {
-//                            emailValidation();
-//                        }
-
                         if (!hasFocus) {
                             if (etEmail.getText().toString().trim().length() > 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -277,16 +262,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-////                        if (emailValidation() && passwordValidation()) {
-////                            cvNext.setEnabled(true);
-////                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-////                        } else {
-////                            cvNext.setEnabled(false);
-////                            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-////                        }
-//                        if (!hasFocus && etPassword.getText().toString().trim().equals("")) {
-//                            passwordValidation();
-//                        }
                         if (!hasFocus) {
                             if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0) {
                                 etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -456,15 +431,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             SetFaceLock();
             SetTouchId();
             SetRemember();
-
-//            if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-//                if (chkRemember.isChecked()) {
-//                    etEmail.setText("");
-//                    etPassword.setText("");
-//                    chkRemember.setChecked(false);
-//                }
-//                etEmail.setText(objMyApplication.getStrRetrEmail());
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -550,7 +516,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dsRemember.moveToFirst();
             if (dsRemember.getCount() > 0) {
                 etEmail.setText(dsRemember.getString(1));
-//                etPassword.setText(dsRemember.getString(2));
                 chkRemember.setChecked(true);
             } else {
                 chkRemember.setChecked(false);
@@ -558,7 +523,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         } catch (Exception ex) {
             if (ex.getMessage().toString().contains("no such table")) {
                 mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblRemember(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, username TEXT, password TEXT);");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblRemember(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, username TEXT);");
             }
         }
     }
@@ -804,12 +769,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void saveCredentials() {
         try {
-            if (strEmail.equals("") && strPwd.equals("")) {
+//            if (strEmail.equals("") && strPwd.equals("")) {
+//                strEmail = etEmail.getText().toString().trim().toLowerCase();
+//                strPwd = etPassword.getText().toString().trim();
+//            }
+            if (strEmail.equals("")) {
                 strEmail = etEmail.getText().toString().trim().toLowerCase();
-                strPwd = etPassword.getText().toString().trim();
             }
             mydatabase.execSQL("Delete from tblRemember");
-            mydatabase.execSQL("INSERT INTO tblRemember(id,username,password) VALUES(null,'" + strEmail.toLowerCase() + "','" + strPwd + "')");
+            mydatabase.execSQL("INSERT INTO tblRemember(id,username) VALUES(null,'" + strEmail.toLowerCase() + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
