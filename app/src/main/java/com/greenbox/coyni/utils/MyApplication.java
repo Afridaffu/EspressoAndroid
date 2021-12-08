@@ -17,6 +17,7 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
 
@@ -43,13 +44,14 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "";
-    int timezoneID = 0, tempTimezoneID = 0,userId;
+    int timezoneID = 0, tempTimezoneID = 0, userId;
     SignOnData objSignOnData = new SignOnData();
     TrackerResponse trackerResponse = new TrackerResponse();
-
     public AgreementsPdf getAgreementsPdf() {
         return agreementsPdf;
     }
+    WalletInfo gbtWallet;
+    Double GBTBalance = 0.0;
 
     public void setAgreementsPdf(AgreementsPdf agreementsPdf) {
         this.agreementsPdf = agreementsPdf;
@@ -258,5 +260,21 @@ public class MyApplication extends Application {
 
     public void setStrPreference(String strPreference) {
         this.strPreference = strPreference;
+    }
+
+    public WalletInfo getGbtWallet() {
+        return gbtWallet;
+    }
+
+    public void setGbtWallet(WalletInfo gbtWallet) {
+        this.gbtWallet = gbtWallet;
+    }
+
+    public Double getGBTBalance() {
+        return GBTBalance;
+    }
+
+    public void setGBTBalance(Double GBTBalance) {
+        this.GBTBalance = GBTBalance;
     }
 }

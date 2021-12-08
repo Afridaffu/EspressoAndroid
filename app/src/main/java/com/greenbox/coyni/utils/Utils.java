@@ -855,4 +855,92 @@ public class Utils {
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static void showQuickAction(final Context context) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_quick_action);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        LinearLayout scanLL = dialog.findViewById(R.id.scanLL);
+        LinearLayout payRequestLL = dialog.findViewById(R.id.payRequestLL);
+        LinearLayout buyTokenLL = dialog.findViewById(R.id.buyTokenLL);
+        LinearLayout widthdrawLL = dialog.findViewById(R.id.widthdrawLL);
+
+        scanLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        payRequestLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        buyTokenLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        widthdrawLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public static String convertTwoDecimal(String strAmount) {
+        String strValue = "", strAmt = "";
+        try {
+            if (strAmount.contains(" ")) {
+                strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
+                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + strAmount.split(" ")[1];
+            } else {
+                strAmt = Utils.convertBigDecimalUSDC(strAmount);
+//                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + mContext.getString(R.string.currency);
+                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
+            }
+            Log.e("str",strValue);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strValue;
+    }
+
+    public static String convertTxnDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
 }

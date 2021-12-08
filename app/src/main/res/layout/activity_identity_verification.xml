@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeLL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingStart="@dimen/_21sdp"
     android:paddingEnd="@dimen/_21sdp"
-    android:id="@+id/swipeLL"
     android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".view.IdentityVerificationActivity">
 
@@ -150,23 +150,23 @@
                             android:layout_marginTop="@dimen/_20sdp"
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="@dimen/_18sdp"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:lineSpacingExtra="@dimen/_6sdp"
+                            android:singleLine="true"
                             android:text="@string/contentuploadidsuccess"
                             android:textColor="@color/primary_color"
                             android:textSize="@dimen/_11ssp"
-                            android:visibility="visible"
-                            android:layout_weight="1"
-                            android:singleLine="true"/>
+                            android:visibility="visible" />
 
                         <ImageView
                             android:id="@+id/idveriUpIdSuccessImg"
                             android:layout_width="@dimen/_15sdp"
                             android:layout_height="@dimen/_15sdp"
                             android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/_15sdp"
                             android:src="@drawable/ic_complete"
-                            android:visibility="visible"
-                            android:layout_marginEnd="@dimen/_15sdp"/>
+                            android:visibility="visible" />
 
 
                     </LinearLayout>
@@ -278,6 +278,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
+                            android:cursorVisible="false"
+                            android:editable="false"
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="@string/dobhint"
                             android:imeOptions="actionDone"
@@ -286,9 +288,7 @@
                             android:padding="@dimen/_14sdp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/light_gray"
-                            android:textSize="@dimen/_12ssp"
-                            android:cursorVisible="false"
-                            android:editable="false"/>
+                            android:textSize="@dimen/_12ssp" />
 
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -387,14 +387,17 @@
                     android:id="@+id/mailingAddET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/_"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint"
                     android:imeOptions="actionNext"
-                    android:maxLength="255"
-                    android:padding="@dimen/_12sdp"
+                    android:inputType="textPostalAddress|textNoSuggestions"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                     android:singleLine="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
@@ -447,14 +450,17 @@
                     android:id="@+id/mailingAddlineoptET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ@+-,.0123456789/_"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/mailingaddresshint2"
                     android:imeOptions="actionNext"
-                    android:maxLength="255"
-                    android:padding="@dimen/_12sdp"
+                    android:inputType="textPostalAddress|textNoSuggestions"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                     android:singleLine="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
@@ -510,11 +516,14 @@
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/cityhint"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLength="30"
-                    android:padding="@dimen/_12sdp"
-                    android:textColor="@color/black"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />
@@ -548,10 +557,10 @@
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/stateCL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp"
-                android:id="@+id/stateCL">
+                android:layout_marginTop="@dimen/_14sdp">
 
                 <ImageButton
                     android:id="@+id/stateimg"
@@ -590,19 +599,22 @@
                         android:id="@+id/stateET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:cursorVisible="false"
+                        android:editable="false"
+                        android:focusable="false"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/statehint"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLength="30"
-                        android:padding="@dimen/_12sdp"
-                        android:textColor="@color/black"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress|textNoSuggestions"
+                        android:maxLines="1"
+                        android:padding="@dimen/_14sdp"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:focusable="false"
-                        android:cursorVisible="false"/>
+                        android:textSize="@dimen/_12ssp" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -629,13 +641,18 @@
                     android:id="@+id/zipcodeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="@string/ziphint"
                     android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:padding="@dimen/_12sdp"
-                    android:textColor="@color/black"
+                    android:importantForAutofill="no"
+                    android:inputType="number|textNoSuggestions"
+                    android:maxLength="7"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp" />

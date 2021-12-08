@@ -401,7 +401,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                         emailErrorLL.setVisibility(VISIBLE);
                         emailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
-                        isEmail = false;
+                        isEmail = true;
                         enableOrDisableNext();
                     }
                 }

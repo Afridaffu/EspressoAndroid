@@ -1047,6 +1047,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         viewRight.setBackgroundResource(R.drawable.button_background);
                         backbtn.setVisibility(VISIBLE);
                         closebtn.setVisibility(GONE);
+                        mailAddr1.requestFocus();
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
                     }
@@ -1091,8 +1092,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                     .putExtra("screen", "SUCCESS"));
                         } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
                             //SSN Error
-//                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-//                                    .putExtra("screen","SUCCESS"));
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
 
                         } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
                                 || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
@@ -1168,5 +1168,13 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        identityFile = null;
+        isFileSelected = false;
+
     }
 }

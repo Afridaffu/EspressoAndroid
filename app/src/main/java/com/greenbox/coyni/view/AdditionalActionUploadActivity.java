@@ -1,13 +1,5 @@
 package com.greenbox.coyni.view;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +7,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
@@ -28,9 +24,9 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.santalu.maskara.widget.MaskEditText;
 
-public class IdVeAdditionalActionActivity extends AppCompatActivity {
+public class AdditionalActionUploadActivity extends AppCompatActivity {
     MaskEditText ssnET;
-    CardView idveridoneBtn;
+    CardView idveriDone;
     boolean isssn = false, isSubmitEnabled = false;
     LinearLayout ssnCloseLL, ssnErrorLL;
     TextView ssnErrorTV;
@@ -41,12 +37,11 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_id_ve_additional_action);
+        setContentView(R.layout.activity_additional_action_upload);
         ssnCloseLL = findViewById(R.id.ssnCloseLL);
         ssnET = findViewById(R.id.ssnET);
         ssnErrorLL = findViewById(R.id.ssnErrorLL);
         ssnErrorTV = findViewById(R.id.ssnErrorTV);
-        idveridoneBtn = findViewById(R.id.idveridoneBtn);
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
@@ -55,7 +50,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         ssnCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(IdVeAdditionalActionActivity.this, DashboardActivity.class));
+                startActivity(new Intent(AdditionalActionUploadActivity.this, DashboardActivity.class));
             }
         });
 
@@ -85,11 +80,11 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
             }
         });
 
-        idveridoneBtn.setOnClickListener(new View.OnClickListener() {
+        idveriDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isSubmitEnabled) {
-                    dialog = Utils.showProgressDialog(IdVeAdditionalActionActivity.this);
+                    dialog = Utils.showProgressDialog(AdditionalActionUploadActivity.this);
                     IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
                     identityAddressRequest.setFirstName(IDVEResponse.getData().getFirstName());
                     identityAddressRequest.setLastName(IDVEResponse.getData().getLastName());
@@ -145,12 +140,12 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                                 || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
                                 || respCode.equalsIgnoreCase("CI24")) {
                             //Success
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                            startActivity(new Intent(AdditionalActionUploadActivity.this, IdentityVerificationBindingLayoutActivity.class)
                                     .putExtra("screen", "SUCCESS"));
                             finish();
                         } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
                             //SSN Error
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdVeAdditionalActionActivity.class));
+                            startActivity(new Intent(AdditionalActionUploadActivity.this, AdditionalActionUploadActivity.class));
                             finish();
                         } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
                                 || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
@@ -158,19 +153,19 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                                 || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
                                 || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
                             //Under Review
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                            startActivity(new Intent(AdditionalActionUploadActivity.this, IdentityVerificationBindingLayoutActivity.class)
                                     .putExtra("screen", "UNDER_REVIEW"));
                             finish();
 
                         } else {
                             //Failed
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                            startActivity(new Intent(AdditionalActionUploadActivity.this, IdentityVerificationBindingLayoutActivity.class)
                                     .putExtra("screen", "FAILED"));
                             finish();
 
                         }
                     } else {
-                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdVeAdditionalActionActivity.this, "");
+                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), AdditionalActionUploadActivity.this, "");
                     }
                 }
             });
@@ -181,9 +176,9 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 
     private void enableORdiableNext() {
         if (isssn) {
-            idveridoneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+            idveriDone.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
         } else {
-            idveridoneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            idveriDone.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
         }
     }
 }

@@ -180,5 +180,7 @@
     <string name="bank_exhausthead">Too Many Bank Accounts</string>
     <string name="bank_exhaust">There is an account limit of 4 total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.</string>
 
+    <string name="currency">CYN</string>
+
 
 </resources>
