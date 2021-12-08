@@ -10,10 +10,10 @@ public class TransactionListData {
     private TransactionListItems items;
     @SerializedName("currentPageNo")
     @Expose
-    private int currentPageNo;
+    private String currentPageNo;
     @SerializedName("pageSize")
     @Expose
-    private int pageSize;
+    private String pageSize;
     @SerializedName("totalItems")
     @Expose
     private int totalItems;
@@ -29,19 +29,19 @@ public class TransactionListData {
         this.items = items;
     }
 
-    public int getCurrentPageNo() {
+    public String getCurrentPageNo() {
         return currentPageNo;
     }
 
-    public void setCurrentPageNo(int currentPageNo) {
+    public void setCurrentPageNo(String currentPageNo) {
         this.currentPageNo = currentPageNo;
     }
 
-    public int getPageSize() {
+    public String getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(String pageSize) {
         this.pageSize = pageSize;
     }
 

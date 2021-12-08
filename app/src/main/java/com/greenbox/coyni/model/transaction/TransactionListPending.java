@@ -13,7 +13,7 @@ public class TransactionListPending {
     private String txnTypeDn;
     @SerializedName("txnSubTypeDn")
     @Expose
-    private Object txnSubTypeDn;
+    private String txnSubTypeDn;
     @SerializedName("txnStatusDn")
     @Expose
     private String txnStatusDn;
@@ -28,13 +28,13 @@ public class TransactionListPending {
     private String walletBalance;
     @SerializedName("transactionId")
     @Expose
-    private Object transactionId;
+    private String transactionId;
     @SerializedName("gbxTransactionId")
     @Expose
-    private Object gbxTransactionId;
+    private String gbxTransactionId;
     @SerializedName("updatedAt")
     @Expose
-    private Object updatedAt;
+    private String updatedAt;
 
     public String getCreatedAt() {
         return createdAt;
@@ -52,11 +52,11 @@ public class TransactionListPending {
         this.txnTypeDn = txnTypeDn;
     }
 
-    public Object getTxnSubTypeDn() {
+    public String getTxnSubTypeDn() {
         return txnSubTypeDn;
     }
 
-    public void setTxnSubTypeDn(Object txnSubTypeDn) {
+    public void setTxnSubTypeDn(String txnSubTypeDn) {
         this.txnSubTypeDn = txnSubTypeDn;
     }
 
@@ -92,27 +92,27 @@ public class TransactionListPending {
         this.walletBalance = walletBalance;
     }
 
-    public Object getTransactionId() {
+    public String getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(Object transactionId) {
+    public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 
-    public Object getGbxTransactionId() {
+    public String getGbxTransactionId() {
         return gbxTransactionId;
     }
 
-    public void setGbxTransactionId(Object gbxTransactionId) {
+    public void setGbxTransactionId(String gbxTransactionId) {
         this.gbxTransactionId = gbxTransactionId;
     }
 
-    public Object getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Object updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 

@@ -3,7 +3,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.greenbox.coyni.model.Error;
 
-public class TransactionList {
+import java.io.Serializable;
+
+public class TransactionList  {
         @SerializedName("status")
         @Expose
         private String status;

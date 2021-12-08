@@ -8,27 +8,20 @@
     <TextView
         android:id="@+id/dateTV"
         android:layout_width="match_parent"
-        android:layout_height="27dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
         android:background="#f2f4f5"
         android:fontFamily="@font/opensans_bold"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:text="May 8,2021"
+        android:visibility="visible"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/text_size_14sp" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_2sdp"
-        app:cardCornerRadius="@dimen/_10sdp">
+        android:textSize="@dimen/text_size_14sp"
+        android:layout_marginBottom="@dimen/_10sdp"/>
 
         <RelativeLayout
+            android:id="@+id/layoutTopRadiusRL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:paddingTop="@dimen/_10sdp"
             android:paddingBottom="@dimen/_10sdp">
 
@@ -55,13 +48,15 @@
 
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/statusCVbg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/messageTV"
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 app:cardBackgroundColor="#FFEFD8"
-                app:cardCornerRadius="@dimen/_27sdp">
+                android:layout_marginBottom="@dimen/_1sdp"
+                app:cardCornerRadius="@dimen/_6sdp">
 
                 <TextView
                     android:id="@+id/statusTV"
@@ -79,25 +74,37 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/balanceTV"
+                android:id="@+id/balTXT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/messageTV"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Balance "
+                android:layout_toLeftOf="@id/balanceTV"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/balanceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/messageTV"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginRight="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Balance 1,000.00"
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/_10ssp" />
 
         </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
     <View
         android:layout_below="@id/balanceTV"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
+        android:layout_marginStart="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
         android:background="#D8E2F0"
         />
 </LinearLayout>

@@ -1,24 +1,40 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.PayAmountBottomSheet;
 import com.greenbox.coyni.fragments.RequestAmountBottomSheet;
-import com.greenbox.coyni.fragments.ScanActivityBottomSheetDialog;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.utils.Utils;
+//import com.greenbox.coyni.fragments.ScanActivityBottomSheetDialog;
 
 public class PayRequestTransactionActivity extends AppCompatActivity implements View.OnClickListener {
     LinearLayout addNoteClick,prLL;
@@ -109,10 +125,36 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                 @Override
                 public void onClick(View view) {
 
-                    ScanActivityBottomSheetDialog scanActivityBottomSheetDialog=new ScanActivityBottomSheetDialog();
-                    scanActivityBottomSheetDialog.show(getSupportFragmentManager(),"TAG");
+                     // custom dialog
+                        final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.add_note_layout);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        TextInputEditText addnote = dialog.findViewById(R.id.addNoteET);
+                        LinearLayout closeBtn=dialog.findViewById(R.id.cancelBtn);
+                        addnote.requestFocus();
+                        addnote.setShowSoftInputOnFocus(true);
 
-                }
+
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+
+                        Window window = dialog.getWindow();
+                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                        WindowManager.LayoutParams wlp = window.getAttributes();
+
+                        wlp.gravity = Gravity.BOTTOM;
+                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wlp);
+
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
+                    }
+
             });
 
             if (!(payRequestET.getText().toString().isEmpty())&&!(addNoteTV.getText().toString().isEmpty())){
@@ -285,4 +327,5 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
             e.printStackTrace();
         }
     }
+
 }

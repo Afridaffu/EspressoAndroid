@@ -35,6 +35,5 @@
     <color name="active_green">#008A05</color>
     <color name="under_review_blue">#1D86BE</color>
     <color name="retake_bg_grey">#707070</color>
-
     <color name="trans_black">#66000000</color>
 </resources>

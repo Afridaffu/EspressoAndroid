@@ -59,6 +59,8 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:screenOrientation="portrait">
+
+
         </activity>
         <activity
             android:name=".view.ConfirmPasswordActivity"

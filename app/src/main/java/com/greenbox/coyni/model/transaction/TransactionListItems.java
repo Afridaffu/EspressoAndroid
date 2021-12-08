@@ -6,13 +6,13 @@ public class TransactionListItems {
 
         @SerializedName("pendingTransactions")
         @Expose
-        private List<TransactionListPending> pendingTransactions = null;
+        private List<TransactionListPending> pendingTransactions;
         @SerializedName("pendingTransactionsCount")
         @Expose
         private int pendingTransactionsCount;
         @SerializedName("postedTransactions")
         @Expose
-        private List<TransactionListPosted> postedTransactions = null;
+        private List<TransactionListPosted> postedTransactions;
         @SerializedName("postedTransactionsCount")
         @Expose
         private int postedTransactionsCount;
