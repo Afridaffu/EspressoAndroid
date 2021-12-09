@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -28,11 +29,12 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
     Context mecontext;
     MyApplication objMyApplication;
     TransactionList transactionList;
-public TransactionListPendingAdapter(List<TransactionListPending> list, Context context){
-    this.transactionListItemspending=list;
-    this.mecontext=context;
-    this.objMyApplication = (MyApplication) context.getApplicationContext();
-}
+
+    public TransactionListPendingAdapter(List<TransactionListPending> list, Context context) {
+        this.transactionListItemspending = list;
+        this.mecontext = context;
+        this.objMyApplication = (MyApplication) context.getApplicationContext();
+    }
 
     @NonNull
     @Override
@@ -46,7 +48,7 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull TransactionListPendingAdapter.MyViewHolder holder, int position) {
-    TransactionListPending objData=transactionListItemspending.get(position);
+        TransactionListPending objData = transactionListItemspending.get(position);
 
         String strType = "", strPrev = "", strCurr = "", strCurDate = "";
 //            holder.tvDate.setText(Utils.convertDate(objData.getCreatedAt()));
@@ -77,8 +79,7 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
         holder.date.setVisibility(View.GONE);
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
             strType = "withdraw";
-        }
-        else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
+        } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
             if (objData.getTxnSubTypeDn().toLowerCase().contains("send") || objData.getTxnSubTypeDn().toLowerCase().contains("sent")) {
                 strType = "pay";
             } else {
@@ -93,7 +94,7 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
         if (strType.contains("pay") || strType.equals("withdraw")) {
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
         } else {
-            holder.amount.setText("+" +convertTwoDecimal(objData.getAmount()));
+            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(R.color.active_green);
         }
 //        if (position == transactionListItemspending.size() - 1 && transactionListItemspending.size() < trans) {
@@ -121,20 +122,21 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-    TextView date,txnDescrip,amount,txnStatus,walletBal;
-    View viewLine;
+        TextView date, txnDescrip, amount, txnStatus, walletBal;
+        View viewLine;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            date=itemView.findViewById(R.id.dateTV);
-            txnDescrip=itemView.findViewById(R.id.messageTV);
-            amount=itemView.findViewById(R.id.amountTV);
-            txnStatus=itemView.findViewById(R.id.statusTV);
-            walletBal=itemView.findViewById(R.id.balanceTV);
-            viewLine=itemView.findViewById(R.id.viewV);
+            date = itemView.findViewById(R.id.dateTV);
+            txnDescrip = itemView.findViewById(R.id.messageTV);
+            amount = itemView.findViewById(R.id.amountTV);
+            txnStatus = itemView.findViewById(R.id.statusTV);
+            walletBal = itemView.findViewById(R.id.balanceTV);
+            viewLine = itemView.findViewById(R.id.viewV);
         }
     }
+
     private String convertTwoDecimal(String strAmount) {
         String strValue = "", strAmt = "";
         try {

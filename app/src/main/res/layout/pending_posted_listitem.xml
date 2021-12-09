@@ -7,23 +7,26 @@
 
     <TextView
         android:id="@+id/dateTV"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f2f4f5"
+        android:background="@color/et_bg_gray"
         android:fontFamily="@font/opensans_bold"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:visibility="visible"
         android:textColor="@color/primary_black"
         android:textSize="@dimen/text_size_14sp"
-        android:layout_marginBottom="@dimen/_10sdp"/>
+        android:text="Date" />
 
         <RelativeLayout
             android:id="@+id/layoutTopRadiusRL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_10sdp">
+            android:paddingBottom="@dimen/_10sdp"
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/messageTV"
@@ -108,7 +111,7 @@
         android:layout_height="@dimen/_1sdp"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
-        android:background="#D8E2F0"
+        android:background="@color/blue_light"
         />
 
 </LinearLayout>

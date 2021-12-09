@@ -25,13 +25,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class TransactionListPostedAdapter extends  RecyclerView.Adapter<TransactionListPostedAdapter.MyViewHolder> {
+public class TransactionListPostedAdapter extends RecyclerView.Adapter<TransactionListPostedAdapter.MyViewHolder> {
     Context mecontext;
     MyApplication objMyApplication;
     List<TransactionListPosted> transactionListItemsposted;
-    public TransactionListPostedAdapter(List<TransactionListPosted> list, Context context){
-        this.transactionListItemsposted=list;
-        this.mecontext=context;
+
+    public TransactionListPostedAdapter(List<TransactionListPosted> list, Context context) {
+        this.transactionListItemsposted = list;
+        this.mecontext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -46,37 +47,50 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 
     @Override
     public void onBindViewHolder(@NonNull TransactionListPostedAdapter.MyViewHolder holder, int position) {
-        TransactionListPosted objData=transactionListItemsposted.get(position);
+        TransactionListPosted objData = transactionListItemsposted.get(position);
 
-        String strType = "", strPrev = "", strCurr = "", strCurDate = "";
-//            holder.tvDate.setText(Utils.convertDate(objData.getCreatedAt()));
-//        holder.date.setText(objMyApplication.convertZoneDate(objData.getUpdatedAt()));
-        holder.date.setText(Utils.convertDate(objData.getUpdatedAt()));
+        String strType = "", strPrev = "", strCurr = "", strCurDate = "", strNext="";
+        holder.date.setText(objMyApplication.convertNewZoneDate(objData.getUpdatedAt().split("\\.")[0]));
         if (position == 0) {
             try {
                 holder.date.setVisibility(View.VISIBLE);
+                holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.topradius_list_items));
                 SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 strCurDate = spf.format(Calendar.getInstance().getTime());
-                Log.e("dateTransaction",""+objMyApplication.convertZoneDate(objData.getUpdatedAt()));
-
                 if (Utils.convertDate(objData.getUpdatedAt()).equals(Utils.convertDate(strCurDate))) {
                     holder.date.setText("Today");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            holder.topRadius.setBackgroundResource(R.drawable.topradius_list_items);
-        }
-        else
-        if (position != 0) {
+        } else if (position != 0) {
 
             try {
-                strPrev = objMyApplication.convertZoneDate(transactionListItemsposted.get(position - 1).getUpdatedAt());
-                strCurr = objMyApplication.convertZoneDate(objData.getUpdatedAt());
-                if (strPrev.equals(strCurr)) {
+                strPrev = objMyApplication.convertNewZoneDate(transactionListItemsposted.get(position - 1).getUpdatedAt().split("\\.")[0]);
+                try {
+                    strNext = objMyApplication.convertNewZoneDate(transactionListItemsposted.get(position + 1).getUpdatedAt().split("\\.")[0]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                strCurr = objMyApplication.convertNewZoneDate(objData.getUpdatedAt().split("\\.")[0]);
+//                if (strPrev.equals(strCurr)) {
+//                    holder.date.setVisibility(View.GONE);
+//                } else {
+//                    holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.topradius_list_items));
+//                    holder.date.setVisibility(View.VISIBLE);
+//                }
+
+                if (!strCurr.equals(strNext)) {
                     holder.date.setVisibility(View.GONE);
-                } else {
-                    holder.date.setVisibility(View.VISIBLE);
+                    holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                }else {
+//                    holder.date.setVisibility(View.GONE);
+                    if (strPrev.equals(strCurr)) {
+                        holder.date.setVisibility(View.GONE);
+                    } else {
+                        holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.topradius_list_items));
+                        holder.date.setVisibility(View.VISIBLE);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -84,10 +98,9 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
         }
 
         //txn description
-        if(objData.getTxnDescription().length()>25){
-            holder.txnDescrip.setText(objData.getTxnDescription().substring(0,25)+"...");
-        }
-        else {
+        if (objData.getTxnDescription().length() > 25) {
+            holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 25) + "...");
+        } else {
             holder.txnDescrip.setText(objData.getTxnDescription());
         }
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
@@ -96,8 +109,7 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
         //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
             strType = "withdraw";
-        }
-        else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
+        } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
             if (objData.getTxnSubTypeDn().toLowerCase().contains("send") || objData.getTxnSubTypeDn().toLowerCase().contains("sent")) {
                 strType = "pay";
             } else {
@@ -112,12 +124,11 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
         if (strType.contains("pay") || strType.equals("withdraw")) {
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#000000"));
-        } else if (strType.contains("buy")||strType.equals("receive")){
+        } else if (strType.contains("buy") || strType.equals("receive")) {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
 
-        }
-        else {
+        } else {
             holder.amount.setText(convertTwoDecimal(objData.getAmount()));
         }
 //        switch (strType) {
@@ -173,33 +184,29 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 
     @Override
     public int getItemCount() {
-        Log.e("size",""+transactionListItemsposted.size());
+        Log.e("size", "" + transactionListItemsposted.size());
         return transactionListItemsposted.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView date,txnDescrip,amount,txnStatus,walletBal;
-//        CardView statusBackcolor;
-        RelativeLayout topRadius;
+        TextView date, txnDescrip, amount, txnStatus, walletBal;
+        //        CardView statusBackcolor;
+        RelativeLayout itemRL;
         MyApplication myApplication;
         View lineItem;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            date=itemView.findViewById(R.id.dateTV);
-            txnDescrip=itemView.findViewById(R.id.messageTV);
-            amount=itemView.findViewById(R.id.amountTV);
-            txnStatus=itemView.findViewById(R.id.statusTV);
-            walletBal=itemView.findViewById(R.id.balanceTV);
+            date = itemView.findViewById(R.id.dateTV);
+            txnDescrip = itemView.findViewById(R.id.messageTV);
+            amount = itemView.findViewById(R.id.amountTV);
+            txnStatus = itemView.findViewById(R.id.statusTV);
+            walletBal = itemView.findViewById(R.id.balanceTV);
 //            statusBackcolor=itemView.findViewById(R.id.statusCVbg);
-            topRadius=itemView.findViewById(R.id.layoutTopRadiusRL);
-            lineItem=itemView.findViewById(R.id.viewV);
+            itemRL = itemView.findViewById(R.id.layoutTopRadiusRL);
+            lineItem = itemView.findViewById(R.id.viewV);
         }
     }
-
-
-
-
 
 
     private String convertTwoDecimal(String strAmount) {
@@ -217,12 +224,6 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
         }
         return strValue;
     }
-
-
-
-
-
-
 
 
     public void addLoadingView() {

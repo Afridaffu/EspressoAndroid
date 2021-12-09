@@ -229,7 +229,7 @@ public class DashboardActivity extends AppCompatActivity {
             viewMoreLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(DashboardActivity.this, TransactionDetailsActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
                 }
             });
 

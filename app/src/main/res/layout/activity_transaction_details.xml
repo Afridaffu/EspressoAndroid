@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#f2f4f5"
     android:orientation="vertical"
-    tools:context=".view.TransactionDetailsActivity">
+    tools:context=".view.TransactionListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,99 +100,101 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedSV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-    <TextView
-        android:id="@+id/pendingTV"
-        android:layout_width="match_parent"
-        android:layout_height="27dp"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:background="#f2f4f5"
-        android:fontFamily="@font/opensans_bold"
-        android:gravity="center_vertical"
-        android:paddingLeft="15dp"
-        android:text="Pending"
-        android:textColor="@color/primary_black"
-        android:textSize="@dimen/text_size_14sp"
-        android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/pendingTV"
+                android:layout_width="match_parent"
+                android:layout_height="27dp"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:background="#f2f4f5"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="Pending"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/text_size_14sp"
+                android:visibility="gone" />
 
 
-    <LinearLayout
-        android:id="@+id/layoutLLPending"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_2sdp"
-            app:cardCornerRadius="@dimen/_10sdp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/transactionListPendingRV"
+            <LinearLayout
+                android:id="@+id/layoutLLPending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                android:scrollbars="none" />
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-    <LinearLayout
-        android:id="@+id/layoutLLposted"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
-        android:orientation="vertical"
-        android:visibility="visible">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    app:cardCornerRadius="@dimen/_10sdp">
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/transactionListPendingRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:clipToPadding="false"
+                        android:divider="@color/white"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_2sdp"
-            app:cardCornerRadius="@dimen/_10sdp">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/transactionListPostedRV"
+            <LinearLayout
+                android:id="@+id/layoutLLposted"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                android:scrollbars="none" />
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-    <TextView
-        android:id="@+id/noTransactions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/opensans_regular"
-        android:gravity="center"
-        android:text="You have no transactions"
-        android:textColor="@color/dark_grey"
-        android:textSize="@dimen/_10ssp"
-        android:visibility="gone" />
+
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginBottom="@dimen/_2sdp"-->
+<!--                    app:cardCornerRadius="@dimen/_10sdp"-->
+<!--                    app:cardBackgroundColor="@color/white">-->
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/transactionListPostedRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="true"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+<!--                </androidx.cardview.widget.CardView>-->
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/noTransactions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="You have no transactions"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
+
             <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/progressBarLoadMore"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
