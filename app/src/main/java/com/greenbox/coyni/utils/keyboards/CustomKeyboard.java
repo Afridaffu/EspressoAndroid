@@ -135,7 +135,6 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 try {
-                    Toast.makeText(mContext, "Verify click", Toast.LENGTH_LONG).show();
                     if (strScreen.equals("addcard")) {
                         AddCardActivity.addCardActivity.verifyClick();
                     }

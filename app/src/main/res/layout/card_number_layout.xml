@@ -27,16 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_7sdp"
-                android:src="@drawable/ic_masteractive" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="+1"
-                android:textColor="@color/light_gray"
-                android:textSize="@dimen/_12ssp" />
+                android:src="@drawable/ic_visa_inactive" />
 
             <View
                 android:layout_width="1.5dp"
@@ -50,8 +41,8 @@
             android:id="@+id/pnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:digits="0123456789"
             android:fontFamily="@font/opensans_semibold"

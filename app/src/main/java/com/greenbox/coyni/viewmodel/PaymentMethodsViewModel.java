@@ -173,17 +173,22 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<PreAuthResponse>() {
                 @Override
                 public void onResponse(Call<PreAuthResponse> call, Response<PreAuthResponse> response) {
-                    if (response.isSuccessful()) {
-                        PreAuthResponse obj = response.body();
-                        preAuthResponseMutableLiveData.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
-                        }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
+                    try {
+                        if (response.isSuccessful()) {
+                            PreAuthResponse obj = response.body();
+                            preAuthResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse == null) {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            }
                             apiErrorMutableLiveData.setValue(errorResponse);
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
