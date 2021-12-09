@@ -17,6 +17,7 @@ import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
@@ -40,6 +41,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<RemoveIdentityResponse> removeIdentityImageResponse = new MutableLiveData<>();
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressResponse = new MutableLiveData<>();
     private MutableLiveData<TrackerResponse> getStatusTracker = new MutableLiveData<>();
+    private MutableLiveData<GetIdentityResponse> getIdentity = new MutableLiveData<>();
 
     public IdentityVerificationViewModel(@NonNull Application application) {
         super(application);
@@ -47,6 +49,10 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
     public MutableLiveData<APIError> getApiErrorMutableLiveData() {
         return apiErrorMutableLiveData;
+    }
+
+    public MutableLiveData<GetIdentityResponse> getGetIdentity() {
+        return getIdentity;
     }
 
     public MutableLiveData<TrackerResponse> getGetStatusTracker() {
@@ -193,6 +199,41 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<TrackerResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getIdentityData() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<GetIdentityResponse> mCall = apiService.getIdentity();
+            mCall.enqueue(new Callback<GetIdentityResponse>() {
+                @Override
+                public void onResponse(Call<GetIdentityResponse> call, Response<GetIdentityResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            GetIdentityResponse obj = response.body();
+                            getIdentity.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<GetIdentityResponse>() {
+                            }.getType();
+                            GetIdentityResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            getIdentity.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getIdentity.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetIdentityResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

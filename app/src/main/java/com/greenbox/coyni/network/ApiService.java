@@ -9,9 +9,11 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
@@ -240,5 +242,11 @@ public interface ApiService {
 
     @POST("api/v2/neutrino/bin-lookup")
     Call<CardTypeResponse> cardType(@Body CardTypeRequest request);
+
+    @GET("api/v2/profile/identity")
+    Call<GetIdentityResponse> getIdentity();
+
+    @GET("api/v2/transactions/me/latest-txns")
+    Call<LatestTxnResponse> getLatestTransactions();
 
 }

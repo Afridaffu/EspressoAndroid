@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -31,6 +32,7 @@ public class WebViewActivity extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_web_view);
+
             SignOnData signOnData;
             objMyApplication = (MyApplication) getApplicationContext();
             layoutLoader = findViewById(R.id.layoutLoader);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_252sdp"
-    android:background="@drawable/bg_core"
+    android:layout_height="wrap_content"
+    android:background="@drawable/roundeddialog"
     android:orientation="vertical">
 
     <View
@@ -14,6 +14,7 @@
         android:background="@drawable/bg_core_colorfill" />
 
     <LinearLayout
+        android:id="@+id/scanLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -45,13 +46,14 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1.5dp"
             android:layout_marginLeft="@dimen/_24sdp"
             android:layout_marginRight="@dimen/_24sdp"
-            android:background="@color/inactive_color" />
+            android:background="@color/blue_light" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/payRequestLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -84,13 +86,14 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1.5dp"
             android:layout_marginLeft="@dimen/_24sdp"
             android:layout_marginRight="@dimen/_24sdp"
-            android:background="@color/inactive_color" />
+            android:background="@color/blue_light" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/buyTokenLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -123,13 +126,14 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1.5dp"
             android:layout_marginLeft="@dimen/_24sdp"
             android:layout_marginRight="@dimen/_24sdp"
-            android:background="@color/inactive_color" />
+            android:background="@color/blue_light" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/widthdrawLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -158,13 +162,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/_26sdp">
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1.5dp"
             android:layout_marginLeft="@dimen/_24sdp"
             android:layout_marginRight="@dimen/_24sdp"
-            android:background="@color/inactive_color" />
+            android:background="@color/blue_light" />
     </LinearLayout>
 </LinearLayout>

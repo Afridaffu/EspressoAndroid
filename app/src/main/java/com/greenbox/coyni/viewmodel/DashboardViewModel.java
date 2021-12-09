@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 //import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
@@ -53,6 +54,11 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<ProfilesResponse> profileRespMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UserDetails> userDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<LatestTxnResponse> getUserLatestTxns = new MutableLiveData<>();
+
+    public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
+        return getUserLatestTxns;
+    }
 
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
         return userDetailsMutableLiveData;
@@ -443,7 +449,6 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
-
     public void getProfiles() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -527,5 +532,40 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
+    public void getLatestTxns(){
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<LatestTxnResponse> mCall = apiService.getLatestTransactions();
+            mCall.enqueue(new Callback<LatestTxnResponse>() {
+                @Override
+                public void onResponse(Call<LatestTxnResponse> call, Response<LatestTxnResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            LatestTxnResponse obj = response.body();
+                            getUserLatestTxns.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<LatestTxnResponse>() {
+                            }.getType();
+                            LatestTxnResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                getUserLatestTxns.setValue(errorResponse);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getUserLatestTxns.setValue(null);
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<LatestTxnResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
