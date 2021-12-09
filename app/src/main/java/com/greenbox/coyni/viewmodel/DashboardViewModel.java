@@ -24,14 +24,18 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.transaction.TransactionList;
+import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.UserDetailsData;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -59,10 +63,23 @@ public class DashboardViewModel extends AndroidViewModel {
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
     }
+    private MutableLiveData<TransactionList> transactionListMutableLiveData=new MutableLiveData<>();
 
+
+    public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
+        return transactionListMutableLiveData;
+    }
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
         return userDetailsMutableLiveData;
     }
+
+    public MutableLiveData<UserPreference> getUserPreferenceMutableLiveData() {
+        return userPreferenceMutableLiveData;
+    }
+
+//    public MutableLiveData<String> getErrorMutableLiveData() {
+//        return errorMutableLiveData;
+//    }
 
     public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
         return profileRespMutableLiveData;
@@ -568,4 +585,38 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+    public void meTransactionList(TransactionListRequest request){
+        ApiService apiService=AuthApiClient.getInstance().create(ApiService.class);
+        Call<TransactionList> mcall=apiService.meTransactionList(request);
+        mcall.enqueue(new Callback<TransactionList>() {
+            @Override
+            public void onResponse(Call<TransactionList> call, Response<TransactionList> response) {
+                try {
+                    if (response.isSuccessful()){
+                        TransactionList obj=response.body();
+                        transactionListMutableLiveData.setValue(obj);
+                    }
+                    else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<TransactionList>() {
+                        }.getType();
+                        TransactionList errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        transactionListMutableLiveData.setValue(errorResponse);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransactionList> call, Throwable t) {
+                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                apiErrorMutableLiveData.setValue(null);
+            }
+        });
+
+    }
+
+
+
 }
