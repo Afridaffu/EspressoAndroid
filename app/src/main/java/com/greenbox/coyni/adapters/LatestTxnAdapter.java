@@ -58,7 +58,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
         try {
             holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
             holder.amountTV.setText(latestTxns.getData().get(position).getAmount());
-            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
+//            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
             holder.balanceTV.setText("Balance "+Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
             String strType = "";
 
@@ -90,15 +90,16 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("Completed")) {
                 holder.statusLL.setVisibility(View.GONE);
                 holder.dateTV.setVisibility(View.VISIBLE);
-                holder.dateTV.setText(Utils.convertTxnDate(latestTxns.getData().get(position).getUpdatedAt()).split(" ")[0]);
+                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("In Progress")) {
                 holder.statusTV.setText(latestTxns.getData().get(position).getTxnStatusDn());
                 holder.statusTV.setTextColor(mContext.getColor(R.color.under_review_blue));
                 holder.statusLL.setBackground(mContext.getDrawable(R.drawable.txn_inprogress_bg));
 
+                // comment
 //                holder.statusLL.setVisibility(View.GONE);
 //                holder.dateTV.setVisibility(View.VISIBLE);
-//                holder.dateTV.setText(Utils.convertTxnDate(latestTxns.getData().get(position).getUpdatedAt()));
+//                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("Pending")) {
                 holder.statusTV.setText(latestTxns.getData().get(position).getTxnStatusDn());
                 holder.statusTV.setTextColor(mContext.getColor(R.color.orange));

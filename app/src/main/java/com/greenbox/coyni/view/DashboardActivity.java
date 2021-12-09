@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -32,6 +33,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.wallet.WalletInfo;
@@ -55,7 +57,8 @@ public class DashboardActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     Dialog dialog;
     ProgressDialog progressDialog;
-    RelativeLayout cvHeaderRL, cvSmallHeaderRL, transactionsRL;
+    RelativeLayout cvHeaderRL, cvSmallHeaderRL,statusCardsRL;
+    NestedScrollView transactionsNSV;
     CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
     ImageView imgProfileSmall, imgProfile;
     Long mLastClickTime = 0L;
@@ -83,7 +86,7 @@ public class DashboardActivity extends AppCompatActivity {
             cvHeaderRL = findViewById(R.id.cvHeaderRL);
             cvSmallHeaderRL = findViewById(R.id.cvSmallHeaderRL);
             getStartedCV = findViewById(R.id.getStartedCV);
-            transactionsRL = findViewById(R.id.transactionsRL);
+            transactionsNSV = findViewById(R.id.transactionsNSV);
             imgProfileSmall = findViewById(R.id.imgProfileSmall);
             imgProfile = findViewById(R.id.imgProfile);
 
@@ -107,6 +110,7 @@ public class DashboardActivity extends AppCompatActivity {
             noTxnTV = findViewById(R.id.noTxnTV);
             tvBalance = findViewById(R.id.tvBalance);
             viewMoreLL = findViewById(R.id.viewMoreLL);
+            statusCardsRL = findViewById(R.id.statusCardsRL);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -222,6 +226,12 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             });
 
+            viewMoreLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, TransactionDetailsActivity.class));
+                }
+            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -274,7 +284,7 @@ public class DashboardActivity extends AppCompatActivity {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
                             getStartedCV.setVisibility(View.GONE);
-                            transactionsRL.setVisibility(View.VISIBLE);
+                            transactionsNSV.setVisibility(View.VISIBLE);
 
                             if (trackerResponse.getData().isPaymentModeAdded()) {
                                 welcomeCoyniCV.setVisibility(View.GONE);
@@ -295,12 +305,12 @@ public class DashboardActivity extends AppCompatActivity {
                                 cvHeaderRL.setVisibility(View.GONE);
                                 cvSmallHeaderRL.setVisibility(View.VISIBLE);
                                 getStartedCV.setVisibility(View.VISIBLE);
-                                transactionsRL.setVisibility(View.GONE);
+                                transactionsNSV.setVisibility(View.GONE);
                             }else if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")){
                                 cvHeaderRL.setVisibility(View.VISIBLE);
                                 cvSmallHeaderRL.setVisibility(View.GONE);
                                 getStartedCV.setVisibility(View.GONE);
-                                transactionsRL.setVisibility(View.VISIBLE);
+                                transactionsNSV.setVisibility(View.VISIBLE);
 
                                 welcomeCoyniCV.setVisibility(View.GONE);
                                 underReviewCV.setVisibility(View.VISIBLE);
@@ -311,7 +321,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 cvHeaderRL.setVisibility(View.VISIBLE);
                                 cvSmallHeaderRL.setVisibility(View.GONE);
                                 getStartedCV.setVisibility(View.GONE);
-                                transactionsRL.setVisibility(View.VISIBLE);
+                                transactionsNSV.setVisibility(View.VISIBLE);
 
                                 welcomeCoyniCV.setVisibility(View.GONE);
                                 underReviewCV.setVisibility(View.GONE);
@@ -337,7 +347,7 @@ public class DashboardActivity extends AppCompatActivity {
                     cvHeaderRL.setVisibility(View.VISIBLE);
                     cvSmallHeaderRL.setVisibility(View.GONE);
                     getStartedCV.setVisibility(View.GONE);
-                    transactionsRL.setVisibility(View.VISIBLE);
+                    transactionsNSV.setVisibility(View.VISIBLE);
 
                     welcomeCoyniCV.setVisibility(View.GONE);
                     underReviewCV.setVisibility(View.GONE);
@@ -362,6 +372,46 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
+            @Override
+            public void onChanged(Preferences preferences) {
+
+                try {
+                    if (preferences != null) {
+                        if (preferences.getData().getTimeZone() == 0) {
+                            objMyApplication.setTempTimezone(getString(R.string.PST));
+                            objMyApplication.setTempTimezoneID(0);
+                            objMyApplication.setStrPreference("PST");
+                        } else if (preferences.getData().getTimeZone() == 1) {
+                            objMyApplication.setTempTimezone(getString(R.string.MST));
+                            objMyApplication.setTempTimezoneID(1);
+                            objMyApplication.setStrPreference("America/Denver");
+                        } else if (preferences.getData().getTimeZone() == 2) {
+                            objMyApplication.setTempTimezone(getString(R.string.CST));
+                            objMyApplication.setTempTimezoneID(2);
+                            objMyApplication.setStrPreference("CST");
+                        } else if (preferences.getData().getTimeZone() == 3) {
+                            objMyApplication.setTempTimezone(getString(R.string.EST));
+                            objMyApplication.setTempTimezoneID(3);
+                            objMyApplication.setStrPreference("America/New_York");
+                        } else if (preferences.getData().getTimeZone() == 4) {
+                            objMyApplication.setTempTimezone(getString(R.string.HST));
+                            objMyApplication.setTempTimezoneID(4);
+                            objMyApplication.setStrPreference("HST");
+                        } else if (preferences.getData().getTimeZone() == 5) {
+                            objMyApplication.setTempTimezone(getString(R.string.AST));
+                            objMyApplication.setTempTimezoneID(5);
+                            objMyApplication.setStrPreference("AST");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
     }
 
     private void cryptoAssets() {
@@ -521,6 +571,7 @@ public class DashboardActivity extends AppCompatActivity {
         if (Utils.checkInternet(DashboardActivity.this)) {
             progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
+            dashboardViewModel.mePreferences();
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
         }

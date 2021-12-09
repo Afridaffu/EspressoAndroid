@@ -63,12 +63,14 @@ public class DashboardViewModel extends AndroidViewModel {
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
     }
-    private MutableLiveData<TransactionList> transactionListMutableLiveData=new MutableLiveData<>();
+
+    private MutableLiveData<TransactionList> transactionListMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
         return transactionListMutableLiveData;
     }
+
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
         return userDetailsMutableLiveData;
     }
@@ -549,7 +551,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void getLatestTxns(){
+    public void getLatestTxns() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<LatestTxnResponse> mCall = apiService.getLatestTransactions();
@@ -585,18 +587,18 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
-    public void meTransactionList(TransactionListRequest request){
-        ApiService apiService=AuthApiClient.getInstance().create(ApiService.class);
-        Call<TransactionList> mcall=apiService.meTransactionList(request);
+
+    public void meTransactionList(TransactionListRequest request) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<TransactionList> mcall = apiService.meTransactionList(request);
         mcall.enqueue(new Callback<TransactionList>() {
             @Override
             public void onResponse(Call<TransactionList> call, Response<TransactionList> response) {
                 try {
-                    if (response.isSuccessful()){
-                        TransactionList obj=response.body();
+                    if (response.isSuccessful()) {
+                        TransactionList obj = response.body();
                         transactionListMutableLiveData.setValue(obj);
-                    }
-                    else {
+                    } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<TransactionList>() {
                         }.getType();
@@ -616,7 +618,6 @@ public class DashboardViewModel extends AndroidViewModel {
         });
 
     }
-
 
 
 }

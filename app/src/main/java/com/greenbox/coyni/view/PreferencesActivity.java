@@ -150,7 +150,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             timeZoneET.setText(getString(R.string.MST));
                             myApplicationObj.setTempTimezone(getString(R.string.MST));
                             myApplicationObj.setTempTimezoneID(1);
-                            myApplicationObj.setStrPreference("MST");
+                            myApplicationObj.setStrPreference("America/Denver");
                         } else if (preferences.getData().getTimeZone() == 2) {
                             timeZoneET.setText(getString(R.string.CST));
                             myApplicationObj.setTempTimezone(getString(R.string.CST));
@@ -160,7 +160,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             timeZoneET.setText(getString(R.string.EST));
                             myApplicationObj.setTempTimezone(getString(R.string.EST));
                             myApplicationObj.setTempTimezoneID(3);
-                            myApplicationObj.setStrPreference("EST");
+                            myApplicationObj.setStrPreference("America/New_York");
                         } else if (preferences.getData().getTimeZone() == 4) {
                             timeZoneET.setText(getString(R.string.HST));
                             myApplicationObj.setTempTimezone(getString(R.string.HST));
@@ -193,11 +193,11 @@ public class PreferencesActivity extends AppCompatActivity {
                         if (myApplicationObj.getTempTimezoneID() == 0) {
                             myApplicationObj.setStrPreference("PST");
                         } else if (myApplicationObj.getTempTimezoneID() == 1) {
-                            myApplicationObj.setStrPreference("MST");
+                            myApplicationObj.setStrPreference("America/Denver");
                         } else if (myApplicationObj.getTempTimezoneID() == 2) {
                             myApplicationObj.setStrPreference("CST");
                         } else if (myApplicationObj.getTempTimezoneID() == 3) {
-                            myApplicationObj.setStrPreference("EST");
+                            myApplicationObj.setStrPreference("America/New_York");
                         } else if (myApplicationObj.getTempTimezoneID() == 4) {
                             myApplicationObj.setStrPreference("HST");
                         } else if (myApplicationObj.getTempTimezoneID() == 5) {

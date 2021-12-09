@@ -133,16 +133,18 @@ public class PayRequestScanActivity extends AppCompatActivity {
             imageShare = findViewById(R.id.imgShare);
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
+            imgProfile = findViewById(R.id.imgProfile);
 
 
-            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
+//            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-            userNameTV.setText(strUserName.toUpperCase(Locale.US));
+//            userNameTV.setText(strUserName.toUpperCase(Locale.US));
             if (strName != null && strName.length() > 22) {
                 tvName.setText(strName.substring(0, 22) + "...");
             } else {
                 tvName.setText(strName);
             }
+            bindImage();
 
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
             if (walletResponse != null) {
