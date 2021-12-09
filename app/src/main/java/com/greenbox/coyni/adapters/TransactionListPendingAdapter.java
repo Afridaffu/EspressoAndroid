@@ -71,6 +71,7 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
 //            }
 //        }
         holder.txnStatus.setText(objData.getTxnStatusDn());
+        holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
         holder.txnDescrip.setText(objData.getTxnDescription());
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
         holder.date.setVisibility(View.GONE);
@@ -121,7 +122,7 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
     TextView date,txnDescrip,amount,txnStatus,walletBal;
-
+    View viewLine;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -131,6 +132,7 @@ public TransactionListPendingAdapter(List<TransactionListPending> list, Context 
             amount=itemView.findViewById(R.id.amountTV);
             txnStatus=itemView.findViewById(R.id.statusTV);
             walletBal=itemView.findViewById(R.id.balanceTV);
+            viewLine=itemView.findViewById(R.id.viewV);
         }
     }
     private String convertTwoDecimal(String strAmount) {
