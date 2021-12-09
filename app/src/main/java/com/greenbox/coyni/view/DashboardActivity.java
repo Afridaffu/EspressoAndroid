@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -38,6 +39,7 @@ import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
@@ -48,10 +50,11 @@ import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr,viewMoreLL;
+    LinearLayout scanQr, viewMoreLL;
     DashboardViewModel dashboardViewModel;
+    CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo,noTxnTV,tvBalance;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance;
     MyApplication objMyApplication;
     Dialog dialog;
     ProgressDialog progressDialog;
@@ -110,6 +113,7 @@ public class DashboardActivity extends AppCompatActivity {
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
@@ -291,12 +295,12 @@ public class DashboardActivity extends AppCompatActivity {
                                 buyTokensCV.setVisibility(View.GONE);
                             }
                         } else {
-                            if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")){
+                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
                                 cvHeaderRL.setVisibility(View.GONE);
                                 cvSmallHeaderRL.setVisibility(View.VISIBLE);
                                 getStartedCV.setVisibility(View.VISIBLE);
                                 transactionsRL.setVisibility(View.GONE);
-                            }else if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")){
+                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
                                 cvHeaderRL.setVisibility(View.VISIBLE);
                                 cvSmallHeaderRL.setVisibility(View.GONE);
                                 getStartedCV.setVisibility(View.GONE);
@@ -307,7 +311,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 additionalActionCV.setVisibility(View.GONE);
                                 buyTokensCV.setVisibility(View.GONE);
 
-                            } else if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")){
+                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
                                 cvHeaderRL.setVisibility(View.VISIBLE);
                                 cvSmallHeaderRL.setVisibility(View.GONE);
                                 getStartedCV.setVisibility(View.GONE);
@@ -353,12 +357,31 @@ public class DashboardActivity extends AppCompatActivity {
                         txnRV.setLayoutManager(mLayoutManager);
                         txnRV.setItemAnimator(new DefaultItemAnimator());
                         txnRV.setAdapter(latestTxnAdapter);
-                    } else{
+                    } else {
                         txnRV.setVisibility(View.GONE);
                         noTxnTV.setVisibility(View.VISIBLE);
                         buyTokensCV.setVisibility(View.VISIBLE);
                     }
 
+                }
+            }
+        });
+
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            objMyApplication.setStrSignOnError("");
+                        } else {
+                            objMyApplication.setSignOnData(null);
+                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -431,7 +454,7 @@ public class DashboardActivity extends AppCompatActivity {
 //                buyViewModel.meBanks();
 //                notificationsViewModel.meNotifications();
 //                payViewModel.getReceiveRequests();
-//                buyViewModel.meSignOn();
+                customerProfileViewModel.meSignOn();
 //                dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
             } catch (Exception ex) {

@@ -11,7 +11,10 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -167,6 +170,7 @@ public class AddCardActivity extends AppCompatActivity {
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
             objMyApplication.getStates();
+            etName.setText(objMyApplication.getStrUserName());
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
             } else {
@@ -314,9 +318,6 @@ public class AddCardActivity extends AppCompatActivity {
                     if (progressDialog != null) {
                         progressDialog.dismiss();
                     }
-                    if (preDialog != null) {
-                        preDialog.dismiss();
-                    }
                     if (apiError != null) {
                         if (apiError.getError() != null) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
@@ -360,6 +361,30 @@ public class AddCardActivity extends AppCompatActivity {
                 if (cardTypeResponse != null) {
                     objCard = cardTypeResponse;
                     etCardNumber.setImage(cardTypeResponse.getData().getCardBrand());
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getPreAuthErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                if (preDialog != null) {
+                    preDialog.dismiss();
+                }
+                if (apiError != null) {
+                    if (apiError.getError() != null) {
+                        if (!apiError.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "");
+                        } else {
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "");
+                        }
+                    } else if (apiError.getData() != null) {
+                        if (!((LinkedTreeMap) apiError.getData()).get("msg").toString().contains("incorrect")) {
+                            Utils.displayAlert(((LinkedTreeMap) apiError.getData()).get("msg").toString(), AddCardActivity.this, "");
+                        } else {
+                            displayPreAuthFail();
+                        }
+                    }
                 }
             }
         });
@@ -433,6 +458,8 @@ public class AddCardActivity extends AppCompatActivity {
             year = ydf.format(Calendar.getInstance().getTime());
             if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) < Integer.parseInt(year)) {
                 value = false;
+            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
+                value = false;
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
                 value = false;
             }
@@ -449,18 +476,20 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etName.setHint("");
                             if (etName.getText().toString().trim().length() > 0) {
                                 nameErrorLL.setVisibility(GONE);
                                 etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+                                //Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
 
                             } else {
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+                                //Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
                             }
                         } else {
+                            etName.setHint("John Joestar");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                         }
@@ -930,6 +959,19 @@ public class AddCardActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void disableCopyPaste() {
+        try {
+            etExpiry.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return true;
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void enableOrDisableNext() {

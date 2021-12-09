@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:paddingLeft="@dimen/_20sdp"
     android:paddingTop="@dimen/_20sdp"
@@ -69,7 +70,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_21sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="Please enter card details"
             android:textColor="@color/primary_black"
@@ -80,7 +80,7 @@
         android:id="@+id/layoutCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:paddingBottom="@dimen/_20sdp">
 
         <ScrollView
@@ -103,7 +103,6 @@
                     android:textColorHint="@color/primary_black"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -112,7 +111,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="John Joestar"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="30"
@@ -223,6 +221,7 @@
                                 android:hint="MM/YY"
                                 android:imeOptions="actionNext"
                                 android:inputType="number"
+                                android:longClickable="false"
                                 android:maxLength="5"
                                 android:padding="@dimen/_14sdp"
                                 android:singleLine="true"
@@ -289,6 +288,7 @@
                                 android:hint="123"
                                 android:imeOptions="actionDone"
                                 android:inputType="numberPassword"
+                                android:longClickable="false"
                                 android:maxLength="4"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"
@@ -358,6 +358,7 @@
         android:id="@+id/layoutAddress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_15sdp"
         android:paddingBottom="@dimen/_20sdp"
         android:visibility="gone">
 

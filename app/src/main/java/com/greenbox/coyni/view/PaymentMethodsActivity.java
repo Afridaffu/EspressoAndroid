@@ -49,8 +49,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     LinearLayout lyAPayClose, lyExternalClose, lyPayBack;
     CardView cvNext, cvAddPayment;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
-    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead;
-    String strCurrent = "", strSignOn = "";
+    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
+    String strCurrent = "", strSignOn = "", strScreen = "";
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow;
     RecyclerView rvPaymentMethods;
     CustomerProfileViewModel customerProfileViewModel;
@@ -110,13 +110,22 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
+            if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
+                strScreen = getIntent().getStringExtra("screen");
+            }
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             if (Utils.checkInternet(PaymentMethodsActivity.this)) {
 //                dialog = Utils.showProgressDialog(this);
-                customerProfileViewModel.meSignOn();
+                //customerProfileViewModel.meSignOn();
+                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
+                    customerProfileViewModel.meSignOn();
+                } else {
+                    strSignOn = objMyApplication.getStrSignOnError();
+                    signOnData = objMyApplication.getSignOnData();
+                }
             } else {
                 Utils.displayAlert(getString(R.string.internet), PaymentMethodsActivity.this, "");
             }
@@ -317,6 +326,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             layoutCCard = findViewById(R.id.layoutCCard);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
+            tvMessage = findViewById(R.id.tvMessage);
+            if (strScreen != null && strScreen.equals("buy")) {
+                tvMessage.setVisibility(View.VISIBLE);
+            } else {
+                tvMessage.setVisibility(View.GONE);
+            }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

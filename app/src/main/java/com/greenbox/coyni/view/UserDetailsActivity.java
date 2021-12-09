@@ -593,88 +593,88 @@ public class UserDetailsActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        Uri uri = getImageUri(this, selectedImage);
-                        CropImage.activity(uri).start(this);
+//        if (resultCode != RESULT_CANCELED) {
+        switch (requestCode) {
+            case 0:
+                if (resultCode == RESULT_OK && data != null) {
+                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                    Uri uri = getImageUri(this, selectedImage);
+                    CropImage.activity(uri).start(this);
 //                        userProfileIV.setVisibility(View.VISIBLE);
 //                        imageTextTV.setVisibility(View.GONE);
 //                        userProfileIV.setImageBitmap(selectedImage);
 //                        uploadImage();
-                    }
-                    break;
-                case 1:
-                    if (resultCode == RESULT_OK && data != null) {
-                        try {
-                            Uri selectedImage = data.getData();
-                            if (selectedImage != null) {
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                }
+                break;
+            case 1:
+                if (resultCode == RESULT_OK && data != null) {
+                    try {
+                        Uri selectedImage = data.getData();
+                        if (selectedImage != null) {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
 //                                userProfileIV.setImageBitmap(bitmap);
 //                                userProfileIV.setVisibility(View.VISIBLE);
 //                                imageTextTV.setVisibility(View.GONE);
 //                                uploadImage();
-                                Uri uri = getImageUri(this, bitmap);
-                                CropImage.activity(uri).start(this);
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                            Uri uri = getImageUri(this, bitmap);
+                            CropImage.activity(uri).start(this);
                         }
-                    }
-                    break;
-
-                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE: {
-                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                    if (resultCode == RESULT_OK) {
-                        Uri resultUri = result.getUri();
-                        userProfileIV.setVisibility(View.VISIBLE);
-                        imageTextTV.setVisibility(View.GONE);
-                        userProfileIV.setImageURI(resultUri);
-                        uploadImage();
-
-                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Exception error = result.getError();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
                 break;
-                case 251: {
-                    if (resultCode == RESULT_OK) {
-                        if (authenticateType.equals("EMAIL")) {
-                            Intent ee = new Intent(UserDetailsActivity.this, EditEmailActivity.class);
-                            startActivity(ee);
-                        } else if (authenticateType.equals("ADDRESS")) {
-                            Intent ea = new Intent(UserDetailsActivity.this, EditAddressActivity.class);
-                            startActivity(ea);
-                        } else if (authenticateType.equals("PHONE")) {
-                            Intent ep = new Intent(UserDetailsActivity.this, EditPhoneActivity.class);
-                            ep.putExtra("OLD_PHONE", phoneFormat);
-                            startActivity(ep);
 
-                        }
-                    } else {
-                        if (authenticateType.equals("EMAIL")) {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "EditEmail"));
-                        } else if (authenticateType.equals("ADDRESS")) {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "EditAddress"));
-                        } else if (authenticateType.equals("PHONE")) {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("OLD_PHONE", phoneFormat)
-                                    .putExtra("screen", "EditPhone"));
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE: {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    userProfileIV.setVisibility(View.VISIBLE);
+                    imageTextTV.setVisibility(View.GONE);
+                    userProfileIV.setImageURI(resultUri);
+                    uploadImage();
 
-                        }
-                    }
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
-                break;
             }
+            break;
+            case 251: {
+                if (resultCode == RESULT_OK) {
+                    if (authenticateType.equals("EMAIL")) {
+                        Intent ee = new Intent(UserDetailsActivity.this, EditEmailActivity.class);
+                        startActivity(ee);
+                    } else if (authenticateType.equals("ADDRESS")) {
+                        Intent ea = new Intent(UserDetailsActivity.this, EditAddressActivity.class);
+                        startActivity(ea);
+                    } else if (authenticateType.equals("PHONE")) {
+                        Intent ep = new Intent(UserDetailsActivity.this, EditPhoneActivity.class);
+                        ep.putExtra("OLD_PHONE", phoneFormat);
+                        startActivity(ep);
+
+                    }
+                } else {
+                    if (authenticateType.equals("EMAIL")) {
+                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "EditEmail"));
+                    } else if (authenticateType.equals("ADDRESS")) {
+                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "EditAddress"));
+                    } else if (authenticateType.equals("PHONE")) {
+                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("OLD_PHONE", phoneFormat)
+                                .putExtra("screen", "EditPhone"));
+
+                    }
+                }
+            }
+            break;
         }
     }
+//    }
 
     @Override
     protected void onResume() {

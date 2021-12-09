@@ -55,9 +55,11 @@ import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 
 import java.lang.reflect.Field;
@@ -640,7 +642,7 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size() ; i++) {
+            for (int i = 0; i < arrZonesList.size(); i++) {
                 if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                     arrZonesList.get(i).setSelected(true);
                 }
@@ -896,6 +898,9 @@ public class Utils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                Intent i = new Intent(context, PaymentMethodsActivity.class);
+                i.putExtra("screen", "buy");
+                context.startActivity(i);
             }
         });
 
@@ -932,7 +937,7 @@ public class Utils {
 //                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + mContext.getString(R.string.currency);
                 strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
             }
-            Log.e("str",strValue);
+            Log.e("str", strValue);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
