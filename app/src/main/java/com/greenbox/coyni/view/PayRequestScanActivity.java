@@ -678,5 +678,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        //Change Not Updated
+        //Accept yours
     }
 }

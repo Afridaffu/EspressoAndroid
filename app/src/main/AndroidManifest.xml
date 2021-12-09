@@ -32,8 +32,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-            android:name=".view.TransactionDetailsActivity"
-            android:exported="true" />
+        <activity android:name=".view.TransactionDetailsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".view.AddCardActivity"
             android:exported="false"

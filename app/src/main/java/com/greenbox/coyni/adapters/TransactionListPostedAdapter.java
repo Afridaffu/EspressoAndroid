@@ -143,19 +143,26 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 //                break;
 //        }
         holder.txnStatus.setText(objData.getTxnStatusDn());
-        holder.statusBackcolor.setCardBackgroundColor(Color.parseColor("#e8f3f9"));
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:
                 holder.txnStatus.setTextColor(Color.parseColor("#2196F3"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
+                holder.txnStatus.setBackgroundColor(Color.parseColor("#E8F3F9"));
                 break;
             case Utils.transPending:
                 holder.txnStatus.setTextColor(Color.parseColor("#A5A5A5"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
+                holder.txnStatus.setBackgroundColor(Color.parseColor("#FFF6E5"));
                 break;
             case Utils.transCompleted:
                 holder.txnStatus.setTextColor(Color.parseColor("#00CC6E"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
+                holder.txnStatus.setBackgroundColor(Color.parseColor("#E5F3E5"));
                 break;
             case Utils.transFailed:
                 holder.txnStatus.setTextColor(Color.parseColor("#D45858"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
+                holder.txnStatus.setBackgroundColor(Color.parseColor("#EFEFEF"));
                 break;
         }
 
@@ -178,7 +185,7 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView date,txnDescrip,amount,txnStatus,walletBal;
-        CardView statusBackcolor;
+//        CardView statusBackcolor;
         RelativeLayout topRadius;
         MyApplication myApplication;
 
@@ -189,7 +196,7 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
             amount=itemView.findViewById(R.id.amountTV);
             txnStatus=itemView.findViewById(R.id.statusTV);
             walletBal=itemView.findViewById(R.id.balanceTV);
-            statusBackcolor=itemView.findViewById(R.id.statusCVbg);
+//            statusBackcolor=itemView.findViewById(R.id.statusCVbg);
             topRadius=itemView.findViewById(R.id.layoutTopRadiusRL);
         }
     }

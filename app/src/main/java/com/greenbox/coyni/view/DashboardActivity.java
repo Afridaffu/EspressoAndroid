@@ -93,34 +93,23 @@ public class DashboardActivity extends AppCompatActivity {
             layoutCrypto = findViewById(R.id.layoutCrypto);
             layoutCard = findViewById(R.id.layoutCard);
             tvUserName = findViewById(R.id.tvUserName);
-            viewMoreLL=findViewById(R.id.viewMoreLL);
             scanQr=findViewById(R.id.scanQrLL);
             tvUserNameSmall = findViewById(R.id.tvUserNameSmall);
             tvUserInfo = findViewById(R.id.tvUserInfo);
             tvUserInfoSmall = findViewById(R.id.tvUserInfoSmall);
             scanQr = findViewById(R.id.scanQrLL);
-
+            viewMoreLL=findViewById(R.id.viewMoreLL);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+
+
 
             layoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(DashboardActivity.this, CustomerProfileActivity.class);
                     startActivity(i);
-                }
-            });
-            viewMoreLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        Intent intent = new Intent(DashboardActivity.this, TransactionDetailsActivity.class);
-                        startActivity(intent);
-                    }
-                    catch (Exception ex){
-                        ex.printStackTrace();
-                    }
                 }
             });
             layoutCrypto.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +129,14 @@ public class DashboardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+                }
+            });
+
+            viewMoreLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(DashboardActivity.this, TransactionDetailsActivity.class);
+                    startActivity(intent);
                 }
             });
 
