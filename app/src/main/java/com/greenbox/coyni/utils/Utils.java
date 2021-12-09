@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
@@ -30,6 +31,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -53,9 +55,11 @@ import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 
 import java.lang.reflect.Field;
@@ -638,7 +642,7 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size() ; i++) {
+            for (int i = 0; i < arrZonesList.size(); i++) {
                 if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                     arrZonesList.get(i).setSelected(true);
                 }
@@ -855,6 +859,12 @@ public class Utils {
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static int convertPxtoDP(int value) {
+        int dpvalue = 0;
+        dpvalue = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, Resources.getSystem().getDisplayMetrics());
+        return dpvalue;
+    }
+
     public static void showQuickAction(final Context context) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -888,6 +898,9 @@ public class Utils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                Intent i = new Intent(context, PaymentMethodsActivity.class);
+                i.putExtra("screen", "buy");
+                context.startActivity(i);
             }
         });
 
@@ -924,7 +937,7 @@ public class Utils {
 //                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + mContext.getString(R.string.currency);
                 strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
             }
-            Log.e("str",strValue);
+            Log.e("str", strValue);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

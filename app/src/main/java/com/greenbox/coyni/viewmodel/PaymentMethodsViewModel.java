@@ -34,6 +34,7 @@ import retrofit2.Response;
 public class PaymentMethodsViewModel extends AndroidViewModel {
     private MutableLiveData<PublicKeyResponse> publicKeyResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<APIError> preAuthErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BankDeleteResponseData> delBankResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CardResponse> cardResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PreAuthResponse> preAuthResponseMutableLiveData = new MutableLiveData<>();
@@ -65,6 +66,10 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
     public MutableLiveData<CardTypeResponse> getCardTypeResponseMutableLiveData() {
         return cardTypeResponseMutableLiveData;
+    }
+
+    public MutableLiveData<APIError> getPreAuthErrorMutableLiveData() {
+        return preAuthErrorMutableLiveData;
     }
 
     public void getPublicKey(int userId) {
@@ -173,24 +178,29 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<PreAuthResponse>() {
                 @Override
                 public void onResponse(Call<PreAuthResponse> call, Response<PreAuthResponse> response) {
-                    if (response.isSuccessful()) {
-                        PreAuthResponse obj = response.body();
-                        preAuthResponseMutableLiveData.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
-                        }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                    try {
+                        if (response.isSuccessful()) {
+                            PreAuthResponse obj = response.body();
+                            preAuthResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse == null) {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            }
+                            preAuthErrorMutableLiveData.setValue(errorResponse);
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<PreAuthResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
+                    preAuthErrorMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {
