@@ -36,13 +36,9 @@
     <color name="under_review_blue">#1D86BE</color>
     <color name="retake_bg_grey">#707070</color>
     <color name="trans_black">#66000000</color>
-    <color name="blue_light">#d8e2f0</color>
-
-
     <color name="txn_completed_trans">#E5F3E5</color>
     <color name="txn_inprogress_trans">#E8F3F9</color>
     <color name="txn_pending_trans">#FFEFD8</color>
     <color name="txn_failed_trans">#E8E8E8</color>
-
-
+    <color name="blue_light">#d8e2f0</color>
 </resources>

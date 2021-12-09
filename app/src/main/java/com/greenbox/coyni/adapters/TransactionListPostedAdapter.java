@@ -61,11 +61,11 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 
                 if (Utils.convertDate(objData.getUpdatedAt()).equals(Utils.convertDate(strCurDate))) {
                     holder.date.setText("Today");
-                    holder.topRadius.setBackgroundResource(R.drawable.topradius_list_items);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            holder.topRadius.setBackgroundResource(R.drawable.topradius_list_items);
         }
         else
         if (position != 0) {
@@ -146,23 +146,19 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:
                 holder.txnStatus.setTextColor(Color.parseColor("#2196F3"));
-                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
-                holder.txnStatus.setBackgroundColor(Color.parseColor("#E8F3F9"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case Utils.transPending:
                 holder.txnStatus.setTextColor(Color.parseColor("#A5A5A5"));
-                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
-                holder.txnStatus.setBackgroundColor(Color.parseColor("#FFF6E5"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             case Utils.transCompleted:
                 holder.txnStatus.setTextColor(Color.parseColor("#00CC6E"));
-                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
-                holder.txnStatus.setBackgroundColor(Color.parseColor("#E5F3E5"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case Utils.transFailed:
                 holder.txnStatus.setTextColor(Color.parseColor("#D45858"));
-                holder.txnStatus.setBackgroundResource(R.drawable.txn_status_corner_radius);
-                holder.txnStatus.setBackgroundColor(Color.parseColor("#EFEFEF"));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
         }
 
@@ -171,8 +167,6 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 //        holder.txnStatus.setText(transactionListItemsposted.get(position).getTxnStatusDn());
 //
 //        holder.walletBal.setText(transactionListItemsposted.get(position).getWalletBalance());
-
-
 
 
     }
@@ -188,6 +182,7 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
 //        CardView statusBackcolor;
         RelativeLayout topRadius;
         MyApplication myApplication;
+        View lineItem;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -198,6 +193,7 @@ public class TransactionListPostedAdapter extends  RecyclerView.Adapter<Transact
             walletBal=itemView.findViewById(R.id.balanceTV);
 //            statusBackcolor=itemView.findViewById(R.id.statusCVbg);
             topRadius=itemView.findViewById(R.id.layoutTopRadiusRL);
+            lineItem=itemView.findViewById(R.id.viewV);
         }
     }
 
