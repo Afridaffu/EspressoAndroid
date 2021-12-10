@@ -64,6 +64,8 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
+import com.greenbox.coyni.model.transaction.TransactionList;
+import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.users.AccountLimits;
@@ -72,6 +74,8 @@ import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
+
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -86,6 +90,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface ApiService {
 
@@ -206,6 +211,10 @@ public interface ApiService {
 
     @POST("api/v2/transactions/token/info")
     Call<TransactionDetails> getTransactionDt();
+
+    @POST("api/v2/transactions/me/pending-posted-txns")
+    Call<TransactionList> meTransactionList(@Body TransactionListRequest request);
+
 
     @POST("api/v2/fiserv/sync-account")
     Call<SyncAccount> meSyncAccount();

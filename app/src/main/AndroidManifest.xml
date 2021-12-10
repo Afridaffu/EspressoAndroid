@@ -19,9 +19,6 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature"/>
-
-
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"
@@ -47,6 +44,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
+            android:name=".view.TransactionListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+        <activity
             android:name=".view.AddCardActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -56,8 +58,7 @@
             android:name=".view.WebViewActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" >
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PaymentMethodsActivity"
             android:exported="false"
@@ -76,11 +77,14 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PdfViewAgreementsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.PayRequestTransactionActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+
         <activity
             android:name=".view.ConfirmPasswordActivity"
             android:exported="true"

@@ -130,6 +130,7 @@ public class Utils {
     public static String[] for_Declined = {"RT01", "RT02"};
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
+    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
 
 
     public static String getStrLang() {

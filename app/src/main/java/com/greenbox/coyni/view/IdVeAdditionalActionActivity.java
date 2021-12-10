@@ -1,22 +1,19 @@
 package com.greenbox.coyni.view;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
@@ -88,6 +85,10 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         idveridoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String SSN = ssnET.getText().toString().substring(0,9);
+
+                Log.e("ssn", SSN);
+                Log.e("ssn", ssnET.getText().toString());
                 if (isSubmitEnabled) {
                     dialog = Utils.showProgressDialog(IdVeAdditionalActionActivity.this);
                     IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
@@ -97,7 +98,9 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                     identityAddressRequest.setEmail(IDVEResponse.getData().getEmail());
                     identityAddressRequest.setDateOfBirth(IDVEResponse.getData().getDateOfBirth());
                     //Unmask SSN
-                    identityAddressRequest.setSsn(ssnET.getText().toString().trim());
+//                    String SSN = ssnET.getText().toString().substring(0,2)+ssnET.getText().toString().substring(4,5)+ssnET.getText().toString().substring(7,10);
+
+                    identityAddressRequest.setSsn(SSN);
 
                     AddressObj addressObj = new AddressObj();
                     addressObj.setAddressLine1(IDVEResponse.getData().getUseraddress().getAddressLine1());
@@ -109,7 +112,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                     addressObj.setZipCode(IDVEResponse.getData().getUseraddress().getZipCode());
 
                     PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
-                    photoIDEntityObject.setNumber(ssnET.getText().toString().trim());
+                    photoIDEntityObject.setNumber(SSN);
                     photoIDEntityObject.setType(IDVEResponse.getData().getPhotoIDEntityObject().getType());
                     photoIDEntityObject.setIssuer(IDVEResponse.getData().getPhotoIDEntityObject().getIssuer());
 

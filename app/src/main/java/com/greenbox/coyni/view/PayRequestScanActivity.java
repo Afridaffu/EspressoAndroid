@@ -111,21 +111,21 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_pay_request_scan);
         try {
-
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            objMyApplication = (MyApplication) getApplicationContext();
             closeBtnScanCode = findViewById(R.id.closeBtnSC);
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
             scanCode = findViewById(R.id.scanCodeTV);
             scanMe = findViewById(R.id.scanMeTV);
             toglebtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.tvWalletAddress);
-            objMyApplication = (MyApplication) getApplicationContext();
             mycodeScannerView = findViewById(R.id.scanner_view);
             scannerLayout = findViewById(R.id.scannerLayout);
             scannerBar = findViewById(R.id.lineView);
             flashLL = findViewById(R.id.flashBtnLL);
             idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
             tvName = findViewById(R.id.tvName);
-            tvNameHead = findViewById(R.id.tvUserInfo);
+//            tvNameHead = findViewById(R.id.tvUserInfo);
             layoutHead = findViewById(R.id.layoutHead);
             scanMeSV = findViewById(R.id.scanmeScrlView);
             savetoAlbum = findViewById(R.id.saveToAlbumTV);
@@ -134,16 +134,17 @@ public class PayRequestScanActivity extends AppCompatActivity {
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
             imgProfile = findViewById(R.id.imgProfile);
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-//            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
+
+
+//            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
 //            userNameTV.setText(strUserName.toUpperCase(Locale.US));
-            bindImage();
-            if (strName != null && strName.length() > 21) {
-                tvName.setText(strName.substring(0, 21) + "...");
+            if (strName != null && strName.length() > 22) {
+                tvName.setText(strName.substring(0, 22) + "...");
             } else {
                 tvName.setText(strName);
             }
+            bindImage();
 
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
             if (walletResponse != null) {
@@ -232,6 +233,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
 //                        showToast();
+
                         Utils.showCustomToast(PayRequestScanActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
 
                     } catch (Exception ex) {
@@ -244,28 +246,11 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                        Drawable mDrawable = idIVQrcode.getDrawable();
-//                        Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
-//
-//                        String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
-//                        Uri uri = Uri.parse(path);
-//
-//                        Intent intent = new Intent(Intent.ACTION_SEND);
-//                        intent.setType("image/jpeg");
-//                        intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                        intent.putExtra(Intent.EXTRA_TEXT, strWallet);
-//                        startActivity(Intent.createChooser(intent, "Share QrCode Image"));
-
-
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-//                    Drawable mDrawable = meQrCode.getDrawable();
-//                    Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
-//                    String path = MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "Image Description", null);
-//                    Uri uri = Uri.parse(path);
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);
@@ -273,11 +258,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                         Intent shareIntent = Intent.createChooser(sendIntent, null);
                         startActivity(shareIntent);
-//                    Intent intent = new Intent(Intent.ACTION_SEND);
-//                    intent.setType("image/jpeg");
-//                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                    intent.putExtra(Intent.EXTRA_TEXT, strWallet);
-//                    startActivity(Intent.createChooser(intent, "Share via"));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -326,9 +306,9 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     saveToGallery();
+//                    Toast.makeText(PayRequestScanActivity.this, "saved to Gallery successfully", Toast.LENGTH_SHORT).show();
                     Utils.showCustomToast(PayRequestScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
 
-//                    Toast.makeText(PayRequestScanActivity.this, "saved to Gallery successfully", Toast.LENGTH_SHORT).show();
                 }
 
             });
@@ -387,12 +367,17 @@ public class PayRequestScanActivity extends AppCompatActivity {
         dashboardViewModel.getUserDetailsMutableLiveData().observe(this, new Observer<UserDetails>() {
             @Override
             public void onChanged(UserDetails userDetails) {
+
                 dialog.dismiss();
-                if (userDetails != null) {
-                    Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
-                    i.putExtra("walletId", strScanWallet);
-                    i.putExtra("screen", "scan");
-                    startActivity(i);
+                try {
+                    if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
+                        i.putExtra("walletId", strScanWallet);
+                        i.putExtra("screen", "scan");
+                        startActivity(i);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -438,32 +423,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
             Bitmap b = idIVQrcode.getDrawingCache();
 
             MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-PayQr", "this is QR");
-//        BitmapDrawable bitmapDrawable=(BitmapDrawable) idIVQrcode.getDrawable();
-//        Bitmap bitmap=bitmapDrawable.getBitmap();
-//        FileOutputStream outputStream=null;
-//        File file= Environment.getExternalStorageDirectory();
-//        File dir=new File(file.getAbsolutePath()+"/mypics");
-//        dir.mkdirs();
-//        String filename=String.format("%d.png",System.currentTimeMillis());
-//        File outfile=new File(dir,filename);
-//        try {
-//            outputStream=new FileOutputStream(outfile);
-//
-//        }
-//        catch (Exception fileNotFoundException){
-//            fileNotFoundException.printStackTrace();
-//        }
-//        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
-//        try {
-//            outputStream.flush();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            outputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -629,20 +588,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
-    private void showToast() {
-        try {
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast_recipientaddress, (ViewGroup) findViewById(R.id.toastRootLL));
-
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setView(layout);
-            toast.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     private void getUserDetails(String strWalletId) {
         try {
@@ -684,10 +629,10 @@ public class PayRequestScanActivity extends AppCompatActivity {
         actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
-                mcodeScanner.startPreview();
-                scannerLayout.setVisibility(View.VISIBLE);
-            }
+                                        dialog.dismiss();
+                                        mcodeScanner.startPreview();
+                                        scannerLayout.setVisibility(View.VISIBLE);
+                                    }
         });
 
         message.setText(msg);
@@ -735,5 +680,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        //Change Not Updated
+        //Accept yours
     }
 }
