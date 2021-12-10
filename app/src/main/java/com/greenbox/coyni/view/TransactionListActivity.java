@@ -5,6 +5,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,6 +68,7 @@ public class TransactionListActivity extends AppCompatActivity {
             layoutTransactionsposted = findViewById(R.id.layoutLLposted);
             noTransactionTV = findViewById(R.id.noTransactions);
             pendingTxt = findViewById(R.id.pendingTV);
+//            getRvTransactionsPosted.addItemDecoration(new DividerItemDecoration(TransactionListActivity.this,90));
             transactionList = objMyApplication.getTransactionList();
 //            totalItemCount = transactionList.getData().getItems().getPendingTransactionsCount();
             initObservers();
