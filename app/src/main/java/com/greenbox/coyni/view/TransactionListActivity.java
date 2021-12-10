@@ -25,11 +25,13 @@ import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionListActivity extends AppCompatActivity {
@@ -48,6 +50,7 @@ public class TransactionListActivity extends AppCompatActivity {
     TransactionList transactionList;
     TextView pendingTxt;
     ImageView closeBtn;
+    List<TransactionListPosted> globalData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,22 +122,33 @@ public class TransactionListActivity extends AppCompatActivity {
                         LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
                         LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
                         //Pending RV
-                        if (transactionList.getData().getItems().getPendingTransactionsCount() != 0) {
-                            noTransactionTV.setVisibility(View.GONE);
-                            layoutTransactionspending.setVisibility(View.VISIBLE);
-                            total = transactionList.getData().getTotalPages();
-                            objMyApplication.setTransactionList(transactionList);
-                            transactionListPendingAdapter = new TransactionListPendingAdapter(transactionList.getData().getItems().getPendingTransactions(), TransactionListActivity.this);
-                            pendingTxt.setVisibility(View.VISIBLE);
-                            rvTransactionsPending.setLayoutManager(mLayoutManager);
-                            rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
-                            rvTransactionsPending.setAdapter(transactionListPendingAdapter);
+                        if (transactionList.getData().getItems().getPendingTransactions().size() > 0) {
+                            globalData.addAll(transactionList.getData().getItems().getPendingTransactions());
+//                            noTransactionTV.setVisibility(View.GONE);
+//                            layoutTransactionspending.setVisibility(View.VISIBLE);
+//                            total = transactionList.getData().getTotalPages();
+//                            objMyApplication.setTransactionList(transactionList);
+//                            transactionListPendingAdapter = new TransactionListPendingAdapter(transactionList.getData().getItems().getPendingTransactions(), TransactionListActivity.this);
+//                            pendingTxt.setVisibility(View.VISIBLE);
+//                            rvTransactionsPending.setLayoutManager(mLayoutManager);
+//                            rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
+//                            rvTransactionsPending.setAdapter(transactionListPendingAdapter);
                         }
                         //Posted RV
-                        if (transactionList.getData().getItems().getPostedTransactions().size() != 0) {
+                        if (transactionList.getData().getItems().getPostedTransactions().size() > 0) {
+                            globalData.addAll(transactionList.getData().getItems().getPostedTransactions());
+//                            noTransactionTV.setVisibility(View.GONE);
+//                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+//                            transactionListPostedAdapter = new TransactionListPostedAdapter(transactionList.getData().getItems().getPostedTransactions(), TransactionListActivity.this);
+//                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+//                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+//                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+                        }
+
+                        if (globalData.size() > 0) {
                             noTransactionTV.setVisibility(View.GONE);
                             layoutTransactionsposted.setVisibility(View.VISIBLE);
-                            transactionListPostedAdapter = new TransactionListPostedAdapter(transactionList.getData().getItems().getPostedTransactions(), TransactionListActivity.this);
+                            transactionListPostedAdapter = new TransactionListPostedAdapter(globalData, TransactionListActivity.this);
                             getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                             getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                             getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);

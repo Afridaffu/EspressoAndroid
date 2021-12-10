@@ -6,7 +6,7 @@ public class TransactionListItems {
 
         @SerializedName("pendingTransactions")
         @Expose
-        private List<TransactionListPending> pendingTransactions;
+        private List<TransactionListPosted> pendingTransactions;
         @SerializedName("pendingTransactionsCount")
         @Expose
         private int pendingTransactionsCount;
@@ -17,11 +17,11 @@ public class TransactionListItems {
         @Expose
         private int postedTransactionsCount;
 
-        public List<TransactionListPending> getPendingTransactions() {
+        public List<TransactionListPosted> getPendingTransactions() {
             return pendingTransactions;
         }
 
-        public void setPendingTransactions(List<TransactionListPending> pendingTransactions) {
+        public void setPendingTransactions(List<TransactionListPosted> pendingTransactions) {
             this.pendingTransactions = pendingTransactions;
         }
 

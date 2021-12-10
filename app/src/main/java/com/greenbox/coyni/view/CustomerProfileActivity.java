@@ -202,7 +202,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             });
 
-
             cvLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -388,7 +387,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-
 
             cardviewYourAccount.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {

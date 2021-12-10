@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
     InputConnection inputConnection;
     Context mContext;
     String strScreen = "";
+    String enteredText = "";
 
     public CustomKeyboard(Context context) {
         this(context, null, 0);
@@ -114,7 +116,12 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         } else {
             String value = keyValues.get(view.getId());
             try {
-                inputConnection.commitText(value, 1);
+                if (enteredText.contains(".") && value.equals(".")) {
+
+                } else{
+                    enteredText = enteredText + value;
+                    inputConnection.commitText(value, 1);
+                }
             } catch (Exception e) {
 //                e.printStackTrace();
             }
@@ -126,6 +133,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 String chatSet = (String) inputConnection.getSelectedText(0);
                 try {
                     inputConnection.deleteSurroundingText(1, 0);
+                    enteredText = enteredText.substring(0, enteredText.length()-1);
                 } catch (Exception e) {
 //                    e.printStackTrace();
                 }

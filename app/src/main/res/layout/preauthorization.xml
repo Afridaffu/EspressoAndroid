@@ -73,7 +73,6 @@
                     android:layout_height="wrap_content"
                     app:boxStrokeColor="@color/primary_green"
                     app:hintEnabled="false"
-                    app:prefixText="$"
                     app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:prefixTextColor="@color/primary_black">
 
@@ -81,11 +80,9 @@
                         android:id="@+id/etAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="0123456789"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="0.00"
                         android:imeOptions="actionDone"
-                        android:inputType="number"
                         android:maxLength="7"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
