@@ -226,7 +226,9 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
+                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
+                    i.putExtra("screen", "buy");
+                    startActivity(i);
                 }
             });
 

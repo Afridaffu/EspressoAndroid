@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -55,6 +56,12 @@ import com.greenbox.coyni.utils.encryption.EncryptRequest;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.utils.outline_et.CardNumberEditText;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
+import com.microblink.blinkcard.MicroblinkSDK;
+import com.microblink.blinkcard.entities.recognizers.Recognizer;
+import com.microblink.blinkcard.entities.recognizers.RecognizerBundle;
+import com.microblink.blinkcard.entities.recognizers.blinkcard.BlinkCardRecognizer;
+import com.microblink.blinkcard.uisettings.ActivityRunner;
+import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
 import com.santalu.maskara.widget.MaskEditText;
 
 import org.json.JSONObject;
@@ -91,6 +98,9 @@ public class AddCardActivity extends AppCompatActivity {
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     public Boolean isCard = false;
+
+    private BlinkCardRecognizer mRecognizer;
+    private RecognizerBundle mRecognizerBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +177,14 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress1 = findViewById(R.id.etlAddress1);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
+
+            MicroblinkSDK.setLicenseKey(Utils.blinkCardKey,this);
+            mRecognizer = new BlinkCardRecognizer();
+            mRecognizer.setExtractCvv(false);
+            mRecognizer.setExtractIban(false);
+            // bundle recognizers into RecognizerBundle
+            mRecognizerBundle = new RecognizerBundle(mRecognizer);
+
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
             objMyApplication.getStates();
@@ -269,6 +287,13 @@ public class AddCardActivity extends AppCompatActivity {
                         layoutCard.setVisibility(View.VISIBLE);
                         layoutAddress.setVisibility(View.GONE);
                     }
+                }
+            });
+
+            etCardNumber.getCardReaderIVRef().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startScanning();
                 }
             });
         } catch (Exception ex) {
@@ -1220,4 +1245,36 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
+    // method within MyActivity from previous step
+    public void startScanning() {
+        // Settings for BlinkCardActivity
+        BlinkCardUISettings settings = new BlinkCardUISettings(mRecognizerBundle);
+        // tweak settings as you wish
+        // Start activity
+        ActivityRunner.startActivityForResult(this, 123, settings);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 123) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                // load the data into all recognizers bundled within your RecognizerBundle
+                mRecognizerBundle.loadFromIntent(data);
+                // now every recognizer object that was bundled within RecognizerBundle
+                // has been updated with results obtained during scanning session
+                // you can get the result by invoking getResult on recognizer
+                BlinkCardRecognizer.Result result = mRecognizer.getResult();
+                if (result.getResultState() == Recognizer.Result.State.Valid) {
+                    // result is valid, you can use it however you wish
+                    Log.e("number",result.getCardNumber() );
+                    Log.e("owner",result.getOwner());
+                    Log.e("number",result.getExpiryDate().toString());
+                    result.getCardNumber();
+                    etCardNumber.setText(result.getCardNumber());
+                }
+            }
+        }
+    }
 }

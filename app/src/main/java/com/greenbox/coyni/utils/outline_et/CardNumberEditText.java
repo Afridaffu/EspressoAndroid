@@ -25,7 +25,7 @@ public class CardNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private EditText cnET;
-    private ImageView imgCardType;
+    private ImageView imgCardType,readCardIV;
     boolean isPhoneError = false;
 
     public String cardType = "";
@@ -49,6 +49,7 @@ public class CardNumberEditText extends ConstraintLayout {
         hintHolder = findViewById(R.id.hintdHolderLL);
         cnET = findViewById(R.id.pnET);
         imgCardType = findViewById(R.id.imgCardType);
+        readCardIV = findViewById(R.id.readCardIV);
         cnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -166,5 +167,9 @@ public class CardNumberEditText extends ConstraintLayout {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ImageView getCardReaderIVRef(){
+        return readCardIV;
     }
 }
