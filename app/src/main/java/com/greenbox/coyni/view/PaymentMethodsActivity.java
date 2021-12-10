@@ -39,8 +39,6 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
-import org.json.JSONObject;
-
 import java.util.List;
 
 public class PaymentMethodsActivity extends AppCompatActivity {
@@ -147,11 +145,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                ControlMethod("addpayment");
-                strCurrent = "addpay";
-            } else {
-                getPaymentMethods();
+            if (objMyApplication.getSelectedCard() == null) {
+                if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpay";
+                } else {
+                    getPaymentMethods();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -659,7 +659,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         try {
             final Dialog dialog = new Dialog(context);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.activity_removing_btm_sheet);
+            dialog.setContentView(R.layout.payment_remove);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
             DisplayMetrics mertics = context.getResources().getDisplayMetrics();
@@ -691,6 +691,133 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     paymentMethodsViewModel.deleteBanks(String.valueOf(objPayment.getId()));
                 }
             });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void expiry(Context context, PaymentsList objPayment) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.payment_expire);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvMessage = dialog.findViewById(R.id.tvMessage);
+            TextView tvRemove = dialog.findViewById(R.id.tvRemove);
+            TextView tvEdit = dialog.findViewById(R.id.tvEdit);
+            if (objPayment != null) {
+                if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    tvMessage.setText("Seems like you have an issue with your bank account");
+                    tvEdit.setText("Relink");
+                } else {
+                    tvMessage.setText("Seems like you have an issue with your card");
+                    tvEdit.setText("Edit");
+                }
+
+            }
+            tvRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    remove(context, objPayment);
+                }
+            });
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void remove(Context context, PaymentsList objPayment) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.payment_remove);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            ImageView imgBankIcon = dialog.findViewById(R.id.imgBankIcon);
+            TextView tvBankName = dialog.findViewById(R.id.tvBankName);
+            TextView tvAccount = dialog.findViewById(R.id.tvAccount);
+            TextView tvNo = dialog.findViewById(R.id.tvNo);
+            TextView tvYes = dialog.findViewById(R.id.tvYes);
+            if (objPayment != null) {
+                if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
+                        tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvAccount.setText(objPayment.getAccountNumber());
+                    }
+                } else {
+                    tvAccount.setText("****" + objPayment.getLastFour());
+                    switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
+                        case "VISA":
+                            tvBankName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            imgBankIcon.setImageResource(R.drawable.ic_visaactive);
+                            break;
+                        case "MASTERCARD":
+                            tvBankName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            imgBankIcon.setImageResource(R.drawable.ic_masteractive);
+                            break;
+                        case "AMERICANEXPRESS":
+                            tvBankName.setText("American Express Card");
+                            imgBankIcon.setImageResource(R.drawable.ic_amexactive);
+                            break;
+                        case "DISCOVER":
+                            tvBankName.setText("Discover Card");
+                            imgBankIcon.setImageResource(R.drawable.ic_discoveractive);
+                            break;
+                    }
+                }
+
+            }
+            tvNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            tvYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
             Window window = dialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 

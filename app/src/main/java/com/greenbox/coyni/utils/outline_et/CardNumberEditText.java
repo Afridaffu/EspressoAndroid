@@ -25,7 +25,7 @@ public class CardNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private EditText cnET;
-    private ImageView imgCardType,readCardIV;
+    private ImageView imgCardType, readCardIV;
     boolean isPhoneError = false;
 
     public String cardType = "";
@@ -59,7 +59,7 @@ public class CardNumberEditText extends ConstraintLayout {
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
                         if ((cnET.getText().length() > 0)) {
-                            if (!cardType.contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
+                            if (!cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
@@ -98,6 +98,7 @@ public class CardNumberEditText extends ConstraintLayout {
                     if (i2 > 2) {
                         if (charSequence != null && charSequence.length() >= 15) {
                             AddCardActivity.addCardActivity.getCardype(charSequence.toString());
+                            AddCardActivity.addCardActivity.isCard = true;
                         }
                     } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {
                         AddCardActivity.addCardActivity.isCard = true;
@@ -169,7 +170,11 @@ public class CardNumberEditText extends ConstraintLayout {
         }
     }
 
-    public ImageView getCardReaderIVRef(){
+    public ImageView getCardReaderIVRef() {
         return readCardIV;
+    }
+
+    public void disableEditText() {
+        cnET.setEnabled(false);
     }
 }

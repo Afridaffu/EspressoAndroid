@@ -70,19 +70,23 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="64dp"
                     app:boxStrokeColor="@color/primary_green"
                     app:hintEnabled="false"
-                    app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:prefixText="$   "
+                    app:prefixTextAppearance="@style/prefix"
                     app:prefixTextColor="@color/primary_black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etAmount"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:digits="0123456789"
                         android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center_vertical"
                         android:hint="0.00"
                         android:imeOptions="actionDone"
+                        android:inputType="number"
                         android:maxLength="7"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"

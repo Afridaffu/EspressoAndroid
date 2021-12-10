@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.cards.CardEditRequest;
+import com.greenbox.coyni.model.cards.CardEditResponse;
 import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
@@ -39,6 +41,7 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
     private MutableLiveData<CardResponse> cardResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PreAuthResponse> preAuthResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CardTypeResponse> cardTypeResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CardEditResponse> cardEditResponseMutableLiveData = new MutableLiveData<>();
 
     public PaymentMethodsViewModel(@NonNull Application application) {
         super(application);
@@ -70,6 +73,10 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
     public MutableLiveData<APIError> getPreAuthErrorMutableLiveData() {
         return preAuthErrorMutableLiveData;
+    }
+
+    public MutableLiveData<CardEditResponse> getCardEditResponseMutableLiveData() {
+        return cardEditResponseMutableLiveData;
     }
 
     public void getPublicKey(int userId) {
@@ -231,6 +238,38 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<CardTypeResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void editCards(CardEditRequest request, Integer cardId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CardEditResponse> mCall = apiService.editCards(request, cardId);
+            mCall.enqueue(new Callback<CardEditResponse>() {
+                @Override
+                public void onResponse(Call<CardEditResponse> call, Response<CardEditResponse> response) {
+                    if (response.isSuccessful()) {
+                        CardEditResponse obj = response.body();
+                        cardEditResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<APIError>() {
+                        }.getType();
+                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            apiErrorMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CardEditResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

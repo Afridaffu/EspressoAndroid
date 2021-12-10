@@ -111,6 +111,7 @@ public class AddCardActivity extends AppCompatActivity {
             initialization();
             textWatchers();
             focusWatchers();
+            etName.setText(objMyApplication.getStrUserName());
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -178,7 +179,7 @@ public class AddCardActivity extends AppCompatActivity {
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
 
-            MicroblinkSDK.setLicenseKey(Utils.blinkCardKey,this);
+            MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
             mRecognizer = new BlinkCardRecognizer();
             mRecognizer.setExtractCvv(false);
             mRecognizer.setExtractIban(false);
@@ -188,7 +189,6 @@ public class AddCardActivity extends AppCompatActivity {
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
             objMyApplication.getStates();
-            etName.setText(objMyApplication.getStrUserName());
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
             } else {
@@ -246,7 +246,7 @@ public class AddCardActivity extends AppCompatActivity {
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
                             strName = etName.getText().toString().trim();
-                            strCardNo = etCardNumber.getText().toString().trim();
+                            strCardNo = etCardNumber.getText().toString().trim().replace(" ", "");
                             strExpiry = etExpiry.getText().toString().trim();
                             strCvv = etCVV.getText().toString().trim();
                         }
@@ -702,6 +702,11 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
+                    if (i2 > 2) {
+                        if (charSequence != null && charSequence.length() < 31) {
+                            isName = true;
+                        }
+                    }
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
@@ -1079,6 +1084,7 @@ public class AddCardActivity extends AppCompatActivity {
             ctKey.setInputConnection(ic);
             tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
+            etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1268,9 +1274,9 @@ public class AddCardActivity extends AppCompatActivity {
                 BlinkCardRecognizer.Result result = mRecognizer.getResult();
                 if (result.getResultState() == Recognizer.Result.State.Valid) {
                     // result is valid, you can use it however you wish
-                    Log.e("number",result.getCardNumber() );
-                    Log.e("owner",result.getOwner());
-                    Log.e("number",result.getExpiryDate().toString());
+                    Log.e("number", result.getCardNumber());
+                    Log.e("owner", result.getOwner());
+                    Log.e("number", result.getExpiryDate().toString());
                     result.getCardNumber();
                     etCardNumber.setText(result.getCardNumber());
                 }

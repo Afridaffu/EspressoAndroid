@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,6 +115,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         } else {
             String value = keyValues.get(view.getId());
             try {
+//                inputConnection.commitText(value, 1);
                 if (enteredText.contains(".") && value.equals(".")) {
 
                 } else{

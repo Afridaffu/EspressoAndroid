@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -57,6 +58,7 @@ public class MyApplication extends Application {
     String timezone = "", tempTimezone = "";
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
+    PaymentsList selectedCard;
     
     public TransactionList getTransactionList() {
         return transactionList;
@@ -508,5 +510,13 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return strDate;
+    }
+
+    public PaymentsList getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(PaymentsList selectedCard) {
+        this.selectedCard = selectedCard;
     }
 }
