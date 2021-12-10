@@ -173,7 +173,7 @@
                         android:id="@+id/transactionListPostedRV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clipToPadding="true"
+                        android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
                         android:overScrollMode="never"
                         android:scrollbars="none" />

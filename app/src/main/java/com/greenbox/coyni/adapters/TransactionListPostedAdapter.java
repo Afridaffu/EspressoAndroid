@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.utils.MyApplication;
@@ -29,7 +32,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
     Context mecontext;
     MyApplication objMyApplication;
     List<TransactionListPosted> transactionListItemsposted;
-
+    TransactionList transactionList;
     public TransactionListPostedAdapter(List<TransactionListPosted> list, Context context) {
         this.transactionListItemsposted = list;
         this.mecontext = context;
@@ -83,6 +86,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                 if (!strCurr.equals(strNext)) {
                     holder.date.setVisibility(View.GONE);
                     holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                    holder.lineItem.setVisibility(View.GONE);
                 }else {
 //                    holder.date.setVisibility(View.GONE);
                     if (strPrev.equals(strCurr)) {
@@ -188,12 +192,13 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         return transactionListItemsposted.size();
     }
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView date, txnDescrip, amount, txnStatus, walletBal;
         //        CardView statusBackcolor;
         RelativeLayout itemRL;
         MyApplication myApplication;
-        View lineItem;
+        LinearLayout lineItem;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -206,6 +211,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
             itemRL = itemView.findViewById(R.id.layoutTopRadiusRL);
             lineItem = itemView.findViewById(R.id.viewV);
         }
+
     }
 
 

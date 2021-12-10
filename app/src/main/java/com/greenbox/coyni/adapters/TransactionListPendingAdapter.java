@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -113,6 +114,9 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 //                tokenFragment.pbLoader.setVisibility(View.GONE);
 //            }
 //        }
+        if (position==transactionListItemspending.size()-1){
+            holder.viewLine.setVisibility(View.GONE);
+        }
 
     }
 
@@ -123,7 +127,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView date, txnDescrip, amount, txnStatus, walletBal;
-        View viewLine;
+        LinearLayout viewLine;
 
 
         public MyViewHolder(@NonNull View itemView) {

@@ -104,14 +104,28 @@
                 android:textSize="@dimen/_10ssp" />
 
         </RelativeLayout>
-    <View
+    <LinearLayout
         android:id="@+id/viewV"
-        android:layout_below="@id/balanceTV"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <View
+            android:layout_below="@id/balanceTV"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/white"/>
+    <View
+        android:layout_below="@id/balanceTV"
+        android:layout_width="@dimen/_10sdp"
         android:layout_height="@dimen/_1sdp"
-        android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
+        android:layout_weight="1"
+
         android:background="@color/blue_light"
         />
-
+        <View
+            android:layout_below="@id/balanceTV"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/white"/>
+    </LinearLayout>
 </LinearLayout>
