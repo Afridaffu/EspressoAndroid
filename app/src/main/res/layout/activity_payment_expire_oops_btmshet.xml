@@ -4,72 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_core"
     android:orientation="vertical"
-    android:padding="@dimen/_20sdp"
-    android:background="@drawable/bg_core">
+    android:padding="@dimen/_20sdp">
 
     <View
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_2sdp"
-        android:background="#00a6a2"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_13sdp"
-        android:layout_marginBottom="@dimen/_28sdp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Oops"
-        android:fontFamily="@font/opensans_bold"
-        android:textSize="@dimen/_16ssp"
-        android:textColor="@color/black"
-        android:layout_marginBottom="@dimen/_9sdp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Seems like you have an issue with your \ncard"
-        android:textSize="@dimen/_12ssp"
-        android:fontFamily="@font/opensans_semibold"
-        android:layout_marginBottom="@dimen/_27sdp"
-        />
+        android:background="@color/primary_green" />
 
-   <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-       android:gravity="center"
-    android:layout_marginBottom="@dimen/_20sdp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_9sdp"
+        android:layout_marginTop="@dimen/_28sdp"
+        android:fontFamily="@font/opensans_bold"
+        android:text="Oops"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_27sdp"
+        android:fontFamily="@font/opensans_semibold"
+        android:text="Seems like you have an issue with your \ncard"
+        android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_corefull"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
             android:paddingLeft="@dimen/_34sdp"
-            android:paddingRight="@dimen/_34sdp"
             android:paddingTop="@dimen/_13sdp"
+            android:paddingRight="@dimen/_34sdp"
             android:paddingBottom="@dimen/_13sdp"
             android:text="Remove"
-            android:textColor="@color/primary_color"
-            android:background="@drawable/bg_corefull"
-            android:gravity="center"
+            android:textColor="@color/primary_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_core_colorfill"
             android:fontFamily="@font/opensans_bold"
-            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="@dimen/_34sdp"
+            android:paddingTop="@dimen/_13sdp"
+            android:paddingRight="@dimen/_34sdp"
+            android:paddingBottom="@dimen/_13sdp"
+            android:text="Edit"
+            android:textColor="@color/white"
+
             />
-       <TextView
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:paddingLeft="@dimen/_34sdp"
-           android:paddingRight="@dimen/_34sdp"
-           android:paddingTop="@dimen/_13sdp"
-           android:layout_marginLeft="@dimen/_8sdp"
-           android:paddingBottom="@dimen/_13sdp"
-           android:text="Edit"
-           android:textColor="@color/white"
-           android:background="@drawable/bg_core_colorfill"
-           android:gravity="center"
-           android:fontFamily="@font/opensans_bold"
-            android:layout_weight="1"
 
-           />
-
-   </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
