@@ -142,5 +142,7 @@
         <item name="android:windowExitAnimation">@anim/slide_bottom</item>
     </style>
 
-
+    <style name="prefix" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/_14ssp</item>
+    </style>
 </resources>
