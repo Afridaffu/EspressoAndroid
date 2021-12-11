@@ -95,7 +95,7 @@ public class AddCardActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     public static AddCardActivity addCardActivity;
     CardTypeResponse objCard;
-    Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
+    Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false, isPASuccess = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     public Boolean isCard = false;
 
@@ -112,6 +112,7 @@ public class AddCardActivity extends AppCompatActivity {
             textWatchers();
             focusWatchers();
             etName.setText(objMyApplication.getStrUserName());
+            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -124,7 +125,13 @@ public class AddCardActivity extends AppCompatActivity {
             if (layoutAddress.getVisibility() == View.VISIBLE) {
                 layoutCard.setVisibility(View.VISIBLE);
                 layoutAddress.setVisibility(View.GONE);
+                divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
             } else {
+                if (isPASuccess) {
+                    isPASuccess = false;
+                    return;
+                }
                 super.onBackPressed();
             }
         } catch (Exception ex) {
@@ -205,6 +212,7 @@ public class AddCardActivity extends AppCompatActivity {
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
+
             etState.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -215,6 +223,7 @@ public class AddCardActivity extends AppCompatActivity {
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
+
             etlState.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -225,6 +234,7 @@ public class AddCardActivity extends AppCompatActivity {
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
+
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -286,6 +296,8 @@ public class AddCardActivity extends AppCompatActivity {
                     if (layoutAddress.getVisibility() == View.VISIBLE) {
                         layoutCard.setVisibility(View.VISIBLE);
                         layoutAddress.setVisibility(View.GONE);
+                        divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                     }
                 }
             });
@@ -296,6 +308,19 @@ public class AddCardActivity extends AppCompatActivity {
                     startScanning();
                 }
             });
+
+            if (objMyApplication.getMyProfile() != null) {
+                etAddress1.setText(objMyApplication.getMyProfile().getData().getAddressLine1());
+                etAddress2.setText(objMyApplication.getMyProfile().getData().getAddressLine2());
+                etCity.setText(objMyApplication.getMyProfile().getData().getCity());
+                etState.setText(objMyApplication.getMyProfile().getData().getState());
+                etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
+                isAddress1 = true;
+                isCity = true;
+                isState = true;
+                isZipcode = true;
+                enableOrDisableNext();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -418,15 +443,7 @@ public class AddCardActivity extends AppCompatActivity {
     private Boolean validation() {
         Boolean value = true;
         try {
-            if (etName.getText().toString().equals("")) {
-                etName.requestFocus();
-                Utils.displayAlert("Card holder Name is required", AddCardActivity.this, "");
-                return value = false;
-            } else if (etCardNumber.getText().toString().equals("")) {
-                etCardNumber.requestFocus();
-                Utils.displayAlert("Card Number is required", AddCardActivity.this, "");
-                return value = false;
-            } else if (!objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() < 19) {
+            if (!objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() < 19) {
                 etCardNumber.requestFocus();
                 Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "");
                 return value = false;
@@ -465,6 +482,9 @@ public class AddCardActivity extends AppCompatActivity {
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
                 Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "");
+                return value = false;
+            } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
+                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "");
                 return value = false;
             }
         } catch (Exception ex) {
@@ -505,11 +525,11 @@ public class AddCardActivity extends AppCompatActivity {
                             if (etName.getText().toString().trim().length() > 0) {
                                 nameErrorLL.setVisibility(GONE);
                                 etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                //Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+                                Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
 
                             } else {
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                //Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
                             }
@@ -1145,6 +1165,7 @@ public class AddCardActivity extends AppCompatActivity {
     private void displayPreAuthSuccess() {
         try {
             CardView cvDone;
+            isPASuccess = true;
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
