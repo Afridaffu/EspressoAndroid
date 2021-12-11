@@ -152,7 +152,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                             objMyApplication.setSelectedCard(objData);
                             Intent i = new Intent(mContext, EditCardActivity.class);
                             mContext.startActivity(i);
-                        }else {
+                        } else {
                             ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
                         }
                     } catch (Exception ex) {

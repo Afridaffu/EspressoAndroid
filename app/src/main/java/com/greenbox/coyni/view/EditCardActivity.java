@@ -39,6 +39,7 @@ public class EditCardActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;
     ProgressDialog dialog;
+    TextView tvCard;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
 
     @Override
@@ -66,6 +67,7 @@ public class EditCardActivity extends AppCompatActivity {
             etState = findViewById(R.id.etState);
             etZipcode = findViewById(R.id.etZipcode);
             etCountry = findViewById(R.id.etCountry);
+            tvCard = findViewById(R.id.tvCard);
             cvSave = findViewById(R.id.cvSave);
             cvRemove = findViewById(R.id.cvRemove);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -81,6 +83,22 @@ public class EditCardActivity extends AppCompatActivity {
                 etCity.setText(selectedCard.getCity());
                 etState.setText(selectedCard.getState());
                 etZipcode.setText(selectedCard.getZipCode());
+                etlCard.setImage(selectedCard.getCardBrand());
+                etlCard.hideCamera();
+                switch (selectedCard.getCardBrand().toUpperCase().replace(" ", "")) {
+                    case "VISA":
+                        tvCard.setText(Utils.capitalize(selectedCard.getCardBrand() + " " + selectedCard.getCardType() + " ****" + selectedCard.getLastFour()));
+                        break;
+                    case "MASTERCARD":
+                        tvCard.setText(Utils.capitalize(selectedCard.getCardBrand() + " " + selectedCard.getCardType() + " ****" + selectedCard.getLastFour()));
+                        break;
+                    case "AMERICANEXPRESS":
+                        tvCard.setText(Utils.capitalize("American Express Card ****" + selectedCard.getLastFour()));
+                        break;
+                    case "DISCOVER":
+                        tvCard.setText(Utils.capitalize("Discover Card ****" + selectedCard.getLastFour()));
+                        break;
+                }
             }
 
             cvRemove.setOnClickListener(new View.OnClickListener() {

@@ -5,6 +5,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
 import com.greenbox.coyni.model.cards.CardRequest;
@@ -225,7 +226,7 @@ public interface ApiService {
     Call<PublicKeyResponse> getPublicKey(@Query("userId") int userId);
 
     @DELETE("api/v2/banks/me")
-    Call<BankDeleteResponseData> deleteBank(@Query("accountId") String accountId);
+    Call<BankDeleteResponseData> deleteBank(@Query("accountId") Integer accountId);
 
     @POST("api/v2/user/authenticate")
     Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
@@ -262,5 +263,8 @@ public interface ApiService {
 
     @PATCH("api/v2/cards/me")
     Call<CardEditResponse> editCards(@Body CardEditRequest request, @Query("cardId") Integer cardId);
+
+    @DELETE("api/v2/cards/me")
+    Call<CardDeleteResponse> deleteCards(@Query("cardId") Integer cardId);
 
 }

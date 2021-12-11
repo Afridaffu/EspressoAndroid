@@ -69,6 +69,9 @@ public class CardNumberEditText extends ConstraintLayout {
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
                                 AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
+                            } else {
+                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                             }
                         } else if ((cnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
@@ -106,6 +109,7 @@ public class CardNumberEditText extends ConstraintLayout {
                         hintName.setTextColor(getResources().getColor(R.color.primary_color));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
+                        imgCardType.setImageResource(R.drawable.ic_visa_inactive);
                         AddCardActivity.addCardActivity.isCard = false;
                     }
                     AddCardActivity.addCardActivity.enableOrDisableNext();
@@ -176,5 +180,9 @@ public class CardNumberEditText extends ConstraintLayout {
 
     public void disableEditText() {
         cnET.setEnabled(false);
+    }
+
+    public void hideCamera() {
+        readCardIV.setVisibility(GONE);
     }
 }

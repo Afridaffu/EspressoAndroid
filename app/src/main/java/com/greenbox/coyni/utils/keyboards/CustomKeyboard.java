@@ -116,9 +116,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
             String value = keyValues.get(view.getId());
             try {
 //                inputConnection.commitText(value, 1);
-                if (enteredText.contains(".") && value.equals(".")) {
+                if ((enteredText.equals("") || enteredText.contains(".")) && value.equals(".")) {
 
-                } else{
+                } else {
                     enteredText = enteredText + value;
                     inputConnection.commitText(value, 1);
                 }
@@ -133,7 +133,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 String chatSet = (String) inputConnection.getSelectedText(0);
                 try {
                     inputConnection.deleteSurroundingText(1, 0);
-                    enteredText = enteredText.substring(0, enteredText.length()-1);
+                    enteredText = enteredText.substring(0, enteredText.length() - 1);
                 } catch (Exception e) {
 //                    e.printStackTrace();
                 }
