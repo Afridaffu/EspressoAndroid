@@ -215,6 +215,8 @@ public class EditCardActivity extends AppCompatActivity {
                             request.setExpiryDate(etExpiry.getText().toString().trim());
                             request.setCity(etCity.getText().toString().trim());
                             request.setState(etState.getText().toString().trim());
+                            request.setZipCode(etZipcode.getText().toString().trim());
+                            request.setDefaultForAllWithDrawals(true);
                             if (etCountry.getText().toString().trim().equals("United States")) {
                                 request.setCountry("US");
                             } else {
