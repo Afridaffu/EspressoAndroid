@@ -19,6 +19,11 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" android:protectionLevel="signature"
+        tools:ignore="ProtectedPermissions" />
+    <permission android:name="android.permission.INTERACT_ACROSS_USERS" android:protectionLevel="signature"/>
+    <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature"/>
+
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"

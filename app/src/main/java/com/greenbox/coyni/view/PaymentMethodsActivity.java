@@ -404,7 +404,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
 //                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
-                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity1.class);
+                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
