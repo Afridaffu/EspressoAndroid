@@ -1,7 +1,11 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,15 +14,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.cards.CardEditRequest;
@@ -30,6 +39,9 @@ import com.greenbox.coyni.utils.outline_et.CardNumberEditText;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import com.santalu.maskara.widget.MaskEditText;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class EditCardActivity extends AppCompatActivity {
     PaymentsList selectedCard;
     MyApplication objMyApplication;
@@ -39,8 +51,13 @@ public class EditCardActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;
     ProgressDialog dialog;
+    ConstraintLayout clStates;
+    LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack;
+    TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
+    TextInputLayout etlState, etlAddress1, etlCity, etlZipCode, etlExpiry;
     TextView tvCard;
-    Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
+    Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +66,8 @@ public class EditCardActivity extends AppCompatActivity {
             setContentView(R.layout.activity_edit_card);
             initialization();
             initObserver();
+            textWatchers();
+            focusWatchers();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -70,6 +89,21 @@ public class EditCardActivity extends AppCompatActivity {
             tvCard = findViewById(R.id.tvCard);
             cvSave = findViewById(R.id.cvSave);
             cvRemove = findViewById(R.id.cvRemove);
+            layoutBack = findViewById(R.id.layoutBack);
+            address1ErrorLL = findViewById(R.id.address1ErrorLL);
+            address1ErrorTV = findViewById(R.id.address1ErrorTV);
+            cityErrorLL = findViewById(R.id.cityErrorLL);
+            cityErrorTV = findViewById(R.id.cityErrorTV);
+            stateErrorLL = findViewById(R.id.stateErrorLL);
+            stateErrorTV = findViewById(R.id.stateErrorTV);
+            zipErrorLL = findViewById(R.id.zipErrorLL);
+            zipErrorTV = findViewById(R.id.zipErrorTV);
+            clStates = findViewById(R.id.clStates);
+            etlState = findViewById(R.id.etlState);
+            etlAddress1 = findViewById(R.id.etlAddress1);
+            etlCity = findViewById(R.id.etlCity);
+            etlZipCode = findViewById(R.id.etlZipCode);
+            etlExpiry = findViewById(R.id.etlExpiry);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
             etExpiry.setEnabled(false);
@@ -85,6 +119,18 @@ public class EditCardActivity extends AppCompatActivity {
                 etZipcode.setText(selectedCard.getZipCode());
                 etlCard.setImage(selectedCard.getCardBrand());
                 etlCard.hideCamera();
+                isAddress1 = true;
+                isCity = true;
+                isState = true;
+                isZipcode = true;
+                if (selectedCard.getExpired()) {
+                    etExpiry.setEnabled(true);
+                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                    Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                } else {
+                    etExpiry.setEnabled(false);
+                }
+                enableOrDisableNext();
                 switch (selectedCard.getCardBrand().toUpperCase().replace(" ", "")) {
                     case "VISA":
                         tvCard.setText(Utils.capitalize(selectedCard.getCardBrand() + " " + selectedCard.getCardType() + " ****" + selectedCard.getLastFour()));
@@ -101,6 +147,47 @@ public class EditCardActivity extends AppCompatActivity {
                 }
             }
 
+            layoutBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                    finish();
+                }
+            });
+
+            clStates.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
+                }
+            });
+
+            etState.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
+                }
+            });
+
+            etlState.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
+                }
+            });
+
             cvRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -116,20 +203,26 @@ public class EditCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        CardEditRequest request = new CardEditRequest();
-                        request.setAddressLine1(etAddress1.getText().toString().trim());
-                        request.setAddressLine2(etAddress2.getText().toString().trim());
-                        request.setName(etName.getText().toString().trim());
-                        request.setExpiryDate(etExpiry.getText().toString().trim());
-                        request.setCity(etCity.getText().toString().trim());
-                        request.setState(etState.getText().toString().trim());
-                        if (etCountry.getText().toString().trim().equals("United States")) {
-                            request.setCountry("US");
-                        } else {
-                            request.setCountry(Utils.getStrCCode());
+                        if (isAddEnabled) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            CardEditRequest request = new CardEditRequest();
+                            request.setAddressLine1(etAddress1.getText().toString().trim());
+                            request.setAddressLine2(etAddress2.getText().toString().trim());
+                            request.setName(etName.getText().toString().trim());
+                            request.setExpiryDate(etExpiry.getText().toString().trim());
+                            request.setCity(etCity.getText().toString().trim());
+                            request.setState(etState.getText().toString().trim());
+                            if (etCountry.getText().toString().trim().equals("United States")) {
+                                request.setCountry("US");
+                            } else {
+                                request.setCountry(Utils.getStrCCode());
+                            }
+                            dialog = Utils.showProgressDialog(EditCardActivity.this);
+                            paymentMethodsViewModel.editCards(request, selectedCard.getId());
                         }
-                        dialog = Utils.showProgressDialog(EditCardActivity.this);
-                        paymentMethodsViewModel.editCards(request, selectedCard.getId());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -170,6 +263,372 @@ public class EditCardActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void focusWatchers() {
+        try {
+
+            etExpiry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            if (etExpiry.getText().toString().trim().length() > 0) {
+                                if (validateExpiry()) {
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
+                                } else {
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                                }
+                            } else {
+                                etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                            }
+                        } else {
+                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            etAddress1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            if (etAddress1.getText().toString().trim().length() > 0) {
+                                address1ErrorLL.setVisibility(GONE);
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_black));
+
+                            } else {
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlAddress1, getColor(R.color.error_red));
+                                address1ErrorLL.setVisibility(VISIBLE);
+                                address1ErrorTV.setText("Field Required");
+                            }
+                        } else {
+                            etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            etCity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            if (etCity.getText().toString().trim().length() > 0) {
+                                cityErrorLL.setVisibility(GONE);
+                                etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
+
+                            } else {
+                                etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlCity, getColor(R.color.error_red));
+                                cityErrorLL.setVisibility(VISIBLE);
+                                cityErrorTV.setText("Field Required");
+                            }
+                        } else {
+                            etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            etState.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            if (etState.getText().toString().trim().length() > 0) {
+                                stateErrorLL.setVisibility(GONE);
+                                etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
+
+                            } else {
+                                etlState.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlState, getColor(R.color.error_red));
+                                stateErrorLL.setVisibility(VISIBLE);
+                                stateErrorTV.setText("Field Required");
+                            }
+                        } else {
+                            etlState.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlState, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            etZipcode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            if (etZipcode.getText().toString().trim().length() > 0) {
+                                zipErrorLL.setVisibility(GONE);
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
+
+                            } else {
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                                zipErrorLL.setVisibility(VISIBLE);
+                                zipErrorTV.setText("Field Required");
+                            }
+                        } else {
+                            etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void textWatchers() {
+
+        etExpiry.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 6) {
+                        if (validateExpiry()) {
+                            isExpiry = true;
+                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
+                        } else {
+                            isExpiry = false;
+                        }
+                    } else {
+                        isExpiry = false;
+                    }
+                    enableOrDisableNext();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    String str = etExpiry.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        etExpiry.setText("");
+                        etExpiry.setSelection(etExpiry.getText().length());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        etExpiry.setText(etExpiry.getText().toString().replaceAll("\\.", ""));
+                        etExpiry.setSelection(etExpiry.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        etExpiry.setText("");
+                        etExpiry.setSelection(etExpiry.getText().length());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        etAddress1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 101) {
+                        isAddress1 = true;
+                        address1ErrorLL.setVisibility(GONE);
+                        etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
+                    } else {
+                        isAddress1 = false;
+                    }
+                    enableOrDisableNext();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    String str = etAddress1.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        etAddress1.setText("");
+                        etAddress1.setSelection(etAddress1.getText().length());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        etAddress1.setText(etAddress1.getText().toString().replaceAll("\\.", ""));
+                        etAddress1.setSelection(etAddress1.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        etAddress1.setText("");
+                        etAddress1.setSelection(etAddress1.getText().length());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        etCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 51) {
+                        isCity = true;
+                        cityErrorLL.setVisibility(GONE);
+                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
+                    } else {
+                        isCity = false;
+                    }
+                    enableOrDisableNext();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    String str = etCity.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        etCity.setText("");
+                        etCity.setSelection(etCity.getText().length());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        etCity.setText(etCity.getText().toString().replaceAll("\\.", ""));
+                        etCity.setSelection(etCity.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        etCity.setText("");
+                        etCity.setSelection(etCity.getText().length());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        etState.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.toString().trim().length() > 0) {
+                        isState = true;
+                        stateErrorLL.setVisibility(GONE);
+                    } else {
+                        isState = false;
+                    }
+                    enableOrDisableNext();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        etZipcode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4 && charSequence.toString().trim().length() < 8) {
+                        isZipcode = true;
+                        zipErrorLL.setVisibility(GONE);
+                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+                    } else {
+                        isZipcode = false;
+                    }
+                    enableOrDisableNext();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    String str = etZipcode.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        etZipcode.setText("");
+                        etZipcode.setSelection(etCity.getText().length());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        etZipcode.setText(etZipcode.getText().toString().replaceAll("\\.", ""));
+                        etZipcode.setSelection(etZipcode.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        etZipcode.setText("");
+                        etZipcode.setSelection(etZipcode.getText().length());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    public void enableOrDisableNext() {
+        try {
+            if (isAddress1 && isCity && isZipcode && isState) {
+                if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
+                    isAddEnabled = true;
+                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                }
+            } else {
+                isAddEnabled = false;
+                cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void displayAlertNew(String msg, final Context context, String headerText) {
@@ -220,5 +679,26 @@ public class EditCardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private Boolean validateExpiry() {
+        Boolean value = true;
+        try {
+            Calendar cal = Calendar.getInstance();
+            int month = cal.get(Calendar.MONTH) + 1;
+            String year = "";
+            SimpleDateFormat ydf = new SimpleDateFormat("yy");
+            year = ydf.format(Calendar.getInstance().getTime());
+            if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) < Integer.parseInt(year)) {
+                value = false;
+            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
+                value = false;
+            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
+                value = false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
     }
 }

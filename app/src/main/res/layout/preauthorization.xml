@@ -85,7 +85,6 @@
                         android:gravity="center_vertical"
                         android:hint="0.00"
                         android:imeOptions="actionDone"
-                        android:inputType="number"
                         android:maxLength="4"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -99,6 +98,17 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tvError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Incorrect amount, 1 attempt left"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_12ssp"
+                    android:visibility="gone"></TextView>
             </LinearLayout>
         </ScrollView>
 
