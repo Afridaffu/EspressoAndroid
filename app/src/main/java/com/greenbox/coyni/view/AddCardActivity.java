@@ -98,7 +98,7 @@ public class AddCardActivity extends AppCompatActivity {
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false, isPASuccess = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     public Boolean isCard = false;
-
+    TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
 
@@ -429,7 +429,16 @@ public class AddCardActivity extends AppCompatActivity {
                             Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "");
                         }
                     } else if (apiError.getData() != null) {
-                        if (!((LinkedTreeMap) apiError.getData()).get("msg").toString().contains("incorrect")) {
+                        if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
+                            double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
+                            int attempt = (int) value;
+                            tvError.setVisibility(VISIBLE);
+                            if (attempt != 3) {
+                                tvError.setText("Invalid amount " + (3 - attempt) + " tries left.");
+                            } else {
+                                displayPreAuthFail();
+                            }
+                        } else if (!((LinkedTreeMap) apiError.getData()).get("msg").toString().contains("incorrect")) {
                             Utils.displayAlert(((LinkedTreeMap) apiError.getData()).get("msg").toString(), AddCardActivity.this, "");
                         } else {
                             displayPreAuthFail();
@@ -974,7 +983,7 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 8) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4 && charSequence.toString().trim().length() < 8) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -1009,19 +1018,6 @@ public class AddCardActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void disableCopyPaste() {
-        try {
-            etExpiry.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    return true;
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void enableOrDisableNext() {
@@ -1080,7 +1076,7 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             LinearLayout layoutPClose;
             TextView tvMessage;
-            CustomKeyboard ctKey = new CustomKeyboard(AddCardActivity.this);
+            CustomKeyboard ctKey;
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.preauthorization);
@@ -1096,6 +1092,7 @@ public class AddCardActivity extends AppCompatActivity {
             preDialog.show();
             layoutPClose = preDialog.findViewById(R.id.layoutPClose);
             tvMessage = preDialog.findViewById(R.id.tvMessage);
+            tvError = preDialog.findViewById(R.id.tvError);
             etPreAmount = preDialog.findViewById(R.id.etAmount);
             ctKey = preDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify");
@@ -1121,6 +1118,26 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     Utils.hideSoftKeypad(AddCardActivity.this, view);
+                }
+            });
+            etPreAmount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable.length() > 0) {
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
+                    }
                 }
             });
         } catch (Exception ex) {
@@ -1199,12 +1216,43 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
+//    private void displayPreAuthFail() {
+//        try {
+//            CardView cvDone;
+//            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
+//            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            preDialog.setContentView(R.layout.activity_cards_authorization_failed);
+//            Window window = preDialog.getWindow();
+//            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//            window.setGravity(Gravity.CENTER);
+//            window.setBackgroundDrawableResource(android.R.color.transparent);
+//
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preDialog.getWindow().setAttributes(lp);
+//            preDialog.show();
+//            cvDone = preDialog.findViewById(R.id.cvDone);
+//
+//            cvDone.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    preDialog.dismiss();
+//                    onBackPressed();
+//                    finish();
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
     private void displayPreAuthFail() {
         try {
-            CardView cvDone;
+            CardView cvAddBank;
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            preDialog.setContentView(R.layout.activity_cards_authorization_failed);
+            preDialog.setContentView(R.layout.preauthfailed);
             Window window = preDialog.getWindow();
             window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             window.setGravity(Gravity.CENTER);
@@ -1215,9 +1263,9 @@ public class AddCardActivity extends AppCompatActivity {
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             preDialog.getWindow().setAttributes(lp);
             preDialog.show();
-            cvDone = preDialog.findViewById(R.id.cvDone);
+            cvAddBank = preDialog.findViewById(R.id.cvAddBank);
 
-            cvDone.setOnClickListener(new View.OnClickListener() {
+            cvAddBank.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     preDialog.dismiss();

@@ -783,6 +783,17 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 }
             });
 
+            tvEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                        Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
+                        startActivity(i);
+                    }
+                }
+            });
+
             Window window = dialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 

@@ -104,17 +104,17 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        if (inputConnection == null) {
-            CharSequence selectedText = inputConnection.getSelectedText(0);
-            if (TextUtils.isEmpty(selectedText)) {
-                inputConnection.deleteSurroundingText(1, 0);
+        try {
+            if (inputConnection == null) {
+                CharSequence selectedText = inputConnection.getSelectedText(0);
+                if (TextUtils.isEmpty(selectedText)) {
+                    inputConnection.deleteSurroundingText(1, 0);
 
+                } else {
+                    inputConnection.commitText("", 1);
+                }
             } else {
-                inputConnection.commitText("", 1);
-            }
-        } else {
-            String value = keyValues.get(view.getId());
-            try {
+                String value = keyValues.get(view.getId());
 //                inputConnection.commitText(value, 1);
                 if ((enteredText.equals("") || enteredText.contains(".")) && value.equals(".")) {
 
@@ -122,9 +122,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                     enteredText = enteredText + value;
                     inputConnection.commitText(value, 1);
                 }
-            } catch (Exception e) {
-//                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         keyBack.setOnClickListener(new OnClickListener() {
@@ -165,5 +165,15 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
 
     public void setScreenName(String screenName) {
         strScreen = screenName;
+    }
+
+    public void enableButton() {
+        keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_bg);
+        keyAction.setEnabled(true);
+    }
+
+    public void disableButton() {
+        keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg);
+        keyAction.setEnabled(false);
     }
 }
