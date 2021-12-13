@@ -13,6 +13,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -142,42 +143,49 @@ public class CustomerProfileActivity extends AppCompatActivity {
             bindImage(objMyApplication.getMyProfile().getData().getImage());
 
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
-                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
-                    tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
-                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                    tvACStatus.setTextColor(getResources().getColor(R.color.orange));
-                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
-                    tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
-                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                } else {
+                try {
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
+                        tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
+                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                        tvACStatus.setTextColor(getResources().getColor(R.color.orange));
+                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
+                        tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
+                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
+                    } else {
+                    }
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                        cardviewYourAccount.setVisibility(View.VISIBLE);
+                    } else {
+                        cardviewYourAccount.setVisibility(View.GONE);
+                    }
+                    tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+                    cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
                 }
-//                cardviewYourAccount.setVisibility(View.VISIBLE);
-                if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                    cardviewYourAccount.setVisibility(View.GONE);
-                } else {
-                    cardviewYourAccount.setVisibility(View.VISIBLE);
-                }
-                tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
-                cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
 
             } else {
                 tvACStatus.setText("");
             }
 
-            if (objMyApplication.getStrUserName().length() > 20) {
-                customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20));
-            } else {
-                customerNameTV.setText(objMyApplication.getStrUserName());
-            }
+            try {
+                if (objMyApplication.getStrUserName().length() > 20) {
+                    customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20));
+                } else {
+                    customerNameTV.setText(objMyApplication.getStrUserName());
+                }
 
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+                dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-            if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
-                tvBMSetting.setText(getString(R.string.security_touchid));
-            } else {
-                tvBMSetting.setText(getString(R.string.security_faceid));
+                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
+                    tvBMSetting.setText(getString(R.string.security_touchid));
+                } else {
+                    tvBMSetting.setText(getString(R.string.security_faceid));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             imgQRCode.setOnClickListener(new View.OnClickListener() {
@@ -985,8 +993,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        dashboardViewModel.meProfile();
+        try {
+            super.onResume();
+            dashboardViewModel.meProfile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -55,6 +55,7 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "";
+    String timezone = "", tempTimezone = "",rsaPublicKey="";
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;
@@ -525,5 +526,13 @@ public class MyApplication extends Application {
 
     public void setStrStatesUrl(String strStatesUrl) {
         this.strStatesUrl = strStatesUrl;
+    }
+
+    public String getRsaPublicKey() {
+        return rsaPublicKey;
+    }
+
+    public void setRsaPublicKey(String rsaPublicKey) {
+        this.rsaPublicKey = rsaPublicKey;
     }
 }

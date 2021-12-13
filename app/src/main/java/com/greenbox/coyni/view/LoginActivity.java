@@ -53,11 +53,13 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.io.UnsupportedEncodingException;
 
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     private long mLastClickTime = 0;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginResponse loginResponse;
+    PaymentMethodsViewModel paymentMethodsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             endIconIV = findViewById(R.id.endIconIV);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
 
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
@@ -545,6 +549,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             getStatesUrl(login.getData().getStateList().getUS());
+                            paymentMethodsViewModel.getPublicKey(login.getData().getUserId());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -625,6 +630,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
                                 Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
@@ -668,6 +674,17 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
             }
         });
+
+        paymentMethodsViewModel.getPublicKeyResponseMutableLiveData().observe(this, new Observer<PublicKeyResponse>() {
+            @Override
+            public void onChanged(PublicKeyResponse publicKeyResponse) {
+                if (publicKeyResponse != null) {
+                    objMyApplication.setRsaPublicKey(publicKeyResponse.getData().getPublicKey());
+
+                }
+            }
+        });
+
     }
 
     private Boolean emailValidation() {
