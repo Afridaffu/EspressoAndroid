@@ -807,13 +807,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_34sdp"
+                                    android:layout_marginBottom="@dimen/_100sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:gravity="center"
                                     android:text="You have no recent transactions"
                                     android:textColor="@color/light_gray"
                                     android:textSize="@dimen/_10ssp"
-                                    android:visibility="visible"
-                                    android:layout_marginBottom="@dimen/_100sdp"/>
+                                    android:visibility="visible" />
 
                             </LinearLayout>
 

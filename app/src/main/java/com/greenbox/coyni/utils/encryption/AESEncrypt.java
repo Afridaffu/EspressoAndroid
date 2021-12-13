@@ -52,4 +52,16 @@ public class AESEncrypt {
         }
         return hex;
     }
+
+//    public static String decryptPayload(final String key, final String enPayload, final String privateKey, final String publicKey) throws Exception {
+//        final String encAesKeyBase64 = key;
+//        final byte[] encAesKeyBytes = Base64.getDecoder().decode(encAesKeyBase64.getBytes());
+//        final byte[] decryptedAesKeyHex = CryptoUtils.decryptWithPrivateRsaKey(encAesKeyBytes, privateKey);
+//        final byte[] decryptedAesKey = HexUtils.fromHexString(new String(decryptedAesKeyHex));
+//        final byte[] iv = publicKey.substring(0, 16).getBytes();
+//        final byte[] payloadInBytes = Base64.getDecoder().decode(enPayload);
+//        final byte[] decryptedPayloadInBytes = CryptoUtils.decryptWithAes(payloadInBytes, decryptedAesKey, iv);
+//        final String payload = new String(decryptedPayloadInBytes);
+//        return payload;
+//    }
 }

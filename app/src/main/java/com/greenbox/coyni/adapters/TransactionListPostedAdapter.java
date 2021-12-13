@@ -21,8 +21,10 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
+import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.TransactionListActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -136,6 +138,9 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                         } else if (isNextAvailabe && !isNextSameDate) {
                             holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
                             holder.lineItem.setVisibility(View.GONE);
+                        } else if (!isNextAvailabe && !isNextSameDate) {
+                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                            holder.lineItem.setVisibility(View.GONE);
                         } else {
                             holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.fullradius_list_items));
                             holder.lineItem.setVisibility(View.GONE);
@@ -217,6 +222,20 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
         }
+
+//        if (position == transactionListItemsposted.size() - 1) {
+//            if (TransactionListActivity.transactionListActivity.total > TransactionListActivity.transactionListActivity.currentPage) {
+//                TransactionListActivity.transactionListActivity.progressBar.setVisibility(View.VISIBLE);
+//                TransactionListActivity.transactionListActivity.currentPage = TransactionListActivity.transactionListActivity.currentPage + 1;
+//                Log.e("CurrentPage", TransactionListActivity.transactionListActivity.currentPage + "");
+//                TransactionListRequest transactionListRequest = new TransactionListRequest();
+//                transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
+//                transactionListRequest.setWalletCategory(Utils.walletCategory);
+//                transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+//                TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
+//
+//            }
+//        }
     }
 
     @Override

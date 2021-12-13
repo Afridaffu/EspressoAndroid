@@ -19,10 +19,17 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" android:protectionLevel="signature"
+    <uses-permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
+        android:protectionLevel="signature"
         tools:ignore="ProtectedPermissions" />
-    <permission android:name="android.permission.INTERACT_ACROSS_USERS" android:protectionLevel="signature"/>
-    <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature"/>
+
+    <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        android:protectionLevel="signature" />
 
     <application
         android:name=".utils.MyApplication"
@@ -152,7 +159,7 @@
             android:name=".view.RetrieveEmailActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
@@ -212,7 +219,8 @@
             android:name=".view.IdentityVerificationActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/ThemeFullSCreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.AgreementsActivity"
             android:exported="true"

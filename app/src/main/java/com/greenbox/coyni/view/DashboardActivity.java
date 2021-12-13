@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -127,19 +128,23 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.showQuickAction(DashboardActivity.this);
+                    showQuickAction(DashboardActivity.this);
                 }
             });
 
             layoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Intent i = new Intent(DashboardActivity.this, CustomerProfileActivity.class);
+                        startActivity(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(DashboardActivity.this, CustomerProfileActivity.class);
-                    startActivity(i);
                 }
             });
 
@@ -182,7 +187,9 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, IdentityVerificationActivity.class));
+                    Intent i = new Intent(DashboardActivity.this, BindingLayoutActivity.class);
+                    i.putExtra("screen", "profileGetStarted");
+                    startActivity(i);
                 }
             });
 
@@ -235,6 +242,10 @@ public class DashboardActivity extends AppCompatActivity {
             viewMoreLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
                 }
             });
@@ -619,6 +630,84 @@ public class DashboardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void showQuickAction(final Context context) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_quick_action);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        LinearLayout scanLL = dialog.findViewById(R.id.scanLL);
+        LinearLayout payRequestLL = dialog.findViewById(R.id.payRequestLL);
+        LinearLayout buyTokenLL = dialog.findViewById(R.id.buyTokenLL);
+        LinearLayout widthdrawLL = dialog.findViewById(R.id.widthdrawLL);
+
+        scanLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+            }
+        });
+
+        payRequestLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                dialog.dismiss();
+            }
+        });
+
+        buyTokenLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                dialog.dismiss();
+                Intent i = new Intent(context, PaymentMethodsActivity.class);
+                i.putExtra("screen", "buy");
+                context.startActivity(i);
+            }
+        });
+
+        widthdrawLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                dialog.dismiss();
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
 }

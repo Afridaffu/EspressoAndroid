@@ -55,7 +55,7 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "";
+    String timezone = "", tempTimezone = "",rsaPublicKey="";
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;
@@ -518,5 +518,13 @@ public class MyApplication extends Application {
 
     public void setSelectedCard(PaymentsList selectedCard) {
         this.selectedCard = selectedCard;
+    }
+
+    public String getRsaPublicKey() {
+        return rsaPublicKey;
+    }
+
+    public void setRsaPublicKey(String rsaPublicKey) {
+        this.rsaPublicKey = rsaPublicKey;
     }
 }

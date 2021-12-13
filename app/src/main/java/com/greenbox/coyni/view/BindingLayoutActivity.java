@@ -124,7 +124,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
                     startActivity(i);
-                    finish();
                 }
             });
 
