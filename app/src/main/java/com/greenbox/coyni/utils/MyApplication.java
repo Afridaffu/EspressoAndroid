@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -56,9 +57,11 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "";
+    String timezone = "", tempTimezone = "",rsaPublicKey="";
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
+    PaymentsList selectedCard;
+
 
 
     public UserDetails getUserDetails() {
@@ -478,7 +481,7 @@ public class MyApplication extends Application {
                         .toFormatter()
                         .withZone(ZoneOffset.UTC);
                 ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd");
                 zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
                 strDate = zonedTime.format(DATE_TIME_FORMATTER);
             } else {
@@ -493,5 +496,47 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return strDate;
+    }
+
+    public String convertZoneDateLastYear(String date) {
+        String strDate = "";
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC);
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            } else {
+                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newDate = spf.parse(date);
+                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
+                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
+                strDate = spf.format(newDate);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public PaymentsList getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(PaymentsList selectedCard) {
+        this.selectedCard = selectedCard;
+    }
+
+    public String getRsaPublicKey() {
+        return rsaPublicKey;
+    }
+
+    public void setRsaPublicKey(String rsaPublicKey) {
+        this.rsaPublicKey = rsaPublicKey;
     }
 }

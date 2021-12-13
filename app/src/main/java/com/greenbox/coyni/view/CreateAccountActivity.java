@@ -68,7 +68,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
     public LinearLayout emailErrorLL, phoneErrorLL, firstNameErrorLL, lastNameErrorLL, passwordErrorLL, confPassErrorLL;
     public TextView emailErrorTV, phoneErrorTV, firstNameErrorTV, lastNameErrorTV, passwordErrorTV, confPassErrorTV;
-    TextView passwordInfoTV, spannableText,privacyPolicyTV;
+    TextView passwordInfoTV, spannableText, privacyPolicyTV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -106,6 +106,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     RelativeLayout mainRL;
     ScrollView mainSV;
     public static int focusedID = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -130,23 +131,23 @@ public class CreateAccountActivity extends AppCompatActivity {
         isPwdEye = false;
         isCPwdEye = false;
 
-        if(firstNameET.getId()==focusedID){
+        if (firstNameET.getId() == focusedID) {
             firstNameET.requestFocus();
-        }else if(lastNameET.getId()==focusedID){
+        } else if (lastNameET.getId() == focusedID) {
             lastNameET.requestFocus();
-        }else if(emailET.getId()==focusedID){
+        } else if (emailET.getId() == focusedID) {
             emailET.requestFocus();
-        }else if(confirmPasswordET.getId()==focusedID){
+        } else if (confirmPasswordET.getId() == focusedID) {
             confirmPasswordET.requestFocus();
-        }else if(passwordET.getId()==focusedID){
+        } else if (passwordET.getId() == focusedID) {
             passwordET.requestFocus();
-        }else if(phoneNumberET.getETID()==focusedID){
+        } else if (phoneNumberET.getETID() == focusedID) {
             phoneNumberET.requestETFocus();
-        }else{
+        } else {
             firstNameET.requestFocus();
         }
 
-        Log.e("ID",""+focusedID);
+        Log.e("ID", "" + focusedID);
     }
 
     public void initFields() {
@@ -401,7 +402,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                         emailErrorLL.setVisibility(VISIBLE);
                         emailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
-                        isEmail = true;
+                        isEmail = false;
                         enableOrDisableNext();
                     }
                 }
@@ -425,7 +426,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         isFirstName = true;
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(firstNameTIL,getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_green));
                     } else {
                         isFirstName = false;
                     }
@@ -442,7 +443,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         } else if (str.length() > 0 && str.contains(".")) {
                             firstNameET.setText(lastNameET.getText().toString().replaceAll("\\.", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
-                        }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
                         }
@@ -462,11 +463,11 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31 ) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
                         isLastName = true;
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(lastNameTIL,getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_green));
                     } else {
                         isLastName = false;
                     }
@@ -504,7 +505,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         emailErrorLL.setVisibility(GONE);
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        emailTIL.setHintTextColor(colorState);
-                        Utils.setUpperHintColor(emailTIL,getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(emailTIL, getResources().getColor(R.color.primary_green));
 
                     } else if (emailET.getText().toString().trim().length() == 0) {
                         emailErrorLL.setVisibility(VISIBLE);

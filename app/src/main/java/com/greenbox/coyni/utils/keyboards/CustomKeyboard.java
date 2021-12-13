@@ -24,6 +24,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
     InputConnection inputConnection;
     Context mContext;
     String strScreen = "";
+    String enteredText = "";
 
     public CustomKeyboard(Context context) {
         this(context, null, 0);
@@ -103,21 +104,27 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        if (inputConnection == null) {
-            CharSequence selectedText = inputConnection.getSelectedText(0);
-            if (TextUtils.isEmpty(selectedText)) {
-                inputConnection.deleteSurroundingText(1, 0);
+        try {
+            if (inputConnection == null) {
+                CharSequence selectedText = inputConnection.getSelectedText(0);
+                if (TextUtils.isEmpty(selectedText)) {
+                    inputConnection.deleteSurroundingText(1, 0);
 
+                } else {
+                    inputConnection.commitText("", 1);
+                }
             } else {
-                inputConnection.commitText("", 1);
+                String value = keyValues.get(view.getId());
+//                inputConnection.commitText(value, 1);
+                if ((enteredText.equals("") || enteredText.contains(".")) && value.equals(".")) {
+
+                } else {
+                    enteredText = enteredText + value;
+                    inputConnection.commitText(value, 1);
+                }
             }
-        } else {
-            String value = keyValues.get(view.getId());
-            try {
-                inputConnection.commitText(value, 1);
-            } catch (Exception e) {
-//                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         keyBack.setOnClickListener(new OnClickListener() {
@@ -126,6 +133,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 String chatSet = (String) inputConnection.getSelectedText(0);
                 try {
                     inputConnection.deleteSurroundingText(1, 0);
+                    enteredText = enteredText.substring(0, enteredText.length() - 1);
                 } catch (Exception e) {
 //                    e.printStackTrace();
                 }
@@ -157,5 +165,15 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
 
     public void setScreenName(String screenName) {
         strScreen = screenName;
+    }
+
+    public void enableButton() {
+        keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_bg);
+        keyAction.setEnabled(true);
+    }
+
+    public void disableButton() {
+        keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg);
+        keyAction.setEnabled(false);
     }
 }

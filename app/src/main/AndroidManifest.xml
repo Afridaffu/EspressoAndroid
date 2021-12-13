@@ -19,6 +19,18 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
+        android:protectionLevel="signature"
+        tools:ignore="ProtectedPermissions" />
+
+    <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        android:protectionLevel="signature" />
+
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"
@@ -28,6 +40,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.EditCardActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.BuyTokenActivity"
             android:exported="false"
@@ -47,7 +64,7 @@
             android:name=".view.TransactionListActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AddCardActivity"
             android:exported="false"
@@ -83,8 +100,7 @@
             android:name=".view.PayRequestTransactionActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
-
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.ConfirmPasswordActivity"
             android:exported="true"
@@ -143,7 +159,7 @@
             android:name=".view.RetrieveEmailActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
@@ -203,7 +219,8 @@
             android:name=".view.IdentityVerificationActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/ThemeFullSCreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.AgreementsActivity"
             android:exported="true"

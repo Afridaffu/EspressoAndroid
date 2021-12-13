@@ -130,6 +130,7 @@ public class Utils {
     public static String[] for_Declined = {"RT01", "RT02"};
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
+    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
 
 
     public static String getStrLang() {
@@ -865,66 +866,6 @@ public class Utils {
         return dpvalue;
     }
 
-    public static void showQuickAction(final Context context) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_quick_action);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
-        int width = mertics.widthPixels;
-
-        LinearLayout scanLL = dialog.findViewById(R.id.scanLL);
-        LinearLayout payRequestLL = dialog.findViewById(R.id.payRequestLL);
-        LinearLayout buyTokenLL = dialog.findViewById(R.id.buyTokenLL);
-        LinearLayout widthdrawLL = dialog.findViewById(R.id.widthdrawLL);
-
-        scanLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        payRequestLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        buyTokenLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent i = new Intent(context, PaymentMethodsActivity.class);
-                i.putExtra("screen", "buy");
-                context.startActivity(i);
-            }
-        });
-
-        widthdrawLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        WindowManager.LayoutParams wlp = window.getAttributes();
-
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
 
     public static String convertTwoDecimal(String strAmount) {
         String strValue = "", strAmt = "";

@@ -7,125 +7,128 @@
 
     <TextView
         android:id="@+id/dateTV"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/et_bg_gray"
         android:fontFamily="@font/opensans_bold"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:visibility="visible"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        android:text="Date"
         android:textColor="@color/primary_black"
         android:textSize="@dimen/text_size_14sp"
-        android:text="Date" />
+        android:visibility="visible" />
 
-        <RelativeLayout
-            android:id="@+id/layoutTopRadiusRL"
+    <RelativeLayout
+        android:id="@+id/layoutTopRadiusRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/messageTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_10sdp"
-            android:background="@color/white">
+            android:layout_marginStart="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Send funds from Alison L"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_11ssp" />
 
-            <TextView
-                android:id="@+id/messageTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="Send funds from Alison L"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11ssp" />
-
-            <TextView
-                android:id="@+id/amountTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:text="-100.00"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+        <TextView
+            android:id="@+id/amountTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="-100.00"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
 
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/statusCVbg"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_below="@+id/messageTV"-->
-<!--                android:layout_marginStart="@dimen/_11sdp"-->
-<!--                android:layout_marginTop="@dimen/_8sdp"-->
-<!--                app:cardBackgroundColor="#FFEFD8"-->
-<!--                android:layout_marginBottom="@dimen/_1sdp"-->
-<!--                app:cardCornerRadius="@dimen/_6sdp">-->
+        <!--            <androidx.cardview.widget.CardView-->
+        <!--                android:id="@+id/statusCVbg"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@+id/messageTV"-->
+        <!--                android:layout_marginStart="@dimen/_11sdp"-->
+        <!--                android:layout_marginTop="@dimen/_8sdp"-->
+        <!--                app:cardBackgroundColor="#FFEFD8"-->
+        <!--                android:layout_marginBottom="@dimen/_1sdp"-->
+        <!--                app:cardCornerRadius="@dimen/_6sdp">-->
 
-                <TextView
-                    android:id="@+id/statusTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_bold"
-                    android:paddingStart="@dimen/_20sdp"
-                    android:layout_below="@id/messageTV"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:paddingTop="@dimen/_2sdp"
-                    android:paddingEnd="@dimen/_20sdp"
-                    android:paddingBottom="@dimen/_2sdp"
-                    android:text="Pending"
-                    android:textColor="#FFA701"
-                    android:textSize="@dimen/_7ssp" />
+        <TextView
+            android:id="@+id/statusTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/messageTV"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:paddingStart="@dimen/_20sdp"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingEnd="@dimen/_20sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:text="Pending"
+            android:textColor="#FFA701"
+            android:textSize="@dimen/_7ssp" />
 
-<!--            </androidx.cardview.widget.CardView>-->
+        <!--            </androidx.cardview.widget.CardView>-->
 
-            <TextView
-                android:id="@+id/balTXT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/messageTV"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="Balance "
-                android:layout_toLeftOf="@id/balanceTV"
-                android:textColor="@color/light_gray"
-                android:textSize="@dimen/_10ssp" />
+        <TextView
+            android:id="@+id/balTXT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/messageTV"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_toLeftOf="@id/balanceTV"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Balance "
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_10ssp" />
 
-            <TextView
-                android:id="@+id/balanceTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/messageTV"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginRight="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:textColor="@color/light_gray"
-                android:textSize="@dimen/_10ssp" />
+        <TextView
+            android:id="@+id/balanceTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/messageTV"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_10ssp" />
 
-        </RelativeLayout>
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/viewV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <View
-            android:layout_below="@id/balanceTV"
-            android:layout_width="@dimen/_11sdp"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/white"/>
-    <View
-        android:layout_below="@id/balanceTV"
-        android:layout_width="@dimen/_10sdp"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_weight="1"
 
-        android:background="@color/blue_light"
-        />
         <View
-            android:layout_below="@id/balanceTV"
             android:layout_width="@dimen/_11sdp"
             android:layout_height="@dimen/_1sdp"
-            android:background="@color/white"/>
+            android:layout_below="@id/balanceTV"
+            android:background="@color/white" />
+
+        <View
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_below="@id/balanceTV"
+            android:layout_weight="1"
+
+            android:background="@color/blue_light" />
+
+        <View
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_below="@id/balanceTV"
+            android:background="@color/white" />
     </LinearLayout>
 </LinearLayout>

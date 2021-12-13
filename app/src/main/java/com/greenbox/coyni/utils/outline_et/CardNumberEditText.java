@@ -25,7 +25,7 @@ public class CardNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private EditText cnET;
-    private ImageView imgCardType;
+    private ImageView imgCardType, readCardIV;
     boolean isPhoneError = false;
 
     public String cardType = "";
@@ -49,6 +49,7 @@ public class CardNumberEditText extends ConstraintLayout {
         hintHolder = findViewById(R.id.hintdHolderLL);
         cnET = findViewById(R.id.pnET);
         imgCardType = findViewById(R.id.imgCardType);
+        readCardIV = findViewById(R.id.readCardIV);
         cnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -58,7 +59,7 @@ public class CardNumberEditText extends ConstraintLayout {
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
                         if ((cnET.getText().length() > 0)) {
-                            if (!cardType.contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
+                            if (!cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
@@ -68,6 +69,9 @@ public class CardNumberEditText extends ConstraintLayout {
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
                                 AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
+                            } else {
+                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                             }
                         } else if ((cnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
@@ -97,6 +101,7 @@ public class CardNumberEditText extends ConstraintLayout {
                     if (i2 > 2) {
                         if (charSequence != null && charSequence.length() >= 15) {
                             AddCardActivity.addCardActivity.getCardype(charSequence.toString());
+                            AddCardActivity.addCardActivity.isCard = true;
                         }
                     } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {
                         AddCardActivity.addCardActivity.isCard = true;
@@ -104,6 +109,7 @@ public class CardNumberEditText extends ConstraintLayout {
                         hintName.setTextColor(getResources().getColor(R.color.primary_color));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
+                        imgCardType.setImageResource(R.drawable.ic_visa_inactive);
                         AddCardActivity.addCardActivity.isCard = false;
                     }
                     AddCardActivity.addCardActivity.enableOrDisableNext();
@@ -166,5 +172,17 @@ public class CardNumberEditText extends ConstraintLayout {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ImageView getCardReaderIVRef() {
+        return readCardIV;
+    }
+
+    public void disableEditText() {
+        cnET.setEnabled(false);
+    }
+
+    public void hideCamera() {
+        readCardIV.setVisibility(GONE);
     }
 }

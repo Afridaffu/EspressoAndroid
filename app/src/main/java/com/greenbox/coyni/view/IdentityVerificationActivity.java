@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -28,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,9 +86,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     TextInputEditText dobET, ssnET, cityET, mailAddr1, mailAddr2, state, zipcode;
     TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
     ConstraintLayout idveriDOBConLayout, stateCL;
-    LinearLayout bottomSheet, fileSelectedLL, firstIVeri, ssnErrorLL, swipeLL;
+    LinearLayout bottomSheet, fileSelectedLL, firstIVeri, ssnErrorLL, swipeLL, bottomNaviLL;
     public static CardView btnNext, btnSubmit;
-    ScrollView secondIVeri;
+    RelativeLayout secondIVeri;
     View viewLeft, viewRight;
     ImageButton closebtn, backbtn;
     ImageView upIdSuccessImg;
@@ -112,9 +114,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_identity_verification);
 
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
@@ -125,13 +124,13 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             setStates();
             initFields();
             initObservers();
+//            swipeListeners();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-
 
     public static String convertDate(String date) {
         String strDate = "";
@@ -164,6 +163,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                 isDOBSelected = true;
                                 dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
                                 enableNext();
+                                ssnET.clearFocus();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -204,98 +204,12 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 }
             });
 
-            mailAddr1.addTextChangedListener(new TextWatcher() {
+            dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
-                        isMailAddr1 = true;
-                    } else {
-                        isMailAddr1 = false;
-                    }
-                    enableORdiableSubmit();
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
+                public void onFocusChange(View view, boolean b) {
+                    Utils.hideKeypad(IdentityVerificationActivity.this);
                 }
             });
-
-            cityET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
-                        isCity = true;
-                    } else {
-                        isCity = false;
-                    }
-                    enableORdiableSubmit();
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-
-            state.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
-                        isState = true;
-                    } else {
-                        isState = false;
-                    }
-                    enableORdiableSubmit();
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-
-            zipcode.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
-                        isZip = true;
-                    } else {
-                        isZip = false;
-                    }
-                    enableORdiableSubmit();
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-
             ssnET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -349,7 +263,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 }
             });
-
 
             mailAddr1.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -472,8 +385,10 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                             cityET.setText(cityET.getText().toString().replaceAll(".", ""));
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
+                        }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            cityET.setText("");
+                            cityET.setSelection(cityET.getText().length());
                         }
-
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -635,6 +550,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     public void initFields() {
         try {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+
             btnSubmit = findViewById(R.id.submitBtn);
             bottomSheet = findViewById(R.id.clickBottomSheet);
             idveriUItext = findViewById(R.id.idveriUpIdTxt);
@@ -685,6 +605,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             zipcodeErrorLL = findViewById(R.id.zipcodeErrorLL);
             zipcodeErrorTV = findViewById(R.id.zipcodeErrorTV);
 
+            bottomNaviLL = findViewById(R.id.bottomNaviLL);
+
 
             TextWatchers();
 
@@ -693,6 +615,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             idveriDOBConLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     setToDate(dobET);
                 }
             });
@@ -700,6 +627,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     setToDate(dobET);
                 }
             });
@@ -716,6 +648,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             bottomSheet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     showIdentityTypePopup(IdentityVerificationActivity.this);
                 }
             });
@@ -723,6 +660,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             backbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     firstIVeri.setVisibility(View.VISIBLE);
                     secondIVeri.setVisibility(View.GONE);
                     backbtn.setVisibility(View.GONE);
@@ -790,31 +728,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
-//            swipeLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-//
-//                public void onSwipeRight() {
-//                    firstIVeri.setVisibility(View.VISIBLE);
-//                    secondIVeri.setVisibility(View.GONE);
-//                    viewLeft.setBackgroundResource(R.drawable.button_background);
-//                    viewRight.setBackgroundResource(R.drawable.button_background1);
-//                    backbtn.setVisibility(View.GONE);
-//                    closebtn.setVisibility(View.VISIBLE);
-//                }
-//
-//                public void onSwipeLeft() {
-//                    if (isNext) {
-//                        firstIVeri.setVisibility(GONE);
-//                        secondIVeri.setVisibility(VISIBLE);
-//                        viewLeft.setBackgroundResource(R.drawable.button_background1);
-//                        viewRight.setBackgroundResource(R.drawable.button_background);
-//                        backbtn.setVisibility(VISIBLE);
-//                        closebtn.setVisibility(GONE);
-//                    }
-//                }
-//
-//
-//            });
-
 
             btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -832,7 +745,10 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 //                        viewRight.setBackgroundResource(R.drawable.button_background);
 //                        backbtn.setVisibility(VISIBLE);
 //                        closebtn.setVisibility(GONE);
-
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         dialog = Utils.showProgressDialog(IdentityVerificationActivity.this);
                         identityVerificationViewModel.removeIdentityImage(identityType + "");
                     }
@@ -843,6 +759,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (isSubmit) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         dialog = Utils.showProgressDialog(IdentityVerificationActivity.this);
                         IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
                         identityAddressRequest.setFirstName(myApplicationObj.getMyProfile().getData().getFirstName());
@@ -1168,6 +1089,158 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void swipeListeners() {
+        swipeLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+
+            public void onSwipeRight() {
+                firstIVeri.setVisibility(View.VISIBLE);
+                secondIVeri.setVisibility(View.GONE);
+                viewLeft.setBackgroundResource(R.drawable.button_background);
+                viewRight.setBackgroundResource(R.drawable.button_background1);
+                backbtn.setVisibility(View.GONE);
+                closebtn.setVisibility(View.VISIBLE);
+            }
+
+            public void onSwipeLeft() {
+                if (isNext) {
+                    firstIVeri.setVisibility(GONE);
+                    secondIVeri.setVisibility(VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background1);
+                    viewRight.setBackgroundResource(R.drawable.button_background);
+                    backbtn.setVisibility(VISIBLE);
+                    closebtn.setVisibility(GONE);
+                }
+            }
+
+
+        });
+
+        ssnTIL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+
+            public void onSwipeRight() {
+                firstIVeri.setVisibility(View.VISIBLE);
+                secondIVeri.setVisibility(View.GONE);
+                viewLeft.setBackgroundResource(R.drawable.button_background);
+                viewRight.setBackgroundResource(R.drawable.button_background1);
+                backbtn.setVisibility(View.GONE);
+                closebtn.setVisibility(View.VISIBLE);
+            }
+
+            public void onSwipeLeft() {
+                if (isNext) {
+                    firstIVeri.setVisibility(GONE);
+                    secondIVeri.setVisibility(VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background1);
+                    viewRight.setBackgroundResource(R.drawable.button_background);
+                    backbtn.setVisibility(VISIBLE);
+                    closebtn.setVisibility(GONE);
+                }
+            }
+
+
+        });
+
+        dobTIL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+
+            public void onSwipeRight() {
+                firstIVeri.setVisibility(View.VISIBLE);
+                secondIVeri.setVisibility(View.GONE);
+                viewLeft.setBackgroundResource(R.drawable.button_background);
+                viewRight.setBackgroundResource(R.drawable.button_background1);
+                backbtn.setVisibility(View.GONE);
+                closebtn.setVisibility(View.VISIBLE);
+            }
+
+            public void onSwipeLeft() {
+                if (isNext) {
+                    firstIVeri.setVisibility(GONE);
+                    secondIVeri.setVisibility(VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background1);
+                    viewRight.setBackgroundResource(R.drawable.button_background);
+                    backbtn.setVisibility(VISIBLE);
+                    closebtn.setVisibility(GONE);
+                }
+            }
+
+
+        });
+
+        bottomNaviLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+
+            public void onSwipeRight() {
+                firstIVeri.setVisibility(View.VISIBLE);
+                secondIVeri.setVisibility(View.GONE);
+                viewLeft.setBackgroundResource(R.drawable.button_background);
+                viewRight.setBackgroundResource(R.drawable.button_background1);
+                backbtn.setVisibility(View.GONE);
+                closebtn.setVisibility(View.VISIBLE);
+            }
+
+            public void onSwipeLeft() {
+                if (isNext) {
+                    firstIVeri.setVisibility(GONE);
+                    secondIVeri.setVisibility(VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background1);
+                    viewRight.setBackgroundResource(R.drawable.button_background);
+                    backbtn.setVisibility(VISIBLE);
+                    closebtn.setVisibility(GONE);
+                }
+            }
+
+
+        });
+
+        dobET.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+
+            public void onSwipeRight() {
+                firstIVeri.setVisibility(View.VISIBLE);
+                secondIVeri.setVisibility(View.GONE);
+                viewLeft.setBackgroundResource(R.drawable.button_background);
+                viewRight.setBackgroundResource(R.drawable.button_background1);
+                backbtn.setVisibility(View.GONE);
+                closebtn.setVisibility(View.VISIBLE);
+            }
+
+            public void onSwipeLeft() {
+                if (isNext) {
+                    firstIVeri.setVisibility(GONE);
+                    secondIVeri.setVisibility(VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background1);
+                    viewRight.setBackgroundResource(R.drawable.button_background);
+                    backbtn.setVisibility(VISIBLE);
+                    closebtn.setVisibility(GONE);
+                }
+            }
+
+
+        });
+
+        bottomSheet.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
+
+            public void onSwipeRight() {
+                firstIVeri.setVisibility(View.VISIBLE);
+                secondIVeri.setVisibility(View.GONE);
+                viewLeft.setBackgroundResource(R.drawable.button_background);
+                viewRight.setBackgroundResource(R.drawable.button_background1);
+                backbtn.setVisibility(View.GONE);
+                closebtn.setVisibility(View.VISIBLE);
+            }
+
+            public void onSwipeLeft() {
+                if (isNext) {
+                    firstIVeri.setVisibility(GONE);
+                    secondIVeri.setVisibility(VISIBLE);
+                    viewLeft.setBackgroundResource(R.drawable.button_background1);
+                    viewRight.setBackgroundResource(R.drawable.button_background);
+                    backbtn.setVisibility(VISIBLE);
+                    closebtn.setVisibility(GONE);
+                }
+            }
+
+
+        });
     }
 
     @Override
