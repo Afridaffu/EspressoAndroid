@@ -9,17 +9,21 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
@@ -47,7 +51,7 @@ public class TransactionListActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     TransactionList transactionList;
     TextView pendingTxt;
-    ImageView closeBtn;
+    ImageView closeBtn,filterIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class TransactionListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaction_details);
         try {
             closeBtn = findViewById(R.id.closeBtnIV);
+            filterIV=findViewById(R.id.filterIconIV);
+
             nestedScrollView = findViewById(R.id.nestedSV);
             progressBar = findViewById(R.id.progressBarLoadMore);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -72,6 +78,34 @@ public class TransactionListActivity extends AppCompatActivity {
             transactionList = objMyApplication.getTransactionList();
 //            totalItemCount = transactionList.getData().getItems().getPendingTransactionsCount();
             initObservers();
+
+            filterIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                        // custom dialog
+                        final Dialog dialog = new Dialog(TransactionListActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.activity_filters);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                        Window window = dialog.getWindow();
+
+                         int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,height);
+
+                        WindowManager.LayoutParams wlp = window.getAttributes();
+
+                        wlp.gravity = Gravity.BOTTOM;
+                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wlp);
+
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
+                }
+            });
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -93,7 +127,7 @@ public class TransactionListActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.VISIBLE);
                             transactionListRequest.setPageNo(String.valueOf(currentPage));
                             transactionListRequest.setWalletCategory(Utils.walletCategory);
-                            int pagination = Integer.parseInt(transactionListRequest.getPageSize()) + Utils.pageSize;
+                            int pagination=Integer.parseInt(transactionListRequest.getPageSize())+Utils.pageSize;
                             transactionListRequest.setPageSize(String.valueOf(pagination));
                             dashboardViewModel.meTransactionList(transactionListRequest);
                         } catch (Exception e) {
@@ -122,7 +156,6 @@ public class TransactionListActivity extends AppCompatActivity {
                         if (transactionList.getData().getItems().getPendingTransactionsCount() != 0) {
                             noTransactionTV.setVisibility(View.GONE);
                             layoutTransactionspending.setVisibility(View.VISIBLE);
-                            total = transactionList.getData().getTotalPages();
                             objMyApplication.setTransactionList(transactionList);
                             transactionListPendingAdapter = new TransactionListPendingAdapter(transactionList.getData().getItems().getPendingTransactions(), TransactionListActivity.this);
                             pendingTxt.setVisibility(View.VISIBLE);
@@ -188,8 +221,8 @@ public class TransactionListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-//            TransactionListRequest transactionListRequest=new TransactionListRequest();
+//        try {
+            TransactionListRequest transactionListRequest=new TransactionListRequest();
 //            transactionListRequest.setPageNo(String.valueOf(currentPage));
 //            transactionListRequest.setWalletCategory(Utils.walletCategory);
 //            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -197,9 +230,20 @@ public class TransactionListActivity extends AppCompatActivity {
 //                dashboardViewModel.meTransactionList(transactionListRequest);
 //                dashboardViewModel.meWallet();
 //            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        try {
+            progressBar.setVisibility(View.VISIBLE);
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+//        int pagination = Integer.parseInt(transactionListRequest.getPageSize()) + Utils.pageSize;
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            dashboardViewModel.meTransactionList(transactionListRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

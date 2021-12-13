@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,7 +97,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
         } else {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
-            holder.amount.setTextColor(R.color.active_green);
+            holder.amount.setTextColor(Color.parseColor("#008a05"));
         }
 //        if (position == transactionListItemspending.size() - 1 && transactionListItemspending.size() < trans) {
 //            Log.e("size", transactionListItemspending.size() + "");
