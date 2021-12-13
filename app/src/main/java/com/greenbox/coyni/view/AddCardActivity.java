@@ -90,7 +90,7 @@ public class AddCardActivity extends AppCompatActivity {
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
-    Dialog preDialog;
+    Dialog preDialog, preAuthDialog;
     CardResponseData cardResponseData;
     ProgressDialog progressDialog;
     public static AddCardActivity addCardActivity;
@@ -429,6 +429,7 @@ public class AddCardActivity extends AppCompatActivity {
                             Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "");
                         }
                     } else if (apiError.getData() != null) {
+                        etPreAmount.setText("");
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
@@ -512,7 +513,7 @@ public class AddCardActivity extends AppCompatActivity {
             year = ydf.format(Calendar.getInstance().getTime());
             if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) < Integer.parseInt(year)) {
                 value = false;
-            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
+            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) == 0 || Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
                 value = false;
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
                 value = false;
@@ -989,6 +990,10 @@ public class AddCardActivity extends AppCompatActivity {
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
+                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                        zipErrorLL.setVisibility(VISIBLE);
+                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
                     }
                     enableOrDisableNext();
@@ -1077,10 +1082,10 @@ public class AddCardActivity extends AppCompatActivity {
             LinearLayout layoutPClose;
             TextView tvMessage;
             CustomKeyboard ctKey;
-            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
-            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            preDialog.setContentView(R.layout.preauthorization);
-            Window window = preDialog.getWindow();
+            preAuthDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
+            preAuthDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            preAuthDialog.setContentView(R.layout.preauthorization);
+            Window window = preAuthDialog.getWindow();
             window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -1088,13 +1093,13 @@ public class AddCardActivity extends AppCompatActivity {
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.dimAmount = 0.7f;
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preDialog.getWindow().setAttributes(lp);
-            preDialog.show();
-            layoutPClose = preDialog.findViewById(R.id.layoutPClose);
-            tvMessage = preDialog.findViewById(R.id.tvMessage);
-            tvError = preDialog.findViewById(R.id.tvError);
-            etPreAmount = preDialog.findViewById(R.id.etAmount);
-            ctKey = preDialog.findViewById(R.id.ckb);
+            preAuthDialog.getWindow().setAttributes(lp);
+            preAuthDialog.show();
+            layoutPClose = preAuthDialog.findViewById(R.id.layoutPClose);
+            tvMessage = preAuthDialog.findViewById(R.id.tvMessage);
+            tvError = preAuthDialog.findViewById(R.id.tvError);
+            etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
+            ctKey = preAuthDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify");
             ctKey.setScreenName("addcard");
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
@@ -1105,7 +1110,7 @@ public class AddCardActivity extends AppCompatActivity {
             layoutPClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    preDialog.dismiss();
+                    preAuthDialog.dismiss();
                 }
             });
             etPreAmount.setOnClickListener(new View.OnClickListener() {

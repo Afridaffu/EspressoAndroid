@@ -19,6 +19,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -57,6 +58,8 @@ import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.io.UnsupportedEncodingException;
 
 public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlEmail, etlPassword;
@@ -311,7 +314,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5  && etPassword.getText().toString().length() >= 8) {
+                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5 && etPassword.getText().toString().length() >= 8) {
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                         } else {
@@ -541,6 +544,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             objMyApplication.setUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
+                            getStatesUrl(login.getData().getStateList().getUS());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -864,6 +868,17 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             loginBGIV.setAlpha(0.2f);
         } else {
             loginBGIV.setAlpha(1.0f);
+        }
+    }
+
+    private void getStatesUrl(String strCode) {
+        try {
+            byte[] valueDecoded = new byte[0];
+            valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
+            objMyApplication.setStrStatesUrl(new String(valueDecoded));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class MyApplication extends Application {
-    static String strEncryptedPublicKey, strUser = "", strUserCode;
     List<CardsDataItem> listCards = new ArrayList<>();
     List<Agreements> agreementsList;
     AccountLimitsData objAcc;
@@ -55,11 +54,11 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "";
+    String timezone = "", tempTimezone = "", strStatesUrl = "";
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;
-    
+
     public TransactionList getTransactionList() {
         return transactionList;
     }
@@ -74,6 +73,7 @@ public class MyApplication extends Application {
     public AgreementsPdf getAgreementsPdf() {
         return agreementsPdf;
     }
+
     WalletInfo gbtWallet;
     Double GBTBalance = 0.0;
 
@@ -303,7 +303,6 @@ public class MyApplication extends Application {
     }
 
 
-
     public String transactionDate(String date) {
         String strDate = "";
         try {
@@ -518,5 +517,13 @@ public class MyApplication extends Application {
 
     public void setSelectedCard(PaymentsList selectedCard) {
         this.selectedCard = selectedCard;
+    }
+
+    public String getStrStatesUrl() {
+        return strStatesUrl;
+    }
+
+    public void setStrStatesUrl(String strStatesUrl) {
+        this.strStatesUrl = strStatesUrl;
     }
 }

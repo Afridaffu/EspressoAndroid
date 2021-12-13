@@ -185,4 +185,5 @@ public class CardNumberEditText extends ConstraintLayout {
     public void hideCamera() {
         readCardIV.setVisibility(GONE);
     }
+
 }

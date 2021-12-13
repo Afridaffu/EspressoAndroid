@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
@@ -59,6 +60,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<UserDetails> userDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LatestTxnResponse> getUserLatestTxns = new MutableLiveData<>();
+    private MutableLiveData<TransactionDetails> transactionDetailsMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -78,10 +80,6 @@ public class DashboardViewModel extends AndroidViewModel {
     public MutableLiveData<UserPreference> getUserPreferenceMutableLiveData() {
         return userPreferenceMutableLiveData;
     }
-
-//    public MutableLiveData<String> getErrorMutableLiveData() {
-//        return errorMutableLiveData;
-//    }
 
     public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
         return profileRespMutableLiveData;
@@ -108,11 +106,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return agreementsMutableLiveData;
     }
 
-    public void setAgreementsMutableLiveData(MutableLiveData<Agreements> agreementsMutableLiveData) {
-        this.agreementsMutableLiveData = agreementsMutableLiveData;
-    }
-
-
     public DashboardViewModel(@NonNull Application application) {
         super(application);
     }
@@ -135,6 +128,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> getErrorMutableLiveData() {
         return errorMutableLiveData;
+    }
+
+    public MutableLiveData<TransactionDetails> getTransactionDetailsMutableLiveData() {
+        return transactionDetailsMutableLiveData;
     }
 
     public void meProfile() {
@@ -617,6 +614,42 @@ public class DashboardViewModel extends AndroidViewModel {
             }
         });
 
+    }
+
+    public void getTransactionDetails(String gbxTxnIdType, int txnType, int txnSubType) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<TransactionDetails> call = apiService.getTransactionDetails(gbxTxnIdType, txnType, txnSubType);
+            call.enqueue(new Callback<TransactionDetails>() {
+                @Override
+                public void onResponse(Call<TransactionDetails> call, Response<TransactionDetails> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            TransactionDetails obj = response.body();
+                            transactionDetailsMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<TransactionList>() {
+                            }.getType();
+                            TransactionDetails errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            transactionDetailsMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        transactionListMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TransactionDetails> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 

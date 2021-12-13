@@ -417,8 +417,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-//                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
-                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity1.class);
+                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
+//                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity1.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
@@ -787,9 +787,22 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
-                        Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
-                        startActivity(i);
+                    try {
+                        if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                            Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
+                            startActivity(i);
+                        } else {
+                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                                isBank = true;
+                                Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
+                                i.putExtra("signon", signOnData);
+                                startActivityForResult(i, 1);
+                            } else {
+                                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });

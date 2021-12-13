@@ -29,6 +29,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.TransactionDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.EditCardActivity"
             android:exported="false"
             android:screenOrientation="portrait"
