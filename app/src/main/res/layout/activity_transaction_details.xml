@@ -7,7 +7,7 @@
     tools:context=".view.TransactionDetailsActivity">
 
     <include
-        android:id="@+id/addpayment"
+        android:id="@+id/payrequest"
         layout="@layout/payrequestdetails"
         android:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

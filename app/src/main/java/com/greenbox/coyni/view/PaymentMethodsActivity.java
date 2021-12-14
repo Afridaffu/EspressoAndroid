@@ -50,7 +50,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     String strCurrent = "", strSignOn = "", strScreen = "";
-    ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow;
+    ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     RecyclerView rvPaymentMethods;
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
@@ -117,8 +117,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             if (Utils.checkInternet(PaymentMethodsActivity.this)) {
-//                dialog = Utils.showProgressDialog(this);
-                //customerProfileViewModel.meSignOn();
                 if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
                     customerProfileViewModel.meSignOn();
                 } else {
@@ -343,10 +341,17 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
-            if (strScreen != null && strScreen.equals("buy")) {
+            imgLogo = findViewById(R.id.imgLogo);
+            if (strScreen != null && strScreen.equals("dashboard")) {
+                imgLogo.setVisibility(View.GONE);
+                tvExtBHead.setText("Bank Account");
+                tvMessage.setText("Choose a payment method");
                 tvMessage.setVisibility(View.VISIBLE);
             } else {
+                imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
+                tvExtBHead.setText("External Bank Account");
+                tvMessage.setText("There is no payment method currently \\nlinked to your account. Please follow one of \\nthe prompts below to link an account.");
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override

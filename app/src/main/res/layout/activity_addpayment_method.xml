@@ -28,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
-            android:layout_marginBottom="@dimen/_22sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="left"
             android:text="Add Payment Method"
@@ -49,9 +48,11 @@
 
 
             <ImageView
+                android:id="@+id/imgLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_22sdp"
                 android:src="@drawable/ic_addpayment_method" />
 
             <TextView
@@ -59,7 +60,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_18sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account."
                 android:textColor="@color/primary_black"
