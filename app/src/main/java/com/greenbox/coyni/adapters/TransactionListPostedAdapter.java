@@ -170,8 +170,8 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         }
 
         //txn description
-        if (objData.getTxnDescription().length() > 25) {
-            holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 25) + "...");
+        if (objData.getTxnDescription().length() > 32) {
+            holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 32) + "...");
         } else {
             holder.txnDescrip.setText(objData.getTxnDescription());
         }
@@ -303,6 +303,10 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
 
     public void addData(List<TransactionListPosted> listItems) {
         this.transactionListItemsposted.addAll(listItems);
+        notifyDataSetChanged();
+    }
+    public void updateList(List<TransactionListPosted> list) {
+        transactionListItemsposted = list;
         notifyDataSetChanged();
     }
 

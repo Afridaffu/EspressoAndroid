@@ -22,40 +22,79 @@
             android:background="@drawable/shape_green_round_rect" />
 
     </LinearLayout>
-
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
+        android:id="@+id/layoutMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_21sdp"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:layout_marginEnd="@dimen/_21sdp"
-        app:cardCornerRadius="@dimen/_10sdp">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/addnoteTIL"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/bg_message_radius"
+        android:layout_marginRight="15dp">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etlMessage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:counterMaxLength="120"
+        app:counterEnabled="false"
+        app:hintEnabled="false"
+        app:counterTextColor="@color/primary_black">
+        <EditText
+            android:id="@+id/addNoteET"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/et_bg_gray"
-            android:outlineProvider="none"
-            app:counterEnabled="true"
-            app:counterMaxLength="120"
-            app:hintTextColor="@color/primary_color">
+            android:layout_height="@dimen/_80sdp"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/opensans_semibold"
+            android:background="@null"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="3dp"
+            android:gravity="top"
+            android:maxLength="120"
+            android:hint="Optional: Add Note (Maximum 120 characters)"
+            android:padding="15dp"
+            android:text=""
+            android:textColorHint="@color/text_grey_msg"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_11ssp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/addNoteET"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="top"
-                android:hint="Optional: Add Note (Maximum 120 characters)"
-                android:imeOptions="actionDone"
-                android:maxLength="120"
-                android:textColor="@color/black"
-                android:textColorHint="@color/dark_color_bg"
-                android:textCursorDrawable="@drawable/cursor_color_text"
-                android:textSize="@dimen/_10ssp" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    </RelativeLayout>
+
+    <!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="@dimen/_21sdp"-->
+<!--        android:layout_marginTop="@dimen/_14sdp"-->
+<!--        android:layout_marginEnd="@dimen/_21sdp"-->
+<!--        app:cardCornerRadius="@dimen/_10sdp">-->
+
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/addnoteTIL"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@color/et_bg_gray"-->
+<!--            android:outlineProvider="none"-->
+<!--            app:counterEnabled="true"-->
+<!--            app:counterMaxLength="120"-->
+<!--            app:hintTextColor="@color/primary_color">-->
+
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/addNoteET"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/_60sdp"-->
+<!--                android:fontFamily="@font/opensans_semibold"-->
+<!--                android:gravity="top"-->
+<!--                android:hint="Optional: Add Note (Maximum 120 characters)"-->
+<!--                android:imeOptions="actionDone"-->
+<!--                android:maxLength="120"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textColorHint="@color/dark_color_bg"-->
+<!--                android:textCursorDrawable="@drawable/cursor_color_text"-->
+<!--                android:textSize="@dimen/_10ssp" />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+
 
     <RelativeLayout
         android:layout_width="match_parent"

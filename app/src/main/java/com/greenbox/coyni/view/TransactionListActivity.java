@@ -8,13 +8,19 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,6 +29,7 @@ import android.widget.TextView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -33,11 +40,13 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedAdapter transactionListPostedAdapter;
     static Context context;
+    Long mLastClickTime = 0L;
     NestedScrollView nestedScrollView;
     public ProgressBar progressBar;
     public int totalItemCount, currentPage = 0, total = 0;
@@ -45,12 +54,13 @@ public class TransactionListActivity extends AppCompatActivity {
     Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
     MyApplication objMyApplication;
     LinearLayout layoutTransactionspending, layoutTransactionsposted;
-    TextView noTransactionTV;
+    TextView noTransactionTV,noMoreTransactionTV;
     public DashboardViewModel dashboardViewModel;
     TransactionList transactionList;
     TextView pendingTxt;
-    ImageView closeBtn;
+    ImageView closeBtn,filterIV;
     List<TransactionListPosted> globalData = new ArrayList<>();
+    EditText searchET;
     List<TransactionListPending> globalPending = new ArrayList<>();
     List<TransactionListPosted> globalPosted = new ArrayList<>();
     public static TransactionListActivity transactionListActivity;
@@ -61,10 +71,12 @@ public class TransactionListActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView(R.layout.activity_transactions);
+        setContentView(R.layout.activity_transaction_list);
         try {
             transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
+            filterIV=findViewById(R.id.filterIconIV);
+
             nestedScrollView = findViewById(R.id.nestedSV);
             progressBar = findViewById(R.id.progressBarLoadMore);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -74,15 +86,93 @@ public class TransactionListActivity extends AppCompatActivity {
             layoutTransactionspending = findViewById(R.id.layoutLLPending);
             layoutTransactionsposted = findViewById(R.id.layoutLLposted);
             noTransactionTV = findViewById(R.id.noTransactions);
+            noMoreTransactionTV=findViewById(R.id.noMoreTransactions);
             pendingTxt = findViewById(R.id.pendingTV);
+            searchET=findViewById(R.id.searchET);
 //            getRvTransactionsPosted.addItemDecoration(new DividerItemDecoration(TransactionListActivity.this,90));
             transactionList = objMyApplication.getTransactionList();
 //            totalItemCount = transactionList.getData().getItems().getPendingTransactionsCount();
             initObservers();
+
+            filterIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
+                        // custom dialog
+                        final Dialog dialog = new Dialog(TransactionListActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.activity_filters);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                        Window window = dialog.getWindow();
+
+                         int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,height);
+
+                        WindowManager.LayoutParams wlp = window.getAttributes();
+
+                        wlp.gravity = Gravity.BOTTOM;
+                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wlp);
+
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
+                }
+            });
             closeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     finish();
+                }
+            });
+
+            searchET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                   String search_key=charSequence.toString();
+                   List<TransactionListPending> filterList=new ArrayList<>();
+                   List<TransactionListPosted> filterList1=new ArrayList<>();
+                   int pindex=0,poindex=0;
+                    if (globalPending.size()>0){
+                        for (int iteration=0;iteration<globalPending.size();iteration++){
+                            pindex=globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+                            if (pindex==0){
+                                filterList.add(globalPending.get(iteration));
+                            }
+                        }
+                        if (filterList.size()>0){
+                            transactionListPendingAdapter.updateList(filterList);
+                        }
+
+                    }
+                    if (globalPosted.size()>0){
+                        for (int iteration=0;iteration<globalPosted.size();iteration++){
+                            poindex=globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+                            if (poindex==0){
+                                filterList1.add(globalPosted.get(iteration));
+                            }
+                        }
+                        if (filterList1.size()>0){
+                            transactionListPostedAdapter.updateList(filterList1);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
                 }
             });
             TransactionListRequest transactionListRequest = new TransactionListRequest();
@@ -116,14 +206,21 @@ public class TransactionListActivity extends AppCompatActivity {
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
                                 TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
-
+                                noMoreTransactionTV.setVisibility(View.GONE);
                             }
-                        } catch (Exception e) {
+                            if (TransactionListActivity.transactionListActivity.total == TransactionListActivity.transactionListActivity.currentPage) {
+                                noMoreTransactionTV.setVisibility(View.VISIBLE);
+                            }
+
+                            } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                     }
                 }
             });
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,6 +290,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                 && transactionListPendingAdapter.getItemCount() == 0) {
                             layoutTransactionsposted.setVisibility(View.GONE);
                             layoutTransactionspending.setVisibility(View.GONE);
+                            pendingTxt.setVisibility(View.GONE);
                             noTransactionTV.setVisibility(View.VISIBLE);
                         }
 
@@ -234,14 +332,14 @@ public class TransactionListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-//            TransactionListRequest transactionListRequest=new TransactionListRequest();
-//            transactionListRequest.setPageNo(String.valueOf(currentPage));
-//            transactionListRequest.setWalletCategory(Utils.walletCategory);
-//            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-//            if (Utils.checkInternet(context)) {
-//                dashboardViewModel.meTransactionList(transactionListRequest);
-//                dashboardViewModel.meWallet();
-//            }
+//            TransactionListActivity.transactionListActivity.currentPage = TransactionListActivity.transactionListActivity.currentPage + 1;
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
+            noMoreTransactionTV.setVisibility(View.GONE);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();

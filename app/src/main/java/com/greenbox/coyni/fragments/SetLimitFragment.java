@@ -201,7 +201,7 @@ SetLimitFragment extends BottomSheetDialogFragment implements View.OnClickListen
                 break;
             case R.id.keyDotTV:
                 if (!strAmount.contains(".")){
-                    strAmount=strAmount.concat(".");
+                    strAmount=strAmount+".";
                     inputEV.setText(strAmount);
                 }
                 break;
