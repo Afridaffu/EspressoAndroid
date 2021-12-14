@@ -700,11 +700,17 @@ public class AddCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
 
-                            } else {
+                            } else if (etZipCode.getText().toString().trim().length() == 0) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
+                            } else {
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                                zipErrorLL.setVisibility(VISIBLE);
+                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
+                                isZipcode = false;
                             }
                         } else {
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -737,7 +743,7 @@ public class AddCardActivity extends AppCompatActivity {
                             isName = true;
                         }
                     }
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 2 && charSequence.toString().trim().length() < 31) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -984,7 +990,7 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4 && charSequence.toString().trim().length() < 8) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));

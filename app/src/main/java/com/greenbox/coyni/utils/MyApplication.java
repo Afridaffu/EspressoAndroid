@@ -54,8 +54,7 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "", strStatesUrl = "";
-    String timezone = "", tempTimezone = "",rsaPublicKey="";
+    String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;

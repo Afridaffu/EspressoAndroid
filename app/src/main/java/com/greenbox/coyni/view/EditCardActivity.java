@@ -387,7 +387,7 @@ public class EditCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
-                            if (etZipcode.getText().toString().trim().length() > 0 && etZipcode.getText().toString().trim().length() > 4 && etZipcode.getText().toString().trim().length() < 8) {
+                            if (etZipcode.getText().toString().trim().length() > 0 && etZipcode.getText().toString().trim().length() > 4) {
                                 isZipcode = true;
                                 zipErrorLL.setVisibility(GONE);
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -401,7 +401,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
-                                zipErrorTV.setText("Zip Code should be Min 5 and Max 7");
+                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
                                 isZipcode = false;
                             }
                         } else {
@@ -598,7 +598,7 @@ public class EditCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4 && charSequence.toString().trim().length() < 8) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -607,7 +607,7 @@ public class EditCardActivity extends AppCompatActivity {
                         etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                         zipErrorLL.setVisibility(VISIBLE);
-                        zipErrorTV.setText("Zip Code should be Min 5 and Max 7");
+                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
                     }
                     enableOrDisableNext();

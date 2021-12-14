@@ -180,6 +180,9 @@ public class CardNumberEditText extends ConstraintLayout {
 
     public void disableEditText() {
         cnET.setEnabled(false);
+        hintName.setTextColor(getResources().getColor(R.color.xdark_gray));
+//        hintName.setBackgroundColor(getResources().getColor(R.color.et_bg_gray));
+        hintHolder.setBackground(null);
     }
 
     public void hideCamera() {
