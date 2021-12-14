@@ -404,7 +404,7 @@
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -679,7 +679,7 @@
                     android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginEnd="1dp"
                     android:layout_marginBottom="1dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 
@@ -781,70 +781,70 @@
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 
-<!--                    <ScrollView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent">-->
+                    <!--                    <ScrollView-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="match_parent">-->
 
-                        <RelativeLayout
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fitsSystemWindows="true">
+
+                        <LinearLayout
+                            android:id="@+id/rvLL"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:fitsSystemWindows="true">
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/rvLL"
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/txnRV"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical">
+                                android:visibility="visible" />
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/txnRV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:visibility="visible" />
-
-                                <TextView
-                                    android:id="@+id/noTxnTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_34sdp"
-                                    android:layout_marginBottom="@dimen/_100sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:gravity="center"
-                                    android:text="You have no recent transactions"
-                                    android:textColor="@color/light_gray"
-                                    android:textSize="@dimen/_10ssp"
-                                    android:visibility="visible" />
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:id="@+id/viewMoreLL"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/_33sdp"
-                                android:layout_below="@id/rvLL"
-                                android:layout_centerInParent="true"
-                                android:layout_marginTop="@dimen/_36sdp"
-                                android:layout_marginBottom="@dimen/_20sdp"
-                                android:background="@drawable/shape_green_round_rect_core"
+                            <TextView
+                                android:id="@+id/noTxnTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_34sdp"
+                                android:layout_marginBottom="@dimen/_100sdp"
+                                android:fontFamily="@font/opensans_regular"
                                 android:gravity="center"
-                                android:orientation="vertical"
-                                android:visibility="gone">
+                                android:text="You have no recent transactions"
+                                android:textColor="@color/light_gray"
+                                android:textSize="@dimen/_10ssp"
+                                android:visibility="visible" />
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_20sdp"
-                                    android:layout_marginEnd="@dimen/_20sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center"
-                                    android:text="View More"
-                                    android:textColor="@color/primary_color"
-                                    android:textSize="@dimen/_12ssp" />
-                            </LinearLayout>
-                        </RelativeLayout>
+                        </LinearLayout>
 
-<!--                    </ScrollView>-->
+
+                        <LinearLayout
+                            android:id="@+id/viewMoreLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_33sdp"
+                            android:layout_below="@id/rvLL"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/_36sdp"
+                            android:layout_marginBottom="@dimen/_20sdp"
+                            android:background="@drawable/shape_green_round_rect_core"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_20sdp"
+                                android:layout_marginEnd="@dimen/_20sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:gravity="center"
+                                android:text="View More"
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!--                    </ScrollView>-->
 
                 </androidx.cardview.widget.CardView>
 

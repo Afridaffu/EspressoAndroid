@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.santalu.maskara.widget.MaskEditText;
 
 public class IdVeAdditionalActionActivity extends AppCompatActivity {
-    MaskEditText ssnET;
+    EditText ssnET;
     CardView idveridoneBtn;
     boolean isssn = false, isSubmitEnabled = false;
     LinearLayout ssnCloseLL, ssnErrorLL;
@@ -64,7 +65,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() == 11) {
+                if (charSequence.toString().trim().length() == 9) {
                     isssn = true;
                     isSubmitEnabled = true;
                 } else {
@@ -85,41 +86,49 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         idveridoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String SSN = ssnET.getText().toString().substring(0,9);
+                String SSN = ssnET.getText().toString();
 
                 Log.e("ssn", SSN);
                 Log.e("ssn", ssnET.getText().toString());
                 if (isSubmitEnabled) {
                     dialog = Utils.showProgressDialog(IdVeAdditionalActionActivity.this);
                     IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
-                    identityAddressRequest.setFirstName(IDVEResponse.getData().getFirstName());
-                    identityAddressRequest.setLastName(IDVEResponse.getData().getLastName());
-                    identityAddressRequest.setPhoneNumber(IDVEResponse.getData().getPhoneNumber());
-                    identityAddressRequest.setEmail(IDVEResponse.getData().getEmail());
-                    identityAddressRequest.setDateOfBirth(IDVEResponse.getData().getDateOfBirth());
-                    //Unmask SSN
+                    try {
+                        identityAddressRequest.setFirstName(IDVEResponse.getData().getFirstName());
+                        identityAddressRequest.setLastName(IDVEResponse.getData().getLastName());
+                        identityAddressRequest.setPhoneNumber(IDVEResponse.getData().getPhoneNumber());
+                        identityAddressRequest.setEmail(IDVEResponse.getData().getEmail());
+                        identityAddressRequest.setDateOfBirth(IDVEResponse.getData().getDateOfBirth());
+                        //Unmask SSN
 //                    String SSN = ssnET.getText().toString().substring(0,2)+ssnET.getText().toString().substring(4,5)+ssnET.getText().toString().substring(7,10);
 
-                    identityAddressRequest.setSsn(SSN);
+                        identityAddressRequest.setSsn(SSN);
 
-                    AddressObj addressObj = new AddressObj();
-                    addressObj.setAddressLine1(IDVEResponse.getData().getUseraddress().getAddressLine1());
-                    addressObj.setAddressLine2(IDVEResponse.getData().getUseraddress().getAddressLine2());
-                    addressObj.setAddressType(IDVEResponse.getData().getUseraddress().getAddressType());
-                    addressObj.setCity(IDVEResponse.getData().getUseraddress().getCity());
-                    addressObj.setState(IDVEResponse.getData().getUseraddress().getState());
-                    addressObj.setCountry("us");
-                    addressObj.setZipCode(IDVEResponse.getData().getUseraddress().getZipCode());
+                        AddressObj addressObj = new AddressObj();
+                        addressObj.setAddressLine1(IDVEResponse.getData().getUseraddress().getAddressLine1());
+                        addressObj.setAddressLine2(IDVEResponse.getData().getUseraddress().getAddressLine2());
+                        addressObj.setAddressType(IDVEResponse.getData().getUseraddress().getAddressType());
+                        addressObj.setCity(IDVEResponse.getData().getUseraddress().getCity());
+                        addressObj.setState(IDVEResponse.getData().getUseraddress().getState());
+                        addressObj.setCountry("us");
+                        addressObj.setZipCode(IDVEResponse.getData().getUseraddress().getZipCode());
 
-                    PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
-                    photoIDEntityObject.setNumber(SSN);
-                    photoIDEntityObject.setType(IDVEResponse.getData().getPhotoIDEntityObject().getType());
-                    photoIDEntityObject.setIssuer(IDVEResponse.getData().getPhotoIDEntityObject().getIssuer());
+                        PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
+                        photoIDEntityObject.setNumber(SSN);
+                        try {
+                            photoIDEntityObject.setType(IDVEResponse.getData().getPhotoIDEntityObject().getType());
+                            photoIDEntityObject.setIssuer(IDVEResponse.getData().getPhotoIDEntityObject().getIssuer());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                    identityAddressRequest.setAddressObj(addressObj);
-                    identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);
+                        identityAddressRequest.setAddressObj(addressObj);
+                        identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                    identityVerificationViewModel.uploadIdentityAddress(identityAddressRequest);
+                    identityVerificationViewModel.uploadIdentityAddressPatch(identityAddressRequest);
 
                 }
             }
@@ -136,42 +145,42 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 
 
         try {
-            identityVerificationViewModel.getUploadIdentityAddressResponse().observe(this, new Observer<IdentityAddressResponse>() {
+            identityVerificationViewModel.getUploadIdentityAddressPatchResponse().observe(this, new Observer<IdentityAddressResponse>() {
                 @Override
                 public void onChanged(IdentityAddressResponse identityAddressResponse) {
                     if (dialog != null) {
                         dialog.dismiss();
                     }
                     if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
-                        String respCode = identityAddressResponse.getData().getGiactResponseName();
-                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-                                || respCode.equalsIgnoreCase("CI24")) {
+//                        String respCode = identityAddressResponse.getData().getGiactResponseName();
+//                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+//                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+//                                || respCode.equalsIgnoreCase("CI24")) {
                             //Success
                             startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
                                     .putExtra("screen", "SUCCESS"));
                             finish();
-                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-                            //SSN Error
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdVeAdditionalActionActivity.class));
-                            finish();
-                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-                            //Under Review
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "UNDER_REVIEW"));
-                            finish();
-
-                        } else {
-                            //Failed
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "FAILED"));
-                            finish();
-
-                        }
+//                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+//                            //SSN Error
+//                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdVeAdditionalActionActivity.class));
+//                            finish();
+//                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+//                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+//                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+//                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+//                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+//                            //Under Review
+//                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                    .putExtra("screen", "UNDER_REVIEW"));
+//                            finish();
+//
+//                        } else {
+//                            //Failed
+//                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                    .putExtra("screen", "FAILED"));
+//                            finish();
+//
+//                        }
                     } else {
                         Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdVeAdditionalActionActivity.this, "");
                     }

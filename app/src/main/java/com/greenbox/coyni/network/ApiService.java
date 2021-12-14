@@ -267,4 +267,7 @@ public interface ApiService {
     @DELETE("api/v2/cards/me")
     Call<CardDeleteResponse> deleteCards(@Query("cardId") Integer cardId);
 
+    @PATCH("api/v2/profile/identity")
+    Call<IdentityAddressResponse> uploadIdentityAddressPatch(@Body IdentityAddressRequest identityAddressRequest);
+
 }

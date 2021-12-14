@@ -422,7 +422,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                         isFirstName = true;
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -463,7 +463,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                         isLastName = true;
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -725,11 +725,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        if (firstNameET.getText().toString().trim().length() > 0) {
+                        if (firstNameET.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_black));
 
+                        } else if (firstNameET.getText().toString().trim().length() == 1) {
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
+                            firstNameErrorLL.setVisibility(VISIBLE);
+                            firstNameErrorTV.setText("Minimum 2 characters required");
                         } else {
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
@@ -748,11 +753,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        if (lastNameET.getText().toString().trim().length() > 0) {
+                        if (lastNameET.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_black));
 
+                        } else if (lastNameET.getText().toString().trim().length() == 1) {
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
+                            lastNameErrorLL.setVisibility(VISIBLE);
+                            lastNameErrorTV.setText("Minimum 2 characters required");
                         } else {
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
