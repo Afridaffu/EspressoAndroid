@@ -149,13 +149,13 @@
                     android:layout_height="80dp"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="5">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_20sdp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:gravity="right"
                         android:orientation="horizontal">
 
@@ -189,7 +189,7 @@
                             android:gravity="right"
                             android:hint="0.00"
                             android:inputType="number"
-                            android:maxLength="15"
+                            android:maxLength="11"
                             android:singleLine="true"
                             android:text=""
                             android:textColor="@color/primary_black"
@@ -208,7 +208,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:gravity="bottom"
                         android:orientation="horizontal">
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -308,19 +308,19 @@
                 <LinearLayout
                     android:id="@+id/addNoteClickLL"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/addNoteTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_40sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:hint="Optional: Add Note (Maximum 120 characters )"
-                        android:textAlignment="center"
-                        android:textColor="@color/light_gray" />
+                        android:textColorHint="@color/light_gray"
+                        android:textColor="@color/primary_black" />
 
                 </LinearLayout>
 

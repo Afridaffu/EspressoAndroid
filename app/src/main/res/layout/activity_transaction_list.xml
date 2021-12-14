@@ -100,7 +100,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedSV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,12 +111,12 @@
             <TextView
                 android:id="@+id/pendingTV"
                 android:layout_width="match_parent"
-                android:layout_height="27dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:background="#f2f4f5"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center_vertical"
-                android:paddingLeft="15dp"
+                android:layout_marginStart="@dimen/_21sdp"
                 android:text="Pending"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/text_size_14sp"
@@ -159,7 +160,7 @@
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
 
                 <!--                <androidx.cardview.widget.CardView-->
@@ -195,6 +196,19 @@
                 android:id="@+id/progressBarLoadMore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/noMoreTransactions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="You have no more transactions"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

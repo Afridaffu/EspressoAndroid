@@ -5,7 +5,6 @@ import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,18 +12,17 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
@@ -43,6 +41,7 @@ public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedAdapter transactionListPostedAdapter;
     static Context context;
+    Long mLastClickTime = 0L;
     NestedScrollView nestedScrollView;
     public ProgressBar progressBar;
     public int totalItemCount, currentPage = 0, total = 0;
@@ -50,7 +49,7 @@ public class TransactionListActivity extends AppCompatActivity {
     Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
     MyApplication objMyApplication;
     LinearLayout layoutTransactionspending, layoutTransactionsposted;
-    TextView noTransactionTV;
+    TextView noTransactionTV,noMoreTransactionTV;
     public DashboardViewModel dashboardViewModel;
     TransactionList transactionList;
     TextView pendingTxt;
@@ -66,7 +65,7 @@ public class TransactionListActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView(R.layout.activity_transaction_details);
+        setContentView(R.layout.activity_transaction_list);
         try {
             transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
@@ -81,6 +80,7 @@ public class TransactionListActivity extends AppCompatActivity {
             layoutTransactionspending = findViewById(R.id.layoutLLPending);
             layoutTransactionsposted = findViewById(R.id.layoutLLposted);
             noTransactionTV = findViewById(R.id.noTransactions);
+            noMoreTransactionTV=findViewById(R.id.noMoreTransactions);
             pendingTxt = findViewById(R.id.pendingTV);
 //            getRvTransactionsPosted.addItemDecoration(new DividerItemDecoration(TransactionListActivity.this,90));
             transactionList = objMyApplication.getTransactionList();
@@ -90,6 +90,10 @@ public class TransactionListActivity extends AppCompatActivity {
             filterIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
 
                         // custom dialog
                         final Dialog dialog = new Dialog(TransactionListActivity.this);
@@ -151,14 +155,21 @@ public class TransactionListActivity extends AppCompatActivity {
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
                                 TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
-
+                                noMoreTransactionTV.setVisibility(View.GONE);
                             }
-                        } catch (Exception e) {
+                            if (TransactionListActivity.transactionListActivity.total == TransactionListActivity.transactionListActivity.currentPage) {
+                                noMoreTransactionTV.setVisibility(View.VISIBLE);
+                            }
+
+                            } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                     }
                 }
             });
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,6 +239,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                 && transactionListPendingAdapter.getItemCount() == 0) {
                             layoutTransactionsposted.setVisibility(View.GONE);
                             layoutTransactionspending.setVisibility(View.GONE);
+                            pendingTxt.setVisibility(View.GONE);
                             noTransactionTV.setVisibility(View.VISIBLE);
                         }
 
@@ -269,14 +281,7 @@ public class TransactionListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-//            TransactionListRequest transactionListRequest=new TransactionListRequest();
-//            transactionListRequest.setPageNo(String.valueOf(currentPage));
-//            transactionListRequest.setWalletCategory(Utils.walletCategory);
-//            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-//            if (Utils.checkInternet(context)) {
-//                dashboardViewModel.meTransactionList(transactionListRequest);
-//                dashboardViewModel.meWallet();
-//            }
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
