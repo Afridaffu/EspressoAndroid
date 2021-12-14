@@ -139,16 +139,12 @@ public class LoginData {
         this.biometricEnabled = biometricEnabled;
     }
 
-    public class StateList{
-        private String US;
+    public StateList getStateList() {
+        return stateList;
+    }
 
-        public String getUS() {
-            return US;
-        }
-
-        public void setUS(String US) {
-            this.US = US;
-        }
+    public void setStateList(StateList stateList) {
+        this.stateList = stateList;
     }
 }
 

@@ -45,7 +45,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         app:cardBackgroundColor="@color/primary_green"
-        app:cardCornerRadius="@dimen/_21sdp">
+        app:cardCornerRadius="@dimen/_22sdp">
 
         <TextView
             android:id="@+id/authorTV"

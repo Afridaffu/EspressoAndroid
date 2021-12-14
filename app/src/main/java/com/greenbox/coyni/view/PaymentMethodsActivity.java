@@ -279,6 +279,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 pDialog.dismiss();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(PaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
                 }
             }
@@ -289,6 +290,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
                 pDialog.dismiss();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(PaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
                 }
             }
@@ -417,8 +419,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-//                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
                             Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
+//                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity1.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
@@ -681,11 +683,17 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
             ImageView imgBankIcon = dialog.findViewById(R.id.imgBankIcon);
             TextView tvBankName = dialog.findViewById(R.id.tvBankName);
+            TextView tvCardName = dialog.findViewById(R.id.tvCardName);
             TextView tvAccount = dialog.findViewById(R.id.tvAccount);
+            TextView tvCardNumber = dialog.findViewById(R.id.tvCardNumber);
             TextView tvNo = dialog.findViewById(R.id.tvNo);
             TextView tvYes = dialog.findViewById(R.id.tvYes);
+            LinearLayout layoutCard = dialog.findViewById(R.id.layoutCard);
+            LinearLayout layoutBank = dialog.findViewById(R.id.layoutBank);
             if (objPayment != null) {
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
                     imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                     tvBankName.setText(objPayment.getBankName());
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
@@ -694,22 +702,24 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
                 } else {
-                    tvAccount.setText("****" + objPayment.getLastFour());
+                    layoutCard.setVisibility(View.VISIBLE);
+                    layoutBank.setVisibility(View.GONE);
+                    tvCardNumber.setText("****" + objPayment.getLastFour());
                     switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
-                            tvBankName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
                             imgBankIcon.setImageResource(R.drawable.ic_visaactive);
                             break;
                         case "MASTERCARD":
-                            tvBankName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
                             imgBankIcon.setImageResource(R.drawable.ic_masteractive);
                             break;
                         case "AMERICANEXPRESS":
-                            tvBankName.setText("American Express Card");
+                            tvCardName.setText("American Express Card");
                             imgBankIcon.setImageResource(R.drawable.ic_amexactive);
                             break;
                         case "DISCOVER":
-                            tvBankName.setText("Discover Card");
+                            tvCardName.setText("Discover Card");
                             imgBankIcon.setImageResource(R.drawable.ic_discoveractive);
                             break;
                     }
@@ -769,6 +779,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                     tvMessage.setText("Seems like you have an issue with your bank account");
                     tvEdit.setText("Relink");
+                    customerProfileViewModel.meSignOn();
                 } else {
                     tvMessage.setText("Seems like you have an issue with your card");
                     tvEdit.setText("Edit");
@@ -787,9 +798,23 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
-                        Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
-                        startActivity(i);
+                    try {
+                        if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                            Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
+                            startActivity(i);
+                        } else {
+                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                                isBank = true;
+                                objMyApplication.setResolveUrl(true);
+                                Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
+                                i.putExtra("signon", signOnData);
+                                startActivityForResult(i, 1);
+                            } else {
+                                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });

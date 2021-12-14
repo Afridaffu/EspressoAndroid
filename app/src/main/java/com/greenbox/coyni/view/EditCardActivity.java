@@ -52,10 +52,10 @@ public class EditCardActivity extends AppCompatActivity {
     CardView cvSave, cvRemove;
     ProgressDialog dialog;
     ConstraintLayout clStates;
-    LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack;
+    LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack, expiryErrorLL;
     TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
     TextInputLayout etlState, etlAddress1, etlCity, etlZipCode, etlExpiry;
-    TextView tvCard;
+    TextView tvCard, expiryErrorTV;
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
 
@@ -64,6 +64,7 @@ public class EditCardActivity extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_edit_card);
+
             initialization();
             initObserver();
             textWatchers();
@@ -90,6 +91,8 @@ public class EditCardActivity extends AppCompatActivity {
             cvSave = findViewById(R.id.cvSave);
             cvRemove = findViewById(R.id.cvRemove);
             layoutBack = findViewById(R.id.layoutBack);
+            expiryErrorLL = findViewById(R.id.expiryErrorLL);
+            expiryErrorTV = findViewById(R.id.expiryErrorTV);
             address1ErrorLL = findViewById(R.id.address1ErrorLL);
             address1ErrorTV = findViewById(R.id.address1ErrorTV);
             cityErrorLL = findViewById(R.id.cityErrorLL);
@@ -269,7 +272,6 @@ public class EditCardActivity extends AppCompatActivity {
 
     private void focusWatchers() {
         try {
-
             etExpiry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -277,13 +279,18 @@ public class EditCardActivity extends AppCompatActivity {
                         if (!b) {
                             if (etExpiry.getText().toString().trim().length() > 0) {
                                 if (validateExpiry()) {
+                                    expiryErrorLL.setVisibility(GONE);
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
                                 } else {
+                                    expiryErrorLL.setVisibility(VISIBLE);
+                                    expiryErrorTV.setText("Please enter valid Expiry Date");
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                 }
                             } else {
+                                expiryErrorLL.setVisibility(VISIBLE);
+                                expiryErrorTV.setText("Please enter valid Expiry Date");
                                 etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                             }
@@ -380,16 +387,22 @@ public class EditCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
-                            if (etZipcode.getText().toString().trim().length() > 0) {
+                            if (etZipcode.getText().toString().trim().length() > 0 && etZipcode.getText().toString().trim().length() > 4) {
+                                isZipcode = true;
                                 zipErrorLL.setVisibility(GONE);
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
-
-                            } else {
+                            } else if (etZipcode.getText().toString().trim().length() == 0) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
+                            } else {
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                                zipErrorLL.setVisibility(VISIBLE);
+                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
+                                isZipcode = false;
                             }
                         } else {
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -407,7 +420,6 @@ public class EditCardActivity extends AppCompatActivity {
     }
 
     private void textWatchers() {
-
         etExpiry.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -420,13 +432,20 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 6) {
                         if (validateExpiry()) {
                             isExpiry = true;
+                            expiryErrorLL.setVisibility(GONE);
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                         } else {
                             isExpiry = false;
+                            etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                            expiryErrorLL.setVisibility(VISIBLE);
+                            expiryErrorTV.setText("Please enter valid Expiry Date");
                         }
                     } else {
                         isExpiry = false;
+                        etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -579,12 +598,16 @@ public class EditCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4 && charSequence.toString().trim().length() < 8) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
+                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                        zipErrorLL.setVisibility(VISIBLE);
+                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
                     }
                     enableOrDisableNext();
@@ -622,6 +645,9 @@ public class EditCardActivity extends AppCompatActivity {
                 if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
                     isAddEnabled = true;
                     cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                } else {
+                    isAddEnabled = false;
+                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 }
             } else {
                 isAddEnabled = false;

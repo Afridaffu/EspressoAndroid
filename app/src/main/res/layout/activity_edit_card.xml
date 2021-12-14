@@ -81,6 +81,10 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="Name on Card"
                         android:textColorHint="@color/primary_black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -109,7 +113,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_42sdp"
+                            android:layout_height="@dimen/_43sdp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:background="@drawable/disable_bg" />
 
@@ -127,6 +131,10 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="Card Exp"
                         android:textColorHint="@color/primary_black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -151,6 +159,32 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <LinearLayout
+                        android:id="@+id/expiryErrorLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/etlCard"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="@dimen/_12sdp"
+                            android:layout_height="@dimen/_12sdp"
+                            android:src="@drawable/ic_erro" />
+
+                        <TextView
+                            android:id="@+id/expiryErrorTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10ssp" />
+                    </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -163,8 +197,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="Billing Address"
+                        android:hint="Biling Address Line 1"
                         android:textColorHint="@color/primary_black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -220,6 +258,10 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="Billing Address Line 2(Optional)"
                         android:textColorHint="@color/primary_black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -249,6 +291,10 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="City"
                         android:textColorHint="@color/primary_black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -388,8 +434,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="Zipcode"
+                        android:hint="Zip Code"
                         android:textColorHint="@color/primary_black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -402,7 +452,7 @@
                             android:hint=""
                             android:imeOptions="actionDone"
                             android:inputType="number|textNoSuggestions"
-                            android:maxLength="7"
+                            android:maxLength="5"
                             android:maxLines="1"
                             android:padding="14dp"
                             android:singleLine="true"
@@ -444,17 +494,18 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_42sdp"
+                            android:layout_height="@dimen/_43sdp"
                             android:layout_marginTop="@dimen/_6sdp"
                             android:background="@drawable/disable_bg" />
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/etlCountry"
                             style="@style/TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Country"
-                            android:textColorHint="@color/black"
+                            android:textColorHint="@color/xdark_gray"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
                             app:expandedHintEnabled="false"
