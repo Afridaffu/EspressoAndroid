@@ -85,7 +85,8 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.tvCardNumber.setVisibility(View.VISIBLE);
-                holder.tvCardNumber.setText(objData.getFirstSix() + " ****" + objData.getLastFour());
+//                holder.tvCardNumber.setText(objData.getFirstSix() + " ****" + objData.getLastFour());
+                holder.tvCardNumber.setText(objData.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + objData.getLastFour());
                 if (!objData.getExpired()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {

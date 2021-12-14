@@ -38,16 +38,18 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cvDone"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         app:cardBackgroundColor="@color/primary_green"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="@dimen/_22sdp"
+        app:cardElevation="0dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:text="Done"
             android:textColor="#fdfdfd"

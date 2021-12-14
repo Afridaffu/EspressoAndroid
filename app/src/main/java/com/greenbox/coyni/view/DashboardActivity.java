@@ -61,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     Dialog dialog;
     ProgressDialog progressDialog;
-    RelativeLayout cvHeaderRL, cvSmallHeaderRL,statusCardsRL;
+    RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
     NestedScrollView transactionsNSV;
     CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
     ImageView imgProfileSmall, imgProfile;
@@ -200,7 +200,8 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, PaymentMethodsActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, PaymentMethodsActivity.class)
+                            .putExtra("screen", "dashboard"));
                 }
             });
 
@@ -323,7 +324,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 cvSmallHeaderRL.setVisibility(View.VISIBLE);
                                 getStartedCV.setVisibility(View.VISIBLE);
                                 transactionsNSV.setVisibility(View.GONE);
-                            }else if(objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")){
+                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
                                 cvHeaderRL.setVisibility(View.VISIBLE);
                                 cvSmallHeaderRL.setVisibility(View.GONE);
                                 getStartedCV.setVisibility(View.GONE);

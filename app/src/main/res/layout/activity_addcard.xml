@@ -336,12 +336,13 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvNext"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_below="@+id/layoutExpiry"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:gravity="center"
                     app:cardBackgroundColor="@color/inactive_color"
-                    app:cardCornerRadius="20dp">
+                    app:cardCornerRadius="@dimen/_22sdp"
+                    app:cardElevation="0dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -402,8 +403,9 @@
                         android:id="@+id/etAddress1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="3131 Camino Del Rio North"
+                        android:hint="Billing Address Line 1"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
@@ -461,8 +463,9 @@
                         android:id="@+id/etAddress2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Suite 1400"
+                        android:hint="Billing Address Line 2(Optional)"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
@@ -497,7 +500,7 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="San Diego"
+                        android:hint="City"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="50"
@@ -644,7 +647,7 @@
                         android:layout_height="wrap_content"
                         android:digits="1234567890"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="92108"
+                        android:hint="Zip Code"
                         android:imeOptions="actionDone"
                         android:inputType="number|textNoSuggestions"
                         android:maxLength="5"
@@ -735,11 +738,12 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvAddCard"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_marginTop="@dimen/_43sdp"
                     android:gravity="center"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="20dp">
+                    app:cardCornerRadius="@dimen/_22sdp"
+                    app:cardElevation="0dp">
 
                     <TextView
                         android:layout_width="match_parent"
