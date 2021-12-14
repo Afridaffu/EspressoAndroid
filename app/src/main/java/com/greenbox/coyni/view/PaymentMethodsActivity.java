@@ -626,14 +626,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     tvExtBankHead.setTextColor(getColor(R.color.light_gray));
                     tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
                     imgBankArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgBankIcon.setColorFilter(getColor(R.color.light_gray));
+                    imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
                 } else {
                     tvBankError.setVisibility(View.GONE);
                     tvExtBHead.setTextColor(getColor(R.color.primary_black));
                     tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
                     tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
                     imgBankArrow.clearColorFilter();
-                    imgBankIcon.clearColorFilter();
+                    imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
                 if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                     tvDCardError.setVisibility(View.VISIBLE);
@@ -641,14 +641,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     tvDCardHead.setTextColor(getColor(R.color.light_gray));
                     tvDCardMsg.setTextColor(getColor(R.color.light_gray));
                     imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgDCardLogo.setColorFilter(getColor(R.color.light_gray));
+                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                 } else {
                     tvDCardError.setVisibility(View.GONE);
                     tvDCHead.setTextColor(getColor(R.color.primary_black));
                     tvDCardHead.setTextColor(getColor(R.color.dark_grey));
                     tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
                     imgDCardArrow.clearColorFilter();
-                    imgDCardLogo.clearColorFilter();
+                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
                 }
                 if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                     tvCCardError.setVisibility(View.VISIBLE);
@@ -656,14 +656,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     tvCCardHead.setTextColor(getColor(R.color.light_gray));
                     tvCCardMsg.setTextColor(getColor(R.color.light_gray));
                     imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgCCardLogo.setColorFilter(getColor(R.color.light_gray));
+                    imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                 } else {
                     tvCCardError.setVisibility(View.GONE);
                     tvCCHead.setTextColor(getColor(R.color.primary_black));
                     tvCCardHead.setTextColor(getColor(R.color.dark_grey));
                     tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
                     imgCCardArrow.clearColorFilter();
-                    imgCCardLogo.clearColorFilter();
+                    imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
+
                 }
             }
         } catch (Exception ex) {

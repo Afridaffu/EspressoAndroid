@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
@@ -192,6 +193,10 @@ public class AddCardActivity extends AppCompatActivity {
             mRecognizer.setExtractIban(false);
             // bundle recognizers into RecognizerBundle
             mRecognizerBundle = new RecognizerBundle(mRecognizer);
+
+            etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
+            etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
+            etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
@@ -410,7 +415,9 @@ public class AddCardActivity extends AppCompatActivity {
             public void onChanged(CardTypeResponse cardTypeResponse) {
                 if (cardTypeResponse != null) {
                     objCard = cardTypeResponse;
-                    etCardNumber.setImage(cardTypeResponse.getData().getCardBrand());
+                    if (!etCardNumber.getText().toString().trim().equals("")) {
+                        etCardNumber.setImage(cardTypeResponse.getData().getCardBrand());
+                    }
                 }
             }
         });
@@ -435,7 +442,11 @@ public class AddCardActivity extends AppCompatActivity {
                             int attempt = (int) value;
                             tvError.setVisibility(VISIBLE);
                             if (attempt != 3) {
-                                tvError.setText("Invalid amount " + (3 - attempt) + " tries left.");
+                                if (3 - attempt == 1) {
+                                    tvError.setText("Incorrect amount " + (3 - attempt) + " try left.");
+                                } else {
+                                    tvError.setText("Incorrect amount " + (3 - attempt) + " tries left.");
+                                }
                             } else {
                                 displayPreAuthFail();
                             }
@@ -519,6 +530,7 @@ public class AddCardActivity extends AppCompatActivity {
                 value = false;
             }
         } catch (Exception ex) {
+            value = false;
             ex.printStackTrace();
         }
         return value;
@@ -533,11 +545,12 @@ public class AddCardActivity extends AppCompatActivity {
                         if (!b) {
                             etName.setHint("");
                             if (etName.getText().toString().trim().length() > 0) {
+                                isName = true;
                                 nameErrorLL.setVisibility(GONE);
                                 etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
-
                             } else {
+                                isName = false;
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
                                 nameErrorLL.setVisibility(VISIBLE);
@@ -548,6 +561,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                         }
+                        enableOrDisableNext();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -561,16 +575,19 @@ public class AddCardActivity extends AppCompatActivity {
                         if (!b) {
                             if (etExpiry.getText().toString().trim().length() > 0) {
                                 if (validateExpiry()) {
+                                    isExpiry = true;
                                     expiryErrorLL.setVisibility(GONE);
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
                                 } else {
+                                    isExpiry = false;
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                     expiryErrorLL.setVisibility(VISIBLE);
                                     expiryErrorTV.setText("Please enter valid Expiry Date");
                                 }
                             } else {
+                                isExpiry = false;
                                 etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                 expiryErrorLL.setVisibility(VISIBLE);
@@ -580,6 +597,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                         }
+                        enableOrDisableNext();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -591,21 +609,27 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
-                            if (etCVV.getText().toString().trim().length() > 0) {
-                                cvvErrorLL.setVisibility(GONE);
-                                etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_black));
-
-                            } else {
+                            if (etCVV.getText().toString().trim().length() < 3) {
+                                isCvv = false;
                                 etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 cvvErrorLL.setVisibility(VISIBLE);
-                                cvvErrorTV.setText("Field Required");
+                                if (etCVV.getText().toString().trim().length() == 0) {
+                                    cvvErrorTV.setText("Field Required");
+                                } else {
+                                    cvvErrorTV.setText("Please enter valid CVV");
+                                }
+                            } else {
+                                isCvv = true;
+                                cvvErrorLL.setVisibility(GONE);
+                                etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_black));
                             }
                         } else {
                             etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_green));
                         }
+                        enableOrDisableNext();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -893,15 +917,14 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etAddress1.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.substring(0).equals(" ")) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
-                    } else if (str.length() > 0 && str.contains(".")) {
-                        etAddress1.setText(etAddress1.getText().toString().replaceAll("\\.", ""));
-                        etAddress1.setSelection(etAddress1.getText().length());
-                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        address1ErrorLL.setVisibility(GONE);
+                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
+                        address1ErrorLL.setVisibility(GONE);
                     }
 
                 } catch (Exception ex) {
