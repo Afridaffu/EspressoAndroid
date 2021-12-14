@@ -305,5 +305,9 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         this.transactionListItemsposted.addAll(listItems);
         notifyDataSetChanged();
     }
+    public void updateList(List<TransactionListPosted> list) {
+        transactionListItemsposted = list;
+        notifyDataSetChanged();
+    }
 
 }

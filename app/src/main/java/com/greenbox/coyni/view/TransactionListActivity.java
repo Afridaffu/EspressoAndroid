@@ -13,11 +13,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -36,6 +40,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
@@ -55,6 +60,7 @@ public class TransactionListActivity extends AppCompatActivity {
     TextView pendingTxt;
     ImageView closeBtn,filterIV;
     List<TransactionListPosted> globalData = new ArrayList<>();
+    EditText searchET;
     List<TransactionListPending> globalPending = new ArrayList<>();
     List<TransactionListPosted> globalPosted = new ArrayList<>();
     public static TransactionListActivity transactionListActivity;
@@ -82,6 +88,7 @@ public class TransactionListActivity extends AppCompatActivity {
             noTransactionTV = findViewById(R.id.noTransactions);
             noMoreTransactionTV=findViewById(R.id.noMoreTransactions);
             pendingTxt = findViewById(R.id.pendingTV);
+            searchET=findViewById(R.id.searchET);
 //            getRvTransactionsPosted.addItemDecoration(new DividerItemDecoration(TransactionListActivity.this,90));
             transactionList = objMyApplication.getTransactionList();
 //            totalItemCount = transactionList.getData().getItems().getPendingTransactionsCount();
@@ -122,6 +129,50 @@ public class TransactionListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     finish();
+                }
+            });
+
+            searchET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                   String search_key=charSequence.toString();
+                   List<TransactionListPending> filterList=new ArrayList<>();
+                   List<TransactionListPosted> filterList1=new ArrayList<>();
+                   int pindex=0,poindex=0;
+                    if (globalPending.size()>0){
+                        for (int iteration=0;iteration<globalPending.size();iteration++){
+                            pindex=globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+                            if (pindex==0){
+                                filterList.add(globalPending.get(iteration));
+                            }
+                        }
+                        if (filterList.size()>0){
+                            transactionListPendingAdapter.updateList(filterList);
+                        }
+
+                    }
+                    if (globalPosted.size()>0){
+                        for (int iteration=0;iteration<globalPosted.size();iteration++){
+                            poindex=globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+                            if (poindex==0){
+                                filterList1.add(globalPosted.get(iteration));
+                            }
+                        }
+                        if (filterList1.size()>0){
+                            transactionListPostedAdapter.updateList(filterList1);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
                 }
             });
             TransactionListRequest transactionListRequest = new TransactionListRequest();
@@ -281,6 +332,13 @@ public class TransactionListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+//            TransactionListActivity.transactionListActivity.currentPage = TransactionListActivity.transactionListActivity.currentPage + 1;
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
+            noMoreTransactionTV.setVisibility(View.GONE);
 
 
         } catch (Exception ex) {

@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -181,6 +182,10 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
     public void addData(List<TransactionListPending> listItems) {
         this.transactionListItemspending.addAll(listItems);
+        notifyDataSetChanged();
+    }
+    public void updateList(List<TransactionListPending> list) {
+        transactionListItemspending = list;
         notifyDataSetChanged();
     }
 

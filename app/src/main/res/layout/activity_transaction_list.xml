@@ -65,13 +65,13 @@
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_toLeftOf="@id/filterIconIV"
                         android:background="@android:color/transparent"
-                        android:cursorVisible="false"
+                        android:cursorVisible="true"
                         android:hint="Merchant’s Name/Reference ID."
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/primary_black"
                         android:textColorHint="@color/dark_grey"
-                        android:textCursorDrawable="@drawable/cursor_color_text"
+                        android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_10ssp" />
 
                     <View

@@ -54,7 +54,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/nextCV"
+            android:layout_above="@id/applyFilterBtnCV"
             android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/_25sdp"
             android:scrollbars="none">
@@ -82,6 +82,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypePR"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,6 +97,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeBT"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -117,6 +119,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeSO"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -131,6 +134,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeWithdraw"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -152,6 +156,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/TransTypeRefund"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -166,6 +171,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeAT"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -187,6 +193,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypePI"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -231,6 +238,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/TransSubTypeSent"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -245,6 +253,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeReceived"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -266,6 +275,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeBA"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -280,6 +290,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeCC"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -300,6 +311,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeDC"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -314,6 +326,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeSignet"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -335,6 +348,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeIP"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -349,6 +363,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeGiftCard"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -370,6 +385,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeSOToken"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -384,6 +400,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeFW"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -405,6 +422,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeCW"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -450,6 +468,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusPending"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -464,6 +483,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusCompleted"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -485,6 +505,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusCanceled"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -499,6 +520,7 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusInProgress"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -520,6 +542,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusFailed"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -565,6 +588,7 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:id="@+id/transAmountStartET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -592,6 +616,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <EditText
+                        android:id="@+id/transAmountEndET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -621,6 +646,7 @@
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
+                    android:id="@+id/dateRangePickerLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_10sdp"
@@ -628,6 +654,7 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:id="@+id/datePickET"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_9sdp"
@@ -659,7 +686,7 @@
         </ScrollView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/nextCV"
+            android:id="@+id/applyFilterBtnCV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_42sdp"
             android:layout_alignParentBottom="true"
@@ -669,7 +696,6 @@
             app:cardCornerRadius="@dimen/_20sdp">
 
             <TextView
-                android:id="@+id/home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
