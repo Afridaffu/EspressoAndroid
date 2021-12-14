@@ -397,7 +397,9 @@
                                 android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursor_color"
                                 android:textIsSelectable="false"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_12ssp"
+                                android:cursorVisible="false"
+                                android:longClickable="false"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>

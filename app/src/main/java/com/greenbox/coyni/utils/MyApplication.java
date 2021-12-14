@@ -24,6 +24,8 @@ import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
 
+import org.json.JSONArray;
+
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -58,6 +60,7 @@ public class MyApplication extends Application {
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;
+    JSONArray statesArray = new JSONArray();
 
     public TransactionList getTransactionList() {
         return transactionList;
@@ -533,5 +536,13 @@ public class MyApplication extends Application {
 
     public void setRsaPublicKey(String rsaPublicKey) {
         this.rsaPublicKey = rsaPublicKey;
+    }
+
+    public JSONArray getStatesArray() {
+        return statesArray;
+    }
+
+    public void setStatesArray(JSONArray statesArray) {
+        this.statesArray = statesArray;
     }
 }

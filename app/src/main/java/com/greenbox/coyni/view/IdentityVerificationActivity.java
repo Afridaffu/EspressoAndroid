@@ -121,7 +121,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             identityVerificationActivity = this;
             myApplicationObj = (MyApplication) getApplicationContext();
             dashboardViewModel.meProfile();
-            setStates();
+//            setStates();
             initFields();
             initObservers();
 //            swipeListeners();
@@ -778,14 +778,17 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         addressObj.setAddressLine2(mailAddr2.getText().toString().trim());
                         addressObj.setAddressType(0);
                         addressObj.setCity(cityET.getText().toString().trim());
-                        addressObj.setState(state.getText().toString().trim());
+//                        addressObj.setState(state.getText().toString().trim());
+                        addressObj.setState(Utils.tempStateCode);
+                        addressObj.setStateCode(Utils.tempStateCode);
                         addressObj.setCountry("us");
                         addressObj.setZipCode(zipcode.getText().toString().trim());
 
                         PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
                         photoIDEntityObject.setNumber(ssnET.getText().toString().trim());
                         photoIDEntityObject.setType(identityType);
-                        photoIDEntityObject.setIssuer(state.getText().toString().trim());
+//                        photoIDEntityObject.setIssuer(state.getText().toString().trim());
+                        photoIDEntityObject.setIssuer(Utils.tempStateCode);
 
                         identityAddressRequest.setAddressObj(addressObj);
                         identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);

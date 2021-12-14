@@ -11,6 +11,7 @@ public class AddressObj {
     private String city;
     private String country;
     private String state;
+    private String stateCode;
     private String zipCode;
 
     public String getAddressLine1() {
@@ -67,6 +68,14 @@ public class AddressObj {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
     }
 }
 
