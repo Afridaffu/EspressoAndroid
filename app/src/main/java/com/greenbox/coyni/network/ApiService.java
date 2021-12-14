@@ -267,6 +267,9 @@ public interface ApiService {
     @DELETE("api/v2/cards/me")
     Call<CardDeleteResponse> deleteCards(@Query("cardId") Integer cardId);
 
+    @PATCH("api/v2/profile/identity")
+    Call<IdentityAddressResponse> uploadIdentityAddressPatch(@Body IdentityAddressRequest identityAddressRequest);
+
     @GET("api/v2/transactions/token/info/{gbxTxnId}/{txnType}")
     Call<TransactionDetails> getTransactionDetails(@Path("gbxTxnId") String gbxTxnId,
                                                   @Path("txnType") int txnType,

@@ -93,7 +93,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     ImageButton closebtn, backbtn;
     ImageView upIdSuccessImg;
     int mYear, mMonth, mDay;
-    public static boolean isMailAddr1 = true, isCity = false, isState = false, isZip = false, isSubmit = false, isNext = false;
+    public static boolean isMailAddr1 = false, isCity = false, isState = false, isZip = false, isSubmit = false, isNext = false;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     public static File identityFile;
     public static String dateOfBirth;
@@ -385,7 +385,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                             cityET.setText(cityET.getText().toString().replaceAll(".", ""));
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
-                        }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
                             cityET.setText("");
                             cityET.setSelection(cityET.getText().length());
                         }

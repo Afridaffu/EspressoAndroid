@@ -45,7 +45,7 @@ android {
         dev {
             buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
-            buildConfigField 'String', 'Country_Code', '\"IN\"'
+            buildConfigField 'String', 'Country_Code', '\"US\"'
         }
     }
     lintOptions {

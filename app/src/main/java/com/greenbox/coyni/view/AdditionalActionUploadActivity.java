@@ -111,7 +111,7 @@ public class AdditionalActionUploadActivity extends AppCompatActivity {
                     identityAddressRequest.setAddressObj(addressObj);
                     identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);
 
-                    identityVerificationViewModel.uploadIdentityAddress(identityAddressRequest);
+                    identityVerificationViewModel.uploadIdentityAddressPatch(identityAddressRequest);
 
                 }
             }
