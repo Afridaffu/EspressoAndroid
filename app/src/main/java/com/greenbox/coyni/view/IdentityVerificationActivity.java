@@ -779,7 +779,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         addressObj.setAddressType(0);
                         addressObj.setCity(cityET.getText().toString().trim());
 //                        addressObj.setState(state.getText().toString().trim());
-                        addressObj.setState(Utils.tempStateCode);
+                        addressObj.setState(Utils.tempStateName);
                         addressObj.setStateCode(Utils.tempStateCode);
                         addressObj.setCountry("us");
                         addressObj.setZipCode(zipcode.getText().toString().trim());

@@ -390,8 +390,8 @@
                     app:boxStrokeColor="@color/primary_green"
                     app:endIconDrawable="@drawable/ic_eyeclose"
                     app:endIconMode="custom"
-                    app:errorIconDrawable="@null"
                     app:endIconTint="@color/xdark_gray"
+                    app:errorIconDrawable="@null"
                     app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
@@ -451,14 +451,56 @@
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
-                <TextView
-                    android:id="@+id/privacyTV"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="@string/privay_policy"
-                    android:textColor="@color/primary_green"
-                    android:textSize="@dimen/_11ssp" />
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chkRemember"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="-5dp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp"
+                        android:theme="@style/AppTheme" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="I agree to"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tosTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text=" Terms of Service"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text=" &amp; "
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/privacyTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/privay_policy"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/nextCV"

@@ -133,6 +133,32 @@ public class Utils {
     public static String mondayURL = "https://monday.com/";
     public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
 
+    public static final int payRequest = 12;
+    public static final int buyTokens = 2;
+    public static final int saleOrder = 10;
+    public static final int withdraw = 3;
+    public static final int refund = 9;
+    public static final int accountTransfer = 0; //Not available
+    public static final int paidInvoice = 15;
+
+    public static final int sent = 8;
+    public static final int received = 9;
+    public static final int bankAccount = 0;
+    public static final int creditCard = 2;
+    public static final int debitCard = 3;
+    public static final int signet = 7;
+    public static final int instantPay = 1;
+    public static final int giftCard = 6;
+    public static final int saleOrderToken = 11; //need to confirm
+    public static final int failedWithdraw = 11; // need to confirm
+    public static final int cancelledWithdraw = 18;
+
+    public static final int pending = 1;
+    public static final int completed = 2;
+    public static final int cancelled = 4;//Not available
+    public static final int inProgress =0;
+    public static final int failed = 3;
+
 
     public static String getStrLang() {
         return strLang;
