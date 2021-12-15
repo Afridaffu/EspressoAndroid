@@ -796,8 +796,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fitsSystemWindows="true">
+                        android:layout_height="match_parent">
 
                         <LinearLayout
                             android:id="@+id/rvLL"
@@ -833,7 +832,7 @@
                             android:layout_height="@dimen/_33sdp"
                             android:layout_below="@id/rvLL"
                             android:layout_centerInParent="true"
-                            android:layout_marginTop="@dimen/_36sdp"
+                            android:layout_marginTop="@dimen/_26sdp"
                             android:layout_marginBottom="@dimen/_20sdp"
                             android:background="@drawable/shape_green_round_rect_core"
                             android:gravity="center"

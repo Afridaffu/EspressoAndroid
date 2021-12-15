@@ -145,4 +145,12 @@
     <style name="prefix" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/_14ssp</item>
     </style>
+
+    <style name="Theme.Calender" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/secondary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color</item>
+        <item name="colorAccent">@color/white</item>
+
+    </style>
 </resources>
