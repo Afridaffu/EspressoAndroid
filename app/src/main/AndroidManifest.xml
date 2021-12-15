@@ -18,7 +18,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission
         android:name="android.permission.INTERACT_ACROSS_USERS"
         android:protectionLevel="signature"
@@ -40,6 +39,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.BuyTokenPaymentMethodsActivity"
+            android:exported="false" />
         <activity
             android:name=".view.TransactionDetailsActivity"
             android:exported="false" />

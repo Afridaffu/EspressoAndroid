@@ -104,7 +104,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 public void onClick(View v) {
                     try {
                         if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                            ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
