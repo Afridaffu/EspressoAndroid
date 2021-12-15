@@ -6,8 +6,10 @@ import static android.view.View.VISIBLE;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -15,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,7 +99,7 @@ public class AddCardActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     public static AddCardActivity addCardActivity;
     CardTypeResponse objCard;
-    Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false, isPASuccess = false;
+    Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     public Boolean isCard = false;
     TextView tvError;
@@ -129,10 +132,6 @@ public class AddCardActivity extends AppCompatActivity {
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
             } else {
-                if (isPASuccess) {
-                    isPASuccess = false;
-                    return;
-                }
                 super.onBackPressed();
             }
         } catch (Exception ex) {
@@ -447,6 +446,16 @@ public class AddCardActivity extends AppCompatActivity {
                                 } else {
                                     tvError.setText("Incorrect amount " + (3 - attempt) + " tries left.");
                                 }
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            tvError.setVisibility(GONE);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                }, 3000);
                             } else {
                                 displayPreAuthFail();
                             }
@@ -557,7 +566,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 nameErrorTV.setText("Field Required");
                             }
                         } else {
-                            etName.setHint("John Joestar");
+                            etName.setHint("Name on card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                         }
@@ -855,7 +864,7 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 5) {
+                    if (charSequence.toString().trim().length() > 2 && charSequence.toString().trim().length() < 5) {
                         isCvv = true;
                         cvvErrorLL.setVisibility(GONE);
                         etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -1019,8 +1028,8 @@ public class AddCardActivity extends AppCompatActivity {
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
-                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+//                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                         zipErrorLL.setVisibility(VISIBLE);
                         zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
@@ -1216,7 +1225,6 @@ public class AddCardActivity extends AppCompatActivity {
     private void displayPreAuthSuccess() {
         try {
             CardView cvDone;
-            isPASuccess = true;
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
@@ -1229,6 +1237,7 @@ public class AddCardActivity extends AppCompatActivity {
             lp.dimAmount = 0.7f;
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             preDialog.getWindow().setAttributes(lp);
+            preDialog.setCancelable(false);
             preDialog.show();
             cvDone = preDialog.findViewById(R.id.cvDone);
 
@@ -1242,6 +1251,17 @@ public class AddCardActivity extends AppCompatActivity {
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                    }
+                }
+            });
+
+            preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        return true;
+                    } else {
+                        return false;
                     }
                 }
             });

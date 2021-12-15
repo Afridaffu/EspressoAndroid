@@ -210,6 +210,7 @@
                             android:id="@+id/etAddress1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                             android:fontFamily="@font/opensans_semibold"
                             android:hint=""
                             android:imeOptions="actionNext"
@@ -269,6 +270,7 @@
                             android:id="@+id/etAddress2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                             android:fontFamily="@font/opensans_semibold"
                             android:hint=""
                             android:imeOptions="actionNext"
@@ -381,6 +383,7 @@
                                 android:id="@+id/etState"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:cursorVisible="false"
                                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 android:editable="false"
                                 android:focusable="false"
@@ -388,6 +391,7 @@
                                 android:hint="CA"
                                 android:imeOptions="actionNext"
                                 android:inputType="text|textNoSuggestions"
+                                android:longClickable="false"
                                 android:maxLength="30"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"
@@ -397,9 +401,7 @@
                                 android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursor_color"
                                 android:textIsSelectable="false"
-                                android:textSize="@dimen/_12ssp"
-                                android:cursorVisible="false"
-                                android:longClickable="false"/>
+                                android:textSize="@dimen/_12ssp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>

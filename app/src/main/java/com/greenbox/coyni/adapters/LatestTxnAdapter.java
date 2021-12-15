@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.LoginActivity;
+import com.greenbox.coyni.view.TransactionDetailsActivity;
 
 import java.util.List;
 
@@ -56,10 +57,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
+            LatestTxnResponse.Daata objData = latestTxns.getData().get(position);
             holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
             holder.amountTV.setText(latestTxns.getData().get(position).getAmount());
 //            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
-            holder.balanceTV.setText("Balance "+Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
+            holder.balanceTV.setText("Balance " + Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
             String strType = "";
 
             if (latestTxns.getData().get(position).getTxnTypeDn().toLowerCase().contains("withdraw")) {
@@ -112,6 +114,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 @Override
                 public void onClick(View v) {
                     try {
+                        Intent i = new Intent(mContext, TransactionDetailsActivity.class);
+                        i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
+                        i.putExtra("txnType", objData.getTxnTypeDn());
+                        i.putExtra("txnSubType", objData.getTxnSubTypeDn());
+                        mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

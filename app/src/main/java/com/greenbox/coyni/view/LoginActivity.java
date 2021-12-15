@@ -64,15 +64,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -644,6 +635,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 try {
                     if (loginResponse != null) {
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                            Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
+                            objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
@@ -904,7 +900,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             byte[] valueDecoded = new byte[0];
             valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
             objMyApplication.setStrStatesUrl(new String(valueDecoded));
-            Log.e("States url",objMyApplication.getStrStatesUrl() +"   sdssd");
+            Log.e("States url", objMyApplication.getStrStatesUrl() + "   sdssd");
             try {
                 new HttpGetRequest().execute("");
             } catch (Exception e) {
@@ -919,8 +915,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         public static final String REQUEST_METHOD = "GET";
         public static final int READ_TIMEOUT = 15000;
         public static final int CONNECTION_TIMEOUT = 15000;
+
         @Override
-        protected String doInBackground(String... params){
+        protected String doInBackground(String... params) {
             String stringUrl = params[0];
             String result;
             String inputLine;
@@ -928,7 +925,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 //Create a URL object holding our url
                 URL myUrl = new URL(objMyApplication.getStrStatesUrl());
                 //Create a connection
-                HttpURLConnection connection =(HttpURLConnection)
+                HttpURLConnection connection = (HttpURLConnection)
                         myUrl.openConnection();
                 //Set methods and timeouts
                 connection.setRequestMethod(REQUEST_METHOD);
@@ -944,7 +941,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 BufferedReader reader = new BufferedReader(streamReader);
                 StringBuilder stringBuilder = new StringBuilder();
                 //Check if the line we are reading is not null
-                while((inputLine = reader.readLine()) != null){
+                while ((inputLine = reader.readLine()) != null) {
                     stringBuilder.append(inputLine);
                 }
                 //Close our InputStream and Buffered reader
@@ -952,14 +949,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 streamReader.close();
                 //Set our result equal to our stringBuilder
                 result = stringBuilder.toString();
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 result = null;
             }
             return result;
         }
-        protected void onPostExecute(String result){
+
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Gson gson = new Gson();
             Type type = new TypeToken<List<States>>() {

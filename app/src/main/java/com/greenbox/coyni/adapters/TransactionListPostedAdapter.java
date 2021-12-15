@@ -1,6 +1,7 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -24,6 +25,8 @@ import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.EditCardActivity;
+import com.greenbox.coyni.view.TransactionDetailsActivity;
 import com.greenbox.coyni.view.TransactionListActivity;
 
 import java.text.SimpleDateFormat;
@@ -31,14 +34,14 @@ import java.util.Calendar;
 import java.util.List;
 
 public class TransactionListPostedAdapter extends RecyclerView.Adapter<TransactionListPostedAdapter.MyViewHolder> {
-    Context mecontext;
+    Context mContext;
     MyApplication objMyApplication;
     List<TransactionListPosted> transactionListItemsposted;
     TransactionList transactionList;
 
     public TransactionListPostedAdapter(List<TransactionListPosted> list, Context context) {
         this.transactionListItemsposted = list;
-        this.mecontext = context;
+        this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -88,13 +91,13 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
             try {
                 holder.date.setVisibility(View.VISIBLE);
                 if (isNextAvailabe && isNextSameDate) {
-                    holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.topradius_list_items));
+                    holder.itemRL.setBackground(mContext.getDrawable(R.drawable.topradius_list_items));
                     holder.lineItem.setVisibility(View.VISIBLE);
                 } else if (isNextAvailabe && !isNextSameDate) {
-                    holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.fullradius_list_items));
+                    holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                     holder.lineItem.setVisibility(View.GONE);
                 } else {
-                    holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.fullradius_list_items));
+                    holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                     holder.lineItem.setVisibility(View.GONE);
                 }
                 SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -123,10 +126,10 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                         if (isNextAvailabe && isNextSameDate) {
                             holder.lineItem.setVisibility(View.VISIBLE);
                         } else if (isNextAvailabe && !isNextSameDate) {
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
                             holder.lineItem.setVisibility(View.GONE);
                         } else {
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.fullradius_list_items));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                             holder.lineItem.setVisibility(View.GONE);
                         }
 
@@ -136,13 +139,13 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                         if (isNextAvailabe && isNextSameDate) {
                             holder.lineItem.setVisibility(View.VISIBLE);
                         } else if (isNextAvailabe && !isNextSameDate) {
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
                             holder.lineItem.setVisibility(View.GONE);
                         } else if (!isNextAvailabe && !isNextSameDate) {
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
                             holder.lineItem.setVisibility(View.GONE);
                         } else {
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.fullradius_list_items));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                             holder.lineItem.setVisibility(View.GONE);
                         }
 //                        holder.lineItem.setVisibility(View.GONE);
@@ -153,13 +156,13 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                     } else {
                         if (isNextAvailabe && isNextSameDate) {
                             holder.lineItem.setVisibility(View.VISIBLE);
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.topradius_list_items));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.topradius_list_items));
                         } else if (isNextAvailabe && !isNextSameDate) {
                             holder.lineItem.setVisibility(View.GONE);
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.card_bottomradius));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
                         } else {
                             holder.lineItem.setVisibility(View.GONE);
-                            holder.itemRL.setBackground(mecontext.getDrawable(R.drawable.fullradius_list_items));
+                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                         }
 //                        holder.date.setVisibility(View.VISIBLE);
                     }
@@ -206,36 +209,37 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:
-                holder.txnStatus.setTextColor(mecontext.getResources().getColor(R.color.under_review_blue));
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.under_review_blue));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case Utils.transPending:
-                holder.txnStatus.setTextColor(mecontext.getResources().getColor(R.color.orange));
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.orange));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             case Utils.transCompleted:
-                holder.txnStatus.setTextColor(mecontext.getResources().getColor(R.color.active_green));
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.active_green));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case Utils.transFailed:
-                holder.txnStatus.setTextColor(mecontext.getResources().getColor(R.color.error_red));
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.error_red));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
         }
 
-//        if (position == transactionListItemsposted.size() - 1) {
-//            if (TransactionListActivity.transactionListActivity.total > TransactionListActivity.transactionListActivity.currentPage) {
-//                TransactionListActivity.transactionListActivity.progressBar.setVisibility(View.VISIBLE);
-//                TransactionListActivity.transactionListActivity.currentPage = TransactionListActivity.transactionListActivity.currentPage + 1;
-//                Log.e("CurrentPage", TransactionListActivity.transactionListActivity.currentPage + "");
-//                TransactionListRequest transactionListRequest = new TransactionListRequest();
-//                transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
-//                transactionListRequest.setWalletCategory(Utils.walletCategory);
-//                transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-//                TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
-//
-//            }
-//        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent i = new Intent(mContext, TransactionDetailsActivity.class);
+                    i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
+                    i.putExtra("txnType", objData.getTxnTypeDn());
+                    i.putExtra("txnSubType", objData.getTxnSubTypeDn());
+                    mContext.startActivity(i);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -305,6 +309,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         this.transactionListItemsposted.addAll(listItems);
         notifyDataSetChanged();
     }
+
     public void updateList(List<TransactionListPosted> list) {
         transactionListItemsposted = list;
         notifyDataSetChanged();

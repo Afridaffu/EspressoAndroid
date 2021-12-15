@@ -236,6 +236,11 @@ public class OnboardActivity extends AppCompatActivity {
                 try {
                     if (loginResponse != null) {
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                            Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
+                            objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(OnboardActivity.this, PINActivity.class);

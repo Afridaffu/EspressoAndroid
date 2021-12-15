@@ -23,13 +23,21 @@
                 android:background="@drawable/backgrndbtmcornrs"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:id="@+id/lyPRClose"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginLeft="@dimen/_22sdp"
-                    android:layout_marginTop="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_14sdp"
-                    android:src="@drawable/ic_chevron_left" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_chevron_left" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -66,7 +74,7 @@
                         android:layout_marginTop="@dimen/_22sdp"
                         android:layout_marginBottom="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Pay/Request - Sent"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp"
                         android:visibility="visible" />
@@ -82,7 +90,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
-                            android:text="100.00"
+                            android:text="0.00"
                             android:textColor="@color/primary_color"
                             android:textSize="@dimen/_24ssp" />
 
@@ -104,7 +112,7 @@
                         android:layout_marginTop="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:gravity="center"
-                        android:text="“Hey friend, thanks for dinner the other night. Here’s \nwhat I owe you for the meal you  (this is exactly 120\n characters). ”"
+                        android:text="“”"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_10ssp" />
 
@@ -174,7 +182,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="07/27/2020 10:36:14"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
@@ -201,7 +209,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="1.00 CYN"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
@@ -242,7 +250,7 @@
                             android:layout_gravity="center_vertical"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="101.00 CYN"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
@@ -270,7 +278,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="1,000.00 CYN"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
@@ -291,6 +299,7 @@
                             android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
+                            android:id="@+id/lyRefId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
@@ -306,7 +315,7 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
                                 android:singleLine="true"
-                                android:text="1d3hsM734h…"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -359,7 +368,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="Dan Nusinovich"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
@@ -381,6 +390,7 @@
                             android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
+                            android:id="@+id/lyAccAdd"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
@@ -393,7 +403,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="1d3hsM734h…"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 

@@ -222,7 +222,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
                             Type type = new TypeToken<APIError>() {
                             }.getType();
                             APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            //apiErrorMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
