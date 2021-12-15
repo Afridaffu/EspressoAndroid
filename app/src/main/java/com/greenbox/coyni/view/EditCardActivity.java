@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -107,13 +108,16 @@ public class EditCardActivity extends AppCompatActivity {
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
             etlExpiry = findViewById(R.id.etlExpiry);
+            etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
+            etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
+            etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
             etExpiry.setEnabled(false);
             etlCard.disableEditText();
             if (selectedCard != null) {
                 etName.setText(Utils.capitalize(selectedCard.getName()));
-                etlCard.setText(selectedCard.getFirstSix() + " ****" + selectedCard.getLastFour());
+                etlCard.setText(selectedCard.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + selectedCard.getLastFour());
                 etExpiry.setText(selectedCard.getExpiryDate());
                 etAddress1.setText(selectedCard.getAddressLine1());
                 etAddress2.setText(selectedCard.getAddressLine2());
@@ -245,7 +249,8 @@ public class EditCardActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (cardEditResponse != null) {
                     if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
-                        displayAlertNew(cardEditResponse.getData(), EditCardActivity.this, "");
+                        //displayAlertNew(cardEditResponse.getData(), EditCardActivity.this, "");
+                        Utils.showCustomToast(EditCardActivity.this, cardEditResponse.getData(), R.drawable.ic_custom_tick, "");
                     }
                 }
             }
@@ -444,8 +449,8 @@ public class EditCardActivity extends AppCompatActivity {
                         }
                     } else {
                         isExpiry = false;
-                        etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+//                        etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                        Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -501,15 +506,14 @@ public class EditCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etAddress1.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.substring(0).equals(" ")) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
-                    } else if (str.length() > 0 && str.contains(".")) {
-                        etAddress1.setText(etAddress1.getText().toString().replaceAll("\\.", ""));
-                        etAddress1.setSelection(etAddress1.getText().length());
-                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        address1ErrorLL.setVisibility(GONE);
+                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
+                        address1ErrorLL.setVisibility(GONE);
                     }
 
                 } catch (Exception ex) {
@@ -604,8 +608,8 @@ public class EditCardActivity extends AppCompatActivity {
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
-                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+//                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                         zipErrorLL.setVisibility(VISIBLE);
                         zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
@@ -725,6 +729,7 @@ public class EditCardActivity extends AppCompatActivity {
                 value = false;
             }
         } catch (Exception ex) {
+            value = false;
             ex.printStackTrace();
         }
         return value;

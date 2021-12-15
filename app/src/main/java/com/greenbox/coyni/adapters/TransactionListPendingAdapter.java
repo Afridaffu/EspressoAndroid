@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.EditCardActivity;
+import com.greenbox.coyni.view.TransactionDetailsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -120,9 +123,24 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 //                tokenFragment.pbLoader.setVisibility(View.GONE);
 //            }
 //        }
-        if (position==transactionListItemspending.size()-1){
+        if (position == transactionListItemspending.size() - 1) {
             holder.viewLine.setVisibility(View.GONE);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent i = new Intent(mecontext, TransactionDetailsActivity.class);
+                    i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
+                    i.putExtra("txnType", objData.getTxnTypeDn());
+                    i.putExtra("txnSubType", objData.getTxnSubTypeDn());
+                    mecontext.startActivity(i);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
     }
 
@@ -184,6 +202,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
         this.transactionListItemspending.addAll(listItems);
         notifyDataSetChanged();
     }
+
     public void updateList(List<TransactionListPending> list) {
         transactionListItemspending = list;
         notifyDataSetChanged();

@@ -35,6 +35,7 @@ import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -292,73 +293,69 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        try {
-            identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
-                @Override
-                public void onChanged(TrackerResponse trackerResponse) {
+        identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
+            @Override
+            public void onChanged(TrackerResponse trackerResponse) {
 
-                    if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
-                        objMyApplication.setTrackerResponse(trackerResponse);
+                if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                    objMyApplication.setTrackerResponse(trackerResponse);
 
-                        if (trackerResponse.getData().isPersonIdentified()) {
+                    if (trackerResponse.getData().isPersonIdentified()) {
+                        cvHeaderRL.setVisibility(View.VISIBLE);
+                        cvSmallHeaderRL.setVisibility(View.GONE);
+                        getStartedCV.setVisibility(View.GONE);
+                        transactionsNSV.setVisibility(View.VISIBLE);
+
+                        if (trackerResponse.getData().isPaymentModeAdded()) {
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            underReviewCV.setVisibility(View.GONE);
+                            additionalActionCV.setVisibility(View.GONE);
+                            buyTokensCV.setVisibility(View.GONE);
+
+                            dashboardViewModel.getLatestTxns();
+
+                        } else {
+                            welcomeCoyniCV.setVisibility(View.VISIBLE);
+                            underReviewCV.setVisibility(View.GONE);
+                            additionalActionCV.setVisibility(View.GONE);
+                            buyTokensCV.setVisibility(View.GONE);
+                        }
+                    } else {
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                            cvHeaderRL.setVisibility(View.GONE);
+                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
+                            getStartedCV.setVisibility(View.VISIBLE);
+                            transactionsNSV.setVisibility(View.GONE);
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
                             getStartedCV.setVisibility(View.GONE);
                             transactionsNSV.setVisibility(View.VISIBLE);
 
-                            if (trackerResponse.getData().isPaymentModeAdded()) {
-                                welcomeCoyniCV.setVisibility(View.GONE);
-                                underReviewCV.setVisibility(View.GONE);
-                                additionalActionCV.setVisibility(View.GONE);
-                                buyTokensCV.setVisibility(View.GONE);
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            underReviewCV.setVisibility(View.VISIBLE);
+                            additionalActionCV.setVisibility(View.GONE);
+                            buyTokensCV.setVisibility(View.GONE);
 
-                                dashboardViewModel.getLatestTxns();
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
+                            cvHeaderRL.setVisibility(View.VISIBLE);
+                            cvSmallHeaderRL.setVisibility(View.GONE);
+                            getStartedCV.setVisibility(View.GONE);
+                            transactionsNSV.setVisibility(View.VISIBLE);
 
-                            } else {
-                                welcomeCoyniCV.setVisibility(View.VISIBLE);
-                                underReviewCV.setVisibility(View.GONE);
-                                additionalActionCV.setVisibility(View.GONE);
-                                buyTokensCV.setVisibility(View.GONE);
-                            }
-                        } else {
-                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                                cvHeaderRL.setVisibility(View.GONE);
-                                cvSmallHeaderRL.setVisibility(View.VISIBLE);
-                                getStartedCV.setVisibility(View.VISIBLE);
-                                transactionsNSV.setVisibility(View.GONE);
-                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
-                                cvHeaderRL.setVisibility(View.VISIBLE);
-                                cvSmallHeaderRL.setVisibility(View.GONE);
-                                getStartedCV.setVisibility(View.GONE);
-                                transactionsNSV.setVisibility(View.VISIBLE);
-
-                                welcomeCoyniCV.setVisibility(View.GONE);
-                                underReviewCV.setVisibility(View.VISIBLE);
-                                additionalActionCV.setVisibility(View.GONE);
-                                buyTokensCV.setVisibility(View.GONE);
-
-                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
-                                cvHeaderRL.setVisibility(View.VISIBLE);
-                                cvSmallHeaderRL.setVisibility(View.GONE);
-                                getStartedCV.setVisibility(View.GONE);
-                                transactionsNSV.setVisibility(View.VISIBLE);
-
-                                welcomeCoyniCV.setVisibility(View.GONE);
-                                underReviewCV.setVisibility(View.GONE);
-                                additionalActionCV.setVisibility(View.VISIBLE);
-                                buyTokensCV.setVisibility(View.GONE);
-
-                            }
-
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            underReviewCV.setVisibility(View.GONE);
+                            additionalActionCV.setVisibility(View.VISIBLE);
+                            buyTokensCV.setVisibility(View.GONE);
 
                         }
-                    }
 
+
+                    }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+            }
+        });
 
         dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
             @Override
@@ -451,6 +448,15 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                }
+            }
+        });
+
     }
 
     private void cryptoAssets() {
@@ -521,7 +527,7 @@ public class DashboardActivity extends AppCompatActivity {
 //                notificationsViewModel.meNotifications();
 //                payViewModel.getReceiveRequests();
                 customerProfileViewModel.meSignOn();
-//                dashboardViewModel.mePaymentMethods();
+                dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
             } catch (Exception ex) {
                 ex.printStackTrace();

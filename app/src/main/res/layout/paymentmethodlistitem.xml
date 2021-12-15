@@ -79,6 +79,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_toRightOf="@+id/imgBankIcon"
         android:fontFamily="@font/opensans_semibold"
+        android:gravity="center_vertical"
         android:text="4538 32••••2338"
         android:textColor="@color/white"
         android:textSize="@dimen/_16ssp"
