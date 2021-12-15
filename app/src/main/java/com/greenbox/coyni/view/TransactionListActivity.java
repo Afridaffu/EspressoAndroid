@@ -1,15 +1,18 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -26,6 +29,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
@@ -38,9 +44,13 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
@@ -48,6 +58,7 @@ public class TransactionListActivity extends AppCompatActivity {
     static Context context;
     Long mLastClickTime = 0L;
     NestedScrollView nestedScrollView;
+    SwipeRefreshLayout swipeRefreshLayout;
     public ProgressBar progressBar;
     public int totalItemCount, currentPage = 0, total = 0;
     RecyclerView rvTransactionsPending, getRvTransactionsPosted;
@@ -78,6 +89,7 @@ public class TransactionListActivity extends AppCompatActivity {
             filterIV=findViewById(R.id.filterIconIV);
 
             nestedScrollView = findViewById(R.id.nestedSV);
+            swipeRefreshLayout=findViewById(R.id.refreshLayout);
             progressBar = findViewById(R.id.progressBarLoadMore);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -89,9 +101,6 @@ public class TransactionListActivity extends AppCompatActivity {
             noMoreTransactionTV=findViewById(R.id.noMoreTransactions);
             pendingTxt = findViewById(R.id.pendingTV);
             searchET=findViewById(R.id.searchET);
-//            getRvTransactionsPosted.addItemDecoration(new DividerItemDecoration(TransactionListActivity.this,90));
-            transactionList = objMyApplication.getTransactionList();
-//            totalItemCount = transactionList.getData().getItems().getPendingTransactionsCount();
             initObservers();
 
             filterIV.setOnClickListener(new View.OnClickListener() {
@@ -101,13 +110,14 @@ public class TransactionListActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
+                        LinearLayout dateRPickerLL;
                         // custom dialog
                         final Dialog dialog = new Dialog(TransactionListActivity.this);
                         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.activity_filters);
                         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+                        dateRPickerLL=dialog.findViewById(R.id.dateRangePickerLL);
+                        EditText getDateFromPickerET=dialog.findViewById(R.id.datePickET);
                         Window window = dialog.getWindow();
 
                          int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
@@ -123,6 +133,65 @@ public class TransactionListActivity extends AppCompatActivity {
 
                         dialog.setCanceledOnTouchOutside(true);
                         dialog.show();
+
+
+                        //Click Actions
+
+                            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                            calendar.clear();
+
+                            long today = MaterialDatePicker.todayInUtcMilliseconds();
+
+                            calendar.setTimeInMillis(today);
+
+                            calendar.set(Calendar.MONTH, Calendar.JANUARY);
+                            long january = calendar.getTimeInMillis();
+
+                            calendar.set(Calendar.MONTH, Calendar.MARCH);
+                            long march = calendar.getTimeInMillis();
+
+                            calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+                            long december = calendar.getTimeInMillis();
+
+
+                            CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+                            constraintBuilder.setValidator(new DateValidatorWeekdays());
+
+                            //MaterialDatePicker
+//        MaterialDatePicker.Builder<Pair<Long,Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+//        builder.setTitleText("SELECT A DATE");
+//        builder.setSelection();
+
+
+//
+                            MaterialDatePicker.Builder<Pair<Long,Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+                            builder.setTitleText("SELECT A DATE");
+                            final MaterialDatePicker materialDatePicker = builder.build();
+                            builder.setTheme(R.style.Calender);
+                    dateRPickerLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            try {
+                                materialDatePicker.show(getSupportFragmentManager(),"");
+                                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long,Long>>() {
+                                    @Override
+                                    public void onPositiveButtonClick(Pair<Long,Long> selection) {
+
+                                        Long start_date=selection.first;
+                                        Long end_date=selection.second;
+                                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MMM dd,yyyy");
+                                        getDateFromPickerET.setText(simpleDateFormat.format(start_date)+" - "+simpleDateFormat.format(end_date));
+                                    }
+                                });
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
                 }
             });
             closeBtn.setOnClickListener(new View.OnClickListener() {
@@ -175,12 +244,24 @@ public class TransactionListActivity extends AppCompatActivity {
 
                 }
             });
-            TransactionListRequest transactionListRequest = new TransactionListRequest();
-            transactionListRequest.setPageNo(String.valueOf(currentPage));
-            transactionListRequest.setWalletCategory(Utils.walletCategory);
-            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-            dashboardViewModel.meTransactionList(transactionListRequest);
-            dashboardViewModel.mePreferences();
+
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                            globalPosted.clear();
+                            globalPending.clear();
+                            currentPage = 0;
+                            TransactionListRequest transactionListRequest = new TransactionListRequest();
+                            transactionListRequest.setPageNo(String.valueOf(currentPage));
+                            transactionListRequest.setWalletCategory(Utils.walletCategory);
+                            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+                            dashboardViewModel.meTransactionList(transactionListRequest);
+                            dashboardViewModel.mePreferences();
+                            swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+            swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.status));
+
 
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
@@ -245,7 +326,6 @@ public class TransactionListActivity extends AppCompatActivity {
                             noTransactionTV.setVisibility(View.GONE);
                             layoutTransactionspending.setVisibility(View.VISIBLE);
                             total = transactionList.getData().getTotalPages();
-                            objMyApplication.setTransactionList(transactionList);
                             transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
                             pendingTxt.setVisibility(View.VISIBLE);
                             rvTransactionsPending.setLayoutManager(mLayoutManager);
@@ -332,15 +412,15 @@ public class TransactionListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-//            TransactionListActivity.transactionListActivity.currentPage = TransactionListActivity.transactionListActivity.currentPage + 1;
+            globalPending.clear();
+            globalPosted.clear();
+            currentPage=0;
             TransactionListRequest transactionListRequest = new TransactionListRequest();
-            transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-            TransactionListActivity.transactionListActivity.dashboardViewModel.meTransactionList(transactionListRequest);
-            noMoreTransactionTV.setVisibility(View.GONE);
-
-
+            dashboardViewModel.meTransactionList(transactionListRequest);
+            dashboardViewModel.mePreferences();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
