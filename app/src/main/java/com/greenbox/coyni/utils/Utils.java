@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +43,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
@@ -65,6 +68,7 @@ import com.greenbox.coyni.view.PreferencesActivity;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -158,6 +162,8 @@ public class Utils {
     public static final int cancelled = 4;//Not available
     public static final int inProgress =0;
     public static final int failed = 3;
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
 
     public static String getStrLang() {
@@ -923,5 +929,20 @@ public class Utils {
             ex.printStackTrace();
         }
         return strDate;
+    }
+
+    public static String convertTwoDecimalPoints(Double value){
+        return df.format(value);
+    }
+
+    public static void copyText(String strText, Context context) {
+        try {
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Wallet Address", strText);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

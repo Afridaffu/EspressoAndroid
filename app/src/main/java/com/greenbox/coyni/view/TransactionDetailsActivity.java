@@ -152,7 +152,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
 
 
-            datetime.setText(Utils.convertTransactionData(objData.getCreatedDate()));
+            datetime.setText(Utils.convertTxnDate(objData.getCreatedDate()));
             try {
                 Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", ""));
                 Double sentamnt = Double.parseDouble(objData.getTotalAmount().replace("CYN", ""));
