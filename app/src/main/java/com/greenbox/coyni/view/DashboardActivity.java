@@ -156,6 +156,7 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     cryptoAssets();
+//                    startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
                 }
             });
 
@@ -169,6 +170,7 @@ public class DashboardActivity extends AppCompatActivity {
                     issueCards();
                 }
             });
+
             scanQr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
