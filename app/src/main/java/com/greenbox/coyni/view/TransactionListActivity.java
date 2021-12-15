@@ -33,9 +33,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.andrewjapar.rangedatepicker.CalendarPicker;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.util.Pair;
@@ -98,7 +100,7 @@ public class TransactionListActivity extends AppCompatActivity {
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
 
-    public String strStartAmount = "", strEndAmount = "";
+    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,7 @@ public class TransactionListActivity extends AppCompatActivity {
             filterIV = findViewById(R.id.filterIconIV);
 
             nestedScrollView = findViewById(R.id.nestedSV);
-            swipeRefreshLayout=findViewById(R.id.refreshLayout);
+            swipeRefreshLayout = findViewById(R.id.refreshLayout);
             progressBar = findViewById(R.id.progressBarLoadMore);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -186,16 +188,16 @@ public class TransactionListActivity extends AppCompatActivity {
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                            globalPosted.clear();
-                            globalPending.clear();
-                            currentPage = 0;
-                            TransactionListRequest transactionListRequest = new TransactionListRequest();
-                            transactionListRequest.setPageNo(String.valueOf(currentPage));
-                            transactionListRequest.setWalletCategory(Utils.walletCategory);
-                            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-                            dashboardViewModel.meTransactionList(transactionListRequest);
-                            dashboardViewModel.mePreferences();
-                            swipeRefreshLayout.setRefreshing(false);
+                    globalPosted.clear();
+                    globalPending.clear();
+                    currentPage = 0;
+                    TransactionListRequest transactionListRequest = new TransactionListRequest();
+                    transactionListRequest.setPageNo(String.valueOf(currentPage));
+                    transactionListRequest.setWalletCategory(Utils.walletCategory);
+                    transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+                    dashboardViewModel.meTransactionList(transactionListRequest);
+                    dashboardViewModel.mePreferences();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
             swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.status));
@@ -233,6 +235,16 @@ public class TransactionListActivity extends AppCompatActivity {
                                 if (!strEndAmount.trim().equals("")) {
                                     transactionListRequest.setToAmount(strEndAmount.replace(",", ""));
                                     transactionListRequest.setToAmountOperator("<=");
+                                }
+
+                                if (!strFromDate.equals("")) {
+                                    transactionListRequest.setUpdatedFromDate(strFromDate);
+                                    transactionListRequest.setUpdatedFromDateOperator(">=");
+                                }
+
+                                if (!strToDate.equals("")) {
+                                    transactionListRequest.setUpdatedToDate(strToDate);
+                                    transactionListRequest.setUpdatedToDateOperator("<=");
                                 }
 
                                 dashboardViewModel.meTransactionList(transactionListRequest);
@@ -381,25 +393,8 @@ public class TransactionListActivity extends AppCompatActivity {
             transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-            if (transactionType.size() > 0) {
-                transactionListRequest.setTransactionType(transactionType);
-            }
-            if (transactionSubType.size() > 0) {
-                transactionListRequest.setTransactionSubType(transactionSubType);
-            }
-            if (txnStatus.size() > 0) {
-                transactionListRequest.setTxnStatus(txnStatus);
-            }
-            if (!strStartAmount.trim().equals("")) {
-                transactionListRequest.setFromAmount(strStartAmount.replace(",", ""));
-                transactionListRequest.setFromAmountOperator(">=");
-            }
-            if (!strEndAmount.trim().equals("")) {
-                transactionListRequest.setToAmount(strEndAmount.replace(",", ""));
-                transactionListRequest.setToAmountOperator("<=");
-            }
-            dashboardViewModel.meTransactionList(transactionListRequest);
 
+            dashboardViewModel.meTransactionList(transactionListRequest);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -451,7 +446,8 @@ public class TransactionListActivity extends AppCompatActivity {
 
         CardView applyFilterBtnCV = dialog.findViewById(R.id.applyFilterBtnCV);
         LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
-        EditText getDateFromPickerET=dialog.findViewById(R.id.datePickET);
+        EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
+        TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
 
         if (transactionType.size() > 0) {
             for (int i = 0; i < transactionType.size(); i++) {
@@ -567,14 +563,55 @@ public class TransactionListActivity extends AppCompatActivity {
             }
         }
 
-
-        if (!strStartAmount.equals("")) {
-
+        if (!strStartAmount.trim().equals("")) {
+            transAmountStartET.setText(strStartAmount.replace(",", "").split("\\.")[0]);
+        }
+        if (!strEndAmount.trim().equals("")) {
+            transAmountEndET.setText(strEndAmount.replace(",", "").split("\\.")[0]);
         }
 
-        if (!strEndAmount.equals("")) {
 
-        }
+        resetFiltersTV.setOnClickListener(view -> {
+            transactionType.clear();
+            transactionSubType.clear();
+            txnStatus.clear();
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = "";
+            strEndAmount = "";
+
+            transTypePR.setChecked(false);
+            transTypeBT.setChecked(false);
+            transTypeSO.setChecked(false);
+            transTypeWithdraw.setChecked(false);
+            transTypeRefund.setChecked(false);
+            transTypeAT.setChecked(false);
+            transTypePI.setChecked(false);
+
+            transSubTypeSent.setChecked(false);
+            transSubTypeReceived.setChecked(false);
+            transSubTypeBA.setChecked(false);
+            transSubTypeCC.setChecked(false);
+            transSubTypeDC.setChecked(false);
+            transSubTypeSignet.setChecked(false);
+            transSubTypeIP.setChecked(false);
+            transSubTypeGiftCard.setChecked(false);
+            transSubTypeSOToken.setChecked(false);
+            transSubTypeFW.setChecked(false);
+            transSubTypeCW.setChecked(false);
+
+            transStatusPending.setChecked(false);
+            transStatusCompleted.setChecked(false);
+            transStatusCanceled.setChecked(false);
+            transStatusInProgress.setChecked(false);
+            transStatusFailed.setChecked(false);
+
+            transAmountStartET.setText("");
+            transAmountEndET.setText("");
+            getDateFromPickerET.setText("");
+
+
+        });
 
         transTypePR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1076,59 +1113,74 @@ public class TransactionListActivity extends AppCompatActivity {
                     transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
                     transactionListRequest.setToAmountOperator("<=");
                 }
+                if (!strFromDate.equals("")) {
+                    transactionListRequest.setUpdatedFromDate(strFromDate);
+                    transactionListRequest.setUpdatedFromDateOperator(">=");
+                }
+                if (!strToDate.equals("")) {
+                    transactionListRequest.setUpdatedToDate(strToDate);
+                    transactionListRequest.setUpdatedToDateOperator("<=");
+                }
 
                 dashboardViewModel.meTransactionList(transactionListRequest);
                 noMoreTransactionTV.setVisibility(View.GONE);
                 dialog.dismiss();
             }
         });
-                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-                  dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.clear();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
 
-                long today = MaterialDatePicker.todayInUtcMilliseconds();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
 
-                calendar.setTimeInMillis(today);
+        calendar.setTimeInMillis(today);
 
-                calendar.set(Calendar.MONTH, Calendar.JANUARY);
-                long january = calendar.getTimeInMillis();
+        calendar.set(Calendar.MONTH, Calendar.JANUARY);
+        long january = calendar.getTimeInMillis();
 
-                calendar.set(Calendar.MONTH, Calendar.MARCH);
-                long march = calendar.getTimeInMillis();
+        calendar.set(Calendar.MONTH, Calendar.MARCH);
+        long march = calendar.getTimeInMillis();
 
-                calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-                long december = calendar.getTimeInMillis();
+        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+        long december = calendar.getTimeInMillis();
 
 
-                CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-                constraintBuilder.setValidator(new DateValidatorWeekdays());
+        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+        constraintBuilder.setValidator(new DateValidatorWeekdays());
 
-                //MaterialDatePicker
+        //MaterialDatePicker
 //        MaterialDatePicker.Builder<Pair<Long,Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
 //        builder.setTitleText("SELECT A DATE");
 //        builder.setSelection();
 //
-                MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-                builder.setTitleText("SELECT A DATE");
-                builder.setTheme(R.style.Calender);
-                final MaterialDatePicker materialDatePicker = builder.build();
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText("SELECT A DATE");
+        builder.setTheme(R.style.Calender);
+        final MaterialDatePicker materialDatePicker = builder.build();
         dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                materialDatePicker.show(getSupportFragmentManager(), "");
-
-                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long,Long>>() {
-                                   @Override
-                                   public void onPositiveButtonClick(Pair<Long,Long> selection) {
-                                       Long start_date=selection.first;
-                                       Long end_date=selection.second;
-                                       SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MMM dd,yyyy");
-                                       getDateFromPickerET.setText(simpleDateFormat.format(start_date)+" - "+simpleDateFormat.format(end_date));
-                                   }
-                              });
+                showCalendar();
+//                materialDatePicker.show(getSupportFragmentManager(), "");
+//
+//                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+//                    @Override
+//                    public void onPositiveButtonClick(Pair<Long, Long> selection) {
+//                        Long start_date = selection.first;
+//                        Long end_date = selection.second;
+//                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                        strFromDate = format.format(start_date) + " 00:00:00.00";
+//                        strToDate = format.format(end_date) + " 00:00:00.00";
+//
+//                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+//                        getDateFromPickerET.setText(simpleDateFormat.format(start_date) + " - " + simpleDateFormat.format(end_date));
+//
+//                        Log.e("strFromDate", strFromDate + " " + strToDate);
+//                    }
+//                });
             }
         });
 
@@ -1149,6 +1201,41 @@ public class TransactionListActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void showCalendar() {
+        // custom dialog
+        final Dialog dialog = new Dialog(TransactionListActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.calendar_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        Window window = dialog.getWindow();
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.90);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        ImageView closeIV = dialog.findViewById(R.id.closeIV);
+        closeIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
+        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        endDate.add(Calendar.MONTH, 6); // Add 6 months ahead from current date
+        calendarPicker.showDayOfWeekTitle(true);
+        calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
+        calendarPicker.setRangeDate(startDate.getTime(), endDate.getTime());
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
 }

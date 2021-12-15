@@ -67,7 +67,7 @@
             android:name=".view.TransactionListActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Calender" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AddCardActivity"
             android:exported="false"
