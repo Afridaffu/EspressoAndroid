@@ -109,7 +109,13 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                         addressObj.setAddressLine2(IDVEResponse.getData().getUseraddress().getAddressLine2());
                         addressObj.setAddressType(IDVEResponse.getData().getUseraddress().getAddressType());
                         addressObj.setCity(IDVEResponse.getData().getUseraddress().getCity());
-                        addressObj.setState(IDVEResponse.getData().getUseraddress().getState());
+//                        addressObj.setState(IDVEResponse.getData().getUseraddress().getState());
+                        addressObj.setState(IDVEResponse.getData().getUseraddress().getStateCode());
+                        try {
+                            addressObj.setStateCode(IDVEResponse.getData().getUseraddress().getStateCode());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         addressObj.setCountry("us");
                         addressObj.setZipCode(IDVEResponse.getData().getUseraddress().getZipCode());
 

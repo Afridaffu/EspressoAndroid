@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@drawable/top_rounded_bg"
     tools:context=".fragments.PayAmountBottomSheet">
 
     <View
@@ -15,24 +16,38 @@
         android:layout_marginTop="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_28sdp"
         />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Paying [Alison L]"
+        android:gravity="center"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paying "
         android:textSize="@dimen/_12ssp"
         android:fontFamily="@font/opensans_semibold"
         android:gravity="center"
-        android:layout_marginLeft="@dimen/_11ssp"
-        android:layout_marginRight="@dimen/_13ssp"
         android:textColor="@color/black"
-        android:layout_marginBottom="@dimen/_7sdp"
         />
+        <TextView
+            android:id="@+id/userNamePayTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[Alison L]"
+            android:textSize="@dimen/_12ssp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center">
         <TextView
+            android:id="@+id/amountPayTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="160.00"
@@ -182,6 +197,7 @@
         android:layout_marginBottom="@dimen/_6sdp"
         />
     <TextView
+        android:id="@+id/messageNoteTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="“Hey friend, thanks for dinner the other night. \nHere’s what you owe me for my meal.”"
@@ -193,18 +209,21 @@
         android:layout_marginRight="@dimen/_21sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         />
+
+
     <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/lay_lock_main"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_margin="@dimen/_21sdp"
-        android:background="@drawable/shape_round_rectable"
-        android:elevation="8dp"
-        app:layoutDescription="@xml/activity_swipe_unloack_scene"
+        android:layout_height="@dimen/_48sdp"
+        android:id="@+id/lay_lock_main"
+        android:layout_margin="@dimen/_20sdp"
+        android:elevation="@dimen/_2sdp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@drawable/shape_round_rectable"
+        app:layoutDescription="@xml/activity_swipe_unloack_scene"
+        >
 
         <TextView
             android:id="@+id/tv_lable"
@@ -216,7 +235,7 @@
             android:paddingEnd="16dp"
             android:paddingRight="16dp"
             android:text="Slide to Confirm"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_green"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
@@ -226,47 +245,188 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/im_lock"
-            android:layout_width="@dimen/_45sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            app:cardBackgroundColor="@color/primary_color"
-            app:cardCornerRadius="@dimen/_22sdp"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:layout_marginStart="@dimen/_2sdp"
+            app:cardBackgroundColor="@color/slidebtn_bg"
+            app:cardCornerRadius="@dimen/_21sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_double_left"
 
                 />
 
         </androidx.cardview.widget.CardView>
+
+
         <androidx.cardview.widget.CardView
             android:id="@+id/im_lock_"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:visibility="invisible"
-            app:cardCornerRadius="@dimen/_20sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_20sdp"
+            android:visibility="invisible">
 
             <ProgressBar
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
                 android:layout_gravity="center"
-                android:background="@color/primary_color" />
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                />
 
         </androidx.cardview.widget.CardView>
+        <!--        <androidx.constraintlayout.utils.widget.ImageFilterView-->
+        <!--            android:id="@+id/image"-->
+        <!--            android:layout_marginBottom="16dp"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginEnd="16dp"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            android:background="@color/white"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            android:src="@drawable/right"-->
+        <!--            app:altSrc="@drawable/left"-->
+        <!--            android:layout_width="@dimen/_30sdp"-->
+        <!--            android:layout_height="@dimen/_30sdp"-->
+        <!--            />-->
+
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <RelativeLayout
+        android:id="@+id/successRL"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_round_rectable">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Success"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_alignParentRight="true"
+            app:cardCornerRadius="@dimen/_20sdp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_check"
+                 />
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+
+
+
+<!--    <androidx.constraintlayout.motion.widget.MotionLayout-->
+<!--        android:id="@+id/lay_lock_main"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/_50sdp"-->
+<!--        android:layout_margin="@dimen/_21sdp"-->
+<!--        android:background="@drawable/shape_round_rectable"-->
+<!--        android:elevation="8dp"-->
+<!--        app:layoutDescription="@xml/activity_swipe_unloack_scene"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_lable"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:ellipsize="end"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:paddingRight="16dp"-->
+<!--            android:text="Slide to Confirm"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="@dimen/_15sdp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
+
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/im_lock"-->
+<!--            android:layout_width="@dimen/_45sdp"-->
+<!--            android:layout_height="@dimen/_45sdp"-->
+<!--            android:layout_marginStart="@dimen/_5sdp"-->
+<!--            android:layout_marginTop="@dimen/_5sdp"-->
+<!--            android:layout_marginBottom="@dimen/_5sdp"-->
+<!--            app:cardBackgroundColor="@color/primary_color"-->
+<!--            app:cardCornerRadius="@dimen/_22sdp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:layout_width="@dimen/_40sdp"-->
+<!--                android:layout_height="@dimen/_40sdp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/ic_double_left"-->
+
+<!--                />-->
+
+<!--        </androidx.cardview.widget.CardView>-->
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/im_lock_"-->
+<!--            android:layout_width="@dimen/_40sdp"-->
+<!--            android:layout_height="@dimen/_40sdp"-->
+<!--            android:layout_marginTop="@dimen/_5sdp"-->
+<!--            android:layout_marginEnd="@dimen/_5sdp"-->
+<!--            android:layout_marginBottom="@dimen/_5sdp"-->
+<!--            android:visibility="invisible"-->
+<!--            app:cardCornerRadius="@dimen/_20sdp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <ProgressBar-->
+<!--                android:layout_width="@dimen/_40sdp"-->
+<!--                android:layout_height="@dimen/_40sdp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@color/primary_color" />-->
+
+<!--        </androidx.cardview.widget.CardView>-->
+<!--    </androidx.constraintlayout.motion.widget.MotionLayout>-->
 
 
 </LinearLayout>

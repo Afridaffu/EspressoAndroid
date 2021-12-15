@@ -19,6 +19,7 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
@@ -40,15 +41,17 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class MyApplication extends Application {
+    static String strEncryptedPublicKey, strUser = "", strUserCode;
     List<CardsDataItem> listCards = new ArrayList<>();
     List<Agreements> agreementsList;
     AccountLimitsData objAcc;
     AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST";
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST",strWalletId="";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
+    UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
@@ -58,6 +61,16 @@ public class MyApplication extends Application {
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;
+
+
+
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
+    }
 
     public TransactionList getTransactionList() {
         return transactionList;
@@ -301,6 +314,7 @@ public class MyApplication extends Application {
     public void setGBTBalance(Double GBTBalance) {
         this.GBTBalance = GBTBalance;
     }
+
 
 
     public String transactionDate(String date) {

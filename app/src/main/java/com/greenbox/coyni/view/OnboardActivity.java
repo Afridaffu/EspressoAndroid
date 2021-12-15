@@ -10,11 +10,13 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -31,6 +33,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
@@ -38,6 +42,7 @@ import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -48,6 +53,13 @@ import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import java.util.UUID;
 
 public class OnboardActivity extends AppCompatActivity {
@@ -224,6 +236,7 @@ public class OnboardActivity extends AppCompatActivity {
                 try {
                     if (loginResponse != null) {
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                            getStatesUrl(loginResponse.getData().getStateList().getUS());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(OnboardActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -335,4 +348,74 @@ public class OnboardActivity extends AppCompatActivity {
         return value;
     }
 
+        private void getStatesUrl(String strCode) {
+        try {
+            byte[] valueDecoded = new byte[0];
+            valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
+            objMyApplication.setStrStatesUrl(new String(valueDecoded));
+            Log.e("States url",objMyApplication.getStrStatesUrl() +"   sdssd");
+            try {
+                new HttpGetRequest().execute("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public class HttpGetRequest extends AsyncTask<String, Void, String> {
+        public static final String REQUEST_METHOD = "GET";
+        public static final int READ_TIMEOUT = 15000;
+        public static final int CONNECTION_TIMEOUT = 15000;
+        @Override
+        protected String doInBackground(String... params){
+            String stringUrl = params[0];
+            String result;
+            String inputLine;
+            try {
+                //Create a URL object holding our url
+                URL myUrl = new URL(objMyApplication.getStrStatesUrl());
+                //Create a connection
+                HttpURLConnection connection =(HttpURLConnection)
+                        myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.connect();
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new
+                        InputStreamReader(connection.getInputStream());
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                //Check if the line we are reading is not null
+                while((inputLine = reader.readLine()) != null){
+                    stringBuilder.append(inputLine);
+                }
+                //Close our InputStream and Buffered reader
+                reader.close();
+                streamReader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+                result = null;
+            }
+            return result;
+        }
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(result, type);
+            objMyApplication.setListStates(listStates);
+//            Log.e("result", result);
+        }
+    }
 }

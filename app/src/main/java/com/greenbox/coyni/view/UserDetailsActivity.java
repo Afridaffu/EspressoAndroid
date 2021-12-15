@@ -95,7 +95,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_user_details);
             initFields();
-            getStates();
+//            getStates();
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();

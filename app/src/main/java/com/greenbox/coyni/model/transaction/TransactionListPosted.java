@@ -100,7 +100,7 @@ public class TransactionListPosted {
             this.transactionId = transactionId;
         }
 
-        public Object getGbxTransactionId() {
+        public String getGbxTransactionId() {
             return gbxTransactionId;
         }
 

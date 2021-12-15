@@ -192,6 +192,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                         flashLL.setVisibility(View.GONE);
                         closeBtnScanCode.setVisibility(View.GONE);
                         mcodeScanner.setFlashEnabled(false);
+                        mcodeScanner.stopPreview();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

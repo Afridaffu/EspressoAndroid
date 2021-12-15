@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -73,9 +75,13 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 //                holder.date.setText("Today");
 //            }
 //        }
+        if (objData.getTxnDescription().length() > 32) {
+            holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 32) + "...");
+        } else {
+            holder.txnDescrip.setText(objData.getTxnDescription());
+        }
         holder.txnStatus.setText(objData.getTxnStatusDn());
         holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
-        holder.txnDescrip.setText(objData.getTxnDescription());
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
         holder.date.setVisibility(View.GONE);
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
@@ -96,7 +102,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
         } else {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
-            holder.amount.setTextColor(R.color.active_green);
+            holder.amount.setTextColor(Color.parseColor("#008a05"));
         }
 //        if (position == transactionListItemspending.size() - 1 && transactionListItemspending.size() < trans) {
 //            Log.e("size", transactionListItemspending.size() + "");
@@ -176,6 +182,10 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
     public void addData(List<TransactionListPending> listItems) {
         this.transactionListItemspending.addAll(listItems);
+        notifyDataSetChanged();
+    }
+    public void updateList(List<TransactionListPending> list) {
+        transactionListItemspending = list;
         notifyDataSetChanged();
     }
 
