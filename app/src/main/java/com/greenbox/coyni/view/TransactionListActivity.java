@@ -451,6 +451,7 @@ public class TransactionListActivity extends AppCompatActivity {
 
         CardView applyFilterBtnCV = dialog.findViewById(R.id.applyFilterBtnCV);
         LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
+        EditText getDateFromPickerET=dialog.findViewById(R.id.datePickET);
 
         if (transactionType.size() > 0) {
             for (int i = 0; i < transactionType.size(); i++) {
@@ -1081,11 +1082,10 @@ public class TransactionListActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-
-        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                  dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 calendar.clear();
 
@@ -1113,17 +1113,25 @@ public class TransactionListActivity extends AppCompatActivity {
 //
                 MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
                 builder.setTitleText("SELECT A DATE");
-                builder.setTheme(R.style.Theme_Calender);
+                builder.setTheme(R.style.Calender);
                 final MaterialDatePicker materialDatePicker = builder.build();
-
+        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 materialDatePicker.show(getSupportFragmentManager(), "");
+
+                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long,Long>>() {
+                                   @Override
+                                   public void onPositiveButtonClick(Pair<Long,Long> selection) {
+                                       Long start_date=selection.first;
+                                       Long end_date=selection.second;
+                                       SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MMM dd,yyyy");
+                                       getDateFromPickerET.setText(simpleDateFormat.format(start_date)+" - "+simpleDateFormat.format(end_date));
+                                   }
+                              });
             }
         });
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
 
     }
 
