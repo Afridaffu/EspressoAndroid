@@ -75,7 +75,7 @@
     <color name="pending_status">#FFA70F</color>
 
 
-    <color name="txn_failed_trans">#fff6e5</color>
+    <color name="txn_failed_trans">#E8E8E8</color>
     <color name="failed_status">#FFDD2C00</color>
 
 </resources>

@@ -424,13 +424,14 @@ public class MyApplication extends Application {
         String strDate = "";
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SS")
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
                         .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
                         .toFormatter()
                         .withZone(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
 
+                Log.e("getStrPreference",getStrPreference());
                 ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
                 zonedTime = zonedTime.withZoneSameInstant(ZoneOffset.UTC);
                 strDate = zonedTime.format(DATE_TIME_FORMATTER);
             } else {

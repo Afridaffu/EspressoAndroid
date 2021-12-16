@@ -12,6 +12,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -160,7 +161,7 @@ public class Utils {
     public static final int pending = 1;
     public static final int completed = 2;
     public static final int cancelled = 4;//Not available
-    public static final int inProgress =0;
+    public static final int inProgress = 0;
     public static final int failed = 3;
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -769,7 +770,7 @@ public class Utils {
             List<States> listStates = myApplicationObj.getListStates();
 
             for (int i = 0; i < listStates.size(); i++) {
-                if (editText.getText().toString().trim().equals(listStates.get(i).getName())) {
+                if (editText.getText().toString().toLowerCase().trim().equals(listStates.get(i).getName().toLowerCase())) {
                     listStates.get(i).setSelected(true);
                 } else {
                     listStates.get(i).setSelected(false);
@@ -847,6 +848,15 @@ public class Utils {
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
             dialog.setCanceledOnTouchOutside(true);
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (!editText.getText().equals("")) {
+                        tempStateName = "";
+                        tempStateCode = "";
+                    }
+                }
+            });
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -931,7 +941,7 @@ public class Utils {
         return strDate;
     }
 
-    public static String convertTwoDecimalPoints(Double value){
+    public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
 

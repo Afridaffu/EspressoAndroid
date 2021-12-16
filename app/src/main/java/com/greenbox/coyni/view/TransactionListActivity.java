@@ -1,21 +1,8 @@
 package com.greenbox.coyni.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,24 +20,18 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.andrewjapar.rangedatepicker.CalendarPicker;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.andrewjapar.rangedatepicker.CalendarPicker;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
@@ -62,14 +43,13 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.TimeZone;
 
 public class TransactionListActivity extends AppCompatActivity {
@@ -94,13 +74,15 @@ public class TransactionListActivity extends AppCompatActivity {
     EditText searchET;
     List<TransactionListPending> globalPending = new ArrayList<>();
     List<TransactionListPosted> globalPosted = new ArrayList<>();
-    public static TransactionListActivity transactionListActivity;
 
     private ArrayList<Integer> transactionType = new ArrayList<Integer>();
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
 
-    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "";
+    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "";
+    public long startDateLong = 0L, endDateLong = 0L;
+    Date startDateD = null;
+    Date endDateD = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +92,6 @@ public class TransactionListActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
         try {
-            transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
             filterIV = findViewById(R.id.filterIconIV);
 
@@ -200,8 +181,8 @@ public class TransactionListActivity extends AppCompatActivity {
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
-            swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.status));
 
+            swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary_green));
 
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
@@ -238,12 +219,11 @@ public class TransactionListActivity extends AppCompatActivity {
                                 }
 
                                 if (!strFromDate.equals("")) {
-                                    transactionListRequest.setUpdatedFromDate(strFromDate);
+                                    transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
                                     transactionListRequest.setUpdatedFromDateOperator(">=");
                                 }
-
                                 if (!strToDate.equals("")) {
-                                    transactionListRequest.setUpdatedToDate(strToDate);
+                                    transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                                     transactionListRequest.setUpdatedToDateOperator("<=");
                                 }
 
@@ -356,29 +336,6 @@ public class TransactionListActivity extends AppCompatActivity {
 
     }
 
-
-    private void loadMore(List<TransactionListPending> listItems) {
-        try {
-            transactionListPendingAdapter.addLoadingView();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        transactionListPendingAdapter.removeLoadingView();
-                        transactionListPendingAdapter.addData(listItems);
-                        transactionListPendingAdapter.notifyDataSetChanged();
-//                        pbLoader.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }, 2000);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -388,9 +345,20 @@ public class TransactionListActivity extends AppCompatActivity {
             transactionType.clear();
             transactionSubType.clear();
             txnStatus.clear();
+            currentPage = 0;
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = "";
+            strEndAmount = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
+            strSelectedDate = "";
+
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
-            transactionListRequest.setPageNo(String.valueOf(TransactionListActivity.transactionListActivity.currentPage));
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
@@ -520,13 +488,13 @@ public class TransactionListActivity extends AppCompatActivity {
                         transSubTypeGiftCard.setChecked(true);
                         break;
 
-                    case Utils.saleOrderToken:
-                        transSubTypeSOToken.setChecked(true);
-                        break;
-
-//                    case Utils.failedWithdraw:
-//                        transTypePI.setChecked(true);
+//                    case Utils.saleOrderToken:
+//                        transSubTypeSOToken.setChecked(true);
 //                        break;
+
+                    case Utils.failedWithdraw:
+                        transSubTypeFW.setChecked(true);
+                        break;
 
                     case Utils.cancelledWithdraw:
                         transSubTypeCW.setChecked(true);
@@ -566,10 +534,10 @@ public class TransactionListActivity extends AppCompatActivity {
         if (!strStartAmount.trim().equals("")) {
             transAmountStartET.setText(strStartAmount.replace(",", "").split("\\.")[0]);
         }
+
         if (!strEndAmount.trim().equals("")) {
             transAmountEndET.setText(strEndAmount.replace(",", "").split("\\.")[0]);
         }
-
 
         resetFiltersTV.setOnClickListener(view -> {
             transactionType.clear();
@@ -579,6 +547,10 @@ public class TransactionListActivity extends AppCompatActivity {
             strToDate = "";
             strStartAmount = "";
             strEndAmount = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
 
             transTypePR.setChecked(false);
             transTypeBT.setChecked(false);
@@ -922,7 +894,6 @@ public class TransactionListActivity extends AppCompatActivity {
             }
         });
 
-
         transStatusPending.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1114,11 +1085,11 @@ public class TransactionListActivity extends AppCompatActivity {
                     transactionListRequest.setToAmountOperator("<=");
                 }
                 if (!strFromDate.equals("")) {
-                    transactionListRequest.setUpdatedFromDate(strFromDate);
+                    transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
                     transactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
-                    transactionListRequest.setUpdatedToDate(strToDate);
+                    transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                     transactionListRequest.setUpdatedToDateOperator("<=");
                 }
 
@@ -1127,43 +1098,41 @@ public class TransactionListActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.clear();
 
-        long today = MaterialDatePicker.todayInUtcMilliseconds();
-
-        calendar.setTimeInMillis(today);
-
-        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-        long january = calendar.getTimeInMillis();
-
-        calendar.set(Calendar.MONTH, Calendar.MARCH);
-        long march = calendar.getTimeInMillis();
-
-        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-        long december = calendar.getTimeInMillis();
-
-
-        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-        constraintBuilder.setValidator(new DateValidatorWeekdays());
-
-        //MaterialDatePicker
-//        MaterialDatePicker.Builder<Pair<Long,Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-//        builder.setTitleText("SELECT A DATE");
-//        builder.setSelection();
+//        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+//        calendar.clear();
 //
-        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-        builder.setTitleText("SELECT A DATE");
-        builder.setTheme(R.style.Calender);
-        final MaterialDatePicker materialDatePicker = builder.build();
+//        long today = MaterialDatePicker.todayInUtcMilliseconds();
+//
+//        calendar.setTimeInMillis(today);
+//
+//        calendar.set(Calendar.MONTH, Calendar.JANUARY);
+//        long january = calendar.getTimeInMillis();
+//
+//        calendar.set(Calendar.MONTH, Calendar.MARCH);
+//        long march = calendar.getTimeInMillis();
+//
+//        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+//        long december = calendar.getTimeInMillis();
+//
+//
+//        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+//        constraintBuilder.setValidator(new DateValidatorWeekdays());
+
+//        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+//        builder.setTitleText("SELECT A DATE");
+//        builder.setTheme(R.style.Calender);
+//        final MaterialDatePicker materialDatePicker = builder.build();
+
         dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCalendar();
+                showCalendar(getDateFromPickerET);
 //                materialDatePicker.show(getSupportFragmentManager(), "");
 //
 //                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
@@ -1184,7 +1153,6 @@ public class TransactionListActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void USFormat(EditText etAmount, String mode) {
@@ -1203,7 +1171,7 @@ public class TransactionListActivity extends AppCompatActivity {
         }
     }
 
-    public void showCalendar() {
+    public void showCalendar(EditText getDateFromPickerET) {
         // custom dialog
         final Dialog dialog = new Dialog(TransactionListActivity.this);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1218,20 +1186,85 @@ public class TransactionListActivity extends AppCompatActivity {
         window.setAttributes(wlp);
 
         ImageView closeIV = dialog.findViewById(R.id.closeIV);
+        TextView doneTV = dialog.findViewById(R.id.doneTV);
+        TextView rangeDateTV = dialog.findViewById(R.id.rangeDateTV);
         closeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
+
+        doneTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                getDateFromPickerET.setText(strSelectedDate);
+
+                new Date(startDateLong).getYear();
+                Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                String sDate = formatter.format(startDateLong);
+                String eDate = formatter.format(endDateLong);
+
+                strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + " 00:00:00.000";
+
+                Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
+
+                if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
+                        && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
+                        && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
+                    String str = sdf.format(new Date());
+                    strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;
+                } else {
+                    strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " 23:59:59.000";
+                }
+
+                Log.e("strFromDate", strFromDate);
+                Log.e("strToDate", strToDate);
+            }
+        });
+
+
         CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
         Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
         Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        endDate.add(Calendar.MONTH, 6); // Add 6 months ahead from current date
+//        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
+        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
         calendarPicker.showDayOfWeekTitle(true);
         calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
-        calendarPicker.setRangeDate(startDate.getTime(), endDate.getTime());
+        calendarPicker.scrollToDate(endDate.getTime());
 
+
+        if (!strSelectedDate.equals("")) {
+            rangeDateTV.setText(strSelectedDate);
+            calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
+        }
+        calendarPicker.setOnRangeSelectedListener((date, date2, s, s2) -> {
+
+            SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
+
+            try {
+                startDateD = f.parse(s);
+                endDateD = f.parse(s2);
+                startDateLong = startDateD.getTime();
+                endDateLong = endDateD.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+            strSelectedDate = simpleDateFormat.format(startDateLong) + " - " + simpleDateFormat.format(endDateLong);
+            rangeDateTV.setText(strSelectedDate);
+
+            return null;
+        });
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         dialog.setCanceledOnTouchOutside(true);

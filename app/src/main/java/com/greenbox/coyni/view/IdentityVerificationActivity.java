@@ -204,45 +204,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 }
             });
 
-            dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    Utils.hideKeypad(IdentityVerificationActivity.this);
-                }
-            });
-            ssnET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if (!b) {
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
-                        if (ssnET.getText().toString().trim().length() == 4) {
-                            ssnErrorLL.setVisibility(GONE);
-                            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_black));
-
-                        } else if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() < 4) {
-                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
-                            ssnErrorLL.setVisibility(VISIBLE);
-                            ssnErrorTV.setText("Required Last 4 Digits");
-
-                        } else {
-                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
-                            ssnErrorLL.setVisibility(VISIBLE);
-                            ssnErrorTV.setText("Field Required");
-                        }
-                    } else {
-                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
-                    }
-                }
-            });
-
             ssnET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 }
 
                 @Override
@@ -426,7 +390,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() >= 5) {
+                    if (charSequence.length() == 5) {
                         isZip = true;
                         zipcodeErrorLL.setVisibility(GONE);
                         zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -507,7 +471,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    if (zipcode.getText().toString().trim().length() >= 5) {
+                    if (zipcode.getText().toString().trim().length() == 5) {
                         zipcodeErrorLL.setVisibility(GONE);
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
@@ -516,7 +480,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Invalid Zipcode");
+                        zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                     } else {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -527,6 +491,42 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 } else {
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
+                }
+            }
+        });
+
+        dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                Utils.hideKeypad(IdentityVerificationActivity.this);
+            }
+        });
+
+        ssnET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    Utils.hideKeypad(IdentityVerificationActivity.this);
+                    if (ssnET.getText().toString().trim().length() == 4) {
+                        ssnErrorLL.setVisibility(GONE);
+                        ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_black));
+
+                    } else if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() < 4) {
+                        ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
+                        ssnErrorLL.setVisibility(VISIBLE);
+                        ssnErrorTV.setText("Minimum 4 Characters Required");
+
+                    } else {
+                        ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
+                        ssnErrorLL.setVisibility(VISIBLE);
+                        ssnErrorTV.setText("Field Required");
+                    }
+                } else {
+                    ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
                 }
             }
         });
@@ -619,7 +619,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
+                    ssnET.clearFocus();
                     setToDate(dobET);
                 }
             });
@@ -631,7 +631,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
+                    ssnET.clearFocus();
                     setToDate(dobET);
                 }
             });
@@ -640,6 +640,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
+                        ssnET.clearFocus();
                         setToDate(dobET);
                     }
                 }
@@ -652,7 +653,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
+                    ssnET.clearFocus();
                     showIdentityTypePopup(IdentityVerificationActivity.this);
                 }
             });

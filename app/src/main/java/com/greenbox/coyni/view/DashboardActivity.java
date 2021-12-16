@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -68,6 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
     ImageView imgProfileSmall, imgProfile;
     Long mLastClickTime = 0L;
     RecyclerView txnRV;
+    SwipeRefreshLayout latestTxnRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,7 @@ public class DashboardActivity extends AppCompatActivity {
             tvBalance = findViewById(R.id.tvBalance);
             viewMoreLL = findViewById(R.id.viewMoreLL);
             statusCardsRL = findViewById(R.id.statusCardsRL);
+            latestTxnRefresh = findViewById(R.id.latestTxnRefresh);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -253,6 +256,13 @@ public class DashboardActivity extends AppCompatActivity {
                     startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
                 }
             });
+            latestTxnRefresh.setColorSchemeColors(getResources().getColor(R.color.primary_green));
+            latestTxnRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    dashboardViewModel.getLatestTxns();
+                }
+            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -360,6 +370,7 @@ public class DashboardActivity extends AppCompatActivity {
         dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
             @Override
             public void onChanged(LatestTxnResponse latestTxnResponse) {
+                latestTxnRefresh.setRefreshing(false);
                 if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
                     cvHeaderRL.setVisibility(View.VISIBLE);
                     cvSmallHeaderRL.setVisibility(View.GONE);
