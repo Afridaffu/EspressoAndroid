@@ -71,7 +71,6 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_16sdp" />
 
-
     <LinearLayout
         android:id="@+id/linearLayoutIdVe"
         android:layout_width="match_parent"
