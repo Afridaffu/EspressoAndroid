@@ -119,4 +119,12 @@ dependencies {
 
     implementation 'org.apache.httpcomponents:httpcore:4.4.10'
     implementation 'org.apache.httpcomponents:httpclient:4.5.6'
+
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    implementation 'com.andrewjapar.rangedatepicker:rangedatepicker:0.3'
+
+
 }

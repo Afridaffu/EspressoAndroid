@@ -12,6 +12,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -849,6 +850,15 @@ public class Utils {
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
             dialog.setCanceledOnTouchOutside(true);
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (!editText.getText().equals("")) {
+                        tempStateName = "";
+                        tempStateCode = "";
+                    }
+                }
+            });
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
