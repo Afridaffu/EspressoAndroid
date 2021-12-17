@@ -35,7 +35,6 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.PaymentMethodsAdapter;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
@@ -108,7 +107,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         try {
             if (requestCode == 1 && data == null) {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenPaymentMethodsActivity.this, "");
+                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenPaymentMethodsActivity.this, "", "");
                 } else {
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
@@ -137,7 +136,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     signOnData = objMyApplication.getSignOnData();
                 }
             } else {
-                Utils.displayAlert(getString(R.string.internet), BuyTokenPaymentMethodsActivity.this, "");
+                Utils.displayAlert(getString(R.string.internet), BuyTokenPaymentMethodsActivity.this, "", "");
             }
 
             if (getIntent().getStringExtra("screen") != null) {
@@ -200,14 +199,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                             customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "");
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             } else {
-                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "");
+                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             }
                         } else {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "Error");
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
 //                                String strError = "";
 //                                if (!apiError.getError().getErrorDescription().equals("")) {
@@ -319,7 +318,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 i.putExtra("signon", signOnData);
                 startActivityForResult(i, 1);
             } else {
-                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "");
+                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -452,7 +451,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
-                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "");
+                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

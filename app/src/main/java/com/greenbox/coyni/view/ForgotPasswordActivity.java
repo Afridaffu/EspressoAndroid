@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -200,7 +199,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             tvEmailError.setText("Incorrect information");
                             etEmail.clearFocus();
                         } else {
-                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "");
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", emailResponse.getError().getFieldErrors().get(0));
                         }
 
                     }

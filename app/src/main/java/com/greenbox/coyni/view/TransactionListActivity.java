@@ -1198,35 +1198,39 @@ public class TransactionListActivity extends AppCompatActivity {
         doneTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
-                getDateFromPickerET.setText(strSelectedDate);
+                try {
+                    dialog.dismiss();
+                    getDateFromPickerET.setText(strSelectedDate);
 
-                new Date(startDateLong).getYear();
-                Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                    new Date(startDateLong).getYear();
+                    Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                    int mYear = c.get(Calendar.YEAR);
+                    int mMonth = c.get(Calendar.MONTH);
+                    int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                String sDate = formatter.format(startDateLong);
-                String eDate = formatter.format(endDateLong);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    String sDate = formatter.format(startDateLong);
+                    String eDate = formatter.format(endDateLong);
 
-                strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + " 00:00:00.000";
+                    strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + " 00:00:00.000";
 
-                Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
+                    Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
 
-                if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
-                        && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
-                        && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
-                    String str = sdf.format(new Date());
-                    strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;
-                } else {
-                    strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " 23:59:59.000";
+                    if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
+                        String str = sdf.format(new Date());
+                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;
+                    } else {
+                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " 23:59:59.000";
+                    }
+
+                    Log.e("strFromDate", strFromDate);
+                    Log.e("strToDate", strToDate);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
-
-                Log.e("strFromDate", strFromDate);
-                Log.e("strToDate", strToDate);
             }
         });
 
@@ -1242,9 +1246,13 @@ public class TransactionListActivity extends AppCompatActivity {
         calendarPicker.scrollToDate(endDate.getTime());
 
 
-        if (!strSelectedDate.equals("")) {
-            rangeDateTV.setText(strSelectedDate);
-            calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
+        try {
+            if (!strSelectedDate.equals("")) {
+                rangeDateTV.setText(strSelectedDate);
+                calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         calendarPicker.setOnRangeSelectedListener((date, date2, s, s2) -> {
 

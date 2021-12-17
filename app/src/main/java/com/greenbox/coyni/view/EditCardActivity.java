@@ -21,7 +21,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -296,9 +295,9 @@ public class EditCardActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), EditCardActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), EditCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), EditCardActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), EditCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {

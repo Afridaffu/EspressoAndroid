@@ -4,7 +4,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,7 +15,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -24,14 +22,11 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -57,7 +52,6 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
-import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -160,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 biometricLogin();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "", "");
                         }
                     }
                 });
@@ -429,7 +423,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -602,7 +596,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "");
+                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "", login.getError().getFieldErrors().get(0));
                             }
                         }
                     }
@@ -659,7 +653,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "");
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
                             }
                         }
                     }
@@ -685,7 +679,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(loginResponse.getData().getPhoneNumber()));
                         startActivity(i);
                     } else {
-                        Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error");
+                        Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error", "");
                     }
                 }
 

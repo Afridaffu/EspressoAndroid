@@ -6,11 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,10 +18,7 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -42,7 +37,6 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -290,7 +284,7 @@ public class OTPValidation extends AppCompatActivity {
                         }else{
                             layoutEntry.setVisibility(View.VISIBLE);
                             layoutFailure.setVisibility(View.GONE);
-                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again",OTPValidation.this,"");
+                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again",OTPValidation.this,"", "");
                         }
 
                     }
@@ -576,16 +570,16 @@ public class OTPValidation extends AppCompatActivity {
                             shakeAnimateLeftRight();
                             if (strScreen != null && strScreen.equals("login")) {
                                 if (resendCounter >= 5) {
-                                    Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                                    Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                                 }
                             } else {
                                 if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
                                         smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
                                     try {
                                         if(smsValidate.getError().getErrorDescription().equals("")){
-                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
                                         }else{
-                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -681,15 +675,15 @@ public class OTPValidation extends AppCompatActivity {
                         startTimer();
                         if (strScreen != null && strScreen.equals("login")) {
                             if (resendCounter >= 5) {
-                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                             }
                         }
                     } else {
                         try {
                             if(smsResponse.getError().getErrorDescription().equals("")){
-                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
                             }else{
-                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -713,9 +707,9 @@ public class OTPValidation extends AppCompatActivity {
                         } else {
                             try {
                                 if(emailResponse.getError().getErrorDescription().equals("")){
-                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 }else{
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -742,7 +736,7 @@ public class OTPValidation extends AppCompatActivity {
                         layoutEntry.setVisibility(View.GONE);
                         layoutFailure.setVisibility(View.GONE);
                     } else {
-                        Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                        Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this, "", initializeCustomerResponse.getError().getFieldErrors().get(0));
                     }
                 }
             }
@@ -778,9 +772,9 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this, "");
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this, "", apiError.getError().getFieldErrors().get(0));
                     } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this, "", apiError.getError().getFieldErrors().get(0));
                     }
                 }
             }
@@ -894,9 +888,9 @@ public class OTPValidation extends AppCompatActivity {
                         } else {
                             try {
                                 if(emailResponse.getError().getErrorDescription().equals("")){
-                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 }else{
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

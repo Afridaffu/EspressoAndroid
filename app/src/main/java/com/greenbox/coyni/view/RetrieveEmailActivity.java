@@ -221,7 +221,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             if (Utils.checkInternet(RetrieveEmailActivity.this)) {
                                 retrieveEmail();
                             } else {
-                                Utils.displayAlert(getString(R.string.internet), RetrieveEmailActivity.this, "");
+                                Utils.displayAlert(getString(R.string.internet), RetrieveEmailActivity.this, "", "");
                             }
                         }
                     } catch (Exception ex) {
@@ -313,7 +313,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                                 emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
-                            Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this, "");
+                            Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this, "", "");
                         }
                     }
                 }

@@ -18,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,12 +39,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
-import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -294,7 +291,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                         dashboardViewModel.meProfile();
                         Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                     } else {
-                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
+                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "",imageResponse.getError().getFieldErrors().get(0));
                     }
 
                 }
@@ -308,7 +305,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
                 if (imageResponse != null) {
-                    Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
+                    Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "", imageResponse.getError().getFieldErrors().get(0));
                 }
             }
         });
@@ -482,7 +479,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                                     })
                                     .show();
                         } else {
-                            Utils.displayAlert("No Profile image found to remove", UserDetailsActivity.this, "");
+                            Utils.displayAlert("No Profile image found to remove", UserDetailsActivity.this, "", "");
                         }
                     } else if (optionsMenu[i].equals("Cancel")) {
                         dialogInterface.dismiss();
@@ -576,11 +573,11 @@ public class UserDetailsActivity extends AppCompatActivity {
             case REQUEST_ID_MULTIPLE_PERMISSIONS:
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "");
+                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Your Storage.", UserDetailsActivity.this, "");
+                    Utils.displayAlert("Requires Access to Your Storage.", UserDetailsActivity.this, "", "");
 
                 } else {
 //                    chooseImage(this);

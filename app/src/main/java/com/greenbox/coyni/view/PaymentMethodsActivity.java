@@ -92,7 +92,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         try {
             if (requestCode == 1 && data == null) {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                    Utils.displayAlert("Bank integration has been cancelled", PaymentMethodsActivity.this, "");
+                    Utils.displayAlert("Bank integration has been cancelled", PaymentMethodsActivity.this, "", "");
                 } else {
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
@@ -130,7 +130,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     signOnData = objMyApplication.getSignOnData();
                 }
             } else {
-                Utils.displayAlert(getString(R.string.internet), PaymentMethodsActivity.this, "");
+                Utils.displayAlert(getString(R.string.internet), PaymentMethodsActivity.this, "", "");
             }
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 ControlMethod("paymentMethods");
@@ -207,14 +207,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "");
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             } else {
-                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), PaymentMethodsActivity.this, "");
+                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), PaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             }
                         } else {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "Error");
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
 //                                String strError = "";
 //                                if (!apiError.getError().getErrorDescription().equals("")) {
@@ -307,9 +307,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     pDialog.dismiss();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), PaymentMethodsActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), PaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {
@@ -436,7 +436,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
-                            Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "");
+                            Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -603,7 +603,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 i.putExtra("signon", signOnData);
                 startActivityForResult(i, 1);
             } else {
-                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "");
+                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -823,7 +823,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
                             } else {
-                                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "");
+                                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
                             }
                         }
                     } catch (Exception ex) {

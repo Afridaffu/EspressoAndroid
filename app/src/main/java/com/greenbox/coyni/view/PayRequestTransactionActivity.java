@@ -9,22 +9,14 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseArray;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputConnection;
@@ -32,26 +24,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.PayAmountBottomSheet;
-import com.greenbox.coyni.fragments.RequestAmountBottomSheet;
-import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
-import java.util.List;
 //import com.greenbox.coyni.fragments.ScanActivityBottomSheetDialog;
 
 public class PayRequestTransactionActivity extends AppCompatActivity implements View.OnClickListener {
@@ -118,7 +99,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
 //                    addreUser.setText(objMyApplication.getUserDetails().getData().getWalletId());
 
                 } else {
-                    Utils.displayAlert(getString(R.string.internet), PayRequestTransactionActivity.this,"");
+                    Utils.displayAlert(getString(R.string.internet), PayRequestTransactionActivity.this,"", "");
                 }
             }
             initObservers();
