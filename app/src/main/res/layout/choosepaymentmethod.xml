@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/roundeddialog"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/_20sdp"
+    android:paddingRight="@dimen/_20sdp">
+
+    <View
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_28sdp"
+        android:background="@color/primary_green" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_bold"
+        android:text="Payment Method"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSelPayMethods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"></androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>

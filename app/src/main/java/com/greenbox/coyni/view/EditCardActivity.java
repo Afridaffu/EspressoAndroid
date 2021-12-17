@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -73,6 +74,12 @@ public class EditCardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Utils.tempStateName = "";
+        super.onBackPressed();
     }
 
     private void initialization() {
@@ -198,11 +205,21 @@ public class EditCardActivity extends AppCompatActivity {
             cvRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(EditCardActivity.this, PaymentMethodsActivity.class);
-                    i.putExtra("screen", "editcard");
-                    i.putExtra("action", "remove");
-                    startActivity(i);
-                    finish();
+                    try {
+//                    Intent i = new Intent(EditCardActivity.this, PaymentMethodsActivity.class);
+//                    i.putExtra("screen", "editcard");
+//                    i.putExtra("action", "remove");
+//                    startActivity(i);
+//                    finish();
+
+                        Intent i = new Intent();
+                        i.putExtra("screen", "editcard");
+                        i.putExtra("action", "remove");
+                        setResult(RESULT_OK, i);
+                        finish();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -248,9 +265,25 @@ public class EditCardActivity extends AppCompatActivity {
             public void onChanged(CardEditResponse cardEditResponse) {
                 dialog.dismiss();
                 if (cardEditResponse != null) {
-                    if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
-                        //displayAlertNew(cardEditResponse.getData(), EditCardActivity.this, "");
-                        Utils.showCustomToast(EditCardActivity.this, cardEditResponse.getData(), R.drawable.ic_custom_tick, "");
+                    try {
+                        if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
+                            //displayAlertNew(cardEditResponse.getData(), EditCardActivity.this, "");
+                            Utils.showCustomToast(EditCardActivity.this, cardEditResponse.getData(), R.drawable.ic_custom_tick, "");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        objMyApplication.setSelectedCard(null);
+                                        onBackPressed();
+                                        finish();
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, 2000);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -328,9 +361,19 @@ public class EditCardActivity extends AppCompatActivity {
                         } else {
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
+                            etAddress1.setSelection(etAddress1.getText().length());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                    }
+                }
+            });
+
+            etAddress2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(b){
+                        etAddress2.setSelection(etAddress2.getText().length());
                     }
                 }
             });
@@ -354,6 +397,7 @@ public class EditCardActivity extends AppCompatActivity {
                         } else {
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
+                            etCity.setSelection(etCity.getText().length());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -412,6 +456,7 @@ public class EditCardActivity extends AppCompatActivity {
                         } else {
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
+                            etZipcode.setSelection(etZipcode.getText().length());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -723,7 +768,7 @@ public class EditCardActivity extends AppCompatActivity {
             year = ydf.format(Calendar.getInstance().getTime());
             if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) < Integer.parseInt(year)) {
                 value = false;
-            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
+            } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) == 0 || Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
                 value = false;
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
                 value = false;

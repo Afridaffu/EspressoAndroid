@@ -84,6 +84,12 @@ public class EditAddressActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Utils.tempStateName = "";
+        super.onBackPressed();
+    }
+
     public void initfields() {
 
         try {
@@ -135,7 +141,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     dialog.setIndeterminate(false);
                     dialog.setMessage("Please wait...");
                     dialog.show();
-
+                    Utils.tempStateName = "";
                     updateAddress();
                 }
             });
