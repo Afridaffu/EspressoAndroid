@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -362,25 +361,25 @@ public class EditEmailActivity extends AppCompatActivity {
                         if (updateEmailResponse.getError().getErrorDescription().equals("")) {
                             try {
                                 Utils.hideSoftKeyboard(EditEmailActivity.this);
-                                if(updateEmailResponse.getError().getFieldErrors().get(0).contains(":")){
+                                if (updateEmailResponse.getError().getFieldErrors().get(0).contains(":")) {
                                     int counter = 0;
-                                    for(int i =0 ; i < updateEmailResponse.getError().getFieldErrors().get(0).length();i++ ){
-                                        if(String.valueOf(updateEmailResponse.getError().getFieldErrors().get(0).charAt(i)).equals(":")){
+                                    for (int i = 0; i < updateEmailResponse.getError().getFieldErrors().get(0).length(); i++) {
+                                        if (String.valueOf(updateEmailResponse.getError().getFieldErrors().get(0).charAt(i)).equals(":")) {
                                             counter = i;
                                             break;
                                         }
                                     }
-                                    Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0).substring(counter+1), EditEmailActivity.this,"");
+                                    Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0).substring(counter + 1), EditEmailActivity.this, "", updateEmailResponse.getError().getFieldErrors().get(0));
 
-                                }else{
-                                    Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0), EditEmailActivity.this,"");
+                                } else {
+                                    Utils.displayAlert(updateEmailResponse.getError().getFieldErrors().get(0), EditEmailActivity.this, "", updateEmailResponse.getError().getFieldErrors().get(0));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         } else {
                             Utils.hideSoftKeyboard(EditEmailActivity.this);
-                            Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "");
+                            Utils.displayAlert(updateEmailResponse.getError().getErrorDescription(), EditEmailActivity.this, "", updateEmailResponse.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception e) {
@@ -423,11 +422,11 @@ public class EditEmailActivity extends AppCompatActivity {
 ////                            objMyApplication.displayAlert(getActivity(), context.getString(R.string.session));
 //                        } else {
                         Utils.hideSoftKeyboard(EditEmailActivity.this);
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), EditEmailActivity.this,"");
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), EditEmailActivity.this, "", apiError.getError().getFieldErrors().get(0));
 //                        }
                     } else {
                         Utils.hideSoftKeyboard(EditEmailActivity.this);
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), EditEmailActivity.this,"");
+                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), EditEmailActivity.this, "", apiError.getError().getFieldErrors().get(0));
                     }
                 }
             }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.santalu.maskara.widget.MaskEditText;
 
 public class AdditionalActionUploadActivity extends AppCompatActivity {
-    MaskEditText ssnET;
+    EditText ssnET;
     CardView idveriDone;
     boolean isssn = false, isSubmitEnabled = false;
     LinearLayout ssnCloseLL, ssnErrorLL;
@@ -170,7 +171,7 @@ public class AdditionalActionUploadActivity extends AppCompatActivity {
 
                         }
                     } else {
-                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), AdditionalActionUploadActivity.this, "");
+                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), AdditionalActionUploadActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });

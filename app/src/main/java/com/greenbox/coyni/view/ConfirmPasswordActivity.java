@@ -13,7 +13,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,12 +23,10 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Pattern;
@@ -163,7 +160,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                                 tvPwdError.setText("Password Not Matched");
                             }else{
                                 layoutPwdError.setVisibility(View.GONE);
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(),ConfirmPasswordActivity.this,"");
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(),ConfirmPasswordActivity.this,"", loginResponse.getError().getFieldErrors().get(0));
                             }
                         }
                     }

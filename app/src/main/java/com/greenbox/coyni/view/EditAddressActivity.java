@@ -5,7 +5,6 @@ import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +12,6 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,16 +31,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.model.States;
-import com.greenbox.coyni.model.register.CustRegisRequest;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
@@ -641,7 +635,7 @@ public class EditAddressActivity extends AppCompatActivity {
                                 }
                             }, 2000);
                         } else {
-                            Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "");
+                            Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception e) {

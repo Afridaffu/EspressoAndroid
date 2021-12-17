@@ -24,7 +24,6 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
-import com.santalu.maskara.widget.MaskEditText;
 
 public class IdVeAdditionalActionActivity extends AppCompatActivity {
     EditText ssnET;
@@ -188,7 +187,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 //
 //                        }
                     } else {
-                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdVeAdditionalActionActivity.this, "");
+                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdVeAdditionalActionActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });

@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -391,7 +390,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         isPhoneError = false;
                         phoneErrorLL.setVisibility(GONE);
                         emailErrorLL.setVisibility(GONE);
-                        Utils.displayAlert(s, CreateAccountActivity.this, "");
+                        Utils.displayAlert(s, CreateAccountActivity.this, "", "");
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

@@ -13,19 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
-import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -186,7 +183,7 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(UserPreference userPreference) {
                 if (userPreference != null) {
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
-                        Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "");
+                        Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     }else{
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());

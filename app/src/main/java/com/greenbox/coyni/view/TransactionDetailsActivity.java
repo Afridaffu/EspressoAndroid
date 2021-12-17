@@ -74,7 +74,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
                 dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
             } else {
-                Utils.displayAlert(getString(R.string.internet), TransactionDetailsActivity.this, "");
+                Utils.displayAlert(getString(R.string.internet), TransactionDetailsActivity.this, "", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

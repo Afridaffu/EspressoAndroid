@@ -629,7 +629,7 @@ public class DashboardActivity extends AppCompatActivity {
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences();
         } else {
-            Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
+            Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }
     }
 

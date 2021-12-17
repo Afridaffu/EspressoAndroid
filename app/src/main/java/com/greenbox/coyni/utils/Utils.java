@@ -17,14 +17,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
-import android.preference.PreferenceActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableString;
@@ -59,11 +57,9 @@ import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
-import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
-import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 
 import java.lang.reflect.Field;
@@ -322,7 +318,7 @@ public class Utils {
         return strDate;
     }
 
-    public static void displayAlert(String msg, Activity activity, String header) {
+    public static void displayAlert(String msg, Activity activity, String header, String fieldError) {
 //        Context context = new ContextThemeWrapper(activity, R.style.Theme_Coyni);
 //        new MaterialAlertDialogBuilder(context)
 //                .setTitle(R.string.app_name)
@@ -332,7 +328,11 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        displayAlertNew(msg, activity, header);
+        if(msg.equals("")){
+            displayAlertNew(msg, activity, header);
+        }else{
+            displayAlertNew(fieldError, activity, header);
+        }
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -381,7 +381,7 @@ public class Utils {
                     context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
                 }
             } else
-                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context, "");
+                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context, "", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -769,9 +769,14 @@ public class Utils {
 
             List<States> listStates = myApplicationObj.getListStates();
 
+            tempStateName = "";
+            tempStateCode = "";
+
             for (int i = 0; i < listStates.size(); i++) {
                 if (editText.getText().toString().toLowerCase().trim().equals(listStates.get(i).getName().toLowerCase())) {
                     listStates.get(i).setSelected(true);
+                    Utils.tempStateName = listStates.get(i).getName();
+                    Utils.tempStateCode = listStates.get(i).getIsocode();
                 } else {
                     listStates.get(i).setSelected(false);
                 }
@@ -851,7 +856,7 @@ public class Utils {
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
-                    if (!editText.getText().equals("")) {
+                    if (editText.getText().toString().equals("")) {
                         tempStateName = "";
                         tempStateCode = "";
                     }
@@ -908,7 +913,6 @@ public class Utils {
         dpvalue = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, Resources.getSystem().getDisplayMetrics());
         return dpvalue;
     }
-
 
     public static String convertTwoDecimal(String strAmount) {
         String strValue = "", strAmt = "";
