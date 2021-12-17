@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,21 +31,31 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
+import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 public class BuyTokenActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     PaymentsList selectedCard;
     ImageView imgBankIcon, imgArrow;
-    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber;
+    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError;
     RelativeLayout lyPayMethod, lyBDetails;
     LinearLayout lyCDetails, lyBuyClose;
     EditText etAmount;
     CustomKeyboard ctKey;
     PaymentMethodsResponse paymentMethodsResponse;
+    BuyTokenViewModel buyTokenViewModel;
     Dialog payDialog;
+    TransactionLimitResponse objResponse;
+    String strLimit = "", strType = "";
+    Double maxValue = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +63,7 @@ public class BuyTokenActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_buy_token);
             initialization();
+            initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -61,6 +74,7 @@ public class BuyTokenActivity extends AppCompatActivity {
             objMyApplication = (MyApplication) getApplicationContext();
             selectedCard = objMyApplication.getSelectedCard();
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+            buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             tvLimit = findViewById(R.id.tvLimit);
@@ -68,6 +82,7 @@ public class BuyTokenActivity extends AppCompatActivity {
             tvBankName = findViewById(R.id.tvBankName);
             tvAccNumber = findViewById(R.id.tvAccNumber);
             tvBAccNumber = findViewById(R.id.tvBAccNumber);
+            tvError = findViewById(R.id.tvError);
             tvCurrency = findViewById(R.id.tvCurrency);
             lyPayMethod = findViewById(R.id.lyPayMethod);
             lyBuyClose = findViewById(R.id.lyBuyClose);
@@ -110,10 +125,25 @@ public class BuyTokenActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    if (editable.length() > 0) {
-                        ctKey.enableButton();
-                    } else {
-                        ctKey.disableButton();
+                    try {
+//                        if (editable.length() > 0) {
+//                            ctKey.enableButton();
+//                        } else {
+//                            ctKey.disableButton();
+//                        }
+                        if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
+                            ctKey.enableButton();
+                            calculateFee();
+                        } else if (editable.toString().equals(".")) {
+                            etAmount.setText("");
+                            ctKey.disableButton();
+                        } else if (editable.length() == 0) {
+                            ctKey.disableButton();
+                        } else {
+                            etAmount.setText("");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -136,13 +166,29 @@ public class BuyTokenActivity extends AppCompatActivity {
         }
     }
 
+    private void initObserver() {
+        buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
+            @Override
+            public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (transactionLimitResponse != null) {
+                    objResponse = transactionLimitResponse;
+                    setDailyWeekLimit(transactionLimitResponse.getData());
+                }
+            }
+        });
+    }
+
     public void bindPayMethod(PaymentsList objData) {
         try {
             if (payDialog != null) {
                 payDialog.dismiss();
             }
+            TransactionLimitRequest obj = new TransactionLimitRequest();
+            obj.setTransactionType(Integer.parseInt(Utils.addType));
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                strType = "bank";
+                obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
@@ -154,6 +200,13 @@ public class BuyTokenActivity extends AppCompatActivity {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
             } else {
+                if (objData.getCardType().toLowerCase().equals("debit")) {
+                    strType = "debit";
+                    obj.setTransactionSubType(Integer.parseInt(Utils.debitType));
+                } else if (objData.getCardType().toLowerCase().equals("credit")) {
+                    strType = "credit";
+                    obj.setTransactionSubType(Integer.parseInt(Utils.creditType));
+                }
                 params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
                 lyBDetails.setVisibility(View.GONE);
                 lyCDetails.setVisibility(View.VISIBLE);
@@ -181,6 +234,11 @@ public class BuyTokenActivity extends AppCompatActivity {
             params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
             params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(15), 0, 0);
             tvLimit.setLayoutParams(params);
+            if (Utils.checkInternet(BuyTokenActivity.this)) {
+                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+            } else {
+                Utils.displayAlert(getString(R.string.internet), BuyTokenActivity.this, "");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -219,6 +277,76 @@ public class BuyTokenActivity extends AppCompatActivity {
 
             payDialog.setCanceledOnTouchOutside(true);
             payDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setDailyWeekLimit(LimitResponseData objLimit) {
+        try {
+            if (objLimit.getTokenLimitFlag()) {
+                tvLimit.setVisibility(View.VISIBLE);
+                Double week = 0.0, daily = 0.0;
+                String strCurrency = "", strAmount = "";
+                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("NA") && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("unlimited")) {
+                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                }
+                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().toLowerCase().equals("NA") && !objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+                }
+                strCurrency = " USD";
+                if ((week == 0 || week < 0) && daily > 0) {
+                    strLimit = "daily";
+                    maxValue = daily;
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                } else if ((daily == 0 || daily < 0) && week > 0) {
+                    strLimit = "week";
+                    maxValue = week;
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
+                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + " USD");
+                    strLimit = "unlimited";
+                } else {
+                    strLimit = "daily";
+                    maxValue = daily;
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                }
+            } else {
+                tvLimit.setVisibility(View.GONE);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void calculateFee() {
+        try {
+            if (!etAmount.getText().toString().trim().equals("") && !etAmount.getText().toString().trim().equals("0")) {
+                TransferFeeRequest request = new TransferFeeRequest();
+                request.setTokens(etAmount.getText().toString().trim().replace(",", ""));
+//                if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("withdraw")) {
+//                    request.setTxnType(Utils.withdrawType);
+//                } else {
+//                    request.setTxnType(Utils.addType);
+//                }
+                request.setTxnType(Utils.addType);
+                if (strType.toLowerCase().equals("debit")) {
+                    request.setTxnSubType(Utils.debitType);
+                } else if (strType.toLowerCase().equals("credit")) {
+                    request.setTxnSubType(Utils.creditType);
+                } else if (strType.toLowerCase().equals("bank")) {
+                    request.setTxnSubType(Utils.bankType);
+                } else if (strType.toLowerCase().equals("instant")) {
+                    request.setTxnSubType(Utils.instantType);
+                }
+                if (Utils.checkInternet(BuyTokenActivity.this)) {
+                    buyTokenViewModel.transferFee(request);
+                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

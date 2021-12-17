@@ -126,6 +126,7 @@ public class Utils {
     public static String deviceID = "";
     public static Long mLastClickTime = 0L;
     public static final int duration = 1000;
+    public static final int userTypeCust = 0;
 
     public static int[][] errorState, state;
     public static int[] errorColor, color;

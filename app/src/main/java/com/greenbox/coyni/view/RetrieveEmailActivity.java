@@ -92,14 +92,14 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
                 firstNameErrorLL.setVisibility(GONE);
                 firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                Utils.setUpperHintColor(firstTIL,getResources().getColor(R.color.primary_green));
+                Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_green));
             }
             enableButton();
-        } else if (charSequence == lastName.getEditableText()){
+        } else if (charSequence == lastName.getEditableText()) {
             if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 31) {
                 lastNameErrorLL.setVisibility(GONE);
                 lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                Utils.setUpperHintColor(lastTIL,getResources().getColor(R.color.primary_green));
+                Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_green));
             }
             enableButton();
         }
@@ -136,7 +136,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 } else if (str.length() > 0 && str.contains(".")) {
                     firstName.setText(firstName.getText().toString().replaceAll("\\.", ""));
                     firstName.setSelection(firstName.getText().length());
-                }else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
                     firstName.setText("");
                     firstName.setSelection(firstName.getText().length());
                 }
@@ -325,14 +325,15 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-//                    if (apiError.getError().getErrorCode().equals("111069")) {
-//                        displayNoAccount();
-//                    } else if (!apiError.getError().getErrorDescription().equals("")) {
-//                        Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this);
-//                    } else {
-//                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this);
-//                    }
-                    displayNoAccount();
+                    if (apiError.getError().getErrorCode().equals("218020") || apiError.getError().getErrorDescription().contains("issue with your OTP")) {
+                        if (!apiError.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this, "");
+                        } else {
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this, "");
+                        }
+                    } else {
+                        displayNoAccount();
+                    }
                 }
             }
         });

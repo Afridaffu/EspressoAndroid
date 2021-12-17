@@ -71,6 +71,8 @@ import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
+import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
+import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.users.AccountLimits;
@@ -279,5 +281,8 @@ public interface ApiService {
 
     @POST("api/v2/transactions/me/limit/{userType}")
     Call<TransactionLimitResponse> transactionLimits(@Body TransactionLimitRequest request, @Path("userType") int userType);
+
+    @POST("api/v2/corda/fee")
+    Call<TransferFeeResponse> transferFee(@Body TransferFeeRequest request);
 
 }

@@ -194,8 +194,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_17sdp"
                         android:background="@color/white"
-                        android:gravity="right"
-                        android:orientation="horizontal"
                         android:paddingLeft="@dimen/_20sdp"
                         android:paddingRight="@dimen/_30sdp">
 
@@ -256,9 +254,19 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_15sdp"
                         android:layout_marginRight="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_32sdp"
                         android:background="#d8e2f0" />
 
+                    <TextView
+                        android:id="@+id/tvError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_22sdp"
+                        android:text="Amount entered exceeds your daily limit"
+                        android:textColor="@color/error"
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="invisible"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
