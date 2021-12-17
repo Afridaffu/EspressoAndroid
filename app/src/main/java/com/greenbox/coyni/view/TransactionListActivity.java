@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andrewjapar.rangedatepicker.CalendarPicker;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -65,12 +66,16 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.TimeZone;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function4;
 
 public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
@@ -1231,6 +1236,14 @@ public class TransactionListActivity extends AppCompatActivity {
         calendarPicker.showDayOfWeekTitle(true);
         calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
         calendarPicker.setRangeDate(startDate.getTime(), endDate.getTime());
+
+        calendarPicker.setOnRangeSelectedListener(new Function4<Date, Date, String, String, Unit>() {
+            @Override
+            public Unit invoke(Date date, Date date2, String s, String s2) {
+                Log.e("SHIVA",""+s+" "+s2);
+                return null;
+            }
+        });
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 

@@ -49,6 +49,7 @@ public class TransactionData {
     @SerializedName("status")
     @Expose
     private String status;
+
     private String amount;
     private String senderMessage;
     private String totalAmount;
@@ -58,10 +59,11 @@ public class TransactionData {
     private String amountReceived;
     private String senderWalletAddress;
     private String purchaseAmount;
-    private String depositid;
+    private String depositId;
     private String cardNumber;
     private String expdate;
     private String cardHolderName;
+    private String cardExpiryDate;
     private String giftCardName;
     private String totalPaidAmount;
     private String recipientEmail;
@@ -71,6 +73,15 @@ public class TransactionData {
     private String description;
     private String orderId;
     private String giftCardFee;
+
+
+    public String getCardExpiryDate() {
+        return cardExpiryDate;
+    }
+
+    public void setCardExpiryDate(String cardExpiryDate) {
+        this.cardExpiryDate = cardExpiryDate;
+    }
 
     public String getGiftCardFee() {
         return giftCardFee;
@@ -168,11 +179,11 @@ public class TransactionData {
         this.expdate = expdate;
     }
 
-    public void setDepositid(String depositid) {
-        this.depositid = depositid;
+    public void setDepositid(String depositId) {
+        this.depositId = depositId;
     }
     public String getDepositid() {
-        return depositid;
+        return depositId;
     }
 
     public String getPurchaseAmount() {

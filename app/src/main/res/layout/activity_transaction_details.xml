@@ -9,5 +9,13 @@
     <include
         android:id="@+id/payrequest"
         layout="@layout/payrequestdetails"
-        android:visibility="visible" />
+        android:visibility="gone" />
+    <include
+        android:id="@+id/buytokenCD"
+        layout="@layout/activity_transaction_buy_token_debit"
+        android:visibility="gone"/>
+    <include
+        android:id="@+id/buytokenBank"
+        layout="@layout/activity_buy_token_bank_acc_transatn"
+        android:visibility="visible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
