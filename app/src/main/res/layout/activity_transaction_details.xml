@@ -17,5 +17,20 @@
     <include
         android:id="@+id/buytokenBank"
         layout="@layout/activity_buy_token_bank_acc_transatn"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/withdrawGift"
+        layout="@layout/activity_withdraw_gift_card_transactions"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/withdrawInstant"
+        layout="@layout/activity_withdraw_instant_transaction"
+        android:visibility="gone"/>
+    <include
+        android:id="@+id/withdrawBank"
+        layout="@layout/activity_withdraw_bank_acc_transctn"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

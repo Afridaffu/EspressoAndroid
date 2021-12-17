@@ -6,10 +6,6 @@
     android:background="@color/et_bg_gray"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +45,14 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/_16ssp" />
             </LinearLayout>
-
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,30 +137,27 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_8sdp"
                             android:layout_marginBottom="@dimen/_10sdp"
-                            android:layout_weight="0.8"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Status"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_30sdp"
                             android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_11ssp" />
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvStatus"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_weight="1.2"
-                            app:cardBackgroundColor="@color/txn_completed_trans"
-                            app:cardCornerRadius="@dimen/_10sdp">
-
-                            <TextView
-                                android:id="@+id/tvStatus"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Completed"
-                                android:textColor="#008a05"
-                                android:textSize="@dimen/_10ssp"></TextView>
-                        </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/payreqStatusTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/_2sdp"
+                            android:paddingLeft="@dimen/_16sdp"
+                            android:paddingRight="@dimen/_16sdp"
+                            android:paddingTop="@dimen/_1sdp"
+                            android:background="@drawable/fill_grn_color_smallradius"
+                            android:fontFamily="@font/opensans_bold"
+                            android:gravity="center"
+                            android:text="Completed"
+                            android:textColor="@color/active_green"
+                            android:textSize="@dimen/_7ssp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -182,15 +182,16 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/payreqPfLL"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_18sdp"
+                        android:visibility="visible"
                         android:orientation="horizontal">
 
                         <TextView
@@ -215,15 +216,18 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/payreqTAmountLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_18sdp"
+                        android:visibility="visible"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:visibility="visible"
                             android:orientation="vertical">
 
                             <TextView
@@ -336,7 +340,7 @@
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:layout_marginRight="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_12sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
@@ -417,7 +421,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
+            </LinearLayout>
+            </ScrollView>
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>

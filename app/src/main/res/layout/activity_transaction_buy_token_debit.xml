@@ -509,8 +509,10 @@
 
                         <ImageView
                             android:id="@+id/cardBrandIV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_3sdp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_visa" />
 

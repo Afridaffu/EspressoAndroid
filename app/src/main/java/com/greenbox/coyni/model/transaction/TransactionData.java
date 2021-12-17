@@ -73,7 +73,12 @@ public class TransactionData {
     private String description;
     private String orderId;
     private String giftCardFee;
+    private String withdrawId;
 
+
+    public String getWithdrawId() {
+        return withdrawId;
+    }
 
     public String getCardExpiryDate() {
         return cardExpiryDate;
