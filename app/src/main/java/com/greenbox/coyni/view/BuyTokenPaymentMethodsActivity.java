@@ -299,9 +299,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     pDialog.dismiss();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "",apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "",apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {
@@ -798,7 +798,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
                             } else {
-                                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "");
+                                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "","");
                             }
                         }
                     } catch (Exception ex) {
@@ -927,7 +927,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
                 startActivity(i);
             } else {
-                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "");
+                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "","");
             }
 
         } catch (Exception ex) {

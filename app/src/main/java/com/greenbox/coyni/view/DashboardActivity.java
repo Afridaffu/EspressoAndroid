@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -70,6 +71,8 @@ public class DashboardActivity extends AppCompatActivity {
     Long mLastClickTime = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
+    String strName = "";
+    ConstraintLayout cvProfileSmall, cvProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +122,8 @@ public class DashboardActivity extends AppCompatActivity {
             viewMoreLL = findViewById(R.id.viewMoreLL);
             statusCardsRL = findViewById(R.id.statusCardsRL);
             latestTxnRefresh = findViewById(R.id.latestTxnRefresh);
+            cvProfileSmall = findViewById(R.id.cvProfileSmall);
+            cvProfile = findViewById(R.id.cvProfile);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -256,14 +261,76 @@ public class DashboardActivity extends AppCompatActivity {
                     startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
                 }
             });
+
             latestTxnRefresh.setColorSchemeColors(getResources().getColor(R.color.primary_green));
+
             latestTxnRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    dashboardViewModel.getLatestTxns();
+                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
+                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                        dashboardViewModel.getLatestTxns();
+                    }else{
+                        latestTxnRefresh.setRefreshing(false);
+                    }
                 }
             });
 
+            tvUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (strName.contains("...")) {
+                        if (strName.length() == 21 || strName.length() > 21) {
+                            tvUserName.setText("Hi " + strName.substring(0, 20));
+                        } else {
+                            tvUserName.setText("Hi " + strName);
+                        }
+                    } else {
+                        if (strName.length() == 21) {
+                            tvUserName.setText("Hi " + strName.substring(0, 20) + "...");
+                        } else if (strName.length() > 22) {
+                            tvUserName.setText("Hi " + strName.substring(0, 22) + "...");
+                        } else {
+                            tvUserName.setText("Hi " + strName);
+                        }
+                    }
+                }
+            });
+
+            tvUserNameSmall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (strName.contains("...")) {
+                        if (strName.length() == 21 || strName.length() > 21) {
+                            tvUserNameSmall.setText("Hi " + strName.substring(0, 20));
+                        } else {
+                            tvUserNameSmall.setText("Hi " + strName);
+                        }
+                    } else {
+                        if (strName.length() == 21) {
+                            tvUserNameSmall.setText("Hi " + strName.substring(0, 20) + "...");
+                        } else if (strName.length() > 22) {
+                            tvUserNameSmall.setText("Hi " + strName.substring(0, 22) + "...");
+                        } else {
+                            tvUserNameSmall.setText("Hi " + strName);
+                        }
+                    }
+                }
+            });
+
+            cvProfileSmall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
+                }
+            });
+
+            cvProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -275,14 +342,21 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onChanged(Profile profile) {
                 if (profile != null) {
-                    progressDialog.dismiss();
+//                    progressDialog.dismiss();
                     objMyApplication.setMyProfile(profile);
                     identityVerificationViewModel.getStatusTracker();
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                    String strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                    if (strName != null && strName.length() > 21) {
-                        tvUserName.setText("Hi " + strName.substring(0, 21) + "...");
-                        tvUserNameSmall.setText("Hi " + strName.substring(0, 21) + "...");
+                    strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+//                    if (strName != null && strName.length() > 21) {
+//                        tvUserName.setText("Hi " + strName.substring(0, 21) + "...");
+//                        tvUserNameSmall.setText("Hi " + strName.substring(0, 21) + "...");
+//                    } else {
+//                        tvUserName.setText("Hi " + strName);
+//                        tvUserNameSmall.setText("Hi " + strName);
+//                    }
+                    if (objMyApplication.getStrUserName().length() > 20) {
+                        tvUserName.setText("Hi " + strName.substring(0, 20));
+                        tvUserNameSmall.setText("Hi " + strName.substring(0, 20));
                     } else {
                         tvUserName.setText("Hi " + strName);
                         tvUserNameSmall.setText("Hi " + strName);
@@ -380,11 +454,20 @@ public class DashboardActivity extends AppCompatActivity {
                     welcomeCoyniCV.setVisibility(View.GONE);
                     underReviewCV.setVisibility(View.GONE);
                     additionalActionCV.setVisibility(View.GONE);
-                    if (latestTxnResponse.getData().size() > 0) {
+                    if (latestTxnResponse.getData().size() > 4) {
                         buyTokensCV.setVisibility(View.GONE);
-
                         txnRV.setVisibility(View.VISIBLE);
                         viewMoreLL.setVisibility(View.VISIBLE);
+                        noTxnTV.setVisibility(View.GONE);
+                        LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
+                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
+                        txnRV.setLayoutManager(mLayoutManager);
+                        txnRV.setItemAnimator(new DefaultItemAnimator());
+                        txnRV.setAdapter(latestTxnAdapter);
+                    }else if (latestTxnResponse.getData().size() <= 4) {
+                        buyTokensCV.setVisibility(View.GONE);
+                        txnRV.setVisibility(View.VISIBLE);
+                        viewMoreLL.setVisibility(View.GONE);
                         noTxnTV.setVisibility(View.GONE);
                         LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
                         LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
@@ -605,7 +688,7 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (Utils.checkInternet(DashboardActivity.this)) {
-            progressDialog = Utils.showProgressDialog(this);
+//            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences();
         } else {

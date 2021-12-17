@@ -113,13 +113,13 @@
 
         <View
             android:layout_width="@dimen/_11sdp"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1dp"
             android:layout_below="@id/balanceTV"
             android:background="@color/white" />
 
         <View
             android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1dp"
             android:layout_below="@id/balanceTV"
             android:layout_weight="1"
 
@@ -127,7 +127,7 @@
 
         <View
             android:layout_width="@dimen/_11sdp"
-            android:layout_height="@dimen/_1sdp"
+            android:layout_height="1dp"
             android:layout_below="@id/balanceTV"
             android:background="@color/white" />
     </LinearLayout>

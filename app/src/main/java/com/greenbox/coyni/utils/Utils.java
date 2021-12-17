@@ -328,7 +328,7 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        if(msg.equals("")){
+        if(!msg.equals("")){
             displayAlertNew(msg, activity, header);
         }else{
             displayAlertNew(fieldError, activity, header);
