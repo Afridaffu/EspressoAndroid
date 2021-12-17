@@ -553,26 +553,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    private void getStates() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("states.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<States>>() {
-            }.getType();
-            List<States> listStates = gson.fromJson(json, type);
-            objMyApplication.setListStates(listStates);
-            Log.e("list states", listStates.size() + "");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public void bindImage() {
         try {
             imgProfile.setVisibility(View.GONE);
@@ -698,8 +678,8 @@ public class DashboardActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 dialog.dismiss();
-                Intent i = new Intent(context, PaymentMethodsActivity.class);
-                i.putExtra("screen", "buy");
+                Intent i = new Intent(context, BuyTokenPaymentMethodsActivity.class);
+                i.putExtra("screen", "dashboard");
                 context.startActivity(i);
             }
         });

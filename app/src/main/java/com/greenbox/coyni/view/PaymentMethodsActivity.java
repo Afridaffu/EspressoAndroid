@@ -97,6 +97,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
                 }
+            } else if (requestCode == 2) {
+                if (data.getStringExtra("screen") != null && data.getStringExtra("screen").equals("editcard")) {
+                    if (data.getStringExtra("action") != null && data.getStringExtra("action").equals("remove")) {
+                        deleteBank(PaymentMethodsActivity.this, objMyApplication.getSelectedCard());
+                    }
+                }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -135,11 +141,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
             addPayment();
             paymentMethods();
-            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("editcard")) {
-                if (getIntent().getStringExtra("action") != null && getIntent().getStringExtra("action").equals("remove")) {
-                    deleteBank(PaymentMethodsActivity.this, objMyApplication.getSelectedCard());
-                }
-            }
+//            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("editcard")) {
+//                if (getIntent().getStringExtra("action") != null && getIntent().getStringExtra("action").equals("remove")) {
+//                    deleteBank(PaymentMethodsActivity.this, objMyApplication.getSelectedCard());
+//                }
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -151,7 +157,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         try {
             if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
-                strCurrent = "addpay";
+//                strCurrent = "addpay";
             } else {
                 getPaymentMethods();
             }
@@ -174,7 +180,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             signOnData = signOn.getData();
                             objMyApplication.setStrSignOnError("");
                             strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
+                            if (objMyApplication.getResolveUrl() && !isBank) {
                                 callResolveFlow();
                             }
                         } else {
@@ -360,6 +366,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                     } else {
+                        strCurrent = "";
                         onBackPressed();
                     }
                 }
@@ -838,6 +845,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void editCard() {
+        try {
+            Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
+            startActivityForResult(i, 2);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

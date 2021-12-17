@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -548,7 +550,7 @@ public class AddCardActivity extends AppCompatActivity {
                     try {
                         if (!b) {
                             etName.setHint("");
-                            if (etName.getText().toString().trim().length() > 0) {
+                            if (etName.getText().toString().trim().length() > 1) {
                                 isName = true;
                                 nameErrorLL.setVisibility(GONE);
                                 etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -564,6 +566,8 @@ public class AddCardActivity extends AppCompatActivity {
                             etName.setHint("Name on card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
+                            InputMethodManager imm = (InputMethodManager) AddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(etName, 0);
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -771,7 +775,7 @@ public class AddCardActivity extends AppCompatActivity {
                             isName = true;
                         }
                     }
-                    if (charSequence.toString().trim().length() > 2 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -1186,6 +1190,10 @@ public class AddCardActivity extends AppCompatActivity {
     public void verifyClick() {
         try {
             if (!etPreAmount.getText().toString().trim().equals("")) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 displayAuthorization();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("amount", etPreAmount.getText().toString().trim());
@@ -1220,6 +1228,7 @@ public class AddCardActivity extends AppCompatActivity {
     private void displayPreAuthSuccess() {
         try {
             CardView cvDone;
+            preAuthDialog.dismiss();
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
@@ -1265,37 +1274,6 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
-//    private void displayPreAuthFail() {
-//        try {
-//            CardView cvDone;
-//            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
-//            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            preDialog.setContentView(R.layout.activity_cards_authorization_failed);
-//            Window window = preDialog.getWindow();
-//            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//            window.setGravity(Gravity.CENTER);
-//            window.setBackgroundDrawableResource(android.R.color.transparent);
-//
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preDialog.getWindow().setAttributes(lp);
-//            preDialog.show();
-//            cvDone = preDialog.findViewById(R.id.cvDone);
-//
-//            cvDone.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    preDialog.dismiss();
-//                    onBackPressed();
-//                    finish();
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void displayPreAuthFail() {
         try {
             CardView cvAddBank;
@@ -1311,6 +1289,7 @@ public class AddCardActivity extends AppCompatActivity {
             lp.dimAmount = 0.7f;
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             preDialog.getWindow().setAttributes(lp);
+            preDialog.setCancelable(false);
             preDialog.show();
             cvAddBank = preDialog.findViewById(R.id.cvAddBank);
 
@@ -1320,6 +1299,16 @@ public class AddCardActivity extends AppCompatActivity {
                     preDialog.dismiss();
                     onBackPressed();
                     finish();
+                }
+            });
+            preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             });
         } catch (Exception ex) {

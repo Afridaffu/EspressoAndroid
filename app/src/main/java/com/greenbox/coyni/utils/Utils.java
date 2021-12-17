@@ -837,7 +837,9 @@ public class Utils {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    editText.setText(tempStateName);
+                    if (!tempStateName.equals("")) {
+                        editText.setText(tempStateName);
+                    }
                 }
             });
 
