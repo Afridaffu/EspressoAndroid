@@ -52,7 +52,7 @@ import java.util.List;
 public class EditAddressActivity extends AppCompatActivity {
 
     TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
-    TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL;
+    TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL,countryTIL;
     ConstraintLayout stateCL;
     MyApplication myApplicationObj;
     CardView editAddressSaveCV;
@@ -114,6 +114,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
             zipcodeErrorLL = findViewById(R.id.zipcodeErrorLL);
             zipcodeErrorTV = findViewById(R.id.zipcodeErrorTV);
+            countryTIL = findViewById(R.id.countryTIL);
 
             editAddressSaveCV = findViewById(R.id.editAddressSaveCV);
 
@@ -122,8 +123,15 @@ public class EditAddressActivity extends AppCompatActivity {
             address1ET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             address2ET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             cityET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
-            zipcodeET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+            zipcodeET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
 
+
+            address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
             editAddressSaveCV.setOnClickListener(view -> {
                 if (isSaveEnabled) {
@@ -373,7 +381,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() >= 5) {
+                if (charSequence.length() == 5) {
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -383,6 +391,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                    zipcodeErrorTV.setText("Minimum 5 Characters Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(VISIBLE);
@@ -422,6 +431,20 @@ public class EditAddressActivity extends AppCompatActivity {
             }
         });
 
+        address2ET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_black));
+                } else {
+                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_green));
+                }
+            }
+        });
+
+
         cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -448,7 +471,7 @@ public class EditAddressActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    if (zipcodeET.getText().toString().trim().length() >= 5) {
+                    if (zipcodeET.getText().toString().trim().length() == 5) {
                         zipcodeErrorLL.setVisibility(GONE);
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
@@ -457,7 +480,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Invalid Zipcode");
+                        zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                     } else {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());

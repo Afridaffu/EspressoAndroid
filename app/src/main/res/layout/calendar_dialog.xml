@@ -21,30 +21,42 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_20sdp"
-        >
+        android:layout_marginBottom="@dimen/_15sdp">
 
         <ImageView
             android:id="@+id/closeIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_close" />
 
         <TextView
+            android:id="@+id/doneTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/opensans_semibold"
             android:text="Done"
             android:textColor="@color/black"
-            android:layout_alignParentRight="true"/>
+            android:textSize="@dimen/_12ssp" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rangeDateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="@color/xdark_gray"
+        android:textSize="@dimen/_11ssp" />
 
     <com.andrewjapar.rangedatepicker.CalendarPicker
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="true"
-        android:scrollbarStyle="outsideOverlay"
-        />
+        android:scrollbarStyle="outsideOverlay" />
 </LinearLayout>

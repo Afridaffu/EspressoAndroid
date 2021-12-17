@@ -224,6 +224,8 @@ public class PreferencesActivity extends AppCompatActivity {
                             accountDDIV.setVisibility(View.VISIBLE);
                             accountET.setClickable(true);
                             accountET.setEnabled(true);
+                            Utils.setUpperHintColor(accountTIL, getColor(R.color.black));
+
                         }else{
                             Log.e("else","else");
                             accountDDIV.setVisibility(View.GONE);
@@ -231,6 +233,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             accountET.setClickable(false);
                             accountET.setEnabled(false);
                             Log.e("else","else");
+                            Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
                         }
 
 

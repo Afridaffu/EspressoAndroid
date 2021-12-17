@@ -34,6 +34,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -68,7 +70,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
     public LinearLayout emailErrorLL, phoneErrorLL, firstNameErrorLL, lastNameErrorLL, passwordErrorLL, confPassErrorLL;
     public TextView emailErrorTV, phoneErrorTV, firstNameErrorTV, lastNameErrorTV, passwordErrorTV, confPassErrorTV;
-    TextView passwordInfoTV, spannableText, privacyPolicyTV;
+    TextView passwordInfoTV, spannableText, privacyPolicyTV,tosTV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -101,11 +103,12 @@ public class CreateAccountActivity extends AppCompatActivity {
     int[] errorColor, color;
     ColorStateList errorColorState, colorState;
 
-    boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false;
+    boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false, isAgreed = false;
 
     RelativeLayout mainRL;
     ScrollView mainSV;
     public static int focusedID = 0;
+    CheckBox agreeCB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +181,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             passwordInfoTV = findViewById(R.id.passwordInfoTV);
             spannableText = findViewById(R.id.spannableTV);
             privacyPolicyTV = findViewById(R.id.privacyTV);
+            tosTV = findViewById(R.id.tosTV);
             nextCV = findViewById(R.id.nextCV);
             layoutClose = findViewById(R.id.layoutClose);
             createAccountCloseIV = findViewById(R.id.createAccountCloseIV);
@@ -204,6 +208,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             stregnthThree = findViewById(R.id.stregnthThree);
             mainRL = findViewById(R.id.mainRL);
             mainSV = findViewById(R.id.mainSV);
+            agreeCB = findViewById(R.id.agreeCB);
 
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
@@ -299,6 +304,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             });
 
+            agreeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    isAgreed = b;
+                    enableOrDisableNext();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -734,7 +746,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);
-                            firstNameErrorTV.setText("Minimum 2 characters required");
+                            firstNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
@@ -762,7 +774,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
-                            lastNameErrorTV.setText("Minimum 2 characters required");
+                            lastNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
@@ -817,7 +829,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                     }
                 }
             });
-
 
             confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -896,7 +907,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     public void enableOrDisableNext() {
 
         try {
-            if (isFirstName && isLastName && isEmail && isPhoneNumber && isPassword && isConfirmPassword) {
+            if (isFirstName && isLastName && isEmail && isPhoneNumber && isPassword && isConfirmPassword && isAgreed) {
                 isNextEnabled = true;
                 nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
@@ -1043,6 +1054,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         privacyPolicyTV.setText("Privacy Policy");
         privacyPolicyTV.setPaintFlags(privacyPolicyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         privacyPolicyTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1053,6 +1065,24 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                 browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
+                try {
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        tosTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
                 try {
                     startActivity(browserIntent);
                 } catch (ActivityNotFoundException e) {

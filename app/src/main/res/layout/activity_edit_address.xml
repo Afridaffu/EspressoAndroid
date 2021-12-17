@@ -349,7 +349,7 @@
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:inputType="number|textNoSuggestions"
-                        android:maxLength="7"
+                        android:maxLength="5"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -407,7 +407,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/country"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/xdark_gray"
                         app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                         app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                         app:boxCornerRadiusTopEnd="@dimen/_10sdp"
@@ -431,7 +431,7 @@
                             android:maxLength="30"
                             android:padding="@dimen/_12sdp"
                             android:text="United States"
-                            android:textColor="@color/black"
+                            android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
