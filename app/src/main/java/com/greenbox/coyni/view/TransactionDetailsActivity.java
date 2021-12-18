@@ -52,10 +52,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         txnType = Integer.parseInt(Utils.payType);
                         break;
                     case "buy token":
+                    case "buy tokens":
                         txnType = Integer.parseInt(Utils.addType);
                         break;
                     case "withdraw":
                         txnType=Integer.parseInt(Utils.withdrawType);
+                        break;
                 }
             }
             if (getIntent().getStringExtra("txnSubType") != null && !getIntent().getStringExtra("txnSubType").equals("")) {
@@ -111,6 +113,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         case "buy tokens":
                            switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()){
                                case "credit card":
+                                   ControlMethod("buytoken");
+                                   buyTokenCreditDebit(transactionDetails.getData());
+                                   break;
                                case "debit card":
                                    ControlMethod("buytoken");
                                    buyTokenCreditDebit(transactionDetails.getData());
@@ -166,7 +171,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             lyAccAdd = findViewById(R.id.lyAccAdd);
             headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype().replace("Tokens", ""));
 
-            if (objData.getTransactionSubtype().equals("Sent Tokens")) {
+            if (objData.getTransactionSubtype().equals("Sent")) {
                 amount.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN","").trim()));
 //                amount.setText(objData.getAmount().replace("CYN", "").trim());
                 name.setText(objData.getRecipientName());
@@ -674,7 +679,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
         withbankheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withbankamount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+        withbankamount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
         withbankdescription.setText(objData.getDescription());
         withbankstatus.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -698,10 +703,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withbankdatetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
-        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace(" USD",""));
-        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace(" CYN",""));
+        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("CYN","").trim());
+        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN","").trim());
 
-        withbankwithdrawalAmount.setText(""+Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD","").trim()));
+        withbankwithdrawalAmount.setText(""+Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN","").trim()));
         withbankprocefee.setText(""+Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN","").trim()));
         withbanktotal.setText(""+Utils.convertTwoDecimal(String.valueOf(subtotal+procesFee)));
 

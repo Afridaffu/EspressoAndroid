@@ -172,7 +172,11 @@ public class TransactionListActivity extends AppCompatActivity {
                         }
                         if (filterList.size() > 0) {
                             transactionListPendingAdapter.updateList(filterList);
+                            globalPosted.clear();
+                            findViewById(R.id.layoutLLposted).setVisibility(View.GONE);
+
                         }
+
 
                     }
                     if (globalPosted.size() > 0) {
@@ -184,6 +188,10 @@ public class TransactionListActivity extends AppCompatActivity {
                         }
                         if (filterList1.size() > 0) {
                             transactionListPostedAdapter.updateList(filterList1);
+                            globalPending.clear();
+                            findViewById(R.id.layoutLLPending).setVisibility(View.GONE);
+                            findViewById(R.id.pendingTV).setVisibility(View.GONE);
+
                         }
 
                     }
