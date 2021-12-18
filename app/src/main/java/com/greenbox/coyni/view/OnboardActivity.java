@@ -1,25 +1,17 @@
 package com.greenbox.coyni.view;
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,7 +20,6 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,17 +30,12 @@ import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
 import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
-import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.States;
-import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
-import com.greenbox.coyni.model.register.CustRegisRequest;
-import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -60,15 +46,14 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.UUID;
 
 public class OnboardActivity extends AppCompatActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
-    Cursor dsPermanentToken, dsFacePin, dsTouchID;
-    String strToken = "", strDeviceID = "";
+    Cursor dsPermanentToken, dsFacePin, dsTouchID, dsUserDetails;
+    String strToken = "", strDeviceID = "", strFirstUser = "";
     Boolean isFaceLock = false, isTouchId = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginViewModel loginViewModel;
@@ -102,6 +87,7 @@ public class OnboardActivity extends AppCompatActivity {
                 Utils.setIsTouchEnabled(false);
                 Utils.setIsFaceEnabled(false);
             }
+            SetDB();
             SetToken();
             SetFaceLock();
             SetTouchId();
@@ -116,8 +102,13 @@ public class OnboardActivity extends AppCompatActivity {
                     faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                 }
             } else {
-                layoutOnBoarding.setVisibility(View.VISIBLE);
-                layoutAuth.setVisibility(View.GONE);
+                if (strFirstUser.equals("")) {
+                    layoutOnBoarding.setVisibility(View.VISIBLE);
+                    layoutAuth.setVisibility(View.GONE);
+                } else {
+                    Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
             }
 
             if (!isDeviceID()) {
@@ -213,7 +204,7 @@ public class OnboardActivity extends AppCompatActivity {
                                 login();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), OnboardActivity.this, "");
+                            Utils.displayAlert(getString(R.string.internet), OnboardActivity.this, "", "");
                         }
                     }
                 });
@@ -260,7 +251,7 @@ public class OnboardActivity extends AppCompatActivity {
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "");
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
                             }
                         }
                     }
@@ -269,6 +260,22 @@ public class OnboardActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void SetDB() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+            dsUserDetails.moveToFirst();
+            if (dsUserDetails.getCount() > 0) {
+                strFirstUser = dsUserDetails.getString(1);
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+            }
+        }
     }
 
     private void SetToken() {
@@ -353,12 +360,12 @@ public class OnboardActivity extends AppCompatActivity {
         return value;
     }
 
-        private void getStatesUrl(String strCode) {
+    private void getStatesUrl(String strCode) {
         try {
             byte[] valueDecoded = new byte[0];
             valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
             objMyApplication.setStrStatesUrl(new String(valueDecoded));
-            Log.e("States url",objMyApplication.getStrStatesUrl() +"   sdssd");
+            Log.e("States url", objMyApplication.getStrStatesUrl() + "   sdssd");
             try {
                 new HttpGetRequest().execute("");
             } catch (Exception e) {
@@ -373,8 +380,9 @@ public class OnboardActivity extends AppCompatActivity {
         public static final String REQUEST_METHOD = "GET";
         public static final int READ_TIMEOUT = 15000;
         public static final int CONNECTION_TIMEOUT = 15000;
+
         @Override
-        protected String doInBackground(String... params){
+        protected String doInBackground(String... params) {
             String stringUrl = params[0];
             String result;
             String inputLine;
@@ -382,7 +390,7 @@ public class OnboardActivity extends AppCompatActivity {
                 //Create a URL object holding our url
                 URL myUrl = new URL(objMyApplication.getStrStatesUrl());
                 //Create a connection
-                HttpURLConnection connection =(HttpURLConnection)
+                HttpURLConnection connection = (HttpURLConnection)
                         myUrl.openConnection();
                 //Set methods and timeouts
                 connection.setRequestMethod(REQUEST_METHOD);
@@ -398,7 +406,7 @@ public class OnboardActivity extends AppCompatActivity {
                 BufferedReader reader = new BufferedReader(streamReader);
                 StringBuilder stringBuilder = new StringBuilder();
                 //Check if the line we are reading is not null
-                while((inputLine = reader.readLine()) != null){
+                while ((inputLine = reader.readLine()) != null) {
                     stringBuilder.append(inputLine);
                 }
                 //Close our InputStream and Buffered reader
@@ -406,14 +414,14 @@ public class OnboardActivity extends AppCompatActivity {
                 streamReader.close();
                 //Set our result equal to our stringBuilder
                 result = stringBuilder.toString();
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 result = null;
             }
             return result;
         }
-        protected void onPostExecute(String result){
+
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Gson gson = new Gson();
             Type type = new TypeToken<List<States>>() {

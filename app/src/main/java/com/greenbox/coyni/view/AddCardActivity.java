@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,17 +16,14 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +34,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -352,10 +349,10 @@ public class AddCardActivity extends AppCompatActivity {
                             if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
                                 displayPreAuth();
                             } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
-                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "");
+                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
                             }
                         } else {
-                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "");
+                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (
@@ -375,12 +372,12 @@ public class AddCardActivity extends AppCompatActivity {
                     if (apiError != null) {
                         if (apiError.getError() != null) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "");
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             } else {
-                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "");
+                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             }
                         } else if (apiError.getData() != null) {
-                            Utils.displayAlert(((LinkedTreeMap) apiError.getData()).get("msg").toString(), AddCardActivity.this, "");
+                            Utils.displayAlert(((LinkedTreeMap) apiError.getData()).get("msg").toString(), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {
@@ -403,7 +400,7 @@ public class AddCardActivity extends AppCompatActivity {
                             displayPreAuthFail();
                         }
                     } else {
-                        Utils.displayAlert(errData.getErrorDescription().toString(), AddCardActivity.this, "");
+                        Utils.displayAlert(errData.getErrorDescription().toString(), AddCardActivity.this, "", preAuthResponse.getError().getFieldErrors().get(0));
                     }
                 }
             }
@@ -430,9 +427,9 @@ public class AddCardActivity extends AppCompatActivity {
                 if (apiError != null) {
                     if (apiError.getError() != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     } else if (apiError.getData() != null) {
                         etPreAmount.setText("");
@@ -460,7 +457,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 displayPreAuthFail();
                             }
                         } else if (!((LinkedTreeMap) apiError.getData()).get("msg").toString().contains("incorrect")) {
-                            Utils.displayAlert(((LinkedTreeMap) apiError.getData()).get("msg").toString(), AddCardActivity.this, "");
+                            Utils.displayAlert(((LinkedTreeMap) apiError.getData()).get("msg").toString(), AddCardActivity.this, "", "");
                         } else {
                             displayPreAuthFail();
                         }
@@ -475,46 +472,46 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             if (!objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() < 19) {
                 etCardNumber.requestFocus();
-                Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "");
+                Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "", "");
                 return value = false;
             } else if (objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() != 18) {
                 etCardNumber.requestFocus();
-                Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "");
+                Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "", "");
                 return value = false;
             } else if (etExpiry.getText().toString().equals("")) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Expiry Date is required", AddCardActivity.this, "");
+                Utils.displayAlert("Expiry Date is required", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!etExpiry.getText().toString().matches("(?:0[1-9]|1[0-2])/[0-9]{2}")) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "");
+                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!validateExpiry()) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "");
+                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (etCVV.getText().toString().equals("")) {
                 etCVV.requestFocus();
-                Utils.displayAlert("CVV is required", AddCardActivity.this, "");
+                Utils.displayAlert("CVV is required", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getValid()) {
-                Utils.displayAlert("Invalid request! Please check the card and try again.", AddCardActivity.this, "");
+                Utils.displayAlert("Invalid request! Please check the card and try again.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit") && objCard.getData().getCardType().toLowerCase().equals("credit")) {
-                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "");
+                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit") && objCard.getData().getCardType().toLowerCase().equals("debit")) {
-                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "");
+                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "");
+                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
-                Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "");
+                Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "");
+                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
@@ -553,7 +550,7 @@ public class AddCardActivity extends AppCompatActivity {
                     try {
                         if (!b) {
                             etName.setHint("");
-                            if (etName.getText().toString().trim().length() > 0) {
+                            if (etName.getText().toString().trim().length() > 1) {
                                 isName = true;
                                 nameErrorLL.setVisibility(GONE);
                                 etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -569,6 +566,8 @@ public class AddCardActivity extends AppCompatActivity {
                             etName.setHint("Name on card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
+                            InputMethodManager imm = (InputMethodManager) AddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(etName, 0);
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -776,7 +775,7 @@ public class AddCardActivity extends AppCompatActivity {
                             isName = true;
                         }
                     }
-                    if (charSequence.toString().trim().length() > 2 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -1191,6 +1190,10 @@ public class AddCardActivity extends AppCompatActivity {
     public void verifyClick() {
         try {
             if (!etPreAmount.getText().toString().trim().equals("")) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 displayAuthorization();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("amount", etPreAmount.getText().toString().trim());
@@ -1214,7 +1217,7 @@ public class AddCardActivity extends AppCompatActivity {
                     preDialog.dismiss();
                 }
             } else {
-                Utils.displayAlert("Please enter Amount", AddCardActivity.this, "");
+                Utils.displayAlert("Please enter Amount", AddCardActivity.this, "", "");
             }
         } catch (Exception ex) {
             preDialog.dismiss();
@@ -1225,6 +1228,7 @@ public class AddCardActivity extends AppCompatActivity {
     private void displayPreAuthSuccess() {
         try {
             CardView cvDone;
+            preAuthDialog.dismiss();
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
@@ -1270,37 +1274,6 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
-//    private void displayPreAuthFail() {
-//        try {
-//            CardView cvDone;
-//            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
-//            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            preDialog.setContentView(R.layout.activity_cards_authorization_failed);
-//            Window window = preDialog.getWindow();
-//            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//            window.setGravity(Gravity.CENTER);
-//            window.setBackgroundDrawableResource(android.R.color.transparent);
-//
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preDialog.getWindow().setAttributes(lp);
-//            preDialog.show();
-//            cvDone = preDialog.findViewById(R.id.cvDone);
-//
-//            cvDone.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    preDialog.dismiss();
-//                    onBackPressed();
-//                    finish();
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void displayPreAuthFail() {
         try {
             CardView cvAddBank;
@@ -1316,6 +1289,7 @@ public class AddCardActivity extends AppCompatActivity {
             lp.dimAmount = 0.7f;
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             preDialog.getWindow().setAttributes(lp);
+            preDialog.setCancelable(false);
             preDialog.show();
             cvAddBank = preDialog.findViewById(R.id.cvAddBank);
 
@@ -1325,6 +1299,16 @@ public class AddCardActivity extends AppCompatActivity {
                     preDialog.dismiss();
                     onBackPressed();
                     finish();
+                }
+            });
+            preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             });
         } catch (Exception ex) {

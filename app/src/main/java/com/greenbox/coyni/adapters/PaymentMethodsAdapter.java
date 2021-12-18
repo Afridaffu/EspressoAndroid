@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     List<PaymentsList> listPayments;
     Context mContext;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankHead, tvBankExpire, tvCardNumber, tvBankName, tvAccNumber;
@@ -143,6 +145,10 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                             if (!objData.getRelink()) {
                                 ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
@@ -151,8 +157,9 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                             }
                         } else if (!objData.getExpired()) {
                             objMyApplication.setSelectedCard(objData);
-                            Intent i = new Intent(mContext, EditCardActivity.class);
-                            mContext.startActivity(i);
+//                            Intent i = new Intent(mContext, EditCardActivity.class);
+//                            mContext.startActivity(i);
+                            ((PaymentMethodsActivity) mContext).editCard();
                         } else {
                             objMyApplication.setSelectedCard(objData);
                             ((PaymentMethodsActivity) mContext).expiry(mContext, objData);

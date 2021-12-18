@@ -19,10 +19,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.hardware.fingerprint.FingerprintManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,7 +51,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.Locale;
 
@@ -374,7 +371,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             if (Utils.checkInternet(CustomerProfileActivity.this)) {
                 dashboardViewModel.mePaymentMethods();
             } else {
-                Utils.displayAlert(getString(R.string.internet), CustomerProfileActivity.this, "");
+                Utils.displayAlert(getString(R.string.internet), CustomerProfileActivity.this, "", "");
             }
 
             customerNameTV.setOnClickListener(view -> {

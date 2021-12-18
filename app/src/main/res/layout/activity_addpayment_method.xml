@@ -14,7 +14,7 @@
             android:id="@+id/lyAPayClose"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

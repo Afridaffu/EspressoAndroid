@@ -145,9 +145,6 @@ public class CardNumberEditText extends ConstraintLayout {
                         cnET.setText("");
                         cnET.setSelection(cnET.getText().length());
                     }
-                    if (s.toString().length() > 17) {
-                        cardValidation(s.toString().trim());
-                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

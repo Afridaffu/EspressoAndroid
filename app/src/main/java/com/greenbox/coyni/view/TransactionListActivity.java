@@ -201,6 +201,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     globalPosted.clear();
                     globalPending.clear();
                     currentPage = 0;
+                    total = 0;
                     TransactionListRequest transactionListRequest = new TransactionListRequest();
                     transactionListRequest.setPageNo(String.valueOf(currentPage));
                     transactionListRequest.setWalletCategory(Utils.walletCategory);
@@ -287,7 +288,8 @@ public class TransactionListActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(TransactionList transactionList) {
                     try {
-                        if (transactionList != null && transactionList.getData().getItems() != null && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        if (transactionList != null && transactionList.getData().getItems() != null
+                                && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             progressBar.setVisibility(View.GONE);
                             try {
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
@@ -296,21 +298,45 @@ public class TransactionListActivity extends AppCompatActivity {
                                 globalPending.addAll(transactionList.getData().getItems().getPendingTransactions());
                                 globalPosted.addAll(transactionList.getData().getItems().getPostedTransactions());
                                 total = transactionList.getData().getTotalPages();
-                                if (globalPending.size() > 0) {
-                                    //                            globalData.addAll(transactionList.getData().getItems().getPendingTransactions());
+
+                                getRvTransactionsPosted.setNestedScrollingEnabled(false);
+                                rvTransactionsPending.setNestedScrollingEnabled(false);
+
+                                if (globalPending.size() > 0 && globalPosted.size() == 0) {
                                     noTransactionTV.setVisibility(View.GONE);
                                     layoutTransactionspending.setVisibility(View.VISIBLE);
+                                    layoutTransactionsposted.setVisibility(View.GONE);
                                     transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
                                     pendingTxt.setVisibility(View.VISIBLE);
                                     rvTransactionsPending.setLayoutManager(mLayoutManager);
                                     rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
                                     rvTransactionsPending.setAdapter(transactionListPendingAdapter);
-
-                                }
-                                //Posted RV
-                                if (globalPosted.size() > 0) {
-                                    //                            globalData.addAll(transactionList.getData().getItems().getPostedTransactions());
+                                    if (currentPage > 0) {
+                                        int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
+//                                        rvTransactionsPending.scrollToPosition(myPos);
+                                        final float y = rvTransactionsPending.getChildAt(myPos).getY();
+                                        nestedScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                nestedScrollView.fling(0);
+                                                nestedScrollView.smoothScrollTo(0, (int) y);
+                                            }
+                                        });
+                                    } else {
+//                                        rvTransactionsPending.scrollToPosition(0);
+                                        final float y = rvTransactionsPending.getChildAt(0).getY();
+                                        nestedScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                nestedScrollView.fling(0);
+                                                nestedScrollView.smoothScrollTo(0, (int) y);
+                                            }
+                                        });
+                                    }
+                                } else if (globalPending.size() == 0 && globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
+                                    layoutTransactionspending.setVisibility(View.GONE);
+                                    pendingTxt.setVisibility(View.GONE);
                                     layoutTransactionsposted.setVisibility(View.VISIBLE);
                                     transactionListPostedAdapter = new TransactionListPostedAdapter(globalPosted, TransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
@@ -318,41 +344,88 @@ public class TransactionListActivity extends AppCompatActivity {
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
                                     if (currentPage > 0) {
                                         int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
-                                        getRvTransactionsPosted.scrollToPosition(myPos);
+//                                        getRvTransactionsPosted.scrollToPosition(myPos);
+                                        final float y = getRvTransactionsPosted.getChildAt(myPos).getY();
+                                        nestedScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                nestedScrollView.fling(0);
+                                                nestedScrollView.smoothScrollTo(0, (int) y);
+                                            }
+                                        });
+                                    } else {
+//                                        getRvTransactionsPosted.scrollToPosition(0);
+                                        final float y = getRvTransactionsPosted.getChildAt(0).getY();
+                                        nestedScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                nestedScrollView.fling(0);
+                                                nestedScrollView.smoothScrollTo(0, (int) y);
+                                            }
+                                        });
                                     }
+                                } else if (globalPending.size() > 0 && globalPosted.size() > 0) {
+                                    noTransactionTV.setVisibility(View.GONE);
+                                    layoutTransactionspending.setVisibility(View.VISIBLE);
+                                    layoutTransactionsposted.setVisibility(View.VISIBLE);
+                                    transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
+                                    pendingTxt.setVisibility(View.VISIBLE);
+                                    rvTransactionsPending.setLayoutManager(mLayoutManager);
+                                    rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
+                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
+
+                                    transactionListPostedAdapter = new TransactionListPostedAdapter(globalPosted, TransactionListActivity.this);
+                                    getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+                                    getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+                                    getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+
+                                    final float y = getRvTransactionsPosted.getChildAt(0).getY();
+                                    nestedScrollView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            nestedScrollView.fling(0);
+                                            nestedScrollView.smoothScrollTo(0, (int) y);
+                                        }
+                                    });
+                                } else {
+                                    noTransactionTV.setVisibility(View.VISIBLE);
+                                    layoutTransactionspending.setVisibility(View.GONE);
+                                    layoutTransactionsposted.setVisibility(View.GONE);
+                                    pendingTxt.setVisibility(View.GONE);
                                 }
 
-                                //                        if (globalData.size() > 0) {
-                                //                            noTransactionTV.setVisibility(View.GONE);
-                                //                            layoutTransactionsposted.setVisibility(View.VISIBLE);
-                                //                            layoutTransactionspending.setVisibility(View.GONE);
-                                //                            transactionListPostedAdapter = new TransactionListPostedAdapter(globalData, TransactionListActivity.this);
-                                //                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-                                //                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-                                //                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
-                                //                        } else {
-                                //                            noTransactionTV.setVisibility(View.VISIBLE);
-                                //                            layoutTransactionsposted.setVisibility(View.GONE);
-                                //                        }
-                                if (transactionListPendingAdapter.getItemCount() == 0) {
-                                    //                                noTransactionTV.setVisibility(View.VISIBLE);
-                                    layoutTransactionspending.setVisibility(View.GONE);
-                                    pendingTxt.setVisibility(View.GONE);
-                                } else if (transactionListPostedAdapter.getItemCount() == 0) {
-                                    layoutTransactionsposted.setVisibility(View.GONE);
-                                } else if (transactionListPostedAdapter.getItemCount() == 0
-                                        && transactionListPendingAdapter.getItemCount() == 0) {
-                                    layoutTransactionsposted.setVisibility(View.GONE);
-                                    layoutTransactionspending.setVisibility(View.GONE);
-                                    pendingTxt.setVisibility(View.GONE);
-                                    noTransactionTV.setVisibility(View.VISIBLE);
-                                }
+//                                //Posted RV
+//                                if (globalPosted.size() > 0) {
+//                                    noTransactionTV.setVisibility(View.GONE);
+//                                    layoutTransactionsposted.setVisibility(View.VISIBLE);
+//                                    transactionListPostedAdapter = new TransactionListPostedAdapter(globalPosted, TransactionListActivity.this);
+//                                    getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+//                                    getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+//                                    getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+//                                    if (currentPage > 0) {
+//                                        int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
+//                                        getRvTransactionsPosted.scrollToPosition(myPos);
+//                                    }
+//                                }
+
+//                                if (transactionListPendingAdapter.getItemCount() == 0) {
+//                                    layoutTransactionspending.setVisibility(View.GONE);
+//                                    pendingTxt.setVisibility(View.GONE);
+//                                } else if (transactionListPostedAdapter.getItemCount() == 0) {
+//                                    layoutTransactionsposted.setVisibility(View.GONE);
+//                                } else if (transactionListPostedAdapter.getItemCount() == 0
+//                                        && transactionListPendingAdapter.getItemCount() == 0) {
+//                                    layoutTransactionsposted.setVisibility(View.GONE);
+//                                    layoutTransactionspending.setVisibility(View.GONE);
+//                                    pendingTxt.setVisibility(View.GONE);
+//                                    noTransactionTV.setVisibility(View.VISIBLE);
+//                                }
 
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            //                    loadMore(tokenTransactions.getData().getItems());
+                            Utils.displayAlert(transactionList.getError().getErrorDescription(), TransactionListActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -384,6 +457,7 @@ public class TransactionListActivity extends AppCompatActivity {
             startDateLong = 0L;
             endDateLong = 0L;
             strSelectedDate = "";
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
@@ -446,127 +520,149 @@ public class TransactionListActivity extends AppCompatActivity {
         EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
         TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
 
-        if (transactionType.size() > 0) {
-            for (int i = 0; i < transactionType.size(); i++) {
-                switch (transactionType.get(i)) {
-                    case Utils.payRequest:
-                        transTypePR.setChecked(true);
-                        break;
+        if (isFilters) {
+            if (transactionType.size() > 0) {
+                for (int i = 0; i < transactionType.size(); i++) {
+                    switch (transactionType.get(i)) {
+                        case Utils.payRequest:
+                            transTypePR.setChecked(true);
+                            break;
 
-                    case Utils.buyTokens:
-                        transTypeBT.setChecked(true);
-                        break;
+                        case Utils.buyTokens:
+                            transTypeBT.setChecked(true);
+                            break;
 
-                    case Utils.saleOrder:
-                        transTypeSO.setChecked(true);
-                        break;
+                        case Utils.saleOrder:
+                            transTypeSO.setChecked(true);
+                            break;
 
-                    case Utils.withdraw:
-                        transTypeWithdraw.setChecked(true);
-                        break;
+                        case Utils.withdraw:
+                            transTypeWithdraw.setChecked(true);
+                            break;
 
-                    case Utils.refund:
-                        transTypeRefund.setChecked(true);
-                        break;
+                        case Utils.refund:
+                            transTypeRefund.setChecked(true);
+                            break;
 
-                    case Utils.accountTransfer:
-                        transTypeAT.setChecked(true);
-                        break;
+                        case Utils.accountTransfer:
+                            transTypeAT.setChecked(true);
+                            break;
 
-                    case Utils.paidInvoice:
-                        transTypePI.setChecked(true);
-                        break;
+                        case Utils.paidInvoice:
+                            transTypePI.setChecked(true);
+                            break;
 
 
+                    }
                 }
             }
-        }
 
-        if (transactionSubType.size() > 0) {
-            for (int i = 0; i < transactionSubType.size(); i++) {
-                switch (transactionSubType.get(i)) {
-                    case Utils.sent:
-                        transSubTypeSent.setChecked(true);
-                        break;
+            if (transactionSubType.size() > 0) {
+                for (int i = 0; i < transactionSubType.size(); i++) {
+                    switch (transactionSubType.get(i)) {
+                        case Utils.sent:
+                            transSubTypeSent.setChecked(true);
+                            break;
 
-                    case Utils.received:
-                        transSubTypeReceived.setChecked(true);
-                        break;
+                        case Utils.received:
+                            transSubTypeReceived.setChecked(true);
+                            break;
 
-                    case Utils.bankAccount:
-                        transSubTypeBA.setChecked(true);
-                        break;
+                        case Utils.bankAccount:
+                            transSubTypeBA.setChecked(true);
+                            break;
 
-                    case Utils.creditCard:
-                        transSubTypeCC.setChecked(true);
-                        break;
+                        case Utils.creditCard:
+                            transSubTypeCC.setChecked(true);
+                            break;
 
-                    case Utils.debitCard:
-                        transSubTypeDC.setChecked(true);
-                        break;
+                        case Utils.debitCard:
+                            transSubTypeDC.setChecked(true);
+                            break;
 
-                    case Utils.signet:
-                        transSubTypeSignet.setChecked(true);
-                        break;
+                        case Utils.signet:
+                            transSubTypeSignet.setChecked(true);
+                            break;
 
-                    case Utils.instantPay:
-                        transSubTypeIP.setChecked(true);
-                        break;
+                        case Utils.instantPay:
+                            transSubTypeIP.setChecked(true);
+                            break;
 
-                    case Utils.giftCard:
-                        transSubTypeGiftCard.setChecked(true);
-                        break;
+                        case Utils.giftCard:
+                            transSubTypeGiftCard.setChecked(true);
+                            break;
 
 //                    case Utils.saleOrderToken:
 //                        transSubTypeSOToken.setChecked(true);
 //                        break;
 
-                    case Utils.failedWithdraw:
-                        transSubTypeFW.setChecked(true);
-                        break;
+                        case Utils.failedWithdraw:
+                            transSubTypeFW.setChecked(true);
+                            break;
 
-                    case Utils.cancelledWithdraw:
-                        transSubTypeCW.setChecked(true);
-                        break;
+                        case Utils.cancelledWithdraw:
+                            transSubTypeCW.setChecked(true);
+                            break;
 
+                    }
                 }
             }
-        }
 
-        if (txnStatus.size() > 0) {
-            for (int i = 0; i < txnStatus.size(); i++) {
-                switch (txnStatus.get(i)) {
-                    case Utils.pending:
-                        transStatusPending.setChecked(true);
-                        break;
+            if (txnStatus.size() > 0) {
+                for (int i = 0; i < txnStatus.size(); i++) {
+                    switch (txnStatus.get(i)) {
+                        case Utils.pending:
+                            transStatusPending.setChecked(true);
+                            break;
 
-                    case Utils.completed:
-                        transStatusCompleted.setChecked(true);
-                        break;
+                        case Utils.completed:
+                            transStatusCompleted.setChecked(true);
+                            break;
 
-                    case Utils.cancelled:
-                        transStatusCanceled.setChecked(true);
-                        break;
+                        case Utils.cancelled:
+                            transStatusCanceled.setChecked(true);
+                            break;
 
-                    case Utils.inProgress:
-                        transStatusInProgress.setChecked(true);
-                        break;
+                        case Utils.inProgress:
+                            transStatusInProgress.setChecked(true);
+                            break;
 
-                    case Utils.failed:
-                        transStatusFailed.setChecked(true);
-                        break;
+                        case Utils.failed:
+                            transStatusFailed.setChecked(true);
+                            break;
 
+                    }
                 }
             }
+
+            if (!strStartAmount.trim().equals("")) {
+                transAmountStartET.setText(strStartAmount.replace(",", "").split("\\.")[0]);
+            }
+
+            if (!strEndAmount.trim().equals("")) {
+                transAmountEndET.setText(strEndAmount.replace(",", "").split("\\.")[0]);
+            }
+
+            if (!strSelectedDate.equals("")) {
+                getDateFromPickerET.setText(strSelectedDate);
+            }
+        } else {
+            transactionType.clear();
+            transactionSubType.clear();
+            txnStatus.clear();
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = "";
+            strEndAmount = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
+            isFilters = false;
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
         }
 
-        if (!strStartAmount.trim().equals("")) {
-            transAmountStartET.setText(strStartAmount.replace(",", "").split("\\.")[0]);
-        }
-
-        if (!strEndAmount.trim().equals("")) {
-            transAmountEndET.setText(strEndAmount.replace(",", "").split("\\.")[0]);
-        }
 
         resetFiltersTV.setOnClickListener(view -> {
             transactionType.clear();
@@ -580,6 +676,8 @@ public class TransactionListActivity extends AppCompatActivity {
             endDateD = null;
             startDateLong = 0L;
             endDateLong = 0L;
+            isFilters = false;
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
             transTypePR.setChecked(false);
             transTypeBT.setChecked(false);
@@ -959,16 +1057,16 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-//                    txnStatus.add(Utils.completed);
-                    transStatusCanceled.setChecked(false);
+                    txnStatus.add(Utils.cancelled);
+//                    transStatusCanceled.setChecked(false);
                 } else {
-                    transStatusCanceled.setChecked(false);
-//                    for (int i=0; i < txnStatus.size();i++){
-//                        if(txnStatus.get(i) == Utils.completed){
-//                            txnStatus.remove(i);
-//                            break;
-//                        }
-//                    }
+//                    transStatusCanceled.setChecked(false);
+                    for (int i = 0; i < txnStatus.size(); i++) {
+                        if (txnStatus.get(i) == Utils.cancelled) {
+                            txnStatus.remove(i);
+                            break;
+                        }
+                    }
                 }
             }
         });
@@ -1091,39 +1189,53 @@ public class TransactionListActivity extends AppCompatActivity {
                 globalPending.clear();
                 globalPosted.clear();
                 currentPage = 0;
+                total = 0;
                 TransactionListRequest transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
                 if (transactionType.size() > 0) {
+                    isFilters = true;
                     transactionListRequest.setTransactionType(transactionType);
                 }
                 if (transactionSubType.size() > 0) {
+                    isFilters = true;
                     transactionListRequest.setTransactionSubType(transactionSubType);
                 }
                 if (txnStatus.size() > 0) {
+                    isFilters = true;
                     transactionListRequest.setTxnStatus(txnStatus);
                 }
                 if (!transAmountStartET.getText().toString().trim().equals("")) {
+                    isFilters = true;
                     transactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
                     transactionListRequest.setFromAmountOperator(">=");
                 }
                 if (!transAmountEndET.getText().toString().trim().equals("")) {
+                    isFilters = true;
                     transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
                     transactionListRequest.setToAmountOperator("<=");
                 }
                 if (!strFromDate.equals("")) {
+                    isFilters = true;
                     transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
                     transactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
+                    isFilters = true;
                     transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                     transactionListRequest.setUpdatedToDateOperator("<=");
                 }
 
-                dashboardViewModel.meTransactionList(transactionListRequest);
-                noMoreTransactionTV.setVisibility(View.GONE);
+                if (isFilters) {
+                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
+                    dashboardViewModel.meTransactionList(transactionListRequest);
+                    noMoreTransactionTV.setVisibility(View.GONE);
+                } else {
+                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+                }
+
                 dialog.dismiss();
             }
         });
@@ -1227,35 +1339,39 @@ public class TransactionListActivity extends AppCompatActivity {
         doneTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
-                getDateFromPickerET.setText(strSelectedDate);
+                try {
+                    dialog.dismiss();
+                    getDateFromPickerET.setText(strSelectedDate);
 
-                new Date(startDateLong).getYear();
-                Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                    new Date(startDateLong).getYear();
+                    Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                    int mYear = c.get(Calendar.YEAR);
+                    int mMonth = c.get(Calendar.MONTH);
+                    int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                String sDate = formatter.format(startDateLong);
-                String eDate = formatter.format(endDateLong);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    String sDate = formatter.format(startDateLong);
+                    String eDate = formatter.format(endDateLong);
 
-                strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + " 00:00:00.000";
+                    strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + " 00:00:00.000";
 
-                Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
+                    Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
 
-                if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
-                        && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
-                        && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
-                    String str = sdf.format(new Date());
-                    strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;
-                } else {
-                    strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " 23:59:59.000";
+                    if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
+                        String str = sdf.format(new Date());
+                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;
+                    } else {
+                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " 23:59:59.000";
+                    }
+
+                    Log.e("strFromDate", strFromDate);
+                    Log.e("strToDate", strToDate);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
-
-                Log.e("strFromDate", strFromDate);
-                Log.e("strToDate", strToDate);
             }
         });
 
@@ -1271,9 +1387,13 @@ public class TransactionListActivity extends AppCompatActivity {
         calendarPicker.scrollToDate(endDate.getTime());
 
 
-        if (!strSelectedDate.equals("")) {
-            rangeDateTV.setText(strSelectedDate);
-            calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
+        try {
+            if (!strSelectedDate.equals("")) {
+                rangeDateTV.setText(strSelectedDate);
+                calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         calendarPicker.setOnRangeSelectedListener((date, date2, s, s2) -> {
 

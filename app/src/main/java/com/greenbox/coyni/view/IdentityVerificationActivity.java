@@ -30,9 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -48,7 +46,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
-import com.greenbox.coyni.fragments.IdVeBottomSheetFragment;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -56,7 +53,6 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
-import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -74,12 +70,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.internal.Util;
 
 public class IdentityVerificationActivity extends AppCompatActivity {
     TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL;
@@ -901,11 +895,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", IdentityVerificationActivity.this, "");
+                        Utils.displayAlert("Requires Access to Camera.", IdentityVerificationActivity.this, "", "");
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Your Storage.", IdentityVerificationActivity.this, "");
+                        Utils.displayAlert("Requires Access to Your Storage.", IdentityVerificationActivity.this, "", "");
 
                     } else {
                         startActivity(new Intent(this, CameraActivity.class));
@@ -974,7 +968,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
                     } else {
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -1035,7 +1029,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                         }
                     } else {
-                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "");
+                        Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
 
                     identityVerificationViewModel.getStatusTracker();

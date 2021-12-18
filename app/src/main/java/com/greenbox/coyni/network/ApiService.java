@@ -69,6 +69,8 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.users.AccountLimits;
@@ -272,7 +274,10 @@ public interface ApiService {
 
     @GET("api/v2/transactions/token/info/{gbxTxnId}/{txnType}")
     Call<TransactionDetails> getTransactionDetails(@Path("gbxTxnId") String gbxTxnId,
-                                                  @Path("txnType") int txnType,
-                                                  @Query("txnSubType")int txnSubType );
+                                                   @Path("txnType") int txnType,
+                                                   @Query("txnSubType") int txnSubType);
+
+    @POST("api/v2/transactions/me/limit/{userType}")
+    Call<TransactionLimitResponse> transactionLimits(@Body TransactionLimitRequest request, @Path("userType") int userType);
 
 }

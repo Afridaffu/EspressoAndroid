@@ -412,7 +412,7 @@
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -517,7 +517,7 @@
                     android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginEnd="1dp"
                     android:layout_marginBottom="1dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 
@@ -580,7 +580,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Our team is still reviewing your account. This process may take up to 3 business days."
+                                android:text="Our team is still reviewing your account. This process may take \nup to 3 business days."
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -588,8 +588,8 @@
                         </LinearLayout>
 
                         <ImageView
-                            android:layout_width="@dimen/_75sdp"
-                            android:layout_height="@dimen/_90sdp"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="@dimen/_80sdp"
                             android:layout_gravity="center"
                             android:layout_marginStart="@dimen/_11sdp"
                             android:src="@drawable/ic_in_progress_icon" />

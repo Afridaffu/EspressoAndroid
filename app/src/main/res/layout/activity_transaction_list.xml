@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:paddingRight="@dimen/_14sdp"
-                        android:src="@drawable/ic_filtericon" />
+                        android:src="@drawable/ic_filter_enabled" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -108,7 +108,8 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedSV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
@@ -24,20 +23,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -52,7 +44,6 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.IdVeBottomSheetFragment;
 import com.greenbox.coyni.fragments.SetLimitFragment;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.wallet.UserDetails;
@@ -64,16 +55,8 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Time;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -468,7 +451,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                                     }
                                     getUserDetails(strScanWallet);
                                 } else {
-                                    Utils.displayAlert("Unable to scan the QR code.", PayRequestScanActivity.this, "");
+                                    Utils.displayAlert("Unable to scan the QR code.", PayRequestScanActivity.this, "", "");
                                 }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -600,7 +583,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.show();
                 dashboardViewModel.getUserDetail(strWalletId);
             } else {
-                Utils.displayAlert(getString(R.string.internet), PayRequestScanActivity.this, "");
+                Utils.displayAlert(getString(R.string.internet), PayRequestScanActivity.this, "", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
