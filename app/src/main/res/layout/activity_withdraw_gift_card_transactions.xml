@@ -6,11 +6,7 @@
     android:orientation="vertical"
     android:background="@color/et_bg_gray"
     >
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,6 +43,16 @@
                     android:layout_marginBottom="@dimen/_11sdp"
                     />
             </LinearLayout>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -418,7 +424,7 @@
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginRight="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_12sdp"
-                android:layout_marginBottom="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -486,6 +492,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            </ScrollView>
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>

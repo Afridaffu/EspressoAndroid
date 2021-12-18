@@ -167,14 +167,42 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype().replace("Tokens", ""));
 
             if (objData.getTransactionSubtype().equals("Sent Tokens")) {
-                amount.setText(objData.getAmount().replace("CYN", "").trim());
+                amount.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN","").trim()));
+//                amount.setText(objData.getAmount().replace("CYN", "").trim());
+                name.setText(objData.getRecipientName());
+                accountadress.setText((objData.getRecipientWalletAddress().substring(0, 10) + "..."));
+                fee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
+                total.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
+                lyAccAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this);
+                    }
+                });
             } else {
-                amount.setText(objData.getAmountReceived().replace("CYN", "").trim());
+                amount.setText(Utils.convertTwoDecimal(objData.getAmountReceived().replace("CYN", "").trim()));
                 findViewById(R.id.payreqTAmountLL).setVisibility(View.GONE);
                 findViewById(R.id.payreqPfLL).setVisibility(View.GONE);
+                name.setText(objData.getSenderName());
+                accountadress.setText((objData.getSenderWalletAddress().substring(0, 10) + "..."));
+                lyAccAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this);
+                    }
+                });
             }
-            descrptn.setText(objData.getSenderMessage());
+            if (!objData.getSenderMessage().equals("")) {
+                descrptn.setText(objData.getSenderMessage());
+            }
+            else{
+                descrptn.setVisibility(View.GONE);
+            }
             completed.setText(objData.getStatus());
+            datetime.setText(Utils.convertTxnDate(objData.getCreatedDate()));
+            balance.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN","").trim())+" CYN");
+            refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+
 
             switch (objData.getStatus().toLowerCase()) {
                 case "completed":
@@ -195,29 +223,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     break;
             }
 
-
-            datetime.setText(Utils.convertTxnDate(objData.getCreatedDate()));
-            try {
-                Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", ""));
-                Double sentamnt = Double.parseDouble(objData.getTotalAmount().replace("CYN", ""));
-                amount.setText(Utils.convertTwoDecimalPoints(sentamnt));
-                fee.setText(Utils.convertTwoDecimalPoints(processingFee) + " CYN");
-                total.setText(Utils.convertTwoDecimalPoints(sentamnt + processingFee) + " CYN");
-                total.setText(Utils.convertTwoDecimalPoints(sentamnt) + " CYN");
-                amount.setText(objData.getAmountReceived().replace("CYN",""));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            balance.setText(objData.getAccountBalance());
-            refid.setText(objData.getReferenceId().substring(0, 10) + "...");
-
-            if (objData.getTransactionSubtype().equals("Sent Tokens")) {
-                name.setText(objData.getRecipientName());
-                accountadress.setText((objData.getRecipientWalletAddress().substring(0, 10) + "..."));
-            } else {
-                name.setText(objData.getSenderName());
-                accountadress.setText((objData.getSenderWalletAddress().substring(0, 10) + "..."));
-            }
             lyPRClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -230,12 +235,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
                 }
             });
-            lyAccAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this);
-                }
-            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -270,7 +270,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
 
-           amount.setText(objData.getYouGet().replace("CYN", ""));
+           amount.setText(Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
 
         status.setText(objData.getStatus());
 
@@ -311,13 +311,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
 
-        Double purchaseAmount = Double.parseDouble(objData.getYouPay().replace("USD", ""));
-        Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", ""));
+        Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", "").trim());
+        Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", "").trim());
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseamount.setText("$" + Utils.convertTwoDecimalPoints(purchaseAmount));
-        fee.setText("$" + Utils.convertTwoDecimalPoints(processingFee));
-        total.setText("$" + Utils.convertTwoDecimalPoints(purchaseAmount + processingFee));
-        balance.setText((objData.getAccountBalance()));
+        purchaseamount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
+        fee.setText("$" + Utils.convertTwoDecimal((objData.getProcessingFee().replace("USD", "").trim())));
+        total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
+        balance.setText(Utils.convertTwoDecimal((objData.getAccountBalance().replace("CYN","").trim()))+" CYN");
 
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
@@ -347,6 +347,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
     }
+
     private void buyTokenBankAccount(TransactionData objData) {
         TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
         TextView refid, name, accountadress, descriptorname,depositIDTV,bankAccNumTV,bankNameTV,nameOnAccTV;
@@ -395,15 +396,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 break;
         }
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseamount.setText(objData.getYouPay());
 
 
-        Double purchaseAmount = Double.parseDouble(objData.getYouPay().replace("USD", ""));
-        Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", ""));
+//        Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", ""));
+//        Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", ""));
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseamount.setText("$" + Utils.convertTwoDecimalPoints(purchaseAmount));
-        fee.setText("$" + Utils.convertTwoDecimalPoints(processingFee));
-        total.setText("$" + Utils.convertTwoDecimalPoints(purchaseAmount + processingFee));
+        purchaseamount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN","").trim()));
+        fee.setText("$" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("USD","").trim()));
+        total.setText("$" + Utils.convertTwoDecimal(objData.getYouPay().replace("USD","").trim()));
         bankAccNumTV.setText("..."+objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length()-4));
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
@@ -443,6 +443,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
     }
+
     private void withdrawGiftcard(TransactionData objData) {
         TextView headerMsdTV,amountTV;
         TextView status,dateandtime,withGiftcardname,subtotal,fee,grandtotal,refid,withid,recipientname,email;
@@ -467,7 +468,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refIDIV=findViewById(R.id.withdrawRefIDIV);
 
         headerMsdTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        amountTV.setText(objData.getTotalPaidAmount().replace("CYN", ""));
+        amountTV.setText(Utils.convertTwoDecimal(objData.getTotalPaidAmount().replace("CYN", "").trim()));
 
         status.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -495,12 +496,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         recipientname.setText(objData.getRecipientName());
         email.setText(objData.getRecipientEmail());
 
-        Double subtotatl = Double.parseDouble(objData.getTotalPaidAmount().replace(" CYN",""));
-        Double procesFee = Double.parseDouble(objData.getGiftCardFee().replace(" CYN",""));
+        Double subtotatl = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN","").trim());
+        Double procesFee = Double.parseDouble(objData.getGiftCardFee().replace("CYN","").trim());
 
-        subtotal.setText(""+Utils.convertTwoDecimalPoints(subtotatl));
-        fee.setText(""+Utils.convertTwoDecimalPoints(procesFee));
-        grandtotal.setText(""+Utils.convertTwoDecimalPoints(subtotatl + procesFee));
+        subtotal.setText(""+Utils.convertTwoDecimal(objData.getTotalPaidAmount().replace("CYN","").trim()));
+        fee.setText(""+Utils.convertTwoDecimal(objData.getGiftCardFee().replace(" CYN","").trim()));
+        grandtotal.setText(""+Utils.convertTwoDecimal(String.valueOf(subtotatl + procesFee)));
 
         dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
@@ -559,7 +560,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
         withiheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withiamount.setText(objData.getReceivedAmount().replace("USD", ""));
+        withiamount.setText(Utils.convertTwoDecimal(objData.getReceivedAmount().replace("USD", "").trim()));
         withidescription.setText(objData.getDescription());
         withistatus.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -583,12 +584,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withidatetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
-        withiwithdrawalAmount.setText(objData.getWithdrawAmount().replace("USD","")+" CYN");
-        withiprocefee.setText(objData.getProcessingFee());
+        withiwithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD","").trim())+" CYN");
 
-        withitotal.setText(objData.getTotalAmount());
+        withiprocefee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN","").trim())+" CYN");
 
-        withiaccountbal.setText(objData.getAccountBalance());
+        withitotal.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN","").trim())+" CYN");
+
+        withiaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN","").trim())+" CYN");
 
         if (objData.getWithdrawalId().length()>10){
             withiwithdrawalId.setText(objData.getWithdrawalId().substring(0,10)+"...");
@@ -672,7 +674,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
         withbankheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withbankamount.setText(objData.getWithdrawAmount().replace("USD", ""));
+        withbankamount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
         withbankdescription.setText(objData.getDescription());
         withbankstatus.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -699,11 +701,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace(" USD",""));
         Double procesFee = Double.parseDouble(objData.getProcessingFee().replace(" CYN",""));
 
-        withbankwithdrawalAmount.setText(""+Utils.convertTwoDecimalPoints(subtotal));
-        withbankprocefee.setText(""+Utils.convertTwoDecimalPoints(procesFee));
-        withbanktotal.setText(""+Utils.convertTwoDecimalPoints(subtotal + procesFee));
+        withbankwithdrawalAmount.setText(""+Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD","").trim()));
+        withbankprocefee.setText(""+Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN","").trim()));
+        withbanktotal.setText(""+Utils.convertTwoDecimal(String.valueOf(subtotal+procesFee)));
 
-        withbankaccountbal.setText(objData.getAccountBalance());
+        withbankaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN","").trim())+" CYN");
 
         if (objData.getWithdrawalId().length()>10){
             withbankwithdrawalId.setText(objData.getWithdrawalId().substring(0,10)+"...");

@@ -71,7 +71,6 @@
                         android:id="@+id/withbankheaderTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Withdraw - Bank Account"
                         android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp"
@@ -98,7 +97,6 @@
                             android:id="@+id/withBankAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="100.00"
                             android:textSize="@dimen/_24ssp"
                             android:fontFamily="@font/opensans_bold"
                             android:textColor="@color/primary_color"
@@ -113,7 +111,6 @@
                         android:layout_marginRight="@dimen/_11sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:gravity="center"
-                        android:text="“Hey friend, thanks for dinner the other night. Here’s \nwhat I owe you for the meal you  (this is exactly 120\n characters). ”"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_10ssp" />
 
@@ -133,7 +130,7 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/_11sdp"
-                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_10sdp"
                         android:paddingTop="@dimen/_8sdp"
                         android:paddingRight="@dimen/_11sdp"
 
@@ -154,13 +151,11 @@
                             android:paddingBottom="@dimen/_2sdp"
                             android:paddingLeft="@dimen/_16sdp"
                             android:paddingRight="@dimen/_16sdp"
-                            android:paddingTop="@dimen/_1sdp"
-                            android:background="@drawable/fill_grn_color_smallradius"
+                            android:paddingTop="@dimen/_2sdp"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
-                            android:text="Completed"
                             android:textColor="@color/active_green"
-                            android:textSize="@dimen/_7ssp" />
+                            android:textSize="@dimen/_8ssp" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -186,7 +181,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="07/27/2020 10:36:14"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
@@ -218,7 +212,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="100.00"
                             android:textSize="@dimen/_11ssp"
                             android:layout_marginRight="@dimen/_4sdp"
                             android:fontFamily="@font/opensans_semibold"
@@ -258,7 +251,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="1.00"
                             android:textSize="@dimen/_11ssp"
                             android:layout_marginRight="@dimen/_4sdp"
                             android:fontFamily="@font/opensans_semibold"
@@ -316,7 +308,6 @@
                             android:layout_marginRight="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="101.00"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                         <TextView
@@ -356,7 +347,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="1,100.00 CYN"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
