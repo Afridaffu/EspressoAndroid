@@ -329,9 +329,9 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        if(msg.equals("")){
+        if (msg.equals("")) {
             displayAlertNew(msg, activity, header);
-        }else{
+        } else {
             displayAlertNew(fieldError, activity, header);
         }
     }
@@ -961,5 +961,10 @@ public class Utils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static float pixelsToSp(Context context, float px) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return px / scaledDensity;
     }
 }

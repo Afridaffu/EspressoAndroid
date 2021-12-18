@@ -10,8 +10,7 @@
     android:paddingTop="@dimen/_10sdp"
     android:paddingEnd="@dimen/_20sdp"
     android:paddingBottom="@dimen/_20sdp"
-    android:theme="@style/Theme.Coyni"
-    >
+    android:theme="@style/Theme.Coyni">
 
     <View
         android:layout_width="@dimen/_43sdp"
@@ -586,8 +585,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -663,8 +662,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:background="@drawable/bg_small_corners"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/datePickET"
@@ -709,11 +708,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@color/primary_green"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
                 android:text="Apply Filter"
                 android:textColor="@color/white"
-                android:background="@color/primary_green"
                 android:textSize="@dimen/_12ssp" />
         </androidx.cardview.widget.CardView>
 

@@ -182,6 +182,7 @@
 
     <string name="currency">CYN</string>
     <string name="maxlength">10</string>
+    <string name="maxlendecimal">16</string>
 
 
 </resources>

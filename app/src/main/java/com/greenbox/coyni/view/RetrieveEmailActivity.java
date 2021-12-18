@@ -327,9 +327,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 if (apiError != null) {
                     if (apiError.getError().getErrorCode().equals("218020") || apiError.getError().getErrorDescription().contains("issue with your OTP")) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this, "");
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), RetrieveEmailActivity.this, "", "");
                         }
                     } else {
                         displayNoAccount();
