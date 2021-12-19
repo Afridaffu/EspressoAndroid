@@ -1,8 +1,21 @@
 package com.greenbox.coyni.view;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,9 +32,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.andrewjapar.rangedatepicker.CalendarPicker;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +52,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.andrewjapar.rangedatepicker.CalendarPicker;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
@@ -48,9 +70,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.TimeZone;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function4;
 
 public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
@@ -143,7 +172,11 @@ public class TransactionListActivity extends AppCompatActivity {
                         }
                         if (filterList.size() > 0) {
                             transactionListPendingAdapter.updateList(filterList);
+                            globalPosted.clear();
+                            findViewById(R.id.layoutLLposted).setVisibility(View.GONE);
+
                         }
+
 
                     }
                     if (globalPosted.size() > 0) {
@@ -155,6 +188,10 @@ public class TransactionListActivity extends AppCompatActivity {
                         }
                         if (filterList1.size() > 0) {
                             transactionListPostedAdapter.updateList(filterList1);
+                            globalPending.clear();
+                            findViewById(R.id.layoutLLPending).setVisibility(View.GONE);
+                            findViewById(R.id.pendingTV).setVisibility(View.GONE);
+
                         }
 
                     }
