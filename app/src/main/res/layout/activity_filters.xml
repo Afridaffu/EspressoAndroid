@@ -643,7 +643,7 @@
                             android:inputType="number"
                             android:textColor="@color/primary_black"
                             android:textColorHint="@color/light_gray"
-                            android:textCursorDrawable="@drawable/cursor_color_text"
+                            android:textCursorDrawable="@drawable/cursor_color"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
@@ -675,7 +675,7 @@
                             android:inputType="number"
                             android:textColor="@color/primary_black"
                             android:textColorHint="@color/light_gray"
-                            android:textCursorDrawable="@drawable/cursor_color_text"
+                            android:textCursorDrawable="@drawable/cursor_color"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
