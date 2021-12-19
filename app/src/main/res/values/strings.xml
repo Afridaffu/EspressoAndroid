@@ -184,7 +184,6 @@
     <string name="reference_id_hyper"><u>[Reference ID (hyper</u></string>
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
-
     <string name="maxlength">10</string>
     <string name="maxlendecimal">16</string>
 
