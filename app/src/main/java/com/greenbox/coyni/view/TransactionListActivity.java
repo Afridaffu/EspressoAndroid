@@ -169,16 +169,46 @@ public class TransactionListActivity extends AppCompatActivity {
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    globalPosted.clear();
-                    globalPending.clear();
-                    currentPage = 0;
-                    total = 0;
-                    TransactionListRequest transactionListRequest = new TransactionListRequest();
-                    transactionListRequest.setPageNo(String.valueOf(currentPage));
-                    transactionListRequest.setWalletCategory(Utils.walletCategory);
-                    transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-                    dashboardViewModel.meTransactionList(transactionListRequest);
-                    dashboardViewModel.mePreferences();
+//                    globalPosted.clear();
+//                    globalPending.clear();
+//                    currentPage = 0;
+//                    total = 0;
+//                    TransactionListRequest transactionListRequest = new TransactionListRequest();
+//                    transactionListRequest.setPageNo(String.valueOf(currentPage));
+//                    transactionListRequest.setWalletCategory(Utils.walletCategory);
+//                    transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+//                    dashboardViewModel.meTransactionList(transactionListRequest);
+//                    dashboardViewModel.mePreferences();
+                    try {
+                        noMoreTransactionTV.setVisibility(View.GONE);
+
+                        globalPending.clear();
+                        globalPosted.clear();
+                        transactionType.clear();
+                        transactionSubType.clear();
+                        txnStatus.clear();
+                        currentPage = 0;
+                        strFromDate = "";
+                        strToDate = "";
+                        strStartAmount = "";
+                        strEndAmount = "";
+                        startDateD = null;
+                        endDateD = null;
+                        startDateLong = 0L;
+                        endDateLong = 0L;
+                        strSelectedDate = "";
+                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
+                        TransactionListRequest transactionListRequest = new TransactionListRequest();
+                        transactionListRequest.setPageNo(String.valueOf(currentPage));
+                        transactionListRequest.setWalletCategory(Utils.walletCategory);
+                        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+
+                        dashboardViewModel.meTransactionList(transactionListRequest);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
@@ -284,25 +314,25 @@ public class TransactionListActivity extends AppCompatActivity {
                                     rvTransactionsPending.setAdapter(transactionListPendingAdapter);
                                     if (currentPage > 0) {
                                         int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
-//                                        rvTransactionsPending.scrollToPosition(myPos);
-                                        final float y = rvTransactionsPending.getChildAt(myPos).getY();
-                                        nestedScrollView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                nestedScrollView.fling(0);
-                                                nestedScrollView.smoothScrollTo(0, (int) y);
-                                            }
-                                        });
+                                        nestedScrollView.smoothScrollTo(myPos, myPos);
+//                                        float y = rvTransactionsPending.getChildAt(myPos).getY();
+//                                        nestedScrollView.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                nestedScrollView.fling(0);
+//                                                nestedScrollView.smoothScrollTo(0, (int) y);
+//                                            }
+//                                        });
                                     } else {
-//                                        rvTransactionsPending.scrollToPosition(0);
-                                        final float y = rvTransactionsPending.getChildAt(0).getY();
-                                        nestedScrollView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                nestedScrollView.fling(0);
-                                                nestedScrollView.smoothScrollTo(0, (int) y);
-                                            }
-                                        });
+                                        nestedScrollView.smoothScrollTo(0, 0);
+//                                        final float y = rvTransactionsPending.getChildAt(0).getY();
+//                                        nestedScrollView.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                nestedScrollView.fling(0);
+//                                                nestedScrollView.smoothScrollTo(0, (int) y);
+//                                            }
+//                                        });
                                     }
                                 } else if (globalPending.size() == 0 && globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
@@ -315,25 +345,26 @@ public class TransactionListActivity extends AppCompatActivity {
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
                                     if (currentPage > 0) {
                                         int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
-//                                        getRvTransactionsPosted.scrollToPosition(myPos);
-                                        final float y = getRvTransactionsPosted.getChildAt(myPos).getY();
-                                        nestedScrollView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                nestedScrollView.fling(0);
-                                                nestedScrollView.smoothScrollTo(0, (int) y);
-                                            }
-                                        });
+                                        nestedScrollView.smoothScrollTo(myPos, myPos);
+//                                        final float y = getRvTransactionsPosted.getChildAt(myPos).getY();
+//                                        nestedScrollView.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                nestedScrollView.fling(0);
+//                                                nestedScrollView.smoothScrollTo(0, (int) y);
+//                                            }
+//                                        });
                                     } else {
+                                        nestedScrollView.smoothScrollTo(0,0);
 //                                        getRvTransactionsPosted.scrollToPosition(0);
-                                        final float y = getRvTransactionsPosted.getChildAt(0).getY();
-                                        nestedScrollView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                nestedScrollView.fling(0);
-                                                nestedScrollView.smoothScrollTo(0, (int) y);
-                                            }
-                                        });
+//                                        final float y = getRvTransactionsPosted.getY() + getRvTransactionsPosted.getChildAt(0).getY();
+//                                        nestedScrollView.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                nestedScrollView.fling(0);
+//                                                nestedScrollView.smoothScrollTo(0, (int) y);
+//                                            }
+//                                        });
                                     }
                                 } else if (globalPending.size() > 0 && globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
@@ -350,19 +381,21 @@ public class TransactionListActivity extends AppCompatActivity {
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
 
-                                    final float y = getRvTransactionsPosted.getChildAt(0).getY();
-                                    nestedScrollView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            nestedScrollView.fling(0);
-                                            nestedScrollView.smoothScrollTo(0, (int) y);
-                                        }
-                                    });
+                                    nestedScrollView.smoothScrollTo(0,0);
+//                                    final float y = getRvTransactionsPosted.getChildAt(0).getY();
+//                                    nestedScrollView.post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            nestedScrollView.fling(0);
+//                                            nestedScrollView.smoothScrollTo(0, (int) y);
+//                                        }
+//                                    });
                                 } else {
                                     noTransactionTV.setVisibility(View.VISIBLE);
                                     layoutTransactionspending.setVisibility(View.GONE);
                                     layoutTransactionsposted.setVisibility(View.GONE);
                                     pendingTxt.setVisibility(View.GONE);
+
                                 }
 
 //                                //Posted RV
@@ -649,6 +682,10 @@ public class TransactionListActivity extends AppCompatActivity {
             endDateLong = 0L;
             isFilters = false;
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
+            transAmountStartET.clearFocus();
+            transAmountEndET.clearFocus();
+            getDateFromPickerET.clearFocus();
 
             transTypePR.setChecked(false);
             transTypeBT.setChecked(false);
