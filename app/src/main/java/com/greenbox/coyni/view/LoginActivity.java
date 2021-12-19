@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (cursor.getCount() > 0) {
                 String value = cursor.getString(1);
                 etEmail.setText(value);
+                etPassword.setText("");
             } else {
                 etEmail.setText("");
                 etPassword.setText("");

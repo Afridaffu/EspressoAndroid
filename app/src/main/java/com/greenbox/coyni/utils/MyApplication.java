@@ -19,6 +19,7 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.transaction.TransactionList;
@@ -61,7 +62,7 @@ public class MyApplication extends Application {
     int timezoneID = 0, tempTimezoneID = 0, userId;
     TransactionList transactionList;
     PaymentsList selectedCard;
-
+    TransferFeeResponse transferFeeResponse;
 
 
     public UserDetails getUserDetails() {
@@ -548,5 +549,13 @@ public class MyApplication extends Application {
 
     public void setRsaPublicKey(String rsaPublicKey) {
         this.rsaPublicKey = rsaPublicKey;
+    }
+
+    public TransferFeeResponse getTransferFeeResponse() {
+        return transferFeeResponse;
+    }
+
+    public void setTransferFeeResponse(TransferFeeResponse transferFeeResponse) {
+        this.transferFeeResponse = transferFeeResponse;
     }
 }
