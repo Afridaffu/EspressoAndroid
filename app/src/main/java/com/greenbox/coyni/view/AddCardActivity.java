@@ -1251,7 +1251,7 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        preDialog.dismiss();
+                        //preDialog.dismiss();
                         Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
                         startActivity(i);
                         finish();

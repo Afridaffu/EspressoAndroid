@@ -123,8 +123,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        objMyApplication.setSelectedCard(objData);
                         if (strScreen.equals("selectpay")) {
+                            objMyApplication.setSelectedCard(objData);
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                 if (!objData.getRelink()) {
 
@@ -137,9 +137,16 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 ((BuyTokenPaymentMethodsActivity) mContext).expiry();
                             }
                         } else {
-                            objMyApplication.setSelectedCard(objData);
-                            notifyDataSetChanged();
-                            ((BuyTokenActivity) mContext).bindPayMethod(objData);
+                            if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                objMyApplication.setSelectedCard(objData);
+                                notifyDataSetChanged();
+//                            ((BuyTokenActivity) mContext).bindPayMethod(objData);
+                                if (!objData.getExpired()) {
+                                    ((BuyTokenActivity) mContext).displayCVV(objData);
+                                } else {
+                                    ((BuyTokenActivity) mContext).expiry();
+                                }
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
