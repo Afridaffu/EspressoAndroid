@@ -217,7 +217,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     completed.setTextColor(getResources().getColor(R.color.completed_status));
                     completed.setBackgroundResource(R.drawable.txn_completed_bg);
                     break;
-                case "inprogress":
+                case "in progress":
                     completed.setTextColor(getResources().getColor(R.color.inprogress_status));
                     completed.setBackgroundResource(R.drawable.txn_inprogress_bg);
                     break;
@@ -254,6 +254,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView refid, name, accountadress, descriptorname, cardNumber, expiryDate, depositIDTV;
         LinearLayout lyPRClose, lyRefId, lyAccAdd;
         ImageView refIdIV, depositIDIV, cardBrandIV;
+        LinearLayout depositID,referenceID;
 
         headerTV = findViewById(R.id.headTV);
         amount = findViewById(R.id.tvAmount);
@@ -263,6 +264,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         fee = findViewById(R.id.processingFeeTV);
         total = findViewById(R.id.totalAmountTV);
         balance = findViewById(R.id.accBalTV);
+        depositID=findViewById(R.id.depositIDLL);
+        referenceID=findViewById(R.id.referenceIDLL);
         refid = findViewById(R.id.referenceIDTV);
         descriptorname = findViewById(R.id.descriNameTV);
         name = findViewById(R.id.cardHoldernameTV);
@@ -287,7 +290,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setTextColor(getResources().getColor(R.color.completed_status));
                 status.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
-            case "inprogress":
+            case "in progress":
                 status.setTextColor(getResources().getColor(R.color.inprogress_status));
                 status.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
@@ -341,13 +344,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        refIdIV.setOnClickListener(new View.OnClickListener() {
+        referenceID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
             }
         });
-        depositIDIV.setOnClickListener(new View.OnClickListener() {
+        depositID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this);
@@ -359,7 +362,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void buyTokenBankAccount(TransactionData objData) {
         TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
         TextView refid, name, accountadress, descriptorname, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
-        LinearLayout lyPRClose, lyRefId, lyAccAdd;
+        LinearLayout lyPRClose, btBankReference, btBankDepositID;
         ImageView previousBtn, refIdIV, depositIDIV;
 
         headerTV = findViewById(R.id.btbankheaderTV);
@@ -370,6 +373,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         fee = findViewById(R.id.btBankprocessingfeeTV);
         total = findViewById(R.id.btbankTotalTV);
         refid = findViewById(R.id.btbankRefidTV);
+        btBankReference=findViewById(R.id.btbankReferenceLL);
+        btBankDepositID=findViewById(R.id.btbankDepositIDLL);
         descriptorname = findViewById(R.id.btbankDescrptorTV);
         depositIDTV = findViewById(R.id.btbankDepositIDTV);
         lyPRClose = findViewById(R.id.btbankprevious);
@@ -389,7 +394,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setTextColor(getResources().getColor(R.color.completed_status));
                 status.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
-            case "inprogress":
+            case "in progress":
                 status.setTextColor(getResources().getColor(R.color.inprogress_status));
                 status.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 findViewById(R.id.cancelTxnCV).setVisibility(View.VISIBLE);
@@ -416,17 +421,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
         depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
-
-        if (!objData.getBankName().equals("")) {
             bankNameTV.setText(objData.getBankName());
-        } else {
-            bankNameTV.setText("Not Available");
-        }
-        if (!objData.getNameOnBankAccount().equals("")) {
+
+
             nameOnAccTV.setText(objData.getNameOnBankAccount());
-        } else {
-            nameOnAccTV.setText("Not Available");
-        }
 //        successadd.setText(("Successfully added "+"["+trasactionDetails.getData().getYouGet()+"]" +" to token account"));
 //        chargeback.setText(("["+trasactionDetails.getData().getReferenceId().substring(0, 8) + "...")+"(hyper");
         lyPRClose.setOnClickListener(new View.OnClickListener() {
@@ -435,16 +433,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        refIdIV.setOnClickListener(new View.OnClickListener() {
+        btBankReference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                try {
+                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
-        depositIDIV.setOnClickListener(new View.OnClickListener() {
+        btBankDepositID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this);
+                try {
+                    Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -453,7 +459,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void withdrawGiftcard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
         TextView status, dateandtime, withGiftcardname, subtotal, fee, grandtotal, refid, withid, recipientname, email;
-        LinearLayout previous;
+        LinearLayout previous,giftCardWithdrawID,giftcardReferenceID;
         ImageView withIdIV, refIDIV;
 
         headerMsdTV = findViewById(R.id.withGiftheadTV);
@@ -468,7 +474,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withid = findViewById(R.id.withgiftid);
         recipientname = findViewById(R.id.withGiftRecipientNameTV);
         email = findViewById(R.id.withGiftReciEmailTV);
-
+        giftCardWithdrawID=findViewById(R.id.giftCardwithdrawIDLL);
+        giftcardReferenceID=findViewById(R.id.giftcardReferenceIDLL);
         previous = findViewById(R.id.withGiftprevious);
         withIdIV = findViewById(R.id.withdrawGiftIdIV);
         refIDIV = findViewById(R.id.withdrawRefIDIV);
@@ -482,7 +489,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setTextColor(getResources().getColor(R.color.completed_status));
                 status.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
-            case "inprogress":
+            case "in progress":
                 status.setTextColor(getResources().getColor(R.color.inprogress_status));
                 status.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
@@ -522,13 +529,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        refIDIV.setOnClickListener(new View.OnClickListener() {
+        giftcardReferenceID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
             }
         });
-        withIdIV.setOnClickListener(new View.OnClickListener() {
+        giftCardWithdrawID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getWithdrawId(), TransactionDetailsActivity.this);
@@ -538,7 +545,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void withdrawInstant(TransactionData objData) {
-        LinearLayout previous;
+        LinearLayout previous,withdrawID,referenceID;
         TextView withiheader, withiamount, withidescription, withistatus, withidatetime, withiwithdrawalAmount, withiprocefee, withitotal, withiaccountbal, withiwithdrawalId, withirefId;
         TextView withicardHolderName, withicardnumber, withiexpirydate;
         ImageView withiwithdrawalid, withirefIDIV, withicardbrand;
@@ -557,6 +564,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withiwithdrawalid = findViewById(R.id.withinwithIDIV);
         withirefId = findViewById(R.id.withinrefid);
         withirefIDIV = findViewById(R.id.withinrefIDIV);
+        withdrawID=findViewById(R.id.withiwithdrawalLL);
+        referenceID=findViewById(R.id.withiReferenceIDLL);
         withicardHolderName = findViewById(R.id.withincardholdername);
         withicardbrand = findViewById(R.id.withincardbrandIV);
         withicardnumber = findViewById(R.id.withincardnumTV);
@@ -576,6 +585,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 withistatus.setTextColor(getResources().getColor(R.color.completed_status));
                 withistatus.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
+            case "in progress":
             case "inprogress":
                 withistatus.setTextColor(getResources().getColor(R.color.inprogress_status));
                 withistatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
@@ -635,13 +645,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        withirefIDIV.setOnClickListener(new View.OnClickListener() {
+        referenceID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
             }
         });
-        withiwithdrawalid.setOnClickListener(new View.OnClickListener() {
+        withdrawID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
@@ -655,7 +665,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView withbankheader, withbankamount, withbankdescription, withbankstatus, withbankdatetime, withbankwithdrawalAmount, withbankprocefee, withbanktotal, withbankaccountbal, withbankwithdrawalId, withbankrefId;
         TextView withbanknameonaccount, withbankname, withbankaccount;
         ImageView withbankwithdrawalid, withbankrefIDIV;
-        LinearLayout withBankCloseLL;
+        LinearLayout withBankCloseLL,withBankWithdrawalID,withBankReference;
 
         withbankheader = findViewById(R.id.withbankheaderTV);
         withbankamount = findViewById(R.id.withBankAmount);
@@ -668,7 +678,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withbankaccountbal = findViewById(R.id.withBankAccBalanceTV);
         withbankwithdrawalId = findViewById(R.id.withBankWithdrawidTV);
         withbankrefId = findViewById(R.id.withBankReferenceIDTV);
-
+        withBankWithdrawalID=findViewById(R.id.withBankWithdrawalIDLL);
+        withBankReference=findViewById(R.id.withBankReferenceIDLL);
         withbanknameonaccount = findViewById(R.id.withBankNameOnAccountTV);
         withbankname = findViewById(R.id.withBankBanknameTV);
         withbankaccount = findViewById(R.id.withBankbankaccountTV);
@@ -691,6 +702,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 withbankstatus.setTextColor(getResources().getColor(R.color.completed_status));
                 withbankstatus.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
+            case "in progress":
             case "inprogress":
                 withbankstatus.setTextColor(getResources().getColor(R.color.inprogress_status));
                 withbankstatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
@@ -723,31 +735,27 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         withbankrefId.setText(objData.getReferenceId().substring(0, 10) + "...");
-        if (!objData.getNameOnBankAccount().equals(""))
+
             withbanknameonaccount.setText(objData.getNameOnBankAccount());
-        else
-            withbanknameonaccount.setText("Not Available");
-        if (!objData.getBankName().equals(""))
+
             withbankname.setText(objData.getBankName());
-        else
-            withbankname.setText("Not Available");
-
-        withbankaccount.setText(objData.getBankAccountNumber());
 
 
+
+        withbankaccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
         withBankCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-        withbankrefIDIV.setOnClickListener(new View.OnClickListener() {
+        withBankReference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
             }
         });
-        withbankwithdrawalid.setOnClickListener(new View.OnClickListener() {
+        withBankWithdrawalID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
