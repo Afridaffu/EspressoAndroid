@@ -385,6 +385,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     try {
                         if (searchET.hasFocus())
                             searchET.clearFocus();
+                        searchET.setText("");
                         if (transactionList != null && transactionList.getData().getItems() != null
                                 && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             progressBar.setVisibility(View.GONE);

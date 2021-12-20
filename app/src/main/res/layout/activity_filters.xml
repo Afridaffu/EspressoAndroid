@@ -712,7 +712,7 @@
                         android:editable="false"
                         android:focusable="false"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Jan,16,2020 - Feb,31, 2020"
+                        android:hint="Date Range"
                         android:textColor="@color/primary_black"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color_text"

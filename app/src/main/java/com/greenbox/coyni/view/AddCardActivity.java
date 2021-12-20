@@ -185,6 +185,7 @@ public class AddCardActivity extends AppCompatActivity {
             etlZipCode = findViewById(R.id.etlZipCode);
             etCardNumber.requestFocus();
 
+            etCardNumber.setFrom("ADD_CARD");
             MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
             mRecognizer = new BlinkCardRecognizer();
             mRecognizer.setExtractCvv(false);
@@ -374,7 +375,7 @@ public class AddCardActivity extends AppCompatActivity {
                     if (apiError != null) {
                         if (apiError.getError() != null) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), AddCardActivity.this, "", "");
                             } else {
                                 Utils.displayAlert(apiError.getError().getFieldErrors().get(0), AddCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             }
@@ -568,6 +569,12 @@ public class AddCardActivity extends AppCompatActivity {
                                 nameErrorLL.setVisibility(GONE);
                                 etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+                            } else if (etName.getText().toString().trim().length() == 1) {
+                                isName = false;
+                                etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+                                nameErrorLL.setVisibility(VISIBLE);
+                                nameErrorTV.setText("Minimum 2 Characters Required");
                             } else {
                                 isName = false;
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -749,23 +756,29 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
-                            if (etZipCode.getText().toString().trim().length() > 0) {
+                            if (etZipCode.getText().toString().trim().length() == 5) {
                                 zipErrorLL.setVisibility(GONE);
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
 
+                            }else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                                zipErrorLL.setVisibility(VISIBLE);
+                                zipErrorTV.setText("Minimum 5 Characters Required");
                             } else if (etZipCode.getText().toString().trim().length() == 0) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
-                            } else {
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
-                                zipErrorLL.setVisibility(VISIBLE);
-                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
-                                isZipcode = false;
                             }
+//                            else {
+//                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+//                                zipErrorLL.setVisibility(VISIBLE);
+//                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
+//                                isZipcode = false;
+//                            }
                         } else {
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
@@ -816,7 +829,7 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    if(!etName.hasFocus()){
+                    if (!etName.hasFocus() && etName.getText().toString().trim().length() > 1) {
                         etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
                     }
@@ -1048,17 +1061,18 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
+                    if (charSequence.toString().trim().length() == 5) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
-//                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
-                        zipErrorLL.setVisibility(VISIBLE);
-                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
+                        zipErrorLL.setVisibility(GONE);
+                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+//                        zipErrorLL.setVisibility(VISIBLE);
+//                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
