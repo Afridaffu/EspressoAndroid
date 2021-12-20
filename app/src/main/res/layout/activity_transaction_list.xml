@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#f2f4f5"
     android:orientation="vertical"
-    android:theme="@style/Calender"
     tools:context=".view.TransactionListActivity">
 
     <LinearLayout
@@ -66,6 +65,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                        android:maxLength="25"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_toLeftOf="@id/filterIconIV"
@@ -75,6 +76,7 @@
                         android:hint="Merchant’s Name/Reference ID."
                         android:maxLines="1"
                         android:singleLine="true"
+                        android:imeOptions="actionDone"
                         android:textColor="@color/primary_black"
                         android:textColorHint="@color/dark_grey"
                         android:textCursorDrawable="@drawable/cursor_color"
@@ -147,7 +149,7 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         app:cardCornerRadius="@dimen/_10sdp">
 
-                        <androidx.recyclerview.widget.RecyclerView
+                        <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
                             android:id="@+id/transactionListPendingRV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -178,7 +180,7 @@
                     <!--                    app:cardCornerRadius="@dimen/_10sdp"-->
                     <!--                    app:cardBackgroundColor="@color/white">-->
 
-                    <androidx.recyclerview.widget.RecyclerView
+                    <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
                         android:id="@+id/transactionListPostedRV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -203,7 +205,21 @@
                 <ProgressBar
                     android:id="@+id/progressBarLoadMore"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/loadMoreTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:text="Load More"
+                    android:textColor="@color/primary_green"
+                    android:textSize="@dimen/_10ssp"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/noMoreTransactions"

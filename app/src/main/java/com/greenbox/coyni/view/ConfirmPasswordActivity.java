@@ -111,6 +111,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                     } else {
                         btnEnabled = false;
                         saveBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        layoutPwdError.setVisibility(View.GONE);
                     }
 
                 }

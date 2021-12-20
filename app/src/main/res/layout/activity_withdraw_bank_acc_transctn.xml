@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/et_bg_gray"
+    >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+         >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/backgrndbtmcornrs"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/_22sdp"
+                >
+                <LinearLayout
+                    android:id="@+id/withbankCloseLL"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_14sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_chevron_left" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_11sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Transaction Details"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16ssp" />
+            </LinearLayout>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                >
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/withbankheaderTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:layout_marginBottom="@dimen/_6sdp"
+                        />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:textSize="@dimen/_24ssp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:textColor="@color/primary_color"
+                        />
+                        <TextView
+                            android:id="@+id/withBankAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_24ssp"
+                            android:fontFamily="@font/opensans_bold"
+                            android:textColor="@color/primary_color"
+                            />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/withBankDescrptnTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginRight="@dimen/_11sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_10ssp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_11sdp"
+                        android:layout_marginRight="@dimen/_11sdp"
+                        android:background="@color/inactive_color"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Status"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/withBankStatusTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/_2sdp"
+                            android:paddingLeft="@dimen/_16sdp"
+                            android:paddingRight="@dimen/_16sdp"
+                            android:paddingTop="@dimen/_2sdp"
+                            android:fontFamily="@font/opensans_bold"
+                            android:gravity="center"
+                            android:textColor="@color/active_green"
+                            android:textSize="@dimen/_8ssp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Date &amp; Time"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/dark_grey"
+                            />
+                        <TextView
+                            android:id="@+id/withbankDatetimeTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Withdraw Amount"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/dark_grey"
+                            />
+
+                        <TextView
+                            android:id="@+id/withBankWithdrawAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_marginRight="@dimen/_4sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CYN"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Processing Fee"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/dark_grey"
+                            />
+                        <TextView
+                            android:id="@+id/withBankProcessFee"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_marginRight="@dimen/_4sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CYN"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                             />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingBottom="@dimen/_11sdp"
+                            android:paddingTop="@dimen/_8sdp"
+                            android:paddingRight="@dimen/_11sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="Total Amount"
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="(Withdraw Amount + Processing Fee)"
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_10ssp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/withBankTotalTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="right"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_11sdp"
+                            android:text="CYN"
+                            android:textSize="@dimen/_11ssp"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Account Balance"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/dark_grey"
+                            />
+                        <TextView
+                            android:id="@+id/withBankAccBalanceTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Withdraw ID"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/dark_grey"
+                           />
+                        <TextView
+                            android:id="@+id/withBankWithdrawidTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="874jeM734h…"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                            />
+                        <ImageView
+                            android:id="@+id/withBankwithdrawIDIV"
+                            android:layout_width="@dimen/_11sdp"
+                            android:layout_height="@dimen/_11sdp"
+                            android:src="@drawable/ic_copy"
+                            android:layout_marginLeft="@dimen/_6sdp"
+                            android:layout_gravity="center"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Reference ID"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/dark_grey"
+                            />
+                        <TextView
+                            android:id="@+id/withBankReferenceIDTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="1d3hsM734h…"
+                            android:textSize="@dimen/_11ssp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:gravity="right"
+                           />
+                        <ImageView
+                            android:id="@+id/withBankReferenceIDIV"
+                            android:layout_width="@dimen/_11sdp"
+                            android:layout_height="@dimen/_11sdp"
+                            android:src="@drawable/ic_copy"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_6sdp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_11sdp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Name on Account"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/withBankNameOnAccountTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="right"
+                            android:text="Dan Nusinovich"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Bank Name"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/withBankBanknameTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Bank of America"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingBottom="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_11sdp"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Bank Account #"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/withBankbankaccountTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                             android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="right"
+                            android:text="••••5359"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activity Log"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:fontFamily="@font/opensans_bold"
+
+            />
+            <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_11sdp"
+            android:layout_marginRight="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                >
+
+                <View
+                    android:layout_width="@dimen/_4sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/dot_view_" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Withdraw"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6/23/2021 7:43pm"
+                    android:textSize="@dimen/_10ssp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginLeft="@dimen/_7sdp"
+                    android:gravity="right"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bank withdraw request Failed for reason [add the\nreason code from Signature Bank]  Total of [withdraw \namount] been credit back to your token account \n[reference ID + will be hyper link to the Failed ACH \nwithdraw transaction"
+                android:textSize="@dimen/_9ssp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                >
+
+                <View
+                    android:layout_width="@dimen/_4sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/dot_view_" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Withdraw"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6/23/2021 7:43pm"
+                    android:textSize="@dimen/_10ssp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginLeft="@dimen/_7sdp"
+                    android:gravity="right"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bank withdraw request got canceled, Total of [withdraw \namount + processing fee] been credit back to your \ntoken account [reference ID + will be hyper link to the \ncanceled ACH withdraw transaction]"
+                android:textSize="@dimen/_9ssp"
+                android:layout_marginRight="@dimen/_9sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:layout_marginLeft="@dimen/_11sdp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                >
+
+                <View
+                    android:layout_width="@dimen/_4sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/dot_view_" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Withdraw"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6/23/2021 7:43pm"
+                    android:textSize="@dimen/_10ssp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginLeft="@dimen/_7sdp"
+                    android:gravity="right"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Successfully Deposit [xxx.xx USD] to bank account\naccount ending in [****1234]"
+                android:textSize="@dimen/_9ssp"
+                android:layout_marginRight="@dimen/_9sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:layout_marginLeft="@dimen/_11sdp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                >
+
+                <View
+                    android:layout_width="@dimen/_4sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/dot_view_" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Withdraw"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6/23/2021 7:43pm"
+                    android:textSize="@dimen/_10ssp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:textColor="@color/primary_black"
+                    android:layout_marginLeft="@dimen/_7sdp"
+                    android:gravity="right"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bank withdraw request sent"
+                android:textSize="@dimen/_9ssp"
+                android:layout_marginRight="@dimen/_9sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/primary_black"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                />
+
+              </LinearLayout>
+            </androidx.cardview.widget.CardView>
+             </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+</LinearLayout>

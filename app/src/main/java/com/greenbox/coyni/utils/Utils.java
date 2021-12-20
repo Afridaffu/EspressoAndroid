@@ -331,7 +331,7 @@ public class Utils {
 
         if(!msg.equals("")){
             displayAlertNew(msg, activity, header);
-        } else {
+        }else{
             displayAlertNew(fieldError, activity, header);
         }
     }
@@ -966,5 +966,17 @@ public class Utils {
     public static float pixelsToSp(Context context, float px) {
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
         return px / scaledDensity;
+    }
+    public static String newDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
     }
 }
