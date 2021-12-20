@@ -207,7 +207,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 descrptn.setVisibility(View.GONE);
             }
             completed.setText(objData.getStatus());
-            datetime.setText(Utils.convertTxnDate(objData.getCreatedDate()));
+            datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
             balance.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
             refid.setText(objData.getReferenceId().substring(0, 10) + "...");
 
@@ -300,7 +300,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
         }
-        datetime.setText(Utils.convertTxnDate(objData.getCreatedDate()));
+        datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
         purchaseamount.setText(objData.getYouPay());
 
         switch (objData.getCardBrand()) {

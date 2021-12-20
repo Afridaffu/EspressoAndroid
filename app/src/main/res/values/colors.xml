@@ -65,7 +65,8 @@
 
     <color name="calendar_month_font">#000000</color>
     <color name="calendar_week_font">#333333</color>
-    <color name="completed_status">#1BB11B</color>
+
+    <color name="completed_status">#008A05</color>
     <color name="txn_completed_trans">#E5F3E5</color>
 
     <color name="txn_inprogress_trans">#E8F3F9</color>

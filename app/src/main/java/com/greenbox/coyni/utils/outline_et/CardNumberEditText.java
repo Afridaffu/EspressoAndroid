@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -121,6 +122,8 @@ public class CardNumberEditText extends ConstraintLayout {
                         AddCardActivity.addCardActivity.isCard = false;
                     }
                     AddCardActivity.addCardActivity.enableOrDisableNext();
+                    cnET.setSelection(cnET.getText().toString().length()+2);
+                    Log.e("length",cnET.getText().toString());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

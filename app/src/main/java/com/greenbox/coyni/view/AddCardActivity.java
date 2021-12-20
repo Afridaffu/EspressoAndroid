@@ -546,6 +546,17 @@ public class AddCardActivity extends AppCompatActivity {
 
     private void focusWatchers() {
         try {
+            etName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                        if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
+                            etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1).toLowerCase());
+                        }
+                    }
+                    return false;
+                }
+            });
             etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -564,6 +575,11 @@ public class AddCardActivity extends AppCompatActivity {
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
                             }
+
+                            if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
+                                etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1).toLowerCase());
+                            }
+
                         } else {
                             etName.setHint("Name on card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -583,6 +599,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etExpiry.setHint("");
                             if (etExpiry.getText().toString().trim().length() > 0) {
                                 if (validateExpiry()) {
                                     isExpiry = true;
@@ -604,6 +621,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 expiryErrorTV.setText("Field Required");
                             }
                         } else {
+                            etExpiry.setHint("MM/YY");
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                         }
@@ -619,6 +637,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etCVV.setHint("");
                             if (etCVV.getText().toString().trim().length() < 3) {
                                 isCvv = false;
                                 etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -636,6 +655,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_black));
                             }
                         } else {
+                            etCVV.setHint("123");
                             etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_green));
                         }
@@ -785,6 +805,8 @@ public class AddCardActivity extends AppCompatActivity {
                     } else {
                         isName = false;
                     }
+
+
                     enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -794,8 +816,12 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
+                    if(!etName.hasFocus()){
+                        etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+                    }
                     String str = etName.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
                         etName.setText("");
                         etName.setSelection(etName.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -805,7 +831,6 @@ public class AddCardActivity extends AppCompatActivity {
                         etName.setText("");
                         etName.setSelection(etName.getText().length());
                     }
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1141,6 +1166,7 @@ public class AddCardActivity extends AppCompatActivity {
             ctKey = preAuthDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify");
             ctKey.setScreenName("addcard");
+            ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
             tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
