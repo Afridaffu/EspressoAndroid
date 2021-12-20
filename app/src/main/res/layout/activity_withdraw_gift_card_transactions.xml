@@ -119,9 +119,7 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/_11sdp"
-                        android:paddingBottom="@dimen/_11sdp"
                         android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_8sdp"
                         >
                         <TextView
                             android:layout_width="match_parent"
@@ -129,6 +127,8 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Status"
+                            android:layout_marginBottom="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
 
@@ -140,10 +140,11 @@
                             android:paddingLeft="@dimen/_16sdp"
                             android:paddingRight="@dimen/_16sdp"
                             android:paddingTop="@dimen/_2sdp"
+                            android:layout_marginTop="@dimen/_7sdp"
                             android:background="@drawable/fill_grn_color_smallradius"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
-                            android:text=""
+                            android:text="Completed"
                             android:textColor="@color/active_green"
                             android:textSize="@dimen/_8ssp" />
 

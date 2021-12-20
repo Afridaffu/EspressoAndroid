@@ -136,11 +136,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:layout_marginBottom="@dimen/_11sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Status"
                             android:layout_weight="1"
-                            android:layout_marginEnd="@dimen/_30sdp"
                             android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_11ssp" />
 
@@ -151,7 +150,8 @@
                             android:paddingBottom="@dimen/_2sdp"
                             android:paddingLeft="@dimen/_16sdp"
                             android:paddingRight="@dimen/_16sdp"
-                            android:paddingTop="@dimen/_1sdp"
+                            android:layout_marginTop="@dimen/_7sdp"
+                            android:paddingTop="@dimen/_2sdp"
                             android:background="@drawable/fill_grn_color_smallradius"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
