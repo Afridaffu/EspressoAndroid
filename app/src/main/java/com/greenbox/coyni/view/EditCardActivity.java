@@ -31,6 +31,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
@@ -51,7 +52,7 @@ public class EditCardActivity extends AppCompatActivity {
     MaskEditText etExpiry;
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;
-    ProgressDialog dialog;
+    ProgressDialog dialog, pDialog;
     ConstraintLayout clStates;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack, expiryErrorLL;
     TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
@@ -205,17 +206,16 @@ public class EditCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                    Intent i = new Intent(EditCardActivity.this, PaymentMethodsActivity.class);
-//                    i.putExtra("screen", "editcard");
-//                    i.putExtra("action", "remove");
-//                    startActivity(i);
-//                    finish();
-
-                        Intent i = new Intent();
-                        i.putExtra("screen", "editcard");
-                        i.putExtra("action", "remove");
-                        setResult(RESULT_OK, i);
-                        finish();
+                        if (!selectedCard.getExpired()) {
+                            Intent i = new Intent();
+                            i.putExtra("screen", "editcard");
+                            i.putExtra("action", "remove");
+                            setResult(RESULT_OK, i);
+                            finish();
+                        } else {
+                            pDialog = Utils.showProgressDialog(EditCardActivity.this);
+                            paymentMethodsViewModel.deleteCards(selectedCard.getId());
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -305,6 +305,28 @@ public class EditCardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                pDialog.dismiss();
+                if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(EditCardActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                objMyApplication.setSelectedCard(null);
+                                onBackPressed();
+                                finish();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }, 2000);
+                }
+            }
+        });
     }
 
     private void focusWatchers() {
@@ -371,7 +393,7 @@ public class EditCardActivity extends AppCompatActivity {
             etAddress2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(b){
+                    if (b) {
                         etAddress2.setSelection(etAddress2.getText().length());
                     }
                 }

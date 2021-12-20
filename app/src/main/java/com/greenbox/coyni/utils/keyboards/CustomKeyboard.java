@@ -155,6 +155,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                         case "buy":
                             BuyTokenActivity.buyTokenActivity.buyTokenClick();
                             break;
+                        case "buycvv":
+                            BuyTokenActivity.buyTokenActivity.okClick();
+                            break;
                     }
 //                    if (strScreen.equals("addcard")) {
 //                        AddCardActivity.addCardActivity.verifyClick();
