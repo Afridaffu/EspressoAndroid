@@ -249,10 +249,6 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.Filters"
-            android:exported="true"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

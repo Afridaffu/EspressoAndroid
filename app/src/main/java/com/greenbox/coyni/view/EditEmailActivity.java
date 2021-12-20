@@ -153,51 +153,51 @@ public class EditEmailActivity extends AppCompatActivity {
     }
 
     public void textWatchers() {
-        try {
-            currentEmailET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
-                        currentEmailErrorLL.setVisibility(GONE);
-                        currentEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        currentEmailTIL.setHintTextColor(colorState);
-                        Utils.setUpperHintColor(currentEmailTIL, getResources().getColor(R.color.primary_green));
-
-                        isCurrentEmail = true;
-                    } else if (currentEmailET.getText().toString().trim().length() == 0) {
-                        currentEmailErrorLL.setVisibility(VISIBLE);
-                        currentEmailErrorTV.setText("Field Required");
-                        isCurrentEmail = false;
-                    }
-                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
-                        isCurrentEmail = true;
-                    } else {
-                        isCurrentEmail = false;
-                    }
-                    enableOrDisableSave();
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    try {
-                        String str = currentEmailET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                            currentEmailET.setText(currentEmailET.getText().toString().replaceAll(" ", ""));
-                            currentEmailET.setSelection(currentEmailET.getText().length());
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            currentEmailET.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
+//                        currentEmailErrorLL.setVisibility(GONE);
+//                        currentEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+////                        currentEmailTIL.setHintTextColor(colorState);
+//                        Utils.setUpperHintColor(currentEmailTIL, getResources().getColor(R.color.primary_green));
+//
+//                        isCurrentEmail = true;
+//                    } else if (currentEmailET.getText().toString().trim().length() == 0) {
+//                        currentEmailErrorLL.setVisibility(VISIBLE);
+//                        currentEmailErrorTV.setText("Field Required");
+//                        isCurrentEmail = false;
+//                    }
+//                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
+//                        isCurrentEmail = true;
+//                    } else {
+//                        isCurrentEmail = false;
+//                    }
+//                    enableOrDisableSave();
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                    try {
+//                        String str = currentEmailET.getText().toString();
+//                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+//                            currentEmailET.setText(currentEmailET.getText().toString().replaceAll(" ", ""));
+//                            currentEmailET.setSelection(currentEmailET.getText().length());
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         try {
             newEmailET.addTextChangedListener(new TextWatcher() {
@@ -271,6 +271,10 @@ public class EditEmailActivity extends AppCompatActivity {
                     } else {
                         newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_green));
+
+                        currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
+
                     }
                 }
             });
@@ -278,36 +282,36 @@ public class EditEmailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        try {
-            currentEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if (!b) {
-                        if (currentEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
-                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.error_red));
-                            currentEmailErrorLL.setVisibility(VISIBLE);
-                            currentEmailErrorTV.setText("Invalid Email");
-                        } else if (currentEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
-                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
-                            currentEmailErrorLL.setVisibility(GONE);
-                            //                            loginViewModel.validateEmail(currentEmailET.getText().toString().trim());
-                        } else {
-                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.error_red));
-                            currentEmailErrorLL.setVisibility(VISIBLE);
-                            currentEmailErrorTV.setText("Field Required");
-                        }
-                    } else {
-                        currentEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_green));
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            currentEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View view, boolean b) {
+//                    if (!b) {
+//                        if (currentEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
+//                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.error_red));
+//                            currentEmailErrorLL.setVisibility(VISIBLE);
+//                            currentEmailErrorTV.setText("Invalid Email");
+//                        } else if (currentEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
+//                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
+//                            currentEmailErrorLL.setVisibility(GONE);
+//                            //                            loginViewModel.validateEmail(currentEmailET.getText().toString().trim());
+//                        } else {
+//                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.error_red));
+//                            currentEmailErrorLL.setVisibility(VISIBLE);
+//                            currentEmailErrorTV.setText("Field Required");
+//                        }
+//                    } else {
+//                        currentEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_green));
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 

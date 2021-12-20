@@ -366,6 +366,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             imgLogo = findViewById(R.id.imgLogo);
             if (strScreen != null && strScreen.equals("dashboard")) {
                 imgLogo.setVisibility(View.VISIBLE);
+                imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
                 tvMessage.setText("There is no payment method currently \\nlinked to your account. Please follow one of \\nthe prompts below to link an account.");

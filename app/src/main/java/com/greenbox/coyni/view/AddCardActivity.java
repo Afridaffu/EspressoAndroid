@@ -182,6 +182,7 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress1 = findViewById(R.id.etlAddress1);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
+            etCardNumber.requestFocus();
 
             MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
             mRecognizer = new BlinkCardRecognizer();

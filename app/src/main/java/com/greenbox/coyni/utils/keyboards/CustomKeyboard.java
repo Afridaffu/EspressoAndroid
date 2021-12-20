@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 
 public class CustomKeyboard extends LinearLayout implements View.OnClickListener {
@@ -150,6 +151,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             break;
                         case "cvv":
                             BuyTokenPaymentMethodsActivity.buyTokenPaymentMethodsActivity.okClick();
+                            break;
+                        case "buy":
+                            BuyTokenActivity.buyTokenActivity.buyTokenClick();
                             break;
                     }
 //                    if (strScreen.equals("addcard")) {

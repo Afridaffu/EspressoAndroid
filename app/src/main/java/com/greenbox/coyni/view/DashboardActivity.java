@@ -270,7 +270,8 @@ public class DashboardActivity extends AppCompatActivity {
                     if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
                             && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
                         dashboardViewModel.getLatestTxns();
-                    }else{
+                        transactionsNSV.smoothScrollTo(0, 0);
+                    } else {
                         latestTxnRefresh.setRefreshing(false);
                     }
                 }
@@ -464,7 +465,7 @@ public class DashboardActivity extends AppCompatActivity {
                         txnRV.setLayoutManager(mLayoutManager);
                         txnRV.setItemAnimator(new DefaultItemAnimator());
                         txnRV.setAdapter(latestTxnAdapter);
-                    }else if (latestTxnResponse.getData().size() <= 4) {
+                    } else if (latestTxnResponse.getData().size() <= 4) {
                         buyTokensCV.setVisibility(View.GONE);
                         txnRV.setVisibility(View.VISIBLE);
                         viewMoreLL.setVisibility(View.GONE);
