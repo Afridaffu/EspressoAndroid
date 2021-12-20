@@ -110,7 +110,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_11sdp"
                         android:layout_marginRight="@dimen/_11sdp"
-                        android:background="@color/inactive_color"
+                        android:background="@color/blue_light"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:layout_marginBottom="@dimen/_11sdp"
                         />
@@ -360,12 +360,18 @@
                             android:fontFamily="@font/opensans_regular"
                             android:textColor="@color/dark_grey"
                             />
+                        <LinearLayout
+                            android:id="@+id/giftCardwithdrawIDLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         <TextView
                             android:id="@+id/withgiftid"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textSize="@dimen/_11ssp"
+                            android:text="98236587165871"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
                             android:gravity="right"
@@ -378,6 +384,7 @@
                             android:layout_marginLeft="@dimen/_6sdp"
                             android:layout_gravity="center"
                             />
+                        </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -397,6 +404,11 @@
                             android:fontFamily="@font/opensans_regular"
                             android:textColor="@color/dark_grey"
                             />
+                        <LinearLayout
+                            android:id="@+id/giftcardReferenceIDLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         <TextView
                             android:id="@+id/withdrawGiftrefidTV"
                             android:layout_width="match_parent"
@@ -415,6 +427,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/_6sdp"
                             />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

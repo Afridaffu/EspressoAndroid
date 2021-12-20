@@ -112,7 +112,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_11sdp"
                         android:layout_marginRight="@dimen/_11sdp"
-                        android:background="@color/inactive_color"
+                        android:background="@color/blue_light"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:layout_marginBottom="@dimen/_11sdp"
                         />
@@ -238,7 +238,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="$1.00"
+                            android:text="$1123243424234242.00"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/text_color"
@@ -257,7 +257,6 @@
                         android:paddingLeft="@dimen/_11sdp"
                         android:paddingTop="@dimen/_8sdp"
                         android:paddingBottom="@dimen/_12sdp"
-                        android:paddingRight="@dimen/_11sdp"
 
                         >
                         <TextView
@@ -287,7 +286,7 @@
                             android:gravity="right"
                             android:layout_marginRight="@dimen/_11sdp"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="$101.00"
+                            android:text="$10144443252332.00"
                             android:layout_marginTop="@dimen/_12sdp"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_11ssp" />
@@ -325,6 +324,11 @@
                             android:fontFamily="@font/opensans_regular"
                             android:textColor="@color/dark_grey"
                             />
+                        <LinearLayout
+                            android:id="@+id/btbankDepositIDLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         <TextView
                             android:id="@+id/btbankDepositIDTV"
                             android:layout_width="match_parent"
@@ -332,7 +336,6 @@
                             android:layout_weight="1"
                             android:text="874jeM734h…"
                             android:textSize="@dimen/_11ssp"
-                            android:textIsSelectable="true"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/text_color"
                             android:gravity="right"
@@ -345,6 +348,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/_4sdp"
                             />
+                        </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -364,6 +368,11 @@
                             android:fontFamily="@font/opensans_regular"
                             android:textColor="@color/dark_grey"
                             />
+                        <LinearLayout
+                            android:id="@+id/btbankReferenceLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
                         <TextView
                             android:id="@+id/btbankRefidTV"
                             android:layout_width="match_parent"
@@ -383,6 +392,7 @@
                             android:layout_marginLeft="@dimen/_2sdp"
                             android:layout_gravity="center"
                             />
+                        </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
