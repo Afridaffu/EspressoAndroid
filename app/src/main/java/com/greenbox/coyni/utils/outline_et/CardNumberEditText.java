@@ -105,25 +105,25 @@ public class CardNumberEditText extends ConstraintLayout {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
+                    AddCardActivity addCardActivity = new AddCardActivity();
                     if (i2 > 2) {
                         if ((cardType.equals("american") && charSequence.toString().trim().length() != 18) || (!cardType.equals("american") && charSequence.toString().trim().length() < 19)) {
-                            AddCardActivity.addCardActivity.isCard = false;
+
+                            addCardActivity.isCard = false;
                         } else {
-                            AddCardActivity.addCardActivity.getCardype(charSequence.toString());
-                            AddCardActivity.addCardActivity.isCard = true;
+                            addCardActivity.getCardype(charSequence.toString());
+                            addCardActivity.isCard = true;
                         }
                     } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {
-                        AddCardActivity.addCardActivity.isCard = true;
-                        AddCardActivity.addCardActivity.cardErrorLL.setVisibility(GONE);
+                        addCardActivity.isCard = true;
+                        addCardActivity.cardErrorLL.setVisibility(GONE);
                         hintName.setTextColor(getResources().getColor(R.color.primary_color));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
                         imgCardType.setImageResource(R.drawable.ic_visa_inactive);
-                        AddCardActivity.addCardActivity.isCard = false;
+                        addCardActivity.isCard = false;
                     }
-                    AddCardActivity.addCardActivity.enableOrDisableNext();
-                    cnET.setSelection(cnET.getText().toString().length()+2);
-                    Log.e("length",cnET.getText().toString());
+                    addCardActivity.enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -132,11 +132,12 @@ public class CardNumberEditText extends ConstraintLayout {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
+                    AddCardActivity addCardActivity = new AddCardActivity();
                     if (s.length() == 7) {
-                        AddCardActivity.addCardActivity.getCardype(s.toString());
+                        addCardActivity.getCardype(s.toString());
                     } else if (s.toString().trim().length() == 0) {
                         imgCardType.setImageResource(R.drawable.ic_visa_inactive);
-                        AddCardActivity.addCardActivity.clearControls();
+                        addCardActivity.clearControls();
                     }
                     String str = cnET.getText().toString();
                     if (str.length() > 0 && str.substring(0).equals(" ")) {
@@ -159,6 +160,10 @@ public class CardNumberEditText extends ConstraintLayout {
 
     public void setText(String text) {
         cnET.setText(text);
+    }
+
+    public void setSelection() {
+        cnET.setSelection(cnET.getText().length());
     }
 
     public String getText() {

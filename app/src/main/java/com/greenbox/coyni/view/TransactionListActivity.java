@@ -1289,6 +1289,8 @@ public class TransactionListActivity extends AppCompatActivity {
                 total = 0;
                 isFilters = false;
                 searchET.setText("");
+                transAmountStartET.clearFocus();
+                transAmountEndET.clearFocus();
                 TransactionListRequest transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                 transactionListRequest.setWalletCategory(Utils.walletCategory);

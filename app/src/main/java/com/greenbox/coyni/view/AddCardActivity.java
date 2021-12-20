@@ -1414,6 +1414,8 @@ public class AddCardActivity extends AppCompatActivity {
                     Log.e("number", result.getExpiryDate().toString());
                     result.getCardNumber();
                     etCardNumber.setText(result.getCardNumber());
+                    etCardNumber.setSelection();
+                    cardErrorLL.setVisibility(GONE);
                 }
             }
         }
