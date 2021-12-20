@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -32,6 +34,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
@@ -58,9 +62,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     BuyTokenViewModel buyTokenViewModel;
     Dialog payDialog, prevDialog;
     TransactionLimitResponse objResponse;
-    String strLimit = "", strType = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
-    Double usdValue = 0.0, cynValue = 0.0;
+    Double usdValue = 0.0, cynValue = 0.0, total = 0.0;
     float fontSize;
     Boolean isUSD = false, isCYN = false;
     public static BuyTokenActivity buyTokenActivity;
@@ -306,6 +310,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
         });
+
+        buyTokenViewModel.getBuyTokResponseMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+            @Override
+            public void onChanged(BuyTokenResponse buyTokenResponse) {
+                if (buyTokenResponse != null) {
+
+                }
+            }
+        });
+
+        buyTokenViewModel.getBuyTokenFailureMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+            @Override
+            public void onChanged(BuyTokenResponse buyTokenResponse) {
+                if (buyTokenResponse != null) {
+
+                }
+            }
+        });
     }
 
     public void bindPayMethod(PaymentsList objData) {
@@ -319,6 +341,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 strType = "bank";
+                strBankId = String.valueOf(objData.getId());
+                strSubType = Utils.bankType;
                 obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
@@ -331,11 +355,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
             } else {
+                strCardId = String.valueOf(objData.getId());
                 if (objData.getCardType().toLowerCase().equals("debit")) {
                     strType = "debit";
+                    strSubType = Utils.debitType;
                     obj.setTransactionSubType(Integer.parseInt(Utils.debitType));
                 } else if (objData.getCardType().toLowerCase().equals("credit")) {
                     strType = "credit";
+                    strSubType = Utils.creditType;
                     obj.setTransactionSubType(Integer.parseInt(Utils.creditType));
                 }
                 params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
@@ -456,15 +483,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void calculateFee(String strAmount) {
         try {
-//            if (!etAmount.getText().toString().trim().equals("") && !etAmount.getText().toString().trim().equals("0")) {
             TransferFeeRequest request = new TransferFeeRequest();
-            request.setTokens(strAmount);
-//                request.setTokens(etAmount.getText().toString().trim().replace(",", ""));
-//                if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("withdraw")) {
-//                    request.setTxnType(Utils.withdrawType);
-//                } else {
-//                    request.setTxnType(Utils.addType);
-//                }
+            request.setTokens(strAmount.trim().replace(",", ""));
             request.setTxnType(Utils.addType);
             if (strType.toLowerCase().equals("debit")) {
                 request.setTxnSubType(Utils.debitType);
@@ -478,7 +498,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (Utils.checkInternet(BuyTokenActivity.this)) {
                 buyTokenViewModel.transferFee(request);
             }
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -504,14 +523,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             LinearLayout layoutBank = prevDialog.findViewById(R.id.layoutBank);
             LinearLayout layoutCard = prevDialog.findViewById(R.id.layoutCard);
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
+            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
+            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
 
-            String strAmt = "", strPFee = "";
-            strAmt = Utils.convertBigDecimalUSDC(String.valueOf(dget));
+            String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            tvGet.setText(Utils.USNumberFormat(Double.parseDouble(strAmt)));
-            tvPurchaseAmt.setText(Utils.USNumberFormat(Double.parseDouble(strAmt)) + " USD");
+            tvGet.setText(Utils.USNumberFormat(cynValue));
+            tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " USD");
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " USD");
-            tvTotal.setText(etAmount.getText().toString().trim() + " USD");
+            total = cynValue + Double.parseDouble(strPFee);
+            tvTotal.setText(Utils.USNumberFormat(total) + " USD");
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
@@ -540,6 +561,32 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         break;
                 }
             }
+
+            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+                @Override
+                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+                }
+
+                @Override
+                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+                }
+
+                @Override
+                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                    if (currentId == motionLayout.getEndState()) {
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        buyToken();
+                    }
+                }
+
+                @Override
+                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+                }
+            });
 
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -583,9 +630,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             }
             etAmount.removeTextChangedListener(BuyTokenActivity.this);
             etAmount.setText(String.valueOf(cynValue));
-            //etAmount.setSelection(etAmount.getText().length() - 3);
             etAmount.addTextChangedListener(BuyTokenActivity.this);
             USFormat(etAmount);
+            etAmount.setSelection(etAmount.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -600,9 +647,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             }
             etAmount.removeTextChangedListener(BuyTokenActivity.this);
             etAmount.setText(String.valueOf(usdValue));
-            //etAmount.setSelection(etAmount.getText().length() - 3);
             etAmount.addTextChangedListener(BuyTokenActivity.this);
             USFormat(etAmount);
+            etAmount.setSelection(etAmount.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -610,7 +657,25 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     public void buyTokenClick() {
         try {
-            calculateFee(etAmount.getText().toString().trim().replace(",", ""));
+            convertUSDtoCYN();
+            convertCYNtoUSD();
+            calculateFee(Utils.USNumberFormat(cynValue));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void buyToken() {
+        try {
+            BuyTokenRequest request = new BuyTokenRequest();
+            request.setBankId(strBankId);
+            request.setCardId(strCardId);
+            request.setCvc(strCvv);
+            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
+            request.setTxnSubType(strSubType);
+            if (Utils.checkInternet(BuyTokenActivity.this)) {
+                buyTokenViewModel.buyTokens(request);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

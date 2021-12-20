@@ -300,10 +300,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "",apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "", "");
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "",apiError.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {

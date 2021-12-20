@@ -1,6 +1,7 @@
 package com.greenbox.coyni.utils.outline_et;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -213,7 +214,7 @@ public class CardNumberEditText extends ConstraintLayout {
         cnET.setEnabled(false);
         cnET.setTextColor(getResources().getColor(R.color.xdark_gray));
         hintName.setTextColor(getResources().getColor(R.color.xdark_gray));
-//        hintName.setBackgroundColor(getResources().getColor(R.color.et_bg_gray));
+        hintName.setBackgroundColor(Color.TRANSPARENT);
         hintHolder.setBackground(null);
     }
 

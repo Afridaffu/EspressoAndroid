@@ -5,6 +5,8 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
@@ -284,5 +286,8 @@ public interface ApiService {
 
     @POST("api/v2/corda/fee")
     Call<TransferFeeResponse> transferFee(@Body TransferFeeRequest request);
+
+    @POST("api/v2/node/buyTokens")
+    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
 
 }
