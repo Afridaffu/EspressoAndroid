@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -60,6 +61,7 @@ public class EditCardActivity extends AppCompatActivity {
     TextView tvCard, expiryErrorTV;
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
+    public static EditCardActivity editCardActivity ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,12 @@ public class EditCardActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+
+            editCardActivity = this;
             objMyApplication = (MyApplication) getApplicationContext();
             selectedCard = objMyApplication.getSelectedCard();
             etName = findViewById(R.id.etName);
@@ -122,6 +130,7 @@ public class EditCardActivity extends AppCompatActivity {
             etName.setEnabled(false);
             etExpiry.setEnabled(false);
             etlCard.disableEditText();
+            etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
                 etName.setText(Utils.capitalize(selectedCard.getName()));
                 etlCard.setText(selectedCard.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + selectedCard.getLastFour());
@@ -471,7 +480,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
-                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
+                                zipErrorTV.setText("Minimum 5 Characters Required");
                                 isZipcode = false;
                             }
                         } else {

@@ -280,19 +280,19 @@ public class DashboardActivity extends AppCompatActivity {
             tvUserName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (strName.contains("...")) {
+                    if (tvUserName.getText().toString().contains("...")) {
                         if (strName.length() == 21 || strName.length() > 21) {
-                            tvUserName.setText("Hi " + strName.substring(0, 20));
+                            tvUserName.setText(strName.substring(0, 20));
                         } else {
-                            tvUserName.setText("Hi " + strName);
+                            tvUserName.setText(strName);
                         }
                     } else {
                         if (strName.length() == 21) {
-                            tvUserName.setText("Hi " + strName.substring(0, 20) + "...");
+                            tvUserName.setText(strName.substring(0, 20) + "...");
                         } else if (strName.length() > 22) {
-                            tvUserName.setText("Hi " + strName.substring(0, 22) + "...");
+                            tvUserName.setText(strName.substring(0, 22) + "...");
                         } else {
-                            tvUserName.setText("Hi " + strName);
+                            tvUserName.setText(strName);
                         }
                     }
                 }
@@ -301,19 +301,19 @@ public class DashboardActivity extends AppCompatActivity {
             tvUserNameSmall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (strName.contains("...")) {
+                    if (tvUserNameSmall.getText().toString().contains("...")) {
                         if (strName.length() == 21 || strName.length() > 21) {
-                            tvUserNameSmall.setText("Hi " + strName.substring(0, 20));
+                            tvUserNameSmall.setText(strName.substring(0, 20));
                         } else {
-                            tvUserNameSmall.setText("Hi " + strName);
+                            tvUserNameSmall.setText(strName);
                         }
                     } else {
                         if (strName.length() == 21) {
-                            tvUserNameSmall.setText("Hi " + strName.substring(0, 20) + "...");
+                            tvUserNameSmall.setText(strName.substring(0, 20) + "...");
                         } else if (strName.length() > 22) {
-                            tvUserNameSmall.setText("Hi " + strName.substring(0, 22) + "...");
+                            tvUserNameSmall.setText(strName.substring(0, 22) + "...");
                         } else {
-                            tvUserNameSmall.setText("Hi " + strName);
+                            tvUserNameSmall.setText(strName);
                         }
                     }
                 }
@@ -349,18 +349,18 @@ public class DashboardActivity extends AppCompatActivity {
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                     strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
 //                    if (strName != null && strName.length() > 21) {
-//                        tvUserName.setText("Hi " + strName.substring(0, 21) + "...");
-//                        tvUserNameSmall.setText("Hi " + strName.substring(0, 21) + "...");
+//                        tvUserName.setText( strName.substring(0, 21) + "...");
+//                        tvUserNameSmall.setText( strName.substring(0, 21) + "...");
 //                    } else {
-//                        tvUserName.setText("Hi " + strName);
-//                        tvUserNameSmall.setText("Hi " + strName);
+//                        tvUserName.setText( strName);
+//                        tvUserNameSmall.setText( strName);
 //                    }
                     if (objMyApplication.getStrUserName().length() > 20) {
-                        tvUserName.setText("Hi " + strName.substring(0, 20));
-                        tvUserNameSmall.setText("Hi " + strName.substring(0, 20));
+                        tvUserName.setText(strName.substring(0, 20));
+                        tvUserNameSmall.setText(strName.substring(0, 20));
                     } else {
-                        tvUserName.setText("Hi " + strName);
-                        tvUserNameSmall.setText("Hi " + strName);
+                        tvUserName.setText(strName);
+                        tvUserNameSmall.setText(strName);
                     }
                     bindImage();
                 }

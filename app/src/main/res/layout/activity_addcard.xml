@@ -212,7 +212,6 @@
                             android:textColorHint="@color/primary_black"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
-                            app:expandedHintEnabled="false"
                             app:hintTextColor="@color/primary_green">
 
                             <com.santalu.maskara.widget.MaskEditText
@@ -221,7 +220,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:hint="MM/YY"
+                                android:hint=""
                                 android:imeOptions="actionNext"
                                 android:inputType="number"
                                 android:longClickable="false"
@@ -280,7 +279,6 @@
                             android:textColorHint="@color/primary_black"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
-                            app:expandedHintEnabled="false"
                             app:hintTextColor="@color/primary_green">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -288,7 +286,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:hint="123"
+                                android:hint=""
                                 android:imeOptions="actionDone"
                                 android:inputType="numberPassword"
                                 android:longClickable="false"

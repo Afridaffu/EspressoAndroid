@@ -78,11 +78,8 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 //                holder.date.setText("Today");
 //            }
 //        }
-        if (objData.getTxnDescription().length() > 32) {
-            holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 32) + "...");
-        } else {
+
             holder.txnDescrip.setText(objData.getTxnDescription());
-        }
         holder.txnStatus.setText(objData.getTxnStatusDn());
         holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
