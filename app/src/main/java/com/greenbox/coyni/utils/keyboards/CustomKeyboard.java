@@ -192,4 +192,8 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg);
         keyAction.setEnabled(false);
     }
+
+    public void clearData() {
+        enteredText = "";
+    }
 }

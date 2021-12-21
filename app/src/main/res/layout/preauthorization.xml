@@ -63,7 +63,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="left"
-                    android:text="A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from [Descriptor Name] and enter the amount below."
+                    android:text="A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below."
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 

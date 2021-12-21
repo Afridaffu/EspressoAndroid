@@ -68,7 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
     NestedScrollView transactionsNSV;
     CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
     ImageView imgProfileSmall, imgProfile;
-    Long mLastClickTime = 0L,mLastClickTimeQA = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
     String strName = "";
@@ -245,8 +245,11 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
-                    i.putExtra("screen", "quick_action");
+//                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
+//                    i.putExtra("screen", "quick_action");
+//                    startActivity(i);
+                    Intent i = new Intent(DashboardActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "dashboard");
                     startActivity(i);
                 }
             });
@@ -456,7 +459,7 @@ public class DashboardActivity extends AppCompatActivity {
                     underReviewCV.setVisibility(View.GONE);
                     additionalActionCV.setVisibility(View.GONE);
 
-                    if (latestTxnResponse.getData().size() ==0) {
+                    if (latestTxnResponse.getData().size() == 0) {
                         txnRV.setVisibility(View.GONE);
                         noTxnTV.setVisibility(View.VISIBLE);
                         buyTokensCV.setVisibility(View.VISIBLE);

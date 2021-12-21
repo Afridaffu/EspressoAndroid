@@ -353,7 +353,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
                 tvMessage.setVisibility(View.VISIBLE);
-            } else if (strScreen != null && strScreen.equals("quick_action")) {
+//            } else if (strScreen != null && strScreen.equals("quick_action")) {
+            } else {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
@@ -455,9 +456,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 }
             });
             numberOfAccounts();
-        } catch (Exception ex) {
+        } catch (
+                Exception ex) {
             ex.printStackTrace();
         }
+
     }
 
     private void paymentMethods() {

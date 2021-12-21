@@ -102,6 +102,7 @@ public class AddCardActivity extends AppCompatActivity {
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
+    CustomKeyboard ctKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -436,6 +437,7 @@ public class AddCardActivity extends AppCompatActivity {
                         }
                     } else if (apiError.getData() != null) {
                         etPreAmount.setText("");
+                        ctKey.clearData();
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
@@ -1160,7 +1162,6 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             LinearLayout layoutPClose;
             TextView tvMessage;
-            CustomKeyboard ctKey;
             preAuthDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preAuthDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preAuthDialog.setContentView(R.layout.preauthorization);
@@ -1184,7 +1185,7 @@ public class AddCardActivity extends AppCompatActivity {
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {

@@ -73,7 +73,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
-                    android:text="This total amount of [Amount] will appear on your\nbank statement as {description}."
+                    android:text="This total amount of [Amount] will appear on your\nBank statement as {description}."
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
@@ -155,7 +155,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="left"
                     android:paddingLeft="@dimen/_10sdp"
-                    android:text="We are processing your request, please allow a few \nminutes for your coyni debit/credit card purchase to be "
+                    android:text="We are processing your request, please allow a few \nminutes for your coyni Debit/Credit card purchase to be "
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_10sdp" />
 
@@ -175,9 +175,8 @@
 
                     <TextView
                         android:id="@+id/tvLearnMore"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="@font/opensans_regular"
                         android:gravity="left"
                         android:text="@string/learn"
