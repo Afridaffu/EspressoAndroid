@@ -678,13 +678,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void convertUSDtoCYN() {
         try {
-//            if (isUSD) {
-//                isUSD = false;
-//                usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                cynValue = ((usdValue - feeInAmount) * 100) / (100 + feeInPercentage);
-//            }
             convertUSDValue();
-            if (cynValue != 0.0) {
+            if (cynValue != 0.0 || usdValue != 0.0) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
@@ -701,11 +696,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void convertCYNtoUSD() {
         try {
-//            if (isCYN) {
-//                isCYN = false;
-//                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                usdValue = (cynValue + (cynValue * (feeInPercentage / 100))) + feeInAmount;
-//            }
             convertCYNValue();
             if (usdValue != 0.0) {
                 InputFilter[] FilterArray = new InputFilter[1];
@@ -724,8 +714,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     public void buyTokenClick() {
         try {
-            convertUSDtoCYN();
-            convertCYNtoUSD();
+            if (tvCYN.getVisibility() == View.VISIBLE) {
+                convertUSDtoCYN();
+            } else {
+                convertCYNtoUSD();
+            }
             calculateFee(Utils.USNumberFormat(cynValue));
         } catch (Exception ex) {
             ex.printStackTrace();
