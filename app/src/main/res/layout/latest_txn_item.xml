@@ -69,14 +69,11 @@
 
             <TextView
                 android:id="@+id/statusTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_68sdp"
+                android:layout_height="@dimen/_14sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:paddingStart="@dimen/_20sdp"
-                android:paddingTop="@dimen/_2sdp"
-                android:paddingEnd="@dimen/_20sdp"
-                android:paddingBottom="@dimen/_2sdp"
                 android:text="Pending"
+                android:gravity="center"
                 android:textColor="#FFA701"
                 android:textSize="@dimen/_7ssp" />
 
