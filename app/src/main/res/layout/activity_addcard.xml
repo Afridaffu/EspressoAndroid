@@ -208,10 +208,10 @@
                             style="@style/TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Card Exp"
                             android:textColorHint="@color/primary_black"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
+                            android:hint="Card Exp"
                             app:hintTextColor="@color/primary_green">
 
                             <com.santalu.maskara.widget.MaskEditText

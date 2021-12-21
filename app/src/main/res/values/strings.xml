@@ -185,7 +185,7 @@
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
     <string name="maxlength">7</string>
-    <string name="maxlendecimal">10</string>
+    <string name="maxlendecimal">12</string>
 
 
 </resources>

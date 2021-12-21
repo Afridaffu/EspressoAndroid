@@ -183,7 +183,7 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress1 = findViewById(R.id.etlAddress1);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
-            etCardNumber.requestFocus();
+            etCardNumber.requestCNETFocus();
 
             etCardNumber.setFrom("ADD_CARD");
             MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
@@ -474,7 +474,7 @@ public class AddCardActivity extends AppCompatActivity {
         Boolean value = true;
         try {
             if (!objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() < 19) {
-                etCardNumber.requestFocus();
+                etCardNumber.requestCNETFocus();
                 Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "", "");
                 return value = false;
             } else if (objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() != 18) {
@@ -558,6 +558,7 @@ public class AddCardActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
             etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -761,7 +762,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
 
-                            }else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
+                            } else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
@@ -1429,6 +1430,8 @@ public class AddCardActivity extends AppCompatActivity {
                     result.getCardNumber();
                     etCardNumber.setText(result.getCardNumber());
                     etCardNumber.setSelection();
+                    etCardNumber.removeError();
+                    etCardNumber.requestCNETFocus();
                     cardErrorLL.setVisibility(GONE);
                 }
             }

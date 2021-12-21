@@ -243,4 +243,15 @@ public class CardNumberEditText extends ConstraintLayout {
     public void setFrom(String strFrom) {
         from = strFrom;
     }
+
+    public void removeError() {
+        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
+
+    public void requestCNETFocus(){
+        cnET.requestFocus();
+        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
 }

@@ -68,7 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
     NestedScrollView transactionsNSV;
     CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
     ImageView imgProfileSmall, imgProfile;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L,mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
     String strName = "";
@@ -246,7 +246,7 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
-                    i.putExtra("screen", "buy");
+                    i.putExtra("screen", "quick_action");
                     startActivity(i);
                 }
             });
@@ -455,7 +455,14 @@ public class DashboardActivity extends AppCompatActivity {
                     welcomeCoyniCV.setVisibility(View.GONE);
                     underReviewCV.setVisibility(View.GONE);
                     additionalActionCV.setVisibility(View.GONE);
-                    if (latestTxnResponse.getData().size() > 4) {
+                    noTxnTV.setVisibility(View.VISIBLE);
+
+                    if (latestTxnResponse.getData().size() ==0) {
+                        txnRV.setVisibility(View.GONE);
+                        noTxnTV.setVisibility(View.VISIBLE);
+                        buyTokensCV.setVisibility(View.VISIBLE);
+
+                    } else if (latestTxnResponse.getData().size() > 4) {
                         buyTokensCV.setVisibility(View.GONE);
                         txnRV.setVisibility(View.VISIBLE);
                         viewMoreLL.setVisibility(View.VISIBLE);
@@ -475,10 +482,6 @@ public class DashboardActivity extends AppCompatActivity {
                         txnRV.setLayoutManager(mLayoutManager);
                         txnRV.setItemAnimator(new DefaultItemAnimator());
                         txnRV.setAdapter(latestTxnAdapter);
-                    } else {
-                        txnRV.setVisibility(View.GONE);
-                        noTxnTV.setVisibility(View.VISIBLE);
-                        buyTokensCV.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -735,10 +738,10 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
             }
         });
@@ -746,10 +749,10 @@ public class DashboardActivity extends AppCompatActivity {
         payRequestLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 dialog.dismiss();
             }
         });
@@ -757,10 +760,10 @@ public class DashboardActivity extends AppCompatActivity {
         buyTokenLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 dialog.dismiss();
                 Intent i = new Intent(context, BuyTokenPaymentMethodsActivity.class);
                 i.putExtra("screen", "dashboard");
@@ -771,10 +774,10 @@ public class DashboardActivity extends AppCompatActivity {
         widthdrawLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 dialog.dismiss();
             }
         });

@@ -353,7 +353,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
                 tvMessage.setVisibility(View.VISIBLE);
-            } else {
+            } else if (strScreen != null && strScreen.equals("quick_action")) {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");

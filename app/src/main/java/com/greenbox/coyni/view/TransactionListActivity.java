@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -913,7 +914,6 @@ public class TransactionListActivity extends AppCompatActivity {
             }
         });
 
-
         transSubTypeSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1225,7 +1225,10 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
+                    transAmountStartET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal))) });
                     USFormat(transAmountStartET, "START");
+                }else{
+                    transAmountStartET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength))) });
                 }
             }
         });
@@ -1234,6 +1237,7 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
+                    transAmountEndET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal))) });
                     USFormat(transAmountEndET, "END");
                     try {
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
@@ -1246,6 +1250,8 @@ public class TransactionListActivity extends AppCompatActivity {
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    transAmountEndET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength))) });
                 }
             }
         });
