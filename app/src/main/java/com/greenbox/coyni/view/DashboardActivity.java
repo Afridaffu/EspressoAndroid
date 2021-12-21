@@ -455,7 +455,6 @@ public class DashboardActivity extends AppCompatActivity {
                     welcomeCoyniCV.setVisibility(View.GONE);
                     underReviewCV.setVisibility(View.GONE);
                     additionalActionCV.setVisibility(View.GONE);
-                    noTxnTV.setVisibility(View.VISIBLE);
 
                     if (latestTxnResponse.getData().size() ==0) {
                         txnRV.setVisibility(View.GONE);

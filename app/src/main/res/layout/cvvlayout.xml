@@ -42,7 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:hint="123"
             android:imeOptions="actionDone"
             android:inputType="numberPassword"
             android:longClickable="false"

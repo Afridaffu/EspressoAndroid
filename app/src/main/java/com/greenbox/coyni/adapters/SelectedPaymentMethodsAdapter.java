@@ -30,18 +30,24 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
     String strScreen = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvPayHead, tvNumber, tvError;
-        public ImageView imgPayMethod, imgTick;
-        public LinearLayout layoutError;
+        public TextView tvBankName, tvAccount, tvError, tvCardName, tvCardNumber;
+        public ImageView imgPayMethod, imgBankTick, imgCardTick;
+        public LinearLayout layoutError, layoutBank;
+        public RelativeLayout layoutCard;
 
         public MyViewHolder(View view) {
             super(view);
             imgPayMethod = view.findViewById(R.id.imgPayMethod);
-            imgTick = view.findViewById(R.id.imgTick);
-            tvPayHead = view.findViewById(R.id.tvPayHead);
-            tvNumber = view.findViewById(R.id.tvNumber);
+            imgBankTick = view.findViewById(R.id.imgBankTick);
+            imgCardTick = view.findViewById(R.id.imgCardTick);
+            tvBankName = view.findViewById(R.id.tvBankName);
+            tvCardName = view.findViewById(R.id.tvCardName);
+            tvAccount = view.findViewById(R.id.tvAccount);
+            tvCardNumber = view.findViewById(R.id.tvCardNumber);
             tvError = view.findViewById(R.id.tvError);
             layoutError = view.findViewById(R.id.layoutError);
+            layoutBank = view.findViewById(R.id.layoutBank);
+            layoutCard = view.findViewById(R.id.layoutCard);
         }
     }
 
@@ -64,31 +70,53 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             PaymentsList objData = listPayments.get(position);
-            if (!strScreen.equals("selectpay")) {
-                if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
-                    holder.imgTick.setVisibility(View.VISIBLE);
-                } else {
-                    holder.imgTick.setVisibility(View.GONE);
-                }
-            } else {
-                holder.imgTick.setVisibility(View.GONE);
-            }
+//            if (!strScreen.equals("selectpay")) {
+//                if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
+//                    holder.imgBankTick.setVisibility(View.VISIBLE);
+//                } else {
+//                    holder.imgBankTick.setVisibility(View.GONE);
+//                }
+//            } else {
+//                holder.imgBankTick.setVisibility(View.GONE);
+//            }
             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                holder.layoutBank.setVisibility(View.VISIBLE);
+                holder.layoutCard.setVisibility(View.GONE);
                 holder.imgPayMethod.setImageResource(R.drawable.ic_bankactive);
+                if (!strScreen.equals("selectpay")) {
+                    if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
+                        holder.imgBankTick.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.imgBankTick.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.imgBankTick.setVisibility(View.GONE);
+                }
                 if (!objData.getRelink()) {
                     holder.layoutError.setVisibility(View.GONE);
                 } else {
                     holder.layoutError.setVisibility(View.VISIBLE);
                     holder.tvError.setText("There’s a issue with your payment ");
                 }
-                holder.tvPayHead.setText(objData.getBankName());
+                holder.tvBankName.setText(objData.getBankName());
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
-                    holder.tvNumber.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvAccount.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
-                    holder.tvNumber.setText(objData.getAccountNumber());
+                    holder.tvAccount.setText(objData.getAccountNumber());
                 }
             } else {
-                holder.tvNumber.setText("****" + objData.getLastFour());
+                holder.layoutBank.setVisibility(View.GONE);
+                holder.layoutCard.setVisibility(View.VISIBLE);
+                holder.tvCardNumber.setText("****" + objData.getLastFour());
+                if (!strScreen.equals("selectpay")) {
+                    if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
+                        holder.imgCardTick.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.imgCardTick.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.imgCardTick.setVisibility(View.GONE);
+                }
                 if (!objData.getExpired()) {
                     holder.layoutError.setVisibility(View.GONE);
                 } else {
@@ -97,19 +125,19 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 }
                 switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
                     case "VISA":
-                        holder.tvPayHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
+                        holder.tvCardName.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
                         holder.imgPayMethod.setImageResource(R.drawable.ic_visaactive);
                         break;
                     case "MASTERCARD":
-                        holder.tvPayHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
+                        holder.tvCardName.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
                         holder.imgPayMethod.setImageResource(R.drawable.ic_masteractive);
                         break;
                     case "AMERICANEXPRESS":
-                        holder.tvPayHead.setText("American Express Card");
+                        holder.tvCardName.setText("American Express Card");
                         holder.imgPayMethod.setImageResource(R.drawable.ic_amexactive);
                         break;
                     case "DISCOVER":
-                        holder.tvPayHead.setText("Discover Card");
+                        holder.tvCardName.setText("Discover Card");
                         holder.imgPayMethod.setImageResource(R.drawable.ic_discoveractive);
                         break;
                 }

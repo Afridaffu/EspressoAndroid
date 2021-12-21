@@ -128,7 +128,7 @@ public class AddCardActivity extends AppCompatActivity {
                 layoutAddress.setVisibility(View.GONE);
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                etCVV.setText("");
+                //etCVV.setText("");
             } else {
                 super.onBackPressed();
             }

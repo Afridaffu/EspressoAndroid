@@ -156,10 +156,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         super.onResume();
         try {
             if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-//                ControlMethod("addpayment");
-////                strCurrent = "addpay";
+                ControlMethod("addpayment");
+//                strCurrent = "addpay";
             } else {
-                    getPaymentMethods();
+                getPaymentMethods();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -362,7 +362,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (strCurrent.equals("addpay")) {
+                    if (strCurrent.equals("addpay") || strCurrent.equals("addpayment") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                     } else {
