@@ -127,7 +127,8 @@ public class CardNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
-                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+//                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+                            imgCardType.setVisibility(INVISIBLE);
                             AddCardActivity.addCardActivity.isCard = false;
                         }
                         AddCardActivity.addCardActivity.enableOrDisableNext();
@@ -145,7 +146,8 @@ public class CardNumberEditText extends ConstraintLayout {
                         if (s.length() == 7) {
                             AddCardActivity.addCardActivity.getCardype(s.toString());
                         } else if (s.toString().trim().length() == 0) {
-                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+//                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+                            imgCardType.setVisibility(INVISIBLE);
                             AddCardActivity.addCardActivity.clearControls();
                         }
                         String str = cnET.getText().toString();
