@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
     MyApplication objMyApplication;
     List<TransactionListPosted> transactionListItemsposted;
     TransactionList transactionList;
-
+    Long mLastClickTime=0L;
     public TransactionListPostedAdapter(List<TransactionListPosted> list, Context context) {
         this.transactionListItemsposted = list;
         this.mContext = context;
@@ -239,6 +240,11 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
             @Override
             public void onClick(View view) {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     Intent i = new Intent(mContext, TransactionDetailsActivity.class);
                     i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
                     i.putExtra("txnType", objData.getTxnTypeDn());
@@ -247,6 +253,12 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        holder.date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
