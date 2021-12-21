@@ -94,7 +94,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         try {
             if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
-            } else {
+            } else if (strScreen != null && !strScreen.equals("addpay")) {
                 getPaymentMethods();
             }
         } catch (Exception ex) {
@@ -142,13 +142,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("screen") != null) {
                 strScreen = getIntent().getStringExtra("screen");
             }
-
-            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+            if (strScreen != null && !strScreen.equals("addpay") && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
             } else {
                 ControlMethod("addpayment");
-                strCurrent = "addpayment";
+                if (strScreen != null && !strScreen.equals("addpay")) {
+                    strCurrent = "addpayment";
+                }
             }
             addPayment();
             paymentMethods();
@@ -299,9 +300,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     pDialog.dismiss();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "",apiError.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "",apiError.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {
@@ -698,7 +699,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
             etCVV.setShowSoftInputOnFocus(false);
-            etCVV.setEnabled(false);
+//            etCVV.setEnabled(false);
+            etCVV.requestFocus();
 
             etCVV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -799,7 +801,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
                             } else {
-                                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "","");
+                                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
                             }
                         }
                     } catch (Exception ex) {
@@ -926,9 +928,10 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
+                i.putExtra("cvv", etCVV.getText().toString().trim());
                 startActivity(i);
             } else {
-                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "","");
+                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "", "");
             }
 
         } catch (Exception ex) {

@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -31,6 +32,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
@@ -51,7 +53,7 @@ public class EditCardActivity extends AppCompatActivity {
     MaskEditText etExpiry;
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;
-    ProgressDialog dialog;
+    ProgressDialog dialog, pDialog;
     ConstraintLayout clStates;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack, expiryErrorLL;
     TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
@@ -59,6 +61,7 @@ public class EditCardActivity extends AppCompatActivity {
     TextView tvCard, expiryErrorTV;
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
+    public static EditCardActivity editCardActivity ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,12 @@ public class EditCardActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+
+            editCardActivity = this;
             objMyApplication = (MyApplication) getApplicationContext();
             selectedCard = objMyApplication.getSelectedCard();
             etName = findViewById(R.id.etName);
@@ -121,6 +130,7 @@ public class EditCardActivity extends AppCompatActivity {
             etName.setEnabled(false);
             etExpiry.setEnabled(false);
             etlCard.disableEditText();
+            etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
                 etName.setText(Utils.capitalize(selectedCard.getName()));
                 etlCard.setText(selectedCard.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + selectedCard.getLastFour());
@@ -205,17 +215,16 @@ public class EditCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                    Intent i = new Intent(EditCardActivity.this, PaymentMethodsActivity.class);
-//                    i.putExtra("screen", "editcard");
-//                    i.putExtra("action", "remove");
-//                    startActivity(i);
-//                    finish();
-
-                        Intent i = new Intent();
-                        i.putExtra("screen", "editcard");
-                        i.putExtra("action", "remove");
-                        setResult(RESULT_OK, i);
-                        finish();
+                        if (!selectedCard.getExpired()) {
+                            Intent i = new Intent();
+                            i.putExtra("screen", "editcard");
+                            i.putExtra("action", "remove");
+                            setResult(RESULT_OK, i);
+                            finish();
+                        } else {
+                            pDialog = Utils.showProgressDialog(EditCardActivity.this);
+                            paymentMethodsViewModel.deleteCards(selectedCard.getId());
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -305,6 +314,28 @@ public class EditCardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                pDialog.dismiss();
+                if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(EditCardActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                objMyApplication.setSelectedCard(null);
+                                onBackPressed();
+                                finish();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }, 2000);
+                }
+            }
+        });
     }
 
     private void focusWatchers() {
@@ -371,7 +402,7 @@ public class EditCardActivity extends AppCompatActivity {
             etAddress2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if(b){
+                    if (b) {
                         etAddress2.setSelection(etAddress2.getText().length());
                     }
                 }
@@ -449,7 +480,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
-                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
+                                zipErrorTV.setText("Minimum 5 Characters Required");
                                 isZipcode = false;
                             }
                         } else {

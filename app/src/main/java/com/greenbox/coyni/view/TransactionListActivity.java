@@ -80,6 +80,7 @@ import java.util.TimeZone;
 import java.util.TimeZone;
 
 import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
 
 public class TransactionListActivity extends AppCompatActivity {
@@ -384,6 +385,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     try {
                         if (searchET.hasFocus())
                             searchET.clearFocus();
+                        searchET.setText("");
                         if (transactionList != null && transactionList.getData().getItems() != null
                                 && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             progressBar.setVisibility(View.GONE);
@@ -1233,11 +1235,16 @@ public class TransactionListActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     USFormat(transAmountEndET, "END");
-                    if (transAmountStartET.getText().toString().equals("")) {
-                        transAmountStartET.requestFocus();
-                        Utils.displayAlert("Please enter 'From Amount' first", TransactionListActivity.this, "", "");
-                    } else if (Double.parseDouble(transAmountEndET.getText().toString()) < getUSFormat(transAmountStartET.getText().toString())) {
-                        Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+                    try {
+                        if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
+                            if (getUSFormat(transAmountEndET.getText().toString()) < getUSFormat(transAmountStartET.getText().toString())) {
+                                Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -1283,6 +1290,8 @@ public class TransactionListActivity extends AppCompatActivity {
                 total = 0;
                 isFilters = false;
                 searchET.setText("");
+                transAmountStartET.clearFocus();
+                transAmountEndET.clearFocus();
                 TransactionListRequest transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                 transactionListRequest.setWalletCategory(Utils.walletCategory);
@@ -1339,52 +1348,25 @@ public class TransactionListActivity extends AppCompatActivity {
 
         dialog.show();
 
-//        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-//        calendar.clear();
-//
-//        long today = MaterialDatePicker.todayInUtcMilliseconds();
-//
-//        calendar.setTimeInMillis(today);
-//
-//        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-//        long january = calendar.getTimeInMillis();
-//
-//        calendar.set(Calendar.MONTH, Calendar.MARCH);
-//        long march = calendar.getTimeInMillis();
-//
-//        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-//        long december = calendar.getTimeInMillis();
-//
-//
-//        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-//        constraintBuilder.setValidator(new DateValidatorWeekdays());
-
-//        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-//        builder.setTitleText("SELECT A DATE");
-//        builder.setTheme(R.style.Calender);
-//        final MaterialDatePicker materialDatePicker = builder.build();
-
         dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 showCalendar(getDateFromPickerET);
-//                materialDatePicker.show(getSupportFragmentManager(), "");
-//
-//                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-//                    @Override
-//                    public void onPositiveButtonClick(Pair<Long, Long> selection) {
-//                        Long start_date = selection.first;
-//                        Long end_date = selection.second;
-//                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//                        strFromDate = format.format(start_date) + " 00:00:00.00";
-//                        strToDate = format.format(end_date) + " 00:00:00.00";
-//
-//                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
-//                        getDateFromPickerET.setText(simpleDateFormat.format(start_date) + " - " + simpleDateFormat.format(end_date));
-//
-//                        Log.e("strFromDate", strFromDate + " " + strToDate);
-//                    }
-//                });
+            }
+        });
+
+        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                showCalendar(getDateFromPickerET);
             }
         });
 
@@ -1507,6 +1489,28 @@ public class TransactionListActivity extends AppCompatActivity {
             rangeDateTV.setText(strSelectedDate);
 
             return null;
+        });
+
+        calendarPicker.setOnStartSelectedListener(new Function2<Date, String, Unit>() {
+            @Override
+            public Unit invoke(Date date, String s) {
+                SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
+
+                try {
+                    startDateD = f.parse(s);
+                    endDateD = f.parse(s);
+                    startDateLong = startDateD.getTime();
+                    endDateLong = endDateD.getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+                strSelectedDate = simpleDateFormat.format(startDateLong) + " - " + simpleDateFormat.format(endDateLong);
+                rangeDateTV.setText(strSelectedDate);
+
+                return null;
+            }
         });
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
