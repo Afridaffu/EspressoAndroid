@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
     Context mecontext;
     MyApplication objMyApplication;
     TransactionList transactionList;
+    Long mLastClickTime=0L;
 
     public TransactionListPendingAdapter(List<TransactionListPending> list, Context context) {
         this.transactionListItemspending = list;
@@ -128,6 +130,11 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
             @Override
             public void onClick(View view) {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     Intent i = new Intent(mecontext, TransactionDetailsActivity.class);
                     i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
                     i.putExtra("txnType", objData.getTxnTypeDn());
@@ -136,6 +143,12 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        holder.date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
