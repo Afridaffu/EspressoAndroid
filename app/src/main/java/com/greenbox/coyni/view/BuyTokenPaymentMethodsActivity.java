@@ -368,14 +368,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             if (strScreen != null && strScreen.equals("dashboard")) {
                 imgLogo.setVisibility(View.VISIBLE);
                 imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
-                tvMessage.setVisibility(View.GONE);
+                tvMessage.setVisibility(VISIBLE);
                 tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \\nlinked to your account. Please follow one of \\nthe prompts below to link an account.");
+                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
             } else {
                 imgLogo.setVisibility(View.GONE);
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
-                tvMessage.setVisibility(View.VISIBLE);
+                tvMessage.setVisibility(GONE);
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override

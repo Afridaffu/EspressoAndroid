@@ -128,7 +128,7 @@ public class AddCardActivity extends AppCompatActivity {
                 layoutAddress.setVisibility(View.GONE);
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                etCVV.setText("");
+                //etCVV.setText("");
             } else {
                 super.onBackPressed();
             }
@@ -761,7 +761,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
 
-                            }else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
+                            } else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);

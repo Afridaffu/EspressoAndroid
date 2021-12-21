@@ -61,7 +61,7 @@ public class EditCardActivity extends AppCompatActivity {
     TextView tvCard, expiryErrorTV;
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
-    public static EditCardActivity editCardActivity ;
+    public static EditCardActivity editCardActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,7 +358,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 }
                             } else {
                                 expiryErrorLL.setVisibility(VISIBLE);
-                                expiryErrorTV.setText("Please enter valid Expiry Date");
+                                expiryErrorTV.setText("Field Required");
                                 etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                             }
@@ -517,15 +517,11 @@ public class EditCardActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                         } else {
                             isExpiry = false;
-//                            etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                             expiryErrorLL.setVisibility(VISIBLE);
                             expiryErrorTV.setText("Please enter valid Expiry Date");
                         }
                     } else {
                         isExpiry = false;
-//                        etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                        Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {

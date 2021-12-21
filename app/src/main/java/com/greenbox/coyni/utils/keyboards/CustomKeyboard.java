@@ -118,7 +118,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
             } else {
                 String value = keyValues.get(view.getId());
 //                inputConnection.commitText(value, 1);
-                if ((enteredText.equals("") || enteredText.contains(".") || enteredText.length() == 3) && value.equals(".")) {
+                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
 
                 } else {
                     enteredText = enteredText + value;

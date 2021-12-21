@@ -245,8 +245,11 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
-                    i.putExtra("screen", "buy");
+//                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
+//                    i.putExtra("screen", "buy");
+//                    startActivity(i);
+                    Intent i = new Intent(DashboardActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "dashboard");
                     startActivity(i);
                 }
             });
