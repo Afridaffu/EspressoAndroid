@@ -448,7 +448,11 @@ public class Utils {
         TextView textTV = dialog.findViewById(R.id.toastTV);
         ImageView imageIV = dialog.findViewById(R.id.toastIV);
         textTV.setText(text);
-        imageIV.setImageResource(imageID);
+        try {
+            imageIV.setImageResource(imageID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
