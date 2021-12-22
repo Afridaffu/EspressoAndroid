@@ -105,7 +105,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
             } else if (strScreen != null && !strScreen.equals("addpay")) {
-                getPaymentMethods();
+                getPaymentMethods(true);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -121,6 +121,12 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 } else {
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
+                }
+            } else if (requestCode == 3) {
+                if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    ControlMethod("addpayment");
+                } else {
+                    getPaymentMethods(false);
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -287,7 +293,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 pDialog.dismiss();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods();
+                    getPaymentMethods(true);
                 }
             }
         });
@@ -298,7 +304,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 pDialog.dismiss();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods();
+                    getPaymentMethods(true);
                 }
             }
         });
@@ -336,9 +342,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    private void getPaymentMethods() {
+    private void getPaymentMethods(Boolean isPayment) {
         try {
-            isPayments = true;
+            isPayments = isPayment;
             dialog = Utils.showProgressDialog(this);
             dashboardViewModel.mePaymentMethods();
         } catch (Exception ex) {
@@ -418,9 +424,13 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
+//                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
+//                            i.putExtra("card", "debit");
+//                            startActivity(i);
+
                             Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
-                            startActivity(i);
+                            startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -434,9 +444,13 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                             strCurrent = "credit";
+//                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
+//                            i.putExtra("card", "credit");
+//                            startActivity(i);
+
                             Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "credit");
-                            startActivity(i);
+                            startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
