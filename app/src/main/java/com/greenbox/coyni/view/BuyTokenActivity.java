@@ -75,7 +75,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;
     SignOnData signOnData;
-    float fontSize;
+    float fontSize, dollarFont;
     Boolean isUSD = false, isCYN = false, isBank = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
@@ -121,12 +121,23 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         isUSD = true;
                         convertUSDValue();
                     }
-                    if (editable.length() > 7) {
-                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 45));
-                    } else if (editable.length() > 5) {
-                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 50));
+//                    if (editable.length() > 7) {
+//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 45));
+//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 40));
+//                    } else if (editable.length() > 5) {
+//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 50));
+//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 45));
+//                    } else {
+//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+//                    }
+
+                    if (editable.length() > 6) {
+                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 95));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 85));
                     } else {
                         etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
                     }
                     if (validation()) {
                         ctKey.enableButton();
@@ -143,6 +154,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     usdValidation = 0.0;
                     ctKey.disableButton();
                     tvError.setVisibility(View.INVISIBLE);
+                    ctKey.clearData();
                 } else {
                     etAmount.setText("");
                     cynValue = 0.0;
@@ -186,6 +198,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
             fontSize = etAmount.getTextSize();
+            dollarFont = tvCurrency.getTextSize();
             etAmount.setShowSoftInputOnFocus(false);
 //            etAmount.setEnabled(false);
             if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
@@ -226,7 +239,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             lyPayMethod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    selectPayMethod();
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        selectPayMethod();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -247,17 +268,17 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 tvCurrency.setVisibility(View.INVISIBLE);
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                                 convertUSDtoCYN();
-                                if (tvError.getVisibility() == View.VISIBLE) {
-                                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
-                                }
+//                                if (tvError.getVisibility() == View.VISIBLE) {
+//                                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+//                                }
                             } else {
                                 tvCYN.setVisibility(View.GONE);
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 convertCYNtoUSD();
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
-                                if (tvError.getVisibility() == View.VISIBLE) {
-                                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
-                                }
+//                                if (tvError.getVisibility() == View.VISIBLE) {
+//                                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
+//                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -805,7 +826,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
-            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName() + ".");
+            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -942,15 +963,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     public void okClick() {
         try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             if (!etCVV.getText().toString().trim().equals("")) {
                 prevSelectedCard = null;
                 cvvDialog.dismiss();
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
                 strCvv = etCVV.getText().toString().trim();
                 etAmount.setText("");
+                ctKey.clearData();
                 bindPayMethod(objSelected);
             } else {
                 Utils.displayAlert("Please enter CVV", BuyTokenActivity.this, "", "");
@@ -1171,15 +1193,27 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 7) {
+//            if (editable.length() > 7) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 50));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 45));
+//            } else if (editable.length() > 5) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 55));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 50));
+//            } else {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+//            }
+            if (editable.length() > 6) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 50));
-            } else if (editable.length() > 5) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 55));
+                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 95));
+                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 85));
             } else {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
                 etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
             }
             etAmount.setFilters(FilterArray);
         } catch (Exception ex) {

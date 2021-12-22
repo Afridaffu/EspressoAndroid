@@ -102,6 +102,7 @@ public class AddCardActivity extends AppCompatActivity {
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
+    CustomKeyboard ctKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -436,6 +437,7 @@ public class AddCardActivity extends AppCompatActivity {
                         }
                     } else if (apiError.getData() != null) {
                         etPreAmount.setText("");
+                        ctKey.clearData();
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
@@ -579,7 +581,8 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 isName = false;
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlName, getColor(R.color.light_gray));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
                             }
@@ -624,7 +627,8 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 isExpiry = false;
                                 etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                                 expiryErrorLL.setVisibility(VISIBLE);
                                 expiryErrorTV.setText("Field Required");
                             }
@@ -649,12 +653,13 @@ public class AddCardActivity extends AppCompatActivity {
                             if (etCVV.getText().toString().trim().length() < 3) {
                                 isCvv = false;
                                 etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 cvvErrorLL.setVisibility(VISIBLE);
                                 if (etCVV.getText().toString().trim().length() == 0) {
                                     cvvErrorTV.setText("Field Required");
+                                    Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
                                 } else {
                                     cvvErrorTV.setText("Please enter valid CVV");
+                                    Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 }
                             } else {
                                 isCvv = true;
@@ -1160,7 +1165,6 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             LinearLayout layoutPClose;
             TextView tvMessage;
-            CustomKeyboard ctKey;
             preAuthDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preAuthDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preAuthDialog.setContentView(R.layout.preauthorization);
@@ -1184,7 +1188,7 @@ public class AddCardActivity extends AppCompatActivity {
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
@@ -1293,8 +1297,11 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         //preDialog.dismiss();
-                        Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
-                        startActivity(i);
+//                        Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
+//                        startActivity(i);
+//                        finish();
+                        Intent i = new Intent();
+                        setResult(RESULT_OK, i);
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();

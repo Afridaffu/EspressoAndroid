@@ -1227,10 +1227,10 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    transAmountStartET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal))) });
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
-                }else{
-                    transAmountStartET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength))) });
+                } else {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
             }
         });
@@ -1239,7 +1239,7 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    transAmountEndET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal))) });
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     try {
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
@@ -1252,8 +1252,8 @@ public class TransactionListActivity extends AppCompatActivity {
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
-                }else{
-                    transAmountEndET.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength))) });
+                } else {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
             }
         });
@@ -1262,9 +1262,11 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
                     transAmountStartET.clearFocus();
                 }
+
                 return false;
             }
         });
@@ -1273,6 +1275,7 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     transAmountEndET.clearFocus();
                 }

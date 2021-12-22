@@ -233,7 +233,7 @@
                                 android:gravity="center_vertical"
                                 android:hint="0.00"
                                 android:inputType="numberDecimal"
-                                android:maxLength="7"
+                                android:maxLength="@string/maxlength"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_53ssp" />
 
