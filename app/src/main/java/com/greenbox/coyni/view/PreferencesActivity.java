@@ -34,8 +34,8 @@ public class PreferencesActivity extends AppCompatActivity {
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
-    TextInputLayout timeZoneTIL, accountTIL;
-    TextInputEditText timeZoneET, accountET;
+    TextInputLayout timeZoneTIL, accountTIL,currencyTIL;
+    TextInputEditText timeZoneET, accountET,currencyET;
     RelativeLayout timeZoneRL;
     LinearLayout preferencesCloseLL;
     ImageView accountDDIV;
@@ -70,11 +70,16 @@ public class PreferencesActivity extends AppCompatActivity {
             timeZoneTIL = findViewById(R.id.timeZoneTIL);
             timeZoneET = findViewById(R.id.timeZoneET);
             accountTIL = findViewById(R.id.accountTIL);
+            currencyTIL = findViewById(R.id.currencyTIL);
             accountET = findViewById(R.id.accountET);
+            currencyET = findViewById(R.id.currencyET);
             timeZoneRL = findViewById(R.id.timezoneRL);
             accountDDIV = findViewById(R.id.accountDDICon);
             disableView = findViewById(R.id.disableView);
             preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
+
+            currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            Utils.setUpperHintColor(currencyTIL, getColor(R.color.light_gray));
 
             timeZoneRL.setOnClickListener(new View.OnClickListener() {
                 @Override

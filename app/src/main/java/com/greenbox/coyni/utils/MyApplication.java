@@ -48,7 +48,7 @@ public class MyApplication extends Application {
     AccountLimitsData objAcc;
     AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST",strWalletId="";
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strWalletId = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
@@ -317,7 +317,6 @@ public class MyApplication extends Application {
     }
 
 
-
     public String transactionDate(String date) {
         String strDate = "";
         try {
@@ -430,7 +429,7 @@ public class MyApplication extends Application {
                         .toFormatter()
                         .withZone(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
 
-                Log.e("getStrPreference",getStrPreference());
+                Log.e("getStrPreference", getStrPreference());
                 ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
                 DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
                 zonedTime = zonedTime.withZoneSameInstant(ZoneOffset.UTC);
