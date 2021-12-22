@@ -111,8 +111,8 @@ public class TransactionListActivity extends AppCompatActivity {
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
 
-    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "";
-    public long startDateLong = 0L, endDateLong = 0L;
+    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "",tempStrSelectedDate = "";
+    public long startDateLong = 0L, endDateLong = 0L,tempStartDateLong = 0L, tempEndDateLong = 0L;
     Date startDateD = null;
     Date endDateD = null;
 
@@ -730,6 +730,7 @@ public class TransactionListActivity extends AppCompatActivity {
             startDateLong = 0L;
             endDateLong = 0L;
             isFilters = false;
+            strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 //            searchET.setText("");
         }
@@ -748,6 +749,7 @@ public class TransactionListActivity extends AppCompatActivity {
             startDateLong = 0L;
             endDateLong = 0L;
             isFilters = false;
+            strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
             searchET.setText("");

@@ -404,6 +404,8 @@ public class DashboardActivity extends AppCompatActivity {
                             underReviewCV.setVisibility(View.GONE);
                             additionalActionCV.setVisibility(View.GONE);
                             buyTokensCV.setVisibility(View.GONE);
+                            txnRV.setVisibility(View.GONE);
+                            noTxnTV.setVisibility(View.VISIBLE);
                         }
                     } else {
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
