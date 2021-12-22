@@ -98,7 +98,7 @@ public class AddCardActivity extends AppCompatActivity {
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
-    public Boolean isCard = false;
+    public Boolean isCard = false, isScan = false, isCardClear = false;
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
@@ -417,6 +417,22 @@ public class AddCardActivity extends AppCompatActivity {
                     objCard = cardTypeResponse;
                     if (!etCardNumber.getText().toString().trim().equals("")) {
                         etCardNumber.setImage(cardTypeResponse.getData().getCardBrand());
+                        if (isScan) {
+                            isScan = false;
+                            if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit") && objCard.getData().getCardType().toLowerCase().equals("credit")) {
+                                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "", "");
+                                etCardNumber.setText("");
+                                etCardNumber.hideBrandIcon();
+                            } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit") && objCard.getData().getCardType().toLowerCase().equals("debit")) {
+                                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
+                                etCardNumber.setText("");
+                                etCardNumber.hideBrandIcon();
+                            } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
+                                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                                etCardNumber.setText("");
+                                etCardNumber.hideBrandIcon();
+                            }
+                        }
                     }
                 }
             }
@@ -509,14 +525,14 @@ public class AddCardActivity extends AppCompatActivity {
                 Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
                 Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
+                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
@@ -872,6 +888,11 @@ public class AddCardActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                     } else {
                         isExpiry = false;
+                        if (charSequence.toString().trim().length() == 0 && isCardClear) {
+                            expiryErrorLL.setVisibility(GONE);
+                            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.light_gray));
+                        }
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -916,6 +937,12 @@ public class AddCardActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.primary_green));
                     } else {
                         isCvv = false;
+                        if (charSequence.toString().trim().length() == 0 && isCardClear) {
+                            isCardClear = false;
+                            cvvErrorLL.setVisibility(GONE);
+                            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
+                        }
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -1401,6 +1428,7 @@ public class AddCardActivity extends AppCompatActivity {
 
     public void clearControls() {
         try {
+            isCardClear = true;
             etExpiry.setText("");
             etCVV.setText("");
         } catch (Exception ex) {
@@ -1435,6 +1463,7 @@ public class AddCardActivity extends AppCompatActivity {
                     Log.e("owner", result.getOwner());
                     Log.e("number", result.getExpiryDate().toString());
                     result.getCardNumber();
+                    isScan = true;
                     etCardNumber.setText(result.getCardNumber());
                     etCardNumber.setSelection();
                     etCardNumber.removeError();

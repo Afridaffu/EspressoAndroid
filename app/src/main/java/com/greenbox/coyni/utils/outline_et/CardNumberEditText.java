@@ -57,7 +57,7 @@ public class CardNumberEditText extends ConstraintLayout {
             @Override
             public void onFocusChange(View view, boolean b) {
 
-                if(from.equals("ADD_CARD")){
+                if (from.equals("ADD_CARD")) {
                     try {
                         if (b) {
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
@@ -96,7 +96,7 @@ public class CardNumberEditText extends ConstraintLayout {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }else{
+                } else {
 
                 }
 
@@ -111,7 +111,7 @@ public class CardNumberEditText extends ConstraintLayout {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(from.equals("ADD_CARD")){
+                if (from.equals("ADD_CARD")) {
                     try {
                         if (i2 > 2) {
                             if ((cardType.equals("american") && charSequence.toString().trim().length() != 18) || (!cardType.equals("american") && charSequence.toString().trim().length() < 19)) {
@@ -141,7 +141,7 @@ public class CardNumberEditText extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(from.equals("ADD_CARD")) {
+                if (from.equals("ADD_CARD")) {
                     try {
                         if (s.length() == 7) {
                             AddCardActivity.addCardActivity.getCardype(s.toString());
@@ -251,9 +251,13 @@ public class CardNumberEditText extends ConstraintLayout {
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
     }
 
-    public void requestCNETFocus(){
+    public void requestCNETFocus() {
         cnET.requestFocus();
         hintName.setTextColor(getResources().getColor(R.color.primary_color));
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
+
+    public void hideBrandIcon() {
+        imgCardType.setVisibility(INVISIBLE);
     }
 }

@@ -132,7 +132,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
 //                    }
 
-                    if (editable.length() > 6) {
+                    if (editable.length() > 5) {
                         etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 95));
                         tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 85));
                     } else {
@@ -1206,7 +1206,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
 //                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
 //            }
-            if (editable.length() > 6) {
+            if (editable.length() > 5) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 95));
                 tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 85));
