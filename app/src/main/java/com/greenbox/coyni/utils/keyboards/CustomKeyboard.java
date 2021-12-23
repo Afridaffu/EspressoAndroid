@@ -118,7 +118,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
             } else {
                 String value = keyValues.get(view.getId());
 //                inputConnection.commitText(value, 1);
-                if ((enteredText.equals("") || enteredText.contains(".") || enteredText.length() == 3) && value.equals(".")) {
+                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
 
                 } else {
                     enteredText = enteredText + value;
@@ -191,5 +191,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
     public void disableButton() {
         keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg);
         keyAction.setEnabled(false);
+    }
+
+    public void clearData() {
+        enteredText = "";
     }
 }

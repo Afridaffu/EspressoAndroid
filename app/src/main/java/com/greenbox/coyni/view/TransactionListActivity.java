@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -57,6 +58,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
+import com.greenbox.coyni.adapters.TransactionListPostedNewAdapter;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -85,7 +87,7 @@ import kotlin.jvm.functions.Function4;
 
 public class TransactionListActivity extends AppCompatActivity {
     TransactionListPendingAdapter transactionListPendingAdapter;
-    TransactionListPostedAdapter transactionListPostedAdapter;
+    TransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;
     Long mLastClickTime = 0L;
     NestedScrollView nestedScrollView;
@@ -110,8 +112,8 @@ public class TransactionListActivity extends AppCompatActivity {
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
 
-    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "";
-    public long startDateLong = 0L, endDateLong = 0L;
+    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
+    public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     Date startDateD = null;
     Date endDateD = null;
 
@@ -174,11 +176,6 @@ public class TransactionListActivity extends AppCompatActivity {
                                 filterList.add(globalPending.get(iteration));
                             }
                         }
-//                        if (filterList.size() > 0) {
-//                            transactionListPendingAdapter.updateList(filterList);
-//                            globalPosted.clear();
-//                            findViewById(R.id.layoutLLposted).setVisibility(View.GONE);
-//                        }
                     }
                     if (globalPosted.size() > 0) {
                         for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
@@ -187,14 +184,6 @@ public class TransactionListActivity extends AppCompatActivity {
                                 filterList1.add(globalPosted.get(iteration));
                             }
                         }
-//                        if (filterList1.size() > 0) {
-//                            transactionListPostedAdapter.updateList(filterList1);
-//                            globalPending.clear();
-//                            findViewById(R.id.layoutLLPending).setVisibility(View.GONE);
-//                            findViewById(R.id.pendingTV).setVisibility(View.GONE);
-//
-//                        }
-
                     }
 
                     if (filterList.size() == 0 && filterList1.size() == 0) {
@@ -224,7 +213,34 @@ public class TransactionListActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     try {
-                        transactionListPostedAdapter.updateList(filterList1);
+                        List<List<TransactionListPosted>> listedData = new ArrayList<>();
+                        ArrayList<String> dates = new ArrayList<>();
+
+//                        for (int k = 0; k < filterList1.size(); k++) {
+//                            String datee = objMyApplication.convertZoneDateLastYear(filterList1.get(k).getUpdatedAt().split("\\.")[0]);
+//                            if (!dates.contains(datee)) {
+//                                dates.add(datee);
+//                            }
+//                        }
+//
+//                        for (int j = 0; j < dates.size(); j++) {
+//                            List<TransactionListPosted> individualDateData = new ArrayList<>();
+//                            for (int l = 0; l < filterList1.size(); l++) {
+//                                String datee = objMyApplication.convertZoneDateLastYear(filterList1.get(l).getUpdatedAt().split("\\.")[0]);
+//                                if (dates.get(j).equals(datee)) {
+//                                    individualDateData.add(filterList1.get(l));
+//                                }
+//                            }
+//                            listedData.add(individualDateData);
+//                        }
+
+                        Log.e("Size", listedData.size() + "");
+                        LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
+                        transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
+                        getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+                        getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+                        getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+//                        transactionListPostedAdapter.updateList(listedData);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -423,7 +439,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                     layoutTransactionspending.setVisibility(View.GONE);
                                     pendingTxt.setVisibility(View.GONE);
                                     layoutTransactionsposted.setVisibility(View.VISIBLE);
-                                    transactionListPostedAdapter = new TransactionListPostedAdapter(globalPosted, TransactionListActivity.this);
+                                    transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, TransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
@@ -443,7 +459,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                     rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
                                     rvTransactionsPending.setAdapter(transactionListPendingAdapter);
 
-                                    transactionListPostedAdapter = new TransactionListPostedAdapter(globalPosted, TransactionListActivity.this);
+                                    transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, TransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
@@ -729,10 +745,10 @@ public class TransactionListActivity extends AppCompatActivity {
             startDateLong = 0L;
             endDateLong = 0L;
             isFilters = false;
+            strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 //            searchET.setText("");
         }
-
 
         resetFiltersTV.setOnClickListener(view -> {
             transactionType.clear();
@@ -747,6 +763,7 @@ public class TransactionListActivity extends AppCompatActivity {
             startDateLong = 0L;
             endDateLong = 0L;
             isFilters = false;
+            strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
             searchET.setText("");
@@ -912,7 +929,6 @@ public class TransactionListActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         transSubTypeSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1225,7 +1241,10 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
+                } else {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
             }
         });
@@ -1234,6 +1253,7 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     try {
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
@@ -1246,6 +1266,8 @@ public class TransactionListActivity extends AppCompatActivity {
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
             }
         });
@@ -1254,9 +1276,11 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
                     transAmountStartET.clearFocus();
                 }
+
                 return false;
             }
         });
@@ -1265,6 +1289,7 @@ public class TransactionListActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     transAmountEndET.clearFocus();
                 }
@@ -1480,6 +1505,7 @@ public class TransactionListActivity extends AppCompatActivity {
                 endDateD = f.parse(s2);
                 startDateLong = startDateD.getTime();
                 endDateLong = endDateD.getTime();
+                Log.e("startDate long", startDateLong + "  " + endDateLong);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -1501,6 +1527,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     endDateD = f.parse(s);
                     startDateLong = startDateD.getTime();
                     endDateLong = endDateD.getTime();
+                    Log.e("startDate long", startDateLong + "  " + endDateLong);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

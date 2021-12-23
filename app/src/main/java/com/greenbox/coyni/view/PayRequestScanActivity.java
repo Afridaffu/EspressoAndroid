@@ -572,7 +572,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
-
     private void getUserDetails(String strWalletId) {
         try {
             if (Utils.checkInternet(PayRequestScanActivity.this)) {

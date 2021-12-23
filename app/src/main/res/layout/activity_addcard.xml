@@ -103,7 +103,7 @@
                     android:layout_below="@+id/tvCardMsg"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:hint="Name on Card"
-                    android:textColorHint="@color/primary_black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:hintTextColor="@color/primary_green">
@@ -208,10 +208,10 @@
                             style="@style/TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Card Exp"
-                            android:textColorHint="@color/primary_black"
+                            android:textColorHint="@color/light_gray"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
+                            android:hint="Card Exp"
                             app:hintTextColor="@color/primary_green">
 
                             <com.santalu.maskara.widget.MaskEditText
@@ -276,7 +276,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="CVV/CVC"
-                            android:textColorHint="@color/primary_black"
+                            android:textColorHint="@color/light_gray"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
                             app:hintTextColor="@color/primary_green">

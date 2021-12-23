@@ -57,7 +57,7 @@ public class CardNumberEditText extends ConstraintLayout {
             @Override
             public void onFocusChange(View view, boolean b) {
 
-                if(from.equals("ADD_CARD")){
+                if (from.equals("ADD_CARD")) {
                     try {
                         if (b) {
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
@@ -96,7 +96,7 @@ public class CardNumberEditText extends ConstraintLayout {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }else{
+                } else {
 
                 }
 
@@ -111,14 +111,13 @@ public class CardNumberEditText extends ConstraintLayout {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(from.equals("ADD_CARD")){
+                if (from.equals("ADD_CARD")) {
                     try {
                         if (i2 > 2) {
+                            AddCardActivity.addCardActivity.getCardype(charSequence.toString());
                             if ((cardType.equals("american") && charSequence.toString().trim().length() != 18) || (!cardType.equals("american") && charSequence.toString().trim().length() < 19)) {
-
                                 AddCardActivity.addCardActivity.isCard = false;
                             } else {
-                                AddCardActivity.addCardActivity.getCardype(charSequence.toString());
                                 AddCardActivity.addCardActivity.isCard = true;
                             }
                         } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {
@@ -127,7 +126,8 @@ public class CardNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
-                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+//                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+                            imgCardType.setVisibility(INVISIBLE);
                             AddCardActivity.addCardActivity.isCard = false;
                         }
                         AddCardActivity.addCardActivity.enableOrDisableNext();
@@ -140,12 +140,13 @@ public class CardNumberEditText extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(from.equals("ADD_CARD")) {
+                if (from.equals("ADD_CARD")) {
                     try {
                         if (s.length() == 7) {
                             AddCardActivity.addCardActivity.getCardype(s.toString());
                         } else if (s.toString().trim().length() == 0) {
-                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+//                            imgCardType.setImageResource(R.drawable.ic_visa_inactive);
+                            imgCardType.setVisibility(INVISIBLE);
                             AddCardActivity.addCardActivity.clearControls();
                         }
                         String str = cnET.getText().toString();
@@ -242,5 +243,20 @@ public class CardNumberEditText extends ConstraintLayout {
 
     public void setFrom(String strFrom) {
         from = strFrom;
+    }
+
+    public void removeError() {
+        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
+
+    public void requestCNETFocus() {
+        cnET.requestFocus();
+        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
+
+    public void hideBrandIcon() {
+        imgCardType.setVisibility(INVISIBLE);
     }
 }

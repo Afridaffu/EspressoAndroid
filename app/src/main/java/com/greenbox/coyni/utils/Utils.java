@@ -51,6 +51,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
 import com.greenbox.coyni.adapters.StatesListAdapter;
@@ -62,8 +64,11 @@ import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -443,7 +448,11 @@ public class Utils {
         TextView textTV = dialog.findViewById(R.id.toastTV);
         ImageView imageIV = dialog.findViewById(R.id.toastIV);
         textTV.setText(text);
-        imageIV.setImageResource(imageID);
+        try {
+            imageIV.setImageResource(imageID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
@@ -759,6 +768,7 @@ public class Utils {
 
             DisplayMetrics mertics = context.getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
+//            List<States> statesFromAssets = getStates(context);
 
             Log.e("editext", editText.getText().toString());
             CardView actionCV = dialog.findViewById(R.id.cvAction);
@@ -769,6 +779,10 @@ public class Utils {
             StatesListAdapter statesListAdapter = new StatesListAdapter(null, context, "EditAddress");
 
             List<States> listStates = myApplicationObj.getListStates();
+
+//            if(listStates.size()==0 ){
+//                listStates = statesFromAssets;
+//            }
 
             tempStateName = "";
             tempStateCode = "";
@@ -967,6 +981,7 @@ public class Utils {
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
         return px / scaledDensity;
     }
+
     public static String newDate(String date) {
         String strDate = "";
         try {
@@ -978,5 +993,25 @@ public class Utils {
             ex.printStackTrace();
         }
         return strDate;
+    }
+
+    public static List<States> getStates(Context context) {
+        String json = null;
+        List<States> listStates = new ArrayList<>();
+        try {
+            InputStream is = context.getAssets().open("states.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            listStates = gson.fromJson(json, type);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return listStates;
     }
 }

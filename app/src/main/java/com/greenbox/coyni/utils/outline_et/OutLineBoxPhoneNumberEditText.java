@@ -182,11 +182,9 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
     }
 
-
     public void setFrom(String fromm) {
         FROM = fromm;
     }
-
 
     public void setText(String text) {
         pnET.setText(text);
@@ -203,4 +201,5 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     public void requestETFocus(){
         pnET.requestFocus();
     }
+
 }

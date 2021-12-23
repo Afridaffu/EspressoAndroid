@@ -555,7 +555,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
 
                     } else {
-                        Utils.displayAlertNew(changePassword.getError().getErrorDescription(), CreatePasswordActivity.this, "");
+                        Utils.displayAlert(changePassword.getError().getErrorDescription(), CreatePasswordActivity.this, "",changePassword.getError().getFieldErrors().get(0));
                     }
                 }
 

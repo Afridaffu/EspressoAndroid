@@ -291,7 +291,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                         dashboardViewModel.meProfile();
                         Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                     } else {
-                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "",imageResponse.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "", imageResponse.getError().getFieldErrors().get(0));
                     }
 
                 }
@@ -507,7 +507,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             //End
 
 //            Uri tempUri = getImageUri(context, bitmap);
-            Uri tempUri = getImageUri(this, scaled);
+            Uri tempUri = getImageUri(UserDetailsActivity.this, scaled);
 
             File file = new File(getRealPathFromURI(tempUri));
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -529,7 +529,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage,
-                myApplicationObj.getMyProfile().getData().getId() + "_profile", null);
+                myApplicationObj.getMyProfile().getData().getId() + "_profile" + System.currentTimeMillis(), null);
         return Uri.parse(path);
     }
 

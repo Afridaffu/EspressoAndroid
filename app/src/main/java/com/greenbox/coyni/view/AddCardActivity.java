@@ -98,10 +98,11 @@ public class AddCardActivity extends AppCompatActivity {
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
-    public Boolean isCard = false;
+    public Boolean isCard = false, isScan = false, isCardClear = false;
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
+    CustomKeyboard ctKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +129,7 @@ public class AddCardActivity extends AppCompatActivity {
                 layoutAddress.setVisibility(View.GONE);
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                etCVV.setText("");
+                //etCVV.setText("");
             } else {
                 super.onBackPressed();
             }
@@ -183,7 +184,7 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress1 = findViewById(R.id.etlAddress1);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
-            etCardNumber.requestFocus();
+            etCardNumber.requestCNETFocus();
 
             etCardNumber.setFrom("ADD_CARD");
             MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
@@ -416,6 +417,22 @@ public class AddCardActivity extends AppCompatActivity {
                     objCard = cardTypeResponse;
                     if (!etCardNumber.getText().toString().trim().equals("")) {
                         etCardNumber.setImage(cardTypeResponse.getData().getCardBrand());
+                        if (isScan) {
+                            isScan = false;
+                            if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit") && objCard.getData().getCardType().toLowerCase().equals("credit")) {
+                                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "", "");
+                                etCardNumber.setText("");
+                                etCardNumber.hideBrandIcon();
+                            } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit") && objCard.getData().getCardType().toLowerCase().equals("debit")) {
+                                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
+                                etCardNumber.setText("");
+                                etCardNumber.hideBrandIcon();
+                            } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
+                                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                                etCardNumber.setText("");
+                                etCardNumber.hideBrandIcon();
+                            }
+                        }
                     }
                 }
             }
@@ -436,6 +453,7 @@ public class AddCardActivity extends AppCompatActivity {
                         }
                     } else if (apiError.getData() != null) {
                         etPreAmount.setText("");
+                        ctKey.clearData();
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
@@ -474,7 +492,7 @@ public class AddCardActivity extends AppCompatActivity {
         Boolean value = true;
         try {
             if (!objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() < 19) {
-                etCardNumber.requestFocus();
+                etCardNumber.requestCNETFocus();
                 Utils.displayAlert("Invalid Card Number", AddCardActivity.this, "", "");
                 return value = false;
             } else if (objCard.getData().getCardBrand().toLowerCase().contains("american") && !etCardNumber.getText().toString().equals("") && etCardNumber.getText().toString().length() != 18) {
@@ -507,14 +525,14 @@ public class AddCardActivity extends AppCompatActivity {
                 Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
                 Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("GreenBox system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
+                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
@@ -558,6 +576,7 @@ public class AddCardActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
             etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -578,7 +597,8 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 isName = false;
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlName, getColor(R.color.light_gray));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
                             }
@@ -623,7 +643,8 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 isExpiry = false;
                                 etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                                 expiryErrorLL.setVisibility(VISIBLE);
                                 expiryErrorTV.setText("Field Required");
                             }
@@ -648,12 +669,13 @@ public class AddCardActivity extends AppCompatActivity {
                             if (etCVV.getText().toString().trim().length() < 3) {
                                 isCvv = false;
                                 etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 cvvErrorLL.setVisibility(VISIBLE);
                                 if (etCVV.getText().toString().trim().length() == 0) {
                                     cvvErrorTV.setText("Field Required");
+                                    Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
                                 } else {
                                     cvvErrorTV.setText("Please enter valid CVV");
+                                    Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 }
                             } else {
                                 isCvv = true;
@@ -761,7 +783,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
 
-                            }else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
+                            } else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
@@ -866,6 +888,11 @@ public class AddCardActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                     } else {
                         isExpiry = false;
+                        if (charSequence.toString().trim().length() == 0 && isCardClear) {
+                            expiryErrorLL.setVisibility(GONE);
+                            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.light_gray));
+                        }
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -910,6 +937,12 @@ public class AddCardActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.primary_green));
                     } else {
                         isCvv = false;
+                        if (charSequence.toString().trim().length() == 0 && isCardClear) {
+                            isCardClear = false;
+                            cvvErrorLL.setVisibility(GONE);
+                            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
+                        }
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -1159,7 +1192,6 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             LinearLayout layoutPClose;
             TextView tvMessage;
-            CustomKeyboard ctKey;
             preAuthDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preAuthDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preAuthDialog.setContentView(R.layout.preauthorization);
@@ -1183,7 +1215,7 @@ public class AddCardActivity extends AppCompatActivity {
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
@@ -1221,6 +1253,7 @@ public class AddCardActivity extends AppCompatActivity {
                         ctKey.enableButton();
                     } else {
                         ctKey.disableButton();
+                        ctKey.clearData();
                     }
                 }
             });
@@ -1292,8 +1325,11 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         //preDialog.dismiss();
-                        Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
-                        startActivity(i);
+//                        Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
+//                        startActivity(i);
+//                        finish();
+                        Intent i = new Intent();
+                        setResult(RESULT_OK, i);
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1393,6 +1429,7 @@ public class AddCardActivity extends AppCompatActivity {
 
     public void clearControls() {
         try {
+            isCardClear = true;
             etExpiry.setText("");
             etCVV.setText("");
         } catch (Exception ex) {
@@ -1427,8 +1464,11 @@ public class AddCardActivity extends AppCompatActivity {
                     Log.e("owner", result.getOwner());
                     Log.e("number", result.getExpiryDate().toString());
                     result.getCardNumber();
+                    isScan = true;
                     etCardNumber.setText(result.getCardNumber());
                     etCardNumber.setSelection();
+                    etCardNumber.removeError();
+                    etCardNumber.requestCNETFocus();
                     cardErrorLL.setVisibility(GONE);
                 }
             }

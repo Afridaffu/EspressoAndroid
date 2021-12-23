@@ -92,8 +92,8 @@
                         android:layout_height="wrap_content"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:hint="Time Zone"
                         android:fontFamily="@font/opensans_semibold"
+                        android:hint="Time Zone"
                         android:inputType="text"
                         android:padding="@dimen/_12sdp"
                         android:textColor="@color/primary_black"
@@ -132,7 +132,7 @@
                     app:hintTextColor="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/countryET"
+                        android:id="@+id/currencyET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"

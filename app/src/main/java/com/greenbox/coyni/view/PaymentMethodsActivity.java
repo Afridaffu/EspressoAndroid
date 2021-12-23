@@ -57,7 +57,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     ProgressDialog dialog, pDialog;
     SignOnData signOnData;
-    Boolean isBank = false, isPayments = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     CardView cvTryAgain, cvDone;
 
@@ -102,6 +102,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     if (data.getStringExtra("action") != null && data.getStringExtra("action").equals("remove")) {
                         deleteBank(PaymentMethodsActivity.this, objMyApplication.getSelectedCard());
                     }
+                }
+            } else if (requestCode == 3) {
+                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    ControlMethod("addpayment");
+                    getPaymentMethods();
+                    isDeCredit = true;
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -156,10 +162,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         super.onResume();
         try {
             if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-//                ControlMethod("addpayment");
-////                strCurrent = "addpay";
+                ControlMethod("addpayment");
+//                strCurrent = "addpay";
+                addPayment();
             } else {
-                    getPaymentMethods();
+                getPaymentMethods();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -263,7 +270,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (isDeCredit) {
+                        isDeCredit = false;
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                        numberOfAccounts();
+                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
@@ -353,6 +365,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
                 tvMessage.setVisibility(View.VISIBLE);
+//            } else if (strScreen != null && strScreen.equals("quick_action")) {
             } else {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
@@ -362,7 +375,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (strCurrent.equals("addpay")) {
+                    if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment") || strCurrent.equals("debit") || strCurrent.equals("credit"))
+                            && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                     } else {
@@ -391,9 +405,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
+//                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
+//                            i.putExtra("card", "debit");
+//                            startActivity(i);
+
                             Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
-                            startActivity(i);
+                            startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -407,9 +425,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                             strCurrent = "credit";
+//                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
+//                            i.putExtra("card", "credit");
+//                            startActivity(i);
+
                             Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "credit");
-                            startActivity(i);
+                            startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -455,9 +477,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 }
             });
             numberOfAccounts();
-        } catch (Exception ex) {
+        } catch (
+                Exception ex) {
             ex.printStackTrace();
         }
+
     }
 
     private void paymentMethods() {

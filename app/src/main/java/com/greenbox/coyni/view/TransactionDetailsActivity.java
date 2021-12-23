@@ -153,7 +153,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
     }
 
-
     private void payRequest(TransactionData objData) {
         try {
             TextView headerTV, amount, descrptn, completed, datetime, fee, total, balance;
@@ -763,7 +762,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void ControlMethod(String methodToShow) {
         try {

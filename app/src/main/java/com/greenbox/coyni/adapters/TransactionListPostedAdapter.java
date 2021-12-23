@@ -67,6 +67,12 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+//            Log.e("cardDate before", transactionListItemsposted.get(position).getUpdatedAt() + " " + transactionListItemsposted.get(position + 1).getUpdatedAt());
+            Log.e("cardDate", cardDate + " " + nextCardDate+" "+position +"  "+(position + 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (nextCardDate.equals("")) {
             isNextAvailabe = false;
             isNextSameDate = false;
@@ -76,6 +82,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         } else if (!cardDate.equals(nextCardDate)) {
             isNextAvailabe = true;
             isNextSameDate = false;
+            Log.e("isNextSameDate", "false");
         }
         try {
             if (currentYear == Integer.parseInt(cardDate.split(",")[1].trim())) {
@@ -134,7 +141,6 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                             holder.lineItem.setVisibility(View.GONE);
                         }
 
-//                        holder.lineItem.setVisibility(View.VISIBLE);
                     } else {
                         holder.date.setVisibility(View.GONE);
                         if (isNextAvailabe && isNextSameDate) {
@@ -149,11 +155,15 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                             holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                             holder.lineItem.setVisibility(View.GONE);
                         }
-//                        holder.lineItem.setVisibility(View.GONE);
                     }
                 } else {
                     if (strPrev.equals(strCurr)) {
                         holder.date.setVisibility(View.GONE);
+//                        if (!cardDate.equals(nextCardDate)){
+//                            holder.lineItem.setVisibility(View.GONE);
+//                            holder.date.setVisibility(View.VISIBLE);
+//                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
+//                        }
                     } else {
                         if (isNextAvailabe && isNextSameDate) {
                             holder.lineItem.setVisibility(View.VISIBLE);
@@ -161,7 +171,12 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                         } else if (isNextAvailabe && !isNextSameDate) {
                             holder.lineItem.setVisibility(View.GONE);
                             holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
-                        } else {
+                        }
+//                        else if (!isNextAvailabe && !isNextSameDate) {
+//                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
+//                            holder.lineItem.setVisibility(View.GONE);
+//                        }
+                        else {
                             holder.lineItem.setVisibility(View.GONE);
                             holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                         }
@@ -175,7 +190,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
 
         //txn description
 
-            holder.txnDescrip.setText(objData.getTxnDescription());
+        holder.txnDescrip.setText(objData.getTxnDescription());
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
 
 
