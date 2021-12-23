@@ -166,7 +166,7 @@ public class AgreementsActivity extends AppCompatActivity {
                 if (position == 1) {
                     Intent inte = new Intent(Intent.ACTION_VIEW);
                     inte.setDataAndType(
-                            Uri.parse(tosURL),
+                            Uri.parse(tosURL+"?"+System.currentTimeMillis()),
                             "application/pdf");
                     startActivity(inte);
 
@@ -174,7 +174,7 @@ public class AgreementsActivity extends AppCompatActivity {
                 if (position == 0) {
                     Intent inte = new Intent(Intent.ACTION_VIEW);
                     inte.setDataAndType(
-                            Uri.parse(privacyURL),
+                            Uri.parse(privacyURL+"?"+System.currentTimeMillis()),
                             "application/pdf");
                     startActivity(inte);
 

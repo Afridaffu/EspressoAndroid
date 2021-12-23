@@ -324,31 +324,36 @@ public class CreateAccountActivity extends AppCompatActivity {
                 try {
                     dialog.dismiss();
                     if (custRegisterResponse != null) {
-                        try {
-                            Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                            if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
-                                i.putExtra("screen", "SignUp");
-                                i.putExtra("OTP_TYPE", "MOBILE");
-                                i.putExtra("MOBILE", phoneNumber);
-                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                i.putExtra("EMAIL", emailET.getText().toString().trim());
-                            } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
-                                i.putExtra("screen", "SignUp");
-                                i.putExtra("OTP_TYPE", "EMAIL");
-                                i.putExtra("MOBILE", phoneNumber);
-                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                i.putExtra("EMAIL", emailET.getText().toString().trim());
-                            } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
-                                i.putExtra("screen", "SignUp");
-                                i.putExtra("OTP_TYPE", "SECURE");
-                                i.putExtra("MOBILE", phoneNumber);
-                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                i.putExtra("EMAIL", emailET.getText().toString().trim());
+                        if(custRegisterResponse.getStatus().toLowerCase().equals("success")){
+                            try {
+                                Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
+                                if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
+                                    i.putExtra("screen", "SignUp");
+                                    i.putExtra("OTP_TYPE", "MOBILE");
+                                    i.putExtra("MOBILE", phoneNumber);
+                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+                                } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
+                                    i.putExtra("screen", "SignUp");
+                                    i.putExtra("OTP_TYPE", "EMAIL");
+                                    i.putExtra("MOBILE", phoneNumber);
+                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+                                } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
+                                    i.putExtra("screen", "SignUp");
+                                    i.putExtra("OTP_TYPE", "SECURE");
+                                    i.putExtra("MOBILE", phoneNumber);
+                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+                                }
+                                startActivity(i);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-                            startActivity(i);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                        }else{
+                            Utils.displayAlert(custRegisterResponse.getError().getErrorDescription(),CreateAccountActivity.this,"",custRegisterResponse.getError().getFieldErrors().get(0));
                         }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

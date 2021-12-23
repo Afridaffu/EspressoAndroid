@@ -425,8 +425,8 @@ public class LoginViewModel extends AndroidViewModel {
                             }.getType();
                             CustRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                             if (errorResponse != null) {
-                                errorMessage.setValue(errorResponse.getError().getErrorDescription());
-                                custRegisResponseMutableLiveData.setValue(null);
+//                                errorMessage.setValue(errorResponse.getError().getErrorDescription());
+                                custRegisResponseMutableLiveData.setValue(errorResponse);
                             }
                             Log.e("CustReg Error", new Gson().toJson(errorResponse));
                         } catch (Exception e) {

@@ -412,4 +412,9 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CreateAccountActivity.focusedID = 0;
+    }
 }
