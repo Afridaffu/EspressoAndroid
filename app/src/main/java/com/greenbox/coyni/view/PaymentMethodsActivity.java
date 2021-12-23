@@ -104,7 +104,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     }
                 }
             } else if (requestCode == 3) {
-                getPaymentMethods();
+                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    ControlMethod("addpayment");
+                } else {
+                    getPaymentMethods();
+                }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -160,6 +164,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
 //                strCurrent = "addpay";
+                addPayment();
             } else {
                 getPaymentMethods();
             }
@@ -365,7 +370,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (strCurrent.equals("addpay") || strCurrent.equals("addpayment") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment") || strCurrent.equals("debit") || strCurrent.equals("credit"))
+                            && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                     } else {

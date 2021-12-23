@@ -89,6 +89,16 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+            ControlMethod("paymentMethods");
+            strCurrent = "paymentMethods";
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         try {
@@ -375,7 +385,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 imgLogo.setVisibility(View.GONE);
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
-                tvMessage.setVisibility(GONE);
+                tvMessage.setVisibility(VISIBLE);
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
