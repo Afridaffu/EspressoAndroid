@@ -1253,6 +1253,7 @@ public class AddCardActivity extends AppCompatActivity {
                         ctKey.enableButton();
                     } else {
                         ctKey.disableButton();
+                        ctKey.clearData();
                     }
                 }
             });

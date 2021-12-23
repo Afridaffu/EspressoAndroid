@@ -114,11 +114,10 @@ public class CardNumberEditText extends ConstraintLayout {
                 if (from.equals("ADD_CARD")) {
                     try {
                         if (i2 > 2) {
+                            AddCardActivity.addCardActivity.getCardype(charSequence.toString());
                             if ((cardType.equals("american") && charSequence.toString().trim().length() != 18) || (!cardType.equals("american") && charSequence.toString().trim().length() < 19)) {
-
                                 AddCardActivity.addCardActivity.isCard = false;
                             } else {
-                                AddCardActivity.addCardActivity.getCardype(charSequence.toString());
                                 AddCardActivity.addCardActivity.isCard = true;
                             }
                         } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {

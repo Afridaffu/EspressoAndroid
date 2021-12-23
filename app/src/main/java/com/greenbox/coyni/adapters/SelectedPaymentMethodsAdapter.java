@@ -155,7 +155,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                             objMyApplication.setSelectedCard(objData);
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                 if (!objData.getRelink()) {
-
+                                    ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
                                 } else {
                                     ((BuyTokenPaymentMethodsActivity) mContext).expiry();
                                 }
@@ -168,11 +168,18 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                             if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
                                 objMyApplication.setSelectedCard(objData);
                                 notifyDataSetChanged();
-//                            ((BuyTokenActivity) mContext).bindPayMethod(objData);
-                                if (!objData.getExpired()) {
-                                    ((BuyTokenActivity) mContext).displayCVV(objData);
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (!objData.getRelink()) {
+                                        ((BuyTokenActivity) mContext).bindSelectedBank(objData);
+                                    } else {
+                                        ((BuyTokenActivity) mContext).expiry();
+                                    }
                                 } else {
-                                    ((BuyTokenActivity) mContext).expiry();
+                                    if (!objData.getExpired()) {
+                                        ((BuyTokenActivity) mContext).displayCVV(objData);
+                                    } else {
+                                        ((BuyTokenActivity) mContext).expiry();
+                                    }
                                 }
                             }
                         }

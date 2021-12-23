@@ -68,7 +68,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvAddPayment, cvTryAgain, cvDone;
-    Boolean isBank = false, isPayments = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false;
     TextInputEditText etCVV;
     RecyclerView rvSelPayMethods;
     public static BuyTokenPaymentMethodsActivity buyTokenPaymentMethodsActivity;
@@ -105,7 +105,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
             } else if (strScreen != null && !strScreen.equals("addpay")) {
-                getPaymentMethods(true);
+                getPaymentMethods();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -125,8 +125,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                     ControlMethod("addpayment");
-                } else {
-                    getPaymentMethods(false);
+                    isDeCredit = true;
+                    getPaymentMethods();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -272,13 +272,19 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (isDeCredit) {
+                        isDeCredit = false;
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                        numberOfAccounts();
+                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                         paymentMethods();
                     } else if (isPayments) {
                         isPayments = false;
+                        isDeCredit = false;
                         ControlMethod("addpayment");
                         strCurrent = "addpayment";
                         numberOfAccounts();
@@ -293,7 +299,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 pDialog.dismiss();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods(true);
+                    getPaymentMethods();
                 }
             }
         });
@@ -304,7 +310,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 pDialog.dismiss();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods(true);
+                    getPaymentMethods();
                 }
             }
         });
@@ -342,9 +348,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    private void getPaymentMethods(Boolean isPayment) {
+    private void getPaymentMethods() {
         try {
-            isPayments = isPayment;
+            isPayments = true;
             dialog = Utils.showProgressDialog(this);
             dashboardViewModel.mePaymentMethods();
         } catch (Exception ex) {
@@ -958,6 +964,15 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "", "");
             }
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void bindSelectedBank() {
+        try {
+            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
+            startActivity(i);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

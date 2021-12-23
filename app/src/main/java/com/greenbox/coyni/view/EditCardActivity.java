@@ -128,7 +128,7 @@ public class EditCardActivity extends AppCompatActivity {
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
-            etExpiry.setEnabled(false);
+//            etExpiry.setEnabled(false);
             etlCard.disableEditText();
             etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
@@ -151,7 +151,7 @@ public class EditCardActivity extends AppCompatActivity {
                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                 } else {
-                    etExpiry.setEnabled(false);
+                    etExpiry.setEnabled(true);
                 }
                 enableOrDisableNext();
                 switch (selectedCard.getCardBrand().toUpperCase().replace(" ", "")) {

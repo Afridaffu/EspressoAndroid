@@ -6,7 +6,7 @@ import java.util.List;
 public class Error {
     private String errorCode;
     private String errorDescription;
-    private List<String> fieldErrors =new ArrayList<>();
+    private List<String> fieldErrors = new ArrayList<>();
 
     public String getErrorCode() {
         return errorCode;
@@ -25,7 +25,7 @@ public class Error {
     }
 
     public List<String> getFieldErrors() {
-        if(fieldErrors == null){
+        if (fieldErrors == null) {
             fieldErrors = new ArrayList<>();
             fieldErrors.add("");
         }

@@ -57,7 +57,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     ProgressDialog dialog, pDialog;
     SignOnData signOnData;
-    Boolean isBank = false, isPayments = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     CardView cvTryAgain, cvDone;
 
@@ -106,8 +106,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             } else if (requestCode == 3) {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
                     ControlMethod("addpayment");
-                } else {
                     getPaymentMethods();
+                    isDeCredit = true;
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -270,7 +270,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (isDeCredit) {
+                        isDeCredit = false;
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                        numberOfAccounts();
+                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
