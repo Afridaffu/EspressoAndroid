@@ -79,7 +79,10 @@ public class PreferencesActivity extends AppCompatActivity {
             preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
 
             currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            Utils.setUpperHintColor(currencyTIL, getColor(R.color.light_gray));
+            Utils.setUpperHintColor(currencyTIL, getColor(R.color.xdark_gray));
+
+            accountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
 
             timeZoneRL.setOnClickListener(new View.OnClickListener() {
                 @Override

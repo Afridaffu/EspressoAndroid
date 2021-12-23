@@ -127,7 +127,7 @@
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                    app:boxStrokeColor="@color/light_gray"
+                    app:boxStrokeColor="@color/primary_color"
                     app:expandedHintEnabled="false"
                     app:hintTextColor="@color/black">
 

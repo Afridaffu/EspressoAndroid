@@ -1,6 +1,5 @@
 package com.greenbox.coyni.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,60 +10,60 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.transaction.TransactionList;
-import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.TransactionDetailsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
-public class TransactionListPendingAdapter extends RecyclerView.Adapter<TransactionListPendingAdapter.MyViewHolder> {
-    List<TransactionListPending> transactionListItemspending;
-    Context mecontext;
+public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<TransactionListPostedInnerAdapter.MyViewHolder> {
+    Context mContext;
     MyApplication objMyApplication;
+    List<TransactionListPosted> transactionListItemsposted;
     TransactionList transactionList;
     Long mLastClickTime = 0L;
 
-    public TransactionListPendingAdapter(List<TransactionListPending> list, Context context) {
-        this.transactionListItemspending = list;
-        this.mecontext = context;
+    public TransactionListPostedInnerAdapter(List<TransactionListPosted> list, Context context) {
+        this.transactionListItemsposted = list;
+        this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TransactionListPostedInnerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.pending_posted_listitem, parent, false);
+                .inflate(R.layout.posted_inner_item, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new TransactionListPostedInnerAdapter.MyViewHolder(itemView);
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(@NonNull TransactionListPendingAdapter.MyViewHolder holder, int position) {
-        TransactionListPending objData = transactionListItemspending.get(position);
-
+    public void onBindViewHolder(@NonNull TransactionListPostedInnerAdapter.MyViewHolder holder, int position) {
+        TransactionListPosted objData = transactionListItemsposted.get(position);
         String strType = "";
 
         holder.txnDescrip.setText(objData.getTxnDescription());
-        holder.txnStatus.setText(objData.getTxnStatusDn());
-        holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
-        holder.date.setVisibility(View.GONE);
+
+        if (position == transactionListItemsposted.size() - 1) {
+            holder.blankView.setVisibility(View.VISIBLE);
+        } else {
+            holder.blankView.setVisibility(View.GONE);
+        }
+
+        //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
             strType = "withdraw";
         } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
@@ -81,17 +80,33 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
         if (strType.contains("pay") || strType.equals("withdraw")) {
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
-        } else {
+            holder.amount.setTextColor(Color.parseColor("#000000"));
+        } else if (strType.contains("buy") || strType.equals("receive")) {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
-        }
 
-        if (position == transactionListItemspending.size() - 1) {
-            holder.blankView.setVisibility(View.VISIBLE);
         } else {
-            holder.blankView.setVisibility(View.GONE);
+            holder.amount.setText(convertTwoDecimal(objData.getAmount()));
         }
-
+        holder.txnStatus.setText(objData.getTxnStatusDn());
+        switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
+            case Utils.transInProgress:
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.under_review_blue));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                break;
+            case Utils.transPending:
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.orange));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                break;
+            case Utils.transCompleted:
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.active_green));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                break;
+            case Utils.transFailed:
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.error_red));
+                holder.txnStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                break;
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,20 +117,14 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    Intent i = new Intent(mecontext, TransactionDetailsActivity.class);
+                    Intent i = new Intent(mContext, TransactionDetailsActivity.class);
                     i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
                     i.putExtra("txnType", objData.getTxnTypeDn());
                     i.putExtra("txnSubType", objData.getTxnSubTypeDn());
-                    mecontext.startActivity(i);
+                    mContext.startActivity(i);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            }
-        });
-        holder.date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 
@@ -123,24 +132,27 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
     @Override
     public int getItemCount() {
-        return transactionListItemspending.size();
+        Log.e("size", "" + transactionListItemsposted.size());
+        return transactionListItemsposted.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView date, txnDescrip, amount, txnStatus, walletBal;
-        LinearLayout viewLine;
+        TextView txnDescrip, amount, txnStatus, walletBal;
+        RelativeLayout itemRL;
+        LinearLayout lineItem;
         View blankView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            date = itemView.findViewById(R.id.dateTV);
             txnDescrip = itemView.findViewById(R.id.messageTV);
             amount = itemView.findViewById(R.id.amountTV);
             txnStatus = itemView.findViewById(R.id.statusTV);
             walletBal = itemView.findViewById(R.id.balanceTV);
-            viewLine = itemView.findViewById(R.id.viewV);
+            itemRL = itemView.findViewById(R.id.layoutTopRadiusRL);
+            lineItem = itemView.findViewById(R.id.viewV);
             blankView = itemView.findViewById(R.id.blankView);
         }
+
     }
 
     private String convertTwoDecimal(String strAmount) {
@@ -157,33 +169,6 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
             ex.printStackTrace();
         }
         return strValue;
-    }
-
-    public void addLoadingView() {
-        //add loading item
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                transactionListItemspending.add(null);
-                notifyItemInserted(transactionListItemspending.size() - 1);
-            }
-        });
-    }
-
-    public void removeLoadingView() {
-        //Remove loading item
-        transactionListItemspending.remove(transactionListItemspending.size() - 1);
-        notifyItemRemoved(transactionListItemspending.size());
-    }
-
-    public void addData(List<TransactionListPending> listItems) {
-        this.transactionListItemspending.addAll(listItems);
-        notifyDataSetChanged();
-    }
-
-    public void updateList(List<TransactionListPending> list) {
-        transactionListItemspending = list;
-        notifyDataSetChanged();
     }
 
 }

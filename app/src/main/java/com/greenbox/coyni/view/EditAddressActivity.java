@@ -46,7 +46,7 @@ import java.util.List;
 public class EditAddressActivity extends AppCompatActivity {
 
     TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
-    TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL,countryTIL;
+    TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
     ConstraintLayout stateCL;
     MyApplication myApplicationObj;
     CardView editAddressSaveCV;
@@ -247,11 +247,11 @@ public class EditAddressActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = address1ET.getText().toString();
-                    if (str.substring(0).equals(" ")) {
-                        address1ET.setText("");
-                        address1ET.setSelection(address1ET.getText().length());
+                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                        address1ET.setText(str.substring(1));
+//                        address1ET.setSelection(address1ET.getText().length());
                         address1ErrorLL.setVisibility(GONE);
-                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    } else if (str.substring(0).equals(" ")) {
                         address1ET.setText("");
                         address1ET.setSelection(address1ET.getText().length());
                         address1ErrorLL.setVisibility(GONE);
@@ -289,11 +289,10 @@ public class EditAddressActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = address2ET.getText().toString();
-                    if (str.substring(0).equals(" ")) {
-                        address2ET.setText("");
-                        address2ET.setSelection(address2ET.getText().length());
+                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                        address2ET.setText(str.substring(1));
                         address2ErrorLL.setVisibility(GONE);
-                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    } else if (str.substring(0).equals(" ")) {
                         address2ET.setText("");
                         address2ET.setSelection(address2ET.getText().length());
                         address2ErrorLL.setVisibility(GONE);
@@ -330,11 +329,10 @@ public class EditAddressActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = cityET.getText().toString();
-                    if (str.substring(0).equals(" ")) {
-                        cityET.setText("");
-                        cityET.setSelection(cityET.getText().length());
+                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                        cityET.setText(str.substring(1));
                         cityErrorLL.setVisibility(GONE);
-                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    } else if (str.substring(0).equals(" ")) {
                         cityET.setText("");
                         cityET.setSelection(cityET.getText().length());
                         cityErrorLL.setVisibility(GONE);

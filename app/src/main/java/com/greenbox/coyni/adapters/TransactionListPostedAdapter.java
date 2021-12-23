@@ -68,8 +68,8 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
             e.printStackTrace();
         }
         try {
-            Log.e("cardDate before", transactionListItemsposted.get(position).getUpdatedAt() + " " + transactionListItemsposted.get(position + 1).getUpdatedAt());
-            Log.e("cardDate", cardDate + " " + nextCardDate);
+//            Log.e("cardDate before", transactionListItemsposted.get(position).getUpdatedAt() + " " + transactionListItemsposted.get(position + 1).getUpdatedAt());
+            Log.e("cardDate", cardDate + " " + nextCardDate+" "+position +"  "+(position + 1));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -141,7 +141,6 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                             holder.lineItem.setVisibility(View.GONE);
                         }
 
-//                        holder.lineItem.setVisibility(View.VISIBLE);
                     } else {
                         holder.date.setVisibility(View.GONE);
                         if (isNextAvailabe && isNextSameDate) {
@@ -156,11 +155,15 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
                             holder.itemRL.setBackground(mContext.getDrawable(R.drawable.fullradius_list_items));
                             holder.lineItem.setVisibility(View.GONE);
                         }
-//                        holder.lineItem.setVisibility(View.GONE);
                     }
                 } else {
                     if (strPrev.equals(strCurr)) {
                         holder.date.setVisibility(View.GONE);
+//                        if (!cardDate.equals(nextCardDate)){
+//                            holder.lineItem.setVisibility(View.GONE);
+//                            holder.date.setVisibility(View.VISIBLE);
+//                            holder.itemRL.setBackground(mContext.getDrawable(R.drawable.card_bottomradius));
+//                        }
                     } else {
                         if (isNextAvailabe && isNextSameDate) {
                             holder.lineItem.setVisibility(View.VISIBLE);
