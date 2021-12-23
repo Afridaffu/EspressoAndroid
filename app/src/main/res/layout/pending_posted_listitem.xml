@@ -18,7 +18,7 @@
         android:paddingBottom="@dimen/_10sdp"
         android:text="Date"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/text_size_14sp"
+        android:textSize="@dimen/_12ssp"
         android:visibility="visible" />
 
     <RelativeLayout
@@ -73,7 +73,6 @@
             android:textColor="#FFA701"
             android:textSize="@dimen/_7ssp" />
 
-        <!--            </androidx.cardview.widget.CardView>-->
 
         <TextView
             android:id="@+id/balTXT"
