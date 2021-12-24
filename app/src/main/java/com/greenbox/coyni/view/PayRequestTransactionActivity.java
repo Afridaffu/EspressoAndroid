@@ -228,7 +228,8 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                                     } else {
                                         addNoteTIL.setCounterEnabled(true);
                                     }
-                                    messagePayReq=addnote.getText().toString();
+
+//                                    messagePayReq=addnote.getText().toString();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -243,10 +244,15 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                             @Override
                             public void onClick(View view) {
 
-                                addNoteTV.setText(messagePayReq);
-                                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                                dialog.dismiss();
+                                try {
+                                    messagePayReq=addnote.getText().toString();
+                                    addNoteTV.setText(addnote.getText().toString());
+                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                                    dialog.dismiss();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                         closeBtn.setOnClickListener(new View.OnClickListener() {
