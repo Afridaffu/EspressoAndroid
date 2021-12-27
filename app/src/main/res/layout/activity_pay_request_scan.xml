@@ -142,7 +142,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/album"
+                android:id="@+id/albumIV"
                 android:layout_width="@dimen/_38sdp"
                 android:layout_height="@dimen/_38sdp"
                 android:layout_alignParentRight="true"

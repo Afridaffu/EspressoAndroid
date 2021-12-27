@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="@dimen/_65sdp"
+            android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_3sdp"
             android:layout_gravity="center"
             android:background="@drawable/shape_green_round_rect" />

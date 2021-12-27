@@ -9,7 +9,7 @@
     tools:context=".fragments.PayAmountBottomSheet">
 
     <View
-        android:layout_width="@dimen/_60sdp"
+        android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_2sdp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_13sdp"
@@ -53,7 +53,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_bold"
-            android:text="160.00"
             android:textColor="@color/primary_color"
             android:textSize="@dimen/_35sdp" />
 
@@ -88,19 +87,23 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
             android:text="Recipient’s Address"
-            android:textColor="#767676"
+            android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
-
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/copyRecipientLL"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginRight="@dimen/_6sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:layout_weight="1"
+            android:orientation="horizontal"
+            >
+        <TextView
+            android:id="@+id/recipAddreTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
-            android:text="Hgj34239274"
             android:textColor="@color/black"
             android:textFontWeight="1"
             android:textSize="@dimen/_11ssp"
@@ -108,12 +111,12 @@
             />
 
         <ImageView
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_9sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:src="@drawable/ic_copy" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -133,7 +136,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
             android:text="Processing Fee"
-            android:textColor="#767676"
+            android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
 
         <TextView
@@ -187,6 +190,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/messageTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_21sdp"
@@ -195,7 +199,7 @@
         android:layout_marginBottom="@dimen/_6sdp"
         android:fontFamily="@font/opensans_regular"
         android:text="Message"
-        android:textColor="#767676"
+        android:textColor="@color/dark_grey"
         android:textSize="@dimen/_11ssp" />
 
     <TextView
