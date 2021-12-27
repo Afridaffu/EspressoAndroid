@@ -564,7 +564,6 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void cryptoAssets() {

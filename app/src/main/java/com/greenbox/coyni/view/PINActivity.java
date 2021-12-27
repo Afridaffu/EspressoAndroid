@@ -94,12 +94,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            clearControls();
-            passcode = "";
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            clearControls();
+//            passcode = "";
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     @Override
