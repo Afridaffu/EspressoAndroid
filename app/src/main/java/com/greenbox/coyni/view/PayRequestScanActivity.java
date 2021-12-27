@@ -744,7 +744,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                     strScanWallet = result.getText();
                     Log.e("Image Text :- ",strScanWallet);
-                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
 
                     try {
                        getUserDetails(strScanWallet);
@@ -790,7 +790,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
         }else {
 
-            Toast.makeText(PayRequestScanActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+            Toast.makeText(PayRequestScanActivity.this, "You haven't picked QR ",Toast.LENGTH_LONG).show();
 
         }
 

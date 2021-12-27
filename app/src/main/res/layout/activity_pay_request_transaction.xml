@@ -9,7 +9,9 @@
 
     <LinearLayout
         android:id="@+id/topLL"
+        android:layout_above="@id/bottomKeyPad"
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -45,18 +47,16 @@
             android:id="@+id/profileLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/payrequestTopLL"
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="@dimen/_36sdp"
-                android:layout_height="@dimen/_36sdp"
-                android:layout_alignParentRight="true"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="@dimen/_32sdp"
                 android:layout_gravity="center"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_18sdp"
+                app:cardCornerRadius="@dimen/_16sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +65,8 @@
 
                 <ImageView
                     android:id="@+id/profileIV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/image"
                     android:visibility="visible" />
 
@@ -155,7 +155,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_20sdp"
-                        android:layout_weight="3"
+                        android:layout_weight="3.3"
                         android:gravity="right"
                         android:orientation="horizontal">
 
@@ -166,7 +166,6 @@
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
                             android:fontFamily="@font/opensans_bold"
                             android:text="$"
                             android:textColor="@color/primary_black"
@@ -186,15 +185,15 @@
                             android:gravity="center_vertical|right"
                             android:hint="0.00"
                             android:ellipsize="end"
-                            android:inputType="numberDecimal"
-                            android:maxLength="8"
+                            android:maxLength="15"
                             android:singleLine="true"
+                            android:inputType="numberDecimal"
                             android:text=""
                             android:textColor="@color/primary_black"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color_text"
                             android:textDirection="rtl"
-                            android:textSize="@dimen/_40ssp"
+                            android:textSize="@dimen/_38ssp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.222"
@@ -208,6 +207,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="bottom"
+                        android:paddingBottom="@dimen/_4sdp"
                         android:orientation="horizontal">
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -232,14 +232,16 @@
 
                             <ImageView
                                 android:id="@+id/changeCurrencyTypeIV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="@dimen/_21sdp"
+                                android:layout_height="@dimen/_21sdp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_component_arrow"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.422"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.708" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
                 </LinearLayout>
