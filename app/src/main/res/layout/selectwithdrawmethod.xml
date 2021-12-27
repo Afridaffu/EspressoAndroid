@@ -1,83 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="@dimen/_22sdp">
+    android:background="@color/boxbackgroundgray"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@drawable/bottomradius"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/_22sdp">
 
         <LinearLayout
-            android:id="@+id/lyAPayClose"
+            android:id="@+id/lySelBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_40sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_x" />
+                android:src="@drawable/ic_close" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="left"
-            android:text="Add Payment Method"
+            android:text="Select Withdraw Method"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
-
     </LinearLayout>
 
-    <ScrollView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <ImageView
-                android:id="@+id/imgLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_22sdp"
-                android:src="@drawable/ic_addpayment_method" />
-
-            <TextView
-                android:id="@+id/tvMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account."
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp"
-                android:visibility="gone" />
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_30sdp">
 
             <RelativeLayout
                 android:id="@+id/lyExternal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:background="@drawable/paymentsborder"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_11sdp"
                 android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_13sdp">
+                android:paddingBottom="@dimen/_10sdp">
 
                 <ImageView
                     android:id="@+id/imgBankIcon"
@@ -95,51 +86,25 @@
                     android:layout_toRightOf="@+id/imgBankIcon"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvExtBHead"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvExtBHead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="External Bank Account"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:id="@+id/tvExtBankHead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="(0/0)"
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="External Bank Account"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
 
                     <TextView
                         android:id="@+id/tvExtBankMsg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Can be used for making Coyni purchases\nor withdrawing funds."
+                        android:text="Can be used for withdrawing funds from your coyni account"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9ssp" />
 
-                    <TextView
-                        android:id="@+id/tvBankError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="This method has reached maximum 4 banks"
-                        android:textColor="@color/error"
-                        android:textSize="@dimen/_9sdp"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <ImageView
@@ -151,17 +116,21 @@
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@color/viewcolor"></View>
+
             <RelativeLayout
-                android:id="@+id/layoutDCard"
+                android:id="@+id/lyInstantPay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:background="@drawable/paymentsborder"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_16sdp"
                 android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_20sdp">
+                android:paddingBottom="@dimen/_10sdp">
 
                 <ImageView
                     android:id="@+id/imgDCardLogo"
@@ -180,51 +149,25 @@
                     android:layout_toRightOf="@+id/imgDCardLogo"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvDCHead"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvDCHead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Debit Card"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:id="@+id/tvDCardHead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="(0/0)"
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Instant Pay"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
 
                     <TextView
                         android:id="@+id/tvDCardMsg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Visa or MasterCard Debit Cards"
+                        android:text="Use a Visa or MasterCard debit cards for instant coyni withdraws via Instant Pay"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9sdp" />
 
-                    <TextView
-                        android:id="@+id/tvDCardError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="This method has reached maximum 4 cards"
-                        android:textColor="@color/error"
-                        android:textSize="@dimen/_9sdp"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <ImageView
@@ -236,16 +179,20 @@
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@color/viewcolor"></View>
+
             <RelativeLayout
-                android:id="@+id/layoutCCard"
+                android:id="@+id/lyGiftCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:background="@drawable/paymentsborder"
                 android:paddingLeft="@dimen/_11sdp"
-                android:paddingTop="@dimen/_11sdp"
+                android:paddingTop="@dimen/_15sdp"
                 android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_13sdp">
+                android:paddingBottom="@dimen/_10sdp">
 
                 <ImageView
                     android:id="@+id/imgCCardLogo"
@@ -253,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:src="@drawable/ic_credit_debit_card" />
+                    android:src="@drawable/ic_gift_card" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -263,38 +210,21 @@
                     android:layout_toRightOf="@+id/imgCCardLogo"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvCCHead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Credit Card"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:id="@+id/tvCCardHead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="(0/0)"
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/tvCCardMsg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Gift Card"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Visa, MasterCard, Discover, and American \nExpress Credit Cards"
+                        android:text="Purchase gift cards from over 100 popular stores, restaurants, and more"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9sdp" />
 
@@ -319,7 +249,14 @@
                     android:layout_marginLeft="@dimen/_12sdp"
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
-        </LinearLayout>
 
-    </ScrollView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@color/viewcolor"></View>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </LinearLayout>

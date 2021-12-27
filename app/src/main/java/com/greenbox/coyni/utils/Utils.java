@@ -57,12 +57,16 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
 import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
+import com.greenbox.coyni.view.WebViewActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -1014,4 +1018,5 @@ public class Utils {
         }
         return listStates;
     }
+
 }

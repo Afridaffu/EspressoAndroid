@@ -19,6 +19,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankName, tvAccount, tvError, tvCardName, tvCardNumber;
-        public ImageView imgPayMethod, imgBankTick, imgCardTick;
+        public ImageView imgPayMethod, imgBankTick, imgCardTick, imgBankArrow, imgCardArrow;
         public LinearLayout layoutError, layoutBank;
         public RelativeLayout layoutCard;
 
@@ -40,6 +41,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
             imgPayMethod = view.findViewById(R.id.imgPayMethod);
             imgBankTick = view.findViewById(R.id.imgBankTick);
             imgCardTick = view.findViewById(R.id.imgCardTick);
+            imgBankArrow = view.findViewById(R.id.imgBankArrow);
+            imgCardArrow = view.findViewById(R.id.imgCardArrow);
             tvBankName = view.findViewById(R.id.tvBankName);
             tvCardName = view.findViewById(R.id.tvCardName);
             tvAccount = view.findViewById(R.id.tvAccount);
@@ -70,20 +73,17 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             PaymentsList objData = listPayments.get(position);
-//            if (!strScreen.equals("selectpay")) {
-//                if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
-//                    holder.imgBankTick.setVisibility(View.VISIBLE);
-//                } else {
-//                    holder.imgBankTick.setVisibility(View.GONE);
-//                }
-//            } else {
-//                holder.imgBankTick.setVisibility(View.GONE);
-//            }
             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.layoutCard.setVisibility(View.GONE);
                 holder.imgPayMethod.setImageResource(R.drawable.ic_bankactive);
-                if (!strScreen.equals("selectpay")) {
+                if (strScreen.equals("withdraw")) {
+                    holder.imgBankArrow.setVisibility(View.VISIBLE);
+                } else {
+                    holder.imgBankArrow.setVisibility(View.GONE);
+                }
+//                if (!strScreen.equals("selectpay")) {
+                if (strScreen.equals("buytoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgBankTick.setVisibility(View.VISIBLE);
                     } else {
@@ -108,7 +108,13 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.layoutCard.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setText("****" + objData.getLastFour());
-                if (!strScreen.equals("selectpay")) {
+                if (strScreen.equals("withdraw")) {
+                    holder.imgCardArrow.setVisibility(View.VISIBLE);
+                } else {
+                    holder.imgCardArrow.setVisibility(View.GONE);
+                }
+//                if (!strScreen.equals("selectpay") && !strScreen.equals("withdrawtoken")) {
+                if (strScreen.equals("buytoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgCardTick.setVisibility(View.VISIBLE);
                     } else {
@@ -151,38 +157,114 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (strScreen.equals("selectpay")) {
-                            objMyApplication.setSelectedCard(objData);
-                            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                if (!objData.getRelink()) {
-                                    ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
+                        switch (strScreen) {
+                            case "selectpay":
+                                objMyApplication.setSelectedCard(objData);
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (!objData.getRelink()) {
+                                        ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
+                                    } else {
+                                        ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                    }
+                                } else if (!objData.getExpired()) {
+                                    ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
                                 } else {
                                     ((BuyTokenPaymentMethodsActivity) mContext).expiry();
                                 }
-                            } else if (!objData.getExpired()) {
-                                ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
-                            } else {
-                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
-                            }
-                        } else {
-                            if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                break;
+                            case "withdrawtoken":
                                 objMyApplication.setSelectedCard(objData);
-                                notifyDataSetChanged();
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
-                                        ((BuyTokenActivity) mContext).bindSelectedBank(objData);
+                                        ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
                                     } else {
-                                        ((BuyTokenActivity) mContext).expiry();
+                                        ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
+                                } else if (!objData.getExpired()) {
+                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdrawtoken");
                                 } else {
-                                    if (!objData.getExpired()) {
-                                        ((BuyTokenActivity) mContext).displayCVV(objData);
+                                    ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                }
+                                break;
+                            case "buytoken":
+                                if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    objMyApplication.setSelectedCard(objData);
+                                    notifyDataSetChanged();
+                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                        if (!objData.getRelink()) {
+                                            ((BuyTokenActivity) mContext).bindSelectedBank(objData);
+                                        } else {
+                                            ((BuyTokenActivity) mContext).expiry();
+                                        }
                                     } else {
-                                        ((BuyTokenActivity) mContext).expiry();
+                                        if (!objData.getExpired()) {
+                                            ((BuyTokenActivity) mContext).displayCVV(objData);
+                                        } else {
+                                            ((BuyTokenActivity) mContext).expiry();
+                                        }
                                     }
                                 }
-                            }
+                                break;
+                            case "withdraw":
+                                objMyApplication.setSelectedCard(objData);
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (!objData.getRelink()) {
+                                        ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdraw");
+                                    } else {
+                                        ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                    }
+                                } else if (!objData.getExpired()) {
+                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdraw");
+                                } else {
+                                    ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                }
+                                break;
                         }
+//                        if (strScreen.equals("selectpay")) {
+//                            objMyApplication.setSelectedCard(objData);
+//                            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+//                                if (!objData.getRelink()) {
+//                                    ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
+//                                } else {
+//                                    ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+//                                }
+//                            } else if (!objData.getExpired()) {
+//                                ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
+//                            } else {
+//                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+//                            }
+//                        } else if (strScreen.equals("withdrawtoken")) {
+//                            objMyApplication.setSelectedCard(objData);
+//                            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+//                                if (!objData.getRelink()) {
+//                                    ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank();
+//                                } else {
+//                                    ((WithdrawPaymentMethodsActivity) mContext).expiry();
+//                                }
+//                            } else if (!objData.getExpired()) {
+//                                ((WithdrawPaymentMethodsActivity) mContext).displayCVV();
+//                            } else {
+//                                ((WithdrawPaymentMethodsActivity) mContext).expiry();
+//                            }
+//                        } else {
+//                            if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+//                                objMyApplication.setSelectedCard(objData);
+//                                notifyDataSetChanged();
+//                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+//                                    if (!objData.getRelink()) {
+//                                        ((BuyTokenActivity) mContext).bindSelectedBank(objData);
+//                                    } else {
+//                                        ((BuyTokenActivity) mContext).expiry();
+//                                    }
+//                                } else {
+//                                    if (!objData.getExpired()) {
+//                                        ((BuyTokenActivity) mContext).displayCVV(objData);
+//                                    } else {
+//                                        ((BuyTokenActivity) mContext).expiry();
+//                                    }
+//                                }
+//                            }
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

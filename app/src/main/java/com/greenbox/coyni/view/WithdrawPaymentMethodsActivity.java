@@ -1,6 +1,5 @@
 package com.greenbox.coyni.view;
 
-import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import androidx.annotation.Nullable;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -44,6 +42,7 @@ import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -51,62 +50,42 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
+public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    LinearLayout lyAPayClose, lyExternalClose, lySelBack, lyAddPay;
-    RelativeLayout layoutDCard, lyExternal, layoutCCard;
-    String strCurrent = "", strSignOn = "", strScreen = "";
+    WalletResponse walletResponse;
+    Double walletBalance = 0.0;
+    Long mLastClickTime = 0L;
+    Boolean isBank = false, isPayments = false, isDeCredit = false;
+    List<PaymentsList> bankList;
+    List<PaymentsList> cardList;
+    Dialog payDialog, cvvDialog;
+    TextInputEditText etCVV;
+    String strSignOn = "", strCurrent = "", strScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
+    LinearLayout lyAPayClose, lyExternalClose, lySelBack, lyAddPay;
+    RelativeLayout layoutDCard, lyExternal, layoutCCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
-    CardView cvNext, cvAddPayment, cvTryAgain, cvDone;
-    Boolean isBank = false, isPayments = false, isDeCredit = false;
-    TextInputEditText etCVV;
-    RecyclerView rvSelPayMethods;
-    public static BuyTokenPaymentMethodsActivity buyTokenPaymentMethodsActivity;
-    Long mLastClickTime = 0L;
-    Dialog cvvDialog;
+    CardView cvNext;
+    public static WithdrawPaymentMethodsActivity withdrawPaymentMethodsActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_buy_token_payment_methods);
-            buyTokenPaymentMethodsActivity = this;
+            setContentView(R.layout.activity_withdraw_payment_methods);
+            withdrawPaymentMethodsActivity = this;
             initialization();
             initObserver();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-            ControlMethod("paymentMethods");
-            strCurrent = "paymentMethods";
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw")) {
-                ControlMethod("addpayment");
-            } else if (strScreen != null && !strScreen.equals("addpay")) {
-                getPaymentMethods();
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -117,14 +96,16 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         try {
             if (requestCode == 1 && data == null) {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenPaymentMethodsActivity.this, "", "");
+                    Utils.displayAlert("Bank integration has been cancelled", WithdrawPaymentMethodsActivity.this, "", "");
                 } else {
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    ControlMethod("addpayment");
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
                     isDeCredit = true;
                     getPaymentMethods();
                 }
@@ -137,6 +118,17 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (strScreen.equals("withdrawpay")) {
+            ControlMethod("withdrawmethod");
+            selectWithdrawMethod();
+            strScreen = "withdrawmethod";
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -144,7 +136,32 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            if (Utils.checkInternet(BuyTokenPaymentMethodsActivity.this)) {
+            walletResponse = objMyApplication.getWalletResponse();
+            walletBalance = objMyApplication.getGBTBalance();
+            if (paymentMethodsResponse != null) {
+                List<PaymentsList> allPayments = paymentMethodsResponse.getData().getData();
+                if (allPayments != null && allPayments.size() > 0) {
+                    bankList = new ArrayList<>();
+                    cardList = new ArrayList<>();
+                    for (int i = 0; i < allPayments.size(); i++) {
+                        if (allPayments.get(i).getPaymentMethod() != null) {
+                            if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
+                                bankList.add(allPayments.get(i));
+                            } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
+                                cardList.add(allPayments.get(i));
+                            }
+                        }
+                    }
+                }
+            }
+            if (walletBalance != 0.0) {
+                ControlMethod("withdrawmethod");
+                selectWithdrawMethod();
+            } else {
+                ControlMethod("withdrawnotoken");
+                bindWithdrawNoTokens();
+            }
+            if (Utils.checkInternet(WithdrawPaymentMethodsActivity.this)) {
                 if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
                     customerProfileViewModel.meSignOn();
                 } else {
@@ -152,27 +169,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     signOnData = objMyApplication.getSignOnData();
                 }
             } else {
-                Utils.displayAlert(getString(R.string.internet), BuyTokenPaymentMethodsActivity.this, "", "");
+                Utils.displayAlert(getString(R.string.internet), WithdrawPaymentMethodsActivity.this, "", "");
             }
-
-            if (getIntent().getStringExtra("screen") != null) {
-                strScreen = getIntent().getStringExtra("screen");
-            }
-            if (strScreen != null && !strScreen.equals("addpay") && !strScreen.equals("withdraw") && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                ControlMethod("paymentMethods");
-                strCurrent = "paymentMethods";
-            } else {
-                ControlMethod("addpayment");
-                if (strScreen != null && !strScreen.equals("addpay")) {
-                    strCurrent = "addpayment";
-                }
-            }
-            addPayment();
-            paymentMethods();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     private void initObserver() {
@@ -205,7 +206,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             }
         });
 
-        customerProfileViewModel.getApiErrorMutableLiveData().observe(BuyTokenPaymentMethodsActivity.this, new Observer<APIError>() {
+        customerProfileViewModel.getApiErrorMutableLiveData().observe(WithdrawPaymentMethodsActivity.this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
                 try {
@@ -216,23 +217,16 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                             customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             } else {
-                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), WithdrawPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                             }
                         } else {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
-                                Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
-//                                String strError = "";
-//                                if (!apiError.getError().getErrorDescription().equals("")) {
-//                                    strError = apiError.getError().getErrorDescription();
-//                                } else {
-//                                    strError = apiError.getError().getFieldErrors().get(0);
-//                                }
-//                                displayError(strError);
-                                displayError();
+//                                displayError();
                             }
                         }
                     }
@@ -242,7 +236,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             }
         });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(BuyTokenPaymentMethodsActivity.this, new Observer<SyncAccount>() {
+        customerProfileViewModel.getSyncAccountMutableLiveData().observe(WithdrawPaymentMethodsActivity.this, new Observer<SyncAccount>() {
             @Override
             public void onChanged(SyncAccount syncAccount) {
                 try {
@@ -250,11 +244,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
                             dashboardViewModel.mePaymentMethods();
-                            displaySuccess();
-                        } else {
-//                        if (Arrays.asList(bob).contains("silly")) {
-//                            // true
-//                        }
+//                            displaySuccess();
                         }
                     }
                 } catch (Exception ex) {
@@ -281,7 +271,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
-                        paymentMethods();
+//                        paymentMethods();
                     } else if (isPayments) {
                         isPayments = false;
                         isDeCredit = false;
@@ -298,7 +288,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 pDialog.dismiss();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
                 }
             }
@@ -309,7 +299,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
                 pDialog.dismiss();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                    Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
                 }
             }
@@ -322,9 +312,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     pDialog.dismiss();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
-                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), WithdrawPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception ex) {
@@ -332,30 +322,6 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void callResolveFlow() {
-        try {
-            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
-                i.putExtra("signon", signOnData);
-                startActivityForResult(i, 1);
-            } else {
-                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void getPaymentMethods() {
-        try {
-            isPayments = true;
-            dialog = Utils.showProgressDialog(this);
-            dashboardViewModel.mePaymentMethods();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private void addPayment() {
@@ -387,18 +353,6 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
             imgLogo = findViewById(R.id.imgLogo);
-            if (strScreen != null && strScreen.equals("dashboard")) {
-                imgLogo.setVisibility(View.VISIBLE);
-                imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
-                tvMessage.setVisibility(VISIBLE);
-                tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
-            } else {
-                imgLogo.setVisibility(View.GONE);
-                tvExtBHead.setText("Bank Account");
-                tvMessage.setText("Choose a payment method");
-                tvMessage.setVisibility(VISIBLE);
-            }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -430,7 +384,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
                             startActivityForResult(i, 3);
                         }
@@ -446,11 +400,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                             strCurrent = "credit";
-//                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
-//                            i.putExtra("card", "credit");
-//                            startActivity(i);
-
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "credit");
                             startActivityForResult(i, 3);
                         }
@@ -474,11 +424,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
-                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
+                            Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -490,7 +440,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Utils.populateLearnMore(BuyTokenPaymentMethodsActivity.this);
+                        Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -569,44 +519,45 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     private void ControlMethod(String methodToShow) {
         try {
             switch (methodToShow) {
-                case "addpayment": {
-                    findViewById(R.id.addpayment).setVisibility(View.VISIBLE);
-                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
+                case "withdrawmethod": {
+                    findViewById(R.id.withdrawmethod).setVisibility(View.VISIBLE);
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
+                    findViewById(R.id.addpayment).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawpay).setVisibility(View.GONE);
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
-                    findViewById(R.id.firstError).setVisibility(View.GONE);
-                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                 }
                 break;
-                case "paymentMethods": {
+                case "withdrawnotoken": {
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.VISIBLE);
+                    findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
                     findViewById(R.id.addpayment).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawpay).setVisibility(View.GONE);
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
-                    findViewById(R.id.paymentMethods).setVisibility(View.VISIBLE);
-                    findViewById(R.id.firstError).setVisibility(View.GONE);
-                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
+
+                }
+                break;
+                case "addpayment": {
+                    findViewById(R.id.addpayment).setVisibility(View.VISIBLE);
+                    findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawpay).setVisibility(View.GONE);
+                    findViewById(R.id.externalBank).setVisibility(View.GONE);
+                }
+                break;
+                case "withdrawpay": {
+                    findViewById(R.id.withdrawpay).setVisibility(VISIBLE);
+                    findViewById(R.id.addpayment).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
+                    findViewById(R.id.externalBank).setVisibility(View.GONE);
                 }
                 break;
                 case "externalBank": {
+                    findViewById(R.id.externalBank).setVisibility(VISIBLE);
+                    findViewById(R.id.withdrawpay).setVisibility(View.GONE);
                     findViewById(R.id.addpayment).setVisibility(View.GONE);
-                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
-                    findViewById(R.id.externalBank).setVisibility(View.VISIBLE);
-                    findViewById(R.id.firstError).setVisibility(View.GONE);
-                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
-                }
-                break;
-                case "firstError": {
-                    findViewById(R.id.addpayment).setVisibility(View.GONE);
-                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
-                    findViewById(R.id.externalBank).setVisibility(View.GONE);
-                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
-                    findViewById(R.id.firstError).setVisibility(View.VISIBLE);
-                }
-                break;
-                case "banksuccess": {
-                    findViewById(R.id.addpayment).setVisibility(View.GONE);
-                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
-                    findViewById(R.id.externalBank).setVisibility(View.GONE);
-                    findViewById(R.id.firstError).setVisibility(View.GONE);
-                    findViewById(R.id.banksuccess).setVisibility(View.VISIBLE);
+                    findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                 }
                 break;
             }
@@ -615,31 +566,118 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    private void paymentMethods() {
+    private void selectWithdrawMethod() {
         try {
-            rvSelPayMethods = findViewById(R.id.rvSelPayMethods);
-            lySelBack = findViewById(R.id.lySelBack);
-            lyAddPay = findViewById(R.id.lyAddPay);
-            numberOfAccounts();
-            if (paymentMethodsResponse.getData() != null && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                bindPaymentMethods(paymentMethodsResponse.getData().getData());
-            }
+            LinearLayout lySelBack = findViewById(R.id.lySelBack);
+            RelativeLayout lyExternal = findViewById(R.id.lyExternal);
+            RelativeLayout lyInstantPay = findViewById(R.id.lyInstantPay);
+            RelativeLayout lyGiftCard = findViewById(R.id.lyGiftCard);
             lySelBack.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (strCurrent.equals("paymentMethods")) {
-                        onBackPressed();
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+
+            lyExternal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (bankList != null && bankList.size() > 0) {
+                            selectPayMethod(bankList);
+                        } else {
+                            ControlMethod("withdrawpay");
+                            withdrawPaymentMethod("bank");
+                            strScreen = "withdrawpay";
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
-            lyAddPay.setOnClickListener(new View.OnClickListener() {
+
+            lyInstantPay.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    numberOfAccounts();
-                    ControlMethod("addpayment");
-                    strScreen = "addpay";
-                    strCurrent = "addpay";
-                    addPayment();
+                public void onClick(View view) {
+                    try {
+                        if (cardList != null && cardList.size() > 0) {
+                            selectPayMethod(cardList);
+                        } else {
+                            ControlMethod("withdrawpay");
+                            withdrawPaymentMethod("card");
+                            strScreen = "withdrawpay";
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void withdrawPaymentMethod(String strPay) {
+        try {
+            ImageView imgPayLogo = findViewById(R.id.imgPayLogo);
+            ImageView imgPayment = findViewById(R.id.imgPayment);
+            TextView tvPayHead = findViewById(R.id.tvPayHead);
+            TextView tvPayMethod = findViewById(R.id.tvPayMethod);
+            TextView tvPayMMessage = findViewById(R.id.tvPayMMessage);
+            LinearLayout lyWPayClose = findViewById(R.id.lyWPayClose);
+            LinearLayout lyPayClick = findViewById(R.id.lyPayClick);
+            if (strPay.equals("bank")) {
+                tvPayHead.setText("Add Bank Account");
+                tvPayMethod.setText("External Bank Account");
+                tvPayMMessage.setText("Can be used for making Coyni purchases or withdrawing funds.");
+                imgPayLogo.setImageResource(R.drawable.ic_add_bank);
+                imgPayment.setImageResource(R.drawable.ic_bank_account_active);
+            } else {
+                tvPayHead.setText("Add Instant Pay");
+                tvPayMethod.setText("Debit Card");
+                tvPayMMessage.setText("Visa or Mastercard debit cards");
+                imgPayLogo.setImageResource(R.drawable.ic_notokenavail);
+                imgPayment.setImageResource(R.drawable.ic_credit_debit_card);
+            }
+            lyWPayClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                }
+            });
+            lyPayClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (strPay.equals("bank")) {
+                            ControlMethod("externalBank");
+                            strCurrent = "externalBank";
+                            cvNext = findViewById(R.id.cvNext);
+                            cvNext.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                                        isBank = true;
+                                        Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
+                                        i.putExtra("signon", signOnData);
+                                        startActivityForResult(i, 1);
+                                    } else {
+                                        Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
+                                    }
+                                }
+                            });
+                        } else {
+                            strCurrent = "debit";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                            i.putExtra("card", "debit");
+                            startActivityForResult(i, 3);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {
@@ -647,55 +685,114 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    private void bindPaymentMethods(List<PaymentsList> listPayments) {
-        SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter;
+    private void getPaymentMethods() {
         try {
+            isPayments = true;
+            dialog = Utils.showProgressDialog(this);
+            dashboardViewModel.mePaymentMethods();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void bindWithdrawNoTokens() {
+        try {
+            LinearLayout lyNTClose = findViewById(R.id.lyNTClose);
+            LinearLayout lyAddPay = findViewById(R.id.lyAddPay);
+            RecyclerView rvPayMethods = findViewById(R.id.rvPayMethods);
+            List<PaymentsList> listData = new ArrayList<>();
+            if (paymentMethodsResponse != null) {
+                listData = paymentMethodsResponse.getData().getData();
+                if (listData != null && listData.size() > 0) {
+                    rvPayMethods.setVisibility(VISIBLE);
+                    SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listData, WithdrawPaymentMethodsActivity.this, "withdraw");
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
+                    rvPayMethods.setLayoutManager(mLayoutManager);
+                    rvPayMethods.setItemAnimator(new DefaultItemAnimator());
+                    rvPayMethods.setAdapter(selectedPaymentMethodsAdapter);
+                } else {
+                    rvPayMethods.setVisibility(View.GONE);
+                }
+            }
+
+            lyAddPay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "withdraw");
+                    startActivity(i);
+                }
+            });
+            lyNTClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void callResolveFlow() {
+        try {
+            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
+                i.putExtra("signon", signOnData);
+                startActivityForResult(i, 1);
+            } else {
+                Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void selectPayMethod(List<PaymentsList> listPayments) {
+        try {
+            payDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+            payDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            payDialog.setContentView(R.layout.choosepaymentmethod);
+            payDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            RecyclerView rvSelPayMethods = payDialog.findViewById(R.id.rvSelPayMethods);
+            LinearLayout lyAddPay = payDialog.findViewById(R.id.lyAddPay);
+            TextView tvHead = payDialog.findViewById(R.id.tvHead);
+            tvHead.setText("Withdraw Method");
+            SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter;
             if (listPayments != null && listPayments.size() > 0) {
-                selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listPayments, BuyTokenPaymentMethodsActivity.this, "selectpay");
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(BuyTokenPaymentMethodsActivity.this);
+                selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listPayments, WithdrawPaymentMethodsActivity.this, "withdrawtoken");
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
                 rvSelPayMethods.setLayoutManager(mLayoutManager);
                 rvSelPayMethods.setItemAnimator(new DefaultItemAnimator());
                 rvSelPayMethods.setAdapter(selectedPaymentMethodsAdapter);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
-    private void displayError() {
-        try {
-            ControlMethod("firstError");
-            tvErrorHead = findViewById(R.id.tvErrorHead);
-            tvErrorMessage = findViewById(R.id.tvErrorMessage);
-            cvTryAgain = findViewById(R.id.cvTryAgain);
-            tvErrorHead.setText(getString(R.string.bank_exhausthead));
-//            tvErrorMessage.setText(getString(R.string.bank_exhaust));
-            tvErrorMessage.setText("There is an account limit of " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.");
-            cvTryAgain.setOnClickListener(new View.OnClickListener() {
+            Window window = payDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            payDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            payDialog.setCanceledOnTouchOutside(true);
+            payDialog.show();
+            lyAddPay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpay";
-                    ControlMethod("externalBank");
-                    strCurrent = "externalBank";
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void displaySuccess() {
-        try {
-            ControlMethod("banksuccess");
-            cvDone = findViewById(R.id.cvDone);
-            cvDone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                        ControlMethod("paymentMethods");
-                        strCurrent = "paymentMethods";
-                        paymentMethods();
+                    try {
+                        payDialog.dismiss();
+                        ControlMethod("addpayment");
+                        addPayment();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -704,9 +801,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    public void displayCVV() {
+    public void displayCVV(String strscreen) {
         try {
-            cvvDialog = new Dialog(BuyTokenPaymentMethodsActivity.this);
+            cvvDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             cvvDialog.setContentView(R.layout.cvvlayout);
             cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -721,7 +818,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("OK");
-            ctKey.setScreenName("cvv");
+            if (strscreen.equals("withdrawtoken")) {
+                ctKey.setScreenName("wpmcvv");
+            } else {
+                ctKey.setScreenName("wntcvv");
+            }
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
             etCVV.setShowSoftInputOnFocus(false);
@@ -731,13 +832,13 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             etCVV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.hideSoftKeypad(BuyTokenPaymentMethodsActivity.this, v);
+                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, v);
                 }
             });
             etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    Utils.hideSoftKeypad(BuyTokenPaymentMethodsActivity.this, view);
+                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, view);
                 }
             });
             etCVV.addTextChangedListener(new TextWatcher() {
@@ -781,7 +882,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 
     public void expiry() {
         try {
-            final Dialog dialog = new Dialog(BuyTokenPaymentMethodsActivity.this);
+            final Dialog dialog = new Dialog(WithdrawPaymentMethodsActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_expire);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -817,17 +918,17 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     dialog.dismiss();
                     try {
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, EditCardActivity.class);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, EditCardActivity.class);
                             startActivity(i);
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
                                 objMyApplication.setResolveUrl(true);
-                                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
                             } else {
-                                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
+                                Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
                             }
                         }
                     } catch (Exception ex) {
@@ -856,7 +957,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 
     public void deleteBank(PaymentsList objPayment) {
         try {
-            final Dialog dialog = new Dialog(BuyTokenPaymentMethodsActivity.this);
+            final Dialog dialog = new Dialog(WithdrawPaymentMethodsActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_remove);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -919,7 +1020,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    pDialog = Utils.showProgressDialog(BuyTokenPaymentMethodsActivity.this);
+                    pDialog = Utils.showProgressDialog(WithdrawPaymentMethodsActivity.this);
                     if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
@@ -945,7 +1046,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    public void okClick() {
+    public void okClick(String strscreen) {
         try {
             if (!etCVV.getText().toString().trim().equals("")) {
                 cvvDialog.dismiss();
@@ -953,11 +1054,15 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
-                i.putExtra("cvv", etCVV.getText().toString().trim());
-                startActivity(i);
+                if (strscreen.equals("wpmcvv")) {
+
+                } else {
+                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+                    i.putExtra("cvv", etCVV.getText().toString().trim());
+                    startActivity(i);
+                }
             } else {
-                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "", "");
+                Utils.displayAlert("Please enter CVV", WithdrawPaymentMethodsActivity.this, "", "");
             }
 
         } catch (Exception ex) {
@@ -965,10 +1070,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    public void bindSelectedBank() {
+    public void bindSelectedBank(String strscreen) {
         try {
-            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
-            startActivity(i);
+            if (strscreen.equals("withdrawtoken")) {
+
+            } else {
+                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+                startActivity(i);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
