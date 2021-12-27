@@ -126,6 +126,11 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     public static String convertDate(String date) {
         String strDate = "";
         try {
