@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/_146sdp"
                 android:layout_height="@dimen/_80sdp"
@@ -72,7 +73,8 @@
                 android:layout_marginTop="-10dp"
                 android:layout_marginRight="@dimen/_11sdp"
                 android:layout_marginBottom="@dimen/_11sdp"
-                app:cardCornerRadius="@dimen/_10sdp">
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -127,13 +129,72 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginRight="@dimen/_11sdp"
-                app:cardCornerRadius="@dimen/_10sdp">
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="@dimen/_11sdp">
+
+                    <RelativeLayout
+                        android:id="@+id/amountRL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_23sdp">
+
+                        <RelativeLayout
+                            android:id="@+id/amountCL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/amountDDICon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginEnd="@dimen/_15sdp"
+                                android:src="@drawable/ic_down"
+                                android:visibility="visible" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/amountTIL"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Amount"
+                                android:textColorHint="@color/primary_black"
+                                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                                app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                                app:boxStrokeColor="@color/primary_color"
+                                app:expandedHintEnabled="false"
+                                app:hintTextColor="@color/black"
+                                app:prefixText="$"
+                                app:prefixTextColor="@color/black">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/amountET"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="false"
+                                    android:cursorVisible="false"
+                                    android:enabled="false"
+                                    android:focusable="false"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:inputType="text"
+                                    android:padding="@dimen/_12sdp"
+                                    android:text=""
+                                    android:textColor="@color/text_color"
+                                    android:textSize="@dimen/_12ssp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </RelativeLayout>
+
+                    </RelativeLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/firstNameTIL"
