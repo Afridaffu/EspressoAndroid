@@ -27,11 +27,15 @@ public class GiftCardsViewModel extends AndroidViewModel {
         super(application);
     }
     private MutableLiveData<BrandsResponse> giftCardsMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BrandsResponse> giftCardDetailsMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<BrandsResponse> getGiftCardsMutableLiveData() {
         return giftCardsMutableLiveData;
+    }
+
+    public MutableLiveData<BrandsResponse> getGiftCardDetailsMutableLiveData() {
+        return giftCardDetailsMutableLiveData;
     }
 
     public void getGiftCards() {
@@ -67,4 +71,36 @@ public class GiftCardsViewModel extends AndroidViewModel {
         }
     }
 
+    public void getGiftCardDetails(String brandKey) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BrandsResponse> mCall = apiService.getGiftCardItems(brandKey);
+            mCall.enqueue(new Callback<BrandsResponse>() {
+                @Override
+                public void onResponse(Call<BrandsResponse> call, Response<BrandsResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BrandsResponse obj = response.body();
+                            giftCardDetailsMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BrandsResponse>() {}.getType();
+                            BrandsResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            giftCardDetailsMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        giftCardDetailsMutableLiveData.setValue(null);
+                    }
+                }
+                @Override
+                public void onFailure(Call<BrandsResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    giftCardDetailsMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

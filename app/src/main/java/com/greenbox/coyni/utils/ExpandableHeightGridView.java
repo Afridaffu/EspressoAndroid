@@ -5,56 +5,42 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-public class ExpandableHeightGridView extends GridView
-{
+public class ExpandableHeightGridView extends GridView {
 
     boolean expanded = false;
 
-    public ExpandableHeightGridView(Context context)
-    {
+    public ExpandableHeightGridView(Context context) {
         super(context);
     }
 
-    public ExpandableHeightGridView(Context context, AttributeSet attrs)
-    {
+    public ExpandableHeightGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ExpandableHeightGridView(Context context, AttributeSet attrs,
-                                    int defStyle)
-    {
+    public ExpandableHeightGridView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public boolean isExpanded()
-    {
-        return expanded;
+    public boolean isExpanded() {
+        return this.expanded;
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
-        // HACK! TAKE THAT ANDROID!
-        if (isExpanded())
-        {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (isExpanded()) {
             // Calculate entire height by providing a very large height hint.
-            // But do not use the highest 2 bits of this integer; those are
-            // reserved for the MeasureSpec mode.
-            int expandSpec = MeasureSpec.makeMeasureSpec(
-                    Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+            // View.MEASURED_SIZE_MASK represents the largest height possible.
+            int expandSpec = MeasureSpec.makeMeasureSpec(MEASURED_SIZE_MASK,
+                    MeasureSpec.AT_MOST);
             super.onMeasure(widthMeasureSpec, expandSpec);
 
             ViewGroup.LayoutParams params = getLayoutParams();
             params.height = getMeasuredHeight();
-        }
-        else
-        {
+        } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
-    public void setExpanded(boolean expanded)
-    {
+    public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
 }
