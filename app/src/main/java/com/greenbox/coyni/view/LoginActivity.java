@@ -124,12 +124,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etEmail.setText(value);
                 etPassword.setText("");
             } else {
-                etEmail.setText("");
+//                etEmail.setText("");
                 etPassword.setText("");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            etEmail.setText("");
+//            etEmail.setText("");
             etPassword.setText("");
         }
         if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
