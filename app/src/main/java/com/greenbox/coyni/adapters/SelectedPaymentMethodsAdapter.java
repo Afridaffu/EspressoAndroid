@@ -20,6 +20,7 @@ import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.imgBankArrow.setVisibility(View.GONE);
                 }
 //                if (!strScreen.equals("selectpay")) {
-                if (strScreen.equals("buytoken")) {
+                if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgBankTick.setVisibility(View.VISIBLE);
                     } else {
@@ -114,7 +115,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.imgCardArrow.setVisibility(View.GONE);
                 }
 //                if (!strScreen.equals("selectpay") && !strScreen.equals("withdrawtoken")) {
-                if (strScreen.equals("buytoken")) {
+                if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgCardTick.setVisibility(View.VISIBLE);
                     } else {
@@ -159,28 +160,32 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                         mLastClickTime = SystemClock.elapsedRealtime();
                         switch (strScreen) {
                             case "selectpay":
-                                objMyApplication.setSelectedCard(objData);
+//                                objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
+                                        objMyApplication.setSelectedCard(objData);
                                         ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
                                     } else {
                                         ((BuyTokenPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
+                                    objMyApplication.setSelectedCard(objData);
                                     ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
                                 } else {
                                     ((BuyTokenPaymentMethodsActivity) mContext).expiry();
                                 }
                                 break;
                             case "withdrawtoken":
-                                objMyApplication.setSelectedCard(objData);
+//                                objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
+                                        objMyApplication.setSelectedCard(objData);
                                         ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
                                     } else {
                                         ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
+                                    objMyApplication.setSelectedCard(objData);
                                     ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdrawtoken");
                                 } else {
                                     ((WithdrawPaymentMethodsActivity) mContext).expiry();
@@ -188,16 +193,20 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 break;
                             case "buytoken":
                                 if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
-                                    objMyApplication.setSelectedCard(objData);
-                                    notifyDataSetChanged();
+//                                    objMyApplication.setSelectedCard(objData);
+//                                    notifyDataSetChanged();
                                     if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                         if (!objData.getRelink()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
                                             ((BuyTokenActivity) mContext).bindSelectedBank(objData);
                                         } else {
                                             ((BuyTokenActivity) mContext).expiry();
                                         }
                                     } else {
                                         if (!objData.getExpired()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
                                             ((BuyTokenActivity) mContext).displayCVV(objData);
                                         } else {
                                             ((BuyTokenActivity) mContext).expiry();
@@ -206,17 +215,40 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 }
                                 break;
                             case "withdraw":
-                                objMyApplication.setSelectedCard(objData);
+//                                objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
+                                        objMyApplication.setSelectedCard(objData);
                                         ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdraw");
                                     } else {
                                         ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
+                                    objMyApplication.setSelectedCard(objData);
                                     ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdraw");
                                 } else {
                                     ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                }
+                                break;
+                            case "wdrawtoken":
+                                if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                        if (!objData.getRelink()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
+                                        } else {
+                                            ((WithdrawTokenActivity) mContext).expiry();
+                                        }
+                                    } else {
+                                        if (!objData.getExpired()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            ((WithdrawTokenActivity) mContext).displayCVV(objData);
+                                        } else {
+                                            ((WithdrawTokenActivity) mContext).expiry();
+                                        }
+                                    }
                                 }
                                 break;
                         }

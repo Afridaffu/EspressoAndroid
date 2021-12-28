@@ -18,6 +18,7 @@ import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 
 public class CustomKeyboard extends LinearLayout implements View.OnClickListener {
 
@@ -164,6 +165,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             break;
                         case "wntcvv":
                             WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wntcvv");
+                            break;
+                        case "withdrawcvv":
+                            WithdrawTokenActivity.withdrawTokenActivity.okClick();
                             break;
                     }
 //                    if (strScreen.equals("addcard")) {

@@ -127,13 +127,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     }
 
                     if (editable.length() > 5) {
-//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 85));
-//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 75));
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                     } else {
-//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
-//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                     }
@@ -694,10 +690,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         String strAmount = "", strReturn = "";
         try {
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-//            changeTextSize(strAmount);
             etAmount.removeTextChangedListener(BuyTokenActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            //etAmount.setSelection(etAmount.getText().length() - 3);
             etAmount.addTextChangedListener(BuyTokenActivity.this);
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);
