@@ -30,7 +30,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -678,8 +677,6 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dashboardViewModel.meProfile();
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     public static void showImagePickerDialog(Activity activity) {
