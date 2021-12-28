@@ -338,9 +338,9 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        if(!msg.equals("")){
+        if (!msg.equals("")) {
             displayAlertNew(msg, activity, header);
-        }else{
+        } else {
             displayAlertNew(fieldError, activity, header);
         }
     }
@@ -452,11 +452,17 @@ public class Utils {
         TextView textTV = dialog.findViewById(R.id.toastTV);
         ImageView imageIV = dialog.findViewById(R.id.toastIV);
         textTV.setText(text);
-        try {
-            imageIV.setImageResource(imageID);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (imageID == 0) {
+            imageIV.setVisibility(View.GONE);
+        } else {
+            try {
+                imageIV.setVisibility(View.VISIBLE);
+                imageIV.setImageResource(imageID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);

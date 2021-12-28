@@ -49,6 +49,13 @@ public class GiftCardActivity extends AppCompatActivity {
 
         giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
         giftCardsViewModel.getGiftCards();
+
+        gcBackbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     public void initObservers() {

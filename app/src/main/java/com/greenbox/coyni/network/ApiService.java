@@ -301,4 +301,5 @@ public interface ApiService {
 
     @GET("api/v2/giftcard/giftCardBrandItems")
     Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
+
 }
