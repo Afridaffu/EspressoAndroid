@@ -14,7 +14,6 @@ import com.greenbox.coyni.model.users.AccountLimits;
 import com.greenbox.coyni.viewmodel.AccountLimitsViewModel;
 
 public class AccountLimitsActivity extends AppCompatActivity {
-
     AccountLimitsViewModel accountLimitsViewModel;
     ProgressDialog dialog;
     int userType = 0;
