@@ -388,7 +388,7 @@
                                 android:editable="false"
                                 android:focusable="false"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:hint="CA"
+                                android:hint="State"
                                 android:imeOptions="actionNext"
                                 android:inputType="text|textNoSuggestions"
                                 android:longClickable="false"

@@ -803,6 +803,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     public void displayCVV(String strscreen) {
         try {
+            closePaymentMethods();
             cvvDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             cvvDialog.setContentView(R.layout.cvvlayout);
@@ -1055,7 +1056,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (strscreen.equals("wpmcvv")) {
-
+                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
+                    i.putExtra("cvv", etCVV.getText().toString().trim());
+                    startActivity(i);
                 } else {
                     Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
                     i.putExtra("cvv", etCVV.getText().toString().trim());
@@ -1073,10 +1076,22 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     public void bindSelectedBank(String strscreen) {
         try {
             if (strscreen.equals("withdrawtoken")) {
-
+                closePaymentMethods();
+                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
+                startActivity(i);
             } else {
                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
                 startActivity(i);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void closePaymentMethods() {
+        try {
+            if (payDialog != null) {
+                payDialog.dismiss();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
