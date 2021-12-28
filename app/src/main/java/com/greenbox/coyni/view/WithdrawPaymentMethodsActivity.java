@@ -613,6 +613,17 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 }
             });
 
+            lyGiftCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

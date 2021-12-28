@@ -298,4 +298,7 @@ public interface ApiService {
 
     @POST("api/v2/node/withdrawTokens")
     Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request);
+
+    @GET("api/v2/giftcard/giftCardBrandItems")
+    Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
 }

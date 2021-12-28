@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ import com.greenbox.coyni.viewmodel.GiftCardsViewModel;
 
 public class GiftCardActivity extends AppCompatActivity {
 
-    ExpandableHeightGridView brandsGV;
+    GridView brandsGV;
     LinearLayout brandsLL, gcBackbtn;
     EditText searchET;
     GiftCardsViewModel giftCardsViewModel;
@@ -44,6 +45,7 @@ public class GiftCardActivity extends AppCompatActivity {
         gcBackbtn = findViewById(R.id.gcBackbtn);
         searchET = findViewById(R.id.searchET);
         noBrandsTV = findViewById(R.id.noBrandsTV);
+//        brandsGV.setExpanded(true);
 
         giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
         giftCardsViewModel.getGiftCards();
@@ -61,7 +63,7 @@ public class GiftCardActivity extends AppCompatActivity {
                                 noBrandsTV.setVisibility(View.GONE);
                                 giftCardsAdapter = new GiftCardsAdapter(GiftCardActivity.this, brandsResponse.getData().getBrands());
                                 brandsGV.setAdapter(giftCardsAdapter);
-                                brandsGV.setExpanded(true);
+
                             } else {
                                 brandsLL.setVisibility(View.GONE);
                                 noBrandsTV.setVisibility(View.VISIBLE);

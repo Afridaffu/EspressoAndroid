@@ -86,34 +86,54 @@
     <LinearLayout
         android:id="@+id/brandsLL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="visible">
 
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_11sdp"
-            android:layout_marginTop="@dimen/_17sdp"
-            android:fontFamily="@font/opensans_bold"
-            android:text="Brands"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12ssp" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/_10sdp"
-            android:padding="@dimen/_10sdp">
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_11sdp"-->
+<!--                android:layout_marginTop="@dimen/_17sdp"-->
+<!--                android:fontFamily="@font/opensans_bold"-->
+<!--                android:text="Brands"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <com.greenbox.coyni.utils.ExpandableHeightGridView
+            <GridView
                 android:id="@+id/brandsGV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:horizontalSpacing="@dimen/_10sdp"
                 android:numColumns="2"
-                android:columnWidth="@dimen/_10sdp"/>
-        </androidx.cardview.widget.CardView>
+                android:padding="@dimen/_10sdp"
+                android:verticalSpacing="@dimen/_10sdp"
+                />
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+
+<!--                -->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="@dimen/_10sdp">-->
+
+<!--                    -->
+
+<!--                </LinearLayout>-->
+
+<!--            </LinearLayout>-->
+
+        </ScrollView>
+
 
     </LinearLayout>
 

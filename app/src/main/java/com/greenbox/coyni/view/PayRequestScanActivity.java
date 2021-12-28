@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -10,10 +11,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Reader;
 import com.google.zxing.Result;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -22,11 +29,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -43,6 +53,8 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.SetLimitFragment;
 import com.greenbox.coyni.model.APIError;
@@ -55,6 +67,9 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,7 +84,8 @@ public class PayRequestScanActivity extends AppCompatActivity {
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
     Long mLastClickTime = 0L;
-    ImageView idIVQrcode, imageShare, copyRecipientAddress;
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
+    ImageView idIVQrcode, imageShare, copyRecipientAddress,albumIV;
     ImageView closeBtnScanCode, closeBtnScanMe,imgProfile;
     private CodeScanner mcodeScanner;
     private CodeScannerView mycodeScannerView;
@@ -117,7 +133,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
             imgProfile = findViewById(R.id.imgProfile);
-
+            albumIV=findViewById(R.id.albumIV);
 
 //            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
@@ -314,6 +330,28 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 }
             });
 
+            albumIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                      if (checkAndRequestPermissions(PayRequestScanActivity.this)){
+                          if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                              return;
+                          }
+                          mLastClickTime = SystemClock.elapsedRealtime();
+
+
+                          Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                          photoPickerIntent.setType("image/*");
+                          startActivityForResult(photoPickerIntent, 101);
+
+                      }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
 //            imageShare.setOnClickListener(new View.OnClickListener() {
 //
 //                @Override
@@ -506,6 +544,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onResume() {
         try {
@@ -665,5 +704,122 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
         //Change Not Updated
         //Accept yours
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            try {
+
+                final Uri imageUri = data.getData();
+
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                try {
+
+                    Bitmap bMap = selectedImage;
+
+
+
+
+                    int[] intArray = new int[bMap.getWidth()*bMap.getHeight()];
+
+                    bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+
+
+
+                    LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+
+
+                    Reader reader = new QRCodeReader();
+
+                    Result result = reader.decode(bitmap);
+
+                    strScanWallet = result.getText();
+                    Log.e("Image Text :- ",strScanWallet);
+//                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
+
+                    try {
+                       getUserDetails(strScanWallet);
+                    } catch (Exception ex) {
+//                        invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+//                        StartScaaner();
+                        //ScanCode Visible
+//                        mycodeScannerView.setVisibility(View.VISIBLE);
+//                        scannerLayout.setVisibility(View.VISIBLE);
+//                        flashLL.setVisibility(View.VISIBLE);
+//                        closeBtnScanCode.setVisibility(View.VISIBLE);
+                        ex.printStackTrace();
+                    }
+
+
+                }catch (Exception e){
+                    try {
+                        Utils.displayAlert("Try scanning a coyni QR code.",PayRequestScanActivity.this,"Invalid QR code","");
+//                    invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+//                   StartScaaner();
+                        //ScanCode Visible
+                        mycodeScannerView.setVisibility(View.VISIBLE);
+                        scannerLayout.setVisibility(View.VISIBLE);
+                        flashLL.setVisibility(View.VISIBLE);
+                        closeBtnScanCode.setVisibility(View.VISIBLE);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                    e.printStackTrace();
+                }
+
+                //  image_view.setImageBitmap(selectedImage);
+
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+
+                Toast.makeText(PayRequestScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+
+            }
+
+
+
+        }else {
+
+            Toast.makeText(PayRequestScanActivity.this, "You haven't picked QR ",Toast.LENGTH_LONG).show();
+
+        }
+
+
+
+    }
+    public static boolean checkAndRequestPermissions(final Activity context) {
+        try {
+            int WExtstorePermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.CAMERA);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
+            }
+            if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded
+                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                                .toArray(new String[listPermissionsNeeded.size()]),
+                        REQUEST_ID_MULTIPLE_PERMISSIONS);
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
     }
 }
