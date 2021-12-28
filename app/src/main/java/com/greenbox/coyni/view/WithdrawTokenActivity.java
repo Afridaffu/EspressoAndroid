@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -26,6 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +42,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
@@ -46,6 +51,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -60,7 +66,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     MyApplication objMyApplication;
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
-    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
+    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks;
     RelativeLayout lyPayMethod;
     LinearLayout lyCDetails, lyWithdrawClose, lyBDetails;
     EditText etAmount;
@@ -78,7 +84,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     SignOnData signOnData;
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, bankId, cardId;
     Boolean isUSD = false, isCYN = false, isBank = false;
     TextInputEditText etCVV;
 
@@ -168,6 +174,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
+            etRemarks = findViewById(R.id.etRemarks);
             tvLimit = findViewById(R.id.tvLimit);
             tvPayHead = findViewById(R.id.tvPayHead);
             tvBankName = findViewById(R.id.tvBankName);
@@ -244,6 +251,13 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onClick(View view) {
                     onBackPressed();
+                }
+            });
+
+            etRemarks.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    displayComments();
                 }
             });
             calculateFee("10");
@@ -429,13 +443,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             request.setTokens(strAmount.trim().replace(",", ""));
             request.setTxnType(Utils.withdrawType);
             if (strType.toLowerCase().equals("debit")) {
-                request.setTxnSubType(Utils.debitType);
-            } else if (strType.toLowerCase().equals("credit")) {
-                request.setTxnSubType(Utils.creditType);
+                request.setTxnSubType(Utils.instantType);
             } else if (strType.toLowerCase().equals("bank")) {
                 request.setTxnSubType(Utils.bankType);
-            } else if (strType.toLowerCase().equals("instant")) {
-                request.setTxnSubType(Utils.instantType);
             }
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
                 buyTokenViewModel.transferFee(request);
@@ -473,12 +483,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 strCardId = String.valueOf(objData.getId());
                 if (objData.getCardType().toLowerCase().equals("debit")) {
                     strType = "debit";
-                    strSubType = Utils.debitType;
-                    obj.setTransactionSubType(Integer.parseInt(Utils.debitType));
-                } else if (objData.getCardType().toLowerCase().equals("credit")) {
-                    strType = "credit";
-                    strSubType = Utils.creditType;
-                    obj.setTransactionSubType(Integer.parseInt(Utils.creditType));
+                    strSubType = Utils.instantType;
+                    obj.setTransactionSubType(Integer.parseInt(Utils.instantType));
                 }
                 params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
                 lyBDetails.setVisibility(View.GONE);
@@ -608,7 +614,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     if (currentId == motionLayout.getEndState()) {
                         slideToConfirm.setInteractionEnabled(false);
                         tv_lable.setText("Verifying");
-                        //buyToken();
+                        withdrawToken();
                     }
                 }
 
@@ -951,6 +957,92 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
             etAmount.setFilters(FilterArray);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void withdrawToken() {
+        try {
+            WithdrawRequest request = new WithdrawRequest();
+            if (!strBankId.equals("")) {
+                bankId = Long.parseLong(strBankId);
+            }
+            if (!strCardId.equals("")) {
+                cardId = Long.parseLong(strCardId);
+            }
+            request.setBankId(bankId);
+            request.setCardId(cardId);
+            request.setGiftCardWithDrawInfo(null);
+            request.setTokens(total);
+            request.setRemarks(etRemarks.getText().toString().trim());
+            request.setWithdrawType(strSubType);
+            if (Utils.checkInternet(WithdrawTokenActivity.this)) {
+                buyTokenViewModel.withdrawTokens(request);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void displayComments() {
+        try {
+            cvvDialog = new Dialog(WithdrawTokenActivity.this);
+            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            cvvDialog.setContentView(R.layout.add_note_layout);
+            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            EditText addNoteET = cvvDialog.findViewById(R.id.addNoteET);
+            CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
+            LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    addNoteET.requestFocus();
+                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    mgr.showSoftInput(addNoteET, InputMethodManager.SHOW_IMPLICIT);
+
+                }
+            }, 100);
+            if (!etRemarks.getText().toString().trim().equals("")) {
+                addNoteET.setText(etRemarks.getText().toString().trim());
+                addNoteET.setSelection(addNoteET.getText().toString().trim().length());
+            }
+
+            Window window = cvvDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            cvvDialog.show();
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cvvDialog.dismiss();
+                }
+            });
+            doneBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (addNoteET.getText().toString().trim().length() > 0) {
+                            etRemarks.setText(addNoteET.getText().toString().trim());
+                            cvvDialog.dismiss();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

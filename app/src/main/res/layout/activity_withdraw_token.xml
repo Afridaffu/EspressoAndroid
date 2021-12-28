@@ -270,25 +270,39 @@
                             android:src="@drawable/ic_download" />
                     </RelativeLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_15sdp"
-                        android:background="#d8e2f0" />
-
                     <TextView
                         android:id="@+id/tvError"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_22sdp"
                         android:text="Amount entered exceeds your daily limit"
                         android:textColor="@color/error"
                         android:textSize="@dimen/_10ssp"
                         android:visibility="invisible"></TextView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginRight="@dimen/_15sdp"
+                        android:background="#d8e2f0" />
+
+                    <TextView
+                        android:id="@+id/etRemarks"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_54sdp"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_15sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="Optional: Add Note (Maximum 120 characters )"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_10ssp"></TextView>
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

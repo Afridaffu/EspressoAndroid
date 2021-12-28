@@ -264,17 +264,17 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 tvCurrency.setVisibility(View.INVISIBLE);
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                                 convertUSDtoCYN();
-//                                if (tvError.getVisibility() == View.VISIBLE) {
-//                                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
-//                                }
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                }
                             } else {
                                 tvCYN.setVisibility(View.GONE);
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 convertCYNtoUSD();
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
-//                                if (tvError.getVisibility() == View.VISIBLE) {
-//                                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
-//                                }
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                }
                             }
                         }
                     } catch (Exception ex) {
