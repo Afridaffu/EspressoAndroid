@@ -69,7 +69,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
     public LinearLayout emailErrorLL, phoneErrorLL, firstNameErrorLL, lastNameErrorLL, passwordErrorLL, confPassErrorLL;
     public TextView emailErrorTV, phoneErrorTV, firstNameErrorTV, lastNameErrorTV, passwordErrorTV, confPassErrorTV;
-    TextView passwordInfoTV, spannableText, privacyPolicyTV,tosTV;
+    TextView passwordInfoTV, spannableText, privacyPolicyTV, tosTV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,
             isPassword = false, isConfirmPassword = false, isNextEnabled = false;
     public String passwordString = "";
@@ -324,7 +324,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 try {
                     dialog.dismiss();
                     if (custRegisterResponse != null) {
-                        if(custRegisterResponse.getStatus().toLowerCase().equals("success")){
+                        if (custRegisterResponse.getStatus().toLowerCase().equals("success")) {
                             try {
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
                                 if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
@@ -350,8 +350,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
-                        }else{
-                            Utils.displayAlert(custRegisterResponse.getError().getErrorDescription(),CreateAccountActivity.this,"",custRegisterResponse.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(custRegisterResponse.getError().getErrorDescription(), CreateAccountActivity.this, "", custRegisterResponse.getError().getFieldErrors().get(0));
                         }
 
                     }
@@ -443,11 +443,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_green));
-                    }else if (firstNameET.getText().toString().trim().length() == 0) {
+                    } else if (firstNameET.getText().toString().trim().length() == 0) {
                         firstNameErrorLL.setVisibility(VISIBLE);
                         firstNameErrorTV.setText("Field Required");
-                    }
-                    else {
+                    } else {
                         isFirstName = false;
                     }
                     enableOrDisableNext();
@@ -457,7 +456,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     try {
                         String str = firstNameET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
                         } else if (str.length() > 0 && str.contains(".")) {
@@ -488,11 +487,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_green));
-                    }else if (lastNameET.getText().toString().trim().length() == 0) {
+                    } else if (lastNameET.getText().toString().trim().length() == 0) {
                         lastNameErrorLL.setVisibility(VISIBLE);
                         lastNameErrorTV.setText("Field Required");
-                    }
-                    else {
+                    } else {
                         isLastName = false;
                     }
                     enableOrDisableNext();

@@ -24,10 +24,10 @@ import com.greenbox.coyni.utils.Utils;
 import java.util.List;
 
 public class GiftCardBindingLayoutActivity extends AppCompatActivity {
-    String strScreen = "",fee="";
-    TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV;
+    String strScreen = "", fee = "";
+    TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV, tvMessage;
     LinearLayout refIDLL;
-    CardView doneCV;
+    CardView doneCV, cvTryAgain;
     MyApplication objMyApplication;
 
     @Override
@@ -58,27 +58,9 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             refIDLL = findViewById(R.id.refIDLL);
             doneCV = findViewById(R.id.doneCV);
 
-            if(objMyApplication.getSelectedBrandResponse()!=null){
-                giftCardTypeTV.setText(objMyApplication.getSelectedBrandResponse().getData().getBrands().get(0).getItems().get(0).getRewardName());
-            }
-            if(objMyApplication.getGcWithdrawRequest()!=null){
-                giftCardAmountTV.setText(Utils.convertBigDecimalUSDC(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getTotalAmount().toString()));
-                giftCardDescTV.setText(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName()+" gift card sent to "+
-                        objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getFirstName()+" "+objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getLastName()+" at "+
-                        objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getEmail());
-                gcProcessingTV.setText("We are processing your request, please allow a few minutes for your "+ objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName()+" gift card to be");
-            }
+            tvMessage = findViewById(R.id.tvMessage);
+            cvTryAgain = findViewById(R.id.cvTryAgain);
 
-            if(objMyApplication.getWithdrawResponse()!=null){
-                refIDTV.setText(objMyApplication.getWithdrawResponse().getData().getGbxTransactionId().substring(0,15));
-            }
-
-            learnMoreTV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -91,11 +73,68 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 case "inprogress": {
                     findViewById(R.id.inProgressContainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.failedContainer).setVisibility(View.GONE);
+
+                    if (objMyApplication.getSelectedBrandResponse() != null) {
+                        giftCardTypeTV.setText(objMyApplication.getSelectedBrandResponse().getData().getBrands().get(0).getItems().get(0).getRewardName());
+                    }
+                    if (objMyApplication.getGcWithdrawRequest() != null) {
+                        giftCardAmountTV.setText(Utils.convertBigDecimalUSDC(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getTotalAmount().toString()));
+                        giftCardDescTV.setText(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card sent to " +
+                                objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getFirstName() + " " + objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getLastName() + " at " +
+                                objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getEmail());
+                        gcProcessingTV.setText("We are processing your request, please allow a few minutes for your " + objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card to be");
+                    }
+
+                    if (objMyApplication.getWithdrawResponse() != null) {
+                        refIDTV.setText(objMyApplication.getWithdrawResponse().getData().getGbxTransactionId().substring(0, 15));
+                    }
+
+                    learnMoreTV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Utils.populateLearnMore(GiftCardBindingLayoutActivity.this);
+                        }
+                    });
+
+                    refIDLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Utils.copyText(objMyApplication.getWithdrawResponse().getData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+                        }
+                    });
+
+                    doneCV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        }
+                    });
                 }
                 break;
                 case "failed": {
                     findViewById(R.id.inProgressContainer).setVisibility(View.GONE);
                     findViewById(R.id.failedContainer).setVisibility(View.VISIBLE);
+
+                    if (objMyApplication.getWithdrawResponse() != null) {
+                        tvMessage.setText("The transaction failed due to error code:\n" +
+                                objMyApplication.getWithdrawResponse().getError().getErrorCode() + " - " +
+                                objMyApplication.getWithdrawResponse().getError().getErrorDescription() + ". Please try again.");
+                    }
+
+                    cvTryAgain.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                finish();
+                                GiftCardDetails.giftCardDetails.finish();
+                                GiftCardActivity.giftCardActivity.finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
                 break;
             }

@@ -102,10 +102,8 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_regular"
                     android:text="Reference ID"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-
-                    />
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
                     android:id="@+id/refIDLL"
@@ -141,8 +139,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/_15sdp">
+            android:layout_marginTop="@dimen/_15sdp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/gcProcessingTV"
@@ -152,7 +150,7 @@
                 android:gravity="left"
                 android:paddingLeft="@dimen/_10sdp"
                 android:text="We are processing your request, please allow a few \nminutes for your [gift car name] gift card to be "
-                android:textColor="@color/primary_black"
+                android:textColor="@color/dark_grey"
                 android:textSize="@dimen/_10sdp" />
 
             <LinearLayout
@@ -166,17 +164,16 @@
                     android:fontFamily="@font/opensans_regular"
                     android:paddingLeft="@dimen/_10sdp"
                     android:text="delivered."
-                    android:textColor="@color/primary_black"
+                    android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10sdp" />
 
                 <TextView
                     android:id="@+id/learnMoreTV"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="left"
                     android:text="@string/learn"
-                    android:textColor="@color/teal_200"
+                    android:textColor="@color/primary_green"
                     android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 

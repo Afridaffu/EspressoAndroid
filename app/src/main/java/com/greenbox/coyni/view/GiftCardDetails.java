@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Html;
@@ -97,12 +99,11 @@ public class GiftCardDetails extends AppCompatActivity {
     static SQLiteDatabase mydatabase;
     static Cursor dsPermanentToken, dsFacePin, dsTouchID;
     static String strToken = "";
-    static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
-    String authenticateType = "";
     Dialog prevDialog;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,12 +167,16 @@ public class GiftCardDetails extends AppCompatActivity {
             viewAllTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (brandDescTV.getMaxLines() == 3) {
-                        brandDescTV.setMaxLines(Integer.MAX_VALUE);
-                        viewAllTV.setText(getResources().getString(R.string.view_less));
-                    } else {
-                        brandDescTV.setMaxLines(3);
-                        viewAllTV.setText(getResources().getString(R.string.view_all));
+                    try {
+                        if (brandDescTV.getMaxLines() == 3) {
+                            brandDescTV.setMaxLines(Integer.MAX_VALUE);
+                            viewAllTV.setText(getResources().getString(R.string.view_less));
+                        } else {
+                            brandDescTV.setMaxLines(3);
+                            viewAllTV.setText(getResources().getString(R.string.view_all));
+                        }
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -198,8 +203,16 @@ public class GiftCardDetails extends AppCompatActivity {
             amountRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getValueType().toUpperCase().equals("FIXED_VALUE")) {
-                        showFixedAmounts(GiftCardDetails.this, amountET, listAmounts);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getValueType().toUpperCase().equals("FIXED_VALUE")) {
+                            showFixedAmounts(GiftCardDetails.this, amountET, listAmounts);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -207,8 +220,16 @@ public class GiftCardDetails extends AppCompatActivity {
             amountET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getValueType().toUpperCase().equals("FIXED_VALUE")) {
-                        showFixedAmounts(GiftCardDetails.this, amountET, listAmounts);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getValueType().toUpperCase().equals("FIXED_VALUE")) {
+                            showFixedAmounts(GiftCardDetails.this, amountET, listAmounts);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -217,6 +238,10 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         String strCurrency = " USD", strAmount = "", limitType = "";
                         if (isNextEnabled) {
                             Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
@@ -224,7 +249,7 @@ public class GiftCardDetails extends AppCompatActivity {
                             Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
 
                             if (walletAmount < giftCardAmount) {
-                                Utils.displayAlert("Gift Card amount ( " + giftCardAmount + " USD ) should not be greater than your wallet amount ( " + giftCardAmount + " USD )", GiftCardDetails.this, "", "");
+                                Utils.displayAlert("Gift Card amount " + giftCardAmount + " should not be greater than your wallet amount " + walletAmount, GiftCardDetails.this, "", "");
                             } else if ((walletAmount > giftCardAmount) && objTranLimit.getData().getTokenLimitFlag()) {
 
                                 limitType = objTranLimit.getData().getLimitType();
@@ -405,7 +430,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     try {
                         if (s.length() > 0 && !s.toString().equals(".") && !s.toString().equals(".00")) {
-                            calculateFee(s.toString());
+                            calculateFee(s.toString().replace(",", ""));
                             amount = s.toString();
                         } else if (s.toString().equals(".")) {
                             amountET.setText("");
