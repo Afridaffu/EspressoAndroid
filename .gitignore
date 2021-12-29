@@ -16,6 +16,9 @@ dist/
 # Log files
 *.log
 
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
 # Maven
 target/
 dist/
