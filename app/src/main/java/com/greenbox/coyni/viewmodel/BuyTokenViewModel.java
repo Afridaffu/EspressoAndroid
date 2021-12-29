@@ -35,7 +35,7 @@ public class BuyTokenViewModel extends AndroidViewModel {
     private MutableLiveData<BuyTokenResponse> buyTokResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BuyTokenResponse> buyTokenFailureMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<WithdrawResponse> withdrawResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<WithdrawResponse> withdrawFailureResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<APIError> withdrawFailureResponseMutableLiveData = new MutableLiveData<>();
 
     public BuyTokenViewModel(@NonNull Application application) {
         super(application);
@@ -65,7 +65,7 @@ public class BuyTokenViewModel extends AndroidViewModel {
         return withdrawResponseMutableLiveData;
     }
 
-    public MutableLiveData<WithdrawResponse> getWithdrawFailureResponseMutableLiveData() {
+    public MutableLiveData<APIError> getWithdrawFailureResponseMutableLiveData() {
         return withdrawFailureResponseMutableLiveData;
     }
 
@@ -208,13 +208,13 @@ public class BuyTokenViewModel extends AndroidViewModel {
                         } else if (response.code() == 400) {
                             strResponse = response.errorBody().string().replaceAll("\"", "'");
                             Gson gson = new Gson();
-                            Type type = new TypeToken<WithdrawResponse>() {
+                            Type type = new TypeToken<APIError>() {
                             }.getType();
-                            WithdrawResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
                             if (errorResponse != null) {
                                 withdrawFailureResponseMutableLiveData.setValue(errorResponse);
                             } else {
-                                WithdrawResponse errorResponse1 = gson.fromJson(strResponse, type);
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
                                 withdrawFailureResponseMutableLiveData.setValue(errorResponse1);
                             }
                         } else {

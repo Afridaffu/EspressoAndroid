@@ -814,85 +814,85 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    public void displayCVV(String strscreen) {
-        try {
-            closePaymentMethods();
-            cvvDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
-            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            cvvDialog.setContentView(R.layout.cvvlayout);
-            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-            DisplayMetrics mertics = getResources().getDisplayMetrics();
-            int width = mertics.widthPixels;
-
-            TextView cvvErrorTV = cvvDialog.findViewById(R.id.cvvErrorTV);
-            etCVV = cvvDialog.findViewById(R.id.etCVV);
-            TextInputLayout etlCVV = cvvDialog.findViewById(R.id.etlCVV);
-            LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
-            CustomKeyboard ctKey;
-            ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK");
-            if (strscreen.equals("withdrawtoken")) {
-                ctKey.setScreenName("wpmcvv");
-            } else {
-                ctKey.setScreenName("wntcvv");
-            }
-            InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
-            ctKey.setInputConnection(ic);
-            etCVV.setShowSoftInputOnFocus(false);
-//            etCVV.setEnabled(false);
-            etCVV.requestFocus();
-
-            etCVV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, v);
-                }
-            });
-            etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, view);
-                }
-            });
-            etCVV.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (editable.length() > 2) {
-                        ctKey.enableButton();
-                    } else {
-                        ctKey.disableButton();
-                    }
-                }
-            });
-
-            Window window = cvvDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-
-            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-            cvvDialog.setCanceledOnTouchOutside(true);
-            cvvDialog.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void displayCVV(String strscreen) {
+//        try {
+//            closePaymentMethods();
+//            cvvDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+//            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//            cvvDialog.setContentView(R.layout.cvvlayout);
+//            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//
+//            DisplayMetrics mertics = getResources().getDisplayMetrics();
+//            int width = mertics.widthPixels;
+//
+//            TextView cvvErrorTV = cvvDialog.findViewById(R.id.cvvErrorTV);
+//            etCVV = cvvDialog.findViewById(R.id.etCVV);
+//            TextInputLayout etlCVV = cvvDialog.findViewById(R.id.etlCVV);
+//            LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
+//            CustomKeyboard ctKey;
+//            ctKey = cvvDialog.findViewById(R.id.ckb);
+//            ctKey.setKeyAction("OK");
+//            if (strscreen.equals("withdrawtoken")) {
+//                ctKey.setScreenName("wpmcvv");
+//            } else {
+//                ctKey.setScreenName("wntcvv");
+//            }
+//            InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
+//            ctKey.setInputConnection(ic);
+//            etCVV.setShowSoftInputOnFocus(false);
+////            etCVV.setEnabled(false);
+//            etCVV.requestFocus();
+//
+//            etCVV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, v);
+//                }
+//            });
+//            etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View view, boolean b) {
+//                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, view);
+//                }
+//            });
+//            etCVV.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                    if (editable.length() > 2) {
+//                        ctKey.enableButton();
+//                    } else {
+//                        ctKey.disableButton();
+//                    }
+//                }
+//            });
+//
+//            Window window = cvvDialog.getWindow();
+//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+//
+//            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//            cvvDialog.setCanceledOnTouchOutside(true);
+//            cvvDialog.show();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void expiry() {
         try {
@@ -1060,27 +1060,43 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-    public void okClick(String strscreen) {
-        try {
-            if (!etCVV.getText().toString().trim().equals("")) {
-                cvvDialog.dismiss();
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                if (strscreen.equals("wpmcvv")) {
-                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
-                    i.putExtra("cvv", etCVV.getText().toString().trim());
-                    startActivity(i);
-                } else {
-                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
-                    i.putExtra("cvv", etCVV.getText().toString().trim());
-                    startActivity(i);
-                }
-            } else {
-                Utils.displayAlert("Please enter CVV", WithdrawPaymentMethodsActivity.this, "", "");
-            }
+//    public void okClick(String strscreen) {
+//        try {
+//            if (!etCVV.getText().toString().trim().equals("")) {
+//                cvvDialog.dismiss();
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//                if (strscreen.equals("wpmcvv")) {
+//                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
+//                    i.putExtra("cvv", etCVV.getText().toString().trim());
+//                    startActivity(i);
+//                } else {
+//                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+//                    i.putExtra("cvv", etCVV.getText().toString().trim());
+//                    startActivity(i);
+//                }
+//            } else {
+//                Utils.displayAlert("Please enter CVV", WithdrawPaymentMethodsActivity.this, "", "");
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
+    public void bindSelectedCard(String strscreen) {
+        try {
+            if (strscreen.equals("withdrawtoken")) {
+                closePaymentMethods();
+                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+                i.putExtra("cvv", etCVV.getText().toString().trim());
+                startActivity(i);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
