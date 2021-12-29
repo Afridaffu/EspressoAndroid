@@ -41,6 +41,9 @@ import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
 
 import java.util.UUID;
 
@@ -64,7 +67,8 @@ public class OnboardActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
-
+            AppCenter.start(getApplication(), "68df58a3-f003-49c7-85fb-f53daed26015",
+                    Analytics.class, Crashes.class);
             //Utils.setDeviceID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (!isDeviceID()) {
                 generateUUID();
