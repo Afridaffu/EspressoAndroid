@@ -25,17 +25,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_11sdp"
-                android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:singleLine="true"
-                android:text="Send funds from Alison L"
+                android:layout_weight=".35"
+                android:text="Send funds from Alison **"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:id="@+id/messagTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:singleLine="true"
+                android:textDirection="ltr"
+                android:layout_weight=".6"
+                android:text="1234"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp"
+                android:visibility="visible"/>
 
 
             <TextView
                 android:id="@+id/amountTV"
-                android:layout_width="@dimen/_100sdp"
+                android:layout_width="@dimen/_80sdp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/_11sdp"

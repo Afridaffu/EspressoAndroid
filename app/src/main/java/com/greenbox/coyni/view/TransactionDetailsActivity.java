@@ -332,7 +332,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
         name.setText(objData.getCardHolderName());
-        cardNumber.setText(objData.getCardNumber().substring(cardNumber.length() - 1));
+        cardNumber.setText("\u2022\u2022\u2022\u2022"+objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
         expiryDate.setText(objData.getCardExpiryDate());
         depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
 //        successadd.setText(("Successfully added "+"["+trasactionDetails.getData().getYouGet()+"]" +" to token account"));

@@ -166,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="@string/done"
+                    android:text="@string/submitbtn"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />

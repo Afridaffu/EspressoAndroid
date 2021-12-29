@@ -674,7 +674,7 @@ public class AddCardActivity extends AppCompatActivity {
                                     cvvErrorTV.setText("Field Required");
                                     Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
                                 } else {
-                                    cvvErrorTV.setText("Please enter valid CVV");
+                                    cvvErrorTV.setText("Please enter a valid CVV");
                                     Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 }
                             } else {

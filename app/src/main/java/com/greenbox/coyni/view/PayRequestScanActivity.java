@@ -8,8 +8,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
+import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
@@ -35,6 +36,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -43,6 +46,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -267,8 +274,72 @@ public class PayRequestScanActivity extends AppCompatActivity {
             scanmeSetAmountTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SetLimitFragment setLimitFragment = new SetLimitFragment();
-                    setLimitFragment.show(getSupportFragmentManager(), setLimitFragment.getTag());
+                    final Dialog dialog = new Dialog(PayRequestScanActivity.this);
+                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.fragment_set_limit);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    CustomKeyboard ctKey=(CustomKeyboard) dialog.findViewById(R.id.customKeyBoard);
+                    EditText setAmount=dialog.findViewById(R.id.setAmountET);
+                    InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
+                    ctKey.setInputConnection(ic);
+                    ctKey.setKeyAction("OK");
+                    setAmount.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                            if (charSequence.length()>7&&charSequence.length()<=11){
+                                setAmount.setTextSize(30);
+                                ctKey.enableButton();
+                            }
+                            if (charSequence.length() > 5 && charSequence.length() <= 7) {
+                                setAmount.setTextSize(38);
+                                ctKey.enableButton();
+                            } else if (charSequence.length() <= 3&&charSequence.length()>0) {
+                                setAmount.setTextSize(54);
+                                ctKey.enableButton();
+                            }
+                            else if (charSequence.length()>3&&charSequence.length()<=5){
+                                setAmount.setTextSize(46);
+                                ctKey.enableButton();
+                            }
+                            else if (charSequence.length()==0){
+                                ctKey.disableButton();
+                            }
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
+
+
+//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+
+                    Window window = dialog.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                    WindowManager.LayoutParams wlp = window.getAttributes();
+
+                    wlp.gravity = Gravity.BOTTOM;
+                    wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                    window.setAttributes(wlp);
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    dialog.show();
+//                    SetLimitFragment setLimitFragment = new SetLimitFragment();
+//                    setLimitFragment.show(getSupportFragmentManager(), setLimitFragment.getTag());
                 }
             });
 
