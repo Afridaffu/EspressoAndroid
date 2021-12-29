@@ -161,7 +161,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
                     getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
-                    || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN"))) {
+                    || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
+                    || getIntent().getStringExtra("screen").equals("GiftCard"))) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -350,7 +351,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                     resetPINValue = "CHOOSE";
                                                     clearPassCode();
                                                     TYPE = "CHOOSE";
-                                                }else if (resetPINValue.equals("CHOOSE")) {
+                                                } else if (resetPINValue.equals("CHOOSE")) {
                                                     tvHead.setText("Confirm your PIN");
                                                     tvForgot.setVisibility(View.GONE);
                                                     passcode = "";
@@ -364,6 +365,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 startActivity(cp);
                                                 finish();
                                                 break;
+
+                                            case "GiftCard":
+                                                Intent returnIntent = new Intent();
+                                                setResult(235,returnIntent);
+                                                finish();
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -534,13 +540,13 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("EditPhone")
                         || getIntent().getStringExtra("screen").equals("EditAddress"))) {
                     onBackPressed();
-                }else if (getIntent().getStringExtra("screen") != null &&
+                } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
                     Log.e("resetPin", resetPINValue);
                     Log.e("Type", TYPE);
                     if (resetPINValue.equals("ENTER")) {
                         onBackPressed();
-                    }else if (resetPINValue.equals("CHOOSE")) {
+                    } else if (resetPINValue.equals("CHOOSE")) {
 //                        tvForgot.setVisibility(View.VISIBLE);
 //                        TYPE = "ENTER";
 //                        tvHead.setText("Enter your PIN");
@@ -549,7 +555,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 //                        resetPINValue = "ENTER";
 //                        imgBack.setImageResource(R.drawable.ic_close);
                         onBackPressed();
-                    }else if (resetPINValue.equals("CONFIRM")) {
+                    } else if (resetPINValue.equals("CONFIRM")) {
                         tvForgot.setVisibility(View.GONE);
                         TYPE = "CHOOSE";
                         tvHead.setText("Choose your PIN");
@@ -558,7 +564,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         imgBack.setImageResource(R.drawable.ic_back);
                         resetPINValue = "CHOOSE";
                     }
-                }else {
+                } else {
                     if (TYPE.equals("CHOOSE")) {
                         onBackPressed();
                     } else {

@@ -30,8 +30,6 @@ public class GiftCardsViewModel extends AndroidViewModel {
     }
     private MutableLiveData<BrandsResponse> giftCardsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BrandsResponse> giftCardDetailsMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<TransferFeeResponse> transferFeeMutableLiveData = new MutableLiveData<>();
-
 
     public MutableLiveData<BrandsResponse> getGiftCardsMutableLiveData() {
         return giftCardsMutableLiveData;
@@ -107,38 +105,4 @@ public class GiftCardsViewModel extends AndroidViewModel {
         }
     }
 
-    public void getProcessingFee(TransferFeeRequest request) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TransferFeeResponse> mCall = apiService.transferFee(request);
-            mCall.enqueue(new Callback<TransferFeeResponse>() {
-                @Override
-                public void onResponse(Call<TransferFeeResponse> call, Response<TransferFeeResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            TransferFeeResponse obj = response.body();
-                            transferFeeMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<TransferFeeResponse>() {
-                            }.getType();
-                            TransferFeeResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            transferFeeMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        transferFeeMutableLiveData.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<TransferFeeResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    transferFeeMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 }

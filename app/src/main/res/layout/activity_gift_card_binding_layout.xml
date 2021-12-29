@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    tools:context=".view.GiftCardBindingLayoutActivity">
+
+    <include
+        android:id="@+id/inProgressContainer"
+        layout="@layout/activity_withdraw_gift_card_in_progress"
+        android:visibility="visible" />
+
+    <include
+        android:id="@+id/failedContainer"
+        layout="@layout/buy_token_transaction_failed"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

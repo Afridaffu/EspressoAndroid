@@ -6,179 +6,202 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/_12sdp">
-    <ScrollView
+
+    <!--    <ScrollView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:scrollbars="none">-->
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottomLL"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_23sdp"
+                android:src="@drawable/ic_in_progress_icon" />
+
+            <TextView
+                android:id="@+id/giftCardTypeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="Amazon Gift Card"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:orientation="vertical">
-                <ImageView
+                android:layout_marginTop="@dimen/_9sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/goneTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_in_progress_icon"
-                    android:layout_marginBottom="@dimen/_23sdp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_77sdp"
-                    />
+                    android:layout_marginLeft="@dimen/_67sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_9sdp"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:text="$"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:id="@+id/giftCardAmountTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="200.00"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_35sdp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/giftCardDescTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="[Gift card name] gift card sent to {first name + last \nname} at {email address}. "
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_41sdp"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Amazon Gift Card"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:textSize="@dimen/_12ssp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="Reference ID"
                     android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp"
+
                     />
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/refIDLL"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_9sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:gravity="right"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/goneTV"
+                        android:id="@+id/refIDTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_67sdp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:gravity="center"
-                        android:paddingTop="@dimen/_9sdp"
-                        android:paddingBottom="@dimen/_7sdp"
-                        android:text="$"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_32ssp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="200.00"
-                        android:textSize="@dimen/_35sdp"
-                        android:textColor="@color/primary_black"
-                        />
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="[Gift card name] gift card sent to {first name + last \nname} at {email address}. "
-                    android:textSize="@dimen/_11ssp"
-                    android:gravity="center"
-                    android:textColor="@color/primary_black"
-                    android:fontFamily="@font/opensans_regular"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_41sdp"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reference ID"
-                        android:textSize="@dimen/_11ssp"
-                        android:textColor="@color/primary_black"
-                        android:fontFamily="@font/opensans_regular"
-
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="SND34239274DANN"
                         android:fontFamily="@font/opensans_semibold"
-                        android:textSize="@dimen/_11ssp"
                         android:gravity="right"
+                        android:text="SND34239274DANN"
                         android:textColor="@color/black"
-                        android:layout_marginLeft="@dimen/_61sdp"
-                        android:layout_weight="1"
-                        />
+                        android:textSize="@dimen/_11ssp" />
+
                     <ImageView
                         android:layout_width="@dimen/_9sdp"
                         android:layout_height="@dimen/_11sdp"
-                        android:src="@drawable/ic_copy"
-                        android:layout_marginLeft="@dimen/_8sdp"
                         android:layout_gravity="center"
-                        />
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:src="@drawable/ic_copy" />
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_70sdp"
-                    android:text="We are processing your request, please allow a few \nminutes for your [gift car name] gift card to be "
-                    android:textSize="@dimen/_10sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:textColor="@color/primary_black"
-                    android:gravity="left"
-                    android:paddingLeft="@dimen/_10sdp"
-                    />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="delivered."
-                        android:textSize="@dimen/_10sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@color/primary_black"
-                        android:paddingLeft="@dimen/_10sdp"
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/learn"
-                        android:textSize="@dimen/_10sdp"
-                        android:textColor="@color/teal_200"
-                        android:gravity="left"
-                        android:layout_weight="1"
-                        />
-                </LinearLayout>
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_15sdp">
+
+            <TextView
+                android:id="@+id/gcProcessingTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="left"
+                android:paddingLeft="@dimen/_10sdp"
+                android:text="We are processing your request, please allow a few \nminutes for your [gift car name] gift card to be "
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_10sdp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/nextCV"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:text="delivered."
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_10sdp" />
+
+                <TextView
+                    android:id="@+id/learnMoreTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="#00a6a2"
-                    android:gravity="center"
-                    app:cardCornerRadius="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_14sdp"
-                    android:layout_marginBottom="@dimen/_32sdp"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Done"
-                        android:fontFamily="@font/opensans_bold"
-                        android:textColor="@color/white"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:paddingTop="@dimen/_13sdp"
-                        android:paddingBottom="@dimen/_13sdp"
-                        />
-                </androidx.cardview.widget.CardView>
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/learn"
+                    android:textColor="@color/teal_200"
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/doneCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_32sdp"
+                android:gravity="center"
+                app:cardBackgroundColor="#00a6a2"
+                app:cardCornerRadius="@dimen/_20sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/_13sdp"
+                    android:paddingBottom="@dimen/_13sdp"
+                    android:text="Done"
+                    android:textColor="@color/white" />
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+    </RelativeLayout>
+    <!--    </ScrollView>-->
 </LinearLayout>
