@@ -301,11 +301,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+                        } else {
+                            Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -315,12 +319,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
             cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
+                        } else {
+                            Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -501,8 +510,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
                         Intent shareIntent = Intent.createChooser(sendIntent, null);
                         startActivity(shareIntent);
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }

@@ -11,6 +11,6 @@ public class NoTokenAvailable extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_no_token_available);
+        setContentView(R.layout.withdraw_no_token_available);
     }
 }

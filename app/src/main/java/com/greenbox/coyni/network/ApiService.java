@@ -14,6 +14,7 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
@@ -290,4 +291,9 @@ public interface ApiService {
     @POST("api/v2/node/buyTokens")
     Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
 
+    @GET("api/v2/giftcard/giftCardBrands")
+    Call<BrandsResponse> getGiftCards();
+
+    @GET("api/v2/giftcard/giftCardBrandItems")
+    Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
 }

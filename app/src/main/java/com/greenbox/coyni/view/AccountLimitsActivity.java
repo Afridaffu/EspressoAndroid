@@ -49,138 +49,142 @@ public class AccountLimitsActivity extends AppCompatActivity {
 
     public void initObserver(){
 
-        accountLimitsViewModel.getUserAccountLimitsMutableLiveData().observe(this, new Observer<AccountLimits>() {
-            @Override
-            public void onChanged(AccountLimits accountLimits) {
+        try {
+            accountLimitsViewModel.getUserAccountLimitsMutableLiveData().observe(this, new Observer<AccountLimits>() {
+                @Override
+                public void onChanged(AccountLimits accountLimits) {
 
-                if (accountLimits.getStatus().equalsIgnoreCase("SUCCESS")){
+                    if (accountLimits.getStatus().equalsIgnoreCase("SUCCESS")){
 
-                     //Pay Request Limits
-                        if (accountLimits.getData().getPayRequestTokenType()==1){
-                            payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Day");
+                         //Pay Request Limits
+                            if (accountLimits.getData().getPayRequestTokenType()==1){
+                                payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Day");
+                            }
+                            else
+                            if (accountLimits.getData().getPayRequestTokenType()==2){
+                                payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Week");
+                            }
+                            else
+                            if (accountLimits.getData().getPayRequestTokenType()==3){
+                                payRequestTranLimit.setText("No Limit");
+                            }
+                            else
+                            if (accountLimits.getData().getPayRequestTokenType()==4){
+                                payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Transaction");
+                            }
+
+
+                        // Buy Token Bank Limit
+                        if (accountLimits.getData().getBuyTokenBankAccountType()==1){
+                            buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Day");
                         }
                         else
-                        if (accountLimits.getData().getPayRequestTokenType()==2){
-                            payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Week");
+                        if (accountLimits.getData().getBuyTokenBankAccountType()==2){
+                            buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Week");
                         }
                         else
-                        if (accountLimits.getData().getPayRequestTokenType()==3){
-                            payRequestTranLimit.setText("No Limit");
+                        if (accountLimits.getData().getBuyTokenBankAccountType()==3){
+                            buyTokenBankLimit.setText("No Limit");
                         }
                         else
-                        if (accountLimits.getData().getPayRequestTokenType()==4){
-                            payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Transaction");
+                        if (accountLimits.getData().getBuyTokenBankAccountType()==4){
+                            buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
                         }
 
 
-                    // Buy Token Bank Limit
-                    if (accountLimits.getData().getBuyTokenBankAccountType()==1){
-                        buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Day");
-                    }
-                    else
-                    if (accountLimits.getData().getBuyTokenBankAccountType()==2){
-                        buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Week");
-                    }
-                    else
-                    if (accountLimits.getData().getBuyTokenBankAccountType()==3){
-                        buyTokenBankLimit.setText("No Limit");
-                    }
-                    else
-                    if (accountLimits.getData().getBuyTokenBankAccountType()==4){
-                        buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
+
+                        // Buy Token Debit Limit
+                        if (accountLimits.getData().getBuyTokenCardType()==1){
+                            buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Day");
+                        }
+                        else
+                        if (accountLimits.getData().getBuyTokenCardType()==2){
+                            buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Week");
+                        }
+                        else
+                        if (accountLimits.getData().getBuyTokenCardType()==3){
+                            buyTokenDebitcardLimit.setText("No Limit");
+                        }
+                        else
+                        if (accountLimits.getData().getBuyTokenCardType()==4){
+                            buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Transaction");
+                        }
+
                     }
 
 
-
-                    // Buy Token Debit Limit
+                    // Buy Token Credit Limit
                     if (accountLimits.getData().getBuyTokenCardType()==1){
-                        buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Day");
+                        buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Day");
                     }
                     else
                     if (accountLimits.getData().getBuyTokenCardType()==2){
-                        buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Week");
+                        buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Week");
                     }
                     else
                     if (accountLimits.getData().getBuyTokenCardType()==3){
-                        buyTokenDebitcardLimit.setText("No Limit");
+                        buyTokenCreditcardLimit.setText("No Limit");
                     }
                     else
                     if (accountLimits.getData().getBuyTokenCardType()==4){
-                        buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Transaction");
+                        buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Transaction");
+                    }
+
+                    // Withdraw Token Bank Limit
+                    if (accountLimits.getData().getWithdrawsBankAccountType()==1){
+                        withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Day");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsBankAccountType()==2){
+                        withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Week");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsBankAccountType()==3){
+                        withdrawTokenBankLimit.setText("No Limit");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsBankAccountType()==4){
+                        withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Transaction");
+                    }
+
+                    // Withdraw Token Instant Limit
+                    if (accountLimits.getData().getWithdrawsInstantPayType()==1){
+                        withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Day");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsInstantPayType()==2){
+                        withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Week");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsInstantPayType()==3){
+                        withdrawTokenInstantLimit.setText("No Limit");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsInstantPayType()==4){
+                        withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Transaction");
+                    }
+
+                    // Withdraw Token GiftCard Limit
+                    if (accountLimits.getData().getWithdrawsGiftCardType()==1){
+                        withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Day");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsGiftCardType()==2){
+                        withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Week");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsGiftCardType()==3){
+                        withdrawTokenGiftcardLimit.setText("No Limit");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsGiftCardType()==4){
+                        withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Transaction");
                     }
 
                 }
-
-
-                // Buy Token Credit Limit
-                if (accountLimits.getData().getBuyTokenCardType()==1){
-                    buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Day");
-                }
-                else
-                if (accountLimits.getData().getBuyTokenCardType()==2){
-                    buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Week");
-                }
-                else
-                if (accountLimits.getData().getBuyTokenCardType()==3){
-                    buyTokenCreditcardLimit.setText("No Limit");
-                }
-                else
-                if (accountLimits.getData().getBuyTokenCardType()==4){
-                    buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Transaction");
-                }
-
-                // Withdraw Token Bank Limit
-                if (accountLimits.getData().getWithdrawsBankAccountType()==1){
-                    withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Day");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsBankAccountType()==2){
-                    withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Week");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsBankAccountType()==3){
-                    withdrawTokenBankLimit.setText("No Limit");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsBankAccountType()==4){
-                    withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Transaction");
-                }
-
-                // Withdraw Token Instant Limit
-                if (accountLimits.getData().getWithdrawsInstantPayType()==1){
-                    withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Day");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsInstantPayType()==2){
-                    withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Week");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsInstantPayType()==3){
-                    withdrawTokenInstantLimit.setText("No Limit");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsInstantPayType()==4){
-                    withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Transaction");
-                }
-
-                // Withdraw Token GiftCard Limit
-                if (accountLimits.getData().getWithdrawsGiftCardType()==1){
-                    withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Day");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsGiftCardType()==2){
-                    withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Week");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsGiftCardType()==3){
-                    withdrawTokenGiftcardLimit.setText("No Limit");
-                }
-                else
-                if (accountLimits.getData().getWithdrawsGiftCardType()==4){
-                    withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Transaction");
-                }
-
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

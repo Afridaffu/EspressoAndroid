@@ -133,14 +133,18 @@ public class DashboardActivity extends AppCompatActivity {
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                    try {
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            showQuickAction(DashboardActivity.this);
+                        } else {
+                            Utils.showCustomToast(DashboardActivity.this, "Please complete your Identity Verification process.", 0, "");
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        showQuickAction(DashboardActivity.this);
-                    } else {
-                        Utils.showCustomToast(DashboardActivity.this, "Please complete your Identity Verification process.", 0, "");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -564,7 +568,6 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void cryptoAssets() {
@@ -789,6 +792,8 @@ public class DashboardActivity extends AppCompatActivity {
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
                 dialog.dismiss();
+                Intent i = new Intent(context, WithdrawPaymentMethodsActivity.class);
+                context.startActivity(i);
             }
         });
 

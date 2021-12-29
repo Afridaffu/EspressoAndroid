@@ -50,7 +50,7 @@
                 android:layout_height="@dimen/_27sdp"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/_3sdp"
-                android:background="@drawable/ic_pin_circle_logo"
+                android:background="@drawable/ic_outline_circle"
                 android:gravity="center">
 
                 <View
