@@ -3,26 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="435dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@drawable/roundeddialog"
     tools:context=".view.IdentityVerificationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:layout_height="@dimen/_44sdp"
+
         android:orientation="vertical"
         android:paddingBottom="30dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_80sdp"
+        <View
+            android:layout_width="@dimen/_55sdp"
             android:layout_height="@dimen/_3sdp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_15sdp"
             app:cardBackgroundColor="@color/primary_color"
-            app:cardCornerRadius="@dimen/_1sdp"
-            android:background="@color/primary_color"
+            android:background="@drawable/button_background"
             />
 
     </LinearLayout>
@@ -35,6 +34,7 @@
         android:text="@string/contentidtype"
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp"
+        android:layout_marginBottom="@dimen/_14sdp"
         />
 
     <LinearLayout
@@ -123,7 +123,7 @@
                 android:text="@string/pptext"
                 android:textColor="@color/primary_black"
 
-                android:textSize="@dimen/_16ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <ImageView
                 android:id="@+id/rightarrowbtnpp"
@@ -148,10 +148,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="32dp"
+        android:paddingLeft="@dimen/_21sdp"
 
-        android:paddingRight="32dp"
-        android:paddingBottom="20dp">
+        android:paddingRight="@dimen/_21sdp"
+        android:paddingBottom="@dimen/_20sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,14 +170,14 @@
                 android:id="@+id/sictxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/sic"
                 android:textColor="@color/primary_black"
 
-                android:textSize="@dimen/_16ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <ImageView
                 android:id="@+id/rightarrowbtnsic"
@@ -193,19 +193,19 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="1.4dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginRight="@dimen/_21sdp"
 
         android:background="@color/viewcolor" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="@dimen/_48sdp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="18dp"
             android:orientation="horizontal" />

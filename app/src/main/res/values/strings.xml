@@ -7,23 +7,25 @@
     <string name="password_strength_very_strong">Very Strong</string>
     <string name="emailotpmsg">We have sent you a 6-digit code sent to the register email address: </string>
 
-
     <string name="remembertxt">   Remember Me</string>
     <string name="forgotpwdtxt">Forgot Password</string>
     <string name="retrievemail">Retrieve Email</string>
     <string name="epincorrecttext">Email or password is incorrect</string>
-    <string name="epincorrectdescri">Either your email or password is incorrect. please try again, or use Forgot password and retrieve email.</string>
+    <string name="epincorrectdescri">Either your email or password is incorrect. Please try again, or use forgot password and retrieve email.</string>
     <string name="faceidnotavaitxt">Face ID Not available</string>
     <string name="faceidnotavaidescri">Please Log in and go to your profile setting to set up the Face ID.</string>
+    <string name="touchidnotavaidescri">Please Log in and go to your profile setting to set up the Touch ID.</string>
+    <string name="faceiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Face ID.</string>
+    <string name="touchiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="chpwdmsg">Look like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
+    <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
 
-    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. please enter the\n information below.</string>
+    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. Please enter the\n information below.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="processing">Processing…</string>
@@ -37,7 +39,7 @@
 
 
     <string name="cu_profile_name">Jonathan Joestar</string>
-    <string name="accountid">Account ID M-1234</string>
+    <string name="accountid">Account ID </string>
     <string name="status_unverified">Account Status: </string>
     <string name="unveri">Unverified</string>
     <string name="cp_almost">You’re almost there!</string>
@@ -53,6 +55,7 @@
     <string name="security">Security</string>
     <string name="security_resetpin">"Reset PIN Code "</string>
     <string name="security_faceid">Face ID Setting</string>
+    <string name="security_touchid">Touch ID Setting</string>
     <string name="security_changepass">Change Password</string>
     <string name="faceidsetuptxt">Set Up Face ID</string>
     <string name="faceidsetup">Enable Face ID to Use face recognition to complete payments quickly and securely.</string>
@@ -76,14 +79,14 @@
     <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
     <string name="city">City</string>
     <string name="state">State</string>
-    <string name="zip">Zipcode</string>
+    <string name="zip">Zip Code</string>
     <string name="country">Country</string>
     <string name="contentuploadidsuccess">Uploaded Driver’s License</string>
     <string name="mailingaddresshint">Street Address</string>
     <string name="mailingaddresshint2">Apt#, Suit, Floor</string>
     <string name="statehint">State</string>
     <string name="cityhint">City</string>
-    <string name="ziphint">Zipcode</string>
+    <string name="ziphint">Zip Code</string>
     <string name="countryhint">United States</string>
 
     <string name="contentidtype">Choose ID Type</string>
@@ -106,7 +109,7 @@
 
     <string name="iv_failed">Identity Verification Failed</string>
     <string name="iv_failedcontent">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
-    <string name="iv_failedcontentextention"> If you need any help Please</string>
+    <string name="iv_failedcontentextention"> If you need any help please</string>
     <string name="iv_failedcontactex"><u>Contact Us</u></string>
 
     <string name="exit">Exit</string>
@@ -115,10 +118,10 @@
     <string name="daylimittext">250,000.00/Day</string>
     <string name="bebit_card">Debit Card </string>
     <string name="credit_card">Credit Card </string>
-    <string name="withdraw">Withdraw</string>
+    <string name="withdraw">Withdraw (CYN)</string>
     <string name="instant">Instant Pay</string>
     <string name="giftcard">Gift Card</string>
-    <string name="buytoken">Buy Tokens</string>
+    <string name="buytoken">Buy Tokens (CYN)</string>
     <string name="ok">OK</string>
     <string name="create_new_password">Create New Password</string>
     <string name="new_password">New Password</string>
@@ -133,8 +136,57 @@
     <string name="forgot_content">Before we can reset your password, we will \nneed to verify your identity.\nPlease enter the email register with your\naccount.</string>
     <string name="email">Email</string>
     <string name="retry_create_account">Retry Create Account</string>
-    <string name="retry_account">Error: Look like we are having an issue with \nyour OTP request, please retry again later.</string>
+    <string name="retry_account">Error: Looks like we are having an issue with \nyour OTP request, please retry again later.</string>
     <string name="try_again">Try Again</string>
     <string name="qr_code">qr_code</string>
+    <string name="user_details">User Details</string>
+    <string name="us_email">Email</string>
+    <string name="emailid">Jonathanjostar@gmail.com</string>
+    <string name="user_phonenumber">Phone Number</string>
+    <string name="user_ph">(661) 726-0369</string>
+    <string name="user_address">3131 Camino Del Rio, San Diego,\nCA, 92108</string>
+    <string name="user_add">Address</string>
+    <string name="cp_agreements">Agreements</string>
+    <string name="cpactive_agreements">Active Agreements</string>
+    <string name="privacyv202">Privacy Policy v2.0.2</string>
+    <string name="tos">Terms of Service v2.3.3</string>
+    <string name="usdcurrency">USD</string>
+    <string name="pastagree">Past Agreements</string>
+    <string name="contact_us"><u>Contact Us</u></string>
+    <string name="spannable_text"><![CDATA[By clicking next, you agree to Term of Service & Privacy Policy]]></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="learn_more"><u>Learn more</u></string>
+    <string name="instant_pay"><b>Instant Pay:</b>Withdrawing money to an Instant Pay bank account uses your debit card to facilitate the process. This typically takes about 30 seconds to process, but can take up to 30 minutes depending on your bank. Most, but not all banks support Instant Pay</string>
+    <string name="gift_card"><b>Gift Cards:</b> Purchasing a gift card with your coyni tokens typically takes about 1 minute to process the request and to send out the email that contains the gift card.</string>
+    <string name="bank_acount"><b>Bank Accounts:</b> All Bank account transactions typically take up to 3 business days to process.</string>
+    <string name="learn_more1"> <u>Learn More</u></string>
+    <string name="learn"><u>Learn More</u></string>
+    <string name="privay_policy"><u>Privay Policy</u></string>
+
+    <string name="EST">Eastern (EST)</string>
+    <string name="CST">Central (CST)</string>
+    <string name="MST">Mountain (MST)</string>
+    <string name="PST">Pacific (PST)</string>
+    <string name="AST">Alaskan (AST)</string>
+    <string name="HST">Hawaii (HST)</string>
+    <string name="set_up_face_id">Set Up Face ID</string>
+    <string name="enable_face_message">Enable Face ID to use face recognition to complete payments quickly and securely.</string>
+    <string name="set_up_touch_id">Set Up Touch ID</string>
+    <string name="enable_touch_message">Enable Touch ID to use touch recognition to complete payments quickly and securely.</string>
+    <string name="error_code">117004</string>
+    <string name="bank_error_code">117007</string>
+    <string name="view_all"><u>View all</u></string>
+    <string name="view_less"><u>View less</u></string>
+    <string name="bank_exhausthead">Too Many Bank Accounts</string>
+    <string name="bank_exhaust">There is an account limit of 4 total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.</string>
+
+    <string name="currency">CYN</string>
+    <string name="reference_id_hyper"><u>[Reference ID (hyper</u></string>
+    <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
+
+    <string name="maxlength">8</string>
+    <string name="maxlendecimal">13</string>
+
 
 </resources>

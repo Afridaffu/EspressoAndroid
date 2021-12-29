@@ -1,5 +1,6 @@
 package com.greenbox.coyni.utils.keyboards;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -9,106 +10,125 @@ import android.view.View;
 import android.view.inputmethod.InputConnection;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.BuyTokenActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 
 public class CustomKeyboard extends LinearLayout implements View.OnClickListener {
 
-    private TextView keyOne,keyTwo,keyThree,keyFour,keyFive,keySix,keySeven,keyEight,keyNine,keyZero,keyDot,keyActionText;
-    private LinearLayout keyBack,keyAction;
-    private SparseArray<String> keyValues=new SparseArray<>();
+    private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText;
+    private LinearLayout keyBack, keyAction;
+    private SparseArray<String> keyValues = new SparseArray<>();
     InputConnection inputConnection;
-    public CustomKeyboard(Context context){
-        this(context,null,0);
+    Context mContext;
+    String strScreen = "";
+    String enteredText = "";
+
+    public CustomKeyboard(Context context) {
+        this(context, null, 0);
 
     }
 
-    public CustomKeyboard(Context context, AttributeSet attrs){
-        this(context,attrs,0);
+    public CustomKeyboard(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
 
     }
 
-    public CustomKeyboard(Context context, AttributeSet attrs, int defStyleattr){
-        super(context,attrs,defStyleattr);
-        init(context,attrs);
+    public CustomKeyboard(Context context, AttributeSet attrs, int defStyleattr) {
+        super(context, attrs, defStyleattr);
+        init(context, attrs);
 
     }
 
-    private void init(Context context,AttributeSet attributeSet){
-        LayoutInflater.from(context).inflate(R.layout.activity_custom_keyboard,this,true);
-        keyOne=findViewById(R.id.keyOneTV);
+    private void init(Context context, AttributeSet attributeSet) {
+        LayoutInflater.from(context).inflate(R.layout.activity_custom_keyboard, this, true);
+        mContext = context;
+        keyOne = findViewById(R.id.keyOneTV);
         keyOne.setOnClickListener(this);
 
-        keyTwo=findViewById(R.id.keyTwoTV);
+        keyTwo = findViewById(R.id.keyTwoTV);
         keyTwo.setOnClickListener(this);
 
-        keyThree=findViewById(R.id.keyThreeTV);
+        keyThree = findViewById(R.id.keyThreeTV);
         keyThree.setOnClickListener(this);
 
-        keyFour=findViewById(R.id.keyFourTV);
+        keyFour = findViewById(R.id.keyFourTV);
         keyFour.setOnClickListener(this);
 
-        keyFive=findViewById(R.id.keyFiveTV);
+        keyFive = findViewById(R.id.keyFiveTV);
         keyFive.setOnClickListener(this);
 
-        keySix=findViewById(R.id.keySixTV);
+        keySix = findViewById(R.id.keySixTV);
         keySix.setOnClickListener(this);
 
-        keySeven=findViewById(R.id.keySevenTV);
+        keySeven = findViewById(R.id.keySevenTV);
         keySeven.setOnClickListener(this);
 
-        keyEight=findViewById(R.id.keyEightTV);
+        keyEight = findViewById(R.id.keyEightTV);
         keyEight.setOnClickListener(this);
 
-        keyNine=findViewById(R.id.keyNineTV);
+        keyNine = findViewById(R.id.keyNineTV);
         keyNine.setOnClickListener(this);
 
-        keyZero=findViewById(R.id.keyZeroTV);
+        keyZero = findViewById(R.id.keyZeroTV);
         keyZero.setOnClickListener(this);
 
-        keyDot=findViewById(R.id.keyDotTV);
+        keyDot = findViewById(R.id.keyDotTV);
         keyDot.setOnClickListener(this);
 
-        keyBack=findViewById(R.id.keyBackLL);
+        keyBack = findViewById(R.id.keyBackLL);
         keyBack.setOnClickListener(this);
 
-        keyAction=findViewById(R.id.keyActionLL);
+        keyAction = findViewById(R.id.keyActionLL);
         keyAction.setOnClickListener(this);
 
-        keyActionText=findViewById(R.id.keyActionTV);
+        keyActionText = findViewById(R.id.keyActionTV);
 
-        keyValues.put(R.id.keyZeroTV,"0");
-        keyValues.put(R.id.keyOneTV,"1");
-        keyValues.put(R.id.keyTwoTV,"2");
-        keyValues.put(R.id.keyThreeTV,"3");
-        keyValues.put(R.id.keyFourTV,"4");
-        keyValues.put(R.id.keyFiveTV,"5");
-        keyValues.put(R.id.keySixTV,"6");
-        keyValues.put(R.id.keySevenTV,"7");
-        keyValues.put(R.id.keyEightTV,"8");
-        keyValues.put(R.id.keyNineTV,"9");
-        keyValues.put(R.id.keyDotTV,".");
-        keyValues.put(R.id.keyActionLL,"");
+        keyValues.put(R.id.keyZeroTV, "0");
+        keyValues.put(R.id.keyOneTV, "1");
+        keyValues.put(R.id.keyTwoTV, "2");
+        keyValues.put(R.id.keyThreeTV, "3");
+        keyValues.put(R.id.keyFourTV, "4");
+        keyValues.put(R.id.keyFiveTV, "5");
+        keyValues.put(R.id.keySixTV, "6");
+        keyValues.put(R.id.keySevenTV, "7");
+        keyValues.put(R.id.keyEightTV, "8");
+        keyValues.put(R.id.keyNineTV, "9");
+        keyValues.put(R.id.keyDotTV, ".");
+        keyValues.put(R.id.keyActionLL, "");
 
 
     }
+
     @Override
     public void onClick(View view) {
-        if (inputConnection == null) {
-            CharSequence selectedText = inputConnection.getSelectedText(0);
-            if (TextUtils.isEmpty(selectedText)) {
-                inputConnection.deleteSurroundingText(1, 0);
+        try {
+            if (inputConnection == null) {
+                CharSequence selectedText = inputConnection.getSelectedText(0);
+                if (TextUtils.isEmpty(selectedText)) {
+                    inputConnection.deleteSurroundingText(1, 0);
 
+                } else {
+                    inputConnection.commitText("", 1);
+                }
             } else {
-                inputConnection.commitText("", 1);
+                String value = keyValues.get(view.getId());
+//                inputConnection.commitText(value, 1);
+                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
+
+                } else {
+                    enteredText = enteredText + value;
+                    inputConnection.commitText(value, 1);
+                }
             }
-        } else {
-            String value = keyValues.get(view.getId());
-            try{
-                inputConnection.commitText(value, 1);
-            }catch (Exception e){
-//                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         keyBack.setOnClickListener(new OnClickListener() {
@@ -116,22 +136,76 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
             public void onClick(View view) {
                 String chatSet = (String) inputConnection.getSelectedText(0);
                 try {
-                    inputConnection.deleteSurroundingText(1,0);
-                }catch (Exception e){
+                    inputConnection.deleteSurroundingText(1, 0);
+                    enteredText = enteredText.substring(0, enteredText.length() - 1);
+                } catch (Exception e) {
 //                    e.printStackTrace();
                 }
             }
         });
+        keyAction.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    switch (strScreen) {
+                        case "addcard":
+                            AddCardActivity.addCardActivity.verifyClick();
+                            break;
+                        case "cvv":
+                            BuyTokenPaymentMethodsActivity.buyTokenPaymentMethodsActivity.okClick();
+                            break;
+                        case "buy":
+                            BuyTokenActivity.buyTokenActivity.buyTokenClick();
+                            break;
+                        case "buycvv":
+                            BuyTokenActivity.buyTokenActivity.okClick();
+                            break;
+//                        case "wpmcvv":
+//                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wpmcvv");
+//                            break;
+//                        case "wntcvv":
+//                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wntcvv");
+//                            break;
+                        case "withdrawcvv":
+                            WithdrawTokenActivity.withdrawTokenActivity.okClick();
+                            break;
+                        case "withdraw":
+                            WithdrawTokenActivity.withdrawTokenActivity.withdrawTokenClick();
+                            break;
+                    }
 
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
     }
 
-    public void setInputConnection(InputConnection ic){
-        inputConnection=ic;
+    public void setInputConnection(InputConnection ic) {
+        inputConnection = ic;
     }
 
-    public void setKeyAction(String actionName){
+    public void setKeyAction(String actionName) {
         keyActionText.setText(actionName);
     }
 
+
+    public void setScreenName(String screenName) {
+        strScreen = screenName;
+    }
+
+    public void enableButton() {
+        keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_bg);
+        keyAction.setEnabled(true);
+    }
+
+    public void disableButton() {
+        keyAction.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg);
+        keyAction.setEnabled(false);
+    }
+
+    public void clearData() {
+        enteredText = "";
+    }
 }

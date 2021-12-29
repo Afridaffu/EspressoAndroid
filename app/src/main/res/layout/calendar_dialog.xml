@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/filter_top_radius"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/_20sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_20sdp"
+    android:paddingBottom="@dimen/_20sdp"
+    android:theme="@style/Theme.Coyni">
+
+    <View
+        android:layout_width="@dimen/_43sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_18sdp"
+        android:background="@drawable/button_background"
+        android:gravity="center" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_15sdp">
+
+        <ImageView
+            android:id="@+id/closeIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/doneTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Done"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rangeDateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="@color/xdark_gray"
+        android:textSize="@dimen/_11ssp" />
+
+    <com.andrewjapar.rangedatepicker.CalendarPicker
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:scrollbarStyle="outsideOverlay" />
+</LinearLayout>

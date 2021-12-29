@@ -3,18 +3,24 @@ package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,9 +36,13 @@ import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -42,7 +52,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
-    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL;
+    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
+    MyApplication objMyApplication;
+    SQLiteDatabase mydatabase;
+    Cursor dsDontRemind;
+    Boolean isDontRemind = false;
+    String resetPINValue = "ENTER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +82,24 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
                     break;
             }
+            String strScreen = getIntent().getStringExtra("screen");
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            SetDontRemind();
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        try {
+//            clearControls();
+//            passcode = "";
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     @Override
@@ -89,7 +117,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setVisibility(View.GONE);
                     TYPE = "CHOOSE";
                     tvHead.setText("Choose your PIN");
-                    clearPassCode();
+                    clearControls();
                     passcode = "";
                     break;
             }
@@ -114,6 +142,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             circleFiveLL = findViewById(R.id.circleFiveLL);
             circleSixLL = findViewById(R.id.circleSixLL);
 
+            pinLL = findViewById(R.id.pinLL);
+
             keyZeroTV = (TextView) findViewById(R.id.keyZeroTV);
             keyOneTV = (TextView) findViewById(R.id.keyOneTV);
             keyTwoTV = (TextView) findViewById(R.id.keyTwoTV);
@@ -128,7 +158,14 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             tvForgot = (TextView) findViewById(R.id.tvForgot);
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
-
+            objMyApplication = (MyApplication) getApplicationContext();
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
+                    getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
+                    || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN"))) {
+                imgBack.setImageResource(R.drawable.ic_close);
+            } else {
+                imgBack.setImageResource(R.drawable.ic_back);
+            }
             keyZeroTV.setOnClickListener(this);
             keyOneTV.setOnClickListener(this);
             keyTwoTV.setOnClickListener(this);
@@ -148,33 +185,197 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void initObserver() {
-
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override
             public void onChanged(ValidateResponse validateResponse) {
-                dialog.dismiss();
-                if (validateResponse != null) {
-                    if (!validateResponse.getStatus().toLowerCase().equals("error")) {
-                        String strScreen = "";
-                        if (getIntent().getStringExtra("screen") != null) {
-                            strScreen = getIntent().getStringExtra("screen");
+                try {
+                    //dialog.dismiss();
+                    if (validateResponse != null) {
+                        if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                            shakeAnimateUpDown();//new
+//                            String strScreen = "";
+//                            if (getIntent().getStringExtra("screen") != null) {
+//                                strScreen = getIntent().getStringExtra("screen");
+//                            }
+//                            switch (strScreen) {
+//                                case "loginExpiry":
+//                                    Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+//                                    i.putExtra("screen", getIntent().getStringExtra("screen"));
+//                                    startActivity(i);
+//                                    break;
+//                                case "login":
+////                                    if (objMyApplication.getBiometric() && (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled())) {
+//                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+//                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+//                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                        startActivity(d);
+//                                    } else {
+//                                        if (!isDontRemind) {
+//                                            if (Utils.checkBiometric(PINActivity.this)) {
+//                                                if (Utils.checkAuthentication(PINActivity.this)) {
+//                                                    if (Utils.isFingerPrint(PINActivity.this)) {
+//                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                                .putExtra("ENABLE_TYPE", "TOUCH")
+//                                                                .putExtra("screen", strScreen));
+//                                                    } else {
+//                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                                .putExtra("ENABLE_TYPE", "FACE")
+//                                                                .putExtra("screen", strScreen));
+//                                                    }
+//                                                } else {
+//                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                            .putExtra("ENABLE_TYPE", "SUCCESS")
+//                                                            .putExtra("screen", strScreen));
+//                                                }
+//                                            } else {
+//                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+//                                                        .putExtra("ENABLE_TYPE", "TOUCH")
+//                                                        .putExtra("screen", strScreen));
+//                                            }
+//                                        } else {
+//                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+//                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                            startActivity(d);
+//                                        }
+//                                    }
+//                                    break;
+//                                case "UserDetails":
+//                                    Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+//                                    startActivity(ee);
+//                                    finish();
+//                                    break;
+//                                case "ChangePassword":
+//                                    Intent cp=new Intent(PINActivity.this,ConfirmPasswordActivity.class);
+//                                    startActivity(cp);
+//                                    finish();
+//                                    break;
+//                                case "EditPhone":
+//                                    Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
+//                                    ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
+//                                    startActivity(ep);
+//                                    finish();
+//                                    break;
+//                                case "EditAddress":
+//                                    Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
+//                                    startActivity(ea);
+//                                    finish();
+//                                    break;
+//                                case "ResetPIN":
+//                                    if(resetPINValue.equals("CHOOSE")){
+//                                        tvHead.setText("Choose your PIN");
+//                                        tvForgot.setVisibility(View.GONE);
+//                                        passcode = "";
+//                                        resetPINValue = "CONFIRM";
+//                                        clearPassCode();
+//                                        TYPE = "CHOOSE";
+//                                    }else{
+//                                        tvHead.setText("Confirm your PIN");
+//                                        tvForgot.setVisibility(View.GONE);
+//                                        passcode = "";
+//                                    }
+//                                    break;
+//                            }
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        String strScreen = "";
+                                        if (getIntent().getStringExtra("screen") != null) {
+                                            strScreen = getIntent().getStringExtra("screen");
+                                        }
+                                        switch (strScreen) {
+                                            case "loginExpiry":
+                                                Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+                                                i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                                startActivity(i);
+                                                break;
+                                            case "login":
+                                                if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+                                                    Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(d);
+                                                } else {
+                                                    if (!isDontRemind) {
+                                                        if (Utils.checkBiometric(PINActivity.this)) {
+                                                            if (Utils.checkAuthentication(PINActivity.this)) {
+                                                                if (Utils.isFingerPrint(PINActivity.this)) {
+                                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                            .putExtra("screen", strScreen));
+                                                                } else {
+                                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                            .putExtra("ENABLE_TYPE", "FACE")
+                                                                            .putExtra("screen", strScreen));
+                                                                }
+                                                            } else {
+                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                        .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                        .putExtra("screen", strScreen));
+                                                            }
+                                                        } else {
+                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                    .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                    .putExtra("screen", strScreen));
+                                                        }
+                                                    } else {
+                                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        startActivity(d);
+                                                    }
+                                                }
+                                                break;
+                                            case "EditEmail":
+                                                Intent ee = new Intent(PINActivity.this, EditEmailActivity.class);
+                                                startActivity(ee);
+                                                finish();
+                                                break;
+                                            case "EditPhone":
+                                                Intent ep = new Intent(PINActivity.this, EditPhoneActivity.class);
+                                                ep.putExtra("OLD_PHONE", getIntent().getStringExtra("OLD_PHONE"));
+                                                startActivity(ep);
+                                                finish();
+                                                break;
+                                            case "EditAddress":
+                                                Intent ea = new Intent(PINActivity.this, EditAddressActivity.class);
+                                                startActivity(ea);
+                                                finish();
+                                                break;
+                                            case "ResetPIN":
+                                                imgBack.setImageResource(R.drawable.ic_back);
+                                                Log.e("resetPin", resetPINValue);
+                                                if (resetPINValue.equals("ENTER")) {
+                                                    tvHead.setText("Choose your PIN");
+                                                    tvForgot.setVisibility(View.GONE);
+                                                    passcode = "";
+                                                    resetPINValue = "CHOOSE";
+                                                    clearPassCode();
+                                                    TYPE = "CHOOSE";
+                                                }else if (resetPINValue.equals("CHOOSE")) {
+                                                    tvHead.setText("Confirm your PIN");
+                                                    tvForgot.setVisibility(View.GONE);
+                                                    passcode = "";
+                                                    resetPINValue = "CONFIRM";
+                                                    clearPassCode();
+                                                    TYPE = "CHOOSE";
+                                                }
+                                                break;
+                                            case "ChangePassword":
+                                                Intent cp = new Intent(PINActivity.this, ConfirmPasswordActivity.class);
+                                                startActivity(cp);
+                                                finish();
+                                                break;
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, Utils.duration);
+                        } else {
+                            setErrorPIN();
                         }
-                        switch (strScreen) {
-                            case "loginExpiry":
-                                Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
-                                i.putExtra("screen", getIntent().getStringExtra("screen"));
-                                startActivity(i);
-                                break;
-                            case "login":
-                                Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(d);
-                                break;
-                        }
-                    } else {
-                        Utils.displayAlert(validateResponse.getError().getErrorDescription(), PINActivity.this);
-                        setErrorPIN();
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -182,37 +383,75 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         coyniViewModel.getRegisterPINResponseMutableLiveData().observe(this, new Observer<PINRegisterResponse>() {
             @Override
             public void onChanged(PINRegisterResponse pinRegisterResponse) {
-                dialog.dismiss();
-                if (pinRegisterResponse != null) {
-                    Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
-                    if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
-
-                        if (Utils.checkAuthentication(PINActivity.this)) {
-                            if (Utils.isFingerPrint(PINActivity.this)) {
-                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "TOUCH"));
-                            } else {
-                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                        .putExtra("ENABLE_TYPE", "FACE"));
+                try {
+                    //dialog.dismiss();
+                    if (pinRegisterResponse != null) {
+                        Log.e("PIN Response", new Gson().toJson(pinRegisterResponse));
+                        if (!pinRegisterResponse.getStatus().toLowerCase().equals("error")) {
+                            String strScreen = "";
+                            if (getIntent().getStringExtra("screen") != null) {
+                                strScreen = getIntent().getStringExtra("screen");
                             }
-                        } else {
-                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                    .putExtra("ENABLE_TYPE", "SUCCESS"));
+                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPin")) {
+                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            PINActivity.this.startActivity(d);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                }, 2000);
+
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
+//                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
+                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            PINActivity.this.startActivity(d);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                }, 2000);
+
+
+                            } else {
+                                if (Utils.checkBiometric(PINActivity.this)) {
+                                    if (Utils.checkAuthentication(PINActivity.this)) {
+                                        if (Utils.isFingerPrint(PINActivity.this)) {
+                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                    .putExtra("ENABLE_TYPE", "TOUCH")
+                                                    .putExtra("screen", strScreen));
+                                        } else {
+                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                    .putExtra("ENABLE_TYPE", "FACE")
+                                                    .putExtra("screen", strScreen));
+                                        }
+                                    } else {
+                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                .putExtra("screen", strScreen));
+                                    }
+                                } else {
+                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                            .putExtra("screen", strScreen));
+                                }
+                            }
                         }
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-//                            if (!fingerprintManager.isHardwareDetected()) {
-//                                Log.e("Not support","Not support");
-//                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-//                                        .putExtra("ENABLE_TYPE","TOUCH"));
-//                            } else {
-//                                Log.e("Supports","Supports");
-//                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-//                                        .putExtra("ENABLE_TYPE","TOUCH"));
-//                            }
-//                        }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -288,14 +527,47 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 passNumberClear(passcode);
                 break;
             case R.id.imgBack:
-                if (TYPE.equals("CHOOSE")) {
+                if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
+                        || getIntent().getStringExtra("screen").equals("loginExpiry")
+                        || getIntent().getStringExtra("screen").equals("ChangePassword")
+                        || getIntent().getStringExtra("screen").equals("EditEmail")
+                        || getIntent().getStringExtra("screen").equals("EditPhone")
+                        || getIntent().getStringExtra("screen").equals("EditAddress"))) {
                     onBackPressed();
-                } else {
-                    tvForgot.setVisibility(View.GONE);
-                    TYPE = "CHOOSE";
-                    tvHead.setText("Choose your PIN");
-                    clearPassCode();
-                    passcode = "";
+                }else if (getIntent().getStringExtra("screen") != null &&
+                        (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
+                    Log.e("resetPin", resetPINValue);
+                    Log.e("Type", TYPE);
+                    if (resetPINValue.equals("ENTER")) {
+                        onBackPressed();
+                    }else if (resetPINValue.equals("CHOOSE")) {
+//                        tvForgot.setVisibility(View.VISIBLE);
+//                        TYPE = "ENTER";
+//                        tvHead.setText("Enter your PIN");
+//                        clearControls();
+//                        passcode = "";
+//                        resetPINValue = "ENTER";
+//                        imgBack.setImageResource(R.drawable.ic_close);
+                        onBackPressed();
+                    }else if (resetPINValue.equals("CONFIRM")) {
+                        tvForgot.setVisibility(View.GONE);
+                        TYPE = "CHOOSE";
+                        tvHead.setText("Choose your PIN");
+                        clearControls();
+                        passcode = "";
+                        imgBack.setImageResource(R.drawable.ic_back);
+                        resetPINValue = "CHOOSE";
+                    }
+                }else {
+                    if (TYPE.equals("CHOOSE")) {
+                        onBackPressed();
+                    } else {
+                        tvForgot.setVisibility(View.GONE);
+                        TYPE = "CHOOSE";
+                        tvHead.setText("Choose your PIN");
+                        clearControls();
+                        passcode = "";
+                    }
                 }
                 break;
             case R.id.tvForgot:
@@ -331,31 +603,41 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         break;
                     case 6:
                         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+
                         switch (TYPE) {
                             case "CHOOSE":
                                 strChoose = passcode;
                                 passcode = "";
                                 TYPE = "CONFIRM";
-                                tvHead.setText("Confrim your PIN");
+                                tvHead.setText("Confirm your PIN");
                                 clearPassCode();
+                                resetPINValue = "CONFIRM";
                                 break;
                             case "CONFIRM":
                                 strConfirm = passcode;
                                 if (!strChoose.equals(strConfirm)) {
-//                                    Toast.makeText(getApplication(), "PIN misMatch", Toast.LENGTH_LONG).show();
-                                    setErrorPIN();
+                                    setErrorPINMismatch(strChoose, strConfirm);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                clearControls();
+                                                passcode = "";
+                                            } catch (Exception ex) {
+                                                ex.printStackTrace();
+                                            }
+                                        }
+                                    }, 2000);
                                 } else {
-
-                                    dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
-                                    dialog.setIndeterminate(false);
-                                    dialog.setMessage("Please wait...");
-                                    dialog.getWindow().setGravity(Gravity.CENTER);
-                                    dialog.show();
-
+//                                    dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
+//                                    dialog.setIndeterminate(false);
+//                                    dialog.setMessage("Please wait...");
+//                                    dialog.getWindow().setGravity(Gravity.CENTER);
+//                                    dialog.show();
+                                    shakeAnimateUpDown();
                                     RegisterRequest registerRequest = new RegisterRequest();
                                     registerRequest.setPin(strChoose);
                                     coyniViewModel.registerCoyniPin(registerRequest);
-
                                 }
                                 break;
                             case "ENTER":
@@ -363,7 +645,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 break;
                         }
                         break;
-
                 }
             }
         } catch (Exception ex) {
@@ -375,23 +656,29 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             switch (number_list.length()) {
                 case 5:
-                    setSuccessPIN();
+                    //setSuccessPIN();
                     chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 4:
                     chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 3:
                     chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 2:
                     chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 1:
                     chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
                 case 0:
                     chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_white);
+                    circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
                     break;
 
             }
@@ -415,11 +702,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
     private void validatePIN() {
         try {
-            dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.getWindow().setGravity(Gravity.CENTER);
-            dialog.show();
+//            dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
+//            dialog.setIndeterminate(false);
+//            dialog.setMessage("Please wait...");
+//            dialog.getWindow().setGravity(Gravity.CENTER);
+//            dialog.show();
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
             coyniViewModel.validateCoyniPin(request);
@@ -429,12 +716,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     public void setErrorPIN() {
-        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
-        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
 
         chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
@@ -442,21 +729,142 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        shakeAnimateLeftRight();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    clearControls();
+                    passcode = "";
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }, 2000);
     }
 
-    public void setSuccessPIN() {
-        circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
+    public void setErrorPINMismatch(String strChoose, String strConfirm) {
+        Log.e("char", strChoose.substring(0, 1));
+        if (strChoose.substring(0, 1).equals(strConfirm.substring(0, 1))) {
+            circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
 
-        chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
-        chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+        if (strChoose.substring(1, 2).equals(strConfirm.substring(1, 2))) {
+            circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(2, 3).equals(strConfirm.substring(2, 3))) {
+            circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(3, 4).equals(strConfirm.substring(3, 4))) {
+            circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+
+        if (strChoose.substring(4, 5).equals(strConfirm.substring(4, 5))) {
+            circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        if (strChoose.substring(5, 6).equals(strConfirm.substring(5, 6))) {
+            circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
+        } else {
+            circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
+        }
+
+        shakeAnimateLeftRight();
     }
+
+    public void shakeAnimateLeftRight() {
+        pinLL.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+    }
+
+    public void shakeAnimateUpDown() {
+        pinLL.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
+    }
+
+    private void clearControls() {
+        try {
+            circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
+            clearPassCode();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void toastTimer(Dialog dialog) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(2000);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    dialog.dismiss();
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+    }
+
+    private void SetDontRemind() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
+            dsDontRemind.moveToFirst();
+            if (dsDontRemind.getCount() > 0) {
+                if (dsDontRemind.getString(1).equals("true")) {
+                    isDontRemind = true;
+                } else {
+                    isDontRemind = false;
+                }
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+            }
+        }
+    }
+
 }

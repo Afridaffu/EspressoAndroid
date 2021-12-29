@@ -1,0 +1,1248 @@
+package com.greenbox.coyni.view;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
+import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
+import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
+import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.model.withdraw.WithdrawRequest;
+import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WithdrawTokenActivity extends AppCompatActivity implements TextWatcher {
+    MyApplication objMyApplication;
+    PaymentsList selectedCard, objSelected, prevSelectedCard;
+    ImageView imgBankIcon, imgArrow, imgConvert;
+    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal;
+    RelativeLayout lyPayMethod;
+    LinearLayout lyCDetails, lyWithdrawClose, lyBDetails, lyBalance;
+    EditText etAmount;
+    CustomKeyboard ctKey;
+    PaymentMethodsResponse paymentMethodsResponse;
+    CustomerProfileViewModel customerProfileViewModel;
+    PaymentMethodsViewModel paymentMethodsViewModel;
+    BuyTokenViewModel buyTokenViewModel;
+    Dialog payDialog, prevDialog, cvvDialog;
+    TransactionLimitResponse objResponse;
+    ProgressDialog pDialog;
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "";
+    Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
+    Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0, avaBal = 0.0;
+    SignOnData signOnData;
+    float fontSize, dollarFont;
+    public static WithdrawTokenActivity withdrawTokenActivity;
+    Long mLastClickTime = 0L, bankId, cardId;
+    Boolean isUSD = false, isCYN = false, isBank = false;
+    TextInputEditText etCVV;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        try {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            setContentView(R.layout.activity_withdraw_token);
+            withdrawTokenActivity = this;
+            initialization();
+            initObserver();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable == etAmount.getEditableText()) {
+            try {
+                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
+                    etAmount.setHint("");
+                    lyBalance.setVisibility(View.VISIBLE);
+                    if (tvCYN.getVisibility() == View.VISIBLE) {
+                        isCYN = true;
+                        isUSD = false;
+                        convertCYNValue();
+                    } else {
+                        isCYN = false;
+                        isUSD = true;
+                        convertUSDValue();
+                    }
+
+                    if (editable.length() > 5) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                    } else {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                    }
+                    if (validation()) {
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
+                    }
+                } else if (editable.toString().equals(".")) {
+                    etAmount.setText("");
+                    ctKey.disableButton();
+                } else if (editable.length() == 0) {
+                    etAmount.setHint("0.00");
+                    lyBalance.setVisibility(View.GONE);
+                    cynValue = 0.0;
+                    usdValue = 0.0;
+                    cynValidation = 0.0;
+                    usdValidation = 0.0;
+                    ctKey.disableButton();
+                    tvError.setVisibility(View.INVISIBLE);
+                    ctKey.clearData();
+                } else {
+                    etAmount.setText("");
+                    cynValue = 0.0;
+                    usdValue = 0.0;
+                    cynValidation = 0.0;
+                    usdValidation = 0.0;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void initialization() {
+        try {
+            objMyApplication = (MyApplication) getApplicationContext();
+            selectedCard = objMyApplication.getSelectedCard();
+            paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+            buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
+            customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
+            paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            imgBankIcon = findViewById(R.id.imgBankIcon);
+            imgArrow = findViewById(R.id.imgArrow);
+            imgConvert = findViewById(R.id.imgConvert);
+            etRemarks = findViewById(R.id.etRemarks);
+            tvLimit = findViewById(R.id.tvLimit);
+            tvPayHead = findViewById(R.id.tvPayHead);
+            tvBankName = findViewById(R.id.tvBankName);
+            tvAccNumber = findViewById(R.id.tvAccNumber);
+            tvBAccNumber = findViewById(R.id.tvBAccNumber);
+            tvError = findViewById(R.id.tvError);
+            tvCYN = findViewById(R.id.tvCYN);
+            tvCurrency = findViewById(R.id.tvCurrency);
+            lyPayMethod = findViewById(R.id.lyPayMethod);
+            lyWithdrawClose = findViewById(R.id.lyWithdrawClose);
+            etAmount = findViewById(R.id.etAmount);
+            lyCDetails = findViewById(R.id.lyCDetails);
+            lyBDetails = findViewById(R.id.lyBDetails);
+            lyBalance = findViewById(R.id.lyBalance);
+            tvAvailableBal = findViewById(R.id.tvAvailableBal);
+            ctKey = (CustomKeyboard) findViewById(R.id.ckb);
+            ctKey.setKeyAction("Withdraw");
+            ctKey.setScreenName("withdraw");
+            InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
+            ctKey.setInputConnection(ic);
+            fontSize = etAmount.getTextSize();
+            dollarFont = tvCurrency.getTextSize();
+            etAmount.requestFocus();
+            etAmount.setShowSoftInputOnFocus(false);
+            avaBal = objMyApplication.getGBTBalance();
+            tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()) + getString(R.string.currency));
+            if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
+                strCvv = getIntent().getStringExtra("cvv");
+            }
+            bindPayMethod(selectedCard);
+            etAmount.addTextChangedListener(this);
+            etAmount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.hideSoftKeypad(WithdrawTokenActivity.this, v);
+                }
+            });
+
+            etAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        Utils.hideSoftKeypad(WithdrawTokenActivity.this, view);
+                        if (!b) {
+                            if (!etAmount.getText().toString().equals("")) {
+                                InputFilter[] FilterArray = new InputFilter[1];
+                                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                                etAmount.setFilters(FilterArray);
+                                USFormat(etAmount);
+                            }
+                        } else {
+                            InputFilter[] FilterArray = new InputFilter[1];
+                            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                            etAmount.setFilters(FilterArray);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            lyPayMethod.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        selectPayMethod();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            lyWithdrawClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+
+            etRemarks.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    displayComments();
+                }
+            });
+
+            imgConvert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (etAmount.getText().toString().trim().length() > 0) {
+                            USFormat(etAmount);
+                            if (tvCYN.getVisibility() == View.GONE) {
+                                tvCYN.setVisibility(View.VISIBLE);
+                                tvCurrency.setVisibility(View.INVISIBLE);
+                                etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                                convertUSDtoCYN();
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    lyBalance.setVisibility(View.GONE);
+                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
+                                } else {
+                                    lyBalance.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                tvCYN.setVisibility(View.GONE);
+                                tvCurrency.setVisibility(View.VISIBLE);
+                                etAmount.setGravity(Gravity.CENTER_VERTICAL);
+                                convertCYNtoUSD();
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    lyBalance.setVisibility(View.GONE);
+                                    //tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
+                                } else {
+                                    lyBalance.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            calculateFee("10");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void initObserver() {
+        buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
+            @Override
+            public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (transactionLimitResponse != null) {
+                    objResponse = transactionLimitResponse;
+                    setDailyWeekLimit(transactionLimitResponse.getData());
+                    if (etAmount.getText().toString().trim().length() > 0) {
+                        validation();
+                    }
+                }
+            }
+        });
+
+        buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
+            @Override
+            public void onChanged(TransferFeeResponse transferFeeResponse) {
+                if (transferFeeResponse != null) {
+                    objMyApplication.setTransferFeeResponse(transferFeeResponse);
+                    feeInAmount = transferFeeResponse.getData().getFeeInAmount();
+                    feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
+                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                        Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
+                        pfee = transferFeeResponse.getData().getFee();
+                        dget = pay - pfee;
+                        withdrawTokenPreview();
+                    }
+                }
+            }
+        });
+
+        buyTokenViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                try {
+                    if (apiError != null) {
+                        if (!apiError.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawTokenActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), WithdrawTokenActivity.this, "", "");
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        buyTokenViewModel.getBuyTokResponseMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+            @Override
+            public void onChanged(BuyTokenResponse buyTokenResponse) {
+                if (prevDialog != null) {
+                    prevDialog.dismiss();
+                }
+                if (buyTokenResponse != null) {
+                    if (buyTokenResponse.getStatus().trim().toLowerCase().equals("success")) {
+                        //buyTokenInProgress(buyTokenResponse.getData());
+                    }
+                }
+            }
+        });
+
+        buyTokenViewModel.getBuyTokenFailureMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+            @Override
+            public void onChanged(BuyTokenResponse buyTokenResponse) {
+                if (buyTokenResponse != null) {
+                    //buyTokenFailure(buyTokenResponse);
+                }
+            }
+        });
+    }
+
+    private void selectPayMethod() {
+        try {
+            payDialog = new Dialog(WithdrawTokenActivity.this);
+            payDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            payDialog.setContentView(R.layout.choosepaymentmethod);
+            payDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            RecyclerView rvSelPayMethods = payDialog.findViewById(R.id.rvSelPayMethods);
+            LinearLayout lyAddPay = payDialog.findViewById(R.id.lyAddPay);
+            SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter;
+            prevSelectedCard = objMyApplication.getSelectedCard();
+            List<PaymentsList> listPayments = new ArrayList<>();
+            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                for (int i = 0; i < paymentMethodsResponse.getData().getData().size(); i++) {
+                    if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
+                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                    }
+                }
+                if (listPayments != null && listPayments.size() > 0) {
+                    selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listPayments, WithdrawTokenActivity.this, "wdrawtoken");
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawTokenActivity.this);
+                    rvSelPayMethods.setLayoutManager(mLayoutManager);
+                    rvSelPayMethods.setItemAnimator(new DefaultItemAnimator());
+                    rvSelPayMethods.setAdapter(selectedPaymentMethodsAdapter);
+                }
+            }
+
+            Window window = payDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            payDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            payDialog.setCanceledOnTouchOutside(true);
+            payDialog.show();
+            lyAddPay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        payDialog.dismiss();
+                        Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
+                        i.putExtra("screen", "addpay");
+                        startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setDailyWeekLimit(LimitResponseData objLimit) {
+        try {
+            if (objLimit.getTokenLimitFlag()) {
+                tvLimit.setVisibility(View.VISIBLE);
+                Double week = 0.0, daily = 0.0;
+                String strCurrency = "", strAmount = "";
+                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("NA") && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("unlimited")) {
+                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                }
+                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().toLowerCase().equals("NA") && !objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+                }
+                strCurrency = " " + getString(R.string.currency);
+                if ((week == 0 || week < 0) && daily > 0) {
+                    strLimit = "daily";
+                    maxValue = daily;
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                } else if ((daily == 0 || daily < 0) && week > 0) {
+                    strLimit = "week";
+                    maxValue = week;
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
+                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
+                    strLimit = "unlimited";
+                } else {
+                    strLimit = "daily";
+                    maxValue = daily;
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                }
+            } else {
+                tvLimit.setVisibility(View.GONE);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void calculateFee(String strAmount) {
+        try {
+            TransferFeeRequest request = new TransferFeeRequest();
+            request.setTokens(strAmount.trim().replace(",", ""));
+            request.setTxnType(Utils.withdrawType);
+            if (strType.toLowerCase().equals("debit")) {
+                request.setTxnSubType(Utils.instantType);
+            } else if (strType.toLowerCase().equals("bank")) {
+                request.setTxnSubType(Utils.bankType);
+            }
+            if (Utils.checkInternet(WithdrawTokenActivity.this)) {
+                buyTokenViewModel.transferFee(request);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void bindPayMethod(PaymentsList objData) {
+        try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
+            selectedCard = objData;
+            TransactionLimitRequest obj = new TransactionLimitRequest();
+            obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                strType = "bank";
+                strBankId = String.valueOf(objData.getId());
+                strSubType = Utils.bankType;
+                obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
+                lyBDetails.setVisibility(View.VISIBLE);
+                lyCDetails.setVisibility(View.GONE);
+                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+                imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+                tvBankName.setText(objData.getBankName());
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
+                    tvBAccNumber.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                } else {
+                    tvBAccNumber.setText(objData.getAccountNumber());
+                }
+            } else {
+                strCardId = String.valueOf(objData.getId());
+                if (objData.getCardType().toLowerCase().equals("debit")) {
+                    strType = "debit";
+                    strSubType = Utils.instantType;
+                    obj.setTransactionSubType(Integer.parseInt(Utils.instantType));
+                }
+                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
+                lyBDetails.setVisibility(View.GONE);
+                lyCDetails.setVisibility(View.VISIBLE);
+                tvAccNumber.setText("****" + objData.getLastFour());
+                switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
+                    case "VISA":
+                        tvPayHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
+                        imgBankIcon.setImageResource(R.drawable.ic_visaactive);
+                        break;
+                    case "MASTERCARD":
+                        tvPayHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
+                        imgBankIcon.setImageResource(R.drawable.ic_masteractive);
+                        break;
+                    case "AMERICANEXPRESS":
+                        tvPayHead.setText("American Express Card");
+                        imgBankIcon.setImageResource(R.drawable.ic_amexactive);
+                        break;
+                    case "DISCOVER":
+                        tvPayHead.setText("Discover Card");
+                        imgBankIcon.setImageResource(R.drawable.ic_discoveractive);
+                        break;
+                }
+            }
+            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
+            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
+            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
+            tvLimit.setLayoutParams(params);
+            if (Utils.checkInternet(WithdrawTokenActivity.this)) {
+                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+            } else {
+                Utils.displayAlert(getString(R.string.internet), WithdrawTokenActivity.this, "", "");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void bindSelectedBank(PaymentsList objData) {
+        try {
+            objSelected = objData;
+            prevSelectedCard = null;
+            strCvv = "";
+            bindPayMethod(objSelected);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Boolean validation() {
+        Boolean value = true;
+        try {
+            cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
+            String strPay = etAmount.getText().toString().trim().replace("\"", "");
+            //usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            String strPay = "";
+//            if (tvCYN.getVisibility() == View.VISIBLE) {
+//                strPay = String.valueOf(cynValue);
+//            } else {
+//                strPay = String.valueOf(usdValue);
+//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            }
+            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+                tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+                if (strLimit.equals("daily")) {
+                    tvError.setText("Amount entered exceeds your daily limit");
+                } else if (strLimit.equals("week")) {
+                    tvError.setText("Amount entered exceeds your weekly limit");
+                }
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else if(Double.parseDouble(strPay.replace(",", "")) > avaBal){
+                tvError.setText("Amount entered exceeds available balance");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else if(cynValue > avaBal){
+                tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else{
+                tvError.setVisibility(View.INVISIBLE);
+                lyBalance.setVisibility(View.VISIBLE);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
+    public void withdrawTokenPreview() {
+        try {
+            prevDialog = new Dialog(WithdrawTokenActivity.this);
+            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            prevDialog.setContentView(R.layout.buy_token_order_review);
+            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvGet = prevDialog.findViewById(R.id.tvGet);
+            TextView tvBankName = prevDialog.findViewById(R.id.tvBankName);
+            TextView tvAccount = prevDialog.findViewById(R.id.tvAccount);
+            TextView tvCYN = prevDialog.findViewById(R.id.tvCYN);
+            TextView tvPaymentHead = prevDialog.findViewById(R.id.tvPaymentHead);
+            TextView tvPurchaseHead = prevDialog.findViewById(R.id.tvPurchaseHead);
+            TextView tvPayMethod = prevDialog.findViewById(R.id.tvPayMethod);
+            TextView tvPurchaseAmt = prevDialog.findViewById(R.id.tvPurchaseAmt);
+            TextView tvProcessingFee = prevDialog.findViewById(R.id.tvProcessingFee);
+            TextView tvTotal = prevDialog.findViewById(R.id.tvTotal);
+            LinearLayout layoutBank = prevDialog.findViewById(R.id.layoutBank);
+            LinearLayout layoutCard = prevDialog.findViewById(R.id.layoutCard);
+            ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
+            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
+            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            tvPaymentHead.setText("Withdraw to");
+            tvPurchaseHead.setText("Withdraw Amount");
+            tvCYN.setVisibility(View.GONE);
+            String strPFee = "";
+            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
+            tvGet.setText("$ " + Utils.USNumberFormat(usdValue));
+            tvPurchaseAmt.setText(Utils.USNumberFormat(usdValue) + " " + getString(R.string.currency));
+            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
+            total = usdValue + Double.parseDouble(strPFee);
+            tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
+            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
+                layoutBank.setVisibility(View.VISIBLE);
+                layoutCard.setVisibility(View.GONE);
+                tvBankName.setText(selectedCard.getBankName());
+                if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
+                    tvAccount.setText("**** " + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
+                } else {
+                    tvAccount.setText(selectedCard.getAccountNumber());
+                }
+            } else {
+                layoutBank.setVisibility(View.GONE);
+                layoutCard.setVisibility(View.VISIBLE);
+                tvPayMethod.setText("****" + selectedCard.getLastFour());
+                switch (selectedCard.getCardBrand().toUpperCase().replace(" ", "")) {
+                    case "VISA":
+                        imgCardType.setImageResource(R.drawable.ic_visa1);
+                        break;
+                    case "MASTERCARD":
+                        imgCardType.setImageResource(R.drawable.ic_master);
+                        break;
+                    case "AMERICANEXPRESS":
+                        imgCardType.setImageResource(R.drawable.ic_amex);
+                        break;
+                    case "DISCOVER":
+                        imgCardType.setImageResource(R.drawable.ic_discover);
+                        break;
+                }
+            }
+
+            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+                @Override
+                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+                }
+
+                @Override
+                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+                }
+
+                @Override
+                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                    if (currentId == motionLayout.getEndState()) {
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        withdrawToken();
+                    }
+                }
+
+                @Override
+                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+                }
+            });
+
+            Window window = prevDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            prevDialog.setCanceledOnTouchOutside(true);
+            prevDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void expiry() {
+        try {
+            final Dialog dialog = new Dialog(WithdrawTokenActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.payment_expire);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+            PaymentsList objPayment = objMyApplication.getSelectedCard();
+            TextView tvMessage = dialog.findViewById(R.id.tvMessage);
+            TextView tvRemove = dialog.findViewById(R.id.tvRemove);
+            TextView tvEdit = dialog.findViewById(R.id.tvEdit);
+            if (objPayment != null) {
+                if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    tvMessage.setText("Seems like you have an issue with your bank account");
+                    tvEdit.setText("Relink");
+                    customerProfileViewModel.meSignOn();
+                } else {
+                    tvMessage.setText("Seems like you have an issue with your card");
+                    tvEdit.setText("Edit");
+                }
+
+            }
+            tvRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    deleteBank(objPayment);
+                }
+            });
+
+            tvEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    try {
+                        if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                            Intent i = new Intent(WithdrawTokenActivity.this, EditCardActivity.class);
+                            startActivity(i);
+                        } else {
+                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                                isBank = true;
+                                objMyApplication.setResolveUrl(true);
+                                Intent i = new Intent(WithdrawTokenActivity.this, WebViewActivity.class);
+                                i.putExtra("signon", signOnData);
+                                startActivityForResult(i, 1);
+                            } else {
+                                Utils.displayAlert(strSignOn, WithdrawTokenActivity.this, "", "");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteBank(PaymentsList objPayment) {
+        try {
+            final Dialog dialog = new Dialog(WithdrawTokenActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.payment_remove);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            ImageView imgBankIcon = dialog.findViewById(R.id.imgBankIcon);
+            TextView tvBankName = dialog.findViewById(R.id.tvBankName);
+            TextView tvCardName = dialog.findViewById(R.id.tvCardName);
+            TextView tvAccount = dialog.findViewById(R.id.tvAccount);
+            TextView tvCardNumber = dialog.findViewById(R.id.tvCardNumber);
+            TextView tvNo = dialog.findViewById(R.id.tvNo);
+            TextView tvYes = dialog.findViewById(R.id.tvYes);
+            LinearLayout layoutCard = dialog.findViewById(R.id.layoutCard);
+            LinearLayout layoutBank = dialog.findViewById(R.id.layoutBank);
+            if (objPayment != null) {
+                if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+                    tvBankName.setText(objPayment.getBankName());
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
+                        tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvAccount.setText(objPayment.getAccountNumber());
+                    }
+                } else {
+                    layoutCard.setVisibility(View.VISIBLE);
+                    layoutBank.setVisibility(View.GONE);
+                    tvCardNumber.setText("****" + objPayment.getLastFour());
+                    switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
+                        case "VISA":
+                            tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            imgBankIcon.setImageResource(R.drawable.ic_visaactive);
+                            break;
+                        case "MASTERCARD":
+                            tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            imgBankIcon.setImageResource(R.drawable.ic_masteractive);
+                            break;
+                        case "AMERICANEXPRESS":
+                            tvCardName.setText("American Express Card");
+                            imgBankIcon.setImageResource(R.drawable.ic_amexactive);
+                            break;
+                        case "DISCOVER":
+                            tvCardName.setText("Discover Card");
+                            imgBankIcon.setImageResource(R.drawable.ic_discoveractive);
+                            break;
+                    }
+                }
+            }
+
+            tvNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            tvYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                        paymentMethodsViewModel.deleteBanks(objPayment.getId());
+                    } else {
+                        paymentMethodsViewModel.deleteCards(objPayment.getId());
+                    }
+                }
+            });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void displayCVV(PaymentsList objData) {
+        try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
+            objSelected = objData;
+            cvvDialog = new Dialog(WithdrawTokenActivity.this);
+            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            cvvDialog.setContentView(R.layout.cvvlayout);
+            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            etCVV = cvvDialog.findViewById(R.id.etCVV);
+            CustomKeyboard ctKey;
+            ctKey = cvvDialog.findViewById(R.id.ckb);
+            ctKey.setKeyAction("OK");
+            ctKey.setScreenName("withdrawcvv");
+            InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
+            ctKey.setInputConnection(ic);
+            etCVV.setShowSoftInputOnFocus(false);
+            etCVV.requestFocus();
+
+            etCVV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.hideSoftKeypad(WithdrawTokenActivity.this, v);
+                }
+            });
+            etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    Utils.hideSoftKeypad(WithdrawTokenActivity.this, view);
+                }
+            });
+            etCVV.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable.length() > 2) {
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
+                    }
+                }
+            });
+
+            Window window = cvvDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            cvvDialog.show();
+            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (dialogInterface != null) {
+                        if (prevSelectedCard != null) {
+                            objMyApplication.setSelectedCard(prevSelectedCard);
+                            selectedCard = prevSelectedCard;
+                        }
+
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void okClick() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (!etCVV.getText().toString().trim().equals("")) {
+                prevSelectedCard = null;
+                cvvDialog.dismiss();
+                strCvv = etCVV.getText().toString().trim();
+                bindPayMethod(objSelected);
+            } else {
+                Utils.displayAlert("Please enter CVV", WithdrawTokenActivity.this, "", "");
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private String USFormat(EditText etAmount) {
+        String strAmount = "", strReturn = "";
+        try {
+            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
+            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.addTextChangedListener(WithdrawTokenActivity.this);
+            etAmount.setSelection(etAmount.getText().toString().length());
+            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            changeTextSize(strReturn);
+            setDefaultLength();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strReturn;
+    }
+
+    private void changeTextSize(String editable) {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            if (editable.length() > 8) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 5) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+            } else {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                etAmount.setTextSize(Utils.pixelsToSp(WithdrawTokenActivity.this, fontSize));
+                tvCurrency.setTextSize(Utils.pixelsToSp(WithdrawTokenActivity.this, dollarFont));
+            }
+            etAmount.setFilters(FilterArray);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setDefaultLength() {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+            etAmount.setFilters(FilterArray);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void withdrawToken() {
+        try {
+            WithdrawRequest request = new WithdrawRequest();
+            if (!strBankId.equals("")) {
+                bankId = Long.parseLong(strBankId);
+            }
+            if (!strCardId.equals("")) {
+                cardId = Long.parseLong(strCardId);
+            }
+            request.setBankId(bankId);
+            request.setCardId(cardId);
+            request.setGiftCardWithDrawInfo(null);
+            request.setTokens(total);
+            request.setRemarks(etRemarks.getText().toString().trim());
+            request.setWithdrawType(strSubType);
+            if (Utils.checkInternet(WithdrawTokenActivity.this)) {
+                buyTokenViewModel.withdrawTokens(request);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void displayComments() {
+        try {
+            cvvDialog = new Dialog(WithdrawTokenActivity.this);
+            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            cvvDialog.setContentView(R.layout.add_note_layout);
+            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            EditText addNoteET = cvvDialog.findViewById(R.id.addNoteET);
+            CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
+            LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    addNoteET.requestFocus();
+                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    mgr.showSoftInput(addNoteET, InputMethodManager.SHOW_IMPLICIT);
+
+                }
+            }, 100);
+            if (!etRemarks.getText().toString().trim().equals("")) {
+                addNoteET.setText(etRemarks.getText().toString().trim());
+                addNoteET.setSelection(addNoteET.getText().toString().trim().length());
+            }
+
+            Window window = cvvDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            cvvDialog.show();
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cvvDialog.dismiss();
+                }
+            });
+            doneBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (addNoteET.getText().toString().trim().length() > 0) {
+                            etRemarks.setText(addNoteET.getText().toString().trim());
+                            cvvDialog.dismiss();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void withdrawTokenClick() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (tvCYN.getVisibility() == View.VISIBLE) {
+                convertUSDtoCYN();
+            } else {
+                convertCYNtoUSD();
+            }
+            calculateFee(Utils.USNumberFormat(cynValue));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertUSDValue() {
+        try {
+            if (isUSD) {
+                isUSD = false;
+                usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
+//                cynValue = ((usdValue + feeInAmount) * 100) / (100 + feeInPercentage);
+                cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertCYNValue() {
+        try {
+            if (isCYN) {
+                isCYN = false;
+                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
+//                usdValue = (cynValue - (cynValue * (feeInPercentage / 100))) + feeInAmount;
+                usdValue = ((cynValue - feeInAmount) * 100) / (100 + feeInPercentage);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertUSDtoCYN() {
+        try {
+            convertUSDValue();
+            if (cynValue != 0.0 || usdValue != 0.0) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setFilters(FilterArray);
+                etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
+                etAmount.setText(String.valueOf(cynValue));
+                etAmount.addTextChangedListener(WithdrawTokenActivity.this);
+                USFormat(etAmount);
+                etAmount.setSelection(etAmount.getText().length());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertCYNtoUSD() {
+        try {
+            convertCYNValue();
+            if (usdValue != 0.0) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setFilters(FilterArray);
+                etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
+                etAmount.setText(String.valueOf(usdValue));
+                etAmount.addTextChangedListener(WithdrawTokenActivity.this);
+                USFormat(etAmount);
+                etAmount.setSelection(etAmount.getText().length());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+}

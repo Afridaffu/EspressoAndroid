@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/_20sdp"
-    tools:context=".view.OTPValidation"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context=".view.OTPValidation">
 
     <LinearLayout
         android:id="@+id/layoutEntry"
@@ -29,7 +30,7 @@
             android:id="@+id/headerTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="Please Verify Your Phone Number"
             android:textColor="@color/primary_black"
@@ -39,9 +40,9 @@
             android:id="@+id/subHeaderTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_28sdp"
+            android:layout_marginBottom="@dimen/_38sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="We sent you 6-digit code to the register phone number"
+            android:text="We sent you 6-digit code to the registered phone number"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
@@ -61,18 +62,18 @@
             app:cursorWidth="0dp"
             app:hideLineWhenFilled="false"
             app:itemCount="6"
+            app:itemHeight="@dimen/_40sdp"
             app:itemRadius="6dp"
-            app:itemSpacing="5dp"
+            app:itemSpacing="@dimen/_7sdp"
+            app:itemWidth="@dimen/_35sdp"
             app:lineColor="@color/line_colors"
             app:lineWidth="2dp"
-            app:viewType="rectangle"
-            app:itemHeight="58dp"
-            app:itemWidth="48dp"/>
+            app:viewType="rectangle" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_25sdp"
             android:fontFamily="@font/opensans_regular"
             android:gravity="center"
             android:text="Didn't get the code?"
@@ -81,11 +82,11 @@
 
         <TextView
             android:id="@+id/resendTV"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:gravity="center"
             android:text="Resend"
             android:textColor="@color/primary_color"
             android:textSize="@dimen/_12ssp" />
@@ -108,7 +109,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/_7sdp">
 
         <include layout="@layout/activity_retry_create_account" />
     </LinearLayout>
@@ -122,29 +124,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_above="@+id/secureNextCV"
-            android:layout_alignParentTop="true">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Secure Your Account"
-                android:textSize="@dimen/_16ssp"
-                android:textColor="@color/primary_black"
-                android:fontFamily="@font/opensans_bold"
-                android:layout_marginBottom="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_62sdp"
-                />
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="One way we keep your account secure is with 2- step verification, which requires you to create 6-digit PIN"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="@color/primary_black"
-                android:fontFamily="@font/opensans_regular"
+                android:layout_marginTop="@dimen/_62sdp"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Secure your account"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_40sdp"
-                />
+                android:fontFamily="@font/opensans_regular"
+                android:text="One way we keep your account secure is with 2- step verification, which requires you to create 6-digit PIN"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -153,7 +154,7 @@
 
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/secureNextCV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
@@ -168,10 +169,11 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Next"
+                android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 </LinearLayout>

@@ -1,18 +1,25 @@
 package com.greenbox.coyni.model.users;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.greenbox.coyni.model.Error;
+
 public class AccountLimits {
+
+
+
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("timestamp")
+    @Expose
     private String timestamp;
+    @SerializedName("data")
+    @Expose
     private AccountLimitsData data;
+    @SerializedName("error")
+    @Expose
     private Error error;
-
-    public AccountLimitsData getData() {
-        return data;
-    }
-
-    public void setData(AccountLimitsData data) {
-        this.data = data;
-    }
 
     public String getStatus() {
         return status;
@@ -22,7 +29,6 @@ public class AccountLimits {
         this.status = status;
     }
 
-
     public String getTimestamp() {
         return timestamp;
     }
@@ -31,6 +37,13 @@ public class AccountLimits {
         this.timestamp = timestamp;
     }
 
+    public AccountLimitsData getData() {
+        return data;
+    }
+
+    public void setData(AccountLimitsData data) {
+        this.data = data;
+    }
 
     public Error getError() {
         return error;
@@ -39,4 +52,50 @@ public class AccountLimits {
     public void setError(Error error) {
         this.error = error;
     }
+//
+//    @SerializedName("status")
+//    @Expose
+//    private String status;
+//    @SerializedName("timestamp")
+//    @Expose
+//    private String timestamp;
+//    @SerializedName("data")
+//    @Expose
+//    private AccountLimitsData data;
+//    @SerializedName("error")
+//    @Expose
+//    private Object error;
+//
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
+//
+//    public String getTimestamp() {
+//        return timestamp;
+//    }
+//
+//    public void setTimestamp(String timestamp) {
+//        this.timestamp = timestamp;
+//    }
+//
+//    public AccountLimitsData getData() {
+//        return data;
+//    }
+//
+//    public void setData(AccountLimitsData data) {
+//        this.data = data;
+//    }
+//
+//    public Object getError() {
+//        return error;
+//    }
+//
+//    public void setError(Object error) {
+//        this.error = error;
+//    }
+
 }

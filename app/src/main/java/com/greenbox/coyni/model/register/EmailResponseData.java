@@ -1,36 +1,91 @@
 package com.greenbox.coyni.model.register;
 
-public class EmailResponseData {
-    private String userId;
-    private String emailStatus;
-    private String emailOtp;
-    private String message;
-    private Boolean smsVerified;
-    private Boolean emailVerified;
-    private String code;
+import com.greenbox.coyni.model.login.StateList;
 
-    public String getUserId() {
+public class EmailResponseData {
+//    private String userId;
+//    private String emailStatus;
+//    private String emailOtp;
+//    private String message;
+//    private Boolean smsVerified;
+//    private Boolean emailVerified;
+//    private String code;
+//
+//    public String getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(String userId) {
+//        this.userId = userId;
+//    }
+//
+//    public String getEmail_status() {
+//        return emailStatus;
+//    }
+//
+//    public void setEmail_status(String emailStatus) {
+//        this.emailStatus = emailStatus;
+//    }
+//
+//    public String getEmailOtp() {
+//        return emailOtp;
+//    }
+//
+//    public void setEmailOtp(String emailOtp) {
+//        this.emailOtp = emailOtp;
+//    }
+//
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
+//
+//    public Boolean getSmsVerified() {
+//        return smsVerified;
+//    }
+//
+//    public void setSmsVerified(Boolean smsVerified) {
+//        this.smsVerified = smsVerified;
+//    }
+//
+//    public Boolean getEmailVerified() {
+//        return emailVerified;
+//    }
+//
+//    public void setEmailVerified(Boolean emailVerified) {
+//        this.emailVerified = emailVerified;
+//    }
+//
+//    public String getCode() {
+//        return code;
+//    }
+//
+//    public void getCode(String authenticationeCode) {
+//        this.code = authenticationeCode;
+//    }
+
+    private int userId;
+    private String message;
+    private String jwtToken;
+    private StateList stateList;
+
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public String getEmail_status() {
-        return emailStatus;
+    public StateList getStateList() {
+        return stateList;
     }
 
-    public void setEmail_status(String emailStatus) {
-        this.emailStatus = emailStatus;
-    }
-
-    public String getEmailOtp() {
-        return emailOtp;
-    }
-
-    public void setEmailOtp(String emailOtp) {
-        this.emailOtp = emailOtp;
+    public void setStateList(StateList stateList) {
+        this.stateList = stateList;
     }
 
     public String getMessage() {
@@ -41,28 +96,12 @@ public class EmailResponseData {
         this.message = message;
     }
 
-    public Boolean getSmsVerified() {
-        return smsVerified;
+    public String getJwtToken() {
+        return jwtToken;
     }
 
-    public void setSmsVerified(Boolean smsVerified) {
-        this.smsVerified = smsVerified;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void getCode(String authenticationeCode) {
-        this.code = authenticationeCode;
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 }
 

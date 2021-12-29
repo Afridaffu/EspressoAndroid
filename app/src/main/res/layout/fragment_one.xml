@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
@@ -14,21 +15,20 @@
             android:id="@+id/topIV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/bg_onboard_frag_one"
             android:layout_above="@+id/bottomIV"
-            android:scaleType="fitXY"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-70dp"
+            android:layout_marginRight="-150dp"
+            android:src="@drawable/bg_onboard_frag_one" />
 
         <ImageView
             android:id="@+id/bottomIV"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_46sdp"
+            android:layout_height="46dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_85sdp"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:layout_marginRight="@dimen/_85sdp"
-            android:layout_marginBottom="@dimen/_60sdp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="60dp"
             android:src="@drawable/ic_coyni_logo" />
     </RelativeLayout>
 

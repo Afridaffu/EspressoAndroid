@@ -6,11 +6,11 @@
 
     <LinearLayout
         android:id="@+id/lyClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="@dimen/_21sdp"
         android:layout_marginTop="?attr/actionBarSize"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
@@ -48,56 +48,14 @@
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_12ssp" />
 
-    <LinearLayout
-        android:id="@+id/llCoyniAct"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/retEmailRV"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_67sdp"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
-        android:background="@drawable/bg_card"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/_8sdp">
+        android:layout_marginEnd="@dimen/_11sdp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_profilelogo" />
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="@dimen/_20sdp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="@string/coyni_account"
-                android:textAlignment="textStart"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/tvEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="@string/jona_gmail_com"
-                android:textAlignment="textStart"
-                android:textColor="#767676"
-                android:textSize="@dimen/_10ssp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_rightarrow" />
-
-    </LinearLayout>
 </LinearLayout>

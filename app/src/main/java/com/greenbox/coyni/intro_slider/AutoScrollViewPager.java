@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.animation.Interpolator;
 
 import androidx.annotation.Nullable;
@@ -31,15 +32,21 @@ public class AutoScrollViewPager extends ViewPager {
   private double autoScrollFactor = 1.0;
   private double swipeScrollFactor = 1.0;
   private Handler handler;
+  private boolean enabled;
   @Nullable
   private DurationScroller scroller;
   public static final int SCROLL_WHAT = 0;
+  private boolean isAutoScroll = false;
+  private boolean isStopByTouch = false;
+  private float downX = 0f;
+
   public AutoScrollViewPager(Context paramContext) {
     super(paramContext);
     init();
   }
   public AutoScrollViewPager(Context paramContext, AttributeSet paramAttributeSet) {
     super(paramContext, paramAttributeSet);
+    this.enabled = true;
     init();
   }
   private void init() {
@@ -51,6 +58,7 @@ public class AutoScrollViewPager extends ViewPager {
    */
   public void startAutoScroll() {
     if (scroller != null) {
+      isAutoScroll = true;
       sendScrollMessage(
           (long) (interval + scroller.getDuration() / autoScrollFactor * swipeScrollFactor));
     }
@@ -61,12 +69,15 @@ public class AutoScrollViewPager extends ViewPager {
    * @param delayTimeInMills first scroll delay time.
    */
   public void startAutoScroll(int delayTimeInMills) {
+
+    isAutoScroll = true;
     sendScrollMessage(delayTimeInMills);
   }
   /**
    * stop auto scroll.
    */
   public void stopAutoScroll() {
+    isAutoScroll = false;
     handler.removeMessages(SCROLL_WHAT);
   }
   /**
@@ -241,4 +252,49 @@ public class AutoScrollViewPager extends ViewPager {
   public void setBorderAnimation(boolean isBorderAnimation) {
     this.isBorderAnimation = isBorderAnimation;
   }
+
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent ev) {
+    int action = ev.getActionMasked();
+
+    if (stopScrollWhenTouch) {
+      if ((action == MotionEvent.ACTION_DOWN) && isAutoScroll) {
+        isStopByTouch = true;
+        stopAutoScroll();
+      } else if (ev.getAction() == MotionEvent.ACTION_UP && isStopByTouch) {
+        startAutoScroll();
+      }
+    }
+
+    if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT || slideBorderMode == SLIDE_BORDER_MODE_CYCLE) {
+      float touchX = ev.getX();
+      if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+        downX = touchX;
+      }
+      int currentItem = getCurrentItem();
+      PagerAdapter adapter = getAdapter();
+      int pageCount = adapter == null ? 0 : adapter.getCount();
+      /**
+       * current index is first one and slide to right or current index is last one and slide to left.<br/>
+       * if slide border mode is to parent, then requestDisallowInterceptTouchEvent false.<br/>
+       * else scroll to last one when current item is first one, scroll to first one when current item is last
+       * one.
+       */
+      if ((currentItem == 0 && downX <= touchX) || (currentItem == pageCount - 1 && downX >= touchX)) {
+        if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT) {
+          getParent().requestDisallowInterceptTouchEvent(false);
+        } else {
+          if (pageCount > 1) {
+            setCurrentItem(pageCount - currentItem - 1, isBorderAnimation);
+          }
+          getParent().requestDisallowInterceptTouchEvent(true);
+        }
+        return super.dispatchTouchEvent(ev);
+      }
+    }
+    getParent().requestDisallowInterceptTouchEvent(true);
+
+    return super.dispatchTouchEvent(ev);
+  }
+
 }

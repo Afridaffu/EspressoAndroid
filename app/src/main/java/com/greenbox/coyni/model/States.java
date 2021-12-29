@@ -3,6 +3,7 @@ package com.greenbox.coyni.model;
 public class States {
     private String name;
     private String code;
+    private boolean isSelected = false;
 
     public String getName() {
         return name;
@@ -18,5 +19,13 @@ public class States {
 
     public void setIsocode(String isocode) {
         this.code = isocode;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

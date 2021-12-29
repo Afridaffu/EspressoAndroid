@@ -33,7 +33,6 @@ public class AccountLimitsViewModel extends AndroidViewModel {
         return userAccountLimitsMutableLiveData;
     }
 
-
     public void meAccountLimits(int request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -45,6 +44,7 @@ public class AccountLimitsViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             AccountLimits obj = response.body();
                             userAccountLimitsMutableLiveData.setValue(obj);
+                            Log.e("AccLi",""+new Gson().toJson(obj));
                         } else {
                             Gson gson = new Gson();
 
@@ -58,7 +58,6 @@ public class AccountLimitsViewModel extends AndroidViewModel {
                         apiErrorMutableLiveData.setValue(null);
                     }
                 }
-
                 @Override
                 public void onFailure(Call<AccountLimits> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();

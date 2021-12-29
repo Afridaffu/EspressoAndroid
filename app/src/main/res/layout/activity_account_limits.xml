@@ -4,29 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f2f4f5"
     android:orientation="vertical"
     tools:context=".view.AccountLimitsActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/_12sdp"
         android:background="@drawable/card_bottomradius"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/_11sdp">
 
+        <LinearLayout
+            android:id="@+id/alBackbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:orientation="horizontal">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginRight="@dimen/_10sdp"
             android:src="@drawable/ic_back" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_14sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="@string/account_limits"
+            android:layout_marginStart="@dimen/_21sdp"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
 
@@ -35,14 +44,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,9 +59,9 @@
                 android:paddingLeft="@dimen/_21sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_buy_tokenicon" />
+                    android:layout_width="@dimen/_30ssp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:src="@drawable/ic_send_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -61,11 +69,9 @@
                     android:layout_marginStart="6dp"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center"
-                    android:text="@string/buytoken"
+                    android:text="Pay/Request (CYN)"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
-
-
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -81,19 +87,90 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingTop="@dimen/_11sdp"
-                    android:paddingBottom="@dimen/_11sdp"
-
-                    >
+                    android:paddingBottom="@dimen/_11sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_11sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="left"
+                            android:text="Pay/Request"
+                            android:textColor="#767676"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvPayRequestTransactionLimit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="right"
+                            android:paddingEnd="@dimen/_11sdp"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_21sdp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/_21sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/ic_buy_tokenicon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:text="@string/buytoken"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_11sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -109,22 +186,22 @@
                             android:id="@+id/tvBuyTokenBankLimit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
                             android:paddingEnd="@dimen/_11sdp"
-                            android:text="@string/weeklimittext"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -132,7 +209,7 @@
                             android:layout_marginStart="@dimen/_11sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:gravity="left"
-                            android:text="@string/bebit_card"
+                            android:text="Credit/Debit Card"
                             android:textColor="#767676"
                             android:textSize="@dimen/_11ssp" />
 
@@ -140,29 +217,30 @@
                             android:id="@+id/tvBuyTokenDebitLimit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
                             android:paddingEnd="@dimen/_11sdp"
-                            android:text="@string/daylimittext"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                       android:gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:visibility="gone"
+                        android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_11sdp"
                             android:fontFamily="@font/opensans_regular"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/credit_card"
                             android:textColor="#767676"
                             android:textSize="@dimen/_11ssp" />
@@ -171,10 +249,9 @@
                             android:id="@+id/tvBuyTokenCreditLimit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
-                            android:gravity="right"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
                             android:paddingEnd="@dimen/_11sdp"
-                            android:text="@string/daylimittext"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
@@ -192,8 +269,8 @@
                 android:paddingStart="@dimen/_21sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_21sdp"
                     android:src="@drawable/ic_withdraw_tokenicon" />
 
                 <TextView
@@ -217,13 +294,13 @@
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_2sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingTop="@dimen/_11sdp"
 
                     >
 
@@ -232,9 +309,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -250,22 +327,22 @@
                             android:id="@+id/tvWithTokenBankLimit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
                             android:paddingEnd="@dimen/_11sdp"
-                            android:text="@string/weeklimittext"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -281,23 +358,23 @@
                             android:id="@+id/tvWithTokenInstantLimit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
                             android:paddingEnd="@dimen/_11sdp"
-                            android:text="@string/daylimittext"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_11sdp"
-                        android:orientation="horizontal">
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -310,13 +387,12 @@
                             android:textSize="@dimen/_11ssp" />
 
                         <TextView
-                            android:id="@+id/tvBuyTokenGiftLimit"
+                            android:id="@+id/tvWithdrawTokenGiftCardLimit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
+                            android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
                             android:paddingEnd="@dimen/_11sdp"
-                            android:text="@string/weeklimittext"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
@@ -324,13 +400,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                />
-
 
         </LinearLayout>
     </ScrollView>

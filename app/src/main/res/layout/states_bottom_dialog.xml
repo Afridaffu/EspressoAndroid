@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/roundeddialog"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/_21sdp"
+    android:paddingRight="@dimen/_21sdp"
+    android:paddingBottom="@dimen/_27sdp"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    <LinearLayout
+        android:id="@+id/vieww"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_3sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_green_round_rect" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/searchLL"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_below="@+id/vieww"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/bg_core_search_et_"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_9sdp"
+            android:src="@drawable/ic_search_icon" />
+
+        <EditText
+            android:id="@+id/searchET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:focusable="true"
+            android:fontFamily="@font/opensans_semibold"
+            android:hint="States Name"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+            android:singleLine="true"
+            android:textColor="@color/primary_black"
+            android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="@dimen/_10sdp" />
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statesRV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/cvAction"
+        android:layout_below="@id/searchLL"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/notFoundTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/cvAction"
+        android:layout_below="@id/searchLL"
+        android:fontFamily="@font/opensans_bold"
+        android:gravity="center"
+        android:text="No state is found"
+        android:textColor="@color/xdark_gray"
+        android:textSize="@dimen/_14ssp"
+        android:visibility="gone"/>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvAction"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:cardBackgroundColor="@color/primary_green"
+        app:cardCornerRadius="@dimen/_22sdp">
+
+        <TextView
+            android:id="@+id/tvAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Done"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_28sdp" />
+</RelativeLayout>

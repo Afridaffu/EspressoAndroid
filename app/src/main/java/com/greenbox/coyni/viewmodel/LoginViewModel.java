@@ -14,13 +14,21 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
+import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneValidateRequest;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
+import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.register.EmailResponse;
 import com.greenbox.coyni.model.register.InitCustomerRequest;
@@ -33,6 +41,8 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
+import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
@@ -40,6 +50,7 @@ import com.greenbox.coyni.utils.Singleton;
 
 import java.lang.reflect.Type;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +73,24 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateEmailResponse> updateEmailValidateResponse = new MutableLiveData<>();
+    private MutableLiveData<UpdatePhoneResponse> updatePhoneValidateResponse = new MutableLiveData<>();
+    private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<EmailExistsResponse> emailExistsResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
+
+    public MutableLiveData<LoginResponse> getAuthenticatePasswordResponse() {
+        return authenticatePasswordResponse;
+    }
+
+    public MutableLiveData<UpdateResendOTPResponse> getUpdateResendOTPMutableLiveData() {
+        return updateResendOTPMutableLiveData;
+    }
+
+    public void setUpdateResendOTPMutableLiveData(MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData) {
+        this.updateResendOTPMutableLiveData = updateResendOTPMutableLiveData;
+    }
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -125,6 +154,22 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<LoginResponse> getBiometricResponseMutableLiveData() {
         return biometricResponseMutableLiveData;
+    }
+
+    public MutableLiveData<ManagePasswordResponse> getManagePasswordResponseMutableLiveData() {
+        return managePasswordResponseMutableLiveData;
+    }
+
+    public MutableLiveData<UpdateEmailResponse> getUpdateEmailValidateResponse() {
+        return updateEmailValidateResponse;
+    }
+
+    public MutableLiveData<UpdatePhoneResponse> getUpdatePhoneValidateResponse() {
+        return updatePhoneValidateResponse;
+    }
+
+    public MutableLiveData<EmailExistsResponse> getEmailExistsResponseMutableLiveData() {
+        return emailExistsResponseMutableLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -380,8 +425,8 @@ public class LoginViewModel extends AndroidViewModel {
                             }.getType();
                             CustRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                             if (errorResponse != null) {
-                                errorMessage.setValue(errorResponse.getError().getErrorDescription());
-                                custRegisResponseMutableLiveData.setValue(null);
+//                                errorMessage.setValue(errorResponse.getError().getErrorDescription());
+                                custRegisResponseMutableLiveData.setValue(errorResponse);
                             }
                             Log.e("CustReg Error", new Gson().toJson(errorResponse));
                         } catch (Exception e) {
@@ -510,11 +555,11 @@ public class LoginViewModel extends AndroidViewModel {
                         retrieveUsersResponseMutableLiveData.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
+                        Type type = new TypeToken<RetrieveUsersResponse>() {
                         }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        RetrieveUsersResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            retrieveUsersResponseMutableLiveData.setValue(errorResponse);
                         }
                     }
                 }
@@ -549,6 +594,196 @@ public class LoginViewModel extends AndroidViewModel {
                         if (errorResponse != null) {
                             biometricResponseMutableLiveData.setValue(errorResponse);
                             Log.e("Biometric Error", new Gson().toJson(errorResponse));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateEmailotpValidate(UpdateEmailValidateRequest updateEmailValidateRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdateEmailResponse> mCall = apiService.updateEmailValidateOTP(updateEmailValidateRequest);
+            mCall.enqueue(new Callback<UpdateEmailResponse>() {
+                @Override
+                public void onResponse(Call<UpdateEmailResponse> call, Response<UpdateEmailResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdateEmailResponse obj = response.body();
+                        updateEmailValidateResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdateEmailResponse>() {
+                        }.getType();
+                        UpdateEmailResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updateEmailValidateResponse.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdateEmailResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updatePhoneotpValidate(UpdatePhoneValidateRequest updatePhoneValidateRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdatePhoneResponse> mCall = apiService.updatePhoneValidateOTP(updatePhoneValidateRequest);
+            mCall.enqueue(new Callback<UpdatePhoneResponse>() {
+                @Override
+                public void onResponse(Call<UpdatePhoneResponse> call, Response<UpdatePhoneResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdatePhoneResponse obj = response.body();
+                        updatePhoneValidateResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdatePhoneResponse>() {
+                        }.getType();
+                        UpdatePhoneResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updatePhoneValidateResponse.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdatePhoneResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setExpiryPassword(ManagePasswordRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ManagePasswordResponse> mCall = apiService.setExpiryPassword(request);
+            mCall.enqueue(new Callback<ManagePasswordResponse>() {
+                @Override
+                public void onResponse(Call<ManagePasswordResponse> call, Response<ManagePasswordResponse> response) {
+                    if (response.isSuccessful()) {
+                        ManagePasswordResponse obj = response.body();
+                        managePasswordResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ManagePasswordResponse>() {
+                        }.getType();
+                        ManagePasswordResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        managePasswordResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ManagePasswordResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void validateEmail(String strEmail) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<EmailExistsResponse> mCall = apiService.validateEmail(strEmail);
+            mCall.enqueue(new Callback<EmailExistsResponse>() {
+                @Override
+                public void onResponse(Call<EmailExistsResponse> call, Response<EmailExistsResponse> response) {
+                    if (response.isSuccessful()) {
+                        EmailExistsResponse obj = response.body();
+                        emailExistsResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<EmailExistsResponse>() {
+                        }.getType();
+                        EmailExistsResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        emailExistsResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EmailExistsResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateOtpResend(UpdateResendRequest resendRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdateResendOTPResponse> mCall = apiService.updateOtpResend(resendRequest);
+            mCall.enqueue(new Callback<UpdateResendOTPResponse>() {
+                @Override
+                public void onResponse(Call<UpdateResendOTPResponse> call, Response<UpdateResendOTPResponse> response) {
+                    if (response.isSuccessful()) {
+                        UpdateResendOTPResponse obj = response.body();
+                        updateResendOTPMutableLiveData.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdateResendOTPResponse>() {
+                        }.getType();
+                        UpdateResendOTPResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updateResendOTPMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdateResendOTPResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void authenticatePassword(PasswordRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<LoginResponse> mCall = apiService.authenticatePassword(request);
+            mCall.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.isSuccessful()) {
+                        LoginResponse obj = response.body();
+                        authenticatePasswordResponse.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<LoginResponse>() {
+                        }.getType();
+                        LoginResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            authenticatePasswordResponse.setValue(errorResponse);
                         }
                     }
                 }

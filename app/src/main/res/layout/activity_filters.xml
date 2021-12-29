@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/filter_top_radius"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/_20sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_20sdp"
+    android:paddingBottom="@dimen/_20sdp"
+    android:theme="@style/Theme.Coyni">
+
+    <View
+        android:layout_width="@dimen/_43sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_28sdp"
+        android:background="@drawable/button_background"
+        android:gravity="center" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Filter"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:id="@+id/resetFiltersTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="right"
+                android:text="Reset all filters"
+                android:textColor="#00a6a2"
+                android:textSize="@dimen/_11ssp" />
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/applyFilterBtnCV"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction Type"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypePR"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Pay/Request"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeBT"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Buy Token"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeSO"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Sales Order"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeWithdraw"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Withdrawn"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeRefund"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Refund"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypeAT"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Account Transfer"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transTypePI"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Paid Invoice"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <!--                    <com.google.android.material.chip.Chip-->
+                    <!--                        android:id="@+id/transTypePI"-->
+                    <!--                        style="@style/Widget.MaterialComponents.Chip.Choice"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginRight="@dimen/_10sdp"-->
+                    <!--                        android:layout_weight="1"-->
+                    <!--                        android:fontFamily="@font/opensans_semibold"-->
+                    <!--                        android:text="Paid Invoice"-->
+                    <!--                        android:textAlignment="center"-->
+                    <!--                        android:textColor="@color/chip_text_color"-->
+                    <!--                        android:textSize="@dimen/_11ssp"-->
+                    <!--                        app:chipBackgroundColor="@color/chipbackgroundcolor"-->
+                    <!--                        app:chipMinHeight="@dimen/_32sdp" />-->
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="invisible"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction SubType"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeSent"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Sent"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeReceived"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Received"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeBA"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Bank Account"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeCC"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Credit Card"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeDC"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Debit Card"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeSignet"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Signet"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeIP"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Instant Pay"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeGiftCard"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Gift Card"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeSOToken"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Sale Order: Token"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeFW"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Failed Withdraw"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeCW"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Canceled Withdraw"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <!--                    <com.google.android.material.chip.Chip-->
+                    <!--                        android:id="@+id/transSubTypeCW"-->
+                    <!--                        style="@style/Widget.MaterialComponents.Chip.Choice"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginRight="@dimen/_10sdp"-->
+                    <!--                        android:layout_weight="1"-->
+                    <!--                        android:fontFamily="@font/opensans_semibold"-->
+                    <!--                        android:text="Canceled Withdraw"-->
+                    <!--                        android:textAlignment="center"-->
+                    <!--                        android:textColor="@color/chip_text_color"-->
+                    <!--                        android:textSize="@dimen/_11ssp"-->
+                    <!--                        app:chipBackgroundColor="@color/chipbackgroundcolor"-->
+                    <!--                        app:chipMinHeight="@dimen/_32sdp" />-->
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="invisible"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction Status"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusPending"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Pending"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusCompleted"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Completed"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusCanceled"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Canceled"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusInProgress"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="In progress"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transStatusFailed"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Failed"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_8sdp"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="invisible"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_17sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction Amount"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_small_corners">
+
+                        <EditText
+                            android:id="@+id/transAmountStartET"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:hint="(CYN)"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:maxLength="@string/maxlength"
+                            android:textColor="@color/primary_black"
+                            android:textColorHint="@color/light_gray"
+                            android:textCursorDrawable="@drawable/cursor_color"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_11sdp"
+                        android:layout_marginRight="@dimen/_11sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="To"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_small_corners">
+
+                        <EditText
+                            android:id="@+id/transAmountEndET"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:hint="(CYN)"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:maxLength="@string/maxlength"
+                            android:textColor="@color/primary_black"
+                            android:textColorHint="@color/light_gray"
+                            android:textCursorDrawable="@drawable/cursor_color"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_17sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Date"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:id="@+id/dateRangePickerLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_50sdp"
+                    android:background="@drawable/bg_small_corners"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/datePickET"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_square_withoutcolor_corners"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:hint="Date Range"
+                        android:textColor="@color/primary_black"
+                        android:textColorHint="@color/light_gray"
+                        android:textCursorDrawable="@drawable/cursor_color_text"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:src="@drawable/ic_calendar_icon"
+
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/applyFilterBtnCV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_35sdp"
+            android:gravity="center"
+            app:cardBackgroundColor="#00a6a2"
+            app:cardCornerRadius="@dimen/_20sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/primary_green"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:text="Apply Filter"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

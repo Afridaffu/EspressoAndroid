@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="25dp"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.OTPValidation">
 
@@ -38,17 +37,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_40sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="Error: Look like we are having an issue with your OTP request, please retry again later."
+            android:text="Error: Looks like we are having an issue with your OTP request, please retry again later."
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/tryAgainCV"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/_30sdp"
         app:cardBackgroundColor="@color/primary_color"
         app:cardCornerRadius="@dimen/_22sdp">
 
@@ -61,6 +59,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp"
             android:textStyle="bold" />
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
