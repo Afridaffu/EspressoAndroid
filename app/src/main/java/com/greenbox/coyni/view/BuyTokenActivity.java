@@ -313,7 +313,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         objResponse = transactionLimitResponse;
                         setDailyWeekLimit(transactionLimitResponse.getData());
                         if (etAmount.getText().toString().trim().length() > 0) {
-                            validation();
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

@@ -234,7 +234,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         }
                                     } else {
                                         if (!objData.getExpired()) {
-                                            ((WithdrawTokenActivity) mContext).displayCVV(objData);
+//                                            ((WithdrawTokenActivity) mContext).displayCVV(objData);
+                                            ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
                                         } else {
                                             ((WithdrawTokenActivity) mContext).expiry();
                                         }
