@@ -265,7 +265,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                                 convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
-                                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
                                 }
                             } else {
                                 tvCYN.setVisibility(View.GONE);
@@ -273,7 +281,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 convertCYNtoUSD();
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
                                 if (tvError.getVisibility() == View.VISIBLE) {
-                                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -293,8 +309,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
                 if (transactionLimitResponse != null) {
-                    objResponse = transactionLimitResponse;
-                    setDailyWeekLimit(transactionLimitResponse.getData());
+                    try {
+                        objResponse = transactionLimitResponse;
+                        setDailyWeekLimit(transactionLimitResponse.getData());
+                        if (etAmount.getText().toString().trim().length() > 0) {
+                            validation();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });

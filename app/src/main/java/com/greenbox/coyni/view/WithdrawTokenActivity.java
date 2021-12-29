@@ -66,9 +66,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     MyApplication objMyApplication;
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
-    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks;
+    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal;
     RelativeLayout lyPayMethod;
-    LinearLayout lyCDetails, lyWithdrawClose, lyBDetails;
+    LinearLayout lyCDetails, lyWithdrawClose, lyBDetails, lyBalance;
     EditText etAmount;
     CustomKeyboard ctKey;
     PaymentMethodsResponse paymentMethodsResponse;
@@ -80,7 +80,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     ProgressDialog pDialog;
     String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
-    Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;
+    Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0, avaBal = 0.0;
     SignOnData signOnData;
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
@@ -120,10 +120,15 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             try {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     etAmount.setHint("");
+                    lyBalance.setVisibility(View.VISIBLE);
                     if (tvCYN.getVisibility() == View.VISIBLE) {
-
+                        isCYN = true;
+                        isUSD = false;
+                        convertCYNValue();
                     } else {
-
+                        isCYN = false;
+                        isUSD = true;
+                        convertUSDValue();
                     }
 
                     if (editable.length() > 5) {
@@ -133,29 +138,30 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                     }
-//                    if (validation()) {
-//                        ctKey.enableButton();
-//                    } else {
-//                        ctKey.disableButton();
-//                    }
+                    if (validation()) {
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
+                    }
                 } else if (editable.toString().equals(".")) {
                     etAmount.setText("");
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     etAmount.setHint("0.00");
-//                    cynValue = 0.0;
-//                    usdValue = 0.0;
-//                    cynValidation = 0.0;
-//                    usdValidation = 0.0;
+                    lyBalance.setVisibility(View.GONE);
+                    cynValue = 0.0;
+                    usdValue = 0.0;
+                    cynValidation = 0.0;
+                    usdValidation = 0.0;
                     ctKey.disableButton();
                     tvError.setVisibility(View.INVISIBLE);
                     ctKey.clearData();
                 } else {
                     etAmount.setText("");
-//                    cynValue = 0.0;
-//                    usdValue = 0.0;
-//                    cynValidation = 0.0;
-//                    usdValidation = 0.0;
+                    cynValue = 0.0;
+                    usdValue = 0.0;
+                    cynValidation = 0.0;
+                    usdValidation = 0.0;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -188,6 +194,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etAmount = findViewById(R.id.etAmount);
             lyCDetails = findViewById(R.id.lyCDetails);
             lyBDetails = findViewById(R.id.lyBDetails);
+            lyBalance = findViewById(R.id.lyBalance);
+            tvAvailableBal = findViewById(R.id.tvAvailableBal);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
             ctKey.setKeyAction("Withdraw");
             ctKey.setScreenName("withdraw");
@@ -197,6 +205,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             dollarFont = tvCurrency.getTextSize();
             etAmount.requestFocus();
             etAmount.setShowSoftInputOnFocus(false);
+            avaBal = objMyApplication.getGBTBalance();
+            tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()) + getString(R.string.currency));
             if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
                 strCvv = getIntent().getStringExtra("cvv");
             }
@@ -260,6 +270,62 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     displayComments();
                 }
             });
+
+            imgConvert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (etAmount.getText().toString().trim().length() > 0) {
+                            USFormat(etAmount);
+                            if (tvCYN.getVisibility() == View.GONE) {
+                                tvCYN.setVisibility(View.VISIBLE);
+                                tvCurrency.setVisibility(View.INVISIBLE);
+                                etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                                convertUSDtoCYN();
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    lyBalance.setVisibility(View.GONE);
+                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
+                                } else {
+                                    lyBalance.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                tvCYN.setVisibility(View.GONE);
+                                tvCurrency.setVisibility(View.VISIBLE);
+                                etAmount.setGravity(Gravity.CENTER_VERTICAL);
+                                convertCYNtoUSD();
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    lyBalance.setVisibility(View.GONE);
+                                    //tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
+                                } else {
+                                    lyBalance.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
             calculateFee("10");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -273,6 +339,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 if (transactionLimitResponse != null) {
                     objResponse = transactionLimitResponse;
                     setDailyWeekLimit(transactionLimitResponse.getData());
+                    if (etAmount.getText().toString().trim().length() > 0) {
+                        validation();
+                    }
                 }
             }
         });
@@ -534,6 +603,54 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         }
     }
 
+    private Boolean validation() {
+        Boolean value = true;
+        try {
+            cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
+            String strPay = etAmount.getText().toString().trim().replace("\"", "");
+            //usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            String strPay = "";
+//            if (tvCYN.getVisibility() == View.VISIBLE) {
+//                strPay = String.valueOf(cynValue);
+//            } else {
+//                strPay = String.valueOf(usdValue);
+//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            }
+            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+                tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+                if (strLimit.equals("daily")) {
+                    tvError.setText("Amount entered exceeds your daily limit");
+                } else if (strLimit.equals("week")) {
+                    tvError.setText("Amount entered exceeds your weekly limit");
+                }
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else if(Double.parseDouble(strPay.replace(",", "")) > avaBal){
+                tvError.setText("Amount entered exceeds available balance");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else if(cynValue > avaBal){
+                tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                return value = false;
+            } else{
+                tvError.setVisibility(View.INVISIBLE);
+                lyBalance.setVisibility(View.VISIBLE);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
     public void withdrawTokenPreview() {
         try {
             prevDialog = new Dialog(WithdrawTokenActivity.this);
@@ -564,11 +681,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             tvCYN.setVisibility(View.GONE);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            tvGet.setText(Utils.USNumberFormat(cynValue));
-            tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " USD");
-            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " USD");
-            total = cynValue + Double.parseDouble(strPFee);
-            tvTotal.setText(Utils.USNumberFormat(total) + " USD");
+            tvGet.setText("$ " + Utils.USNumberFormat(usdValue));
+            tvPurchaseAmt.setText(Utils.USNumberFormat(usdValue) + " " + getString(R.string.currency));
+            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
+            total = usdValue + Double.parseDouble(strPFee);
+            tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
@@ -921,6 +1038,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.addTextChangedListener(WithdrawTokenActivity.this);
+            etAmount.setSelection(etAmount.getText().toString().length());
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
@@ -1043,6 +1161,85 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     }
                 }
             });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void withdrawTokenClick() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (tvCYN.getVisibility() == View.VISIBLE) {
+                convertUSDtoCYN();
+            } else {
+                convertCYNtoUSD();
+            }
+            calculateFee(Utils.USNumberFormat(cynValue));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertUSDValue() {
+        try {
+            if (isUSD) {
+                isUSD = false;
+                usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
+//                cynValue = ((usdValue + feeInAmount) * 100) / (100 + feeInPercentage);
+                cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertCYNValue() {
+        try {
+            if (isCYN) {
+                isCYN = false;
+                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
+//                usdValue = (cynValue - (cynValue * (feeInPercentage / 100))) + feeInAmount;
+                usdValue = ((cynValue - feeInAmount) * 100) / (100 + feeInPercentage);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertUSDtoCYN() {
+        try {
+            convertUSDValue();
+            if (cynValue != 0.0 || usdValue != 0.0) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setFilters(FilterArray);
+                etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
+                etAmount.setText(String.valueOf(cynValue));
+                etAmount.addTextChangedListener(WithdrawTokenActivity.this);
+                USFormat(etAmount);
+                etAmount.setSelection(etAmount.getText().length());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertCYNtoUSD() {
+        try {
+            convertCYNValue();
+            if (usdValue != 0.0) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setFilters(FilterArray);
+                etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
+                etAmount.setText(String.valueOf(usdValue));
+                etAmount.addTextChangedListener(WithdrawTokenActivity.this);
+                USFormat(etAmount);
+                etAmount.setSelection(etAmount.getText().length());
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

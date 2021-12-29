@@ -160,19 +160,20 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                         case "buycvv":
                             BuyTokenActivity.buyTokenActivity.okClick();
                             break;
-                        case "wpmcvv":
-                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wpmcvv");
-                            break;
-                        case "wntcvv":
-                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wntcvv");
-                            break;
+//                        case "wpmcvv":
+//                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wpmcvv");
+//                            break;
+//                        case "wntcvv":
+//                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wntcvv");
+//                            break;
                         case "withdrawcvv":
                             WithdrawTokenActivity.withdrawTokenActivity.okClick();
                             break;
+                        case "withdraw":
+                            WithdrawTokenActivity.withdrawTokenActivity.withdrawTokenClick();
+                            break;
                     }
-//                    if (strScreen.equals("addcard")) {
-//                        AddCardActivity.addCardActivity.verifyClick();
-//                    }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
