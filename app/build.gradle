@@ -17,7 +17,6 @@ android {
 //            keyPassword System.getProperty("Coyni@1")
 //        }
     }
-    compileSdk 30
     compileSdk 31
 
     defaultConfig {
