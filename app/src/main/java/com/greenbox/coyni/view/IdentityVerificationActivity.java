@@ -1252,5 +1252,14 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         identityFile = null;
         isFileSelected = false;
 
+        isSSNSelected=false;
+        isDOBSelected=false;
+        isMailAddr1=false;
+        isCity=false;
+        isState=false;
+        isZip=false;
+        isSubmit=false;
+        isNext=false;
+
     }
 }

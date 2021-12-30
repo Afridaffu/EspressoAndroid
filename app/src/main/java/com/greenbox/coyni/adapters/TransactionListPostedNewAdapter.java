@@ -81,7 +81,7 @@ public class TransactionListPostedNewAdapter extends RecyclerView.Adapter<Transa
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strCurDate = spf.format(Calendar.getInstance().getTime());
-            if (dates.get(position).equals(Utils.convertDate(strCurDate))) {
+            if (dates.get(position).equals(objMyApplication.convertZoneDateLastYear(strCurDate))) {
                 holder.date.setText("Today");
             } else {
                 if (currentYear == Integer.parseInt(dates.get(position).split(",")[1].trim())) {

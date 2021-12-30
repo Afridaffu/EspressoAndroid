@@ -1256,11 +1256,23 @@ public class TransactionListActivity extends AppCompatActivity {
                     transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     try {
+
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
-                            if (getUSFormat(transAmountEndET.getText().toString()) < getUSFormat(transAmountStartET.getText().toString())) {
+
+                            Double startAmount=Double.parseDouble(transAmountStartET.getText().toString().replace(",","").trim());
+                            Double endAmount=Double.parseDouble(transAmountEndET.getText().toString().replace(",","").trim());
+                            if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
-                                transAmountStartET.setText("");
-                                strStartAmount = "";
+
+                                try {
+                                    transAmountStartET.setText("");
+                                    strStartAmount = "";
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                transAmountEndET.setText("");
+                                strEndAmount="";
                             }
                         }
                     } catch (NumberFormatException e) {
@@ -1578,9 +1590,10 @@ public class TransactionListActivity extends AppCompatActivity {
     }
 
     public Double getUSFormat(String amount) {
-        String strAmount = "`";
+        String strAmount = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(amount.trim().replace(",", ""));
+//            strAmount = Utils.convertBigDecimalUSDC(amount.trim().replace(",", ""));
+            strAmount = amount.trim().replace(",", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
