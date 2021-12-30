@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
                     android:paddingLeft="@dimen/_10sdp"
-                    android:text="delivered."
+                    android:text="delivered. "
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10sdp" />
 

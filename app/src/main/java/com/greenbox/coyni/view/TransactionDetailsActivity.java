@@ -480,7 +480,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refIDIV = findViewById(R.id.withdrawRefIDIV);
 
         headerMsdTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        amountTV.setText(Utils.convertTwoDecimal(objData.getTotalPaidAmount().replace("CYN", "").trim()));
+        amountTV.setText(Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
 
         status.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -509,11 +509,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         email.setText(objData.getRecipientEmail());
 
         Double subtotatl = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN", "").trim());
-        Double procesFee = Double.parseDouble(objData.getGiftCardFee().replace("CYN", "").trim());
 
-        subtotal.setText("" + Utils.convertTwoDecimal(objData.getTotalPaidAmount().replace("CYN", "").trim()));
+        subtotal.setText("" + Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
         fee.setText("" + Utils.convertTwoDecimal(objData.getGiftCardFee().replace(" CYN", "").trim()));
-        grandtotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotatl + procesFee)));
+        grandtotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotatl )));
 
         dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 

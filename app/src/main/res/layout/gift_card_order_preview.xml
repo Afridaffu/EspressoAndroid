@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="center"
             android:text="Order Overview"
@@ -33,7 +33,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_17sdp"
+            android:layout_marginTop="@dimen/_1sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:background="@color/white"
             android:gravity="center"
@@ -98,7 +98,7 @@
                 android:gravity="end"
                 android:text="Jonathanjoestar@gmail.com"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,7 +123,7 @@
                 android:gravity="end"
                 android:text="200.00 CYN"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
 
         <LinearLayout
@@ -148,7 +148,8 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="end"
                 android:text="1.00 CYN"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11ssp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,7 +175,8 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="end"
                 android:text="201.00 CYN"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11ssp"/>
         </LinearLayout>
     </LinearLayout>
 

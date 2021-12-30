@@ -74,6 +74,8 @@ public class TransactionData {
     private String orderId;
     private String giftCardFee;
     private String withdrawId;
+    private String giftCardAmount;
+    private String subtotal;
 
 
     public String getWithdrawId() {
@@ -379,5 +381,33 @@ public class TransactionData {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getDepositId() {
+        return depositId;
+    }
+
+    public void setDepositId(String depositId) {
+        this.depositId = depositId;
+    }
+
+    public void setWithdrawId(String withdrawId) {
+        this.withdrawId = withdrawId;
+    }
+
+    public String getGiftCardAmount() {
+        return giftCardAmount;
+    }
+
+    public void setGiftCardAmount(String giftCardAmount) {
+        this.giftCardAmount = giftCardAmount;
+    }
+
+    public String getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(String subtotal) {
+        this.subtotal = subtotal;
     }
 }

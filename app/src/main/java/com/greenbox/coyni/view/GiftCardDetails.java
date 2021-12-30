@@ -31,6 +31,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,12 +97,11 @@ public class GiftCardDetails extends AppCompatActivity {
     public static GiftCardDetails giftCardDetails;
     MyApplication objMyApplication;
 
-    static SQLiteDatabase mydatabase;
-    static Cursor dsPermanentToken, dsFacePin, dsTouchID;
-    static String strToken = "";
-    static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    private static int FOR_RESULT = 235;
+    SQLiteDatabase mydatabase;
+    Cursor dsFacePin, dsTouchID;
+    boolean isFaceLock = false, isTouchId = false, isBiometric = false;
+    int CODE_AUTHENTICATION_VERIFICATION = 251;
+    int FOR_RESULT = 235;
     Dialog prevDialog;
     Long mLastClickTime = 0L;
 
@@ -109,9 +109,11 @@ public class GiftCardDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_gift_card_details);
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.WHITE);
             initFields();
             initObservers();
 
@@ -156,9 +158,8 @@ public class GiftCardDetails extends AppCompatActivity {
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
 
             isBiometric = Utils.checkBiometric(GiftCardDetails.this);
-            SetToken(objMyApplication, this);
-            SetFaceLock(objMyApplication, this);
-            SetTouchId(objMyApplication, this);
+            SetFaceLock();
+            SetTouchId();
 
             giftCardsViewModel.getGiftCardDetails(getIntent().getStringExtra("BRAND_KEY"));
 
@@ -168,11 +169,11 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (brandDescTV.getMaxLines() == 3) {
+                        if (brandDescTV.getMaxLines() == 2) {
                             brandDescTV.setMaxLines(Integer.MAX_VALUE);
                             viewAllTV.setText(getResources().getString(R.string.view_less));
                         } else {
-                            brandDescTV.setMaxLines(3);
+                            brandDescTV.setMaxLines(2);
                             viewAllTV.setText(getResources().getString(R.string.view_all));
                         }
                     } catch (Resources.NotFoundException e) {
@@ -242,53 +243,13 @@ public class GiftCardDetails extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        String strCurrency = " USD", strAmount = "", limitType = "";
-                        if (isNextEnabled) {
-                            Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
-                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
-                            Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
-
-                            if (walletAmount < giftCardAmount) {
-                                Utils.displayAlert("Gift Card amount " + giftCardAmount + " should not be greater than your wallet amount " + walletAmount, GiftCardDetails.this, "", "");
-                            } else if ((walletAmount > giftCardAmount) && objTranLimit.getData().getTokenLimitFlag()) {
-
-                                limitType = objTranLimit.getData().getLimitType();
-
-//                                Double weekLimit = 0.0, dailyLimit = 0.0;
-//                                if (objTranLimit.getData().getWeeklyAccountLimit() != null && !objTranLimit.getData().getWeeklyAccountLimit().toLowerCase().equals("na") && !objTranLimit.getData().getWeeklyAccountLimit().toLowerCase().equals("unlimited")) {
-//                                    weekLimit = Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit());
-//                                }
-//                                if (objTranLimit.getData().getDailyAccountLimit() != null && !objTranLimit.getData().getDailyAccountLimit().toLowerCase().equals("na") && !objTranLimit.getData().getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-//                                    dailyLimit = Double.parseDouble(objTranLimit.getData().getDailyAccountLimit());
-//                                }
-                                minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
-
-                                if (limitType.equalsIgnoreCase("DAILY")) {
-                                    if (giftCardAmount < Double.parseDouble(objTranLimit.getData().getMinimumLimit())) {
-                                        Utils.displayAlert("Your daily minimum amount limit is " + Utils.USNumberFormat(Double.parseDouble(objTranLimit.getData().getMinimumLimit())) + strCurrency, GiftCardDetails.this, "", "");
-                                    } else if (giftCardAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
-                                        Utils.displayAlert("Your daily maximum amount limit is " + Utils.USNumberFormat(Double.parseDouble(objTranLimit.getData().getTransactionLimit())) + strCurrency, GiftCardDetails.this, "", "");
-                                    } else {
-                                        giftCardPreview();
-                                    }
-                                } else {
-                                    if (giftCardAmount < Double.parseDouble(objTranLimit.getData().getMinimumLimit())) {
-                                        Utils.displayAlert("Your weekly minimum amount limit is " + Utils.USNumberFormat(Double.parseDouble(objTranLimit.getData().getMinimumLimit())) + strCurrency, GiftCardDetails.this, "", "");
-                                    } else if (giftCardAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
-                                        Utils.displayAlert("Your weekly maximum amount limit is " + Utils.USNumberFormat(Double.parseDouble(objTranLimit.getData().getTransactionLimit())) + strCurrency, GiftCardDetails.this, "", "");
-                                    } else {
-                                        giftCardPreview();
-                                    }
-                                }
-                            } else {
-                                giftCardPreview();
-                            }
-                        }
+                        giftCardPreview();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -313,7 +274,7 @@ public class GiftCardDetails extends AppCompatActivity {
 //                            } else {
 //                                brandDescTV.setText(Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim()));
 //                            }
-                            brandDescTV.setText(Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " ").trim()));
+                            brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " ")).toString().trim()));
                             Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
                             if (objBrand.getItems() != null && objBrand.getItems().size() > 0) {
@@ -338,6 +299,9 @@ public class GiftCardDetails extends AppCompatActivity {
                                     amountET.setCursorVisible(true);
 
                                     amountETString = "$" + Utils.convertBigDecimalUSDC(String.valueOf(min)) + " - $" + Utils.convertBigDecimalUSDC(String.valueOf(max));
+                                    amountET.requestFocus();
+                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 //                                    selectedItem = objBrand.getItems().get(0);
                                 }
                             }
@@ -414,10 +378,60 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.toString().trim().length() > 0) {
-                        isAmount = true;
-                        amountErrorLL.setVisibility(GONE);
+
                         amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_green));
+
+                        Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
+                        Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
+                        Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
+                        minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
+
+                        if (walletAmount < giftCardAmount) {
+                            isAmount = false;
+                            amountErrorLL.setVisibility(VISIBLE);
+                            amountErrorTV.setText("Amount entered exceeds available balance");
+                        } else if (giftCardETAmount < minValue) {
+                            isAmount = false;
+                            amountErrorLL.setVisibility(VISIBLE);
+                            amountErrorTV.setText("Amount should be equal to or greater than " + minValue + " USD");
+                        } else if (giftCardETAmount > max) {
+                            isAmount = false;
+                            amountErrorLL.setVisibility(VISIBLE);
+                            amountErrorTV.setText("Amount entered exceeds limit");
+                        } else if (objTranLimit.getData().getTokenLimitFlag()) {
+                            String limitType = objTranLimit.getData().getLimitType();
+                            if (limitType.equalsIgnoreCase("DAILY")) {
+                                if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                    isAmount = false;
+                                    amountErrorLL.setVisibility(VISIBLE);
+                                    amountErrorTV.setText("Amount entered exceeds transaction limit");
+                                } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getDailyAccountLimit())) {
+                                    isAmount = false;
+                                    amountErrorLL.setVisibility(VISIBLE);
+                                    amountErrorTV.setText("Amount entered exceeds daily limit");
+                                } else {
+                                    isAmount = true;
+                                    amountErrorLL.setVisibility(GONE);
+                                }
+                            } else {
+                                if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                    isAmount = false;
+                                    amountErrorLL.setVisibility(VISIBLE);
+                                    amountErrorTV.setText("Amount entered exceeds transaction limit");
+                                } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit())) {
+                                    isAmount = false;
+                                    amountErrorLL.setVisibility(VISIBLE);
+                                    amountErrorTV.setText("Amount entered exceeds weekly limit");
+                                } else {
+                                    isAmount = true;
+                                    amountErrorLL.setVisibility(GONE);
+                                }
+                            }
+                        } else {
+                            isAmount = true;
+                            amountErrorLL.setVisibility(GONE);
+                        }
                     } else if (amountET.getText().toString().trim().length() == 0) {
                         amountErrorLL.setVisibility(VISIBLE);
                         amountErrorTV.setText("Field Required");
@@ -587,12 +601,17 @@ public class GiftCardDetails extends AppCompatActivity {
                         USFormat(amountET);
                         amountET.setHint("");
                         if (amountET.getText().toString().trim().length() > 0) {
-                            amountErrorLL.setVisibility(GONE);
+                            if(amountErrorLL.getVisibility()==VISIBLE){
+                                amountErrorLL.setVisibility(VISIBLE);
+                            }else{
+                                amountErrorLL.setVisibility(GONE);
+                            }
                             amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
                         } else {
                             amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
+//                            Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(amountTIL, getColor(R.color.light_gray));
                             amountErrorLL.setVisibility(VISIBLE);
                             amountErrorTV.setText("Field Required");
                         }
@@ -624,7 +643,8 @@ public class GiftCardDetails extends AppCompatActivity {
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
                             firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
+//                            Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(firstNameTIL, getColor(R.color.light_gray));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
@@ -653,7 +673,8 @@ public class GiftCardDetails extends AppCompatActivity {
                             lastNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
                             lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
+                            //Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(lastNameTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
 
@@ -675,20 +696,28 @@ public class GiftCardDetails extends AppCompatActivity {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Invalid Email");
+                            emailErrorTV.setText("Please Enter a valid Email");
                         } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
+                        } else if (emailET.getText().toString().trim().length() == 0) {
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));
+                            emailTIL.setHint("Coyni@example.com");
+                            emailErrorLL.setVisibility(VISIBLE);
+                            emailErrorTV.setText("Field Required");
                         } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Field Required");
+                            emailErrorTV.setText("Please Enter a valid Email");
                         }
                     } else {
-                        emailET.setHint("Email");
+                        emailET.setHint("Coyni@example.com");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
                     }
                 }
@@ -938,13 +967,16 @@ public class GiftCardDetails extends AppCompatActivity {
                         tv_lable.setText("Verifying");
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
                             if (isBiometric && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
+                                prevDialog.dismiss();
                                 Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
+                                prevDialog.dismiss();
                                 startActivityForResult(new Intent(GiftCardDetails.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "GiftCard"), FOR_RESULT);
                             }
                         } else {
+                            prevDialog.dismiss();
                             startActivityForResult(new Intent(GiftCardDetails.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "GiftCard"), FOR_RESULT);
@@ -987,23 +1019,10 @@ public class GiftCardDetails extends AppCompatActivity {
         }
     }
 
-    public static void SetToken(MyApplication objMyApplication, Activity activity) {
-        try {
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
+    public void SetFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
             dsFacePin.moveToFirst();
             if (dsFacePin.getCount() > 0) {
@@ -1021,10 +1040,10 @@ public class GiftCardDetails extends AppCompatActivity {
         }
     }
 
-    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
+    public void SetTouchId() {
         try {
             isTouchId = false;
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
             dsTouchID.moveToFirst();
             if (dsTouchID.getCount() > 0) {

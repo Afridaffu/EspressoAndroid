@@ -806,7 +806,11 @@ public class TransactionListActivity extends AppCompatActivity {
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
 
-
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            dashboardViewModel.meTransactionList(transactionListRequest);
         });
 
         transTypePR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

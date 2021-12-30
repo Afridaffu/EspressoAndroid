@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
@@ -96,7 +96,7 @@
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_17sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="Brands"
+            android:text="Popular Brands"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp" />
 
@@ -129,7 +129,7 @@
                     android:id="@+id/brandsGV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_5sdp"/>
+                    android:padding="@dimen/_5sdp" />
 
             </RelativeLayout>
 

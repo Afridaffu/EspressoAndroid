@@ -81,7 +81,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         giftCardAmountTV.setText(Utils.convertBigDecimalUSDC(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getTotalAmount().toString()));
                         giftCardDescTV.setText(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card sent to " +
                                 objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getFirstName() + " " + objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getLastName() + " at " +
-                                objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getEmail());
+                                objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getEmail()+".");
                         gcProcessingTV.setText("We are processing your request, please allow a few minutes for your " + objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card to be");
                     }
 
