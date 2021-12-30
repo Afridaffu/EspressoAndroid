@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/_10sdp"
     android:paddingTop="@dimen/_10sdp"
+    android:paddingStart="@dimen/_11sdp"
     android:paddingRight="@dimen/_10sdp">
 
     <LinearLayout
@@ -14,28 +15,56 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
         <TextView
-            android:id="@+id/txnDescTV"
-            android:layout_width="match_parent"
+            android:id="@+id/latestmessageTV"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Send funds from Alison L"
+            android:layout_weight=".65"
+            android:textColor="@color/primary_black"
+            android:visibility="visible"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:text="Buy Tokens from Card "
+            android:textSize="@dimen/_11ssp"
+            />
+
+        <TextView
+            android:id="@+id/latestmessagTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:singleLine="true"
+            android:layout_weight=".3"
+            android:gravity="start"
+            android:text=" **1234"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp"
-            android:singleLine="true"
-            android:ellipsize="end"/>
+            android:visibility="visible"/>
+
+<!--        <TextView-->
+<!--            android:id="@+id/txnDescTV"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:fontFamily="@font/opensans_semibold"-->
+<!--            android:text="Send funds from Alison L"-->
+<!--            android:textColor="@color/primary_black"-->
+<!--            android:textSize="@dimen/_11ssp"-->
+<!--            android:singleLine="true"-->
+<!--            android:ellipsize="end"/>-->
 
         <TextView
             android:id="@+id/amountTV"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:fontFamily="@font/opensans_bold"
-            android:text="-100.00"
+            android:text="-100,0000,000"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp"
-            android:layout_weight="2"
             android:gravity="right"/>
 
 

@@ -27,37 +27,80 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingTop="@dimen/_10sdp"
+        android:paddingStart="@dimen/_11sdp"
         android:paddingBottom="@dimen/_10sdp">
-<LinearLayout
-    android:id="@+id/topLL"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-        <TextView
-            android:id="@+id/messageTV"
+
+        <LinearLayout
+            android:id="@+id/topLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_11sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Send funds from Alison L"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_11ssp" />
+            android:orientation="horizontal">
+
+<!--            <TextView-->
+<!--                android:id="@+id/pendingmessageTV"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_11sdp"-->
+<!--                android:layout_weight=".65"-->
+<!--                android:fontFamily="@font/opensans_semibold"-->
+<!--                android:singleLine="true"-->
+<!--                android:text="Send funds from Alison L"-->
+<!--                android:textColor="@color/primary_black"-->
+<!--                android:textSize="@dimen/_11ssp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/pendingmessagTV"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_11sdp"-->
+<!--                android:layout_weight=".3"-->
+<!--                android:gravity="start"-->
+<!--                android:fontFamily="@font/opensans_semibold"-->
+<!--                android:singleLine="true"-->
+<!--                android:text=" ** 5465"-->
+<!--                android:textColor="@color/primary_black"-->
+<!--                android:textSize="@dimen/_11ssp" />-->
+            <TextView
+                android:id="@+id/pendingmessageTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:layout_weight=".65"
+                android:textColor="@color/primary_black"
+                android:visibility="visible"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:text="Buy Tokens from Card "
+                android:textSize="@dimen/_11ssp"
+                />
+
+            <TextView
+                android:id="@+id/pendingmessagTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:singleLine="true"
+                android:layout_weight=".3"
+                android:gravity="start"
+                android:text=" **1234"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp"
+                android:visibility="visible"/>
 
 
-        <TextView
-            android:id="@+id/amountTV"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/_11sdp"
-            android:fontFamily="@font/opensans_bold"
-            android:singleLine="true"
-            android:gravity="right"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/amountTV"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="right"
+                android:singleLine="true"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+        </LinearLayout>
 
 
         <TextView
@@ -65,7 +108,6 @@
             android:layout_width="@dimen/_68sdp"
             android:layout_height="@dimen/_14sdp"
             android:layout_below="@id/topLL"
-            android:layout_marginStart="@dimen/_11sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"

@@ -626,6 +626,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }

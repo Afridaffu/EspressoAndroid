@@ -6,11 +6,27 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".view.IdVeAdditionalActionActivity">
+    <LinearLayout
+        android:id="@+id/ssnCloseLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_45sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:src="@drawable/ic_close" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/idveriErrWithSSNLL"
@@ -18,20 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ssnCloseLL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_45sdp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_15sdp"
-                    android:src="@drawable/ic_close" />
-
-            </LinearLayout>
 
             <ImageView
                 android:layout_width="@dimen/_80sdp"
@@ -62,67 +65,103 @@
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ssnTIL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_44sdp">
+                android:layout_marginTop="@dimen/_54sdp"
+                android:layout_marginStart="@dimen/_21sdp"
+                android:layout_marginEnd="@dimen/_21sdp"
+                android:hint="SSN"
+                android:textColorHint="@color/black"
+                app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                app:boxStrokeColor="@color/primary_color"
+                app:expandedHintEnabled="false"
+                app:hintTextColor="@color/primary_color">
 
-                <LinearLayout
-                    android:id="@+id/hintdHolderLL"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ssnET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_21sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_21sdp"
-                    android:background="@drawable/outline_box_unfocused"
-
-                    android:gravity="center"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <EditText
-                        android:id="@+id/ssnET"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:digits="1234567890"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:hint="•••-••-••••"
-                        android:inputType="numberPassword"
-                        android:maxLines="1"
-                        android:padding="14dp"
-                        android:singleLine="true"
-                        android:maxLength="9"
-                        android:textColor="@color/primary_black"
-                        android:textColorHint="@color/light_gray"
-                        android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        />
-
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/hintTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/white"
                     android:fontFamily="@font/opensans_semibold"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:text="SSN"
+                    android:hint="@string/ssnhint"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="9"
+                    android:padding="@dimen/_14sdp"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderLL"
-                    app:layout_constraintStart_toStartOf="@+id/hintdHolderLL"
-                    app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textSize="@dimen/_12ssp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_44sdp">-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/hintdHolderLL"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/_21sdp"-->
+<!--                    android:layout_marginTop="@dimen/_10sdp"-->
+<!--                    android:layout_marginEnd="@dimen/_21sdp"-->
+<!--                    android:background="@drawable/outline_box_unfocused"-->
+
+<!--                    android:gravity="center"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent">-->
+
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/ssnET"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="55dp"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@android:color/transparent"-->
+<!--                        android:digits="1234567890"-->
+<!--                        android:fontFamily="@font/opensans_semibold"-->
+<!--                        android:hint="•••-••-••••"-->
+<!--                        android:inputType="numberPassword"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:padding="14dp"-->
+<!--                        android:singleLine="true"-->
+<!--                        android:maxLength="9"-->
+<!--                        android:textColor="@color/primary_black"-->
+<!--                        android:textColorHint="@color/light_gray"-->
+<!--                        android:textCursorDrawable="@drawable/cursor_color"-->
+<!--                        android:textSize="@dimen/_12ssp"-->
+<!--                        />-->
+
+
+<!--                </LinearLayout>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/hintTV"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:background="@android:color/white"-->
+<!--                    android:fontFamily="@font/opensans_semibold"-->
+<!--                    android:paddingStart="4dp"-->
+<!--                    android:paddingEnd="4dp"-->
+<!--                    android:text="SSN"-->
+<!--                    android:textColor="@color/primary_black"-->
+<!--                    android:textSize="@dimen/_12ssp"-->
+<!--                    android:visibility="visible"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/hintdHolderLL"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/hintdHolderLL"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />-->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             <LinearLayout
                 android:id="@+id/ssnErrorLL"
@@ -157,7 +196,7 @@
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_70sdp"
                 android:layout_marginRight="@dimen/_21sdp"
-                android:layout_marginBottom="@dimen/_100sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
                 app:cardBackgroundColor="@color/inactive_color"
                 app:cardCornerRadius="@dimen/_21sdp">
 
