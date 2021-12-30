@@ -16,22 +16,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
@@ -45,7 +40,6 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -65,15 +59,14 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     Boolean isBank = false, isPayments = false, isDeCredit = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
-    Dialog payDialog, cvvDialog;
-    TextInputEditText etCVV;
+    Dialog payDialog;
     String strSignOn = "", strCurrent = "", strScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
-    LinearLayout lyAPayClose, lyExternalClose, lySelBack, lyAddPay;
+    LinearLayout lyAPayClose, lyExternalClose;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
-    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
+    TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext;
     public static WithdrawPaymentMethodsActivity withdrawPaymentMethodsActivity;
@@ -108,7 +101,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     ControlMethod("withdrawmethod");
                     selectWithdrawMethod();
                     strScreen = "withdrawmethod";
-                    isDeCredit = true;
                     getPaymentMethods();
                 }
             } else {
@@ -122,7 +114,12 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (strScreen.equals("withdrawpay")) {
+        if (strCurrent.equals("externalBank")) {
+            strCurrent = "";
+            ControlMethod("withdrawpay");
+            withdrawPaymentMethod("bank");
+            strScreen = "withdrawpay";
+        } else if (strScreen.equals("withdrawpay")) {
             ControlMethod("withdrawmethod");
             selectWithdrawMethod();
             strScreen = "withdrawmethod";
@@ -141,20 +138,21 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             walletResponse = objMyApplication.getWalletResponse();
             walletBalance = objMyApplication.getGBTBalance();
             if (paymentMethodsResponse != null) {
-                List<PaymentsList> allPayments = paymentMethodsResponse.getData().getData();
-                if (allPayments != null && allPayments.size() > 0) {
-                    bankList = new ArrayList<>();
-                    cardList = new ArrayList<>();
-                    for (int i = 0; i < allPayments.size(); i++) {
-                        if (allPayments.get(i).getPaymentMethod() != null) {
-                            if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
-                                bankList.add(allPayments.get(i));
-                            } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
-                                cardList.add(allPayments.get(i));
-                            }
-                        }
-                    }
-                }
+//                List<PaymentsList> allPayments = paymentMethodsResponse.getData().getData();
+//                if (allPayments != null && allPayments.size() > 0) {
+//                    bankList = new ArrayList<>();
+//                    cardList = new ArrayList<>();
+//                    for (int i = 0; i < allPayments.size(); i++) {
+//                        if (allPayments.get(i).getPaymentMethod() != null) {
+//                            if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
+//                                bankList.add(allPayments.get(i));
+//                            } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
+//                                cardList.add(allPayments.get(i));
+//                            }
+//                        }
+//                    }
+//                }
+                getPayments(paymentMethodsResponse.getData().getData());
             }
             if (walletBalance != 0.0) {
                 ControlMethod("withdrawmethod");
@@ -227,8 +225,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
-                            } else {
-//                                displayError();
                             }
                         }
                     }
@@ -246,7 +242,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
                             dashboardViewModel.mePaymentMethods();
-//                            displaySuccess();
                         }
                     }
                 } catch (Exception ex) {
@@ -264,6 +259,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
+                    getPayments(payMethodsResponse.getData().getData());
                     if (isDeCredit) {
                         isDeCredit = false;
                         ControlMethod("addpayment");
@@ -274,13 +270,19 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
 //                        paymentMethods();
-                    } else if (isPayments) {
-                        isPayments = false;
-                        isDeCredit = false;
-                        ControlMethod("addpayment");
-                        strCurrent = "addpayment";
-                        numberOfAccounts();
+                    } else if (isPayments && strCurrent.equals("debit")) {
+                        ControlMethod("withdrawpay");
+                        withdrawPaymentMethod("card");
+                        strScreen = "withdrawpay";
                     }
+
+//                    else if (isPayments) {
+//                        isPayments = false;
+//                        isDeCredit = false;
+//                        ControlMethod("addpayment");
+//                        strCurrent = "addpayment";
+//                        numberOfAccounts();
+//                    }
                 }
             }
         });
@@ -602,6 +604,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (cardList != null && cardList.size() > 0) {
                             selectPayMethod(cardList);
                         } else {
@@ -668,6 +674,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         if (strPay.equals("bank")) {
                             ControlMethod("externalBank");
                             strCurrent = "externalBank";
+                            LinearLayout lyExternalClose = findViewById(R.id.lyExternalClose);
+                            TextView tvLearnMore = findViewById(R.id.tvLearnMore);
                             cvNext = findViewById(R.id.cvNext);
                             cvNext.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -680,6 +688,21 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                                     } else {
                                         Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
                                     }
+                                }
+                            });
+                            lyExternalClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    strCurrent = "";
+                                    ControlMethod("withdrawpay");
+                                    withdrawPaymentMethod("bank");
+                                    strScreen = "withdrawpay";
+                                }
+                            });
+                            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
                                 }
                             });
                         } else {
@@ -813,86 +836,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
-//    public void displayCVV(String strscreen) {
-//        try {
-//            closePaymentMethods();
-//            cvvDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
-//            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//            cvvDialog.setContentView(R.layout.cvvlayout);
-//            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//
-//            DisplayMetrics mertics = getResources().getDisplayMetrics();
-//            int width = mertics.widthPixels;
-//
-//            TextView cvvErrorTV = cvvDialog.findViewById(R.id.cvvErrorTV);
-//            etCVV = cvvDialog.findViewById(R.id.etCVV);
-//            TextInputLayout etlCVV = cvvDialog.findViewById(R.id.etlCVV);
-//            LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
-//            CustomKeyboard ctKey;
-//            ctKey = cvvDialog.findViewById(R.id.ckb);
-//            ctKey.setKeyAction("OK");
-//            if (strscreen.equals("withdrawtoken")) {
-//                ctKey.setScreenName("wpmcvv");
-//            } else {
-//                ctKey.setScreenName("wntcvv");
-//            }
-//            InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
-//            ctKey.setInputConnection(ic);
-//            etCVV.setShowSoftInputOnFocus(false);
-////            etCVV.setEnabled(false);
-//            etCVV.requestFocus();
-//
-//            etCVV.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, v);
-//                }
-//            });
-//            etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View view, boolean b) {
-//                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, view);
-//                }
-//            });
-//            etCVV.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable editable) {
-//                    if (editable.length() > 2) {
-//                        ctKey.enableButton();
-//                    } else {
-//                        ctKey.disableButton();
-//                    }
-//                }
-//            });
-//
-//            Window window = cvvDialog.getWindow();
-//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//
-//            WindowManager.LayoutParams wlp = window.getAttributes();
-//
-//            wlp.gravity = Gravity.BOTTOM;
-//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            window.setAttributes(wlp);
-//
-//            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//
-//            cvvDialog.setCanceledOnTouchOutside(true);
-//            cvvDialog.show();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     public void expiry() {
         try {
@@ -1060,32 +1003,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
-//    public void okClick(String strscreen) {
-//        try {
-//            if (!etCVV.getText().toString().trim().equals("")) {
-//                cvvDialog.dismiss();
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                    return;
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
-//                if (strscreen.equals("wpmcvv")) {
-//                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
-//                    i.putExtra("cvv", etCVV.getText().toString().trim());
-//                    startActivity(i);
-//                } else {
-//                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
-//                    i.putExtra("cvv", etCVV.getText().toString().trim());
-//                    startActivity(i);
-//                }
-//            } else {
-//                Utils.displayAlert("Please enter CVV", WithdrawPaymentMethodsActivity.this, "", "");
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public void bindSelectedCard(String strscreen) {
         try {
             if (strscreen.equals("withdrawtoken")) {
@@ -1094,7 +1011,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 startActivity(i);
             } else {
                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
-                i.putExtra("cvv", etCVV.getText().toString().trim());
                 startActivity(i);
             }
         } catch (Exception ex) {
@@ -1127,4 +1043,23 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    private void getPayments(List<PaymentsList> allPayments) {
+        try {
+            if (allPayments != null && allPayments.size() > 0) {
+                bankList = new ArrayList<>();
+                cardList = new ArrayList<>();
+                for (int i = 0; i < allPayments.size(); i++) {
+                    if (allPayments.get(i).getPaymentMethod() != null) {
+                        if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
+                            bankList.add(allPayments.get(i));
+                        } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
+                            cardList.add(allPayments.get(i));
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

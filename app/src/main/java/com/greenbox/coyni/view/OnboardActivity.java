@@ -3,6 +3,8 @@ package com.greenbox.coyni.view;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -75,6 +77,7 @@ public class OnboardActivity extends AppCompatActivity {
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
+            getVersionName();
             if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (Utils.isFingerPrint(OnboardActivity.this)) {
                     Utils.setIsTouchEnabled(true);
@@ -92,6 +95,7 @@ public class OnboardActivity extends AppCompatActivity {
             SetFaceLock();
             SetTouchId();
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
+            Utils.setIsBiometric(isBiometric);
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
                     layoutOnBoarding.setVisibility(View.GONE);
@@ -107,7 +111,9 @@ public class OnboardActivity extends AppCompatActivity {
                     layoutAuth.setVisibility(View.GONE);
                 } else {
                     Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                    i.putExtra("auth", "cancel");
                     startActivity(i);
+                    finish();
                 }
             }
 
@@ -140,7 +146,6 @@ public class OnboardActivity extends AppCompatActivity {
             viewPager.setInterval(AUTO_SCROLL_THRESHOLD_IN_MILLI);
             // enable recycling using true
             viewPager.setCycle(true);
-//            viewPager.setStopScrollWhenTouch(false);
 
             getStarted.setOnClickListener(view -> {
                 try {
@@ -360,6 +365,16 @@ public class OnboardActivity extends AppCompatActivity {
         return value;
     }
 
+    private void getVersionName() {
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
+            Utils.setAppVersion("Android : " + info.versionName + "(" + info.versionCode + ")");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void getStatesUrl(String strCode) {
         try {
             byte[] valueDecoded = new byte[0];
@@ -428,7 +443,6 @@ public class OnboardActivity extends AppCompatActivity {
             }.getType();
             List<States> listStates = gson.fromJson(result, type);
             objMyApplication.setListStates(listStates);
-//            Log.e("result", result);
         }
     }
 }

@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,14 +48,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.SignOnData;
-import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
-import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
-import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
@@ -76,7 +74,7 @@ import java.util.List;
 
 public class WithdrawTokenActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
-    PaymentsList selectedCard, objSelected, prevSelectedCard;
+    PaymentsList selectedCard, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal;
     RelativeLayout lyPayMethod;
@@ -98,7 +96,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
     Boolean isUSD = false, isCYN = false, isBank = false;
-    TextInputEditText etCVV;
+    Boolean isFaceLock = false, isTouchId = false;
+    SQLiteDatabase mydatabase;
+    Cursor dsFacePin, dsTouchID;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private static int FOR_RESULT = 235;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +115,18 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+            case 235: {
+                withdrawToken();
+            }
+            break;
         }
     }
 
@@ -132,7 +146,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             try {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     etAmount.setHint("");
-                    lyBalance.setVisibility(View.VISIBLE);
+                    //lyBalance.setVisibility(View.VISIBLE);
                     isCYN = false;
                     isUSD = true;
                     convertUSDValue();
@@ -154,12 +168,13 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     etAmount.setHint("0.00");
-                    lyBalance.setVisibility(View.GONE);
+//                    lyBalance.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
                     ctKey.disableButton();
-                    tvError.setVisibility(View.INVISIBLE);
+                    tvError.setVisibility(View.GONE);
                     ctKey.clearData();
                 } else {
                     etAmount.setText("");
@@ -211,6 +226,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etAmount.setShowSoftInputOnFocus(false);
             avaBal = objMyApplication.getGBTBalance();
             tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()) + getString(R.string.currency));
+            SetFaceLock();
+            SetTouchId();
             if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
                 strCvv = getIntent().getStringExtra("cvv");
             }
@@ -280,7 +297,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 public void onClick(View view) {
                     try {
                         if (etAmount.getText().toString().trim().length() > 0) {
-                            USFormat(etAmount);
+//                            USFormat(etAmount);
+                            convertDecimal();
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
@@ -387,6 +405,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 if (prevDialog != null) {
                     prevDialog.dismiss();
                 }
+                pDialog.dismiss();
                 if (withdrawResponse != null) {
                     if (withdrawResponse.getStatus().trim().toLowerCase().equals("success")) {
                         withdrawTokenInProgress(withdrawResponse.getData());
@@ -403,6 +422,48 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 }
             }
         });
+    }
+
+    public void SetFaceLock() {
+        try {
+            isFaceLock = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetTouchId() {
+        try {
+            isTouchId = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void selectPayMethod() {
@@ -633,7 +694,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 lyBalance.setVisibility(View.GONE);
                 return value = false;
             } else {
-                tvError.setVisibility(View.INVISIBLE);
+                tvError.setVisibility(View.GONE);
                 lyBalance.setVisibility(View.VISIBLE);
             }
 
@@ -721,9 +782,27 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
                     if (currentId == motionLayout.getEndState()) {
-                        slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-                        withdrawToken();
+                        try {
+                            slideToConfirm.setInteractionEnabled(false);
+                            tv_lable.setText("Verifying");
+                            //withdrawToken();
+                            prevDialog.dismiss();
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "GiftCard"), FOR_RESULT);
+                                }
+                            } else {
+                                startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
 
@@ -977,6 +1056,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     private void withdrawToken() {
         try {
+            pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             WithdrawRequest request = new WithdrawRequest();
             if (!strBankId.equals("")) {
                 bankId = Long.parseLong(strBankId);
@@ -1024,7 +1104,37 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 addNoteET.setText(etRemarks.getText().toString().trim());
                 addNoteET.setSelection(addNoteET.getText().toString().trim().length());
             }
+            addNoteET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = addNoteET.getText().toString();
+                        if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                            addNoteET.setText("");
+                            addNoteET.setSelection(addNoteET.getText().length());
+                        } else if (str.length() > 0 && str.contains(".")) {
+                            addNoteET.setText(addNoteET.getText().toString().replaceAll("\\.", ""));
+                            addNoteET.setSelection(addNoteET.getText().length());
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            addNoteET.setText("");
+                            addNoteET.setSelection(addNoteET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             Window window = cvvDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
@@ -1047,10 +1157,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (addNoteET.getText().toString().trim().length() > 0) {
-                            etRemarks.setText(addNoteET.getText().toString().trim());
-                            cvvDialog.dismiss();
-                        }
+                        etRemarks.setText(addNoteET.getText().toString().trim());
+                        cvvDialog.dismiss();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1100,6 +1208,18 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertDecimal() {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+            etAmount.setFilters(FilterArray);
+            USFormat(etAmount);
+            etAmount.setSelection(etAmount.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -105,7 +105,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    ControlMethod("addpayment");
+                    //ControlMethod("addpayment");
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
                     getPaymentMethods();
                     isDeCredit = true;
                 }
@@ -405,10 +407,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
-//                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-//                            i.putExtra("card", "debit");
-//                            startActivity(i);
-
                             Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
                             startActivityForResult(i, 3);
@@ -425,10 +423,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                             strCurrent = "credit";
-//                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-//                            i.putExtra("card", "credit");
-//                            startActivity(i);
-
                             Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "credit");
                             startActivityForResult(i, 3);

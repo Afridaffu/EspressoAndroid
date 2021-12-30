@@ -90,7 +90,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+        if (!strScreen.equals("withdraw") && (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
             ControlMethod("paymentMethods");
             strCurrent = "paymentMethods";
         } else {
@@ -124,7 +124,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    ControlMethod("addpayment");
+                    //ControlMethod("addpayment");
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
                     isDeCredit = true;
                     getPaymentMethods();
                 }
@@ -445,10 +447,6 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                             strCurrent = "credit";
-//                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
-//                            i.putExtra("card", "credit");
-//                            startActivity(i);
-
                             Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "credit");
                             startActivityForResult(i, 3);

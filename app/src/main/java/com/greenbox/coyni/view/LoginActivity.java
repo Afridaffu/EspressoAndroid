@@ -114,7 +114,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dialog.dismiss();
         }
         isPwdEye = false;
-
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
@@ -124,12 +123,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etEmail.setText(value);
                 etPassword.setText("");
             } else {
-//                etEmail.setText("");
                 etPassword.setText("");
             }
         } catch (Exception e) {
             e.printStackTrace();
-//            etEmail.setText("");
             etPassword.setText("");
         }
         if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
@@ -243,7 +240,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
                         if (!hasFocus) {
-//                            if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             if (etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
@@ -254,12 +250,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                                 layoutEmailError.setVisibility(GONE);
                             }
-//                            else {
-//                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-//                                layoutEmailError.setVisibility(VISIBLE);
-//                                tvEmailError.setText("Field Required");
-//                            }
                         } else {
                             etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
@@ -285,12 +275,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
                                 layoutPwdError.setVisibility(GONE);
                             }
-//                            else {
-//                                etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                                Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
-//                                layoutPwdError.setVisibility(VISIBLE);
-//                                tvPwdError.setText("Field Required");
-//                            }
                         } else {
                             etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
@@ -576,13 +560,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     startActivity(i);
                                 } else {
                                     loginResponse = login;
-//                                    Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-//                                    i.putExtra("screen", "login");
-//                                    i.putExtra("OTP_TYPE", "MOBILE");
-//                                    i.putExtra("MOBILE", login.getData().getPhoneNumber());
-//                                    i.putExtra("EMAIL", login.getData().getEmail());
-//                                    i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
-//                                    startActivity(i);
                                     SMSResend resend = new SMSResend();
                                     resend.setCountryCode(Utils.getStrCCode());
                                     resend.setPhoneNumber(login.getData().getPhoneNumber());
@@ -612,11 +589,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-//                    if (!apiError.getError().getErrorDescription().equals("")) {
-//                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this);
-//                    } else {
-//                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), LoginActivity.this);
-//                    }
                     Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                 }
@@ -689,70 +661,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     }
 
-    private Boolean emailValidation() {
-        Boolean value = true;
-        try {
-            if (etEmail.getText().toString().trim().equals("")) {
-                etlEmail.setErrorEnabled(true);
-                etlEmail.setError(" ");
-                layoutEmailError.setVisibility(View.VISIBLE);
-                tvEmailError.setText("Please enter Email");
-                return value = false;
-            } else if (etEmail.getText().toString().trim().startsWith(" ")) {
-                etlEmail.setErrorEnabled(true);
-                etlEmail.setError(" ");
-                layoutEmailError.setVisibility(View.VISIBLE);
-                tvEmailError.setText("Please enter valid Email");
-                return value = false;
-            } else if (!isEmailValid(etEmail.getText().toString().trim())) {
-                etlEmail.setErrorEnabled(true);
-                etlEmail.setError(" ");
-                layoutEmailError.setVisibility(View.VISIBLE);
-                tvEmailError.setText("Please enter valid Email");
-                return value = false;
-            } else {
-                etlEmail.setErrorEnabled(false);
-                etlEmail.setError("");
-                layoutEmailError.setVisibility(View.GONE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return value;
-    }
-
-    private Boolean passwordValidation() {
-        Boolean value = true;
-        try {
-            if (etPassword.getText().toString().equals("")) {
-                etlPassword.setErrorEnabled(true);
-                etlPassword.setError(" ");
-                layoutPwdError.setVisibility(View.VISIBLE);
-                tvPwdError.setText("Please enter Password");
-                return value = false;
-            } else if (etPassword.getText().toString().startsWith(" ")) {
-                etlPassword.setErrorEnabled(true);
-                etlPassword.setError(" ");
-                layoutPwdError.setVisibility(View.VISIBLE);
-                tvPwdError.setText("Please enter valid Password");
-                return value = false;
-            } else if (etPassword.getText().toString().trim().equals("")) {
-                etlPassword.setErrorEnabled(true);
-                etlPassword.setError(" ");
-                layoutPwdError.setVisibility(View.VISIBLE);
-                tvPwdError.setText("Please enter valid Password");
-                return value = false;
-            } else {
-                etlPassword.setErrorEnabled(false);
-                etlPassword.setError("");
-                layoutPwdError.setVisibility(View.GONE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return value;
-    }
-
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -792,10 +700,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void saveCredentials() {
         try {
-//            if (strEmail.equals("") && strPwd.equals("")) {
-//                strEmail = etEmail.getText().toString().trim().toLowerCase();
-//                strPwd = etPassword.getText().toString().trim();
-//            }
             if (strEmail.equals("")) {
                 strEmail = etEmail.getText().toString().trim().toLowerCase();
             }
@@ -847,7 +751,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
-//                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeclose));
             }
         } catch (Exception ex) {
@@ -958,7 +861,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }.getType();
             List<States> listStates = gson.fromJson(result, type);
             objMyApplication.setListStates(listStates);
-//            Log.e("result", result);
         }
     }
 }
