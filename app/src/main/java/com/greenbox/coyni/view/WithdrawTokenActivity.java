@@ -133,15 +133,18 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     etAmount.setHint("");
                     lyBalance.setVisibility(View.VISIBLE);
-                    if (tvCYN.getVisibility() == View.VISIBLE) {
-                        isCYN = true;
-                        isUSD = false;
-                        convertCYNValue();
-                    } else {
-                        isCYN = false;
-                        isUSD = true;
-                        convertUSDValue();
-                    }
+//                    if (tvCYN.getVisibility() == View.VISIBLE) {
+//                        isCYN = true;
+//                        isUSD = false;
+//                        convertCYNValue();
+//                    } else {
+//                        isCYN = false;
+//                        isUSD = true;
+//                        convertUSDValue();
+//                    }
+                    isCYN = false;
+                    isUSD = true;
+                    convertUSDValue();
 
                     if (editable.length() > 5) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
@@ -293,10 +296,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-                                convertUSDtoCYN();
+                                //convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     lyBalance.setVisibility(View.GONE);
-                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
                                         tvError.setText("Minimum Amount is " + cynValidation + " CYN");
                                     } else {
@@ -313,11 +315,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                 tvCYN.setVisibility(View.GONE);
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
-                                convertCYNtoUSD();
+                                //convertCYNtoUSD();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     lyBalance.setVisibility(View.GONE);
-                                    //tvError.setText("Minimum Amount is " + usdValidation + " USD");
-                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
                                         tvError.setText("Minimum Amount is " + cynValidation + " CYN");
                                     } else {
@@ -692,10 +692,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             tvCYN.setVisibility(View.GONE);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            tvGet.setText("$ " + Utils.USNumberFormat(usdValue));
-            tvPurchaseAmt.setText(Utils.USNumberFormat(usdValue) + " " + getString(R.string.currency));
+            tvGet.setText("$ " + Utils.USNumberFormat(cynValue));
+            tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " " + getString(R.string.currency));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-            total = usdValue + Double.parseDouble(strPFee);
+            total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 layoutBank.setVisibility(View.VISIBLE);
@@ -1191,12 +1191,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
+            cynValue = Double.parseDouble(etAmount.getText().toString().trim());
             mLastClickTime = SystemClock.elapsedRealtime();
-            if (tvCYN.getVisibility() == View.VISIBLE) {
-                convertUSDtoCYN();
-            } else {
-                convertCYNtoUSD();
-            }
+//            if (tvCYN.getVisibility() == View.VISIBLE) {
+//                convertUSDtoCYN();
+//            } else {
+//                convertCYNtoUSD();
+//            }
+            convertUSDtoCYN();
             calculateFee(Utils.USNumberFormat(cynValue));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1208,7 +1210,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             if (isUSD) {
                 isUSD = false;
                 usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                cynValue = ((usdValue + feeInAmount) * 100) / (100 + feeInPercentage);
                 cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
             }
         } catch (Exception ex) {
@@ -1221,7 +1222,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             if (isCYN) {
                 isCYN = false;
                 cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                usdValue = (cynValue - (cynValue * (feeInPercentage / 100))) + feeInAmount;
                 usdValue = ((cynValue - feeInAmount) * 100) / (100 + feeInPercentage);
             }
         } catch (Exception ex) {
@@ -1331,7 +1331,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
-            tvAmount.setText("$ " + Utils.USNumberFormat(usdValue));
+            tvAmount.setText("$ " + Utils.USNumberFormat(cynValue));
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
             tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as Coyni.");
             Window window = prevDialog.getWindow();
