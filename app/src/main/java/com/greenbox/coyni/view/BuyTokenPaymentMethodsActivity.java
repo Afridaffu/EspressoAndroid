@@ -172,7 +172,6 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     private void initObserver() {

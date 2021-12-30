@@ -299,6 +299,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             });
             calculateFee("10");
+            strSignOn = objMyApplication.getStrSignOnError();
+            signOnData = objMyApplication.getSignOnData();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
