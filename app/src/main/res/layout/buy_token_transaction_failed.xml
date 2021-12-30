@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:paddingBottom="@dimen/_30sdp">
 
@@ -32,7 +32,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvHead"
-        android:layout_margin="@dimen/_21sdp"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_21sdp"
         android:fontFamily="@font/opensans_regular"
         android:gravity="center"
         android:text="The transaction failed due to error \ncode: {error code - error code \ndescription}. Please try again."

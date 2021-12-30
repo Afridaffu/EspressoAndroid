@@ -12,6 +12,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
+import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.profile.Profile;
@@ -25,6 +26,8 @@ import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
+import com.greenbox.coyni.model.withdraw.WithdrawRequest;
+import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -63,6 +66,9 @@ public class MyApplication extends Application {
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
+    BrandsResponse selectedBrandResponse;
+    WithdrawRequest gcWithdrawRequest;
+    WithdrawResponse withdrawResponse;
 
 
     public UserDetails getUserDetails() {
@@ -556,5 +562,29 @@ public class MyApplication extends Application {
 
     public void setTransferFeeResponse(TransferFeeResponse transferFeeResponse) {
         this.transferFeeResponse = transferFeeResponse;
+    }
+
+    public BrandsResponse getSelectedBrandResponse() {
+        return selectedBrandResponse;
+    }
+
+    public void setSelectedBrandResponse(BrandsResponse selectedBrandResponse) {
+        this.selectedBrandResponse = selectedBrandResponse;
+    }
+
+    public WithdrawRequest getGcWithdrawRequest() {
+        return gcWithdrawRequest;
+    }
+
+    public void setGcWithdrawRequest(WithdrawRequest gcWithdrawRequest) {
+        this.gcWithdrawRequest = gcWithdrawRequest;
+    }
+
+    public WithdrawResponse getWithdrawResponse() {
+        return withdrawResponse;
+    }
+
+    public void setWithdrawResponse(WithdrawResponse withdrawResponse) {
+        this.withdrawResponse = withdrawResponse;
     }
 }

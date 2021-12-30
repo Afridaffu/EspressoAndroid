@@ -881,7 +881,7 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 6) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 6 && validateExpiry()) {
                         isExpiry = true;
                         expiryErrorLL.setVisibility(GONE);
                         etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));

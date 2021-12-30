@@ -127,13 +127,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     }
 
                     if (editable.length() > 5) {
-//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 85));
-//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 75));
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                     } else {
-//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
-//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
                     }
@@ -268,17 +264,33 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 tvCurrency.setVisibility(View.INVISIBLE);
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                                 convertUSDtoCYN();
-//                                if (tvError.getVisibility() == View.VISIBLE) {
-//                                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
-//                                }
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
+                                }
                             } else {
                                 tvCYN.setVisibility(View.GONE);
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 convertCYNtoUSD();
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
-//                                if (tvError.getVisibility() == View.VISIBLE) {
-//                                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
-//                                }
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                                        tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
+                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -297,8 +309,19 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
                 if (transactionLimitResponse != null) {
-                    objResponse = transactionLimitResponse;
-                    setDailyWeekLimit(transactionLimitResponse.getData());
+                    try {
+                        objResponse = transactionLimitResponse;
+                        setDailyWeekLimit(transactionLimitResponse.getData());
+                        if (etAmount.getText().toString().trim().length() > 0) {
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -694,10 +717,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         String strAmount = "", strReturn = "";
         try {
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-//            changeTextSize(strAmount);
             etAmount.removeTextChangedListener(BuyTokenActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            //etAmount.setSelection(etAmount.getText().length() - 3);
             etAmount.addTextChangedListener(BuyTokenActivity.this);
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);

@@ -27,8 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_7sdp"
-                android:src="@drawable/ic_visa_inactive"
-                android:visibility="invisible"/>
+                android:src="@drawable/ic_issue_card_inactive" />
 
             <View
                 android:layout_width="1.5dp"
@@ -44,10 +43,10 @@
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center_vertical"
             android:background="@android:color/transparent"
             android:digits="0123456789"
             android:fontFamily="@font/opensans_semibold"
+            android:gravity="center_vertical"
             android:hint="XXXX XXXX XXXX XXXX"
             android:imeOptions="actionNext"
             android:inputType="number"

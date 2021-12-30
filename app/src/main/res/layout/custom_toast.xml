@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="@dimen/_22sdp"
-    android:paddingEnd="@dimen/_22sdp"
-    android:paddingTop="@dimen/_43sdp">
+    android:paddingTop="@dimen/_43sdp"
+    android:paddingEnd="@dimen/_22sdp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="@dimen/_46sdp"
         app:cardBackgroundColor="@color/toast_bg"
         app:cardCornerRadius="@dimen/_10sdp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/toastIV"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/ic_faceid"
-                app:tint="@color/toast_icon"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/_13sdp"/>
+                android:layout_marginStart="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_13sdp"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:src="@drawable/ic_faceid"
+                android:visibility="gone"
+                app:tint="@color/toast_icon" />
 
             <TextView
                 android:id="@+id/toastTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_12ssp"
+                android:layout_marginStart="@dimen/_13sdp"
+                android:layout_weight="1"
+                android:text=""
                 android:textColor="@color/white"
-                android:layout_weight="1">
+                android:textSize="@dimen/_12ssp">
 
             </TextView>
 

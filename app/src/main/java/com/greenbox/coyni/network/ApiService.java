@@ -84,6 +84,8 @@ import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
+import com.greenbox.coyni.model.withdraw.WithdrawRequest;
+import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 
 import java.util.Map;
 
@@ -294,6 +296,10 @@ public interface ApiService {
     @GET("api/v2/giftcard/giftCardBrands")
     Call<BrandsResponse> getGiftCards();
 
+    @POST("api/v2/node/withdrawTokens")
+    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request);
+
     @GET("api/v2/giftcard/giftCardBrandItems")
     Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
+
 }

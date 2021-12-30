@@ -20,6 +20,7 @@ import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.imgBankArrow.setVisibility(View.GONE);
                 }
 //                if (!strScreen.equals("selectpay")) {
-                if (strScreen.equals("buytoken")) {
+                if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgBankTick.setVisibility(View.VISIBLE);
                     } else {
@@ -114,7 +115,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.imgCardArrow.setVisibility(View.GONE);
                 }
 //                if (!strScreen.equals("selectpay") && !strScreen.equals("withdrawtoken")) {
-                if (strScreen.equals("buytoken")) {
+                if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgCardTick.setVisibility(View.VISIBLE);
                     } else {
@@ -181,7 +182,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
-                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdrawtoken");
+//                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdrawtoken");
+                                    ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdrawtoken");
                                 } else {
                                     ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                 }
@@ -214,9 +216,30 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
-                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdraw");
+//                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdraw");
+                                    ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdraw");
                                 } else {
                                     ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                }
+                                break;
+                            case "wdrawtoken":
+                                if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    objMyApplication.setSelectedCard(objData);
+                                    notifyDataSetChanged();
+                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
+                                        } else {
+                                            ((WithdrawTokenActivity) mContext).expiry();
+                                        }
+                                    } else {
+                                        if (!objData.getExpired()) {
+//                                            ((WithdrawTokenActivity) mContext).displayCVV(objData);
+                                            ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
+                                        } else {
+                                            ((WithdrawTokenActivity) mContext).expiry();
+                                        }
+                                    }
                                 }
                                 break;
                         }
