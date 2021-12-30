@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingStart="@dimen/_11sdp"
+        android:paddingEnd="@dimen/_11sdp"
         android:paddingTop="@dimen/_10sdp"
         android:paddingBottom="@dimen/_10sdp">
 
@@ -22,25 +24,28 @@
 
             <TextView
                 android:id="@+id/messageTV"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:singleLine="true"
-                android:layout_weight=".35"
-                android:text="Send funds from Alison **"
+                android:layout_weight=".65"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11ssp" />
+                android:visibility="visible"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:text="Buy Tokens from Card "
+                android:textSize="@dimen/_11ssp"
+                />
 
             <TextView
                 android:id="@+id/messagTV"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_semibold"
                 android:singleLine="true"
-                android:textDirection="ltr"
-                android:layout_weight=".6"
-                android:text="1234"
+                android:layout_weight=".3"
+                android:gravity="start"
+                android:text=" **1234"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp"
                 android:visibility="visible"/>
@@ -51,7 +56,6 @@
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="right"
                 android:singleLine="true"
@@ -65,7 +69,7 @@
             android:layout_width="@dimen/_68sdp"
             android:layout_height="@dimen/_14sdp"
             android:layout_below="@id/topLL"
-            android:layout_marginStart="@dimen/_11sdp"
+
             android:layout_marginTop="@dimen/_8sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
@@ -96,9 +100,7 @@
             android:layout_below="@id/topLL"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginRight="@dimen/_11sdp"
             android:layout_weight="1"
-
             android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/light_gray"
             android:textSize="@dimen/_10ssp" />

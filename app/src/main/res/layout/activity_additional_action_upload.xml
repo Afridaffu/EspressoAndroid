@@ -9,10 +9,24 @@
     android:background="@color/white"
     android:orientation="vertical"
     tools:context=".view.IdVeAdditionalActionActivity">
+    <LinearLayout
+        android:id="@+id/ssnCloseLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_45sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:src="@drawable/ic_close" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/idveriErrWithSSNLL"
@@ -20,19 +34,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ssnCloseLL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_45sdp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_15sdp"
-                    android:src="@drawable/ic_close" />
-
-            </LinearLayout>
 
             <ImageView
                 android:layout_width="@dimen/_80sdp"

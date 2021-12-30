@@ -60,7 +60,24 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
         String strType = "";
 
-        holder.txnDescrip.setText(objData.getTxnDescription());
+        String[] data = objData.getTxnDescription().replace("****","-").split("-");
+        try {
+            if (data.length > 1) {
+                holder.txnDescripExtention.setVisibility(View.VISIBLE);
+                holder.txnDescrip.setText(data[0]);
+                holder.txnDescripExtention.setText("**"+data[1]);
+                holder.txnDescrip.setVisibility(View.VISIBLE);
+            } else {
+                holder.txnDescrip.setText(objData.getTxnDescription());
+                holder.txnDescripExtention.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        holder.txnDescrip.setText(objData.getTxnDescription());
+
+
         holder.txnStatus.setText(objData.getTxnStatusDn());
         holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
@@ -127,14 +144,15 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView date, txnDescrip, amount, txnStatus, walletBal;
+        TextView date, txnDescrip,txnDescripExtention, amount, txnStatus, walletBal;
         LinearLayout viewLine;
         View blankView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.dateTV);
-            txnDescrip = itemView.findViewById(R.id.messageTV);
+            txnDescrip = itemView.findViewById(R.id.pendingmessageTV);
+            txnDescripExtention=itemView.findViewById(R.id.pendingmessagTV);
             amount = itemView.findViewById(R.id.amountTV);
             txnStatus = itemView.findViewById(R.id.statusTV);
             walletBal = itemView.findViewById(R.id.balanceTV);

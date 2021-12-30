@@ -26,12 +26,13 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txnDescTV, amountTV, dateTV, statusTV, balanceTV;
+        public TextView txnDescrip,txnDescripExtention, amountTV, dateTV, statusTV, balanceTV;
         LinearLayout statusLL;
 
         public MyViewHolder(View view) {
             super(view);
-            txnDescTV = (TextView) view.findViewById(R.id.txnDescTV);
+            txnDescrip = (TextView) view.findViewById(R.id.latestmessageTV);
+            txnDescripExtention=view.findViewById(R.id.latestmessagTV);
             amountTV = (TextView) view.findViewById(R.id.amountTV);
             dateTV = (TextView) view.findViewById(R.id.dateTV);
             statusTV = (TextView) view.findViewById(R.id.statusTV);
@@ -58,7 +59,25 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             LatestTxnResponse.Daata objData = latestTxns.getData().get(position);
-            holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
+
+            String[] data = objData.getTxnDescription().replace("****","-").split("-");
+            try {
+                if (data.length > 1) {
+                    holder.txnDescripExtention.setVisibility(View.VISIBLE);
+                    holder.txnDescrip.setText(data[0]);
+                    holder.txnDescripExtention.setText("**"+data[1]);
+                    holder.txnDescrip.setVisibility(View.VISIBLE);
+                } else {
+                    holder.txnDescrip.setText(objData.getTxnDescription());
+                    holder.txnDescripExtention.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+//            holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
+//
             holder.amountTV.setText(latestTxns.getData().get(position).getAmount());
 //            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
             holder.balanceTV.setText("Balance " + Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
