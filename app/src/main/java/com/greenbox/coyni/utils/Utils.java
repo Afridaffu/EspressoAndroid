@@ -91,10 +91,12 @@ public class Utils {
     public static String strCode = "12345";
     public static String strCCode = "";
     public static String strAuth;
+    public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
+    public static Boolean isBiometric;
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
@@ -181,6 +183,14 @@ public class Utils {
         return strCode;
     }
 
+    public static String getAppVersion() {
+        return appVersion;
+    }
+
+    public static void setAppVersion(String appVersion) {
+        Utils.appVersion = appVersion;
+    }
+
     public static String getStrAuth() {
         return strAuth;
     }
@@ -227,6 +237,14 @@ public class Utils {
 
     public static void setIsTouchEnabled(Boolean isTouchEnabled) {
         Utils.isTouchEnabled = isTouchEnabled;
+    }
+
+    public static Boolean getIsBiometric() {
+        return isBiometric;
+    }
+
+    public static void setIsBiometric(Boolean isBiometric) {
+        Utils.isBiometric = isBiometric;
     }
 
     public static String getDeviceID() {

@@ -56,7 +56,6 @@ import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
-import java.math.BigDecimal;
 
 public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
@@ -299,6 +298,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             });
             calculateFee("10");
+            strSignOn = objMyApplication.getStrSignOnError();
+            signOnData = objMyApplication.getSignOnData();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1195,6 +1197,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void buyTokenFailure(BuyTokenResponse objData) {
         try {
+            prevDialog.dismiss();
             prevDialog = new Dialog(BuyTokenActivity.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.buy_token_transaction_failed);
