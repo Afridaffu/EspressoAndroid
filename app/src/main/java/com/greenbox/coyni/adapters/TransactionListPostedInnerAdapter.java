@@ -59,12 +59,14 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         try {
             if (data.length > 1) {
                 holder.txnDescripExtention.setVisibility(View.VISIBLE);
-                holder.txnDescrip.setText(data[0]+"**");
-               holder.txnDescripExtention.setText(data[1]);
+                holder.txnDescrip.setText(data[0]);
+               holder.txnDescripExtention.setText("**"+data[1]);
+               holder.txnDescrip.setVisibility(View.VISIBLE);
 
             } else {
-                holder.txnDescrip.setText(objData.getTxnDescription());
-                holder.txnDescripExtention.setVisibility(View.GONE);
+                holder.txnDescripExtention.setText(objData.getTxnDescription());
+                holder.txnDescripExtention.setVisibility(View.VISIBLE);
+                holder.txnDescrip.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
