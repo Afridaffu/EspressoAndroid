@@ -751,6 +751,10 @@ public class TransactionListActivity extends AppCompatActivity {
         }
 
         resetFiltersTV.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             transactionType.clear();
             transactionSubType.clear();
             txnStatus.clear();
@@ -765,6 +769,7 @@ public class TransactionListActivity extends AppCompatActivity {
             isFilters = false;
             strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
 
             searchET.setText("");
             transAmountStartET.setText("");
@@ -806,6 +811,10 @@ public class TransactionListActivity extends AppCompatActivity {
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
 
+            globalPending.clear();
+            globalPosted.clear();
+            currentPage = 0;
+            total = 0;
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
@@ -1256,6 +1265,11 @@ public class TransactionListActivity extends AppCompatActivity {
         transAmountEndET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+
+                if (transAmountStartET.getText().toString().equals("")) {
+                    transAmountStartET.setText("0.00");
+                }
+
                 if (!hasFocus) {
                     transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
@@ -1263,8 +1277,8 @@ public class TransactionListActivity extends AppCompatActivity {
 
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
 
-                            Double startAmount=Double.parseDouble(transAmountStartET.getText().toString().replace(",","").trim());
-                            Double endAmount=Double.parseDouble(transAmountEndET.getText().toString().replace(",","").trim());
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
 
@@ -1276,8 +1290,12 @@ public class TransactionListActivity extends AppCompatActivity {
                                 }
 
                                 transAmountEndET.setText("");
-                                strEndAmount="";
+                                strEndAmount = "";
                             }
+                        }
+
+                        if (transAmountStartET.getText().toString().equals("")) {
+                            transAmountStartET.setText("0.00");
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -1308,6 +1326,9 @@ public class TransactionListActivity extends AppCompatActivity {
                     transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     transAmountEndET.clearFocus();
+                    if (transAmountStartET.getText().toString().equals("")) {
+                        transAmountStartET.setText("0.00");
+                    }
                 }
                 return false;
             }
