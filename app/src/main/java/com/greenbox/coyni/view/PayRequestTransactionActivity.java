@@ -41,11 +41,11 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
     TextView addNoteTV, coynTV;
     ImageView changeCurreIV;
     Boolean isFieldValid = false, isCurrencyEnable = true, isCynEnable = false;
-    String strWalletId = "",reciepientAddress="";
+    String strWalletId = "", reciepientAddress = "";
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
     MyApplication objMyApplication;
-    Long mLastClickTime = 0L,mLastClickTimeNext=0L;
+    Long mLastClickTime = 0L, mLastClickTimeNext = 0L;
     //For Custome KeyBoard
     private String strAmount = new String();
     private String messagePayReq = "", userBalance;
@@ -108,10 +108,10 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                 @Override
                 public void onClick(View view) {
                     try {
-                        String enteredAmount="";
+                        String enteredAmount = "";
 
                         if (!payRequestET.getText().toString().contains(",")) {
-                            enteredAmount=Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
+                            enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
                             payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
                         }
 
@@ -165,7 +165,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         if (charSequence.charAt(0) == 0) {
                             payRequestET.setText(charSequence.subSequence(1, charSequence.length()));
                         }
-                        if (charSequence.length()>7&&charSequence.length()<=11){
+                        if (charSequence.length() > 7 && charSequence.length() <= 11) {
                             payRequestET.setTextSize(30);
                             dollorTV.setTextSize(30);
                         }
@@ -175,8 +175,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         } else if (charSequence.length() <= 3) {
                             payRequestET.setTextSize(54);
                             dollorTV.setTextSize(54);
-                        }
-                        else if (charSequence.length()>3&&charSequence.length()<=5){
+                        } else if (charSequence.length() > 3 && charSequence.length() <= 5) {
                             payRequestET.setTextSize(46);
                             dollorTV.setTextSize(46);
                         }
@@ -214,7 +213,45 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         LinearLayout closeBtn = dialog.findViewById(R.id.cancelBtn);
                         TextInputLayout addNoteTIL = dialog.findViewById(R.id.etlMessage);
                         CardView doneBtn = dialog.findViewById(R.id.doneBtn);
+                        addnote.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                try {
+                                    if (charSequence.length() == 0) {
+                                        addNoteTIL.setCounterEnabled(false);
+                                    } else {
+                                        addNoteTIL.setCounterEnabled(true);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable editable) {
+                                try {
+                                    String str = addnote.getText().toString();
+                                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                                        addnote.setText("");
+                                        addnote.setSelection(addnote.getText().length());
+                                    } else if (str.length() > 0 && str.contains(".")) {
+                                        addnote.setText(addnote.getText().toString().replaceAll("\\.", ""));
+                                        addnote.setSelection(addnote.getText().length());
+                                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                                        addnote.setText("");
+                                        addnote.setSelection(addnote.getText().length());
+                                    }
+
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
                         addnote.requestFocus();
                         addnote.setShowSoftInputOnFocus(true);
                         addnote.setText(messagePayReq);
@@ -238,32 +275,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         dialog.setCanceledOnTouchOutside(false);
 
 
-                        addnote.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                                try {
-                                    if (charSequence.length() == 0) {
-                                        addNoteTIL.setCounterEnabled(false);
-                                    } else {
-                                        addNoteTIL.setCounterEnabled(true);
-                                    }
-
-//                                    messagePayReq=addnote.getText().toString();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable editable) {
-
-                            }
-                        });
                         doneBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -319,7 +330,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
     private void enablePayReBtn() {
 
 
-
         if (isFieldValid) {
             prLL.setBackgroundResource(R.drawable.payrequest_activebg);
             payTV.setOnClickListener(new View.OnClickListener() {
@@ -329,36 +339,36 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
 //                        PayAmountBottomSheet payAmountBottomSheet = new PayAmountBottomSheet();
 //                        payAmountBottomSheet.show(getSupportFragmentManager(), "TAG");
 
-                            //Slide to confirm
-                            MotionLayout lay_lock_main;
-                            TextView tv_lable;
-                            CardView im_lock;
-                            RelativeLayout successRL;
+                        //Slide to confirm
+                        MotionLayout lay_lock_main;
+                        TextView tv_lable;
+                        CardView im_lock;
+                        RelativeLayout successRL;
 
-                            String enteredAmount = "";
-                            TextView messageTV, amountEntered, userNamePay,recipAddre;
-                            String getAddNoteTxt = "";
-                            TextView messageTxt;
-                            LinearLayout recipientCopy;
-                            // custom dialog
-                            final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
-                            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.fragment_pay_amount_bottom_sheet);
-                            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            messageTV = dialog.findViewById(R.id.messageNoteTV);
-                            messageTxt=dialog.findViewById(R.id.messageTxt);
-                            amountEntered = dialog.findViewById(R.id.amountPayTV);
-                            userNamePay = dialog.findViewById(R.id.userNamePayTV);
-                            recipAddre=dialog.findViewById(R.id.recipAddreTV);
-                            recipientCopy=dialog.findViewById(R.id.copyRecipientLL);
-                            //ids Slide to confime
-                            lay_lock_main = dialog.findViewById(R.id.lay_lock_main);
-                            tv_lable = dialog.findViewById(R.id.tv_lable);
-                            im_lock = dialog.findViewById(R.id.im_lock);
-                            successRL = dialog.findViewById(R.id.successRL);
+                        String enteredAmount = "";
+                        TextView messageTV, amountEntered, userNamePay, recipAddre;
+                        String getAddNoteTxt = "";
+                        TextView messageTxt;
+                        LinearLayout recipientCopy;
+                        // custom dialog
+                        final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.fragment_pay_amount_bottom_sheet);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        messageTV = dialog.findViewById(R.id.messageNoteTV);
+                        messageTxt = dialog.findViewById(R.id.messageTxt);
+                        amountEntered = dialog.findViewById(R.id.amountPayTV);
+                        userNamePay = dialog.findViewById(R.id.userNamePayTV);
+                        recipAddre = dialog.findViewById(R.id.recipAddreTV);
+                        recipientCopy = dialog.findViewById(R.id.copyRecipientLL);
+                        //ids Slide to confime
+                        lay_lock_main = dialog.findViewById(R.id.lay_lock_main);
+                        tv_lable = dialog.findViewById(R.id.tv_lable);
+                        im_lock = dialog.findViewById(R.id.im_lock);
+                        successRL = dialog.findViewById(R.id.successRL);
 
                         try {
-                            recipAddre.setText(reciepientAddress.substring(0,16)+"...");
+                            recipAddre.setText(reciepientAddress.substring(0, 16) + "...");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -366,24 +376,23 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                             @Override
                             public void onClick(View view) {
                                 try {
-                                    Utils.copyText(reciepientAddress,PayRequestTransactionActivity.this);
+                                    Utils.copyText(reciepientAddress, PayRequestTransactionActivity.this);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
                         });
 
-                            //User entered Amount convertion to Decimal
-                            if (!payRequestET.getText().toString().contains(",")) {
-                                enteredAmount=Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
-                                amountEntered.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-                                payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-                            }
-                            else {
-                                amountEntered.setText(payRequestET.getText().toString());
-                            }
+                        //User entered Amount convertion to Decimal
+                        if (!payRequestET.getText().toString().contains(",")) {
+                            enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
+                            amountEntered.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+                            payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+                        } else {
+                            amountEntered.setText(payRequestET.getText().toString());
+                        }
 
-                            //User entered AddNote Message
+                        //User entered AddNote Message
                         try {
                             getAddNoteTxt = addNoteTV.getText().toString();
                         } catch (Exception e) {
@@ -391,80 +400,79 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         }
 
                         if (!getAddNoteTxt.isEmpty()) {
-                                messageTxt.setVisibility(View.VISIBLE);
-                                messageTV.setText("\"" + getAddNoteTxt + "\"");
+                            messageTxt.setVisibility(View.VISIBLE);
+                            messageTV.setText("\"" + getAddNoteTxt + "\"");
+                        } else {
+                            messageTxt.setVisibility(View.GONE);
+                            messageTV.setText("");
+                        }
+
+
+                        lay_lock_main.setTransitionListener(new MotionLayout.TransitionListener() {
+                            @Override
+                            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
                             }
-                            else{
-                                messageTxt.setVisibility(View.GONE);
-                                messageTV.setText("");
+
+                            @Override
+                            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
                             }
 
-
-                            lay_lock_main.setTransitionListener(new MotionLayout.TransitionListener() {
-                                @Override
-                                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
-
-                                }
-
-                                @Override
-                                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
-                                }
-
-                                @Override
-                                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                                    if (currentId == motionLayout.getEndState()) {
+                            @Override
+                            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                                if (currentId == motionLayout.getEndState()) {
 //                    lay_lock_main. = ContextCompat.getDrawable(this@SwipeAnimationScreen,
 //                    R.drawable.shape_green_round_rect)
-                                        lay_lock_main.setInteractionEnabled(false);
-                                        tv_lable.setText("Verifying");
+                                    lay_lock_main.setInteractionEnabled(false);
+                                    tv_lable.setText("Verifying");
 
 //                    im_lock.setBackgroundResource(R.drawable.left);
 
-                                        CountDownTimer counter = new CountDownTimer(3000, 1000) {
-                                            public void onTick(long millisUntilDone) {
+                                    CountDownTimer counter = new CountDownTimer(3000, 1000) {
+                                        public void onTick(long millisUntilDone) {
 
-                                            }
+                                        }
 
-                                            public void onFinish() {
-                                                lay_lock_main.setVisibility(View.GONE);
-                                                successRL.setVisibility(View.VISIBLE);
-                                            }
-                                        }.start();
-
-                                    }
-                                }
-
-                                @Override
-                                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+                                        public void onFinish() {
+                                            lay_lock_main.setVisibility(View.GONE);
+                                            successRL.setVisibility(View.VISIBLE);
+                                        }
+                                    }.start();
 
                                 }
-                            });
+                            }
+
+                            @Override
+                            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+                            }
+                        });
 
 
-                            dashboardViewModel.getUserDetailsMutableLiveData().observe(PayRequestTransactionActivity.this, new Observer<UserDetails>() {
-                                @Override
-                                public void onChanged(UserDetails userDetails) {
-                                    if (userDetails != null) {
-                                        userNamePay.setText("[" + userDetails.getData().getFullName() + "]");
+                        dashboardViewModel.getUserDetailsMutableLiveData().observe(PayRequestTransactionActivity.this, new Observer<UserDetails>() {
+                            @Override
+                            public void onChanged(UserDetails userDetails) {
+                                if (userDetails != null) {
+                                    userNamePay.setText("[" + userDetails.getData().getFullName() + "]");
 
-                                    }
                                 }
-                            });
+                            }
+                        });
 
-                            Window window = dialog.getWindow();
-                            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        Window window = dialog.getWindow();
+                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                            WindowManager.LayoutParams wlp = window.getAttributes();
+                        WindowManager.LayoutParams wlp = window.getAttributes();
 
-                            wlp.gravity = Gravity.BOTTOM;
-                            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                            window.setAttributes(wlp);
+                        wlp.gravity = Gravity.BOTTOM;
+                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wlp);
 
-                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-                            dialog.setCanceledOnTouchOutside(true);
-                            dialog.show();
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -477,46 +485,46 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                     try {
 //                        RequestAmountBottomSheet requestAmountBottomSheet=new RequestAmountBottomSheet();
 //                        requestAmountBottomSheet.show(getSupportFragmentManager(),"TAG");
-                            // custom dialog
-                            String enteredAmount = "";
-                            TextView messageTV, requestingAmount, userNameR,messageRequestTxt,recipientAddress;
-                            String getAddNoteTxt = "";
+                        // custom dialog
+                        String enteredAmount = "";
+                        TextView messageTV, requestingAmount, userNameR, messageRequestTxt, recipientAddress;
+                        String getAddNoteTxt = "";
 
-                            //Slide to confirm
-                            MotionLayout lay_lock_main;
-                            TextView tv_lable;
-                            CardView im_lock;
-                            RelativeLayout successRL;
-                            LinearLayout copyRequestRecipient;
-                            final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
-                            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.fragment_request_amount_bottom_sheet);
-                            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            messageTV = dialog.findViewById(R.id.messageAddNote);
-                            requestingAmount = dialog.findViewById(R.id.requetAmountTV);
-                            userNameR = dialog.findViewById(R.id.userNameRequestTV);
-                            messageRequestTxt=dialog.findViewById(R.id.messageReTxt);
-                            copyRequestRecipient=dialog.findViewById(R.id.copyrequeRecipientLL);
-                            recipientAddress=dialog.findViewById(R.id.recipReqAddreTV);
-                            //ids Slide to confime
-                            lay_lock_main = dialog.findViewById(R.id.lay_lock_main);
-                            tv_lable = dialog.findViewById(R.id.tv_lable);
-                            im_lock = dialog.findViewById(R.id.im_lock);
-                            successRL = dialog.findViewById(R.id.successRL);
+                        //Slide to confirm
+                        MotionLayout lay_lock_main;
+                        TextView tv_lable;
+                        CardView im_lock;
+                        RelativeLayout successRL;
+                        LinearLayout copyRequestRecipient;
+                        final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.fragment_request_amount_bottom_sheet);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        messageTV = dialog.findViewById(R.id.messageAddNote);
+                        requestingAmount = dialog.findViewById(R.id.requetAmountTV);
+                        userNameR = dialog.findViewById(R.id.userNameRequestTV);
+                        messageRequestTxt = dialog.findViewById(R.id.messageReTxt);
+                        copyRequestRecipient = dialog.findViewById(R.id.copyrequeRecipientLL);
+                        recipientAddress = dialog.findViewById(R.id.recipReqAddreTV);
+                        //ids Slide to confime
+                        lay_lock_main = dialog.findViewById(R.id.lay_lock_main);
+                        tv_lable = dialog.findViewById(R.id.tv_lable);
+                        im_lock = dialog.findViewById(R.id.im_lock);
+                        successRL = dialog.findViewById(R.id.successRL);
 
-                            dashboardViewModel.getUserDetailsMutableLiveData().observe(PayRequestTransactionActivity.this, new Observer<UserDetails>() {
-                                @Override
-                                public void onChanged(UserDetails userDetails) {
-                                    if (userDetails != null) {
-                                        userNameR.setText("[" + userDetails.getData().getFullName() + "]");
+                        dashboardViewModel.getUserDetailsMutableLiveData().observe(PayRequestTransactionActivity.this, new Observer<UserDetails>() {
+                            @Override
+                            public void onChanged(UserDetails userDetails) {
+                                if (userDetails != null) {
+                                    userNameR.setText("[" + userDetails.getData().getFullName() + "]");
 
-                                    }
                                 }
-                            });
+                            }
+                        });
 
 
                         try {
-                            recipientAddress.setText(reciepientAddress.substring(0,16)+"...");
+                            recipientAddress.setText(reciepientAddress.substring(0, 16) + "...");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -524,23 +532,22 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                             @Override
                             public void onClick(View view) {
                                 try {
-                                    Utils.copyText(reciepientAddress,PayRequestTransactionActivity.this);
+                                    Utils.copyText(reciepientAddress, PayRequestTransactionActivity.this);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }
                         });
-                            //user entered Requesting Amount
+                        //user entered Requesting Amount
 
                         if (!payRequestET.getText().toString().contains(",")) {
-                            enteredAmount=Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
+                            enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
                             requestingAmount.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
                             payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-                        }
-                        else {
+                        } else {
                             requestingAmount.setText(payRequestET.getText().toString());
                         }
-                            //User entered Message Addnote
+                        //User entered Message Addnote
 
                         try {
                             getAddNoteTxt = addNoteTV.getText().toString();
@@ -550,68 +557,67 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         if (!getAddNoteTxt.isEmpty()) {
                             messageRequestTxt.setVisibility(View.VISIBLE);
                             messageTV.setText("\"" + getAddNoteTxt + "\"");
-                        }
-                        else {
+                        } else {
                             messageRequestTxt.setVisibility(View.GONE);
                             messageTV.setText("");
 
                         }
 
-                            lay_lock_main.setTransitionListener(new MotionLayout.TransitionListener() {
-                                @Override
-                                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+                        lay_lock_main.setTransitionListener(new MotionLayout.TransitionListener() {
+                            @Override
+                            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+                            @Override
+                            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                                    if (currentId == motionLayout.getEndState()) {
+                            @Override
+                            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                                if (currentId == motionLayout.getEndState()) {
 //                    lay_lock_main. = ContextCompat.getDrawable(this@SwipeAnimationScreen,
 //                    R.drawable.shape_green_round_rect)
-                                        lay_lock_main.setInteractionEnabled(false);
-                                        tv_lable.setText("Verifying");
+                                    lay_lock_main.setInteractionEnabled(false);
+                                    tv_lable.setText("Verifying");
 
 //                    im_lock.setBackgroundResource(R.drawable.left);
 
-                                        CountDownTimer counter = new CountDownTimer(3000, 1000) {
-                                            public void onTick(long millisUntilDone) {
+                                    CountDownTimer counter = new CountDownTimer(3000, 1000) {
+                                        public void onTick(long millisUntilDone) {
 
-                                            }
+                                        }
 
-                                            public void onFinish() {
-                                                lay_lock_main.setVisibility(View.GONE);
-                                                successRL.setVisibility(View.VISIBLE);
-                                            }
-                                        }.start();
-
-                                    }
-                                }
-
-                                @Override
-                                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+                                        public void onFinish() {
+                                            lay_lock_main.setVisibility(View.GONE);
+                                            successRL.setVisibility(View.VISIBLE);
+                                        }
+                                    }.start();
 
                                 }
-                            });
+                            }
+
+                            @Override
+                            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+                            }
+                        });
 
 
-                            Window window = dialog.getWindow();
-                            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        Window window = dialog.getWindow();
+                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                            WindowManager.LayoutParams wlp = window.getAttributes();
+                        WindowManager.LayoutParams wlp = window.getAttributes();
 
-                            wlp.gravity = Gravity.BOTTOM;
-                            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                            window.setAttributes(wlp);
+                        wlp.gravity = Gravity.BOTTOM;
+                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wlp);
 
-                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-                            dialog.setCanceledOnTouchOutside(true);
-                            dialog.show();
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -763,16 +769,16 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
             tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            tvNameHead.setText(userDetails.getData().getFirstName().substring(0, 1).toUpperCase() + userDetails.getData().getLastName().substring(0, 1).toUpperCase());
             String imageTextNew = "";
-            imageTextNew =userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
+            imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
             String walletId = "";
-            walletId =userDetails.getData().getWalletId().substring(0, 16) + "...";
+            walletId = userDetails.getData().getWalletId().substring(0, 16) + "...";
             userName.setText(imageTextNew);
             userWalletAddre.setText(walletId);
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
-            reciepientAddress="";
-            reciepientAddress=userDetails.getData().getWalletId().toString();
+            reciepientAddress = "";
+            reciepientAddress = userDetails.getData().getWalletId().toString();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

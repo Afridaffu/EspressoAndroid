@@ -90,7 +90,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!strScreen.equals("withdraw") && (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
+        if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
             ControlMethod("paymentMethods");
             strCurrent = "paymentMethods";
         } else {
@@ -102,7 +102,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw")) {
+            if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                 ControlMethod("addpayment");
             } else if (strScreen != null && !strScreen.equals("addpay")) {
                 getPaymentMethods();
@@ -160,7 +160,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("screen") != null) {
                 strScreen = getIntent().getStringExtra("screen");
             }
-            if (strScreen != null && !strScreen.equals("addpay") && !strScreen.equals("withdraw") && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+            if (strScreen != null && !strScreen.equals("addpay") && !strScreen.equals("withdraw") && !strScreen.equals("buytoken") && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
             } else {
@@ -191,13 +191,18 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                             objMyApplication.setStrSignOnError("");
                             strSignOn = "";
                             if (objMyApplication.getResolveUrl()) {
-                                callResolveFlow();
+                                objMyApplication.callResolveFlow(BuyTokenPaymentMethodsActivity.this, strSignOn, signOnData);
                             }
                         } else {
-                            objMyApplication.setSignOnData(null);
-                            signOnData = null;
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                            strSignOn = signOn.getError().getErrorDescription();
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -365,7 +370,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvBankError = findViewById(R.id.tvBankError);
             tvDCardError = findViewById(R.id.tvDCardError);
             tvCCardError = findViewById(R.id.tvCCardError);
-            lyExternal = findViewById(R.id.lyExternal);
+            lyExternal = findViewById(R.id.lyAddExternal);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvExtBHead = findViewById(R.id.tvExtBHead);
             tvExtBankHead = findViewById(R.id.tvExtBankHead);

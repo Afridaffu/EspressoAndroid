@@ -189,14 +189,19 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             signOnData = signOn.getData();
                             objMyApplication.setStrSignOnError("");
                             strSignOn = "";
-                            if (objMyApplication.getResolveUrl() && !isBank) {
-                                callResolveFlow();
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(PaymentMethodsActivity.this,strSignOn,signOnData);
                             }
                         } else {
-                            objMyApplication.setSignOnData(null);
-                            signOnData = null;
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                            strSignOn = signOn.getError().getErrorDescription();
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -339,7 +344,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvBankError = findViewById(R.id.tvBankError);
             tvDCardError = findViewById(R.id.tvDCardError);
             tvCCardError = findViewById(R.id.tvCCardError);
-            lyExternal = findViewById(R.id.lyExternal);
+            lyExternal = findViewById(R.id.lyAddExternal);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvExtBHead = findViewById(R.id.tvExtBHead);
             tvExtBankHead = findViewById(R.id.tvExtBankHead);
