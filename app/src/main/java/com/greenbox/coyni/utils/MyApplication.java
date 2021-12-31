@@ -1,6 +1,9 @@
 package com.greenbox.coyni.utils;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
@@ -28,6 +31,8 @@ import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.view.WebViewActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -586,5 +591,19 @@ public class MyApplication extends Application {
 
     public void setWithdrawResponse(WithdrawResponse withdrawResponse) {
         this.withdrawResponse = withdrawResponse;
+    }
+
+    public void callResolveFlow(Activity activity, String strSignOn, SignOnData signOnData) {
+        try {
+            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                Intent i = new Intent(activity, WebViewActivity.class);
+                i.putExtra("signon", signOnData);
+                activity.startActivityForResult(i, 1);
+            } else {
+                Utils.displayAlert(strSignOn, activity, "", "");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -62,6 +62,7 @@ public class EditCardActivity extends AppCompatActivity {
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
     public static EditCardActivity editCardActivity;
+    String strScreen = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +170,9 @@ public class EditCardActivity extends AppCompatActivity {
                         break;
                 }
             }
-
+            if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
+                strScreen = getIntent().getStringExtra("screen");
+            }
             layoutBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -275,13 +278,14 @@ public class EditCardActivity extends AppCompatActivity {
                 if (cardEditResponse != null) {
                     try {
                         if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
-                            //displayAlertNew(cardEditResponse.getData(), EditCardActivity.this, "");
                             Utils.showCustomToast(EditCardActivity.this, cardEditResponse.getData(), R.drawable.ic_custom_tick, "");
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
-                                        objMyApplication.setSelectedCard(null);
+                                        if (!strScreen.equals("withdraw") && !strScreen.equals("buy")) {
+                                            objMyApplication.setSelectedCard(null);
+                                        }
                                         onBackPressed();
                                         finish();
                                     } catch (Exception ex) {
@@ -716,14 +720,16 @@ public class EditCardActivity extends AppCompatActivity {
 
     public void enableOrDisableNext() {
         try {
-            if (isAddress1 && isCity && isZipcode && isState) {
-                if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
-                    isAddEnabled = true;
-                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                } else {
-                    isAddEnabled = false;
-                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                }
+            if (isAddress1 && isCity && isZipcode && isState && isExpiry) {
+//                if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
+//                    isAddEnabled = true;
+//                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//                } else {
+//                    isAddEnabled = false;
+//                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                }
+                isAddEnabled = true;
+                cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             } else {
                 isAddEnabled = false;
                 cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));

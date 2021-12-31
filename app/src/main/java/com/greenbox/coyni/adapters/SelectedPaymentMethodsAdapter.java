@@ -116,7 +116,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 }
 //                if (!strScreen.equals("selectpay") && !strScreen.equals("withdrawtoken")) {
                 if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
-                    if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
+                    if (objMyApplication.getSelectedCard() != null && objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgCardTick.setVisibility(View.VISIBLE);
                     } else {
                         holder.imgCardTick.setVisibility(View.GONE);

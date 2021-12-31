@@ -25,8 +25,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
@@ -64,7 +62,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
     LinearLayout lyAPayClose, lyExternalClose;
-    RelativeLayout layoutDCard, lyExternal, layoutCCard;
+    RelativeLayout layoutDCard, lyAddExternal, layoutCCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
@@ -128,6 +126,12 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        getPaymentMethods();
+        super.onResume();
+    }
+
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -138,20 +142,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             walletResponse = objMyApplication.getWalletResponse();
             walletBalance = objMyApplication.getGBTBalance();
             if (paymentMethodsResponse != null) {
-//                List<PaymentsList> allPayments = paymentMethodsResponse.getData().getData();
-//                if (allPayments != null && allPayments.size() > 0) {
-//                    bankList = new ArrayList<>();
-//                    cardList = new ArrayList<>();
-//                    for (int i = 0; i < allPayments.size(); i++) {
-//                        if (allPayments.get(i).getPaymentMethod() != null) {
-//                            if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
-//                                bankList.add(allPayments.get(i));
-//                            } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
-//                                cardList.add(allPayments.get(i));
-//                            }
-//                        }
-//                    }
-//                }
                 getPayments(paymentMethodsResponse.getData().getData());
             }
             if (walletBalance != 0.0) {
@@ -191,13 +181,18 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             objMyApplication.setStrSignOnError("");
                             strSignOn = "";
                             if (objMyApplication.getResolveUrl()) {
-                                callResolveFlow();
+                                objMyApplication.callResolveFlow(WithdrawPaymentMethodsActivity.this, strSignOn, signOnData);
                             }
                         } else {
-                            objMyApplication.setSignOnData(null);
-                            signOnData = null;
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                            strSignOn = signOn.getError().getErrorDescription();
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -269,20 +264,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
-//                        paymentMethods();
                     } else if (isPayments && strCurrent.equals("debit")) {
                         ControlMethod("withdrawpay");
                         withdrawPaymentMethod("card");
                         strScreen = "withdrawpay";
                     }
-
-//                    else if (isPayments) {
-//                        isPayments = false;
-//                        isDeCredit = false;
-//                        ControlMethod("addpayment");
-//                        strCurrent = "addpayment";
-//                        numberOfAccounts();
-//                    }
                 }
             }
         });
@@ -334,7 +320,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             tvBankError = findViewById(R.id.tvBankError);
             tvDCardError = findViewById(R.id.tvDCardError);
             tvCCardError = findViewById(R.id.tvCCardError);
-            lyExternal = findViewById(R.id.lyExternal);
+            lyAddExternal = findViewById(R.id.lyAddExternal);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvExtBHead = findViewById(R.id.tvExtBHead);
             tvExtBankHead = findViewById(R.id.tvExtBankHead);
@@ -368,7 +354,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     }
                 }
             });
-            lyExternal.setOnClickListener(new View.OnClickListener() {
+            lyAddExternal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
@@ -839,6 +825,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     public void expiry() {
         try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
             final Dialog dialog = new Dialog(WithdrawPaymentMethodsActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_expire);

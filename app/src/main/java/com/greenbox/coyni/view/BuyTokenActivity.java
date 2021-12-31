@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -38,7 +39,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
@@ -54,6 +57,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 
@@ -69,6 +73,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
+    DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
@@ -97,6 +102,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        dashboardViewModel.mePaymentMethods();
+        super.onResume();
     }
 
     @Override
@@ -162,6 +173,25 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            if (requestCode == 1 && data == null) {
+                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+                } else {
+                    pDialog = Utils.showProgressDialog(this);
+                    customerProfileViewModel.meSyncAccount();
+                }
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } catch (Exception ex) {
+            super.onActivityResult(requestCode, resultCode, data);
+            ex.printStackTrace();
+        }
+    }
+
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -170,6 +200,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -384,6 +415,67 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
         });
+
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            signOnData = signOn.getData();
+                            objMyApplication.setStrSignOnError("");
+                            strSignOn = "";
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(BuyTokenActivity.this, strSignOn, signOnData);
+                            }
+                        } else {
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+            @Override
+            public void onChanged(SyncAccount syncAccount) {
+                try {
+                    pDialog.dismiss();
+                    if (syncAccount != null) {
+                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                    paymentMethodsResponse = payMethodsResponse;
+                    if (objMyApplication.getSelectedCard() != null) {
+                        selectedCard = objMyApplication.getSelectedCard();
+                        bindPayMethod(selectedCard);
+                    }
+                }
+            }
+        });
     }
 
     public void bindPayMethod(PaymentsList objData) {
@@ -498,9 +590,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 public void onClick(View v) {
                     try {
                         payDialog.dismiss();
+//                        Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                        i.putExtra("screen", "addpay");
+//                        startActivity(i);
+
                         Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "addpay");
-                        startActivity(i);
+                        i.putExtra("screen", "buytoken");
+                        startActivityForResult(i, 3);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1031,6 +1127,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     public void expiry() {
         try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
             final Dialog dialog = new Dialog(BuyTokenActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_expire);
@@ -1068,6 +1167,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     try {
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                             Intent i = new Intent(BuyTokenActivity.this, EditCardActivity.class);
+                            i.putExtra("screen", "buy");
                             startActivity(i);
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {

@@ -48,10 +48,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
@@ -67,6 +70,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.ArrayList;
@@ -85,6 +89,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     CustomerProfileViewModel customerProfileViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
     BuyTokenViewModel buyTokenViewModel;
+    DashboardViewModel dashboardViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
@@ -119,9 +124,25 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     }
 
     @Override
+    protected void onResume() {
+        dashboardViewModel.mePaymentMethods();
+        super.onResume();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
+            case 1:
+                if (data == null) {
+                    if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                        Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
+                    } else {
+                        pDialog = Utils.showProgressDialog(this);
+                        customerProfileViewModel.meSyncAccount();
+                    }
+                }
+                break;
             case RESULT_OK:
             case 235: {
                 withdrawToken();
@@ -196,6 +217,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -297,7 +319,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 public void onClick(View view) {
                     try {
                         if (etAmount.getText().toString().trim().length() > 0) {
-//                            USFormat(etAmount);
                             convertDecimal();
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
@@ -307,6 +328,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                     lyBalance.setVisibility(View.GONE);
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
                                         tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
+                                        tvError.setText("Amount entered exceeds available balance");
+                                    } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
+                                        tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -325,6 +350,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                     lyBalance.setVisibility(View.GONE);
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
                                         tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                    } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
+                                        tvError.setText("Amount entered exceeds available balance");
+                                    } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
+                                        tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -422,6 +451,67 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 }
             }
         });
+
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            signOnData = signOn.getData();
+                            objMyApplication.setStrSignOnError("");
+                            strSignOn = "";
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(WithdrawTokenActivity.this, strSignOn, signOnData);
+                            }
+                        } else {
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+            @Override
+            public void onChanged(SyncAccount syncAccount) {
+                try {
+                    pDialog.dismiss();
+                    if (syncAccount != null) {
+                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                    paymentMethodsResponse = payMethodsResponse;
+                    if (objMyApplication.getSelectedCard() != null) {
+                        selectedCard = objMyApplication.getSelectedCard();
+                        bindPayMethod(selectedCard);
+                    }
+                }
+            }
+        });
     }
 
     public void SetFaceLock() {
@@ -515,7 +605,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     try {
                         payDialog.dismiss();
                         Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "addpay");
+                        i.putExtra("screen", "withdraw");
                         startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -832,6 +922,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     public void expiry() {
         try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
             final Dialog dialog = new Dialog(WithdrawTokenActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_expire);
@@ -869,6 +962,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     try {
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                             Intent i = new Intent(WithdrawTokenActivity.this, EditCardActivity.class);
+                            i.putExtra("screen", "withdraw");
                             startActivity(i);
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
@@ -1090,6 +1184,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
             EditText addNoteET = cvvDialog.findViewById(R.id.addNoteET);
             CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
+            TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -1100,10 +1195,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
                 }
             }, 100);
-            if (!etRemarks.getText().toString().trim().equals("")) {
-                addNoteET.setText(etRemarks.getText().toString().trim());
-                addNoteET.setSelection(addNoteET.getText().toString().trim().length());
-            }
             addNoteET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1112,7 +1203,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (charSequence.length() == 0) {
+                        addNoteTIL.setCounterEnabled(false);
+                    } else {
+                        addNoteTIL.setCounterEnabled(true);
+                    }
                 }
 
                 @Override
@@ -1135,6 +1230,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     }
                 }
             });
+            if (!etRemarks.getText().toString().trim().equals("")) {
+                addNoteET.setText(etRemarks.getText().toString().trim());
+                addNoteET.setSelection(addNoteET.getText().toString().trim().length());
+            }
             Window window = cvvDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
@@ -1369,6 +1468,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onClick(View view) {
                     prevDialog.dismiss();
+                    onBackPressed();
+                    finish();
                 }
             });
 
