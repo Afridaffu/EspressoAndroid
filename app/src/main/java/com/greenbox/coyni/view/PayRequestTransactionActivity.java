@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -215,6 +216,35 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         TextInputLayout addNoteTIL = dialog.findViewById(R.id.etlMessage);
                         CardView doneBtn = dialog.findViewById(R.id.doneBtn);
 
+
+                        addnote.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                try {
+                                    if (charSequence.length() == 0) {
+                                        addNoteTIL.setCounterEnabled(false);
+                                    } else {
+                                        addNoteTIL.setCounterEnabled(true);
+                                        addNoteTIL.setCounterTextColor(ColorStateList.valueOf(getColor(R.color.xdark_gray)));
+                                    }
+
+//                                    messagePayReq=addnote.getText().toString();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable editable) {
+
+                            }
+                        });
+                        
                         addnote.requestFocus();
                         addnote.setShowSoftInputOnFocus(true);
                         addnote.setText(messagePayReq);
@@ -238,32 +268,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         dialog.setCanceledOnTouchOutside(false);
 
 
-                        addnote.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                                try {
-                                    if (charSequence.length() == 0) {
-                                        addNoteTIL.setCounterEnabled(false);
-                                    } else {
-                                        addNoteTIL.setCounterEnabled(true);
-                                    }
-
-//                                    messagePayReq=addnote.getText().toString();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable editable) {
-
-                            }
-                        });
                         doneBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

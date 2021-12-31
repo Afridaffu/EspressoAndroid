@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -86,7 +87,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class PayRequestScanActivity extends AppCompatActivity {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV;
     LinearLayout layoutHead;
-    RelativeLayout flashLL;
+    ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
@@ -104,7 +105,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
     String strWallet = "", strScanWallet = "";
     ProgressDialog dialog;
     ObjectAnimator animator;
-    View scannerLayout;
+    ConstraintLayout scannerLayout;
     View scannerBar;
     boolean isPermissionEnable = true;
 
@@ -128,7 +129,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
             mycodeScannerView = findViewById(R.id.scanner_view);
             scannerLayout = findViewById(R.id.scannerLayout);
             scannerBar = findViewById(R.id.lineView);
-            flashLL = findViewById(R.id.flashBtnLL);
+            flashLL = findViewById(R.id.flashBtnRL);
             idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
             tvName = findViewById(R.id.tvName);
 //            tvNameHead = findViewById(R.id.tvUserInfo);
