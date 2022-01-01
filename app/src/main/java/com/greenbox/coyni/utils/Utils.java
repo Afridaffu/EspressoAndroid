@@ -1043,4 +1043,9 @@ public class Utils {
         return listStates;
     }
 
+    public static void openKeyPad(Context context,View view){
+        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    }
+
 }

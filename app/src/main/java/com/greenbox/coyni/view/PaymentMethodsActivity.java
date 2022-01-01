@@ -76,7 +76,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (strCurrent.equals("addpay")) {
+            if (strCurrent.equals("addpay") || strCurrent.equals("addpayment")) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
             } else {
@@ -168,7 +168,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 //                strCurrent = "addpay";
                 addPayment();
             } else {
-                getPaymentMethods();
+                if (!isPayments) {
+                    getPaymentMethods();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -190,7 +192,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             objMyApplication.setStrSignOnError("");
                             strSignOn = "";
                             if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(PaymentMethodsActivity.this,strSignOn,signOnData);
+                                objMyApplication.callResolveFlow(PaymentMethodsActivity.this, strSignOn, signOnData);
                             }
                         } else {
                             if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {

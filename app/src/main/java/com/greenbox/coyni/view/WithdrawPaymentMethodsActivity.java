@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
@@ -128,7 +129,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        getPaymentMethods();
+        if (!isPayments) {
+            getPaymentMethods();
+        }
         super.onResume();
     }
 
@@ -265,6 +268,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                     } else if (isPayments && strCurrent.equals("debit")) {
+                        isPayments = false;
                         ControlMethod("withdrawpay");
                         withdrawPaymentMethod("card");
                         strScreen = "withdrawpay";
@@ -430,6 +434,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -688,6 +696,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             tvLearnMore.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
                                     Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
                                 }
                             });

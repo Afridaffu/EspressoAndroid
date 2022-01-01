@@ -147,6 +147,7 @@ public class EditCardActivity extends AppCompatActivity {
                 isCity = true;
                 isState = true;
                 isZipcode = true;
+                isExpiry = true;
                 if (selectedCard.getExpired()) {
                     etExpiry.setEnabled(true);
                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -329,7 +330,9 @@ public class EditCardActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                objMyApplication.setSelectedCard(null);
+                                if (!strScreen.equals("withdraw") && !strScreen.equals("buy")) {
+                                    objMyApplication.setSelectedCard(null);
+                                }
                                 onBackPressed();
                                 finish();
                             } catch (Exception ex) {

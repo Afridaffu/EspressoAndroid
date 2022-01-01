@@ -305,9 +305,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
-                            android:text="9,999.00CYN"
+                            android:text="9,999.00"
                             android:textColor="@color/balance"
                             android:textSize="@dimen/_12ssp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text="CYN"
+                            android:textColor="@color/balance"
+                            android:textSize="@dimen/_9ssp"></TextView>
 
                     </LinearLayout>
 

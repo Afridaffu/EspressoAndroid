@@ -320,10 +320,13 @@ public class AddCardActivity extends AppCompatActivity {
                 etCity.setText(objMyApplication.getMyProfile().getData().getCity());
                 etState.setText(objMyApplication.getMyProfile().getData().getState());
                 etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
-                isAddress1 = true;
-                isCity = true;
-                isState = true;
-                isZipcode = true;
+                if (!etAddress1.getText().toString().trim().equals("") && !etCity.getText().toString().trim().equals("") &&
+                        !etState.getText().toString().trim().equals("") && !etZipCode.getText().toString().trim().equals("")) {
+                    isAddress1 = true;
+                    isCity = true;
+                    isState = true;
+                    isZipcode = true;
+                }
                 enableOrDisableNext();
             }
         } catch (Exception ex) {

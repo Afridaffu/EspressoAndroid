@@ -93,7 +93,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     SignOnData signOnData;
@@ -247,12 +247,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etAmount.requestFocus();
             etAmount.setShowSoftInputOnFocus(false);
             avaBal = objMyApplication.getGBTBalance();
-            tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()) + getString(R.string.currency));
+            tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             SetFaceLock();
             SetTouchId();
-            if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
-                strCvv = getIntent().getStringExtra("cvv");
-            }
+
             bindPayMethod(selectedCard);
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
@@ -310,6 +308,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etRemarks.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     displayComments();
                 }
             });
@@ -747,7 +749,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     public void bindSelectedBank(PaymentsList objData) {
         try {
             prevSelectedCard = null;
-            strCvv = "";
             bindPayMethod(objData);
         } catch (Exception ex) {
             ex.printStackTrace();

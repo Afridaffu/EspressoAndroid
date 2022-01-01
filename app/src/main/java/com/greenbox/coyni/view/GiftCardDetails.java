@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -75,7 +76,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GiftCardDetails extends AppCompatActivity {
-
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, amountTIL;
     public LinearLayout emailErrorLL, firstNameErrorLL, lastNameErrorLL, giftCardDetailsLL, amountErrorLL;
@@ -86,6 +86,7 @@ public class GiftCardDetails extends AppCompatActivity {
     BuyTokenViewModel buyTokenViewModel;
     BrandsResponse brandsResponseObj;
     Brand objBrand;
+    ProgressDialog pDialog;
     Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0;
     List<Items> listAmounts = new ArrayList<>();
     String amountETString = "", amount = "", strLimit = "";
@@ -157,7 +158,7 @@ public class GiftCardDetails extends AppCompatActivity {
             giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
 
-            isBiometric = Utils.checkBiometric(GiftCardDetails.this);
+            //isBiometric = Utils.checkBiometric(GiftCardDetails.this);
             SetFaceLock();
             SetTouchId();
 
@@ -169,6 +170,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        Utils.hideKeypad(GiftCardDetails.this);
                         if (brandDescTV.getMaxLines() == 2) {
                             brandDescTV.setMaxLines(Integer.MAX_VALUE);
                             viewAllTV.setText(getResources().getString(R.string.view_less));
@@ -239,11 +241,14 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        Utils.hideKeypad(GiftCardDetails.this);
+                        if (isNextEnabled) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            giftCardPreview();
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        giftCardPreview();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
@@ -256,10 +261,10 @@ public class GiftCardDetails extends AppCompatActivity {
     }
 
     public void initObservers() {
-        try {
-            giftCardsViewModel.getGiftCardDetailsMutableLiveData().observe(this, new Observer<BrandsResponse>() {
-                @Override
-                public void onChanged(BrandsResponse brandsResponse) {
+        giftCardsViewModel.getGiftCardDetailsMutableLiveData().observe(this, new Observer<BrandsResponse>() {
+            @Override
+            public void onChanged(BrandsResponse brandsResponse) {
+                try {
                     if (brandsResponse != null) {
                         if (brandsResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                             brandsResponseObj = brandsResponse;
@@ -309,43 +314,42 @@ public class GiftCardDetails extends AppCompatActivity {
                             Utils.displayAlert(brandsResponse.getError().getErrorDescription(), GiftCardDetails.this, "", brandsResponse.getError().getFieldErrors().get(0));
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
-                @Override
-                public void onChanged(TransferFeeResponse transferFeeResponse) {
+        buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
+            @Override
+            public void onChanged(TransferFeeResponse transferFeeResponse) {
+                try {
                     if (transferFeeResponse != null) {
                         fee = transferFeeResponse.getData().getFee();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
-                @Override
-                public void onChanged(TransactionLimitResponse transactionLimitResponse) {
-                    if (transactionLimitResponse != null) {
-                        objTranLimit = transactionLimitResponse;
-                    }
+        buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
+            @Override
+            public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (transactionLimitResponse != null) {
+                    objTranLimit = transactionLimitResponse;
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            buyTokenViewModel.getWithdrawResponseMutableLiveData().observe(this, new Observer<WithdrawResponse>() {
-                @Override
-                public void onChanged(WithdrawResponse withdrawResponse) {
+        buyTokenViewModel.getWithdrawResponseMutableLiveData().observe(this, new Observer<WithdrawResponse>() {
+            @Override
+            public void onChanged(WithdrawResponse withdrawResponse) {
+                try {
                     prevDialog.dismiss();
+                    if (pDialog != null) {
+                        pDialog.dismiss();
+                    }
                     if (withdrawResponse != null) {
                         objMyApplication.setWithdrawResponse(withdrawResponse);
                         if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
@@ -358,15 +362,14 @@ public class GiftCardDetails extends AppCompatActivity {
                                     .putExtra("fee", fee.toString()));
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     public void textWatchers() {
-
         try {
             amountET.addTextChangedListener(new TextWatcher() {
 
@@ -377,67 +380,71 @@ public class GiftCardDetails extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
+                    try {
+                        if (charSequence.toString().trim().length() > 0) {
 
-                        amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_green));
+                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_green));
 
-                        Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
-                        Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
-                        Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
-                        minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
+                            Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
+                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
+                            Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
+                            minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
 
-                        if (walletAmount < giftCardAmount) {
-                            isAmount = false;
-                            amountErrorLL.setVisibility(VISIBLE);
-                            amountErrorTV.setText("Amount entered exceeds available balance");
-                        } else if (giftCardETAmount < minValue) {
-                            isAmount = false;
-                            amountErrorLL.setVisibility(VISIBLE);
-                            amountErrorTV.setText("Amount should be equal to or greater than " + minValue + " USD");
-                        } else if (giftCardETAmount > max) {
-                            isAmount = false;
-                            amountErrorLL.setVisibility(VISIBLE);
-                            amountErrorTV.setText("Amount entered exceeds limit");
-                        } else if (objTranLimit.getData().getTokenLimitFlag()) {
-                            String limitType = objTranLimit.getData().getLimitType();
-                            if (limitType.equalsIgnoreCase("DAILY")) {
-                                if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
-                                    isAmount = false;
-                                    amountErrorLL.setVisibility(VISIBLE);
-                                    amountErrorTV.setText("Amount entered exceeds transaction limit");
-                                } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getDailyAccountLimit())) {
-                                    isAmount = false;
-                                    amountErrorLL.setVisibility(VISIBLE);
-                                    amountErrorTV.setText("Amount entered exceeds daily limit");
+                            if (walletAmount < giftCardAmount) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Amount entered exceeds available balance");
+                            } else if (giftCardETAmount < minValue) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Amount should be equal to or greater than " + minValue + " USD");
+                            } else if (giftCardETAmount > max) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Amount entered exceeds limit");
+                            } else if (objTranLimit.getData().getTokenLimitFlag()) {
+                                String limitType = objTranLimit.getData().getLimitType();
+                                if (limitType.equalsIgnoreCase("DAILY")) {
+                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                        isAmount = false;
+                                        amountErrorLL.setVisibility(VISIBLE);
+                                        amountErrorTV.setText("Amount entered exceeds transaction limit");
+                                    } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getDailyAccountLimit())) {
+                                        isAmount = false;
+                                        amountErrorLL.setVisibility(VISIBLE);
+                                        amountErrorTV.setText("Amount entered exceeds daily limit");
+                                    } else {
+                                        isAmount = true;
+                                        amountErrorLL.setVisibility(GONE);
+                                    }
                                 } else {
-                                    isAmount = true;
-                                    amountErrorLL.setVisibility(GONE);
+                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                        isAmount = false;
+                                        amountErrorLL.setVisibility(VISIBLE);
+                                        amountErrorTV.setText("Amount entered exceeds transaction limit");
+                                    } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit())) {
+                                        isAmount = false;
+                                        amountErrorLL.setVisibility(VISIBLE);
+                                        amountErrorTV.setText("Amount entered exceeds weekly limit");
+                                    } else {
+                                        isAmount = true;
+                                        amountErrorLL.setVisibility(GONE);
+                                    }
                                 }
                             } else {
-                                if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
-                                    isAmount = false;
-                                    amountErrorLL.setVisibility(VISIBLE);
-                                    amountErrorTV.setText("Amount entered exceeds transaction limit");
-                                } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit())) {
-                                    isAmount = false;
-                                    amountErrorLL.setVisibility(VISIBLE);
-                                    amountErrorTV.setText("Amount entered exceeds weekly limit");
-                                } else {
-                                    isAmount = true;
-                                    amountErrorLL.setVisibility(GONE);
-                                }
+                                isAmount = true;
+                                amountErrorLL.setVisibility(GONE);
                             }
-                        } else {
-                            isAmount = true;
-                            amountErrorLL.setVisibility(GONE);
+                        } else if (amountET.getText().toString().trim().length() == 0) {
+                            amountErrorLL.setVisibility(VISIBLE);
+                            amountErrorTV.setText("Field Required");
+                            isAmount = false;
                         }
-                    } else if (amountET.getText().toString().trim().length() == 0) {
-                        amountErrorLL.setVisibility(VISIBLE);
-                        amountErrorTV.setText("Field Required");
-                        isAmount = false;
+                        enableOrDisableNext();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    enableOrDisableNext();
                 }
 
                 @Override
@@ -592,7 +599,6 @@ public class GiftCardDetails extends AppCompatActivity {
     }
 
     public void focusWatchers() {
-
         try {
             amountET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -601,9 +607,9 @@ public class GiftCardDetails extends AppCompatActivity {
                         USFormat(amountET);
                         amountET.setHint("");
                         if (amountET.getText().toString().trim().length() > 0) {
-                            if(amountErrorLL.getVisibility()==VISIBLE){
+                            if (amountErrorLL.getVisibility() == VISIBLE) {
                                 amountErrorLL.setVisibility(VISIBLE);
-                            }else{
+                            } else {
                                 amountErrorLL.setVisibility(GONE);
                             }
                             amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -652,6 +658,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
+                        Utils.openKeyPad(GiftCardDetails.this,firstNameET);
                     }
                 }
             });
@@ -683,6 +690,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
+                        Utils.openKeyPad(GiftCardDetails.this,lastNameET);
                     }
                 }
             });
@@ -719,6 +727,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
+                        Utils.openKeyPad(GiftCardDetails.this,emailET);
                     }
                 }
             });
@@ -770,7 +779,6 @@ public class GiftCardDetails extends AppCompatActivity {
     }
 
     public void enableOrDisableNext() {
-
         try {
             if (isFirstName && isLastName && isEmail && isAmount) {
                 isNextEnabled = true;
@@ -966,7 +974,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         slideToConfirm.setInteractionEnabled(false);
                         tv_lable.setText("Verifying");
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
-                            if (isBiometric && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
+                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
                                 prevDialog.dismiss();
                                 Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
@@ -1010,6 +1018,7 @@ public class GiftCardDetails extends AppCompatActivity {
 
     private void withdrawGiftCard() {
         try {
+            pDialog = Utils.showProgressDialog(GiftCardDetails.this);
             WithdrawRequest request = getGCWithdrawRequest();
             if (Utils.checkInternet(GiftCardDetails.this)) {
                 buyTokenViewModel.withdrawTokens(request);
@@ -1065,10 +1074,7 @@ public class GiftCardDetails extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case RESULT_OK: {
-                withdrawGiftCard();
-            }
-            break;
+            case RESULT_OK:
             case 235: {
                 withdrawGiftCard();
             }

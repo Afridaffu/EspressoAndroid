@@ -368,7 +368,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
                                             case "GiftCard":
                                                 Intent returnIntent = new Intent();
-                                                setResult(235,returnIntent);
+                                                setResult(235, returnIntent);
                                                 finish();
                                         }
                                     } catch (Exception ex) {
@@ -538,7 +538,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("ChangePassword")
                         || getIntent().getStringExtra("screen").equals("EditEmail")
                         || getIntent().getStringExtra("screen").equals("EditPhone")
-                        || getIntent().getStringExtra("screen").equals("EditAddress"))) {
+                        || getIntent().getStringExtra("screen").equals("EditAddress")
+                        || getIntent().getStringExtra("screen").equals("GiftCard"))) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
