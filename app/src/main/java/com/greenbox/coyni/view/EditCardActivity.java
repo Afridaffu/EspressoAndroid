@@ -147,12 +147,13 @@ public class EditCardActivity extends AppCompatActivity {
                 isCity = true;
                 isState = true;
                 isZipcode = true;
-                isExpiry = true;
                 if (selectedCard.getExpired()) {
+                    isExpiry = false;
                     etExpiry.setEnabled(true);
                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                 } else {
+                    isExpiry = true;
                     etExpiry.setEnabled(true);
                 }
                 enableOrDisableNext();

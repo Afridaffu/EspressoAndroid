@@ -76,7 +76,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (strCurrent.equals("addpay") || strCurrent.equals("addpayment")) {
+            if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment"))
+                    && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
             } else {
@@ -279,12 +280,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-                    if (isDeCredit) {
-                        isDeCredit = false;
-                        ControlMethod("addpayment");
-                        strCurrent = "addpayment";
-                        numberOfAccounts();
-                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                    if (isDeCredit) {
+//                        isDeCredit = false;
+//                        ControlMethod("addpayment");
+//                        strCurrent = "addpayment";
+//                        numberOfAccounts();
+//                    } else
+                        if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";

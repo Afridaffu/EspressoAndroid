@@ -329,7 +329,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     lyBalance.setVisibility(View.GONE);
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                                     } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                                         tvError.setText("Amount entered exceeds available balance");
                                     } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
@@ -351,7 +351,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     lyBalance.setVisibility(View.GONE);
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                                     } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                                         tvError.setText("Amount entered exceeds available balance");
                                     } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
@@ -761,7 +761,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = etAmount.getText().toString().trim().replace("\"", "");
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
-                tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 return value = false;

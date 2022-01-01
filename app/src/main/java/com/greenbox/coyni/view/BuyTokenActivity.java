@@ -296,7 +296,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -312,7 +312,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -684,9 +684,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            if (Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
                 if (tvCYN.getVisibility() == View.VISIBLE) {
-                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 } else {
-                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                 }
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;

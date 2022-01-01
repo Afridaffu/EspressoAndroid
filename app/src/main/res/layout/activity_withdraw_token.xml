@@ -235,7 +235,7 @@
                                 android:inputType="numberDecimal"
                                 android:maxLength="@string/maxlength"
                                 android:textColor="@color/primary_black"
-                                android:textCursorDrawable="@drawable/cursor_color"
+                                android:textCursorDrawable="@drawable/cursorcolor"
                                 android:textSize="@dimen/_53ssp" />
 
                             <TextView
