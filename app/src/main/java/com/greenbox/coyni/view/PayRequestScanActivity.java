@@ -9,6 +9,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.zxing.Reader;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
@@ -17,7 +19,6 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
 import com.google.zxing.Result;
 
 import android.Manifest;
@@ -80,6 +81,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -210,7 +212,11 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        mcodeScanner.startPreview();
+                        if (ContextCompat.checkSelfPermission(PayRequestScanActivity.this,
+                                Manifest.permission.CAMERA)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            mcodeScanner.startPreview();
+                        }
                         scanCode.setTextColor(getResources().getColor(R.color.white));
                         scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
                         scanMe.setBackgroundColor(getResources().getColor(R.color.white));
@@ -491,7 +497,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                     } else {
                         if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-                            invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+                            Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code",apiError.getError().getErrorDescription());
                         }
                     }
                 }
@@ -504,7 +510,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (s != null && !s.equals("")) {
                     if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-                        invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+                        Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code","");
                     }
                 }
             }
@@ -621,7 +627,11 @@ public class PayRequestScanActivity extends AppCompatActivity {
     protected void onResume() {
         try {
             super.onResume();
-            mcodeScanner.startPreview();
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mcodeScanner.startPreview();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -699,51 +709,51 @@ public class PayRequestScanActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
-    private void invalidQRCode(String msg, final Context context, String headerText) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
-        int width = mertics.widthPixels;
-
-        TextView header = dialog.findViewById(R.id.tvHead);
-        TextView message = dialog.findViewById(R.id.tvMessage);
-        CardView actionCV = dialog.findViewById(R.id.cvAction);
-        TextView actionText = dialog.findViewById(R.id.tvAction);
-
-        if (!headerText.equals("")) {
-            header.setVisibility(View.VISIBLE);
-            header.setText(headerText);
-        }
-
-        actionCV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                                        dialog.dismiss();
-                                        mcodeScanner.startPreview();
-                                        scannerLayout.setVisibility(View.VISIBLE);
-                                    }
-        });
-
-        message.setText(msg);
-        Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        WindowManager.LayoutParams wlp = window.getAttributes();
-
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
+//
+//    private void invalidQRCode(String msg, final Context context, String headerText) {
+//        // custom dialog
+//        final Dialog dialog = new Dialog(context);
+//        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//
+//        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+//        int width = mertics.widthPixels;
+//
+//        TextView header = dialog.findViewById(R.id.tvHead);
+//        TextView message = dialog.findViewById(R.id.tvMessage);
+//        CardView actionCV = dialog.findViewById(R.id.cvAction);
+//        TextView actionText = dialog.findViewById(R.id.tvAction);
+//
+//        if (!headerText.equals("")) {
+//            header.setVisibility(View.VISIBLE);
+//            header.setText(headerText);
+//        }
+//
+//        actionCV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                                        dialog.dismiss();
+//                                        mcodeScanner.startPreview();
+//                                        scannerLayout.setVisibility(View.VISIBLE);
+//                                    }
+//        });
+//
+//        message.setText(msg);
+//        Window window = dialog.getWindow();
+//        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//        WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//        wlp.gravity = Gravity.BOTTOM;
+//        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        window.setAttributes(wlp);
+//
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//        dialog.setCanceledOnTouchOutside(true);
+//        dialog.show();
+//    }
 
     public void bindImage(){
         try {
@@ -810,7 +820,8 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
 
 
-                    Reader reader = new QRCodeReader();
+//                    Reader reader = new QRCodeReader();
+                    Reader reader=new MultiFormatReader();
 
                     Result result = reader.decode(bitmap);
 
@@ -821,13 +832,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
                     try {
                        getUserDetails(strScanWallet);
                     } catch (Exception ex) {
-//                        invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
-//                        StartScaaner();
-                        //ScanCode Visible
-//                        mycodeScannerView.setVisibility(View.VISIBLE);
-//                        scannerLayout.setVisibility(View.VISIBLE);
-//                        flashLL.setVisibility(View.VISIBLE);
-//                        closeBtnScanCode.setVisibility(View.VISIBLE);
                         ex.printStackTrace();
                     }
 
@@ -838,10 +842,10 @@ public class PayRequestScanActivity extends AppCompatActivity {
 //                    invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
 //                   StartScaaner();
                         //ScanCode Visible
-                        mycodeScannerView.setVisibility(View.VISIBLE);
-                        scannerLayout.setVisibility(View.VISIBLE);
-                        flashLL.setVisibility(View.VISIBLE);
-                        closeBtnScanCode.setVisibility(View.VISIBLE);
+//                        mycodeScannerView.setVisibility(View.VISIBLE);
+//                        scannerLayout.setVisibility(View.VISIBLE);
+//                        flashLL.setVisibility(View.VISIBLE);
+//                        closeBtnScanCode.setVisibility(View.VISIBLE);
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
@@ -873,12 +877,9 @@ public class PayRequestScanActivity extends AppCompatActivity {
         try {
             int WExtstorePermission = ContextCompat.checkSelfPermission(context,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int cameraPermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.CAMERA);
+
             List<String> listPermissionsNeeded = new ArrayList<>();
-            if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
-            }
+
             if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded
                         .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
