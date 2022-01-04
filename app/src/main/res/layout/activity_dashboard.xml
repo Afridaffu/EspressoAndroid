@@ -102,8 +102,8 @@
                             android:layout_height="@dimen/_29sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
-                            app:cardCornerRadius="@dimen/_15sdp"
                             app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_15sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -146,11 +146,18 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/notificationsSmallLL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:src="@drawable/ic_notifications" />
+                    android:layout_marginEnd="@dimen/_17sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -243,8 +250,8 @@
                             android:layout_height="@dimen/_27sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
-                            app:cardCornerRadius="@dimen/_15sdp"
                             app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_15sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -265,10 +272,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/opensans_bold"
-                                tools:text="VT"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_14sdp"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                tools:text="VT" />
                         </androidx.cardview.widget.CardView>
 
 
@@ -287,11 +294,18 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/notificationsLL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:src="@drawable/ic_notifications" />
+                    android:layout_marginEnd="@dimen/_17sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

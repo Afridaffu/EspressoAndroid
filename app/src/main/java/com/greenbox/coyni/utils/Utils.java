@@ -172,6 +172,8 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    public static final float slidePercentage = 0.3f;
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
 

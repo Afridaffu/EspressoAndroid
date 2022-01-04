@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -301,5 +302,14 @@ public interface ApiService {
 
     @GET("api/v2/giftcard/giftCardBrandItems")
     Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
+
+    @GET("api/v2/user-requests/me/receive")
+    Call<Notifications> getReceivedNotifications();
+
+    @GET("api/v2/user-requests/me/sent")
+    Call<Notifications> getSentNotifications();
+
+    @GET("api/v2/notifications/me")
+    Call<Notifications> getNotifications();
 
 }
