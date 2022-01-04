@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -28,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
@@ -213,6 +215,8 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                         LinearLayout closeBtn = dialog.findViewById(R.id.cancelBtn);
                         TextInputLayout addNoteTIL = dialog.findViewById(R.id.etlMessage);
                         CardView doneBtn = dialog.findViewById(R.id.doneBtn);
+
+
                         addnote.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -226,7 +230,10 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                                         addNoteTIL.setCounterEnabled(false);
                                     } else {
                                         addNoteTIL.setCounterEnabled(true);
+                                        addNoteTIL.setCounterTextColor(ColorStateList.valueOf(getColor(R.color.xdark_gray)));
                                     }
+
+//                                    messagePayReq=addnote.getText().toString();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -234,24 +241,10 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
 
                             @Override
                             public void afterTextChanged(Editable editable) {
-                                try {
-                                    String str = addnote.getText().toString();
-                                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
-                                        addnote.setText("");
-                                        addnote.setSelection(addnote.getText().length());
-                                    } else if (str.length() > 0 && str.contains(".")) {
-                                        addnote.setText(addnote.getText().toString().replaceAll("\\.", ""));
-                                        addnote.setSelection(addnote.getText().length());
-                                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                                        addnote.setText("");
-                                        addnote.setSelection(addnote.getText().length());
-                                    }
 
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
                             }
                         });
+
                         addnote.requestFocus();
                         addnote.setShowSoftInputOnFocus(true);
                         addnote.setText(messagePayReq);
@@ -753,30 +746,44 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
             userName = findViewById(R.id.profileTitle);
             userProfile = findViewById(R.id.profileIV);
             userWalletAddre = findViewById(R.id.accAddress);
-//            tvNameHead = findViewById(R.id.tvNameHead);
             requestedToUserId = userDetails.getData().getUserId();
-//            if (getIntent().getStringExtra("name") != null && !getIntent().getStringExtra("name").equals("")) {
-//                tvName.setText(Utils.capitalize(getIntent().getStringExtra("name")));
-//                if (getIntent().getStringExtra("name").contains(" ")) {
-//                    tvNameHead.setText(getIntent().getStringExtra("name").split(" ")[0].substring(0, 1).toUpperCase() + getIntent().getStringExtra("name").split(" ")[1].substring(0, 1).toUpperCase());
-//                } else {
-//                    tvNameHead.setText(getIntent().getStringExtra("name").substring(0, 1).toUpperCase());
-//                }
-//            } else {
-//                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
-//                tvNameHead.setText(userDetails.getData().getFirstName().substring(0, 1).toUpperCase() + userDetails.getData().getLastName().substring(0, 1).toUpperCase());
-//            }
-            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
-//            tvNameHead.setText(userDetails.getData().getFirstName().substring(0, 1).toUpperCase() + userDetails.getData().getLastName().substring(0, 1).toUpperCase());
             String imageTextNew = "";
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
+
+            //bind user Profile
+            try {
+                userName.setVisibility(View.GONE);
+                userProfile.setVisibility(View.VISIBLE);
+
+                userName.setText(imageTextNew);
+
+                if (userDetails.getData().getImage()!=null) {
+                    userProfile.setVisibility(View.VISIBLE);
+                    userName.setVisibility(View.GONE);
+                    Glide.with(this)
+                            .load(userDetails.getData().getImage().toString())
+                            .placeholder(R.drawable.ic_profile_male_user)
+                            .into(userProfile);
+                } else {
+                    userProfile.setVisibility(View.GONE);
+                    userName.setVisibility(View.VISIBLE);
+
+
+                    userName.setText(imageTextNew);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
+
+            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+
             String walletId = "";
             walletId = userDetails.getData().getWalletId().substring(0, 16) + "...";
-            userName.setText(imageTextNew);
             userWalletAddre.setText(walletId);
-            userName.setVisibility(View.VISIBLE);
-            userProfile.setVisibility(View.GONE);
             reciepientAddress = "";
             reciepientAddress = userDetails.getData().getWalletId().toString();
         } catch (Exception ex) {

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
     tools:context=".view.PayRequestScanActivity">
@@ -97,96 +97,99 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <RelativeLayout
-        android:id="@+id/flashBtnLL"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/flashBtnRL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/_80sdp"
-        android:visibility="visible">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="@dimen/_70sdp"
-            android:layout_height="@dimen/_70sdp"
+        <ImageView
+            android:id="@+id/toglebtn"
+            android:layout_width="@dimen/_39sdp"
+            android:layout_height="@dimen/_39sdp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            app:layout_constraintHorizontal_bias="0.195"
+            android:src="@drawable/ic_flashicon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="@dimen/_21sdp"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Flashlight"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
 
-            <ImageView
-                android:id="@+id/toglebtn"
-                android:layout_width="@dimen/_38sdp"
-                android:layout_height="@dimen/_38sdp"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_flashicon"
-                android:text="Flash ON" />
+            app:layout_constraintEnd_toEndOf="@+id/toglebtn"
+            app:layout_constraintStart_toStartOf="@+id/toglebtn"
+            app:layout_constraintTop_toBottomOf="@+id/toglebtn" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="Flashlight"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp"
+        <ImageView
+            android:id="@+id/albumIV"
+            android:layout_width="@dimen/_39sdp"
+            android:layout_height="@dimen/_39sdp"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_group_albumicon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.795"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75" />
 
-                />
-        </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:orientation="vertical">
+            android:fontFamily="@font/opensans_regular"
+            android:text="Album"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="@+id/albumIV"
+            app:layout_constraintStart_toStartOf="@+id/albumIV"
+            app:layout_constraintTop_toBottomOf="@+id/albumIV" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/albumIV"
-                android:layout_width="@dimen/_38sdp"
-                android:layout_height="@dimen/_38sdp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/_30sdp"
-                android:src="@drawable/ic_group_albumicon" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="Album"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp"
-
-                />
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scannerLayout"
         android:layout_width="match_parent"
-        android:layout_height="720dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="61dp"
-        android:layout_marginBottom="130dp"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
         android:visibility="visible">
 
-        <View
-            android:id="@+id/lineView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_55sdp"
-            android:background="@drawable/scananim11" />
+        <LinearLayout
+            android:layout_width="425dp"
+            android:layout_height="319dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:id="@+id/lineView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_55sdp"
+                android:background="@drawable/scananim11" />
 
 
-    </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/scanmeScrlView"
