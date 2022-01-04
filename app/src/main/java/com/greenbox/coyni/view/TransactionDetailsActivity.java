@@ -253,7 +253,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView refid, name, accountadress, descriptorname, cardNumber, expiryDate, depositIDTV;
         LinearLayout lyPRClose, lyRefId, lyAccAdd;
         ImageView refIdIV, depositIDIV, cardBrandIV;
-        LinearLayout depositID,referenceID;
+        LinearLayout depositID, referenceID;
 
         headerTV = findViewById(R.id.headTV);
         amount = findViewById(R.id.tvAmount);
@@ -263,8 +263,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         fee = findViewById(R.id.processingFeeTV);
         total = findViewById(R.id.totalAmountTV);
         balance = findViewById(R.id.accBalTV);
-        depositID=findViewById(R.id.depositIDLL);
-        referenceID=findViewById(R.id.referenceIDLL);
+        depositID = findViewById(R.id.depositIDLL);
+        referenceID = findViewById(R.id.referenceIDLL);
         refid = findViewById(R.id.referenceIDTV);
         descriptorname = findViewById(R.id.descriNameTV);
         name = findViewById(R.id.cardHoldernameTV);
@@ -332,7 +332,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
         name.setText(objData.getCardHolderName());
-        cardNumber.setText("\u2022\u2022\u2022\u2022"+objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
+        cardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
         expiryDate.setText(objData.getCardExpiryDate());
         depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
 //        successadd.setText(("Successfully added "+"["+trasactionDetails.getData().getYouGet()+"]" +" to token account"));
@@ -372,8 +372,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         fee = findViewById(R.id.btBankprocessingfeeTV);
         total = findViewById(R.id.btbankTotalTV);
         refid = findViewById(R.id.btbankRefidTV);
-        btBankReference=findViewById(R.id.btbankReferenceLL);
-        btBankDepositID=findViewById(R.id.btbankDepositIDLL);
+        btBankReference = findViewById(R.id.btbankReferenceLL);
+        btBankDepositID = findViewById(R.id.btbankDepositIDLL);
         descriptorname = findViewById(R.id.btbankDescrptorTV);
         depositIDTV = findViewById(R.id.btbankDepositIDTV);
         lyPRClose = findViewById(R.id.btbankprevious);
@@ -420,10 +420,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
         depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
-            bankNameTV.setText(objData.getBankName());
+        bankNameTV.setText(objData.getBankName());
 
 
-            nameOnAccTV.setText(objData.getNameOnBankAccount());
+        nameOnAccTV.setText(objData.getNameOnBankAccount());
 //        successadd.setText(("Successfully added "+"["+trasactionDetails.getData().getYouGet()+"]" +" to token account"));
 //        chargeback.setText(("["+trasactionDetails.getData().getReferenceId().substring(0, 8) + "...")+"(hyper");
         lyPRClose.setOnClickListener(new View.OnClickListener() {
@@ -458,7 +458,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void withdrawGiftcard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
         TextView status, dateandtime, withGiftcardname, subtotal, fee, grandtotal, refid, withid, recipientname, email;
-        LinearLayout previous,giftCardWithdrawID,giftcardReferenceID;
+        LinearLayout previous, giftCardWithdrawID, giftcardReferenceID;
         ImageView withIdIV, refIDIV;
 
         headerMsdTV = findViewById(R.id.withGiftheadTV);
@@ -473,8 +473,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withid = findViewById(R.id.withgiftid);
         recipientname = findViewById(R.id.withGiftRecipientNameTV);
         email = findViewById(R.id.withGiftReciEmailTV);
-        giftCardWithdrawID=findViewById(R.id.giftCardwithdrawIDLL);
-        giftcardReferenceID=findViewById(R.id.giftcardReferenceIDLL);
+        giftCardWithdrawID = findViewById(R.id.giftCardwithdrawIDLL);
+        giftcardReferenceID = findViewById(R.id.giftcardReferenceIDLL);
         previous = findViewById(R.id.withGiftprevious);
         withIdIV = findViewById(R.id.withdrawGiftIdIV);
         refIDIV = findViewById(R.id.withdrawRefIDIV);
@@ -512,7 +512,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         subtotal.setText("" + Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
         fee.setText("" + Utils.convertTwoDecimal(objData.getGiftCardFee().replace(" CYN", "").trim()));
-        grandtotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotatl )));
+        grandtotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotatl)));
 
         dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
@@ -543,7 +543,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void withdrawInstant(TransactionData objData) {
-        LinearLayout previous,withdrawID,referenceID;
+        LinearLayout previous, withdrawID, referenceID;
         TextView withiheader, withiamount, withidescription, withistatus, withidatetime, withiwithdrawalAmount, withiprocefee, withitotal, withiaccountbal, withiwithdrawalId, withirefId;
         TextView withicardHolderName, withicardnumber, withiexpirydate;
         ImageView withiwithdrawalid, withirefIDIV, withicardbrand;
@@ -562,8 +562,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withiwithdrawalid = findViewById(R.id.withinwithIDIV);
         withirefId = findViewById(R.id.withinrefid);
         withirefIDIV = findViewById(R.id.withinrefIDIV);
-        withdrawID=findViewById(R.id.withiwithdrawalLL);
-        referenceID=findViewById(R.id.withiReferenceIDLL);
+        withdrawID = findViewById(R.id.withiwithdrawalLL);
+        referenceID = findViewById(R.id.withiReferenceIDLL);
         withicardHolderName = findViewById(R.id.withincardholdername);
         withicardbrand = findViewById(R.id.withincardbrandIV);
         withicardnumber = findViewById(R.id.withincardnumTV);
@@ -572,10 +572,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withiheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         withiamount.setText(Utils.convertTwoDecimal(objData.getReceivedAmount().replace("USD", "").trim()));
-        if (objData.getDescription().equals("")) {
+//        if (objData.getDescription().equals("")) {
+//            withidescription.setVisibility(View.GONE);
+//        } else {
+//            withidescription.setText("\"" + objData.getDescription() + "\"");
+//        }
+        if (objData.getRemarks().equals("")) {
             withidescription.setVisibility(View.GONE);
         } else {
-            withidescription.setText("\"" + objData.getDescription() + "\"");
+            withidescription.setText("\"" + objData.getRemarks() + "\"");
         }
         withistatus.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -663,7 +668,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView withbankheader, withbankamount, withbankdescription, withbankstatus, withbankdatetime, withbankwithdrawalAmount, withbankprocefee, withbanktotal, withbankaccountbal, withbankwithdrawalId, withbankrefId;
         TextView withbanknameonaccount, withbankname, withbankaccount;
         ImageView withbankwithdrawalid, withbankrefIDIV;
-        LinearLayout withBankCloseLL,withBankWithdrawalID,withBankReference;
+        LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
 
         withbankheader = findViewById(R.id.withbankheaderTV);
         withbankamount = findViewById(R.id.withBankAmount);
@@ -676,8 +681,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withbankaccountbal = findViewById(R.id.withBankAccBalanceTV);
         withbankwithdrawalId = findViewById(R.id.withBankWithdrawidTV);
         withbankrefId = findViewById(R.id.withBankReferenceIDTV);
-        withBankWithdrawalID=findViewById(R.id.withBankWithdrawalIDLL);
-        withBankReference=findViewById(R.id.withBankReferenceIDLL);
+        withBankWithdrawalID = findViewById(R.id.withBankWithdrawalIDLL);
+        withBankReference = findViewById(R.id.withBankReferenceIDLL);
         withbanknameonaccount = findViewById(R.id.withBankNameOnAccountTV);
         withbankname = findViewById(R.id.withBankBanknameTV);
         withbankaccount = findViewById(R.id.withBankbankaccountTV);
@@ -689,10 +694,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withbankheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         withbankamount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
-        if (objData.getDescription().equals("")) {
+//        if (objData.getDescription().equals("")) {
+//            withbankdescription.setVisibility(View.GONE);
+//        } else {
+//            withbankdescription.setText("\"" + objData.getDescription() + "\"");
+//        }
+        if (objData.getRemarks().equals("")) {
             withbankdescription.setVisibility(View.GONE);
         } else {
-            withbankdescription.setText("\"" + objData.getDescription() + "\"");
+            withbankdescription.setText("\"" + objData.getRemarks() + "\"");
         }
         withbankstatus.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
@@ -734,10 +744,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withbankrefId.setText(objData.getReferenceId().substring(0, 10) + "...");
 
-            withbanknameonaccount.setText(objData.getNameOnBankAccount());
+        withbanknameonaccount.setText(objData.getNameOnBankAccount());
 
-            withbankname.setText(objData.getBankName());
-
+        withbankname.setText(objData.getBankName());
 
 
         withbankaccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));

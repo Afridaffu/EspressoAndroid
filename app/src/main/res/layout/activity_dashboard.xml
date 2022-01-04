@@ -40,50 +40,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <!--                    <androidx.cardview.widget.CardView-->
-                    <!--                        android:id="@+id/cvProfileSmall"-->
-                    <!--                        android:layout_width="@dimen/_30sdp"-->
-                    <!--                        android:layout_height="@dimen/_30sdp"-->
-                    <!--                        app:cardBackgroundColor="@color/white"-->
-                    <!--                        app:cardCornerRadius="@dimen/_15sdp">-->
-
-                    <!--                        <RelativeLayout-->
-                    <!--                            android:layout_width="match_parent"-->
-                    <!--                            android:layout_height="match_parent">-->
-
-                    <!--                            <ProgressBar-->
-                    <!--                                style="?android:attr/progressBarStyleHorizontal"-->
-                    <!--                                android:layout_width="match_parent"-->
-                    <!--                                android:layout_height="match_parent"-->
-                    <!--                                android:background="@drawable/circle_shape"-->
-                    <!--                                android:indeterminate="false"-->
-                    <!--                                android:max="100"-->
-                    <!--                                android:progress="100"-->
-                    <!--                                android:progressDrawable="@drawable/circular_progress_bar" />-->
-
-                    <!--                            <TextView-->
-                    <!--                                android:id="@+id/tvUserInfoSmall"-->
-                    <!--                                android:layout_width="wrap_content"-->
-                    <!--                                android:layout_height="wrap_content"-->
-                    <!--                                android:layout_centerInParent="true"-->
-                    <!--                                android:fontFamily="@font/opensans_bold"-->
-                    <!--                                android:text=""-->
-                    <!--                                android:textColor="@color/text_color"-->
-                    <!--                                android:textSize="14sp"-->
-                    <!--                                android:visibility="visible" />-->
-
-
-                    <!--                            <ImageView-->
-                    <!--                                android:id="@+id/imgProfileSmall"-->
-                    <!--                                android:layout_width="@dimen/_25sdp"-->
-                    <!--                                android:layout_height="@dimen/_25sdp"-->
-                    <!--                                android:layout_centerInParent="true"-->
-                    <!--                                android:scaleType="fitXY"-->
-                    <!--                                android:src="@drawable/ic_profile"-->
-                    <!--                                android:visibility="visible" />-->
-                    <!--                        </RelativeLayout>-->
-                    <!--                    </androidx.cardview.widget.CardView>-->
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cvProfileSmall"
                         android:layout_width="@dimen/_32sdp"
@@ -102,8 +58,8 @@
                             android:layout_height="@dimen/_29sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
-                            app:cardCornerRadius="@dimen/_15sdp"
                             app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_15sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -182,50 +138,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <!--                    <androidx.cardview.widget.CardView-->
-                    <!--                        android:id="@+id/cvProfile"-->
-                    <!--                        android:layout_width="@dimen/_29sdp"-->
-                    <!--                        android:layout_height="@dimen/_29sdp"-->
-                    <!--                        app:cardBackgroundColor="@color/white"-->
-                    <!--                        app:cardCornerRadius="18dp">-->
-
-                    <!--                        <RelativeLayout-->
-                    <!--                            android:layout_width="match_parent"-->
-                    <!--                            android:layout_height="match_parent">-->
-
-                    <!--                            <ProgressBar-->
-                    <!--                                android:id="@+id/progressBar"-->
-                    <!--                                style="?android:attr/progressBarStyleHorizontal"-->
-                    <!--                                android:layout_width="match_parent"-->
-                    <!--                                android:layout_height="match_parent"-->
-                    <!--                                android:background="@drawable/circle_shape"-->
-                    <!--                                android:indeterminate="false"-->
-                    <!--                                android:max="100"-->
-                    <!--                                android:progress="100"-->
-                    <!--                                android:progressDrawable="@drawable/circular_progress_bar" />-->
-
-                    <!--                            <TextView-->
-                    <!--                                android:id="@+id/tvUserInfo"-->
-                    <!--                                android:layout_width="wrap_content"-->
-                    <!--                                android:layout_height="wrap_content"-->
-                    <!--                                android:layout_centerInParent="true"-->
-                    <!--                                android:fontFamily="@font/opensans_bold"-->
-                    <!--                                android:text=""-->
-                    <!--                                android:textColor="@color/text_color"-->
-                    <!--                                android:textSize="14sp"-->
-                    <!--                                android:visibility="gone" />-->
-
-                    <!--                            <ImageView-->
-                    <!--                                android:id="@+id/imgProfile"-->
-                    <!--                                android:layout_width="@dimen/_25sdp"-->
-                    <!--                                android:layout_height="@dimen/_25sdp"-->
-                    <!--                                android:layout_centerInParent="true"-->
-                    <!--                                android:scaleType="fitXY"-->
-                    <!--                                android:src="@drawable/ic_profile"-->
-                    <!--                                android:visibility="visible" />-->
-                    <!--                        </RelativeLayout>-->
-                    <!--                    </androidx.cardview.widget.CardView>-->
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cvProfile"
                         android:layout_width="@dimen/_32sdp"
@@ -243,8 +155,8 @@
                             android:layout_height="@dimen/_27sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
-                            app:cardCornerRadius="@dimen/_15sdp"
                             app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_15sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -265,10 +177,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/opensans_bold"
-                                tools:text="VT"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_14sdp"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                tools:text="VT" />
                         </androidx.cardview.widget.CardView>
 
 
@@ -352,6 +264,7 @@
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cvPayRequest"
                         android:layout_width="@dimen/_145sdp"
                         android:layout_height="@dimen/_32sdp"
                         android:layout_alignParentLeft="true"

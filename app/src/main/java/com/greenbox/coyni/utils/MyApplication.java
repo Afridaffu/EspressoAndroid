@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.reguser.Contacts;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
@@ -50,20 +51,16 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class MyApplication extends Application {
-    static String strEncryptedPublicKey, strUser = "", strUserCode;
-    List<CardsDataItem> listCards = new ArrayList<>();
-    List<Agreements> agreementsList;
-    AccountLimitsData objAcc;
     AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strWalletId = "";
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false;
+    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
@@ -74,6 +71,7 @@ public class MyApplication extends Application {
     BrandsResponse selectedBrandResponse;
     WithdrawRequest gcWithdrawRequest;
     WithdrawResponse withdrawResponse;
+    List<Contacts> listContacts = new ArrayList<>();
 
 
     public UserDetails getUserDetails() {
@@ -591,6 +589,30 @@ public class MyApplication extends Application {
 
     public void setWithdrawResponse(WithdrawResponse withdrawResponse) {
         this.withdrawResponse = withdrawResponse;
+    }
+
+    public Boolean getContactPermission() {
+        return isContactPermission;
+    }
+
+    public void setContactPermission(Boolean contactPermission) {
+        isContactPermission = contactPermission;
+    }
+
+    public List<Contacts> getListContacts() {
+        return listContacts;
+    }
+
+    public void setListContacts(List<Contacts> listContacts) {
+        this.listContacts = listContacts;
+    }
+
+    public String getStrInvite() {
+        return strInvite;
+    }
+
+    public void setStrInvite(String strInvite) {
+        this.strInvite = strInvite;
     }
 
     public void callResolveFlow(Activity activity, String strSignOn, SignOnData signOnData) {

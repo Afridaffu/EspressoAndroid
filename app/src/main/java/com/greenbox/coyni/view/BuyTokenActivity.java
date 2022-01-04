@@ -679,8 +679,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strPay = String.valueOf(cynValue);
             } else {
                 strPay = String.valueOf(usdValue);
-                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
             }
+            usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
 //            if (Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
                 if (tvCYN.getVisibility() == View.VISIBLE) {

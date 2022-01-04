@@ -241,7 +241,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        Utils.hideKeypad(GiftCardDetails.this);
+                        Utils.hideKeypad(GiftCardDetails.this, view);
                         if (isNextEnabled) {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
@@ -658,7 +658,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
-                        Utils.openKeyPad(GiftCardDetails.this,firstNameET);
+                        Utils.openKeyPad(GiftCardDetails.this, firstNameET);
                     }
                 }
             });
@@ -690,7 +690,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
-                        Utils.openKeyPad(GiftCardDetails.this,lastNameET);
+                        Utils.openKeyPad(GiftCardDetails.this, lastNameET);
                     }
                 }
             });
@@ -727,7 +727,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
-                        Utils.openKeyPad(GiftCardDetails.this,emailET);
+                        Utils.openKeyPad(GiftCardDetails.this, emailET);
                     }
                 }
             });
