@@ -77,12 +77,12 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     if (objMyApplication.getSelectedBrandResponse() != null) {
                         giftCardTypeTV.setText(objMyApplication.getSelectedBrandResponse().getData().getBrands().get(0).getItems().get(0).getRewardName());
                     }
-                    if (objMyApplication.getGcWithdrawRequest() != null) {
-                        giftCardAmountTV.setText(Utils.convertBigDecimalUSDC(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getTotalAmount().toString()));
-                        giftCardDescTV.setText(objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card sent to " +
-                                objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getFirstName() + " " + objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getLastName() + " at " +
-                                objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getEmail()+".");
-                        gcProcessingTV.setText("We are processing your request, please allow a few minutes for your " + objMyApplication.getGcWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card to be");
+                    if (objMyApplication.getWithdrawRequest() != null) {
+                        giftCardAmountTV.setText(Utils.convertBigDecimalUSDC(objMyApplication.getWithdrawRequest().getGiftCardWithDrawInfo().getTotalAmount().toString()));
+                        giftCardDescTV.setText(objMyApplication.getWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card sent to " +
+                                objMyApplication.getWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getFirstName() + " " + objMyApplication.getWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getLastName() + " at " +
+                                objMyApplication.getWithdrawRequest().getGiftCardWithDrawInfo().getRecipientDetails().get(0).getEmail()+".");
+                        gcProcessingTV.setText("We are processing your request, please allow a few minutes for your " + objMyApplication.getWithdrawRequest().getGiftCardWithDrawInfo().getGiftCardName() + " gift card to be");
                     }
 
                     if (objMyApplication.getWithdrawResponse() != null) {

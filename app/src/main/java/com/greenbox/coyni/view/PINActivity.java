@@ -36,6 +36,7 @@ import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -43,6 +44,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+import com.greenbox.coyni.viewmodel.PayViewModel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,6 +64,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     Boolean isDontRemind = false;
     String resetPINValue = "ENTER";
     BuyTokenViewModel buyTokenViewModel;
+    PayViewModel payViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -132,6 +136,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     private void initializeComponents() {
         try {
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
+            payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             chooseCircleOne = (View) findViewById(R.id.chooseCircleOne);
             chooseCircleTwo = (View) findViewById(R.id.chooseCircleTwo);
             chooseCircleThree = (View) findViewById(R.id.chooseCircleThree);
@@ -166,7 +171,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
                     getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
-                    || getIntent().getStringExtra("screen").equals("GiftCard"))) {
+                    || getIntent().getStringExtra("screen").equals("Withdraw")
+                    || getIntent().getStringExtra("screen").equals("Pay"))) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -370,8 +376,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 finish();
                                                 break;
 
-                                            case "GiftCard":
-                                                withdrawGiftCard();
+                                            case "Withdraw":
+                                                WithdrawMethod();
+                                                break;
+                                            case "Pay":
+                                                payTransaction();
+                                                break;
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -571,7 +581,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("EditEmail")
                         || getIntent().getStringExtra("screen").equals("EditPhone")
                         || getIntent().getStringExtra("screen").equals("EditAddress")
-                        || getIntent().getStringExtra("screen").equals("GiftCard"))) {
+                        || getIntent().getStringExtra("screen").equals("Withdraw")
+                        || getIntent().getStringExtra("screen").equals("Pay"))) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
@@ -906,11 +917,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void withdrawGiftCard() {
+    private void WithdrawMethod() {
         try {
-            WithdrawRequest request = GiftCardDetails.giftCardDetails.getGCWithdrawRequest();
+            WithdrawRequest request = objMyApplication.getWithdrawRequest();
             if (Utils.checkInternet(PINActivity.this)) {
                 buyTokenViewModel.withdrawTokens(request);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void payTransaction() {
+        try {
+            if (Utils.checkInternet(PINActivity.this)) {
+                payViewModel.sendTokens(objMyApplication.getTransferPayRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

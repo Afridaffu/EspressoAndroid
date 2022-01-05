@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -576,6 +577,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
+            objMyApplication.setTransferPayRequest(request);
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 payViewModel.sendTokens(request);
             }
@@ -815,6 +817,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             userNamePayTV.setText(strUserName);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
@@ -846,32 +849,55 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
 
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+
+                        prevDialog.dismiss();
+                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
+                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
+                                Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "Pay"));
+                            }
+                        } else {
+                            startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "Pay"));
+                        }
+
+                    }
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
-                        try {
-                            slideToConfirm.setInteractionEnabled(false);
-                            tv_lable.setText("Verifying");
-                            prevDialog.dismiss();
-                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
-                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
-                                    Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                                } else {
-                                    startActivityForResult(new Intent(PayRequestActivity.this, PINActivity.class)
-                                            .putExtra("TYPE", "ENTER")
-                                            .putExtra("screen", "Pay"), FOR_RESULT);
-                                }
-                            } else {
-                                startActivityForResult(new Intent(PayRequestActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "Pay"), FOR_RESULT);
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
+//                    if (currentId == motionLayout.getEndState()) {
+//                        try {
+//                            slideToConfirm.setInteractionEnabled(false);
+//                            tv_lable.setText("Verifying");
+//                            prevDialog.dismiss();
+//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
+//                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
+//                                    Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                                } else {
+//                                    startActivityForResult(new Intent(PayRequestActivity.this, PINActivity.class)
+//                                            .putExtra("TYPE", "ENTER")
+//                                            .putExtra("screen", "Pay"), FOR_RESULT);
+//                                }
+//                            } else {
+//                                startActivityForResult(new Intent(PayRequestActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "Pay"), FOR_RESULT);
+//                            }
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
                 }
 
                 @Override

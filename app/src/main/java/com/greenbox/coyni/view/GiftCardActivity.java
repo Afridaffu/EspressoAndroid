@@ -1,7 +1,9 @@
 package com.greenbox.coyni.view;
 
+import android.location.GnssMeasurementsEvent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +36,7 @@ import java.util.List;
 public class GiftCardActivity extends AppCompatActivity {
 
     ExpandableHeightRecyclerView brandsGV;
-    LinearLayout brandsLL, gcBackbtn;
+    LinearLayout brandsLL, gcBackbtn, clearTextLL;
     EditText searchET;
     GiftCardsViewModel giftCardsViewModel;
     GiftCardsRecyclerAdapter giftCardsAdapter;
@@ -59,8 +61,9 @@ public class GiftCardActivity extends AppCompatActivity {
         gcBackbtn = findViewById(R.id.gcBackbtn);
         searchET = findViewById(R.id.searchET);
         noBrandsTV = findViewById(R.id.noBrandsTV);
+        clearTextLL = findViewById(R.id.clearTextLL);
 
-
+        searchET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(60)});
         giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
         giftCardsViewModel.getGiftCards();
 
@@ -79,6 +82,11 @@ public class GiftCardActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().length() > 0) {
+                    clearTextLL.setVisibility(View.VISIBLE);
+                } else {
+                    clearTextLL.setVisibility(View.GONE);
+                }
                 String search_key = charSequence.toString();
                 List<Brand> filterList = new ArrayList<>();
                 int pindex = 0, poindex = 0;
@@ -95,7 +103,7 @@ public class GiftCardActivity extends AppCompatActivity {
                     brandsLL.setVisibility(View.VISIBLE);
                     noBrandsTV.setVisibility(View.GONE);
                     brandsGV.setExpanded(true);
-                    GridLayoutManager layoutManager=new GridLayoutManager(GiftCardActivity.this,2);
+                    GridLayoutManager layoutManager = new GridLayoutManager(GiftCardActivity.this, 2);
                     giftCardsAdapter = new GiftCardsRecyclerAdapter(GiftCardActivity.this, filterList);
                     brandsGV.setLayoutManager(layoutManager);
                     brandsGV.setAdapter(giftCardsAdapter);
@@ -111,6 +119,15 @@ public class GiftCardActivity extends AppCompatActivity {
 
             }
         });
+
+        clearTextLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchET.setText("");
+                searchET.clearFocus();
+                Utils.hideKeypad(GiftCardActivity.this);
+            }
+        });
     }
 
     public void initObservers() {
@@ -124,7 +141,7 @@ public class GiftCardActivity extends AppCompatActivity {
                                 brandsLL.setVisibility(View.VISIBLE);
                                 noBrandsTV.setVisibility(View.GONE);
                                 brandsGV.setExpanded(true);
-                                GridLayoutManager layoutManager=new GridLayoutManager(GiftCardActivity.this,2);
+                                GridLayoutManager layoutManager = new GridLayoutManager(GiftCardActivity.this, 2);
                                 giftCardsAdapter = new GiftCardsRecyclerAdapter(GiftCardActivity.this, brandsResponse.getData().getBrands());
                                 globalBrands = brandsResponse.getData().getBrands();
                                 brandsGV.setLayoutManager(layoutManager);

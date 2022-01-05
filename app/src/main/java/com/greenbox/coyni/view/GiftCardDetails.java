@@ -24,10 +24,12 @@ import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -74,6 +76,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GiftCardDetails extends AppCompatActivity {
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
@@ -158,6 +162,13 @@ public class GiftCardDetails extends AppCompatActivity {
             giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
 
+            emailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+            firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+            firstNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+
+            lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
+            lastNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+
             //isBiometric = Utils.checkBiometric(GiftCardDetails.this);
             SetFaceLock();
             SetTouchId();
@@ -241,12 +252,13 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        Utils.hideKeypad(GiftCardDetails.this, view);
                         if (isNextEnabled) {
+                            Utils.hideKeypad(GiftCardDetails.this, view);
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
+                            getGCWithdrawRequest();
                             giftCardPreview();
                         }
                     } catch (NumberFormatException e) {
@@ -988,13 +1000,14 @@ public class GiftCardDetails extends AppCompatActivity {
                                 prevDialog.dismiss();
                                 startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "GiftCard"));
+                                        .putExtra("screen", "Withdraw"));
                             }
                         } else {
+                            Log.e("elsee", "elssee");
                             prevDialog.dismiss();
                             startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "GiftCard"));
+                                    .putExtra("screen", "Withdraw"));
                         }
 
                     }
@@ -1050,10 +1063,8 @@ public class GiftCardDetails extends AppCompatActivity {
 
     private void withdrawGiftCard() {
         try {
-            pDialog = Utils.showProgressDialog(GiftCardDetails.this);
-            WithdrawRequest request = getGCWithdrawRequest();
             if (Utils.checkInternet(GiftCardDetails.this)) {
-                buyTokenViewModel.withdrawTokens(request);
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1139,7 +1150,44 @@ public class GiftCardDetails extends AppCompatActivity {
         request.setRemarks("");
         request.setWithdrawType(Utils.giftcardType);
 
-        objMyApplication.setGcWithdrawRequest(request);
+        objMyApplication.setWithdrawRequest(request);
         return request;
+    }
+
+    public static InputFilter acceptonlyAlphabetValuesnotNumbersMethod() {
+        return new InputFilter() {
+
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                boolean isCheck = true;
+                StringBuilder sb = new StringBuilder(end - start);
+                for (int i = start; i < end; i++) {
+                    char c = source.charAt(i);
+                    if (isCharAllowed(c)) {
+                        sb.append(c);
+                    } else {
+                        isCheck = false;
+                    }
+                }
+                if (isCheck)
+                    return null;
+                else {
+                    if (source instanceof Spanned) {
+                        SpannableString spannableString = new SpannableString(sb);
+                        TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, spannableString, 0);
+                        return spannableString;
+                    } else {
+                        return sb;
+                    }
+                }
+            }
+
+            private boolean isCharAllowed(char c) {
+                Pattern pattern = Pattern.compile("^[a-zA-Z ]+$");
+                Matcher match = pattern.matcher(String.valueOf(c));
+                return match.matches();
+            }
+        };
     }
 }

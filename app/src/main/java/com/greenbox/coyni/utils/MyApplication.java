@@ -18,6 +18,7 @@ import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -70,8 +71,9 @@ public class MyApplication extends Application {
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
     BrandsResponse selectedBrandResponse;
-    WithdrawRequest gcWithdrawRequest;
+    WithdrawRequest withdrawRequest;
     WithdrawResponse withdrawResponse;
+    TransferPayRequest transferPayRequest;
     List<Contacts> listContacts = new ArrayList<>();
 
 
@@ -576,12 +578,12 @@ public class MyApplication extends Application {
         this.selectedBrandResponse = selectedBrandResponse;
     }
 
-    public WithdrawRequest getGcWithdrawRequest() {
-        return gcWithdrawRequest;
+    public WithdrawRequest getWithdrawRequest() {
+        return withdrawRequest;
     }
 
-    public void setGcWithdrawRequest(WithdrawRequest gcWithdrawRequest) {
-        this.gcWithdrawRequest = gcWithdrawRequest;
+    public void setWithdrawRequest(WithdrawRequest gcWithdrawRequest) {
+        this.withdrawRequest = gcWithdrawRequest;
     }
 
     public WithdrawResponse getWithdrawResponse() {
@@ -701,4 +703,11 @@ public class MyApplication extends Application {
         return timeAgo;
     }
 
+    public TransferPayRequest getTransferPayRequest() {
+        return transferPayRequest;
+    }
+
+    public void setTransferPayRequest(TransferPayRequest transferPayRequest) {
+        this.transferPayRequest = transferPayRequest;
+    }
 }

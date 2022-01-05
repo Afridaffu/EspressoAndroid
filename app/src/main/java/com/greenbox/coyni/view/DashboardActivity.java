@@ -1,7 +1,6 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,11 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
@@ -57,15 +52,13 @@ import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL, notificationsLL, notificationsSmallLL;
+    LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
+    RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;

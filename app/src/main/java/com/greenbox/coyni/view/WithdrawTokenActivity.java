@@ -409,6 +409,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         pfee = transferFeeResponse.getData().getFee();
                         dget = pay - pfee;
                         withdrawTokenPreview();
+
                     }
                 }
             }
@@ -821,6 +822,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             tvPaymentHead.setText("Withdraw to");
             tvPurchaseHead.setText("Withdraw Amount");
             tvCYN.setVisibility(View.GONE);
@@ -831,6 +833,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
             total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
+
+            createWithdrawRequest();
+
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
@@ -869,33 +874,59 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
 
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+
+                        prevDialog.dismiss();
+                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
+                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
+                                Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+
+                                startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "Withdraw"));
+                            }
+                        } else {
+
+                            startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "Withdraw"));
+                        }
+
+                    }
+
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
-                        try {
-                            slideToConfirm.setInteractionEnabled(false);
-                            tv_lable.setText("Verifying");
-                            //withdrawToken();
-                            prevDialog.dismiss();
-                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
-                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
-                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                                } else {
-                                    startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-                                            .putExtra("TYPE", "ENTER")
-                                            .putExtra("screen", "GiftCard"), FOR_RESULT);
-                                }
-                            } else {
-                                startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
+//                    if (currentId == motionLayout.getEndState()) {
+//                        try {
+//                            slideToConfirm.setInteractionEnabled(false);
+//                            tv_lable.setText("Verifying");
+//                            //withdrawToken();
+//                            prevDialog.dismiss();
+//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
+//                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
+//                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                                } else {
+//                                    startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+//                                            .putExtra("TYPE", "ENTER")
+//                                            .putExtra("screen", "GiftCard"), FOR_RESULT);
+//                                }
+//                            } else {
+//                                startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
+//                            }
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
                 }
 
                 @Override
@@ -1153,21 +1184,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     private void withdrawToken() {
         try {
             pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
-            WithdrawRequest request = new WithdrawRequest();
-            if (!strBankId.equals("")) {
-                bankId = Long.parseLong(strBankId);
-            }
-            if (!strCardId.equals("")) {
-                cardId = Long.parseLong(strCardId);
-            }
-            request.setBankId(bankId);
-            request.setCardId(cardId);
-            request.setGiftCardWithDrawInfo(null);
-            request.setTokens(usdValue);
-            request.setRemarks(etRemarks.getText().toString().trim());
-            request.setWithdrawType(strSubType);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-                buyTokenViewModel.withdrawTokens(request);
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1480,4 +1498,22 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         }
     }
 
+    private WithdrawRequest createWithdrawRequest(){
+        WithdrawRequest request = new WithdrawRequest();
+        if (!strBankId.equals("")) {
+            bankId = Long.parseLong(strBankId);
+        }
+        if (!strCardId.equals("")) {
+            cardId = Long.parseLong(strCardId);
+        }
+        request.setBankId(bankId);
+        request.setCardId(cardId);
+        request.setGiftCardWithDrawInfo(null);
+        request.setTokens(usdValue);
+        request.setRemarks(etRemarks.getText().toString().trim());
+        request.setWithdrawType(strSubType);
+        objMyApplication.setWithdrawRequest(request);
+
+        return request;
+    }
 }
