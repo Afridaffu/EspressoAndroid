@@ -728,7 +728,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
-
+            isBuyTokenAPICalled = false;
             TextView tvGet = prevDialog.findViewById(R.id.tvGet);
             TextView tvBankName = prevDialog.findViewById(R.id.tvBankName);
             TextView tvAccount = prevDialog.findViewById(R.id.tvAccount);

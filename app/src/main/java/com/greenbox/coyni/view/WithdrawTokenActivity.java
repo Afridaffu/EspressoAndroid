@@ -106,6 +106,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     Cursor dsFacePin, dsTouchID;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
+    boolean isAuthenticationCalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -833,7 +834,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
             total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
-
+            isAuthenticationCalled = false;
             createWithdrawRequest();
 
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
@@ -881,21 +882,24 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         slideToConfirm.setInteractionEnabled(false);
                         tv_lable.setText("Verifying");
 
-                        prevDialog.dismiss();
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        if (!isAuthenticationCalled) {
+                            prevDialog.dismiss();
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
+                                    isAuthenticationCalled = true;
+                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    isAuthenticationCalled = true;
+                                    startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "Withdraw"));
+                                }
                             } else {
-
+                                isAuthenticationCalled = true;
                                 startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Withdraw"));
                             }
-                        } else {
-
-                            startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "Withdraw"));
                         }
 
                     }
@@ -1498,7 +1502,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         }
     }
 
-    private WithdrawRequest createWithdrawRequest(){
+    private WithdrawRequest createWithdrawRequest() {
         WithdrawRequest request = new WithdrawRequest();
         if (!strBankId.equals("")) {
             bankId = Long.parseLong(strBankId);

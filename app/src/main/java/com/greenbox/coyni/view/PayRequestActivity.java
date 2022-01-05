@@ -64,6 +64,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     Long mLastClickTime = 0L;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
+    boolean isAuthenticationCalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -828,6 +829,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
 
+            isAuthenticationCalled = false;
             if (!addNoteTV.getText().toString().trim().equals("")) {
                 lyMessage.setVisibility(View.VISIBLE);
                 messageNoteTV.setText(addNoteTV.getText().toString());
@@ -859,13 +861,16 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         prevDialog.dismiss();
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
                             if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
+                                isAuthenticationCalled = true;
                                 Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
+                                isAuthenticationCalled = true;
                                 startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Pay"));
                             }
                         } else {
+                            isAuthenticationCalled = true;
                             startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "Pay"));

@@ -109,6 +109,7 @@ public class GiftCardDetails extends AppCompatActivity {
     int FOR_RESULT = 235;
     Dialog prevDialog;
     Long mLastClickTime = 0L;
+    boolean isAuthenticationCalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -975,6 +976,7 @@ public class GiftCardDetails extends AppCompatActivity {
             giftCardTypeTV.setText(brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getRewardName());
             recipientMailTV.setText(emailET.getText().toString());
 
+            isAuthenticationCalled = false;
 
             slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
                 @Override
@@ -991,23 +993,27 @@ public class GiftCardDetails extends AppCompatActivity {
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
                         tv_lable.setText("Verifying");
-
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
-                                prevDialog.dismiss();
-                                Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
+                        if (!isAuthenticationCalled) {
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
+                                    prevDialog.dismiss();
+                                    isAuthenticationCalled = true;
+                                    Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    prevDialog.dismiss();
+                                    isAuthenticationCalled = true;
+                                    startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "Withdraw"));
+                                }
                             } else {
+                                Log.e("elsee", "elssee");
                                 prevDialog.dismiss();
+                                isAuthenticationCalled = true;
                                 startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Withdraw"));
                             }
-                        } else {
-                            Log.e("elsee", "elssee");
-                            prevDialog.dismiss();
-                            startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "Withdraw"));
                         }
 
                     }
