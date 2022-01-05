@@ -80,42 +80,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
             android:text="Recipient’s Address"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
+
         <LinearLayout
             android:id="@+id/copyRecipientLL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:layout_marginRight="@dimen/_6sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:orientation="horizontal"
-            >
-        <TextView
-            android:id="@+id/recipAddreTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semibold"
-            android:gravity="right"
-            android:textColor="@color/black"
-            android:textFontWeight="1"
-            android:textSize="@dimen/_11ssp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            />
+            <TextView
+                android:id="@+id/recipAddreTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="right"
+                android:textColor="@color/primary_black"
+                android:textFontWeight="1"
+                android:textSize="@dimen/_11ssp" />
 
-        <ImageView
-            android:layout_width="@dimen/_11sdp"
-            android:layout_height="@dimen/_11sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:src="@drawable/ic_copy" />
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:src="@drawable/ic_copy" />
         </LinearLayout>
     </LinearLayout>
 
@@ -123,16 +118,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_17sdp"
         android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
             android:text="Processing Fee"
@@ -140,16 +133,14 @@
             android:textSize="@dimen/_11ssp" />
 
         <TextView
+            android:id="@+id/tvProcessingFee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:layout_marginRight="@dimen/_6sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
             android:text="1.00 CYN"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_black"
             android:textFontWeight="1"
             android:textSize="@dimen/_11ssp" />
     </LinearLayout>
@@ -175,6 +166,7 @@
             android:textSize="@dimen/_12ssp" />
 
         <TextView
+            android:id="@+id/tvTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_7sdp"
@@ -189,35 +181,41 @@
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/messageTxt"
+    <LinearLayout
+        android:id="@+id/lyMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_21sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginRight="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_6sdp"
-        android:fontFamily="@font/opensans_regular"
-        android:text="Message"
-        android:textColor="@color/dark_grey"
-        android:textSize="@dimen/_11ssp" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/messageNoteTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_21sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginRight="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
-        android:fontFamily="@font/opensans_regular"
-        android:text="“Hey friend, thanks for dinner the other night. \nHere’s what you owe me for my meal.”"
-        android:textColor="#151515"
-        android:textSize="@dimen/_11ssp" />
+        <TextView
+            android:id="@+id/messageTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Message"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_11ssp" />
 
+        <TextView
+            android:id="@+id/messageNoteTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="“Hey friend, thanks for dinner the other night. \nHere’s what you owe me for my meal.”"
+            android:textColor="#151515"
+            android:textSize="@dimen/_11ssp" />
+    </LinearLayout>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/lay_lock_main"
+        android:id="@+id/slideToConfirm"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_48sdp"
         android:layout_margin="@dimen/_20sdp"
@@ -264,9 +262,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_double_left"
-
-                />
+                android:src="@drawable/ic_double_left" />
 
         </androidx.cardview.widget.CardView>
 
@@ -291,143 +287,7 @@
                 android:layout_gravity="center" />
 
         </androidx.cardview.widget.CardView>
-        <!--        <androidx.constraintlayout.utils.widget.ImageFilterView-->
-        <!--            android:id="@+id/image"-->
-        <!--            android:layout_marginBottom="16dp"-->
-        <!--            android:layout_marginTop="16dp"-->
-        <!--            android:layout_marginStart="16dp"-->
-        <!--            android:layout_marginEnd="16dp"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            android:background="@color/white"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            android:src="@drawable/right"-->
-        <!--            app:altSrc="@drawable/left"-->
-        <!--            android:layout_width="@dimen/_30sdp"-->
-        <!--            android:layout_height="@dimen/_30sdp"-->
-        <!--            />-->
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
-
-    <RelativeLayout
-        android:id="@+id/successRL"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_48sdp"
-        android:layout_margin="20dp"
-        android:background="@drawable/shape_round_rectable"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:paddingEnd="16dp"
-            android:paddingRight="16dp"
-            android:text="Success"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_15sdp"
-            android:textStyle="bold" />
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_2sdp"
-            android:visibility="visible"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/_20sdp">
-
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_check" />
-
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
-
-
-    <!--    <androidx.constraintlayout.motion.widget.MotionLayout-->
-    <!--        android:id="@+id/lay_lock_main"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="@dimen/_50sdp"-->
-    <!--        android:layout_margin="@dimen/_21sdp"-->
-    <!--        android:background="@drawable/shape_round_rectable"-->
-    <!--        android:elevation="8dp"-->
-    <!--        app:layoutDescription="@xml/activity_swipe_unloack_scene"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/tv_lable"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="8dp"-->
-    <!--            android:ellipsize="end"-->
-    <!--            android:gravity="center"-->
-    <!--            android:paddingEnd="16dp"-->
-    <!--            android:paddingRight="16dp"-->
-    <!--            android:text="Slide to Confirm"-->
-    <!--            android:textColor="@color/white"-->
-    <!--            android:textSize="@dimen/_15sdp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
-
-
-    <!--        <androidx.cardview.widget.CardView-->
-    <!--            android:id="@+id/im_lock"-->
-    <!--            android:layout_width="@dimen/_45sdp"-->
-    <!--            android:layout_height="@dimen/_45sdp"-->
-    <!--            android:layout_marginStart="@dimen/_5sdp"-->
-    <!--            android:layout_marginTop="@dimen/_5sdp"-->
-    <!--            android:layout_marginBottom="@dimen/_5sdp"-->
-    <!--            app:cardBackgroundColor="@color/primary_color"-->
-    <!--            app:cardCornerRadius="@dimen/_22sdp"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--            <androidx.appcompat.widget.AppCompatImageView-->
-    <!--                android:layout_width="@dimen/_40sdp"-->
-    <!--                android:layout_height="@dimen/_40sdp"-->
-    <!--                android:layout_gravity="center"-->
-    <!--                android:src="@drawable/ic_double_left"-->
-
-    <!--                />-->
-
-    <!--        </androidx.cardview.widget.CardView>-->
-    <!--        <androidx.cardview.widget.CardView-->
-    <!--            android:id="@+id/im_lock_"-->
-    <!--            android:layout_width="@dimen/_40sdp"-->
-    <!--            android:layout_height="@dimen/_40sdp"-->
-    <!--            android:layout_marginTop="@dimen/_5sdp"-->
-    <!--            android:layout_marginEnd="@dimen/_5sdp"-->
-    <!--            android:layout_marginBottom="@dimen/_5sdp"-->
-    <!--            android:visibility="invisible"-->
-    <!--            app:cardCornerRadius="@dimen/_20sdp"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--            <ProgressBar-->
-    <!--                android:layout_width="@dimen/_40sdp"-->
-    <!--                android:layout_height="@dimen/_40sdp"-->
-    <!--                android:layout_gravity="center"-->
-    <!--                android:background="@color/primary_color" />-->
-
-    <!--        </androidx.cardview.widget.CardView>-->
-    <!--    </androidx.constraintlayout.motion.widget.MotionLayout>-->
-
 
 </LinearLayout>

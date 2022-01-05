@@ -241,7 +241,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-
+                        Utils.hideKeypad(GiftCardDetails.this, view);
                         if (isNextEnabled) {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;

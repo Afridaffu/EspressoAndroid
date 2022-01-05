@@ -136,13 +136,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         convertUSDValue();
                     }
 
-                    if (editable.length() > 5) {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                    } else {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                    }
+//                    if (editable.length() > 5) {
+//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                    } else {
+//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+//                    }
+                    changeTextSize(editable.toString());
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -679,15 +680,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strPay = String.valueOf(cynValue);
             } else {
                 strPay = String.valueOf(usdValue);
-                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
             }
-//            if (Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
-            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
-                if (tvCYN.getVisibility() == View.VISIBLE) {
-                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                } else {
-                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
-                }
+            usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+//                if (tvCYN.getVisibility() == View.VISIBLE) {
+//                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                } else {
+//                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                }
+//                tvError.setVisibility(View.VISIBLE);
+//                return value = false;
+//            }
+            if (tvCYN.getVisibility() == View.VISIBLE && Double.parseDouble(strPay.replace(",", "")) < cynValidation) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                return value = false;
+            } else if (tvCYN.getVisibility() == View.GONE && Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {

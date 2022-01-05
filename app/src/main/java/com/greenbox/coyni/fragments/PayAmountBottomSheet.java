@@ -61,7 +61,7 @@ public class PayAmountBottomSheet extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_pay_amount_bottom_sheet, container, false);
+        View view=inflater.inflate(R.layout.pay_order_preview, container, false);
         // Inflate the layout for this fragment
 
 

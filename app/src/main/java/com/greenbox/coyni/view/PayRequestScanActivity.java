@@ -467,7 +467,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.dismiss();
                 try {
                     if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
+                        Intent i = new Intent(PayRequestScanActivity.this, PayRequestActivity.class);
                         i.putExtra("walletId", strScanWallet);
                         i.putExtra("screen", "scan");
                         startActivity(i);

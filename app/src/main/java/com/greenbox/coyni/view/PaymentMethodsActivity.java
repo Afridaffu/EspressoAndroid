@@ -150,11 +150,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
             addPayment();
             paymentMethods();
-//            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("editcard")) {
-//                if (getIntent().getStringExtra("action") != null && getIntent().getStringExtra("action").equals("remove")) {
-//                    deleteBank(PaymentMethodsActivity.this, objMyApplication.getSelectedCard());
-//                }
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -286,7 +281,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 //                        strCurrent = "addpayment";
 //                        numberOfAccounts();
 //                    } else
-                        if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
@@ -376,12 +371,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
                 tvMessage.setVisibility(View.VISIBLE);
-//            } else if (strScreen != null && strScreen.equals("quick_action")) {
             } else {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
                 tvMessage.setText("There is no payment method currently \\nlinked to your account. Please follow one of \\nthe prompts below to link an account.");
+                if (strScreen.equals("") && strCurrent.equals("addpayment")) {
+                    tvMessage.setVisibility(View.VISIBLE);
+                    imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
+                }
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override

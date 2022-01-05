@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,10 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -51,14 +55,17 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
+    public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
+    LinearLayout scanQr, viewMoreLL, notificationsLL, notificationsSmallLL;
     DashboardViewModel dashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
@@ -66,11 +73,10 @@ public class DashboardActivity extends AppCompatActivity {
     TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV;
     MyApplication objMyApplication;
     Dialog dialog;
-    ProgressDialog progressDialog;
-    RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL, notificationsLL;
+    RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
     NestedScrollView transactionsNSV;
-    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, countCV;
-    ImageView imgProfileSmall, imgProfile, notificationsIV;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, cvPayRequest,countCV;
+    ImageView imgProfileSmall, imgProfile;
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
@@ -94,6 +100,27 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        try {
+            switch (requestCode) {
+                case REQUEST_READ_CONTACTS:
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        objMyApplication.setContactPermission(true);
+                    } else {
+                        // permission denied,Disable the
+                        // functionality that depends on this permission.
+                        objMyApplication.setContactPermission(false);
+                    }
+                    startActivity(new Intent(DashboardActivity.this, AddRecipientActivity.class));
+                    break;
+            }
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void initialization() {
         try {
             cvHeaderRL = findViewById(R.id.cvHeaderRL);
@@ -109,6 +136,7 @@ public class DashboardActivity extends AppCompatActivity {
             underReviewCV = findViewById(R.id.underReviewCV);
             additionalActionCV = findViewById(R.id.additionalActionCV);
             buyTokensCV = findViewById(R.id.buyTokensCV);
+            cvPayRequest = findViewById(R.id.cvPayRequest);
 
             layoutMainMenu = findViewById(R.id.layoutMainMenu);
             layoutProfile = findViewById(R.id.layoutProfile);
@@ -261,11 +289,20 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
-//                    i.putExtra("screen", "quick_action");
-//                    startActivity(i);
                     Intent i = new Intent(DashboardActivity.this, BuyTokenPaymentMethodsActivity.class);
                     i.putExtra("screen", "dashboard");
+                    startActivity(i);
+                }
+            });
+
+            cvPayRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
                     startActivity(i);
                 }
             });
@@ -813,11 +850,13 @@ public class DashboardActivity extends AppCompatActivity {
         payRequestLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                dialog.dismiss();
+                requestPermission();
+//                startActivity(new Intent(DashboardActivity.this, AddRecipientActivity.class));
             }
         });
 
@@ -861,6 +900,21 @@ public class DashboardActivity extends AppCompatActivity {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    private void requestPermission() {
+        try {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
+                // show UI part if you want here to show some rationale !!!
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
+                        REQUEST_READ_CONTACTS);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
+                        REQUEST_READ_CONTACTS);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
