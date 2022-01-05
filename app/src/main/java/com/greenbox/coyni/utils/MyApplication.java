@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.reguser.Contacts;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletInfo;
@@ -72,6 +73,7 @@ public class MyApplication extends Application {
     WithdrawRequest gcWithdrawRequest;
     WithdrawResponse withdrawResponse;
     List<Contacts> listContacts = new ArrayList<>();
+    TransactionListRequest transactionListSearch = new TransactionListRequest();
 
 
     public UserDetails getUserDetails() {
@@ -613,6 +615,18 @@ public class MyApplication extends Application {
 
     public void setStrInvite(String strInvite) {
         this.strInvite = strInvite;
+    }
+
+    public void initializeTransactionSearch() {
+        transactionListSearch = new TransactionListRequest();
+    }
+
+    public TransactionListRequest getTransactionListSearch() {
+        return transactionListSearch;
+    }
+
+    public void setTransactionListSearch(TransactionListRequest transactionListSearch) {
+        this.transactionListSearch = transactionListSearch;
     }
 
     public void callResolveFlow(Activity activity, String strSignOn, SignOnData signOnData) {

@@ -290,7 +290,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         isPayments = false;
                         ControlMethod("addpayment");
                         strCurrent = "addpayment";
-                        numberOfAccounts();
+//                        numberOfAccounts();
+                        addPayment();
                     }
                 }
             }
