@@ -2,21 +2,19 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.recentusers.RecentUsersData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.PayRequestTransactionActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 
 import java.util.List;
 
@@ -74,7 +72,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent i = new Intent(mContext, PayRequestTransactionActivity.class);
+                        Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletAddress());
                         i.putExtra("name", objData.getUserName());
                         mContext.startActivity(i);

@@ -11,12 +11,11 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.coyniusers.CoyniUsersData;
 import com.greenbox.coyni.model.reguser.RegUsersResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddRecipientActivity;
-import com.greenbox.coyni.view.PayRequestTransactionActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 
 import java.util.List;
 
@@ -97,7 +96,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 public void onClick(View v) {
                     try {
                         if (objData.getWalletAddress() != null && !objData.getWalletAddress().equals("")) {
-                            Intent i = new Intent(mContext, PayRequestTransactionActivity.class);
+                            Intent i = new Intent(mContext, PayRequestActivity.class);
                             i.putExtra("walletId", objData.getWalletAddress());
                             i.putExtra("name", objData.getUserName());
                             mContext.startActivity(i);

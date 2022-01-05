@@ -14,7 +14,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.coyniusers.CoyniUsersData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.PayRequestTransactionActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent i = new Intent(mContext, PayRequestTransactionActivity.class);
+                        Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletId());
                         i.putExtra("name", objData.getFullName());
                         mContext.startActivity(i);

@@ -172,13 +172,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     isUSD = true;
                     convertUSDValue();
 
-                    if (editable.length() > 5) {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                    } else {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                    }
+//                    if (editable.length() > 5) {
+//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                    } else {
+//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+//                    }
+                    changeTextSize(editable.toString());
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -1173,7 +1174,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         }
     }
 
-    public void displayComments() {
+    private void displayComments() {
         try {
             cvvDialog = new Dialog(WithdrawTokenActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

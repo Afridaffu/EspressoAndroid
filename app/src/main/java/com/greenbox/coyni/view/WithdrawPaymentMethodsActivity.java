@@ -657,7 +657,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             if (strPay.equals("bank")) {
                 tvPayHead.setText("Add Bank Account");
                 tvPayMethod.setText("External Bank Account");
-                tvCount.setText("(0/0)");
+                tvCount.setText("(0/2)");
                 tvPayMMessage.setText("Can be used for making Coyni purchases or withdrawing funds.");
                 imgPayLogo.setImageResource(R.drawable.ic_add_bank);
                 imgPayment.setImageResource(R.drawable.ic_bank_account_active);

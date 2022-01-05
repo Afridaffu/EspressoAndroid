@@ -15,12 +15,11 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,11 +37,11 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class PayRequestTransactionActivity extends AppCompatActivity implements View.OnClickListener {
+public class PayRequestTransactionActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
     LinearLayout addNoteClick, prLL, topLL, lyPayClose;
     TextView addNoteTV, coynTV;
     ImageView changeCurreIV;
-    Boolean isFieldValid = false, isCurrencyEnable = true, isCynEnable = false;
+    Boolean isFieldValid = false, isCurrencyEnable = true, isCynEnable = false, isUSD = false, isCYN = false;
     String strWalletId = "", reciepientAddress = "", strUserName = "";
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
@@ -60,6 +59,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
     TextView availTV, availBal, errMinAmount, dollorTV;
     TextView requestTV, payTV;
     TransactionLimitResponse objResponse;
+    float fontSize, dollarFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,55 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable == payRequestET.getEditableText()) {
+            try {
+                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
+                    payRequestET.setHint("");
+                    isCYN = false;
+                    isUSD = true;
+                    convertUSDValue();
+
+                    changeTextSize(editable.toString());
+//                    if (validation()) {
+//                        ctKey.enableButton();
+//                    } else {
+//                        ctKey.disableButton();
+//                    }
+                } else if (editable.toString().equals(".")) {
+                    payRequestET.setText("");
+                    //ctKey.disableButton();
+                } else if (editable.length() == 0) {
+                    payRequestET.setHint("0.00");
+//                    cynValue = 0.0;
+//                    usdValue = 0.0;
+//                    cynValidation = 0.0;
+//                    ctKey.disableButton();
+//                    tvError.setVisibility(View.GONE);
+//                    ctKey.clearData();
+                } else {
+                    payRequestET.setText("");
+//                    cynValue = 0.0;
+//                    usdValue = 0.0;
+//                    cynValidation = 0.0;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -93,7 +142,8 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
             coynTV = findViewById(R.id.coyniTV);
             requestTV = findViewById(R.id.requestTV);
             payTV = findViewById(R.id.payTV);
-
+            fontSize = payRequestET.getTextSize();
+            dollarFont = dollorTV.getTextSize();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayRequestTransactionActivity.this)) {
@@ -136,54 +186,54 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                     Utils.hideSoftKeypad(PayRequestTransactionActivity.this, v);
                 }
             });
-
-            payRequestET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() == 0) {
-//                        payRequestET.setError("Minimum amount is [act.limit]CYN");
-                        availTV.setVisibility(View.GONE);
-                        availBal.setVisibility(View.GONE);
-                        errMinAmount.setVisibility(View.VISIBLE);
-                        isFieldValid = false;
-                        enablePayReBtn();
-                    } else if (charSequence.length() > 0) {
-                        availTV.setVisibility(View.VISIBLE);
-                        availBal.setVisibility(View.VISIBLE);
-                        errMinAmount.setVisibility(View.GONE);
-                        isFieldValid = true;
-                        enablePayReBtn();
-
-                        if (charSequence.charAt(0) == 0) {
-                            payRequestET.setText(charSequence.subSequence(1, charSequence.length()));
-                        }
-                        if (charSequence.length() > 7 && charSequence.length() <= 11) {
-                            payRequestET.setTextSize(30);
-                            dollorTV.setTextSize(30);
-                        }
-                        if (charSequence.length() > 5 && charSequence.length() <= 7) {
-                            payRequestET.setTextSize(38);
-                            dollorTV.setTextSize(38);
-                        } else if (charSequence.length() <= 3) {
-                            payRequestET.setTextSize(54);
-                            dollorTV.setTextSize(54);
-                        } else if (charSequence.length() > 3 && charSequence.length() <= 5) {
-                            payRequestET.setTextSize(46);
-                            dollorTV.setTextSize(46);
-                        }
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+            payRequestET.addTextChangedListener(this);
+//            payRequestET.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                    if (charSequence.length() == 0) {
+////                        payRequestET.setError("Minimum amount is [act.limit]CYN");
+//                        availTV.setVisibility(View.GONE);
+//                        availBal.setVisibility(View.GONE);
+//                        errMinAmount.setVisibility(View.VISIBLE);
+//                        isFieldValid = false;
+//                        enablePayReBtn();
+//                    } else if (charSequence.length() > 0) {
+//                        availTV.setVisibility(View.VISIBLE);
+//                        availBal.setVisibility(View.VISIBLE);
+//                        errMinAmount.setVisibility(View.GONE);
+//                        isFieldValid = true;
+//                        enablePayReBtn();
+//
+//                        if (charSequence.charAt(0) == 0) {
+//                            payRequestET.setText(charSequence.subSequence(1, charSequence.length()));
+//                        }
+//                        if (charSequence.length() > 7 && charSequence.length() <= 11) {
+//                            payRequestET.setTextSize(30);
+//                            dollorTV.setTextSize(30);
+//                        }
+//                        if (charSequence.length() > 5 && charSequence.length() <= 7) {
+//                            payRequestET.setTextSize(38);
+//                            dollorTV.setTextSize(38);
+//                        } else if (charSequence.length() <= 3) {
+//                            payRequestET.setTextSize(54);
+//                            dollorTV.setTextSize(54);
+//                        } else if (charSequence.length() > 3 && charSequence.length() <= 5) {
+//                            payRequestET.setTextSize(46);
+//                            dollorTV.setTextSize(46);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//
+//                }
+//            });
 
             activeButtons();
             addNoteClick.setOnClickListener(new View.OnClickListener() {
@@ -358,7 +408,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                             // custom dialog
                             final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
                             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.fragment_pay_amount_bottom_sheet);
+                            dialog.setContentView(R.layout.pay_order_preview);
                             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                             messageTV = dialog.findViewById(R.id.messageNoteTV);
                             messageTxt = dialog.findViewById(R.id.messageTxt);
@@ -739,8 +789,48 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void changeTextSize(String editable) {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            if (editable.length() > 8) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                dollorTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 5) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                dollorTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+            } else {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                payRequestET.setTextSize(Utils.pixelsToSp(PayRequestTransactionActivity.this, fontSize));
+                dollorTV.setTextSize(Utils.pixelsToSp(PayRequestTransactionActivity.this, dollarFont));
+            }
+            payRequestET.setFilters(FilterArray);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
+
+    private void setDefaultLength() {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+            payRequestET.setFilters(FilterArray);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void convertUSDValue() {
+        try {
+//            if (isUSD) {
+//                isUSD = false;
+//                usdValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+//                cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
+//            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

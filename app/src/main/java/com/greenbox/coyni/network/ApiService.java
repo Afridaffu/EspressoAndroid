@@ -23,6 +23,8 @@ import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.payrequest.PayRequestResponse;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -320,5 +322,8 @@ public interface ApiService {
 
     @POST("api/v2/comm-temp/invite/{templateId}/view")
     Call<TemplateResponse> getTemplate(@Path("templateId") int templateId, @Body TemplateRequest request);
+
+    @POST("api/v2/node/sendTokens")
+    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
 
 }
