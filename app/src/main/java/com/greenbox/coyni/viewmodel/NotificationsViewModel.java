@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.view.NotificationsActivity;
 
 import java.lang.reflect.Type;
 
@@ -53,6 +54,7 @@ public class NotificationsViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Notifications obj = response.body();
                             notificationsMutableLiveData.setValue(obj);
+//                            new Thread(() -> NotificationsActivity.notificationsActivity.notificationsViewModel.getReceivedNotifications()).start();
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Notifications>() {
@@ -88,6 +90,8 @@ public class NotificationsViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Notifications obj = response.body();
                             receivedNotificationsMutableLiveData.setValue(obj);
+//                            new Thread(() -> NotificationsActivity.notificationsActivity.notificationsViewModel.getSentNotifications()).start();
+
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Notifications>() {
@@ -103,8 +107,12 @@ public class NotificationsViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<Notifications> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    receivedNotificationsMutableLiveData.setValue(null);
+                    try {
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                        receivedNotificationsMutableLiveData.setValue(null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {
@@ -124,6 +132,7 @@ public class NotificationsViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             Notifications obj = response.body();
                             sentNotificationsMutableLiveData.setValue(obj);
+
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Notifications>() {
@@ -139,8 +148,12 @@ public class NotificationsViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<Notifications> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    sentNotificationsMutableLiveData.setValue(null);
+                    try {
+                        sentNotificationsMutableLiveData.setValue(null);
+                        Toast.makeText(NotificationsActivity.notificationsActivity, "something went wrong", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {

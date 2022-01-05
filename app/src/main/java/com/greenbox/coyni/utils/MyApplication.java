@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class MyApplication extends Application {
     AgreementsPdf agreementsPdf;
@@ -642,4 +643,76 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
     }
+
+    public String convertNotificationTime(String date) {
+        String strDate = "";
+        String timeAgo = "";
+        try {
+            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                    .toFormatter()
+                    .withZone(ZoneOffset.UTC);
+            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+            zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+            strDate = zonedTime.format(DATE_TIME_FORMATTER);
+
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date past = format.parse(strDate);
+
+            Date now = new Date();
+
+            SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
+            String nowString = formatter.format(now);
+
+            DateTimeFormatter dtfNow = new DateTimeFormatterBuilder().appendPattern("EEE MMM dd HH:mm:ss zzzz yyyy")
+                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                    .toFormatter()
+                    .withZone(ZoneOffset.UTC);
+            ZonedDateTime zonedTimeNow = ZonedDateTime.parse(nowString, dtfNow);
+            DateTimeFormatter DATE_TIME_FORMATTER_NOW = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+            zonedTime = zonedTimeNow.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+            nowString = zonedTime.format(DATE_TIME_FORMATTER_NOW);
+
+            SimpleDateFormat formatNow = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            now = formatNow.parse(nowString);
+            Log.e("now", now + "");
+
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            long hours = TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+            long days = TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
+            int weeks = (int) days / 7;
+            int months = (int) weeks / 4;
+            int years = (int) months / 4;
+
+            if (seconds < 60) {
+                timeAgo = seconds + "s ago";
+            } else if (minutes < 60) {
+//                System.out.println(minutes + " minutes ago");
+                timeAgo = minutes + "m ago";
+            } else if (hours < 24) {
+//                System.out.println(hours + " hours ago");
+                timeAgo = hours + "h ago";
+            } else if (days < 7) {
+//                System.out.println(days + " days ago");
+                timeAgo = days + "d ago";
+            } else if (weeks < 4) {
+                timeAgo = weeks + "w ago";
+//                System.out.println(days + " weeks ago");
+            } else if (months < 12) {
+                if (months > 1)
+                    timeAgo = months + "months ago";
+                else
+                    timeAgo = months + "month ago";
+//                System.out.println(days + " weeks ago");
+            } else {
+                timeAgo = years + "y ago";
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return timeAgo;
+    }
+
 }

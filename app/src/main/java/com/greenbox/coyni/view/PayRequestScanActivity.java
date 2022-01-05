@@ -174,7 +174,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
-
     private void listeners() {
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
@@ -631,7 +630,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     @Override
     protected void onResume() {
