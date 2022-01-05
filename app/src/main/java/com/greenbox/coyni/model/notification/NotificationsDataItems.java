@@ -3,7 +3,7 @@ package com.greenbox.coyni.model.notification;
 public class NotificationsDataItems {
     //Receive or Sent
     private int id;
-    private int requestedDate;
+    private String requestedDate;
     private String toUser;
     private String fromUser;
     private int fromUserId;
@@ -14,18 +14,22 @@ public class NotificationsDataItems {
     private String content;
     private String status;
     private String remarks;
-    private int amount;
-    private String  requesterWalletId;
+    private Double amount;
+    private String requesterWalletId;
+
+    //extra params
+    private String type="";
+    private String timeAgo="";
 
 
     //Notifications
-    private String  userId;
-    private String  msgType;
-    private String  msgSubject;
-    private String  msgContent;
-    private String  createdAt;
-    private boolean  deleted;
-    private boolean  read;
+    private String userId;
+    private String msgType;
+    private String msgSubject;
+    private String msgContent;
+    private String createdAt;
+    private boolean deleted;
+    private boolean read;
 
     public int getId() {
         return id;
@@ -35,11 +39,11 @@ public class NotificationsDataItems {
         this.id = id;
     }
 
-    public int getRequestedDate() {
+    public String getRequestedDate() {
         return requestedDate;
     }
 
-    public void setRequestedDate(int requestedDate) {
+    public void setRequestedDate(String requestedDate) {
         this.requestedDate = requestedDate;
     }
 
@@ -123,11 +127,11 @@ public class NotificationsDataItems {
         this.remarks = remarks;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
@@ -193,5 +197,21 @@ public class NotificationsDataItems {
 
     public void setRead(boolean read) {
         this.read = read;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTimeAgo() {
+        return timeAgo;
+    }
+
+    public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
     }
 }

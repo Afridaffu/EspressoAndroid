@@ -37,6 +37,7 @@ import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
@@ -48,6 +49,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,18 +58,19 @@ import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL,notificationsLL,notificationsSmallLL;
+    LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
     DashboardViewModel dashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance;
+    public NotificationsViewModel notificationsViewModel;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV;
     MyApplication objMyApplication;
     Dialog dialog;
     ProgressDialog progressDialog;
-    RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
+    RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL, notificationsLL;
     NestedScrollView transactionsNSV;
-    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
-    ImageView imgProfileSmall, imgProfile,notificationsIV;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, countCV;
+    ImageView imgProfileSmall, imgProfile, notificationsIV;
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
@@ -126,11 +129,14 @@ public class DashboardActivity extends AppCompatActivity {
             cvProfile = findViewById(R.id.cvProfile);
             notificationsSmallLL = findViewById(R.id.notificationsSmallLL);
             notificationsLL = findViewById(R.id.notificationsLL);
+            countTV = findViewById(R.id.countTV);
+            countCV = findViewById(R.id.countCV);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+            notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -585,6 +591,33 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        try {
+            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+//
+                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                        int count = 0;
+                        for (int i = 0; i < notifications.getData().getItems().size(); i++) {
+                            if (!notifications.getData().getItems().get(i).isRead()) {
+                                count++;
+                            }
+                        }
+                        if (count > 0) {
+                            countCV.setVisibility(View.VISIBLE);
+                            countTV.setText(count + "");
+                        } else {
+                            countCV.setVisibility(View.GONE);
+                        }
+
+                        Log.e("count", count + "");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void cryptoAssets() {
@@ -657,6 +690,7 @@ public class DashboardActivity extends AppCompatActivity {
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
+                notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

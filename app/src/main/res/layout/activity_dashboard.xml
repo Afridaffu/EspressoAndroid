@@ -294,18 +294,41 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/notificationsLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_marginEnd="@dimen/_17sdp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/countCV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/primary_green"
+                        app:cardCornerRadius="@dimen/_10sdp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/countTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8ssp" />
+                    </androidx.cardview.widget.CardView>
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_notifications" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -895,7 +918,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/getStartedCV"
         android:layout_width="match_parent"
@@ -1096,4 +1118,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </RelativeLayout>
