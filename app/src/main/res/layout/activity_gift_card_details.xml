@@ -170,7 +170,8 @@
                                 app:errorIconDrawable="@null"
                                 app:hintTextColor="@color/primary_green"
                                 app:prefixText="$"
-                                app:prefixTextColor="@color/black">
+                                app:prefixTextColor="@color/black"
+                                app:prefixTextAppearance="@style/prefix">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/amountET"
@@ -179,7 +180,7 @@
                                     android:fontFamily="@font/opensans_semibold"
                                     android:imeOptions="actionNext"
                                     android:inputType="numberDecimal"
-                                    android:maxLength="7"
+                                    android:maxLength="30"
                                     android:padding="@dimen/_14sdp"
                                     android:textColor="@color/text_color"
                                     android:textColorHint="@color/light_gray"

@@ -87,6 +87,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
+    boolean isBuyTokenAPICalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -733,7 +734,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
-
+            isBuyTokenAPICalled = false;
             TextView tvGet = prevDialog.findViewById(R.id.tvGet);
             TextView tvBankName = prevDialog.findViewById(R.id.tvBankName);
             TextView tvAccount = prevDialog.findViewById(R.id.tvAccount);
@@ -746,6 +747,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
@@ -791,16 +793,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        if (!isBuyTokenAPICalled)
+                            buyToken();
+                    }
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
-                        slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-                        buyToken();
-                    }
+//                    if (currentId == motionLayout.getEndState()) {
+//                        slideToConfirm.setInteractionEnabled(false);
+//                        tv_lable.setText("Verifying");
+//                        buyToken();
+//                    }
                 }
 
                 @Override
@@ -922,6 +932,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void buyToken() {
         try {
+            isBuyTokenAPICalled = true;
             BuyTokenRequest request = new BuyTokenRequest();
             request.setBankId(strBankId);
             request.setCardId(strCardId);
