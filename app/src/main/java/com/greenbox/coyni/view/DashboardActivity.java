@@ -63,7 +63,7 @@ import java.util.List;
 public class DashboardActivity extends AppCompatActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL;
+    LinearLayout scanQr, viewMoreLL,notificationsLL,notificationsSmallLL;
     DashboardViewModel dashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
@@ -75,6 +75,8 @@ public class DashboardActivity extends AppCompatActivity {
     NestedScrollView transactionsNSV;
     CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, cvPayRequest;
     ImageView imgProfileSmall, imgProfile;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
+    ImageView imgProfileSmall, imgProfile,notificationsIV;
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
@@ -153,6 +155,8 @@ public class DashboardActivity extends AppCompatActivity {
             latestTxnRefresh = findViewById(R.id.latestTxnRefresh);
             cvProfileSmall = findViewById(R.id.cvProfileSmall);
             cvProfile = findViewById(R.id.cvProfile);
+            notificationsSmallLL = findViewById(R.id.notificationsSmallLL);
+            notificationsLL = findViewById(R.id.notificationsLL);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -382,6 +386,21 @@ public class DashboardActivity extends AppCompatActivity {
                     startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
                 }
             });
+
+            notificationsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, NotificationsActivity.class));
+                }
+            });
+
+            notificationsSmallLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, NotificationsActivity.class));
+                }
+            });
+
 
         } catch (Exception ex) {
             ex.printStackTrace();

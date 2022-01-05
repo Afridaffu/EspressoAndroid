@@ -165,56 +165,57 @@ public class TransactionListActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    String search_key = charSequence.toString();
-                    List<TransactionListPending> filterList = new ArrayList<>();
-                    List<TransactionListPosted> filterList1 = new ArrayList<>();
-                    int pindex = 0, poindex = 0;
-                    if (globalPending.size() > 0) {
-                        for (int iteration = 0; iteration < globalPending.size(); iteration++) {
-                            pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-                            if (pindex == 0) {
-                                filterList.add(globalPending.get(iteration));
+                    if (charSequence.length() > 0) {
+                        String search_key = charSequence.toString();
+                        List<TransactionListPending> filterList = new ArrayList<>();
+                        List<TransactionListPosted> filterList1 = new ArrayList<>();
+                        int pindex = 0, poindex = 0;
+                        if (globalPending.size() > 0) {
+                            for (int iteration = 0; iteration < globalPending.size(); iteration++) {
+                                pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+                                if (pindex == 0) {
+                                    filterList.add(globalPending.get(iteration));
+                                }
                             }
                         }
-                    }
-                    if (globalPosted.size() > 0) {
-                        for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
-                            poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-                            if (poindex == 0) {
-                                filterList1.add(globalPosted.get(iteration));
+                        if (globalPosted.size() > 0) {
+                            for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
+                                poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+                                if (poindex == 0) {
+                                    filterList1.add(globalPosted.get(iteration));
+                                }
                             }
                         }
-                    }
 
-                    if (filterList.size() == 0 && filterList1.size() == 0) {
-                        layoutTransactionsposted.setVisibility(View.GONE);
-                        layoutTransactionspending.setVisibility(View.GONE);
-                        pendingTxt.setVisibility(View.GONE);
-                        noTransactionTV.setVisibility(View.VISIBLE);
-                    } else if (filterList.size() > 0 && filterList1.size() == 0) {
-                        layoutTransactionsposted.setVisibility(View.GONE);
-                        layoutTransactionspending.setVisibility(View.VISIBLE);
-                        pendingTxt.setVisibility(View.VISIBLE);
-                        noTransactionTV.setVisibility(View.GONE);
-                    } else if (filterList.size() == 0 && filterList1.size() > 0) {
-                        layoutTransactionsposted.setVisibility(View.VISIBLE);
-                        layoutTransactionspending.setVisibility(View.GONE);
-                        pendingTxt.setVisibility(View.GONE);
-                        noTransactionTV.setVisibility(View.GONE);
-                    } else {
-                        layoutTransactionsposted.setVisibility(View.VISIBLE);
-                        layoutTransactionspending.setVisibility(View.VISIBLE);
-                        pendingTxt.setVisibility(View.VISIBLE);
-                        noTransactionTV.setVisibility(View.GONE);
-                    }
-                    try {
-                        transactionListPendingAdapter.updateList(filterList);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        List<List<TransactionListPosted>> listedData = new ArrayList<>();
-                        ArrayList<String> dates = new ArrayList<>();
+                        if (filterList.size() == 0 && filterList1.size() == 0) {
+                            layoutTransactionsposted.setVisibility(View.GONE);
+                            layoutTransactionspending.setVisibility(View.GONE);
+                            pendingTxt.setVisibility(View.GONE);
+                            noTransactionTV.setVisibility(View.VISIBLE);
+                        } else if (filterList.size() > 0 && filterList1.size() == 0) {
+                            layoutTransactionsposted.setVisibility(View.GONE);
+                            layoutTransactionspending.setVisibility(View.VISIBLE);
+                            pendingTxt.setVisibility(View.VISIBLE);
+                            noTransactionTV.setVisibility(View.GONE);
+                        } else if (filterList.size() == 0 && filterList1.size() > 0) {
+                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+                            layoutTransactionspending.setVisibility(View.GONE);
+                            pendingTxt.setVisibility(View.GONE);
+                            noTransactionTV.setVisibility(View.GONE);
+                        } else {
+                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+                            layoutTransactionspending.setVisibility(View.VISIBLE);
+                            pendingTxt.setVisibility(View.VISIBLE);
+                            noTransactionTV.setVisibility(View.GONE);
+                        }
+                        try {
+                            transactionListPendingAdapter.updateList(filterList);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            List<List<TransactionListPosted>> listedData = new ArrayList<>();
+                            ArrayList<String> dates = new ArrayList<>();
 
 //                        for (int k = 0; k < filterList1.size(); k++) {
 //                            String datee = objMyApplication.convertZoneDateLastYear(filterList1.get(k).getUpdatedAt().split("\\.")[0]);
@@ -234,16 +235,18 @@ public class TransactionListActivity extends AppCompatActivity {
 //                            listedData.add(individualDateData);
 //                        }
 
-                        Log.e("Size", listedData.size() + "");
-                        LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
-                        transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
-                        getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-                        getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-                        getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+                            Log.e("Size", listedData.size() + "");
+                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
+                            transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
+                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
 //                        transactionListPostedAdapter.updateList(listedData);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+
                 }
 
                 @Override
@@ -384,7 +387,6 @@ public class TransactionListActivity extends AppCompatActivity {
                     }
                 }
             });
-
 
         } catch (Exception e) {
             e.printStackTrace();

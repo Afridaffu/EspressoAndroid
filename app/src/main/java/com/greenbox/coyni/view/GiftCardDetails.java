@@ -390,7 +390,9 @@ public class GiftCardDetails extends AppCompatActivity {
                             Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
                             Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
                             minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
-
+                            if (minValue < min) {
+                                minValue = min;
+                            }
                             if (walletAmount < giftCardAmount) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
@@ -618,10 +620,13 @@ public class GiftCardDetails extends AppCompatActivity {
                             amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                            Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.light_gray));
+//                            amountTIL.setHint("");
+//                            amountET.setHint("$ Amount");
                             amountErrorLL.setVisibility(VISIBLE);
                             amountErrorTV.setText("Field Required");
                         }
                     } else {
+                        amountET.setHint("Amount");
                         InputFilter[] FilterArray = new InputFilter[1];
                         FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
                         amountET.setFilters(FilterArray);
@@ -928,6 +933,7 @@ public class GiftCardDetails extends AppCompatActivity {
 
     public void giftCardPreview() {
         try {
+            Utils.hideKeypad(GiftCardDetails.this);
             prevDialog = new Dialog(GiftCardDetails.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.gift_card_order_preview);
@@ -943,6 +949,7 @@ public class GiftCardDetails extends AppCompatActivity {
             TextView feeTV = prevDialog.findViewById(R.id.feeTV);
             TextView totalTV = prevDialog.findViewById(R.id.totalTV);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
 
@@ -966,30 +973,55 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
 
-                }
-
-                @Override
-                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
                         tv_lable.setText("Verifying");
+
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
                             if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
                                 prevDialog.dismiss();
                                 Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
                                 prevDialog.dismiss();
-                                startActivityForResult(new Intent(GiftCardDetails.this, PINActivity.class)
+                                startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
+                                        .putExtra("screen", "GiftCard"));
                             }
                         } else {
                             prevDialog.dismiss();
-                            startActivityForResult(new Intent(GiftCardDetails.this, PINActivity.class)
+                            startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "GiftCard"), FOR_RESULT);
+                                    .putExtra("screen", "GiftCard"));
                         }
+
                     }
+                }
+
+                @Override
+                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+//                    if (currentId == motionLayout.getEndState()) {
+//                        slideToConfirm.setInteractionEnabled(false);
+//                        tv_lable.setText("Verifying");
+//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
+//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
+//                                prevDialog.dismiss();
+//                                Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
+//                            } else {
+//                                prevDialog.dismiss();
+//                                startActivityForResult(new Intent(GiftCardDetails.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
+//                            }
+//                        } else {
+//                            prevDialog.dismiss();
+//                            startActivityForResult(new Intent(GiftCardDetails.this, PINActivity.class)
+//                                    .putExtra("TYPE", "ENTER")
+//                                    .putExtra("screen", "GiftCard"), FOR_RESULT);
+//                        }
+//                    }
                 }
 
                 @Override

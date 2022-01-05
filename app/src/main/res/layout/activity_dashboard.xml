@@ -102,11 +102,18 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/notificationsSmallLL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:src="@drawable/ic_notifications" />
+                    android:layout_marginEnd="@dimen/_17sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -199,11 +206,18 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/notificationsLL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:src="@drawable/ic_notifications" />
+                    android:layout_marginEnd="@dimen/_17sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

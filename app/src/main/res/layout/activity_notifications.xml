@@ -4,6 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.NotificationsActivity">
+    tools:context=".view.NotificationsActivity"
+    android:orientation="vertical">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/viewSideBarCV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        app:cardCornerRadius="@dimen/_19sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_2sdp">
+
+            <TextView
+                android:id="@+id/scanCodeTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_core_colorfill"
+                android:fontFamily="@font/opensans_bold"
+                android:paddingTop="@dimen/_11sdp"
+                android:paddingBottom="@dimen/_11sdp"
+                android:text="Notifications"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:id="@+id/requestsTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_bold"
+                android:paddingTop="@dimen/_11sdp"
+                android:paddingBottom="@dimen/_11sdp"
+                android:text="Requests"
+                android:textAlignment="center"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:id="@+id/notificationsRV"
+        android:padding="@dimen/_10sdp">
+
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>
