@@ -505,7 +505,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withGiftcardname.setText(objData.getGiftCardName());
 
         refid.setText(objData.getReferenceId().substring(0, 10) + "...");
-        recipientname.setText(objData.getRecipientName());
+        recipientname.setText(Utils.capitalize(objData.getRecipientName()));
         email.setText(objData.getRecipientEmail());
 
         Double subtotatl = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN", "").trim());

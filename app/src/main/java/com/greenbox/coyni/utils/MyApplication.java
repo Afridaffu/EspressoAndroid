@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,6 +21,7 @@ import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -37,6 +41,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -74,9 +79,11 @@ public class MyApplication extends Application {
     BrandsResponse selectedBrandResponse;
     WithdrawRequest withdrawRequest;
     WithdrawResponse withdrawResponse;
+    PayRequestResponse payRequestResponse;
     TransferPayRequest transferPayRequest;
     List<Contacts> listContacts = new ArrayList<>();
     TransactionListRequest transactionListSearch = new TransactionListRequest();
+    Double withdrawAmount;
 
 
     public UserDetails getUserDetails() {
@@ -723,5 +730,45 @@ public class MyApplication extends Application {
 
     public void setTransferPayRequest(TransferPayRequest transferPayRequest) {
         this.transferPayRequest = transferPayRequest;
+    }
+
+    public Double getWithdrawAmount() {
+        return withdrawAmount;
+    }
+
+    public void setWithdrawAmount(Double withdrawAmount) {
+        this.withdrawAmount = withdrawAmount;
+    }
+
+    public PayRequestResponse getPayRequestResponse() {
+        return payRequestResponse;
+    }
+
+    public void setPayRequestResponse(PayRequestResponse payRequestResponse) {
+        this.payRequestResponse = payRequestResponse;
+    }
+
+    public String convertBitMapToString(Bitmap bitmap) {
+        String temp = "";
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            temp = Base64.encodeToString(b, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return temp;
+    }
+
+    public Bitmap convertStringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 }

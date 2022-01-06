@@ -12,15 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -46,6 +48,8 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,7 +140,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(AddRecipientActivity.this, PayRequestScanActivity.class));
+                    startActivity(new Intent(AddRecipientActivity.this, ScanActivity.class));
                 }
             });
 
@@ -251,14 +255,15 @@ public class AddRecipientActivity extends AppCompatActivity {
             @Override
             public void onChanged(RecentUsers recentUsers) {
                 if (recentUsers != null) {
-                    lyRecentUsers.setVisibility(View.VISIBLE);
                     if (recentUsers.getData() != null && recentUsers.getData().size() > 0) {
+                        lyRecentUsers.setVisibility(View.VISIBLE);
                         tvRecentUsers.setVisibility(View.GONE);
                         rvRecent.setVisibility(View.VISIBLE);
                         bindRecentUsers(recentUsers.getData());
                     } else {
-                        tvRecentUsers.setVisibility(View.VISIBLE);
-                        rvRecent.setVisibility(View.GONE);
+                        lyRecentUsers.setVisibility(View.GONE);
+//                        tvRecentUsers.setVisibility(View.VISIBLE);
+//                        rvRecent.setVisibility(View.GONE);
                     }
                 } else {
                     tvRecentUsers.setVisibility(View.VISIBLE);
@@ -391,9 +396,26 @@ public class AddRecipientActivity extends AppCompatActivity {
                             }
                         }
                         objContact.setNumber(lstNumbers);
-                        listContacts.add(objContact);
+//                        listContacts.add(objContact);
                         pCur.close();
                     }
+                    Bitmap photo = null;
+
+                    try {
+                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
+                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(id)));
+
+                        if (inputStream != null) {
+                            photo = BitmapFactory.decodeStream(inputStream);
+                        }
+
+                        if (inputStream != null) inputStream.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    objContact.setPhoto(objMyApplication.convertBitMapToString(photo));
+                    listContacts.add(objContact);
                 }
             }
             if (cur != null) {
@@ -429,6 +451,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         obj.setCountryCode(strCCode);
                         obj.setPhoneNumber(strPhone);
                         obj.setUserName(mobileArray.get(i).getName());
+                        obj.setImagePath(mobileArray.get(i).getPhoto());
                         listUsers.add(obj);
                     } else {
                         for (int j = 0; j < mobileArray.get(i).getNumber().size(); j++) {
@@ -447,6 +470,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                             obj.setCountryCode(strCCode);
                             obj.setPhoneNumber(strPhone);
                             obj.setUserName(mobileArray.get(i).getName());
+                            obj.setImagePath(mobileArray.get(i).getPhoto());
                             listUsers.add(obj);
 
                         }

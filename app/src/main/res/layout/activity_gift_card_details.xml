@@ -170,8 +170,8 @@
                                 app:errorIconDrawable="@null"
                                 app:hintTextColor="@color/primary_green"
                                 app:prefixText="$"
-                                app:prefixTextColor="@color/black"
-                                app:prefixTextAppearance="@style/prefix">
+                                app:prefixTextAppearance="@style/prefix"
+                                app:prefixTextColor="@color/black">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/amountET"
@@ -235,7 +235,7 @@
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="text|textCapSentences"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="30"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
@@ -292,7 +292,7 @@
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="text|textNoSuggestions"
+                            android:inputType="text|textNoSuggestions|textCapSentences"
                             android:maxLength="30"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"

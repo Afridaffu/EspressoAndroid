@@ -328,8 +328,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 }
                             }
                         } else {
-                            etAmount.setText("0");
-                            etAmount.setSelection(etAmount.getText().length());
+                            if (!etAmount.getText().toString().equals("")) {
+                                etAmount.setText("0");
+                                etAmount.setSelection(etAmount.getText().length());
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

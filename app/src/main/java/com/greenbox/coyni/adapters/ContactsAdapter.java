@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.reguser.RegUsersResponseData;
 import com.greenbox.coyni.utils.MyApplication;
@@ -74,6 +75,21 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                     holder.tvWalletAddress.setVisibility(View.INVISIBLE);
                     holder.imgInvite.setVisibility(View.VISIBLE);
                 }
+                if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
+                    holder.imgUser.setVisibility(View.VISIBLE);
+                    holder.tvNameHead.setVisibility(View.GONE);
+                    if (objData.getImage().contains("https://")) {
+                        Glide.with(mContext)
+                                .load(objData.getImage())
+                                .placeholder(R.drawable.ic_profilelogo)
+                                .into(holder.imgUser);
+                    } else {
+                        holder.imgUser.setImageBitmap(objMyApplication.convertStringToBitMap(objData.getImage().trim()));
+                    }
+                } else {
+                    holder.imgUser.setVisibility(View.GONE);
+                    holder.tvNameHead.setVisibility(View.VISIBLE);
+                }
             }
 
             holder.imgInvite.setOnClickListener(new View.OnClickListener() {
@@ -100,8 +116,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                             i.putExtra("walletId", objData.getWalletAddress());
                             i.putExtra("name", objData.getUserName());
                             mContext.startActivity(i);
-                        }else {
-                            Utils.displayAlert("You can only invite this contact.", ((AddRecipientActivity) mContext),"","");
+                        } else {
+                            Utils.displayAlert("You can only invite this contact.", ((AddRecipientActivity) mContext), "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

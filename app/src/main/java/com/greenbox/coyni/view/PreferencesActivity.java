@@ -34,8 +34,8 @@ public class PreferencesActivity extends AppCompatActivity {
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
-    TextInputLayout timeZoneTIL, accountTIL,currencyTIL;
-    TextInputEditText timeZoneET, accountET,currencyET;
+    TextInputLayout timeZoneTIL, accountTIL, currencyTIL;
+    TextInputEditText timeZoneET, accountET, currencyET;
     RelativeLayout timeZoneRL;
     LinearLayout preferencesCloseLL;
     ImageView accountDDIV;
@@ -124,7 +124,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             });
 
-            dialog =Utils.showProgressDialog(this);
+            dialog = Utils.showProgressDialog(this);
 
             dashboardViewModel.mePreferences();
 
@@ -192,7 +192,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 if (userPreference != null) {
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
-                    }else{
+                    } else {
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -220,24 +220,24 @@ public class PreferencesActivity extends AppCompatActivity {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
-                if(profilesResponse!=null){
-                    accountET.setText(profilesResponse.getData().get(0).getEntityName());
+                if (profilesResponse != null) {
+                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
 
-                    if(profilesResponse.getStatus().equals("SUCCESS")){
-                        if(profilesResponse.getData().size() > 1){
+                    if (profilesResponse.getStatus().equals("SUCCESS")) {
+                        if (profilesResponse.getData().size() > 1) {
                             disableView.setVisibility(View.GONE);
                             accountDDIV.setVisibility(View.VISIBLE);
                             accountET.setClickable(true);
                             accountET.setEnabled(true);
                             Utils.setUpperHintColor(accountTIL, getColor(R.color.black));
 
-                        }else{
-                            Log.e("else","else");
+                        } else {
+                            Log.e("else", "else");
                             accountDDIV.setVisibility(View.GONE);
                             disableView.setVisibility(View.VISIBLE);
                             accountET.setClickable(false);
                             accountET.setEnabled(false);
-                            Log.e("else","else");
+                            Log.e("else", "else");
                             Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
                         }
 
@@ -250,7 +250,7 @@ public class PreferencesActivity extends AppCompatActivity {
         dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
-                if(apiError==null){
+                if (apiError == null) {
                     dialog.dismiss();
                 }
             }

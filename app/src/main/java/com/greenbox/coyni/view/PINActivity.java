@@ -442,7 +442,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     }
                                 }, 2000);
 
-
                             } else {
                                 if (Utils.checkBiometric(PINActivity.this)) {
                                     if (Utils.checkAuthentication(PINActivity.this)) {
@@ -479,18 +478,31 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 @Override
                 public void onChanged(WithdrawResponse withdrawResponse) {
                     try {
-
                         if (withdrawResponse != null) {
                             objMyApplication.setWithdrawResponse(withdrawResponse);
                             if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
-                                startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
-                                        .putExtra("status", "inprogress")
-                                        .putExtra("fee", GiftCardDetails.giftCardDetails.fee.toString()));
+                                if (getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("giftcard")) {
+                                    startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                            .putExtra("status", "inprogress")
+                                            .putExtra("subtype", getIntent().getStringExtra("subtype"))
+                                            .putExtra("fee", GiftCardDetails.giftCardDetails.fee.toString()));
+                                } else {
+                                    startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                            .putExtra("status", "inprogress")
+                                            .putExtra("subtype", getIntent().getStringExtra("subtype")));
+                                }
                                 finish();
                             } else {
-                                startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
-                                        .putExtra("status", "failed")
-                                        .putExtra("fee", GiftCardDetails.giftCardDetails.fee.toString()));
+                                if (getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("giftcard")) {
+                                    startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                            .putExtra("status", "failed")
+                                            .putExtra("subtype", getIntent().getStringExtra("subtype"))
+                                            .putExtra("fee", GiftCardDetails.giftCardDetails.fee.toString()));
+                                } else {
+                                    startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                            .putExtra("status", "failed")
+                                            .putExtra("subtype", getIntent().getStringExtra("subtype")));
+                                }
                                 finish();
                             }
                         }

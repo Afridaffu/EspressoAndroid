@@ -17,6 +17,8 @@ import com.greenbox.coyni.model.reguser.RegUsersResponse;
 import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
+import com.greenbox.coyni.model.userrequest.UserRequest;
+import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -33,6 +35,7 @@ public class PayViewModel extends AndroidViewModel {
     private MutableLiveData<CoyniUsers> coyniUsersMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TemplateResponse> templateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PayRequestResponse> payRequestResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UserRequestResponse> userRequestResponseMutableLiveData = new MutableLiveData<>();
 
     public PayViewModel(@NonNull Application application) {
         super(application);
@@ -56,6 +59,10 @@ public class PayViewModel extends AndroidViewModel {
 
     public MutableLiveData<PayRequestResponse> getPayRequestResponseMutableLiveData() {
         return payRequestResponseMutableLiveData;
+    }
+
+    public MutableLiveData<UserRequestResponse> getUserRequestResponseMutableLiveData() {
+        return userRequestResponseMutableLiveData;
     }
 
     public void registeredUsers(List<RegisteredUsersRequest> request) {
@@ -225,6 +232,41 @@ public class PayViewModel extends AndroidViewModel {
                 public void onFailure(Call<PayRequestResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     payRequestResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void userRequests(UserRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UserRequestResponse> mCall = apiService.userRequests(request);
+            mCall.enqueue(new Callback<UserRequestResponse>() {
+                @Override
+                public void onResponse(Call<UserRequestResponse> call, Response<UserRequestResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            UserRequestResponse obj = response.body();
+                            userRequestResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<UserRequestResponse>() {
+                            }.getType();
+                            UserRequestResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            userRequestResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        userRequestResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserRequestResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    userRequestResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

@@ -396,7 +396,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
             imgLogo = findViewById(R.id.imgLogo);
-            if (strScreen != null && strScreen.equals("dashboard")) {
+            if (strScreen != null && (strScreen.equals("dashboard") || strScreen.equals("payRequest"))) {
                 imgLogo.setVisibility(View.VISIBLE);
                 imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
                 tvMessage.setVisibility(VISIBLE);

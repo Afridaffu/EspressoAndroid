@@ -7,6 +7,7 @@ public class RecentUsersData {
     private String email;
     private String walletAddress;
     private String status;
+    private String image;
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -54,6 +55,14 @@ public class RecentUsersData {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
 

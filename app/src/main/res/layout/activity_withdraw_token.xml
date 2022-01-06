@@ -36,7 +36,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:src="@drawable/ic_x" />
+                        android:src="@drawable/ic_back" />
                 </LinearLayout>
 
                 <TextView
@@ -332,7 +332,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_54sdp"
                         android:layout_marginLeft="@dimen/_15sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_19sdp"
                         android:layout_marginRight="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:fontFamily="@font/opensans_semibold"

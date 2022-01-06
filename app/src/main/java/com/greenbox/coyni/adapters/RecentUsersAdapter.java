@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.recentusers.RecentUsersData;
 import com.greenbox.coyni.utils.MyApplication;
@@ -66,6 +67,17 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 }
                 holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
                 holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
+                if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
+                    holder.imgUser.setVisibility(View.VISIBLE);
+                    holder.tvNameHead.setVisibility(View.GONE);
+                    Glide.with(mContext)
+                            .load(objData.getImage())
+                            .placeholder(R.drawable.ic_profilelogo)
+                            .into(holder.imgUser);
+                } else {
+                    holder.imgUser.setVisibility(View.GONE);
+                    holder.tvNameHead.setVisibility(View.VISIBLE);
+                }
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
