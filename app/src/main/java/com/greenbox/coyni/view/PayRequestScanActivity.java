@@ -33,7 +33,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -89,6 +92,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 public class PayRequestScanActivity extends AppCompatActivity {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV;
     LinearLayout layoutHead;
+    LinearLayout imageSaveAlbumLL;
     ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
@@ -110,6 +114,10 @@ public class PayRequestScanActivity extends AppCompatActivity {
     ConstraintLayout scannerLayout;
     View scannerBar;
     boolean isPermissionEnable = true;
+
+    //Saved To Album Layout Comp..
+    TextView tvSaveUserName,saveProfileTitle,saveSetAmount;
+    ImageView savedImageView,saveProfileIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +141,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
             scannerBar = findViewById(R.id.lineView);
             flashLL = findViewById(R.id.flashBtnRL);
             idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
+            savedImageView=findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
 //            tvNameHead = findViewById(R.id.tvUserInfo);
             layoutHead = findViewById(R.id.layoutHead);
@@ -143,7 +152,15 @@ public class PayRequestScanActivity extends AppCompatActivity {
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
             imgProfile = findViewById(R.id.imgProfile);
-            albumIV = findViewById(R.id.albumIV);
+            albumIV=findViewById(R.id.albumIV);
+            imageSaveAlbumLL=findViewById(R.id.saveToAlbumLL);
+
+            //init Saved to Album Layout
+            savedImageView=findViewById(R.id.qrImageIV);
+            tvSaveUserName=findViewById(R.id.tvNameSave);
+            saveProfileIV=findViewById(R.id.saveprofileIV);
+            saveProfileTitle=findViewById(R.id.saveprofileTitle);
+            saveSetAmount=findViewById(R.id.tvsaveSetAmount);
 
 //            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
@@ -154,6 +171,15 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 tvName.setText(strName);
             }
             bindImage();
+
+            String savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+
+            if (savedStrName != null && savedStrName.length() > 22) {
+                tvSaveUserName.setText(savedStrName.substring(0, 22) + "...");
+            } else {
+                tvSaveUserName.setText(savedStrName);
+            }
+            saveToAlbumbindImage();
 
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
             if (walletResponse != null) {
@@ -515,15 +541,31 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
     private void saveToGallery() {
         try {
-            idIVQrcode.setDrawingCacheEnabled(true);
-            Bitmap b = idIVQrcode.getDrawingCache();
+            imageSaveAlbumLL.setDrawingCacheEnabled(true);
+            imageSaveAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-            MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-PayQr", "this is QR");
+            imageSaveAlbumLL.layout(0, 0, imageSaveAlbumLL.getMeasuredWidth(),imageSaveAlbumLL.getMeasuredHeight());
 
+            imageSaveAlbumLL.buildDrawingCache(true);
+            Bitmap b = Bitmap.createBitmap(imageSaveAlbumLL.getDrawingCache());
+//
+            imageSaveAlbumLL.setDrawingCacheEnabled(false);
+
+
+//            Bitmap b=Bitmap.createBitmap(imageSaveAlbumLL.getWidth(),imageSaveAlbumLL.getHeight(),Bitmap.Config.ARGB_8888);
+//            Canvas canvas=new Canvas(b);
+//            imageSaveAlbumLL.draw(canvas);
+//            savedImageView.setImageBitmap(b);
+
+
+            MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-PayQr", "this is QR");// clear drawing cache
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+
 
     private void torchTogle(boolean command) {
         try {
@@ -695,7 +737,13 @@ public class PayRequestScanActivity extends AppCompatActivity {
 //            bitmap = qrgEncoder.encodeAsBitmap();
             // the bitmap is set inside our image
             // view using .setimagebitmap method.
-            idIVQrcode.setImageBitmap(bitmap);
+            try {
+                idIVQrcode.setImageBitmap(bitmap);
+                savedImageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -783,6 +831,39 @@ public class PayRequestScanActivity extends AppCompatActivity {
             } else {
                 imgProfile.setVisibility(View.GONE);
                 userNameTV.setVisibility(View.VISIBLE);
+                String imageText = "";
+                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                userNameTV.setText(imageText);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        //Change Not Updated
+        //Accept yours
+    }
+
+    public void saveToAlbumbindImage(){
+        try {
+            saveProfileIV.setVisibility(View.GONE);
+            saveProfileTitle.setVisibility(View.VISIBLE);
+            String imageString = objMyApplication.getMyProfile().getData().getImage();
+            String imageTextNew = "";
+            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            saveProfileTitle.setText(imageTextNew);
+
+            if (imageString != null && !imageString.trim().equals("")) {
+                saveProfileIV.setVisibility(View.VISIBLE);
+                saveProfileTitle.setVisibility(View.GONE);
+                Glide.with(this)
+                        .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
+                        .into(saveProfileIV);
+            } else {
+                saveProfileIV.setVisibility(View.GONE);
+                saveProfileTitle.setVisibility(View.VISIBLE);
                 String imageText = "";
                 imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
                         objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();

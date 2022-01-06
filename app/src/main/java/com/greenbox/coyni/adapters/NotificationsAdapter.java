@@ -12,16 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
+import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
 
 import java.util.List;
 
-public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.MyViewHolder> {
+public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdapter.MyViewHolder> {
     Context mContext;
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
+//    boolean isToday = false, isPast = false;
 
 
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
@@ -43,19 +47,52 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.MyViewHolder holder, int position) {
         try {
+            holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
+            holder.tvNotifDate.setPadding(40, 30, 0, 0);
+
             if (notifications.get(position).getType().equals("Notification")) {
-                holder.receivedLL.setVisibility(View.GONE);
+
+                holder.swipeLayout.setLeftSwipeEnabled(true);
+                holder.swipeLayout.setRightSwipeEnabled(true);
+
+                holder.fromRequesterLL.setVisibility(View.GONE);
+                holder.meRequestLL.setVisibility(View.GONE);
+
+                holder.messageTV.setVisibility(View.VISIBLE);
+
                 holder.subject.setText(notifications.get(position).getMsgSubject());
                 holder.messageTV.setText(notifications.get(position).getMsgContent());
                 if (notifications.get(position).isRead()) {
                     holder.readStatusCV.setVisibility(View.GONE);
+                    holder.readStatusTV.setText("UNREAD");
                 } else {
+                    holder.readStatusTV.setText("READ");
                     holder.readStatusCV.setVisibility(View.VISIBLE);
                 }
+
+                holder.readStatusLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("left", "left");
+                    }
+                });
+
+                holder.deleteLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("delete", "delete");
+                    }
+                });
             } else if (notifications.get(position).getType().equals("Received")) {
-                holder.receivedLL.setVisibility(View.VISIBLE);
-                holder.subject.setText(notifications.get(position).getSubject());
-                holder.messageTV.setText(notifications.get(position).getContent());
+
+                holder.swipeLayout.setLeftSwipeEnabled(false);
+                holder.swipeLayout.setRightSwipeEnabled(false);
+
+                holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                holder.subject.setText(notifications.get(position).getContent());
+                holder.messageTV.setVisibility(View.GONE);
                 holder.readStatusCV.setVisibility(View.GONE);
 
                 holder.denyLL.setOnClickListener(new View.OnClickListener() {
@@ -71,9 +108,41 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
                     }
                 });
+            } else {
+
+                holder.swipeLayout.setLeftSwipeEnabled(false);
+                holder.swipeLayout.setRightSwipeEnabled(false);
+
             }
 
             holder.timeTV.setText(notifications.get(position).getTimeAgo());
+
+            if (position == 0) {
+                if (notifications.get(position).getIsToday() == 0) {
+                    holder.tvNotifDate.setVisibility(View.VISIBLE);
+                    holder.tvNotifDate.setText("Past");
+
+                } else if (notifications.get(position).getIsToday() == 1) {
+                    holder.tvNotifDate.setVisibility(View.VISIBLE);
+                    holder.tvNotifDate.setText("Today");
+                } else {
+                    holder.tvNotifDate.setVisibility(View.GONE);
+                }
+            } else {
+                if (notifications.get(position - 1).getIsToday() == notifications.get(position).getIsToday()) {
+                    holder.tvNotifDate.setVisibility(View.GONE);
+                } else {
+                    if (notifications.get(position).getIsToday() == 0) {
+                        holder.tvNotifDate.setVisibility(View.VISIBLE);
+                        holder.tvNotifDate.setText("Past");
+                    } else if (notifications.get(position).getIsToday() == 1) {
+                        holder.tvNotifDate.setVisibility(View.VISIBLE);
+                        holder.tvNotifDate.setText("Today");
+                    } else {
+                        holder.tvNotifDate.setVisibility(View.GONE);
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,8 +158,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         CardView readStatusCV;
-        TextView subject, timeTV, messageTV;
-        LinearLayout receivedLL, denyLL, payLL;
+        TextView subject, timeTV, messageTV, tvNotifDate, readStatusTV;
+        LinearLayout fromRequesterLL, meRequestLL, denyLL, payLL, remindLL, cancelLL, readStatusLL, deleteLL;
+        SwipeLayout swipeLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,10 +168,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             subject = itemView.findViewById(R.id.subject);
             timeTV = itemView.findViewById(R.id.timeTV);
             messageTV = itemView.findViewById(R.id.messageTV);
+            tvNotifDate = itemView.findViewById(R.id.tvNotifDate);
 
-            receivedLL = itemView.findViewById(R.id.receivedLL);
+            fromRequesterLL = itemView.findViewById(R.id.fromRequesterLL);
+            meRequestLL = itemView.findViewById(R.id.meRequestLL);
             denyLL = itemView.findViewById(R.id.denyLL);
             payLL = itemView.findViewById(R.id.payLL);
+            cancelLL = itemView.findViewById(R.id.cancelLL);
+            remindLL = itemView.findViewById(R.id.remindLL);
+
+            swipeLayout = itemView.findViewById(R.id.swipeLayout);
+            readStatusTV = itemView.findViewById(R.id.readStatusTV);
+            readStatusLL = itemView.findViewById(R.id.readStatusLL);
+            deleteLL = itemView.findViewById(R.id.deleteLL);
 
         }
 
@@ -112,4 +191,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //        notifyDataSetChanged();
 //    }
 
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipeLL;
+    }
 }

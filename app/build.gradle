@@ -126,5 +126,7 @@ dependencies {
 
     implementation 'com.andrewjapar.rangedatepicker:rangedatepicker:0.3'
 
+//    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
+
 
 }

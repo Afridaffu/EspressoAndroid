@@ -438,6 +438,155 @@
 
         </RelativeLayout>
     </ScrollView>
-<!--    //Changes Not Updated-->
+    <LinearLayout
+        android:id="@+id/saveToAlbumLL"
+        android:layout_width="@dimen/_286sdp"
+        android:layout_height="@dimen/_463sdp"
+        android:paddingTop="@dimen/_26sdp"
+        android:paddingBottom="@dimen/_56sdp"
+        android:visibility="invisible"
+        android:background="@color/primary_green"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="@dimen/_115sdp"
+            android:layout_height="@dimen/_46sdp"
+            android:src="@drawable/ic_coyni_logo_full_white"
+            android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="@dimen/_264sdp"
+            android:layout_height="@dimen/_311sdp"
+            android:layout_marginTop="@dimen/_22sdp"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginEnd="@dimen/_11sdp"
+            android:paddingBottom="@dimen/_22sdp"
+            android:background="@drawable/saveimagebg"
+            android:orientation="vertical">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/_34sdp"
+                android:layout_height="@dimen/_34sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_17sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <ImageView
+                    android:id="@+id/saveprofileIV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/image"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/saveprofileTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary_green"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:maxLength="2"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14ssp"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+
+
+            <TextView
+                android:id="@+id/tvNameSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Alison L"
+                android:layout_gravity="center"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@color/vlight_gray"/>
+
+            <LinearLayout
+                android:id="@+id/setAmountLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="visible"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvsaveSetAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="160.00"
+                    android:textColor="@color/primary_green"
+                    android:textSize="@dimen/_24ssp"
+                    android:fontFamily="@font/opensans_bold"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="CYN"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:textSize="@dimen/_11ssp"
+                    android:textColor="@color/primary_black"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="@dimen/_144sdp"
+                android:layout_height="@dimen/_144sdp"
+                android:background="@drawable/ic_qr_img_outline"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_4sdp"
+                >
+                <ImageView
+                    android:id="@+id/qrImageIV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_5sdp"
+                    />
+
+
+
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textSize="@dimen/_11ssp"
+                android:text="Use “Scan” in coyni app to scan the QR code "
+                android:textColor="@color/dark_grey"
+                android:layout_gravity="center"
+                />
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/savedImageIV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
