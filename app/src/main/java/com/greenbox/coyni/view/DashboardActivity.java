@@ -224,7 +224,7 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
                 }
             });
 
@@ -845,7 +845,7 @@ public class DashboardActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+                startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
             }
         });
 

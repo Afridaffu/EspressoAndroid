@@ -23,7 +23,6 @@ import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -141,7 +140,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(AddRecipientActivity.this, PayRequestScanActivity.class));
+                    startActivity(new Intent(AddRecipientActivity.this, ScanActivity.class));
                 }
             });
 
@@ -256,14 +255,15 @@ public class AddRecipientActivity extends AppCompatActivity {
             @Override
             public void onChanged(RecentUsers recentUsers) {
                 if (recentUsers != null) {
-                    lyRecentUsers.setVisibility(View.VISIBLE);
                     if (recentUsers.getData() != null && recentUsers.getData().size() > 0) {
+                        lyRecentUsers.setVisibility(View.VISIBLE);
                         tvRecentUsers.setVisibility(View.GONE);
                         rvRecent.setVisibility(View.VISIBLE);
                         bindRecentUsers(recentUsers.getData());
                     } else {
-                        tvRecentUsers.setVisibility(View.VISIBLE);
-                        rvRecent.setVisibility(View.GONE);
+                        lyRecentUsers.setVisibility(View.GONE);
+//                        tvRecentUsers.setVisibility(View.VISIBLE);
+//                        rvRecent.setVisibility(View.GONE);
                     }
                 } else {
                     tvRecentUsers.setVisibility(View.VISIBLE);

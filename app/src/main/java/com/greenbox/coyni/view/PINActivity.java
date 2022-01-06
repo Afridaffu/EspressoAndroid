@@ -442,7 +442,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     }
                                 }, 2000);
 
-
                             } else {
                                 if (Utils.checkBiometric(PINActivity.this)) {
                                     if (Utils.checkAuthentication(PINActivity.this)) {
