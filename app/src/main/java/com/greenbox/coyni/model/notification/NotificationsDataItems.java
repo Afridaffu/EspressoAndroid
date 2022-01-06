@@ -18,8 +18,10 @@ public class NotificationsDataItems {
     private String requesterWalletId;
 
     //extra params
-    private String type="";
-    private String timeAgo="";
+    private String type = "";
+    private String timeAgo = "";
+    private Long longTime = 0L;
+    private int isToday = 1; // 0 = past and 1 = today
 
 
     //Notifications
@@ -213,5 +215,21 @@ public class NotificationsDataItems {
 
     public void setTimeAgo(String timeAgo) {
         this.timeAgo = timeAgo;
+    }
+
+    public int getIsToday() {
+        return isToday;
+    }
+
+    public void setIsToday(int isToday) {
+        this.isToday = isToday;
+    }
+
+    public Long getLongTime() {
+        return longTime;
+    }
+
+    public void setLongTime(Long longTime) {
+        this.longTime = longTime;
     }
 }
