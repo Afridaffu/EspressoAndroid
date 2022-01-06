@@ -46,6 +46,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -445,9 +446,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 }
                 pDialog.dismiss();
                 if (withdrawResponse != null) {
+                    objMyApplication.setWithdrawResponse(withdrawResponse);
                     if (withdrawResponse.getStatus().trim().toLowerCase().equals("success")) {
-                        withdrawTokenInProgress(withdrawResponse.getData());
+                        //withdrawTokenInProgress(withdrawResponse.getData());
+                        startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "inprogress")
+                                .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
+                    } else {
+                        startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "failed")
+                                .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
                     }
+                } else {
+                    Utils.displayAlert("something went wrong", WithdrawTokenActivity.this, "", "");
                 }
             }
         });
@@ -456,7 +467,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             @Override
             public void onChanged(APIError withdrawResponse) {
                 if (withdrawResponse != null) {
-                    withdrawTokenFailure(withdrawResponse);
+//                    withdrawTokenFailure(withdrawResponse);
+                    startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
+                            .putExtra("status", "failed")
+                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
                 }
             }
         });
@@ -887,21 +901,21 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         tv_lable.setText("Verifying");
 
                         if (!isAuthenticationCalled) {
+                            isAuthenticationCalled = true;
                             prevDialog.dismiss();
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
-                                    isAuthenticationCalled = true;
                                     Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
-                                    isAuthenticationCalled = true;
                                     startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
+                                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
                                             .putExtra("screen", "Withdraw"));
                                 }
                             } else {
-                                isAuthenticationCalled = true;
                                 startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
+                                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
                                         .putExtra("screen", "Withdraw"));
                             }
                         }
@@ -1363,7 +1377,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             int width = mertics.widthPixels;
 
             TextView tvAmount = prevDialog.findViewById(R.id.tvAmount);
-            TextView tvMessage = prevDialog.findViewById(R.id.tvMessage);
+            TextView tvMessage = prevDialog.findViewById(R.id.tvWDMessage);
             TextView tvReferenceID = prevDialog.findViewById(R.id.tvReferenceID);
             TextView tvBalance = prevDialog.findViewById(R.id.tvBalance);
 //            TextView tvLearnMore = prevDialog.findViewById(R.id.tvLearnMore);
@@ -1517,10 +1531,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         request.setBankId(bankId);
         request.setCardId(cardId);
         request.setGiftCardWithDrawInfo(null);
-        request.setTokens(usdValue);
+        request.setTokens(cynValue);
         request.setRemarks(etRemarks.getText().toString().trim());
         request.setWithdrawType(strSubType);
         objMyApplication.setWithdrawRequest(request);
+        objMyApplication.setWithdrawAmount(cynValue);
 
         return request;
     }

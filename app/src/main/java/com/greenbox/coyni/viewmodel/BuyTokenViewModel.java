@@ -207,22 +207,37 @@ public class BuyTokenViewModel extends AndroidViewModel {
                             withdrawResponseMutableLiveData.setValue(obj);
                         } else if (response.code() == 400) {
                             strResponse = response.errorBody().string().replaceAll("\"", "'");
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            if (errorResponse != null) {
+//                                withdrawFailureResponseMutableLiveData.setValue(errorResponse);
+//                            } else {
+//                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+//                                withdrawFailureResponseMutableLiveData.setValue(errorResponse1);
+//                            }
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<WithdrawResponse>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            WithdrawResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
                             if (errorResponse != null) {
-                                withdrawFailureResponseMutableLiveData.setValue(errorResponse);
+                                withdrawResponseMutableLiveData.setValue(errorResponse);
                             } else {
-                                APIError errorResponse1 = gson.fromJson(strResponse, type);
-                                withdrawFailureResponseMutableLiveData.setValue(errorResponse1);
+                                WithdrawResponse errorResponse1 = gson.fromJson(strResponse, type);
+                                withdrawResponseMutableLiveData.setValue(errorResponse1);
                             }
                         } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            apiErrorMutableLiveData.setValue(errorResponse);
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<WithdrawResponse>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            WithdrawResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            withdrawResponseMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

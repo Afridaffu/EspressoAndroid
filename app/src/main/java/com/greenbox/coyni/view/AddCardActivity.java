@@ -102,7 +102,7 @@ public class AddCardActivity extends AppCompatActivity {
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
-    public Boolean isCard = false, isScan = false, isCardClear = false;
+    public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
@@ -191,13 +191,19 @@ public class AddCardActivity extends AppCompatActivity {
             etCardNumber.requestCNETFocus();
 
             etCardNumber.setFrom("ADD_CARD");
-            MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
-            mRecognizer = new BlinkCardRecognizer();
-            mRecognizer.setExtractCvv(false);
-            mRecognizer.setExtractIban(false);
-            // bundle recognizers into RecognizerBundle
-            mRecognizerBundle = new RecognizerBundle(mRecognizer);
-
+            try {
+                MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
+                mRecognizer = new BlinkCardRecognizer();
+                mRecognizer.setExtractCvv(false);
+                mRecognizer.setExtractIban(false);
+                // bundle recognizers into RecognizerBundle
+                mRecognizerBundle = new RecognizerBundle(mRecognizer);
+            } catch (Exception ex) {
+                if (ex.toString().toLowerCase().contains("invalidlicencekeyexception")) {
+                    isLicense = true;
+                }
+                ex.printStackTrace();
+            }
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
@@ -318,7 +324,11 @@ public class AddCardActivity extends AppCompatActivity {
             etCardNumber.getCardReaderIVRef().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startScanning();
+                    if (!isLicense) {
+                        startScanning();
+                    } else {
+                        Utils.displayAlert("License has expired", AddCardActivity.this, "", "");
+                    }
                 }
             });
 

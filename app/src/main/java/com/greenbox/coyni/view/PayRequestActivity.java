@@ -7,8 +7,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -28,15 +31,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
+import com.greenbox.coyni.model.templates.TemplateRequest;
+import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.model.userrequest.UserRequest;
+import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -49,6 +58,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     private ImageView keyBack;
     EditText payRequestET;
     Dialog cvvDialog, prevDialog;
+    SQLiteDatabase mydatabase;
+    Cursor dsFacePin, dsTouchID;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
@@ -57,6 +68,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
     TransactionLimitResponse objResponse;
     float fontSize, dollarFont;
+    WalletInfo cynWallet;
     Boolean isFaceLock = false, isTouchId = false;
     String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "";
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
@@ -64,7 +76,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     Long mLastClickTime = 0L;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
-    boolean isAuthenticationCalled = false;
+    boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false;
+    ProgressDialog pDialog;
+    int requestedToUserId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +109,20 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     payRequestET.setHint("");
                     convertUSDValue();
-                    changeTextSize(editable.toString());
+                    if (editable.length() > 8) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() > 5) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                    } else {
+                        payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+                    }
                     if (Double.parseDouble(editable.toString()) > 0) {
                         disableButtons(false);
                     }
+                    payRequestET.setSelection(payRequestET.getText().length());
                 } else if (editable.toString().equals(".")) {
                     payRequestET.setText("");
                     disableButtons(true);
@@ -177,20 +201,97 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     payRequestET.setText(strAmount);
                     break;
                 case R.id.keyDotTV:
-                    strAmount += ".";
-                    payRequestET.setText(strAmount);
+                    if (!strAmount.equals("") && !strAmount.contains(".")) {
+                        strAmount += ".";
+                        payRequestET.setText(strAmount);
+                    }
                     break;
                 case R.id.backActionIV:
                     if (strAmount.length() > 0) {
                         strAmount = strAmount.substring(0, strAmount.length() - 1);
                         payRequestET.setText(strAmount);
                     }
-
+                    break;
+                case R.id.tvPay:
+                    try {
+                        if (isPayClickable) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            convertDecimal();
+                            if (payValidation()) {
+                                pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+                                cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+                                calculateFee(Utils.USNumberFormat(cynValue));
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                case R.id.tvRequest:
+                    try {
+                        if (isReqClickable) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            convertDecimal();
+                            if (requestValidation()) {
+                                requestPreview();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     break;
 
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void SetFaceLock() {
+        try {
+            isFaceLock = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetTouchId() {
+        try {
+            isTouchId = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -206,8 +307,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             tvCurrency = findViewById(R.id.tvCurrency);
             coyniTV = findViewById(R.id.coyniTV);
             availBal = findViewById(R.id.availBal);
-            requestTV = findViewById(R.id.requestTV);
-            payTV = findViewById(R.id.payTV);
+            requestTV = findViewById(R.id.tvRequest);
+            payTV = findViewById(R.id.tvPay);
             addNoteTV = findViewById(R.id.addNoteTV);
             imgConvert = findViewById(R.id.imgConvert);
             lyBalance = findViewById(R.id.lyBalance);
@@ -220,6 +321,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             dollarFont = tvCurrency.getTextSize();
             availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             avaBal = objMyApplication.getGBTBalance();
+            cynWallet = objMyApplication.getGbtWallet();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
@@ -269,39 +371,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 }
             });
 
-            requestTV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        if (requestValidation()) {
-
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-            payTV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        if (payValidation()) {
-                            cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-                            calculateFee(Utils.USNumberFormat(cynValue));
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+            payTV.setOnClickListener(this);
+            requestTV.setOnClickListener(this);
 
             addNoteClickLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -335,6 +406,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     }
                 }
             });
+            SetFaceLock();
+            SetTouchId();
             enableButtons();
             calculateFee("10");
         } catch (Exception ex) {
@@ -365,6 +438,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
             @Override
             public void onChanged(TransferFeeResponse transferFeeResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
                 if (transferFeeResponse != null) {
                     objMyApplication.setTransferFeeResponse(transferFeeResponse);
                     feeInAmount = transferFeeResponse.getData().getFeeInAmount();
@@ -380,8 +456,63 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
             @Override
             public void onChanged(PayRequestResponse payRequestResponse) {
-                if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                if (payRequestResponse != null) {
+                    objMyApplication.setPayRequestResponse(payRequestResponse);
+                    if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                        startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "success")
+                                .putExtra("subtype", "pay"));
 
+                    } else {
+                        startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "failed")
+                                .putExtra("subtype", "pay"));
+                    }
+                } else {
+                    Utils.displayAlert("something went wrong", PayRequestActivity.this, "", "");
+                }
+            }
+        });
+
+        payViewModel.getTemplateResponseMutableLiveData().observe(this, new Observer<TemplateResponse>() {
+            @Override
+            public void onChanged(TemplateResponse templateResponse) {
+                if (templateResponse != null) {
+                    if (templateResponse != null) {
+                        if (Utils.checkInternet(PayRequestActivity.this)) {
+                            UserRequest request = new UserRequest();
+                            request.setAmount(Double.parseDouble(payRequestET.getText().toString().replace(",", "")));
+                            request.setContent(templateResponse.getData().getInviteBody());
+                            request.setPortalType(Utils.portal);
+                            request.setRemarks(addNoteTV.getText().toString().trim());
+                            request.setRequestedToUserId(requestedToUserId);
+                            request.setRequesterWalletId(cynWallet.getWalletId());
+                            request.setRequestType(Utils.request);
+                            request.setSubject(Utils.requestSub);
+                            payViewModel.userRequests(request);
+                        } else {
+                            Utils.displayAlert(getString(R.string.internet), PayRequestActivity.this, "", "");
+                        }
+                    }
+                }
+            }
+        });
+
+        payViewModel.getUserRequestResponseMutableLiveData().observe(this, new Observer<UserRequestResponse>() {
+            @Override
+            public void onChanged(UserRequestResponse userRequestResponse) {
+                if (prevDialog != null) {
+                    prevDialog.dismiss();
+                }
+                if (userRequestResponse.getStatus().toLowerCase().equals("success")) {
+                    startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                            .putExtra("status", "success")
+                            .putExtra("subtype", "request"));
+
+                } else {
+                    startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                            .putExtra("status", "failed")
+                            .putExtra("subtype", "request"));
                 }
             }
         });
@@ -393,8 +524,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             ImageView userProfile;
             tvName = findViewById(R.id.tvName);
             userName = findViewById(R.id.profileTitle);
-            userProfile = findViewById(R.id.profileIV);
+            userProfile = findViewById(R.id.imgProfile);
             userWalletAddre = findViewById(R.id.accAddress);
+            requestedToUserId = userDetails.getData().getUserId();
             tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
             strUserName = Utils.capitalize(userDetails.getData().getFullName());
             String imageTextNew = "";
@@ -404,6 +536,17 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
+            if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+                userProfile.setVisibility(View.VISIBLE);
+                userName.setVisibility(View.GONE);
+                Glide.with(PayRequestActivity.this)
+                        .load(userDetails.getData().getImage())
+                        .placeholder(R.drawable.ic_profilelogo)
+                        .into(userProfile);
+            } else {
+                userProfile.setVisibility(View.GONE);
+                userName.setVisibility(View.VISIBLE);
+            }
             recipientAddress = "";
             recipientAddress = userDetails.getData().getWalletId().toString();
         } catch (Exception ex) {
@@ -414,7 +557,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
+            //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = payRequestET.getText().toString().trim().replace("\"", "");
 //            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
 //                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayRequestActivity.this, "", "");
@@ -438,10 +581,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
-            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-                Utils.displayAlert("Amount entered exceeds available balance", PayRequestActivity.this, "", "");
-                value = false;
             }
+//            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
+//                Utils.displayAlert("Amount entered exceeds available balance", PayRequestActivity.this, "", "");
+//                value = false;
+//            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -467,12 +611,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         try {
             if (value) {
                 payRequestLL.setBackgroundResource(R.drawable.payrequest_bgcolor);
-                requestTV.setEnabled(false);
-                payTV.setEnabled(false);
+                isPayClickable = false;
+                isReqClickable = false;
             } else {
-                payRequestLL.setBackgroundResource(R.drawable.bg_core_colorfill);
-                requestTV.setEnabled(true);
-                payTV.setEnabled(true);
+                payRequestLL.setBackgroundResource(R.drawable.payrequest_activebg);
+                isPayClickable = true;
+                isReqClickable = true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -514,10 +658,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             keyDot = findViewById(R.id.keyDotTV);
             keyDot.setOnClickListener(this);
 
-            keyPay = findViewById(R.id.payTV);
+            keyPay = findViewById(R.id.tvPay);
             keyPay.setOnClickListener(this);
 
-            keyRquest = findViewById(R.id.requestTV);
+            keyRquest = findViewById(R.id.tvRequest);
             keyRquest.setOnClickListener(this);
             keyBack = findViewById(R.id.backActionIV);
             keyBack.setOnClickListener(this);
@@ -543,6 +687,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
             }
             payRequestET.setFilters(FilterArray);
+            payRequestET.setSelection(payRequestET.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -579,9 +724,22 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
             objMyApplication.setTransferPayRequest(request);
+            objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 payViewModel.sendTokens(request);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void requestTransaction() {
+        try {
+            TemplateRequest request = new TemplateRequest();
+            request.setBody1(objMyApplication.getStrUserName());
+            request.setBody2(Utils.convertBigDecimalUSDC(payRequestET.getText().toString().trim().replace(",", "")));
+            request.setBody3(recipientAddress);
+            payViewModel.getTemplate(Utils.requestId, request);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -668,6 +826,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             public void onClick(View view) {
                 dialog.dismiss();
                 Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+                i.putExtra("screen", "payRequest");
                 startActivity(i);
                 finish();
             }
@@ -797,7 +956,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void payPreview() {
+    private void payPreview() {
         try {
             prevDialog = new Dialog(PayRequestActivity.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -806,7 +965,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
-
 
             TextView amountPayTV = prevDialog.findViewById(R.id.amountPayTV);
             TextView userNamePayTV = prevDialog.findViewById(R.id.userNamePayTV);
@@ -822,7 +980,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userNamePayTV.setText(strUserName);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            recipAddreTV.setText(recipientAddress);
+            recipAddreTV.setText(recipientAddress.substring(0, 10) + "...");
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
@@ -834,7 +992,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 lyMessage.setVisibility(View.VISIBLE);
                 messageNoteTV.setText(addNoteTV.getText().toString());
             } else {
-                lyMessage.setVisibility(View.GONE);
+                lyMessage.setVisibility(View.INVISIBLE);
             }
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -859,50 +1017,123 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         tv_lable.setText("Verifying");
 
                         prevDialog.dismiss();
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
-                                isAuthenticationCalled = true;
-                                Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        if (!isAuthenticationCalled) {
+                            isAuthenticationCalled = true;
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "Pay"));
+                                }
                             } else {
-                                isAuthenticationCalled = true;
                                 startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Pay"));
                             }
-                        } else {
-                            isAuthenticationCalled = true;
-                            startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "Pay"));
                         }
-
                     }
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-//                    if (currentId == motionLayout.getEndState()) {
-//                        try {
-//                            slideToConfirm.setInteractionEnabled(false);
-//                            tv_lable.setText("Verifying");
-//                            prevDialog.dismiss();
-//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
-//                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
-//                                    Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                                } else {
-//                                    startActivityForResult(new Intent(PayRequestActivity.this, PINActivity.class)
-//                                            .putExtra("TYPE", "ENTER")
-//                                            .putExtra("screen", "Pay"), FOR_RESULT);
-//                                }
-//                            } else {
-//                                startActivityForResult(new Intent(PayRequestActivity.this, PINActivity.class)
-//                                        .putExtra("TYPE", "ENTER")
-//                                        .putExtra("screen", "Pay"), FOR_RESULT);
-//                            }
-//                        } catch (Exception ex) {
-//                            ex.printStackTrace();
-//                        }
-//                    }
+
+                }
+
+                @Override
+                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+                }
+            });
+
+            Window window = prevDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            prevDialog.setCanceledOnTouchOutside(true);
+            prevDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void requestPreview() {
+        try {
+            prevDialog = new Dialog(PayRequestActivity.this);
+            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            prevDialog.setContentView(R.layout.pay_order_preview);
+            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvHeading = prevDialog.findViewById(R.id.tvHeading);
+            TextView amountPayTV = prevDialog.findViewById(R.id.amountPayTV);
+            TextView userNamePayTV = prevDialog.findViewById(R.id.userNamePayTV);
+            LinearLayout lyProcessing = prevDialog.findViewById(R.id.lyProcessing);
+            LinearLayout lyTotal = prevDialog.findViewById(R.id.lyTotal);
+            TextView recipAddreTV = prevDialog.findViewById(R.id.recipAddreTV);
+            TextView messageNoteTV = prevDialog.findViewById(R.id.messageNoteTV);
+            LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
+            LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
+            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
+            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
+            userNamePayTV.setText(strUserName);
+            tvHeading.setText("Requesting");
+
+            recipAddreTV.setText(recipientAddress.substring(0, 10) + "...");
+            String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
+            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+            lyProcessing.setVisibility(View.GONE);
+            lyTotal.setVisibility(View.GONE);
+            isAuthenticationCalled = false;
+            if (!addNoteTV.getText().toString().trim().equals("")) {
+                lyMessage.setVisibility(View.VISIBLE);
+                messageNoteTV.setText(addNoteTV.getText().toString());
+            } else {
+                lyMessage.setVisibility(View.INVISIBLE);
+            }
+            copyRecipientLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(recipientAddress, PayRequestActivity.this);
+                }
+            });
+            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+                @Override
+                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+                }
+
+                @Override
+                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+
+                        if (!isAuthenticationCalled) {
+                            isAuthenticationCalled = true;
+                            requestTransaction();
+                        }
+                    }
+                }
+
+                @Override
+                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+
                 }
 
                 @Override

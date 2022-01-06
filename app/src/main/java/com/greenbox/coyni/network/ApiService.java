@@ -87,6 +87,8 @@ import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
+import com.greenbox.coyni.model.userrequest.UserRequest;
+import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
@@ -335,5 +337,8 @@ public interface ApiService {
 
     @POST("api/v2/node/sendTokens")
     Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
+
+    @POST("api/v2/user-requests")
+    Call<UserRequestResponse> userRequests(@Body UserRequest request);
 
 }

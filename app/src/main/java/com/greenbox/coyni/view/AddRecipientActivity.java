@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
@@ -46,6 +49,8 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -391,9 +396,26 @@ public class AddRecipientActivity extends AppCompatActivity {
                             }
                         }
                         objContact.setNumber(lstNumbers);
-                        listContacts.add(objContact);
+//                        listContacts.add(objContact);
                         pCur.close();
                     }
+                    Bitmap photo = null;
+
+                    try {
+                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
+                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(id)));
+
+                        if (inputStream != null) {
+                            photo = BitmapFactory.decodeStream(inputStream);
+                        }
+
+                        if (inputStream != null) inputStream.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    objContact.setPhoto(objMyApplication.convertBitMapToString(photo));
+                    listContacts.add(objContact);
                 }
             }
             if (cur != null) {
@@ -429,6 +451,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         obj.setCountryCode(strCCode);
                         obj.setPhoneNumber(strPhone);
                         obj.setUserName(mobileArray.get(i).getName());
+                        obj.setImagePath(mobileArray.get(i).getPhoto());
                         listUsers.add(obj);
                     } else {
                         for (int j = 0; j < mobileArray.get(i).getNumber().size(); j++) {
@@ -447,6 +470,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                             obj.setCountryCode(strCCode);
                             obj.setPhoneNumber(strPhone);
                             obj.setUserName(mobileArray.get(i).getName());
+                            obj.setImagePath(mobileArray.get(i).getPhoto());
                             listUsers.add(obj);
 
                         }

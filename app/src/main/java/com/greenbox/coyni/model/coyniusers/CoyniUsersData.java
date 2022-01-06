@@ -9,6 +9,7 @@ public class CoyniUsersData {
     private int userId;
     private String email;
     private String walletCatagory;
+    private String image;
 
     public String getWalletId() {
         return walletId;
@@ -72,6 +73,14 @@ public class CoyniUsersData {
 
     public void setWalletCatagory(String walletCatagory) {
         this.walletCatagory = walletCatagory;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
 

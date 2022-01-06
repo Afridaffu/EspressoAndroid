@@ -51,7 +51,7 @@
                 android:textSize="@dimen/_35ssp" />
 
             <TextView
-                android:id="@+id/tvMessage"
+                android:id="@+id/tvWDMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"

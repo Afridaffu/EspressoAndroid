@@ -1,11 +1,11 @@
-package com.greenbox.coyni.model.payrequest;
+package com.greenbox.coyni.model.userrequest;
 
 import com.greenbox.coyni.model.Error;
 
-public class PayRequestResponse {
+public class UserRequestResponse {
     private String status;
     private String timestamp;
-    private ResponseData data;
+    private UserReqRespData data;
     private Error error;
 
     public String getStatus() {
@@ -24,11 +24,11 @@ public class PayRequestResponse {
         this.timestamp = timestamp;
     }
 
-    public ResponseData getData() {
+    public UserReqRespData getData() {
         return data;
     }
 
-    public void setData(ResponseData data) {
+    public void setData(UserReqRespData data) {
         this.data = data;
     }
 

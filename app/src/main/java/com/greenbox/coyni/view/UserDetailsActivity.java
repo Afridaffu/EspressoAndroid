@@ -237,7 +237,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 strFileName = myApplicationObj.getMyProfile().getData().getImage();
                 userEmailIdTV.setText(profile.getData().getEmail());
-                userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
 
                 userPhoneNumTV.setText(phoneFormat);
 
@@ -324,10 +324,8 @@ public class UserDetailsActivity extends AppCompatActivity {
                         bindImage(myApplicationObj.getMyProfile().getData().getImage());
                         strFileName = myApplicationObj.getMyProfile().getData().getImage();
                         userEmailIdTV.setText(profile.getData().getEmail());
-                        userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-
+                        userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         userPhoneNumTV.setText(phoneFormat);
-
                         String addressFormatted = "";
                         if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";

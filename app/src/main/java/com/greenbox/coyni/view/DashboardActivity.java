@@ -68,7 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
     Dialog dialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
     NestedScrollView transactionsNSV;
-    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, cvPayRequest,countCV;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, cvPayRequest, countCV;
     ImageView imgProfileSmall, imgProfile;
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
@@ -291,12 +291,21 @@ public class DashboardActivity extends AppCompatActivity {
             cvPayRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
+//                    startActivity(i);
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                            return;
+                        }
+                        mLastClickTimeQA = SystemClock.elapsedRealtime();
+                        requestPermission();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
-                    startActivity(i);
                 }
             });
 

@@ -1004,6 +1004,7 @@ public class GiftCardDetails extends AppCompatActivity {
                                     isAuthenticationCalled = true;
                                     startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
+                                            .putExtra("subtype", "giftcard")
                                             .putExtra("screen", "Withdraw"));
                                 }
                             } else {
@@ -1012,6 +1013,7 @@ public class GiftCardDetails extends AppCompatActivity {
                                 isAuthenticationCalled = true;
                                 startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
+                                        .putExtra("subtype", "giftcard")
                                         .putExtra("screen", "Withdraw"));
                             }
                         }
