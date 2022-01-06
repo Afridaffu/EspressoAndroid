@@ -119,7 +119,8 @@ public class UserDetailsActivity extends AppCompatActivity {
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
 
-            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
+            isBiometric = Utils.getIsBiometric();
+
             SetToken(myApplicationObj, this);
             SetFaceLock(myApplicationObj, this);
             SetTouchId(myApplicationObj, this);

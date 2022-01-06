@@ -3,6 +3,7 @@ package com.greenbox.coyni.adapters;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -18,15 +19,16 @@ import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
 import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.NotificationsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdapter.MyViewHolder> {
     Context mContext;
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
-//    boolean isToday = false, isPast = false;
-
 
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
@@ -47,6 +49,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.MyViewHolder holder, int position) {
         try {
+
             holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
@@ -75,14 +78,28 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.readStatusLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e("left", "left");
+                        ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                        List<Integer> list = new ArrayList<>();
+                        list.add(notifications.get(position).getId());
+
+                        if (notifications.get(position).isRead()) {
+                            ((NotificationsActivity) mContext).markUnReadAPICall(list);
+                        } else {
+                            ((NotificationsActivity) mContext).markReadAPICall(list);
+                        }
                     }
                 });
 
                 holder.deleteLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e("delete", "delete");
+                        ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                        List<Integer> list = new ArrayList<>();
+                        list.add(notifications.get(position).getId());
+
+                        ((NotificationsActivity) mContext).deleteNotificationCall(list);
                     }
                 });
             } else if (notifications.get(position).getType().equals("Received")) {
@@ -90,7 +107,16 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.swipeLayout.setLeftSwipeEnabled(false);
                 holder.swipeLayout.setRightSwipeEnabled(false);
 
-                holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
+                        notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+                                .getData().getWalletInfo().get(0).getWalletId())) {
+                    holder.meRequestLL.setVisibility(View.VISIBLE);
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                } else {
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                }
+
                 holder.subject.setText(notifications.get(position).getContent());
                 holder.messageTV.setVisibility(View.GONE);
                 holder.readStatusCV.setVisibility(View.GONE);
@@ -108,11 +134,24 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                     }
                 });
-            } else {
 
+                holder.cancelLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                holder.remindLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+            } else {
                 holder.swipeLayout.setLeftSwipeEnabled(false);
                 holder.swipeLayout.setRightSwipeEnabled(false);
-
             }
 
             holder.timeTV.setText(notifications.get(position).getTimeAgo());
@@ -157,9 +196,10 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        CardView readStatusCV;
+        CardView readStatusCV, cvNotification;
         TextView subject, timeTV, messageTV, tvNotifDate, readStatusTV;
-        LinearLayout fromRequesterLL, meRequestLL, denyLL, payLL, remindLL, cancelLL, readStatusLL, deleteLL;
+        LinearLayout fromRequesterLL, meRequestLL, denyLL, payLL,
+                remindLL, cancelLL, readStatusLL, deleteLL, notificationItemLL;
         SwipeLayout swipeLayout;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -182,14 +222,17 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
             readStatusLL = itemView.findViewById(R.id.readStatusLL);
             deleteLL = itemView.findViewById(R.id.deleteLL);
 
+            notificationItemLL = itemView.findViewById(R.id.notificationItemLL);
+            cvNotification = itemView.findViewById(R.id.cvNotification);
+
         }
 
     }
 
-//    public void updateList(List<List<TransactionListPosted>> list) {
-//        listedData = list;
-//        notifyDataSetChanged();
-//    }
+    public void updateList(List<NotificationsDataItems> list) {
+        notifications = list;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getSwipeLayoutResourceId(int position) {
