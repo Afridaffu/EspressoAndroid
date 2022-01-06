@@ -252,6 +252,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
+                        firstName.setHint("");
                         if (firstName.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -264,13 +265,14 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
                         }else {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(firstTIL, getColor(R.color.light_gray));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
                     } else {
                         firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
+                        firstName.setHint("First Name");
                     }
                 }
             });
@@ -279,6 +281,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
+                        lastName.setHint("");
                         if (lastName.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
                             lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -292,13 +295,14 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         }
                         else {
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(lastTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
                         }
                     } else {
                         lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
+                        lastName.setHint("Last Name");
                     }
                 }
             });

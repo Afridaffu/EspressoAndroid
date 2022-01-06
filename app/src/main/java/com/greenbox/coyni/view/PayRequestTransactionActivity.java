@@ -6,6 +6,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -35,27 +37,29 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 //import com.greenbox.coyni.fragments.ScanActivityBottomSheetDialog;
 
-public class PayRequestTransactionActivity extends AppCompatActivity implements View.OnClickListener {
+public class PayRequestTransactionActivity extends AppCompatActivity {
     LinearLayout addNoteClick, prLL, topLL;
     TextView addNoteTV, coynTV;
-    ImageView changeCurreIV;
+    ImageView changeCurreIV,backButton;
     Boolean isFieldValid = false, isCurrencyEnable = true, isCynEnable = false;
     String strWalletId = "", reciepientAddress = "";
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
+    PayRequestCustomKeyboard customeKeyB;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L, mLastClickTimeNext = 0L;
     //For Custome KeyBoard
     private String strAmount = new String();
     private String messagePayReq = "", userBalance;
     EditText addnote;
-    private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText, keyPay, keyRquest;
-    private ImageView keyBack;
-    private SparseArray<String> keyValues = new SparseArray<>();
-    InputConnection inputConnection;
+//    private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText, keyPay, keyRquest;
+//    private ImageView keyBack;
+//    private SparseArray<String> keyValues = new SparseArray<>();
+//    InputConnection inputConnection;
     int requestedToUserId = 0;
     EditText payRequestET;
     TextView availTV, availBal, errMinAmount, dollorTV;
@@ -66,26 +70,14 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_request_transaction);
         try {
-            addNoteClick = findViewById(R.id.addNoteClickLL);
-            addNoteTV = findViewById(R.id.addNoteTV);
-            payRequestET = findViewById(R.id.payrequestET);
-            availTV = findViewById(R.id.availBalTV);
-            availBal = findViewById(R.id.availBal);
-            prLL = findViewById(R.id.payRequestLL);
-            topLL = findViewById(R.id.topLL);
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            objMyApplication = (MyApplication) getApplicationContext();
+            initialization();
 
-            //user Details
-            nameUser = findViewById(R.id.tvName);
-            addreUser = findViewById(R.id.accAddress);
+            initActions();
 
-            changeCurreIV = findViewById(R.id.changeCurrencyTypeIV);
-            dollorTV = findViewById(R.id.amontDollorTV);
-            errMinAmount = findViewById(R.id.minAmountErr);
-            coynTV = findViewById(R.id.coyniTV);
-            requestTV = findViewById(R.id.requestTV);
-            payTV = findViewById(R.id.payTV);
+
+
+
+
 
             userBalance = String.valueOf(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount());
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
@@ -105,42 +97,9 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                 }
             }
             initObservers();
-//            bindImage();
-            changeCurreIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        String enteredAmount = "";
 
-                        if (!payRequestET.getText().toString().contains(",")) {
-                            enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
-                            payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-                        }
-
-                        if (isCurrencyEnable) {
-                            dollorTV.setVisibility(View.VISIBLE);
-                            coynTV.setVisibility(View.GONE);
-                            isCurrencyEnable = false;
-                            isCynEnable = true;
-                        } else if (isCynEnable) {
-                            dollorTV.setVisibility(View.GONE);
-                            coynTV.setVisibility(View.VISIBLE);
-                            isCurrencyEnable = true;
-                            isCynEnable = false;
-                        }
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
             availBal.setText(userBalance + "CYN");
 
-            payRequestET.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.hideSoftKeypad(PayRequestTransactionActivity.this, v);
-                }
-            });
 
             payRequestET.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -190,114 +149,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
                 }
             });
 
-            activeButtons();
-            addNoteClick.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    try {
-                        String enteredAmount = "";
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-
-                        // custom dialog
-
-//                        enteredAmount=Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
-//                        payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-
-                        final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
-                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.add_note_layout);
-                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        addnote = dialog.findViewById(R.id.addNoteET);
-                        LinearLayout closeBtn = dialog.findViewById(R.id.cancelBtn);
-                        TextInputLayout addNoteTIL = dialog.findViewById(R.id.etlMessage);
-                        CardView doneBtn = dialog.findViewById(R.id.doneBtn);
-
-
-                        addnote.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                                try {
-                                    if (charSequence.length() == 0) {
-                                        addNoteTIL.setCounterEnabled(false);
-                                    } else {
-                                        addNoteTIL.setCounterEnabled(true);
-                                        addNoteTIL.setCounterTextColor(ColorStateList.valueOf(getColor(R.color.xdark_gray)));
-                                    }
-
-//                                    messagePayReq=addnote.getText().toString();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable editable) {
-
-                            }
-                        });
-
-                        addnote.requestFocus();
-                        addnote.setShowSoftInputOnFocus(true);
-                        addnote.setText(messagePayReq);
-                        addnote.setSelection(messagePayReq.length());
-
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-
-                        Window window = dialog.getWindow();
-                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-                        WindowManager.LayoutParams wlp = window.getAttributes();
-
-                        wlp.gravity = Gravity.BOTTOM;
-                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                        window.setAttributes(wlp);
-
-                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-                        dialog.setCanceledOnTouchOutside(false);
-
-
-                        doneBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                try {
-                                    messagePayReq = addnote.getText().toString();
-                                    addNoteTV.setText(addnote.getText().toString());
-                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                                    dialog.dismiss();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        closeBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            });
 
             if (!(payRequestET.getText().toString().isEmpty()) && !(addNoteTV.getText().toString().isEmpty())) {
                 prLL.setBackgroundResource(R.drawable.bg_core_colorfill);
@@ -305,6 +156,202 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    private void initialization() {
+        try {
+            addNoteClick = findViewById(R.id.addNoteClickLL);
+            addNoteTV = findViewById(R.id.addNoteTV);
+            payRequestET = findViewById(R.id.payrequestET);
+            availTV = findViewById(R.id.availBalTV);
+            availBal = findViewById(R.id.availBal);
+            prLL = findViewById(R.id.payRequestLL);
+            topLL = findViewById(R.id.topLL);
+            customeKeyB=findViewById(R.id.payReqCK);
+            backButton=findViewById(R.id.backBtnIV);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            objMyApplication = (MyApplication) getApplicationContext();
+            //user Details
+            nameUser = findViewById(R.id.tvName);
+            addreUser = findViewById(R.id.accAddress);
+
+            changeCurreIV = findViewById(R.id.changeCurrencyTypeIV);
+            dollorTV = findViewById(R.id.amontDollorTV);
+            errMinAmount = findViewById(R.id.minAmountErr);
+            coynTV = findViewById(R.id.coyniTV);
+            requestTV = findViewById(R.id.requestTV);
+            payTV = findViewById(R.id.payTV);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void initActions() {
+        try {
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            payRequestET.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.hideSoftKeypad(PayRequestTransactionActivity.this, v);
+                }
+            });
+            InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
+            customeKeyB.setInputConnection(ic);
+
+            changeCurreIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        String enteredAmount = "";
+
+                        if (!payRequestET.getText().toString().contains(",")) {
+                            enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
+                            payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+                        }
+
+                        if (isCurrencyEnable) {
+                            try {
+                                dollorTV.setVisibility(View.VISIBLE);
+                                coynTV.setVisibility(View.GONE);
+                                isCurrencyEnable = false;
+                                isCynEnable = true;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else if (isCynEnable) {
+                            try {
+                                dollorTV.setVisibility(View.GONE);
+                                coynTV.setVisibility(View.VISIBLE);
+                                isCurrencyEnable = true;
+                                isCynEnable = false;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addNoteClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    String enteredAmount = "";
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
+                    // custom dialog
+
+//                        enteredAmount=Utils.convertBigDecimalUSDC(payRequestET.getText().toString());
+//                        payRequestET.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+
+                    final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
+                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.add_note_layout);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    addnote = dialog.findViewById(R.id.addNoteET);
+                    LinearLayout closeBtn = dialog.findViewById(R.id.cancelBtn);
+                    TextInputLayout addNoteTIL = dialog.findViewById(R.id.etlMessage);
+                    CardView doneBtn = dialog.findViewById(R.id.doneBtn);
+
+
+                    addnote.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            try {
+                                if (charSequence.length() == 0) {
+                                    addNoteTIL.setCounterEnabled(false);
+                                } else {
+                                    addNoteTIL.setCounterEnabled(true);
+                                    addNoteTIL.setCounterTextColor(ColorStateList.valueOf(getColor(R.color.xdark_gray)));
+                                }
+
+//                                    messagePayReq=addnote.getText().toString();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
+
+                    addnote.requestFocus();
+                    addnote.setShowSoftInputOnFocus(true);
+                    addnote.setText(messagePayReq);
+                    addnote.setSelection(messagePayReq.length());
+
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+
+                    Window window = dialog.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                    WindowManager.LayoutParams wlp = window.getAttributes();
+
+                    wlp.gravity = Gravity.BOTTOM;
+                    wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                    window.setAttributes(wlp);
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(false);
+
+
+                    doneBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            try {
+                                messagePayReq = addnote.getText().toString();
+                                addNoteTV.setText(addnote.getText().toString());
+                                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                                dialog.dismiss();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    closeBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     private void initObservers() {
@@ -624,119 +671,119 @@ public class PayRequestTransactionActivity extends AppCompatActivity implements 
     }
 
 
-    private void activeButtons() {
+//    private void activeButtons() {
+//
+//
+//        try {
+//            keyOne = findViewById(R.id.keyOneTV);
+//            keyOne.setOnClickListener(this);
+//
+//            keyTwo = findViewById(R.id.keyTwoTV);
+//            keyTwo.setOnClickListener(this);
+//
+//            keyThree = findViewById(R.id.keyThreeTV);
+//            keyThree.setOnClickListener(this);
+//
+//            keyFour = findViewById(R.id.keyFourTV);
+//            keyFour.setOnClickListener(this);
+//
+//            keyFive = findViewById(R.id.keyFiveTV);
+//            keyFive.setOnClickListener(this);
+//
+//            keySix = findViewById(R.id.keySixTV);
+//            keySix.setOnClickListener(this);
+//
+//            keySeven = findViewById(R.id.keySevenTV);
+//            keySeven.setOnClickListener(this);
+//
+//            keyEight = findViewById(R.id.keyEightTV);
+//            keyEight.setOnClickListener(this);
+//
+//            keyNine = findViewById(R.id.keyNineTV);
+//            keyNine.setOnClickListener(this);
+//
+//            keyZero = findViewById(R.id.keyZeroTV);
+//            keyZero.setOnClickListener(this);
+//
+//            keyDot = findViewById(R.id.keyDotTV);
+//            keyDot.setOnClickListener(this);
+//
+//            keyPay = findViewById(R.id.payTV);
+//            keyPay.setOnClickListener(this);
+//
+//            keyRquest = findViewById(R.id.requestTV);
+//            keyRquest.setOnClickListener(this);
+//            keyBack = findViewById(R.id.backActionIV);
+//            keyBack.setOnClickListener(this);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+////        keyActionText=view.findViewById(R.id.keyActionTV);
+////        keyValues.put(R.id.keyActionLL,"");
+//    }
 
-
-        try {
-            keyOne = findViewById(R.id.keyOneTV);
-            keyOne.setOnClickListener(this);
-
-            keyTwo = findViewById(R.id.keyTwoTV);
-            keyTwo.setOnClickListener(this);
-
-            keyThree = findViewById(R.id.keyThreeTV);
-            keyThree.setOnClickListener(this);
-
-            keyFour = findViewById(R.id.keyFourTV);
-            keyFour.setOnClickListener(this);
-
-            keyFive = findViewById(R.id.keyFiveTV);
-            keyFive.setOnClickListener(this);
-
-            keySix = findViewById(R.id.keySixTV);
-            keySix.setOnClickListener(this);
-
-            keySeven = findViewById(R.id.keySevenTV);
-            keySeven.setOnClickListener(this);
-
-            keyEight = findViewById(R.id.keyEightTV);
-            keyEight.setOnClickListener(this);
-
-            keyNine = findViewById(R.id.keyNineTV);
-            keyNine.setOnClickListener(this);
-
-            keyZero = findViewById(R.id.keyZeroTV);
-            keyZero.setOnClickListener(this);
-
-            keyDot = findViewById(R.id.keyDotTV);
-            keyDot.setOnClickListener(this);
-
-            keyPay = findViewById(R.id.payTV);
-            keyPay.setOnClickListener(this);
-
-            keyRquest = findViewById(R.id.requestTV);
-            keyRquest.setOnClickListener(this);
-            keyBack = findViewById(R.id.backActionIV);
-            keyBack.setOnClickListener(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-//        keyActionText=view.findViewById(R.id.keyActionTV);
-//        keyValues.put(R.id.keyActionLL,"");
-    }
-
-    @Override
-    public void onClick(View view) {
-        try {
-            switch (view.getId()) {
-                case R.id.keyZeroTV:
-                    strAmount += 0;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyOneTV:
-                    strAmount += 1;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyTwoTV:
-                    strAmount += 2;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyThreeTV:
-                    strAmount += 3;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyFourTV:
-                    strAmount += 4;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyFiveTV:
-                    strAmount += 5;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keySixTV:
-                    strAmount += 6;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keySevenTV:
-                    strAmount += 7;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyEightTV:
-                    strAmount += 8;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyNineTV:
-                    strAmount += 9;
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.keyDotTV:
-                    strAmount += ".";
-                    payRequestET.setText(strAmount);
-                    break;
-                case R.id.backActionIV:
-                    if (strAmount.length() > 0) {
-                        strAmount = strAmount.substring(0, strAmount.length() - 1);
-                        payRequestET.setText(strAmount);
-                    }
-
-                    break;
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void onClick(View view) {
+//        try {
+//            switch (view.getId()) {
+//                case R.id.keyZeroTV:
+//                    strAmount += 0;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyOneTV:
+//                    strAmount += 1;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyTwoTV:
+//                    strAmount += 2;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyThreeTV:
+//                    strAmount += 3;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyFourTV:
+//                    strAmount += 4;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyFiveTV:
+//                    strAmount += 5;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keySixTV:
+//                    strAmount += 6;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keySevenTV:
+//                    strAmount += 7;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyEightTV:
+//                    strAmount += 8;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyNineTV:
+//                    strAmount += 9;
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.keyDotTV:
+//                    strAmount += ".";
+//                    payRequestET.setText(strAmount);
+//                    break;
+//                case R.id.backActionIV:
+//                    if (strAmount.length() > 0) {
+//                        strAmount = strAmount.substring(0, strAmount.length() - 1);
+//                        payRequestET.setText(strAmount);
+//                    }
+//
+//                    break;
+//
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void bindUserInfo(UserDetails userDetails) {
         try {

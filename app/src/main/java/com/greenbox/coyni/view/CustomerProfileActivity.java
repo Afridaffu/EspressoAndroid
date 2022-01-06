@@ -21,6 +21,7 @@ import android.graphics.Point;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -421,6 +422,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
             ImageView imgClose, copyRecipientAddress;
             ImageView meQrCode, shareImage, imgProfile;
             TextView userFullName, userInfo, walletAddress;
+            // saved to album
+            TextView tvSaveUserName, saveProfileTitle, saveToAlbumTV;
+            ImageView savedImageView, saveProfileIV;
+            LinearLayout saveToAlbumLL;
+
+
             qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             qrDialog.setContentView(R.layout.profileqrcode);
@@ -441,6 +448,52 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgProfile = qrDialog.findViewById(R.id.imgProfile);
             walletAddress = qrDialog.findViewById(R.id.tvWalletAddress);
             shareImage = qrDialog.findViewById(R.id.imgShare);
+            //init Saved to Album Layout
+            savedImageView = qrDialog.findViewById(R.id.qrImageIV);
+            tvSaveUserName = qrDialog.findViewById(R.id.tvNameSave);
+            saveProfileIV = qrDialog.findViewById(R.id.saveprofileIV);
+            saveProfileTitle = qrDialog.findViewById(R.id.saveprofileTitle);
+            saveToAlbumTV = qrDialog.findViewById(R.id.savetoAlbumTV);
+            saveToAlbumLL = qrDialog.findViewById(R.id.saveToAlbumLL);
+
+            String savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+
+            if (savedStrName != null && savedStrName.length() > 22) {
+                tvSaveUserName.setText(savedStrName.substring(0, 22) + "...");
+            } else {
+                tvSaveUserName.setText(savedStrName);
+            }
+
+            try {
+                saveProfileIV.setVisibility(View.GONE);
+                saveProfileTitle.setVisibility(View.VISIBLE);
+                String imageString = objMyApplication.getMyProfile().getData().getImage();
+                String imageTextNew = "";
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                saveProfileTitle.setText(imageTextNew);
+
+                if (imageString != null && !imageString.trim().equals("")) {
+                    saveProfileIV.setVisibility(View.VISIBLE);
+                    saveProfileTitle.setVisibility(View.GONE);
+                    Glide.with(this)
+                            .load(imageString)
+                            .placeholder(R.drawable.ic_profile_male_user)
+                            .into(saveProfileIV);
+                } else {
+                    saveProfileIV.setVisibility(View.GONE);
+                    saveProfileTitle.setVisibility(View.VISIBLE);
+                    String imageText = "";
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                    saveProfileTitle.setText(imageText);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
 
             try {
@@ -476,6 +529,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);
+                savedImageView.setImageBitmap(bitmap);
                 walletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
             }
             imgClose.setOnClickListener(new View.OnClickListener() {
@@ -532,10 +586,44 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 }
             });
 
+            saveToAlbumTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    try {
+                        saveToAlbumLL.setDrawingCacheEnabled(true);
+                        saveToAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+                        saveToAlbumLL.layout(0, 0, saveToAlbumLL.getMeasuredWidth(), saveToAlbumLL.getMeasuredHeight());
+
+                        saveToAlbumLL.buildDrawingCache(true);
+                        Bitmap b = Bitmap.createBitmap(saveToAlbumLL.getDrawingCache());
+                        saveToAlbumLL.setDrawingCacheEnabled(false);
+
+
+//            Bitmap b=Bitmap.createBitmap(imageSaveAlbumLL.getWidth(),imageSaveAlbumLL.getHeight(),Bitmap.Config.ARGB_8888);
+//            Canvas canvas=new Canvas(b);
+//            imageSaveAlbumLL.draw(canvas);
+//            savedImageView.setImageBitmap(b);
+
+
+                        MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-Qr", "this is QR");
+
+                        Utils.showCustomToast(CustomerProfileActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
     private void dropAllTables() {
         try {

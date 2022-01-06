@@ -64,10 +64,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="First Name"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -76,7 +75,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="First Name"
                         android:imeOptions="actionNext"
                         android:inputType="text|textCapSentences"
                         android:maxLength="30"
@@ -123,10 +121,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Last Name"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -135,7 +132,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Last Name"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="30"
@@ -181,11 +177,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Email"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:errorTextColor="@color/error_red"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -194,7 +189,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Email"
                         android:importantForAutofill="no"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress|textNoSuggestions"
@@ -277,13 +271,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Password"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:endIconDrawable="@drawable/ic_eyeclose"
                         app:endIconMode="custom"
                         app:endIconTint="@color/xdark_gray"
                         app:errorIconDrawable="@null"
-                        app:expandedHintEnabled="false"
                         app:hintTextColor="@color/primary_green">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -292,7 +285,6 @@
                             android:layout_height="wrap_content"
                             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint="8-12 Characters"
                             android:imeOptions="actionNext"
                             android:inputType="textPassword|textNoSuggestions"
                             android:longClickable="false"
@@ -388,13 +380,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Confirm Password"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:endIconDrawable="@drawable/ic_eyeclose"
                     app:endIconMode="custom"
                     app:endIconTint="@color/xdark_gray"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -403,7 +394,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Confirm Password"
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:inputType="textPassword|textNoSuggestions"

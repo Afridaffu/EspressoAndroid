@@ -201,6 +201,6 @@ public class EditPhoneActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        newPhoneET.clearFocus();
+//        newPhoneET.clearFocus();
     }
 }
