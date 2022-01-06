@@ -136,15 +136,17 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         isUSD = true;
                         convertUSDValue();
                     }
+                    if (editable.length() > 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() > 5) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                    } else {
+                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+                    }
 
-//                    if (editable.length() > 5) {
-//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                    } else {
-//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-//                    }
-                    changeTextSize(editable.toString());
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -162,6 +164,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     ctKey.disableButton();
                     tvError.setVisibility(View.INVISIBLE);
                     ctKey.clearData();
+                    setDefaultLength();
                 } else {
                     etAmount.setText("");
                     cynValue = 0.0;
@@ -290,7 +293,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (etAmount.getText().toString().trim().length() > 0) {
+                        if (etAmount.getText().toString().trim().length() > 0 && Double.parseDouble(etAmount.getText().toString().replace(",", "")) != 0) {
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
@@ -324,6 +327,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                     }
                                 }
                             }
+                        } else {
+                            etAmount.setText("0");
+                            etAmount.setSelection(etAmount.getText().length());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

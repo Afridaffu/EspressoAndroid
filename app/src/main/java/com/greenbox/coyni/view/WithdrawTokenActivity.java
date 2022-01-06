@@ -173,14 +173,17 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     isUSD = true;
                     convertUSDValue();
 
-//                    if (editable.length() > 5) {
-//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                    } else {
-//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-//                    }
-                    changeTextSize(editable.toString());
+                    if (editable.length() > 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() > 5) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                    } else {
+                        etAmount.setTextSize(Utils.pixelsToSp(WithdrawTokenActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(WithdrawTokenActivity.this, dollarFont));
+                    }
+
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -199,6 +202,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     ctKey.disableButton();
                     tvError.setVisibility(View.GONE);
                     ctKey.clearData();
+                    setDefaultLength();
                 } else {
                     etAmount.setText("");
                     cynValue = 0.0;
