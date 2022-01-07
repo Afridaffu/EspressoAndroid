@@ -116,8 +116,8 @@ public class ScanActivity extends AppCompatActivity {
     boolean isPermissionEnable = true;
 
     //Saved To Album Layout Comp..
-    TextView tvSaveUserName,saveProfileTitle,saveSetAmount;
-    ImageView savedImageView,saveProfileIV;
+    TextView tvSaveUserName, saveProfileTitle, saveSetAmount;
+    ImageView savedImageView, saveProfileIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +141,7 @@ public class ScanActivity extends AppCompatActivity {
             scannerBar = findViewById(R.id.lineView);
             flashLL = findViewById(R.id.flashBtnRL);
             idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
-            savedImageView=findViewById(R.id.savedImageIV);
+            savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
 //            tvNameHead = findViewById(R.id.tvUserInfo);
             layoutHead = findViewById(R.id.layoutHead);
@@ -152,15 +152,15 @@ public class ScanActivity extends AppCompatActivity {
             userNameTV = findViewById(R.id.tvUserInfo);
             copyRecipientAddress = findViewById(R.id.imgCopy);
             imgProfile = findViewById(R.id.imgProfile);
-            albumIV=findViewById(R.id.albumIV);
-            imageSaveAlbumLL=findViewById(R.id.saveToAlbumLL);
+            albumIV = findViewById(R.id.albumIV);
+            imageSaveAlbumLL = findViewById(R.id.saveToAlbumLL);
 
             //init Saved to Album Layout
-            savedImageView=findViewById(R.id.qrImageIV);
-            tvSaveUserName=findViewById(R.id.tvNameSave);
-            saveProfileIV=findViewById(R.id.saveprofileIV);
-            saveProfileTitle=findViewById(R.id.saveprofileTitle);
-            saveSetAmount=findViewById(R.id.tvsaveSetAmount);
+            savedImageView = findViewById(R.id.qrImageIV);
+            tvSaveUserName = findViewById(R.id.tvNameSave);
+            saveProfileIV = findViewById(R.id.saveprofileIV);
+            saveProfileTitle = findViewById(R.id.saveprofileTitle);
+            saveSetAmount = findViewById(R.id.tvsaveSetAmount);
 
 //            String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1) + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1));
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
@@ -545,7 +545,7 @@ public class ScanActivity extends AppCompatActivity {
             imageSaveAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-            imageSaveAlbumLL.layout(0, 0, imageSaveAlbumLL.getMeasuredWidth(),imageSaveAlbumLL.getMeasuredHeight());
+            imageSaveAlbumLL.layout(0, 0, imageSaveAlbumLL.getMeasuredWidth(), imageSaveAlbumLL.getMeasuredHeight());
 
             imageSaveAlbumLL.buildDrawingCache(true);
             Bitmap b = Bitmap.createBitmap(imageSaveAlbumLL.getDrawingCache());
@@ -564,7 +564,6 @@ public class ScanActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
 
 
     private void torchTogle(boolean command) {
@@ -844,7 +843,7 @@ public class ScanActivity extends AppCompatActivity {
         //Accept yours
     }
 
-    public void saveToAlbumbindImage(){
+    public void saveToAlbumbindImage() {
         try {
             saveProfileIV.setVisibility(View.GONE);
             saveProfileTitle.setVisibility(View.VISIBLE);
@@ -867,7 +866,7 @@ public class ScanActivity extends AppCompatActivity {
                 String imageText = "";
                 imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
                         objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                userNameTV.setText(imageText);
+                saveProfileTitle.setText(imageText);
             }
 
         } catch (Exception ex) {
@@ -925,6 +924,8 @@ public class ScanActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     try {
                         Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+//                    invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+//                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
 //                    invalidQRCode("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code");
 //                   StartScaaner();
                         //ScanCode Visible
@@ -954,7 +955,6 @@ public class ScanActivity extends AppCompatActivity {
             Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
 
         }
-
 
     }
 

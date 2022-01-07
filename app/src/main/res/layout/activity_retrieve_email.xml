@@ -100,14 +100,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_21sdp"
                     android:hint="@string/firstName"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -116,7 +115,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="First Name"
                         android:imeOptions="actionNext"
                         android:inputType="text|textCapSentences"
                         android:longClickable="false"
@@ -164,14 +162,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:hint="@string/lastName"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_color"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -180,7 +177,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Last Name"
                         android:imeOptions="actionDone"
                         android:inputType="text|textCapSentences"
                         android:longClickable="false"

@@ -521,8 +521,8 @@ public class EditCardActivity extends AppCompatActivity {
                         if (validateExpiry()) {
                             isExpiry = true;
                             expiryErrorLL.setVisibility(GONE);
-                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
+//                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                         } else {
                             isExpiry = false;
                             expiryErrorLL.setVisibility(VISIBLE);
@@ -570,8 +570,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 101) {
                         isAddress1 = true;
                         address1ErrorLL.setVisibility(GONE);
-                        etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
+//                        etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
                     } else {
                         isAddress1 = false;
                     }
@@ -613,8 +613,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 51) {
                         isCity = true;
                         cityErrorLL.setVisibility(GONE);
-                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
+//                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
                     } else {
                         isCity = false;
                     }
@@ -684,8 +684,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
-                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+//                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
 //                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
