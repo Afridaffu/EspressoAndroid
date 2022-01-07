@@ -106,52 +106,135 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                 holder.swipeLayout.setLeftSwipeEnabled(false);
                 holder.swipeLayout.setRightSwipeEnabled(false);
+                holder.messageTV.setVisibility(View.GONE);
 
                 if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
                         notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
                                 .getData().getWalletInfo().get(0).getWalletId())) {
                     holder.meRequestLL.setVisibility(View.VISIBLE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
-                } else {
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
+                        !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+                                .getData().getWalletInfo().get(0).getWalletId())) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
+                    Log.e("cancelled","cancelled");
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText(notifications.get(position).getToUser()+" cancelled this request");
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
+                    holder.meRequestLL.setVisibility(View.VISIBLE);
+                    holder.remindLL.setVisibility(View.INVISIBLE);
+                    holder.remindLL.setClickable(false);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText(notifications.get(position).getToUser()+" sent a reminder to you");
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")) {
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText("You declined this request");
                 }
 
                 holder.subject.setText(notifications.get(position).getContent());
-                holder.messageTV.setVisibility(View.GONE);
                 holder.readStatusCV.setVisibility(View.GONE);
 
                 holder.denyLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Log.e("denyLL", "denyLL");
                     }
                 });
 
                 holder.payLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Log.e("payLL", "payLL");
                     }
                 });
 
                 holder.cancelLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Log.e("cancelLL", "cancelLL");
                     }
                 });
 
                 holder.remindLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        Log.e("remindLL", "remindLL");
                     }
                 });
 
             } else {
                 holder.swipeLayout.setLeftSwipeEnabled(false);
                 holder.swipeLayout.setRightSwipeEnabled(false);
+
+                holder.subject.setText(notifications.get(position).getContent());
+                holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
+                holder.messageTV.setVisibility(View.VISIBLE);
+                holder.messageTV.setText(notifications.get(position).getStatus() + " Received");
+                holder.readStatusCV.setVisibility(View.GONE);
+
+                holder.fromRequesterLL.setVisibility(View.GONE);
+
+                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
+                    holder.meRequestLL.setVisibility(View.VISIBLE);
+                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
+                            notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+                                    .getData().getWalletInfo().get(0).getWalletId())) {
+                        holder.meRequestLL.setVisibility(View.VISIBLE);
+                        holder.fromRequesterLL.setVisibility(View.GONE);
+                    } else {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                    }
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText("You cancelled this request");
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
+                    holder.meRequestLL.setVisibility(View.VISIBLE);
+                    holder.remindLL.setVisibility(View.INVISIBLE);
+                    holder.remindLL.setClickable(false);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText("You sent a reminder to " + notifications.get(position).getToUser());
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")) {
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText("You declined this request");
+                }
+
+                holder.denyLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("denyLL", "denyLL");
+                    }
+                });
+
+                holder.payLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("payLL", "payLL");
+                    }
+                });
+
+                holder.cancelLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("cancelLL", "cancelLL");
+                    }
+                });
+
+                holder.remindLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("remindLL", "remindLL");
+                    }
+                });
             }
 
             holder.timeTV.setText(notifications.get(position).getTimeAgo());
