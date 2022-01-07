@@ -282,6 +282,7 @@
                         android:textColor="@color/xdark_gray"
                         android:layout_marginTop="@dimen/_13sdp"
                         android:layout_below="@id/viewLine"
+
                         />
 
                     <RelativeLayout
