@@ -76,6 +76,7 @@ public class TransactionData {
     private String withdrawId;
     private String giftCardAmount;
     private String subtotal;
+    private String remarks;
 
 
     public String getWithdrawId() {
@@ -409,5 +410,13 @@ public class TransactionData {
 
     public void setSubtotal(String subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

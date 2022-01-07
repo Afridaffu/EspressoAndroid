@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
@@ -117,6 +118,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             ControlMethod("withdrawpay");
             withdrawPaymentMethod("bank");
             strScreen = "withdrawpay";
+        } else if (strCurrent.equals("debit")) {
+            strCurrent = "";
+            ControlMethod("withdrawpay");
+            withdrawPaymentMethod("card");
+            strScreen = "withdrawpay";
         } else if (strScreen.equals("withdrawpay")) {
             ControlMethod("withdrawmethod");
             selectWithdrawMethod();
@@ -128,7 +134,17 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        getPaymentMethods();
+        if (strCurrent.equals("externalBank")) {
+            ControlMethod("withdrawpay");
+            withdrawPaymentMethod("bank");
+            strScreen = "withdrawpay";
+        } else if (strCurrent.equals("debit")) {
+            ControlMethod("withdrawpay");
+            withdrawPaymentMethod("card");
+            strScreen = "withdrawpay";
+        } else if (!isPayments) {
+            getPaymentMethods();
+        }
         super.onResume();
     }
 
@@ -265,6 +281,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                     } else if (isPayments && strCurrent.equals("debit")) {
+                        isPayments = false;
                         ControlMethod("withdrawpay");
                         withdrawPaymentMethod("card");
                         strScreen = "withdrawpay";
@@ -430,6 +447,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -630,17 +651,20 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             TextView tvPayHead = findViewById(R.id.tvPayHead);
             TextView tvPayMethod = findViewById(R.id.tvPayMethod);
             TextView tvPayMMessage = findViewById(R.id.tvPayMMessage);
+            TextView tvCount = findViewById(R.id.tvCount);
             LinearLayout lyWPayClose = findViewById(R.id.lyWPayClose);
             LinearLayout lyPayClick = findViewById(R.id.lyPayClick);
             if (strPay.equals("bank")) {
                 tvPayHead.setText("Add Bank Account");
                 tvPayMethod.setText("External Bank Account");
+                tvCount.setText("(0/2)");
                 tvPayMMessage.setText("Can be used for making Coyni purchases or withdrawing funds.");
                 imgPayLogo.setImageResource(R.drawable.ic_add_bank);
                 imgPayment.setImageResource(R.drawable.ic_bank_account_active);
             } else {
                 tvPayHead.setText("Add Instant Pay");
                 tvPayMethod.setText("Debit Card");
+                tvCount.setText("(0/4)");
                 tvPayMMessage.setText("Visa or Mastercard debit cards");
                 imgPayLogo.setImageResource(R.drawable.ic_notokenavail);
                 imgPayment.setImageResource(R.drawable.ic_credit_debit_card);
@@ -688,6 +712,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             tvLearnMore.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
                                     Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
                                 }
                             });

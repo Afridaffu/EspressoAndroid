@@ -87,6 +87,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
+    boolean isBuyTokenAPICalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,14 +136,17 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         isUSD = true;
                         convertUSDValue();
                     }
-
-                    if (editable.length() > 5) {
+                    if (editable.length() > 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() > 5) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                     } else {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
                     }
+
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -160,6 +164,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     ctKey.disableButton();
                     tvError.setVisibility(View.INVISIBLE);
                     ctKey.clearData();
+                    setDefaultLength();
                 } else {
                     etAmount.setText("");
                     cynValue = 0.0;
@@ -288,7 +293,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (etAmount.getText().toString().trim().length() > 0) {
+                        if (etAmount.getText().toString().trim().length() > 0 && Double.parseDouble(etAmount.getText().toString().replace(",", "")) != 0) {
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
@@ -296,7 +301,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -312,7 +317,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -321,6 +326,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                         }
                                     }
                                 }
+                            }
+                        } else {
+                            if (!etAmount.getText().toString().equals("")) {
+                                etAmount.setText("0");
+                                etAmount.setSelection(etAmount.getText().length());
                             }
                         }
                     } catch (Exception ex) {
@@ -679,15 +689,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strPay = String.valueOf(cynValue);
             } else {
                 strPay = String.valueOf(usdValue);
-                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
             }
-//            if (Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
-            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
-                if (tvCYN.getVisibility() == View.VISIBLE) {
-                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
-                } else {
-                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
-                }
+            usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+//                if (tvCYN.getVisibility() == View.VISIBLE) {
+//                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                } else {
+//                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                }
+//                tvError.setVisibility(View.VISIBLE);
+//                return value = false;
+//            }
+            if (tvCYN.getVisibility() == View.VISIBLE && Double.parseDouble(strPay.replace(",", "")) < cynValidation) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                return value = false;
+            } else if (tvCYN.getVisibility() == View.GONE && Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
@@ -717,7 +736,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
-
+            isBuyTokenAPICalled = false;
             TextView tvGet = prevDialog.findViewById(R.id.tvGet);
             TextView tvBankName = prevDialog.findViewById(R.id.tvBankName);
             TextView tvAccount = prevDialog.findViewById(R.id.tvAccount);
@@ -730,6 +749,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
@@ -775,16 +795,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        if (!isBuyTokenAPICalled)
+                            buyToken();
+                    }
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
-                        slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-                        buyToken();
-                    }
+//                    if (currentId == motionLayout.getEndState()) {
+//                        slideToConfirm.setInteractionEnabled(false);
+//                        tv_lable.setText("Verifying");
+//                        buyToken();
+//                    }
                 }
 
                 @Override
@@ -906,6 +934,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void buyToken() {
         try {
+            isBuyTokenAPICalled = true;
             BuyTokenRequest request = new BuyTokenRequest();
             request.setBankId(strBankId);
             request.setCardId(strCardId);

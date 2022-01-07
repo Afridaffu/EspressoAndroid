@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f4f5"
-    android:orientation="vertical">
+    android:background="#f2f4f5">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -37,7 +36,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:src="@drawable/ic_x" />
+                        android:src="@drawable/ic_back" />
                 </LinearLayout>
 
                 <TextView
@@ -235,7 +234,7 @@
                                 android:inputType="numberDecimal"
                                 android:maxLength="@string/maxlength"
                                 android:textColor="@color/primary_black"
-                                android:textCursorDrawable="@drawable/cursor_color"
+                                android:textCursorDrawable="@drawable/cursorcolor"
                                 android:textSize="@dimen/_53ssp" />
 
                             <TextView
@@ -243,7 +242,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="CYN"
+                                android:text=" CYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp"
                                 android:visibility="visible"></TextView>
@@ -305,9 +304,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
-                            android:text="9,999.00CYN"
+                            android:text="9,999.00"
                             android:textColor="@color/balance"
                             android:textSize="@dimen/_12ssp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text=" CYN"
+                            android:textColor="@color/balance"
+                            android:textSize="@dimen/_9ssp"></TextView>
 
                     </LinearLayout>
 
@@ -325,7 +332,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_54sdp"
                         android:layout_marginLeft="@dimen/_15sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_19sdp"
                         android:layout_marginRight="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:fontFamily="@font/opensans_semibold"

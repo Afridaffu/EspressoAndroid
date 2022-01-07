@@ -76,7 +76,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textCapSentences"
+                        android:inputType="text|textCapSentences|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -133,7 +133,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions"
+                        android:inputType="text|textNoSuggestions|textCapSentences"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Email"
-                    android:textColorHint="@color/light_gray"
+                    android:textColorHint="@color/black"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:errorTextColor="@color/error_red"
@@ -286,10 +286,10 @@
                             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
+                            android:importantForAutofill="no"
                             android:inputType="textPassword|textNoSuggestions"
                             android:longClickable="false"
                             android:maxLength="12"
-                            android:importantForAutofill="no"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                             android:singleLine="true"
@@ -443,14 +443,14 @@
                     android:text="@string/spannable_text"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_14sdp">
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/agreeCB"

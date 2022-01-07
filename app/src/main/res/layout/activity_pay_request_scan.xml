@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-    tools:context=".view.PayRequestScanActivity">
+    tools:context=".view.ScanActivity">
 
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/scanner_view"

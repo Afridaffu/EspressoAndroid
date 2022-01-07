@@ -89,7 +89,7 @@ import java.util.Locale;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
-public class PayRequestScanActivity extends AppCompatActivity {
+public class ScanActivity extends AppCompatActivity {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV;
     LinearLayout layoutHead;
     LinearLayout imageSaveAlbumLL;
@@ -200,7 +200,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
     }
 
-
     private void listeners() {
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
@@ -238,7 +237,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (ContextCompat.checkSelfPermission(PayRequestScanActivity.this,
+                        if (ContextCompat.checkSelfPermission(ScanActivity.this,
                                 Manifest.permission.CAMERA)
                                 == PackageManager.PERMISSION_GRANTED) {
                             mcodeScanner.startPreview();
@@ -274,7 +273,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                         myClipboard.setPrimaryClip(myClip);
 //                        showToast();
 
-                        Utils.showCustomToast(PayRequestScanActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
+                        Utils.showCustomToast(ScanActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -307,7 +306,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
             scanmeSetAmountTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final Dialog dialog = new Dialog(PayRequestScanActivity.this);
+                    final Dialog dialog = new Dialog(ScanActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.fragment_set_limit);
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -408,8 +407,8 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     saveToGallery();
-//                    Toast.makeText(PayRequestScanActivity.this, "saved to Gallery successfully", Toast.LENGTH_SHORT).show();
-                    Utils.showCustomToast(PayRequestScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+//                    Toast.makeText(ScanActivity.this, "saved to Gallery successfully", Toast.LENGTH_SHORT).show();
+                    Utils.showCustomToast(ScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
 
                 }
 
@@ -436,12 +435,11 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (checkAndRequestPermissions(PayRequestScanActivity.this)) {
+                        if (checkAndRequestPermissions(ScanActivity.this)) {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-
 
                             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                             photoPickerIntent.setType("image/*");
@@ -495,7 +493,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.dismiss();
                 try {
                     if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Intent i = new Intent(PayRequestScanActivity.this, PayRequestTransactionActivity.class);
+                        Intent i = new Intent(ScanActivity.this, PayRequestActivity.class);
                         i.putExtra("walletId", strScanWallet);
                         i.putExtra("screen", "scan");
                         startActivity(i);
@@ -521,7 +519,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                     } else {
                         if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-                            Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code", apiError.getError().getErrorDescription());
+                            Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", apiError.getError().getErrorDescription());
                         }
                     }
                 }
@@ -534,7 +532,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (s != null && !s.equals("")) {
                     if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-                        Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code", "");
+                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
                     }
                 }
             }
@@ -606,7 +604,7 @@ public class PayRequestScanActivity extends AppCompatActivity {
                                     }
                                     getUserDetails(strScanWallet);
                                 } else {
-                                    Utils.displayAlert("Unable to scan the QR code.", PayRequestScanActivity.this, "", "");
+                                    Utils.displayAlert("Unable to scan the QR code.", ScanActivity.this, "", "");
                                 }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -634,33 +632,45 @@ public class PayRequestScanActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 123) {
-            try {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    StartScaaner();
+        try {
+            if (requestCode == 123) {
+                try {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        StartScaaner();
 
-                    toglebtn1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (isTorchOn) {
-                                mcodeScanner.setFlashEnabled(true);
-                                torchTogle(isTorchOn);
-                            } else {
-                                mcodeScanner.setFlashEnabled(false);
-                                torchTogle(isTorchOn);
+                        toglebtn1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (isTorchOn) {
+                                    mcodeScanner.setFlashEnabled(true);
+                                    torchTogle(isTorchOn);
+                                } else {
+                                    mcodeScanner.setFlashEnabled(false);
+                                    torchTogle(isTorchOn);
+                                }
+
                             }
-
-                        }
-                    });
-                } else {
-                    Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
+                        });
+                    } else {
+                        Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } else if (requestCode == 101) {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Utils.displayAlert("Requires Access to Your Storage.", ScanActivity.this, "", "");
+                } else {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, 101);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
 
     @Override
     protected void onResume() {
@@ -740,15 +750,15 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
     private void getUserDetails(String strWalletId) {
         try {
-            if (Utils.checkInternet(PayRequestScanActivity.this)) {
-                dialog = new ProgressDialog(PayRequestScanActivity.this, R.style.MyAlertDialogStyle);
+            if (Utils.checkInternet(ScanActivity.this)) {
+                dialog = new ProgressDialog(ScanActivity.this, R.style.MyAlertDialogStyle);
                 dialog.setIndeterminate(false);
                 dialog.setMessage("Please wait...");
                 dialog.getWindow().setGravity(Gravity.CENTER);
                 dialog.show();
                 dashboardViewModel.getUserDetail(strWalletId);
             } else {
-                Utils.displayAlert(getString(R.string.internet), PayRequestScanActivity.this, "", "");
+                Utils.displayAlert(getString(R.string.internet), ScanActivity.this, "", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -915,6 +925,8 @@ public class PayRequestScanActivity extends AppCompatActivity {
                     try {
                         Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code", "");
 //                    invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+//                    invalidQRCode("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code");
 //                   StartScaaner();
                         //ScanCode Visible
 //                        mycodeScannerView.setVisibility(View.VISIBLE);
@@ -933,17 +945,16 @@ public class PayRequestScanActivity extends AppCompatActivity {
 
                 e.printStackTrace();
 
-                Toast.makeText(PayRequestScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
 
             }
 
 
         } else {
 
-            Toast.makeText(PayRequestScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
+            Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
 
         }
-
 
     }
 
@@ -969,4 +980,6 @@ public class PayRequestScanActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 }

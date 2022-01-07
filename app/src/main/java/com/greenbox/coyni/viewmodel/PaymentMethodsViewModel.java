@@ -163,12 +163,19 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
                         CardResponse obj = response.body();
                         cardResponseMutableLiveData.setValue(obj);
                     } else {
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<APIError>() {
+//                        }.getType();
+//                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+//                        if (errorResponse != null) {
+//                            apiErrorMutableLiveData.setValue(errorResponse);
+//                        }
                         Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
+                        Type type = new TypeToken<CardResponse>() {
                         }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        CardResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            cardResponseMutableLiveData.setValue(errorResponse);
                         }
                     }
                 }
@@ -176,7 +183,7 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<CardResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
+                    cardResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

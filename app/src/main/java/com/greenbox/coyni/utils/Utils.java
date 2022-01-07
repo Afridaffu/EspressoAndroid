@@ -77,10 +77,17 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -171,6 +178,8 @@ public class Utils {
     public static final int cancelled = 4;//Not available
     public static final int inProgress = 0;
     public static final int failed = 3;
+
+    public static final float slidePercentage = 0.3f;
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
@@ -1041,6 +1050,11 @@ public class Utils {
             ex.printStackTrace();
         }
         return listStates;
+    }
+
+    public static void openKeyPad(Context context,View view){
+        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
 }

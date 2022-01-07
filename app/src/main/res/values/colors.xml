@@ -81,5 +81,8 @@
     <color name="accounts_bg_color">#f6f9fe</color>
     <color name="balance">#404040</color>
 
+    <color name="notif_delete_bg">#FCE9E8</color>
+
+
 
 </resources>

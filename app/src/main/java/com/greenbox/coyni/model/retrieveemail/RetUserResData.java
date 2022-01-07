@@ -4,6 +4,7 @@ public class RetUserResData {
     private String firstName;
     private String lastName;
     private String email;
+    private String profileImage;
 
     public String getFirstName() {
         return firstName;
@@ -27,5 +28,13 @@ public class RetUserResData {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

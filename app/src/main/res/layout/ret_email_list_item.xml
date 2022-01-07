@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -7,17 +8,25 @@
         android:id="@+id/llCoyniAct"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_67sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/bg_card"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_10sdp"
         android:paddingRight="@dimen/_8sdp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
             android:layout_marginLeft="@dimen/_10sdp"
-            android:src="@drawable/ic_profilelogo" />
+            app:cardCornerRadius="@dimen/_14sdp">
+
+            <ImageView
+                android:id="@+id/imgProfilePic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_profilelogo" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -148,10 +148,12 @@ public class EditCardActivity extends AppCompatActivity {
                 isState = true;
                 isZipcode = true;
                 if (selectedCard.getExpired()) {
+                    isExpiry = false;
                     etExpiry.setEnabled(true);
                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                 } else {
+                    isExpiry = true;
                     etExpiry.setEnabled(true);
                 }
                 enableOrDisableNext();
@@ -329,7 +331,9 @@ public class EditCardActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                objMyApplication.setSelectedCard(null);
+                                if (!strScreen.equals("withdraw") && !strScreen.equals("buy")) {
+                                    objMyApplication.setSelectedCard(null);
+                                }
                                 onBackPressed();
                                 finish();
                             } catch (Exception ex) {
