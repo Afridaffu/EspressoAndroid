@@ -150,6 +150,12 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 withdrawToken();
             }
             break;
+            case 0:
+                startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                        .putExtra("screen", "Withdraw"));
+                break;
         }
     }
 
@@ -329,6 +335,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     try {
                         if (etAmount.getText().toString().trim().length() > 0) {
                             convertDecimal();
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
@@ -397,7 +408,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     objResponse = transactionLimitResponse;
                     setDailyWeekLimit(transactionLimitResponse.getData());
                     if (etAmount.getText().toString().trim().length() > 0) {
-                        validation();
+                        if (validation()) {
+                            ctKey.enableButton();
+                        } else {
+                            ctKey.disableButton();
+                        }
                     }
                 }
             }
@@ -785,7 +800,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
+                value = false;
+            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
+                value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
                 if (strLimit.equals("daily")) {
                     tvError.setText("Amount entered exceeds your daily limit");
@@ -794,17 +811,17 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 }
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
+                value = false;
             } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
                 tvError.setText("Amount entered exceeds available balance");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
+                value = false;
             } else if (cynValue > avaBal) {
                 tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
+                value = false;
             } else {
                 tvError.setVisibility(View.GONE);
                 lyBalance.setVisibility(View.VISIBLE);

@@ -132,7 +132,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
-            isBiometric = Utils.checkBiometric(CustomerProfileActivity.this);
+//            isBiometric = Utils.checkBiometric(CustomerProfileActivity.this);
+            isBiometric = Utils.getIsBiometric();
             SetToken(objMyApplication, this);
             SetFaceLock(objMyApplication, this);
             SetTouchId(objMyApplication, this);

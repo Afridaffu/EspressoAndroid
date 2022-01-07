@@ -36,7 +36,7 @@
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
-                android:text="Transaction in Progress"
+                android:text="Transaction In Progress"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 

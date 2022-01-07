@@ -80,6 +80,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
+            } else if (strCurrent.equals("externalBank")) {
+                ControlMethod("addpayment");
+                strCurrent = "addpayment";
             } else {
                 super.onBackPressed();
             }
@@ -376,7 +379,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \\nlinked to your account. Please follow one of \\nthe prompts below to link an account.");
+                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
                 if (strScreen.equals("") && strCurrent.equals("addpayment")) {
                     tvMessage.setVisibility(View.VISIBLE);
                     imgLogo.setImageResource(R.drawable.ic_addpayment_method2);

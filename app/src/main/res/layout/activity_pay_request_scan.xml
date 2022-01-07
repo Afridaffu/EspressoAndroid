@@ -111,10 +111,10 @@
             android:layout_alignParentLeft="true"
             android:layout_gravity="center"
             android:scaleType="fitXY"
-            app:layout_constraintHorizontal_bias="0.195"
             android:src="@drawable/ic_flashicon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.195"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.75" />
@@ -162,8 +162,6 @@
             app:layout_constraintTop_toBottomOf="@+id/albumIV" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scannerLayout"
         android:layout_width="match_parent"
@@ -184,10 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55sdp"
                 android:background="@drawable/scananim11" />
-
-
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -297,7 +292,7 @@
                             android:fontFamily="@font/opensans_bold"
                             android:text="160.00"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_34sdp" />
+                            android:textSize="@dimen/_24sdp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -438,36 +433,39 @@
 
         </RelativeLayout>
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/saveToAlbumLL"
         android:layout_width="@dimen/_286sdp"
         android:layout_height="@dimen/_463sdp"
+        android:background="@color/primary_green"
+        android:orientation="vertical"
         android:paddingTop="@dimen/_26sdp"
         android:paddingBottom="@dimen/_56sdp"
-        android:visibility="invisible"
-        android:background="@color/primary_green"
-        android:orientation="vertical">
+        android:visibility="invisible">
+
         <ImageView
             android:layout_width="@dimen/_115sdp"
             android:layout_height="@dimen/_46sdp"
-            android:src="@drawable/ic_coyni_logo_full_white"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/ic_coyni_logo_full_white" />
+
         <LinearLayout
             android:layout_width="@dimen/_264sdp"
             android:layout_height="@dimen/_311sdp"
-            android:layout_marginTop="@dimen/_22sdp"
             android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_22sdp"
             android:layout_marginEnd="@dimen/_11sdp"
-            android:paddingBottom="@dimen/_22sdp"
             android:background="@drawable/saveimagebg"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_22sdp">
 
 
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/_34sdp"
                 android:layout_height="@dimen/_34sdp"
-                android:layout_marginTop="@dimen/_11sdp"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_11sdp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_17sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -475,11 +473,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
                 <ImageView
                     android:id="@+id/saveprofileIV"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="fitXY"
                     android:src="@drawable/image"
                     android:visibility="visible" />
 
@@ -498,15 +496,14 @@
             </androidx.cardview.widget.CardView>
 
 
-
             <TextView
                 android:id="@+id/tvNameSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Alison L"
-                android:layout_gravity="center"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -514,72 +511,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:background="@color/vlight_gray"/>
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:background="@color/vlight_gray" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@color/white"
+                android:visibility="gone"></View>
 
             <LinearLayout
                 android:id="@+id/setAmountLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:visibility="visible"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
+
                 <TextView
                     android:id="@+id/tvsaveSetAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold"
                     android:text="160.00"
                     android:textColor="@color/primary_green"
-                    android:textSize="@dimen/_24ssp"
-                    android:fontFamily="@font/opensans_bold"
-                    />
+                    android:textSize="@dimen/_24ssp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="CYN"
+                    android:layout_marginStart="@dimen/_6sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:textSize="@dimen/_11ssp"
-                    android:textColor="@color/primary_black"/>
+                    android:text="CYN"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="@dimen/_144sdp"
                 android:layout_height="@dimen/_144sdp"
-                android:background="@drawable/ic_qr_img_outline"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_4sdp"
-                >
+                android:background="@drawable/ic_qr_img_outline">
+
                 <ImageView
                     android:id="@+id/qrImageIV"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_5sdp"
-                    />
-
-
-
-
+                    android:layout_margin="@dimen/_5sdp" />
             </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_17sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:textSize="@dimen/_11ssp"
                 android:text="Use “Scan” in coyni app to scan the QR code "
                 android:textColor="@color/dark_grey"
-                android:layout_gravity="center"
-                />
-
-
-
-
-
-
-
-
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -588,5 +581,4 @@
         android:id="@+id/savedImageIV"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </RelativeLayout>

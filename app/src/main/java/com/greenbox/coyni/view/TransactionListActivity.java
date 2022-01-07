@@ -21,6 +21,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -85,7 +86,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.functions.Function4;
 
-public class TransactionListActivity extends AppCompatActivity {
+public class TransactionListActivity extends AppCompatActivity implements TextWatcher {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;
@@ -156,99 +157,100 @@ public class TransactionListActivity extends AppCompatActivity {
             });
 
             closeBtn.setOnClickListener(view -> finish());
+            searchET.addTextChangedListener(this);
 
-            searchET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() > 30) {
-//                        String search_key = charSequence.toString();
-//                        List<TransactionListPending> filterList = new ArrayList<>();
-//                        List<TransactionListPosted> filterList1 = new ArrayList<>();
-//                        int pindex = 0, poindex = 0;
-//                        if (globalPending.size() > 0) {
-//                            for (int iteration = 0; iteration < globalPending.size(); iteration++) {
-//                                pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-//                                if (pindex == 0) {
-//                                    filterList.add(globalPending.get(iteration));
-//                                }
-//                            }
-//                        }
-//                        if (globalPosted.size() > 0) {
-//                            for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
-//                                poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-//                                if (poindex == 0) {
-//                                    filterList1.add(globalPosted.get(iteration));
-//                                }
-//                            }
-//                        }
+//            searchET.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //
-//                        if (filterList.size() == 0 && filterList1.size() == 0) {
-//                            layoutTransactionsposted.setVisibility(View.GONE);
-//                            layoutTransactionspending.setVisibility(View.GONE);
-//                            pendingTxt.setVisibility(View.GONE);
-//                            noTransactionTV.setVisibility(View.VISIBLE);
-//                        } else if (filterList.size() > 0 && filterList1.size() == 0) {
-//                            layoutTransactionsposted.setVisibility(View.GONE);
-//                            layoutTransactionspending.setVisibility(View.VISIBLE);
-//                            pendingTxt.setVisibility(View.VISIBLE);
-//                            noTransactionTV.setVisibility(View.GONE);
-//                        } else if (filterList.size() == 0 && filterList1.size() > 0) {
-//                            layoutTransactionsposted.setVisibility(View.VISIBLE);
-//                            layoutTransactionspending.setVisibility(View.GONE);
-//                            pendingTxt.setVisibility(View.GONE);
-//                            noTransactionTV.setVisibility(View.GONE);
-//                        } else {
-//                            layoutTransactionsposted.setVisibility(View.VISIBLE);
-//                            layoutTransactionspending.setVisibility(View.VISIBLE);
-//                            pendingTxt.setVisibility(View.VISIBLE);
-//                            noTransactionTV.setVisibility(View.GONE);
-//                        }
-//                        try {
-//                            transactionListPendingAdapter.updateList(filterList);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        try {
-//                            List<List<TransactionListPosted>> listedData = new ArrayList<>();
-//                            ArrayList<String> dates = new ArrayList<>();
+//                }
 //
-//                            Log.e("Size", listedData.size() + "");
-//                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
-//                            transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
-//                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-//                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-//                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-                        globalPending.clear();
-                        globalPosted.clear();
-                        TransactionListRequest transactionListRequest = new TransactionListRequest();
-                        transactionListRequest.setWalletCategory(Utils.walletCategory);
-                        transactionListRequest.setGbxTransactionId(charSequence.toString());
-                        dashboardViewModel.meTransactionList(transactionListRequest);
-                    } else if (charSequence.length() > 0 && charSequence.length() < 30) {
-                        layoutTransactionsposted.setVisibility(View.GONE);
-                        layoutTransactionspending.setVisibility(View.GONE);
-                        pendingTxt.setVisibility(View.GONE);
-                        noTransactionTV.setVisibility(View.VISIBLE);
-                    } else if (charSequence.toString().trim().length() == 0) {
-                        globalPending.clear();
-                        globalPosted.clear();
-                        dashboardViewModel.meTransactionList(objMyApplication.getTransactionListSearch());
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                    if (charSequence.length() > 30) {
+////                        String search_key = charSequence.toString();
+////                        List<TransactionListPending> filterList = new ArrayList<>();
+////                        List<TransactionListPosted> filterList1 = new ArrayList<>();
+////                        int pindex = 0, poindex = 0;
+////                        if (globalPending.size() > 0) {
+////                            for (int iteration = 0; iteration < globalPending.size(); iteration++) {
+////                                pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+////                                if (pindex == 0) {
+////                                    filterList.add(globalPending.get(iteration));
+////                                }
+////                            }
+////                        }
+////                        if (globalPosted.size() > 0) {
+////                            for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
+////                                poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+////                                if (poindex == 0) {
+////                                    filterList1.add(globalPosted.get(iteration));
+////                                }
+////                            }
+////                        }
+////
+////                        if (filterList.size() == 0 && filterList1.size() == 0) {
+////                            layoutTransactionsposted.setVisibility(View.GONE);
+////                            layoutTransactionspending.setVisibility(View.GONE);
+////                            pendingTxt.setVisibility(View.GONE);
+////                            noTransactionTV.setVisibility(View.VISIBLE);
+////                        } else if (filterList.size() > 0 && filterList1.size() == 0) {
+////                            layoutTransactionsposted.setVisibility(View.GONE);
+////                            layoutTransactionspending.setVisibility(View.VISIBLE);
+////                            pendingTxt.setVisibility(View.VISIBLE);
+////                            noTransactionTV.setVisibility(View.GONE);
+////                        } else if (filterList.size() == 0 && filterList1.size() > 0) {
+////                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+////                            layoutTransactionspending.setVisibility(View.GONE);
+////                            pendingTxt.setVisibility(View.GONE);
+////                            noTransactionTV.setVisibility(View.GONE);
+////                        } else {
+////                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+////                            layoutTransactionspending.setVisibility(View.VISIBLE);
+////                            pendingTxt.setVisibility(View.VISIBLE);
+////                            noTransactionTV.setVisibility(View.GONE);
+////                        }
+////                        try {
+////                            transactionListPendingAdapter.updateList(filterList);
+////                        } catch (Exception e) {
+////                            e.printStackTrace();
+////                        }
+////                        try {
+////                            List<List<TransactionListPosted>> listedData = new ArrayList<>();
+////                            ArrayList<String> dates = new ArrayList<>();
+////
+////                            Log.e("Size", listedData.size() + "");
+////                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
+////                            transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
+////                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+////                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+////                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+////                        } catch (Exception e) {
+////                            e.printStackTrace();
+////                        }
+//                        globalPending.clear();
+//                        globalPosted.clear();
+//                        TransactionListRequest transactionListRequest = new TransactionListRequest();
+//                        transactionListRequest.setWalletCategory(Utils.walletCategory);
+//                        transactionListRequest.setGbxTransactionId(charSequence.toString());
+//                        dashboardViewModel.meTransactionList(transactionListRequest);
+//                    } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+//                        layoutTransactionsposted.setVisibility(View.GONE);
+//                        layoutTransactionspending.setVisibility(View.GONE);
+//                        pendingTxt.setVisibility(View.GONE);
+//                        noTransactionTV.setVisibility(View.VISIBLE);
+//                    } else if (charSequence.toString().trim().length() == 0) {
+//                        globalPending.clear();
+//                        globalPosted.clear();
+//                        dashboardViewModel.meTransactionList(objMyApplication.getTransactionListSearch());
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//
+//                }
+//            });
 
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -394,14 +396,54 @@ public class TransactionListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        if (charSequence.length() > 30) {
+            globalPending.clear();
+            globalPosted.clear();
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setGbxTransactionId(charSequence.toString());
+            dashboardViewModel.meTransactionList(transactionListRequest);
+        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+            layoutTransactionsposted.setVisibility(View.GONE);
+            layoutTransactionspending.setVisibility(View.GONE);
+            pendingTxt.setVisibility(View.GONE);
+            noTransactionTV.setVisibility(View.VISIBLE);
+        } else if (charSequence.toString().trim().length() == 0) {
+            globalPending.clear();
+            globalPosted.clear();
+            dashboardViewModel.meTransactionList(objMyApplication.getTransactionListSearch());
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable == searchET.getEditableText()) {
+            try {
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private void initObservers() {
         dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
                 try {
-//                    if (searchET.hasFocus())
-//                        searchET.clearFocus();
-//                    searchET.setText("");
+                    if (searchET.hasFocus())
+                        searchET.clearFocus();
+                    searchET.removeTextChangedListener(TransactionListActivity.this);
+                    searchET.setText("");
+                    searchET.addTextChangedListener(TransactionListActivity.this);
+
                     if (transactionList != null && transactionList.getData().getItems() != null
                             && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                         progressBar.setVisibility(View.GONE);
@@ -767,7 +809,9 @@ public class TransactionListActivity extends AppCompatActivity {
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
 
+            searchET.removeTextChangedListener(TransactionListActivity.this);
             searchET.setText("");
+            searchET.addTextChangedListener(TransactionListActivity.this);
             transAmountStartET.setText("");
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
@@ -1349,7 +1393,9 @@ public class TransactionListActivity extends AppCompatActivity {
                 currentPage = 0;
                 total = 0;
                 isFilters = false;
+                searchET.removeTextChangedListener(TransactionListActivity.this);
                 searchET.setText("");
+                searchET.addTextChangedListener(TransactionListActivity.this);
                 transAmountStartET.clearFocus();
                 transAmountEndET.clearFocus();
                 TransactionListRequest transactionListRequest = new TransactionListRequest();

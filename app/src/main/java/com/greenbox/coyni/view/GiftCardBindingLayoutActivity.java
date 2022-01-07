@@ -217,7 +217,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             tvDescription.setText(ss);
 
             tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
-            tvHeading.setText("Transaction in Progress");
+            tvHeading.setText("Transaction In Progress");
             imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
@@ -255,7 +255,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             TextView goneTV = findViewById(R.id.goneTV);
             TextView tvCurrency = findViewById(R.id.tvCurrency);
             TextView gcProcessingTV = findViewById(R.id.gcProcessingTV);
-            TextView refIDTV = findViewById(R.id.refIDTV);
+            TextView tvReference = findViewById(R.id.refIDTV);
             LinearLayout lyMessage = findViewById(R.id.lyMessage);
             CardView doneCV = findViewById(R.id.doneCV);
             gcProcessingTV.setVisibility(View.GONE);
@@ -267,10 +267,20 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             giftCardTypeTV.setText("Transaction Successful");
             imgLogo.setImageResource(R.drawable.ic_success_icon);
             if (objMyApplication.getPayRequestResponse().getData().getGbxTransactionId().length() > 10) {
-                refIDTV.setText(objMyApplication.getPayRequestResponse().getData().getGbxTransactionId().substring(0, 10) + "...");
+                tvReference.setText(objMyApplication.getPayRequestResponse().getData().getGbxTransactionId().substring(0, 10) + "...");
             } else {
-                refIDTV.setText(objMyApplication.getPayRequestResponse().getData().getGbxTransactionId());
+                tvReference.setText(objMyApplication.getPayRequestResponse().getData().getGbxTransactionId());
             }
+            tvReference.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.copyText(objMyApplication.getPayRequestResponse().getData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
