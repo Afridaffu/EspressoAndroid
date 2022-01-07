@@ -923,9 +923,9 @@ public class ScanActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     try {
-                        Utils.displayAlert("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code", "");
-//                    invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
                         Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+//                    invalidQRCode("Try scanning a coyni QR code.", PayRequestScanActivity.this, "Invalid QR code");
+//                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
 //                    invalidQRCode("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code");
 //                   StartScaaner();
                         //ScanCode Visible
