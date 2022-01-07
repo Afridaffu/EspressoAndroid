@@ -81,14 +81,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_44sdp"
                 android:hint="Email"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/light_gray"
                 app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_green"
                 app:errorIconDrawable="@null"
-                app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_green">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -97,7 +96,6 @@
                     android:layout_height="wrap_content"
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                     android:fontFamily="@font/opensans_semibold"
-                    android:hint="Coyni@example.com"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:longClickable="false"
@@ -147,14 +145,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                     app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                     app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                     app:boxCornerRadiusTopStart="@dimen/_10sdp"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green"
                     app:passwordToggleTint="@color/xdark_gray">
 
@@ -166,7 +163,6 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="center_vertical"
                         android:importantForAutofill="no"
-                        android:hint="\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword|textNoSuggestions"
                         android:longClickable="false"

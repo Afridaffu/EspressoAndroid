@@ -162,6 +162,7 @@
             app:layout_constraintTop_toBottomOf="@+id/albumIV" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scannerLayout"
         android:layout_width="match_parent"
@@ -182,7 +183,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55sdp"
                 android:background="@drawable/scananim11" />
+
+
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -198,7 +202,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvQRcode"
                 android:layout_width="match_parent"
@@ -253,17 +256,42 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text=""
+                        android:text="dfbcbsbs"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
+
+                    <View
+                        android:id="@+id/viewLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_below="@id/tvName"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_11sdp"
+                        android:layout_marginEnd="@dimen/_11sdp"
+                        android:background="@color/viewcolor"/>
+                    <TextView
+                        android:id="@+id/messageQr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Set amount to request a payment or scan QR\n code to pay me"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/_11ssp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:textColor="@color/xdark_gray"
+                        android:layout_marginTop="@dimen/_13sdp"
+                        android:layout_below="@id/viewLine"
+
+                        />
 
                     <RelativeLayout
                         android:id="@+id/qrViewRL"
                         android:layout_width="@dimen/_146sdp"
                         android:layout_height="@dimen/_144sdp"
-                        android:layout_below="@+id/tvName"
+                        android:layout_below="@+id/messageQr"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/_13sdp"
+                        android:layout_marginTop="@dimen/_14sdp"
                         android:background="@drawable/ic_qr_img_outline">
 
                         <ImageView
@@ -292,7 +320,7 @@
                             android:fontFamily="@font/opensans_bold"
                             android:text="160.00"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_24sdp" />
+                            android:textSize="@dimen/_34sdp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -392,13 +420,20 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/divider"
                         android:layout_marginTop="@dimen/_25sdp"
-                        android:paddingLeft="@dimen/_40sdp"
-                        android:paddingRight="@dimen/_35sdp">
+                        android:layout_marginStart="@dimen/_36sdp"
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:orientation="vertical"
+                            >
 
                         <ImageView
                             android:id="@+id/imgCopy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_17sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:src="@drawable/ic_copy" />
 
                         <TextView
@@ -409,11 +444,20 @@
                             android:text="Copy"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="@dimen/_35sdp"
+                            android:orientation="vertical"
+                            >
 
                         <ImageView
                             android:id="@+id/imgShare"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:layout_alignParentRight="true"
                             android:src="@drawable/ic_share" />
 
@@ -427,6 +471,7 @@
 
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
+                        </LinearLayout>
                     </RelativeLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -437,7 +482,7 @@
     <LinearLayout
         android:id="@+id/saveToAlbumLL"
         android:layout_width="@dimen/_286sdp"
-        android:layout_height="@dimen/_463sdp"
+        android:layout_height="wrap_content"
         android:background="@color/primary_green"
         android:orientation="vertical"
         android:paddingTop="@dimen/_26sdp"
@@ -452,7 +497,7 @@
 
         <LinearLayout
             android:layout_width="@dimen/_264sdp"
-            android:layout_height="@dimen/_311sdp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_11sdp"
             android:layout_marginTop="@dimen/_22sdp"
             android:layout_marginEnd="@dimen/_11sdp"
@@ -473,11 +518,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+
                 <ImageView
                     android:id="@+id/saveprofileIV"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitXY"
                     android:src="@drawable/image"
                     android:visibility="visible" />
 
@@ -503,7 +548,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text=""
+                android:text="Alison L"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -515,20 +560,13 @@
                 android:layout_marginEnd="@dimen/_11sdp"
                 android:background="@color/vlight_gray" />
 
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_20sdp"
-                android:background="@color/white"
-                android:visibility="gone"></View>
-
             <LinearLayout
                 android:id="@+id/setAmountLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/tvsaveSetAmount"
@@ -536,6 +574,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_bold"
                     android:text="160.00"
+                    android:layout_marginTop="@dimen/_3sdp"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_24ssp" />
 
@@ -543,6 +582,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
                     android:text="CYN"
@@ -562,6 +602,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/_5sdp" />
+
+
             </LinearLayout>
 
             <TextView
@@ -573,6 +615,8 @@
                 android:text="Use “Scan” in coyni app to scan the QR code "
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/_11ssp" />
+
+
         </LinearLayout>
 
     </LinearLayout>
@@ -581,4 +625,5 @@
         android:id="@+id/savedImageIV"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </RelativeLayout>
