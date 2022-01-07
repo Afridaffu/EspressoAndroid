@@ -121,6 +121,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
             isBiometric = Utils.getIsBiometric();
+
             SetToken(myApplicationObj, this);
             SetFaceLock(myApplicationObj, this);
             SetTouchId(myApplicationObj, this);

@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.UnReadDelResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
@@ -338,6 +339,14 @@ public interface ApiService {
     @POST("api/v2/node/sendTokens")
     Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
 
+    @POST("api/v2/notifications/me/mark-read")
+    Call<UnReadDelResponse> notificationsMarkRead(@Body List<Integer> list);
+
+    @POST("api/v2/notifications/me/mark-unread")
+    Call<UnReadDelResponse> notificationsMarkUnRead(@Body List<Integer> list);
+
+    @POST("api/v2/notifications/me/mark-clear")
+    Call<UnReadDelResponse> notificationDelete(@Body List<Integer> list);
     @POST("api/v2/user-requests")
     Call<UserRequestResponse> userRequests(@Body UserRequest request);
 

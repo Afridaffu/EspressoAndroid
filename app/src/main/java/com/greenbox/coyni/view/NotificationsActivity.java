@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +19,9 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.NotificationsAdapter;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
+import com.greenbox.coyni.model.notification.UnReadDelResponse;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +50,9 @@ public class NotificationsActivity extends AppCompatActivity {
     public static NotificationsActivity notificationsActivity;
     MyApplication objMyApplication;
     String selectedTab = "NOTIFICATIONS";
+    public String selectedRow = "";
+    ProgressDialog progressDialog;
+    NotificationsAdapter notificationsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,7 @@ public class NotificationsActivity extends AppCompatActivity {
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         try {
+            progressDialog = Utils.showProgressDialog(this);
             notificationsViewModel.getNotifications();
             notificationsViewModel.getSentNotifications();
         } catch (Exception e) {
@@ -94,7 +101,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     requestsTV.setTextColor(getResources().getColor(R.color.primary_black));
 
                     LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                    NotificationsAdapter notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
+                    notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
                     notificationsRV.setLayoutManager(nLayoutManager);
                     notificationsRV.setItemAnimator(new DefaultItemAnimator());
                     notificationsRV.setAdapter(notificationsAdapter);
@@ -116,8 +123,11 @@ public class NotificationsActivity extends AppCompatActivity {
                     payReqNotifications.addAll(globalReceivedNotifications);
                     payReqNotifications.addAll(globalSentNotifications);
 
+                    Collections.sort(payReqNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
+                            .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
+
                     LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                    NotificationsAdapter notificationsAdapter = new NotificationsAdapter(payReqNotifications, NotificationsActivity.this);
+                    notificationsAdapter = new NotificationsAdapter(payReqNotifications, NotificationsActivity.this);
                     notificationsRV.setLayoutManager(nLayoutManager);
                     notificationsRV.setItemAnimator(new DefaultItemAnimator());
                     notificationsRV.setAdapter(notificationsAdapter);
@@ -156,6 +166,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
                 @Override
                 public void onChanged(Notifications notifications) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
                         notificationsViewModel.getSentNotifications();
                         globalReceivedNotifications.clear();
@@ -171,7 +184,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                 .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
 
                         LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                        NotificationsAdapter notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
+                        notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
                         notificationsRV.setLayoutManager(nLayoutManager);
                         notificationsRV.setItemAnimator(new DefaultItemAnimator());
                         notificationsRV.setAdapter(notificationsAdapter);
@@ -193,6 +206,54 @@ public class NotificationsActivity extends AppCompatActivity {
                             globalSentNotifications.get(i).setTimeAgo(convertNotificationTime(globalSentNotifications.get(i).getRequestedDate(), i,
                                     "Sent"));
                         }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            notificationsViewModel.getMarkReadResponse().observe(this, new Observer<UnReadDelResponse>() {
+                @Override
+                public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
+                        globalNotifications.get(Integer.parseInt(selectedRow)).setRead(true);
+                        notificationsAdapter.updateList(globalNotifications);
+                    } else {
+                        Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            notificationsViewModel.getMarkUnReadResponse().observe(this, new Observer<UnReadDelResponse>() {
+                @Override
+                public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
+                        globalNotifications.get(Integer.parseInt(selectedRow)).setRead(false);
+                        notificationsAdapter.updateList(globalNotifications);
+                    } else {
+                        Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            notificationsViewModel.getDeleteNotifResponse().observe(this, new Observer<UnReadDelResponse>() {
+                @Override
+                public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
+                        globalNotifications.remove(Integer.parseInt(selectedRow));
+                        notificationsAdapter.updateList(globalNotifications);
+                    } else {
+                        Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -233,7 +294,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
             SimpleDateFormat formatNow = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             now = formatNow.parse(nowString);
-            Log.e("now", now + "");
+//            Log.e("now", now + "");
 
             long seconds = TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
             long minutes = TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
@@ -265,12 +326,6 @@ public class NotificationsActivity extends AppCompatActivity {
             }
 
 
-            try {
-                System.out.println(days + " days ago");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             if (type.equals("Notification")) {
                 globalNotifications.get(position).setLongTime(past.getTime());
                 if (days > 0)
@@ -297,4 +352,16 @@ public class NotificationsActivity extends AppCompatActivity {
         return timeAgo;
     }
 
+
+    public void markReadAPICall(List<Integer> list) {
+        notificationsViewModel.setReadNotification(list);
+    }
+
+    public void markUnReadAPICall(List<Integer> list) {
+        notificationsViewModel.setUnReadNotification(list);
+    }
+
+    public void deleteNotificationCall(List<Integer> list) {
+        notificationsViewModel.setDeleteNotification(list);
+    }
 }

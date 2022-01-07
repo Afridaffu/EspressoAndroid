@@ -88,7 +88,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_5sdp"
-                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
@@ -97,7 +96,8 @@
                             android:layout_height="@dimen/_6sdp"
                             android:layout_marginRight="@dimen/_5sdp"
                             app:cardBackgroundColor="@color/primary_color"
-                            app:cardCornerRadius="5dp" />
+                            app:cardCornerRadius="5dp"
+                            android:layout_gravity="center"/>
 
                         <TextView
                             android:id="@+id/subject"
@@ -230,7 +230,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text="Remind"
+                                android:text="Reminder"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>

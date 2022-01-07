@@ -21,7 +21,7 @@ public class NotificationsDataItems {
     private String type = "";
     private String timeAgo = "";
     private Long longTime = 0L;
-    private int isToday = 1; // 0 = past and 1 = today
+    private int isToday = 0; // 0 = past and 1 = today
 
 
     //Notifications
