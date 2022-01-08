@@ -172,7 +172,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
                     || getIntent().getStringExtra("screen").equals("Withdraw")
-                    || getIntent().getStringExtra("screen").equals("Pay"))) {
+                    || getIntent().getStringExtra("screen").equals("Pay"))
+                    || getIntent().getStringExtra("screen").equals("Notifications")) {
+
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -382,6 +384,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                             case "Pay":
                                                 payTransaction();
                                                 break;
+                                            case "Notifications":
+                                                Intent returnIntent = new Intent();
+                                                setResult(235, returnIntent);
+                                                finish();
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -594,7 +600,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("EditPhone")
                         || getIntent().getStringExtra("screen").equals("EditAddress")
                         || getIntent().getStringExtra("screen").equals("Withdraw")
-                        || getIntent().getStringExtra("screen").equals("Pay"))) {
+                        || getIntent().getStringExtra("screen").equals("Pay")
+                        || getIntent().getStringExtra("screen").equals("Notifications"))) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {

@@ -82,7 +82,20 @@
         android:id="@+id/notificationsRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_10sdp">
+        android:padding="@dimen/_10sdp"
+        android:visibility="visible">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/noDataTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/opensans_regular"
+        android:gravity="center"
+        android:text="You have no notifications"
+        android:textColor="@color/dark_grey"
+        android:textSize="@dimen/_10ssp"
+        android:visibility="gone" />
+
 </LinearLayout>

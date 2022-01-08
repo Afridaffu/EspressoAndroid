@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -347,7 +348,11 @@ public interface ApiService {
 
     @POST("api/v2/notifications/me/mark-clear")
     Call<UnReadDelResponse> notificationDelete(@Body List<Integer> list);
+
     @POST("api/v2/user-requests")
     Call<UserRequestResponse> userRequests(@Body UserRequest request);
+
+    @PATCH("api/v2/user-requests")
+    Call<UserRequestResponse> updateUserRequests(@Body StatusRequest request);
 
 }

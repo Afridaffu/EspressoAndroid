@@ -11,7 +11,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
+import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.view.NotificationsActivity;
@@ -35,6 +37,13 @@ public class NotificationsViewModel extends AndroidViewModel {
     private final MutableLiveData<UnReadDelResponse> markReadResponse = new MutableLiveData<>();
     private final MutableLiveData<UnReadDelResponse> markUnReadResponse = new MutableLiveData<>();
     private final MutableLiveData<UnReadDelResponse> deleteNotifResponse = new MutableLiveData<>();
+
+    private final MutableLiveData<UserRequestResponse> notificationStatusUpdateResponse = new MutableLiveData<>();
+
+
+    public MutableLiveData<UserRequestResponse> getNotificationStatusUpdateResponse() {
+        return notificationStatusUpdateResponse;
+    }
 
     public MutableLiveData<UnReadDelResponse> getDeleteNotifResponse() {
         return deleteNotifResponse;
@@ -284,6 +293,45 @@ public class NotificationsViewModel extends AndroidViewModel {
                 public void onFailure(Call<UnReadDelResponse> call, Throwable t) {
                     try {
                         deleteNotifResponse.setValue(null);
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void notificationStatusUpdate(StatusRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UserRequestResponse> mCall = apiService.updateUserRequests(request);
+            mCall.enqueue(new Callback<UserRequestResponse>() {
+                @Override
+                public void onResponse(Call<UserRequestResponse> call, Response<UserRequestResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            UserRequestResponse obj = response.body();
+                            notificationStatusUpdateResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<UserRequestResponse>() {
+                            }.getType();
+                            UserRequestResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            notificationStatusUpdateResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        notificationStatusUpdateResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserRequestResponse> call, Throwable t) {
+                    try {
+                        notificationStatusUpdateResponse.setValue(null);
                         Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();

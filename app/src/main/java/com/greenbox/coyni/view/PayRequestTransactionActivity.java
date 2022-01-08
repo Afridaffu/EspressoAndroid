@@ -42,9 +42,9 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 //import com.greenbox.coyni.fragments.ScanActivityBottomSheetDialog;
 
 public class PayRequestTransactionActivity extends AppCompatActivity {
-    LinearLayout addNoteClick, prLL, topLL;
+    LinearLayout addNoteClick, prLL, topLL, lyPayClose;
     TextView addNoteTV, coynTV;
-    ImageView changeCurreIV,backButton;
+    ImageView changeCurreIV;
     Boolean isFieldValid = false, isCurrencyEnable = true, isCynEnable = false;
     String strWalletId = "", reciepientAddress = "";
     ProgressDialog dialog;
@@ -56,7 +56,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
     private String strAmount = new String();
     private String messagePayReq = "", userBalance;
     EditText addnote;
-//    private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText, keyPay, keyRquest;
+    //    private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText, keyPay, keyRquest;
 //    private ImageView keyBack;
 //    private SparseArray<String> keyValues = new SparseArray<>();
 //    InputConnection inputConnection;
@@ -68,15 +68,11 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pay_request_transaction);
+        setContentView(R.layout.activity_pay_request);
         try {
             initialization();
 
             initActions();
-
-
-
-
 
 
             userBalance = String.valueOf(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount());
@@ -159,7 +155,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
     }
 
 
-
     private void initialization() {
         try {
             addNoteClick = findViewById(R.id.addNoteClickLL);
@@ -169,20 +164,20 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
             availBal = findViewById(R.id.availBal);
             prLL = findViewById(R.id.payRequestLL);
             topLL = findViewById(R.id.topLL);
-            customeKeyB=findViewById(R.id.payReqCK);
-            backButton=findViewById(R.id.backBtnIV);
+//            customeKeyB = findViewById(R.id.payReqCK);
+            lyPayClose = findViewById(R.id.lyPayClose);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
             //user Details
             nameUser = findViewById(R.id.tvName);
             addreUser = findViewById(R.id.accAddress);
 
-            changeCurreIV = findViewById(R.id.changeCurrencyTypeIV);
-            dollorTV = findViewById(R.id.amontDollorTV);
-            errMinAmount = findViewById(R.id.minAmountErr);
+            changeCurreIV = findViewById(R.id.imgConvert);
+            dollorTV = findViewById(R.id.tvCurrency);
+//            errMinAmount = findViewById(R.id.minAmountErr);
             coynTV = findViewById(R.id.coyniTV);
-            requestTV = findViewById(R.id.requestTV);
-            payTV = findViewById(R.id.payTV);
+            requestTV = findViewById(R.id.tvRequest);
+            payTV = findViewById(R.id.tvPay);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,10 +187,10 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
 
     private void initActions() {
         try {
-            backButton.setOnClickListener(new View.OnClickListener() {
+            lyPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    finish();
                 }
             });
             payRequestET.setOnClickListener(new View.OnClickListener() {
@@ -393,7 +388,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
                         // custom dialog
                         final Dialog dialog = new Dialog(PayRequestTransactionActivity.this);
                         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.fragment_pay_amount_bottom_sheet);
+                        dialog.setContentView(R.layout.pay_order_preview);
                         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                         messageTV = dialog.findViewById(R.id.messageNoteTV);
                         messageTxt = dialog.findViewById(R.id.messageTxt);
@@ -805,7 +800,7 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
 
                 userName.setText(imageTextNew);
 
-                if (userDetails.getData().getImage()!=null) {
+                if (userDetails.getData().getImage() != null) {
                     userProfile.setVisibility(View.VISIBLE);
                     userName.setVisibility(View.GONE);
                     Glide.with(this)
@@ -823,7 +818,6 @@ public class PayRequestTransactionActivity extends AppCompatActivity {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
 
 
             tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
