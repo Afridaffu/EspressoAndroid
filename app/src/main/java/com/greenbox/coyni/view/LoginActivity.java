@@ -300,7 +300,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             if(etPassword.getText().toString().length() > 0)
                                 etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             else
-                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                         }
 
                     } catch (Exception ex) {

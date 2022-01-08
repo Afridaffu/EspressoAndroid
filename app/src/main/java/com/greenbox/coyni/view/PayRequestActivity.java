@@ -634,6 +634,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
             }
+//            else if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+//                value = false;
+//                Utils.displayAlert("You can only Pay", PayRequestActivity.this, "Oops!", "");
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
