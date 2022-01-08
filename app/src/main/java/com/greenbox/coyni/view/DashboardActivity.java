@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -73,8 +75,10 @@ public class DashboardActivity extends AppCompatActivity {
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
-    String strName = "";
+    String strName = "", strFirstUser = "";
     ConstraintLayout cvProfileSmall, cvProfile;
+    SQLiteDatabase mydatabase;
+    Cursor dsUserDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +162,10 @@ public class DashboardActivity extends AppCompatActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
-
+            SetDB();
+            if (strFirstUser.equals("")) {
+                saveFirstUser();
+            }
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -656,6 +663,34 @@ public class DashboardActivity extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void SetDB() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+            dsUserDetails.moveToFirst();
+            if (dsUserDetails.getCount() > 0) {
+                strFirstUser = dsUserDetails.getString(1);
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+            }
+        }
+    }
+
+    private void saveFirstUser() {
+        try {
+            if (strFirstUser.equals("")) {
+                strFirstUser = objMyApplication.getStrEmail();
+            }
+            mydatabase.execSQL("Delete from tblUserDetails");
+            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

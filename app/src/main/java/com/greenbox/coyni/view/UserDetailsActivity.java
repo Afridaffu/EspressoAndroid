@@ -118,8 +118,8 @@ public class UserDetailsActivity extends AppCompatActivity {
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
 
+//            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
             isBiometric = Utils.getIsBiometric();
-
             SetToken(myApplicationObj, this);
             SetFaceLock(myApplicationObj, this);
             SetTouchId(myApplicationObj, this);
@@ -678,8 +678,8 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dashboardViewModel.meProfile();
-//        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     public static void showImagePickerDialog(Activity activity) {

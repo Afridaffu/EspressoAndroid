@@ -79,7 +79,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     Long mLastClickTime = 0L;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
-    boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false;
+    boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
     ProgressDialog pDialog;
     int requestedToUserId = 0;
 
@@ -156,6 +156,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             case 235: {
                 payTransaction();
             }
+            break;
+            case 0:
+                startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("screen", "Pay"));
+                break;
         }
     }
 
@@ -224,6 +230,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                             mLastClickTime = SystemClock.elapsedRealtime();
                             convertDecimal();
                             if (payValidation()) {
+                                isPayClick = true;
                                 pDialog = Utils.showProgressDialog(PayRequestActivity.this);
                                 cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
@@ -337,6 +344,13 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             }
 
             payRequestET.addTextChangedListener(this);
+            if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+                payRequestET.setText(getIntent().getStringExtra("amount"));
+                USFormat(payRequestET);
+                payRequestET.setEnabled(false);
+            } else {
+                enableButtons();
+            }
             payRequestET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -411,7 +425,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             });
             SetFaceLock();
             SetTouchId();
-            enableButtons();
+//            enableButtons();
             calculateFee("10");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -450,7 +464,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                     pfee = transferFeeResponse.getData().getFee();
                     if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0")) {
-                        payPreview();
+                        if (isPayClick) {
+                            isPayClick = false;
+                            payPreview();
+                        }
                     }
                 }
             }
@@ -459,20 +476,24 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
             @Override
             public void onChanged(PayRequestResponse payRequestResponse) {
-                if (payRequestResponse != null) {
-                    objMyApplication.setPayRequestResponse(payRequestResponse);
-                    if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
-                        startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "success")
-                                .putExtra("subtype", "pay"));
+                try {
+                    if (payRequestResponse != null) {
+                        objMyApplication.setPayRequestResponse(payRequestResponse);
+                        if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                            startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "success")
+                                    .putExtra("subtype", "pay"));
 
+                        } else {
+                            startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "failed")
+                                    .putExtra("subtype", "pay"));
+                        }
                     } else {
-                        startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "failed")
-                                .putExtra("subtype", "pay"));
+                        Utils.displayAlert("something went wrong", PayRequestActivity.this, "", "");
                     }
-                } else {
-                    Utils.displayAlert("something went wrong", PayRequestActivity.this, "", "");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -731,6 +752,19 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 payViewModel.sendTokens(request);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void payTransactionRequest() {
+        try {
+            TransferPayRequest request = new TransferPayRequest();
+            request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
+            request.setRemarks(addNoteTV.getText().toString().trim());
+            request.setRecipientWalletId(recipientAddress);
+            objMyApplication.setTransferPayRequest(request);
+            objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -997,6 +1031,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             } else {
                 lyMessage.setVisibility(View.INVISIBLE);
             }
+            payTransactionRequest();
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

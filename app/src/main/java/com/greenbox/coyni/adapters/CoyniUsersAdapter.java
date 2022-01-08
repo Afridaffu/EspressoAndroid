@@ -58,7 +58,15 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
             if (objData.getFullName() != null && !objData.getFullName().equals("")) {
                 if (objData.getFullName().contains(" ")) {
                     if (!objData.getFullName().split(" ")[0].equals("")) {
-                        holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
+                        if (objData.getFullName().split(" ").length > 2) {
+                            if (!objData.getFullName().split(" ")[1].equals("")) {
+                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
+                            } else {
+                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[2].substring(0, 1).toUpperCase());
+                            }
+                        } else {
+                            holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
+                        }
                     } else {
                         holder.tvNameHead.setText(objData.getFullName().split(" ")[0].toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
                     }

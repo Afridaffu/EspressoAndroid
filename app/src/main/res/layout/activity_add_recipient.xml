@@ -79,7 +79,7 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:cursorVisible="true"
-                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- "
                         android:hint="Name / Account Address "
                         android:imeOptions="actionDone"
                         android:maxLines="1"

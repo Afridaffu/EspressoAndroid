@@ -93,7 +93,7 @@ public class GiftCardDetails extends AppCompatActivity {
     ProgressDialog pDialog;
     Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0;
     List<Items> listAmounts = new ArrayList<>();
-    String amountETString = "", amount = "", strLimit = "";
+    String amountETString = "", amount = "", strLimit = "", strBrandDesc = "";
     public String selectedFixedAmount = "";
     public boolean isFirstName = false, isLastName = false, isEmail = false, isAmount = false, isNextEnabled = false;
     CardView purchaseCV;
@@ -182,7 +182,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        Utils.hideKeypad(GiftCardDetails.this);
+                        Utils.hideKeypad(GiftCardDetails.this, view);
                         if (brandDescTV.getMaxLines() == 2) {
                             brandDescTV.setMaxLines(Integer.MAX_VALUE);
                             viewAllTV.setText(getResources().getString(R.string.view_less));
@@ -190,6 +190,13 @@ public class GiftCardDetails extends AppCompatActivity {
                             brandDescTV.setMaxLines(2);
                             viewAllTV.setText(getResources().getString(R.string.view_all));
                         }
+//                        if (viewAllTV.getText().toString().equals(getResources().getString(R.string.view_all))) {
+//                            viewAllTV.setText(getResources().getString(R.string.view_less));
+//                            brandDescTV.setText(strBrandDesc.substring(0, 200));
+//                        } else {
+//                            viewAllTV.setText(getResources().getString(R.string.view_all));
+//                            brandDescTV.setText(strBrandDesc);
+//                        }
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
@@ -254,13 +261,13 @@ public class GiftCardDetails extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         if (isNextEnabled) {
-                            Utils.hideKeypad(GiftCardDetails.this, view);
+//                            Utils.hideKeypad(GiftCardDetails.this, view);
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             getGCWithdrawRequest();
-                            giftCardPreview();
+                            giftCardPreview(view);
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -292,6 +299,7 @@ public class GiftCardDetails extends AppCompatActivity {
 //                            } else {
 //                                brandDescTV.setText(Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim()));
 //                            }
+                            strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " ")).toString().trim());
                             brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " ")).toString().trim()));
                             Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
@@ -359,7 +367,9 @@ public class GiftCardDetails extends AppCompatActivity {
             @Override
             public void onChanged(WithdrawResponse withdrawResponse) {
                 try {
-                    prevDialog.dismiss();
+                    if (prevDialog != null) {
+                        prevDialog.dismiss();
+                    }
                     if (pDialog != null) {
                         pDialog.dismiss();
                     }
@@ -368,10 +378,12 @@ public class GiftCardDetails extends AppCompatActivity {
                         if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
                             startActivity(new Intent(GiftCardDetails.this, GiftCardBindingLayoutActivity.class)
                                     .putExtra("status", "inprogress")
+                                    .putExtra("subtype", "giftcard")
                                     .putExtra("fee", fee.toString()));
                         } else {
                             startActivity(new Intent(GiftCardDetails.this, GiftCardBindingLayoutActivity.class)
                                     .putExtra("status", "failed")
+                                    .putExtra("subtype", "giftcard")
                                     .putExtra("fee", fee.toString()));
                         }
                     }
@@ -944,9 +956,9 @@ public class GiftCardDetails extends AppCompatActivity {
         }
     }
 
-    public void giftCardPreview() {
+    public void giftCardPreview(View view) {
         try {
-            Utils.hideKeypad(GiftCardDetails.this);
+            Utils.hideKeypad(GiftCardDetails.this, view);
             prevDialog = new Dialog(GiftCardDetails.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.gift_card_order_preview);
@@ -996,7 +1008,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         if (!isAuthenticationCalled) {
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
-                                    prevDialog.dismiss();
+//                                    prevDialog.dismiss();
                                     isAuthenticationCalled = true;
                                     Utils.checkAuthentication(GiftCardDetails.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
@@ -1130,6 +1142,12 @@ public class GiftCardDetails extends AppCompatActivity {
                 withdrawGiftCard();
             }
             break;
+            case 0:
+                startActivity(new Intent(GiftCardDetails.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("subtype", "giftcard")
+                        .putExtra("screen", "Withdraw"));
+                break;
         }
     }
 

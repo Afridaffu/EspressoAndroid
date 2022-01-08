@@ -117,8 +117,8 @@ public class AddCardActivity extends AppCompatActivity {
             initialization();
             textWatchers();
             focusWatchers();
-            etName.setText(objMyApplication.getStrUserName());
-            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+            //etName.setText(objMyApplication.getStrUserName());
+//            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -188,8 +188,8 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress1 = findViewById(R.id.etlAddress1);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
-            etCardNumber.requestCNETFocus();
-
+//            etCardNumber.requestCNETFocus();
+            etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
             try {
                 MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
@@ -859,7 +859,7 @@ public class AddCardActivity extends AppCompatActivity {
                             isName = true;
                         }
                     }
-                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 61) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
