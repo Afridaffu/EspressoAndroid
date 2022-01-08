@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.templates.TemplateRequest;
@@ -79,6 +80,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
     ProgressDialog pDialog;
     int requestedToUserId = 0;
+    PaymentMethodsResponse paymentMethodsResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,10 +229,16 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                             mLastClickTime = SystemClock.elapsedRealtime();
                             convertDecimal();
                             if (payValidation()) {
-                                isPayClick = true;
-                                pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-                                cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-                                calculateFee(Utils.USNumberFormat(cynValue));
+                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                                    isPayClick = true;
+                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+                                    calculateFee(Utils.USNumberFormat(cynValue));
+                                } else {
+                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+                                    i.putExtra("screen", "payRequest");
+                                    startActivity(i);
+                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -331,6 +339,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             cynWallet = objMyApplication.getGbtWallet();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
+            paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayRequestActivity.this)) {

@@ -93,8 +93,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class ScanActivity extends AppCompatActivity implements TextWatcher {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
-    LinearLayout layoutHead;
-    LinearLayout imageSaveAlbumLL, scanAmountLL, setAmountLL;
+    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL;
     ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
@@ -355,30 +354,42 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        setAmountDialog = new Dialog(ScanActivity.this);
-                        setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                        setAmountDialog.setContentView(R.layout.fragment_set_limit);
-                        setAmountDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        ctKey = (CustomKeyboard) setAmountDialog.findViewById(R.id.customKeyBoard);
-                        setAmount = setAmountDialog.findViewById(R.id.setAmountET);
-                        InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
-                        ctKey.setInputConnection(ic);
-                        ctKey.setKeyAction("OK");
-                        ctKey.setScreenName("setAmount");
-                        fontSize = setAmount.getTextSize();
-                        setAmount.addTextChangedListener(ScanActivity.this);
+                        if (!scanmeSetAmountTV.getText().equals("Clear Amount")) {
+                            setAmountDialog = new Dialog(ScanActivity.this);
+                            setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                            setAmountDialog.setContentView(R.layout.fragment_set_limit);
+                            setAmountDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            ctKey = (CustomKeyboard) setAmountDialog.findViewById(R.id.customKeyBoard);
+                            setAmount = setAmountDialog.findViewById(R.id.setAmountET);
+                            InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
+                            ctKey.setInputConnection(ic);
+                            ctKey.setKeyAction("OK");
+                            ctKey.setScreenName("setAmount");
+                            fontSize = setAmount.getTextSize();
+                            setAmount.setShowSoftInputOnFocus(false);
+                            setAmount.addTextChangedListener(ScanActivity.this);
+                            setAmount.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Utils.hideSoftKeypad(ScanActivity.this, v);
+                                }
+                            });
+                            Window window = setAmountDialog.getWindow();
+                            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                        Window window = setAmountDialog.getWindow();
-                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                            WindowManager.LayoutParams wlp = window.getAttributes();
 
-                        WindowManager.LayoutParams wlp = window.getAttributes();
-
-                        wlp.gravity = Gravity.BOTTOM;
-                        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                        window.setAttributes(wlp);
-                        setAmountDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                        setAmountDialog.setCanceledOnTouchOutside(true);
-                        setAmountDialog.show();
+                            wlp.gravity = Gravity.BOTTOM;
+                            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                            window.setAttributes(wlp);
+                            setAmountDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            setAmountDialog.setCanceledOnTouchOutside(true);
+                            setAmountDialog.show();
+                        } else {
+                            scanAmountLL.setVisibility(View.GONE);
+                            scanmeSetAmountTV.setText("Set Amount");
+                            generateQRCode(strWallet);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -510,7 +521,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
                     } else {
                         if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-                            Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", apiError.getError().getErrorDescription());
+//                            Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", apiError.getError().getErrorDescription());
+                            displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                         }
                     }
                 }
@@ -523,7 +535,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 dialog.dismiss();
                 if (s != null && !s.equals("")) {
                     if (mycodeScannerView.getVisibility() == View.VISIBLE) {
-                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+//                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+                        displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                     }
                 }
             }
@@ -826,31 +839,17 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK) {
-
             try {
-
                 final Uri imageUri = data.getData();
-
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
                 try {
-
                     Bitmap bMap = selectedImage;
-
-
                     int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
-
                     bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
-
-
                     LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-
                     BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
 
 //                    Reader reader = new QRCodeReader();
                     Reader reader = new MultiFormatReader();
@@ -882,7 +881,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
 
                 } catch (Exception e) {
-                    Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+//                    Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
+                    displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                     e.printStackTrace();
                 }
             } catch (FileNotFoundException e) {
@@ -979,6 +979,54 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void displayAlert(String msg, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(ScanActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = dialog.findViewById(R.id.tvHead);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    dialog.dismiss();
+                    mcodeScanner.startPreview();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
 }

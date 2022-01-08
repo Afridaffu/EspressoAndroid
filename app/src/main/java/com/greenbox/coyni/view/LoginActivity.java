@@ -367,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
                         if (s.length() == 0) {
                             // No entered text so will show hint
-                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                         } else {
                             etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         }
