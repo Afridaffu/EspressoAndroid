@@ -45,13 +45,14 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         app:cardBackgroundColor="@color/primary_green"
-        app:cardCornerRadius="@dimen/_21sdp">
+        app:cardCornerRadius="@dimen/_22sdp">
 
         <TextView
             android:id="@+id/authorTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
             android:text="Try Again"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />

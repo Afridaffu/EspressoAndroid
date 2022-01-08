@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/roundeddialog"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    <View
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_28sdp"
+        android:background="@color/primary_green" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_semibold"
+        android:text="Please confirm CVV to continue"
+        android:textColor="@color/primary_black"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:textSize="@dimen/_12ssp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etlCVV"
+        style="@style/TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20sdp"
+        android:hint="CVV/CVC"
+        android:textColorHint="@color/primary_black"
+        app:boxStrokeColor="@color/primary_green"
+        app:errorIconDrawable="@null"
+        app:expandedHintEnabled="false"
+        app:hintTextColor="@color/primary_green">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCVV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:imeOptions="actionDone"
+            android:inputType="numberPassword"
+            android:longClickable="false"
+            android:maxLength="4"
+            android:maxLines="1"
+            android:padding="@dimen/_14sdp"
+            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+            android:singleLine="true"
+            android:textColor="@color/primary_black"
+            android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/_12ssp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/cvvErrorLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etlCard"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:src="@drawable/ic_erro" />
+
+        <TextView
+            android:id="@+id/cvvErrorTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutKeypad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <com.greenbox.coyni.utils.keyboards.CustomKeyboard
+            android:id="@+id/ckb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

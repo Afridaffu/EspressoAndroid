@@ -179,7 +179,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 .putExtra("NEW_PHONE", newPhoneNumber));
                     } else {
                         Utils.hideSoftKeyboard(EditPhoneActivity.this);
-                        Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "");
+                        Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -201,6 +201,6 @@ public class EditPhoneActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        newPhoneET.clearFocus();
+//        newPhoneET.clearFocus();
     }
 }

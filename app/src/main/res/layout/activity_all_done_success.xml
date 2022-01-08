@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="Your bank account has been successfully authorized and added to your payment \nmethods."
+                android:text="Your bank account has been successfully authorized and added to your payment \nmethod."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
@@ -55,7 +55,7 @@
                 android:layout_height="@dimen/_43sdp"
                 android:gravity="center"
                 app:cardBackgroundColor="@color/primary_green"
-                app:cardCornerRadius="@dimen/_21sdp">
+                app:cardCornerRadius="@dimen/_22sdp">
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/_22sdp">
 
@@ -14,7 +15,7 @@
             android:id="@+id/lyAPayClose"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -28,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
-            android:layout_marginBottom="@dimen/_22sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="left"
             android:text="Add Payment Method"
@@ -47,19 +47,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <ImageView
+                android:id="@+id/imgLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_addpayment_method" />
+                android:layout_marginTop="@dimen/_22sdp"
+                android:src="@drawable/ic_addpayment_method2" />
 
             <TextView
                 android:id="@+id/tvMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_18sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account."
                 android:textColor="@color/primary_black"
@@ -67,7 +67,7 @@
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:id="@+id/lyExternal"
+                android:id="@+id/lyAddExternal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_12sdp"
-                    android:src="@drawable/ic__01_bank" />
+                    android:src="@drawable/ic_bank_account_active" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_12sdp"
-                    android:src="@drawable/ic_credit_card" />
+                    android:src="@drawable/ic_credit_debit_card" />
 
                 <LinearLayout
                     android:id="@+id/layoutDDetails"
@@ -210,7 +210,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Visa or Mastercard debit cards"
+                        android:text="Visa or MasterCard Debit Cards"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9sdp" />
 
@@ -252,7 +252,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:src="@drawable/ic_credit_card" />
+                    android:src="@drawable/ic_credit_debit_card" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -293,7 +293,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Visa, MasterCard, Discover, and American \nExpress credit cards"
+                        android:text="Visa, MasterCard, Discover, and American \nExpress Credit Cards"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9sdp" />
 

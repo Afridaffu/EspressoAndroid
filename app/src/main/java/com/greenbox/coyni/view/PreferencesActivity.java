@@ -13,19 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
-import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -37,8 +34,8 @@ public class PreferencesActivity extends AppCompatActivity {
     ProgressDialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
-    TextInputLayout timeZoneTIL, accountTIL;
-    TextInputEditText timeZoneET, accountET;
+    TextInputLayout timeZoneTIL, accountTIL, currencyTIL;
+    TextInputEditText timeZoneET, accountET, currencyET;
     RelativeLayout timeZoneRL;
     LinearLayout preferencesCloseLL;
     ImageView accountDDIV;
@@ -73,11 +70,19 @@ public class PreferencesActivity extends AppCompatActivity {
             timeZoneTIL = findViewById(R.id.timeZoneTIL);
             timeZoneET = findViewById(R.id.timeZoneET);
             accountTIL = findViewById(R.id.accountTIL);
+            currencyTIL = findViewById(R.id.currencyTIL);
             accountET = findViewById(R.id.accountET);
+            currencyET = findViewById(R.id.currencyET);
             timeZoneRL = findViewById(R.id.timezoneRL);
             accountDDIV = findViewById(R.id.accountDDICon);
             disableView = findViewById(R.id.disableView);
             preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
+
+            currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            Utils.setUpperHintColor(currencyTIL, getColor(R.color.xdark_gray));
+
+            accountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
 
             timeZoneRL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -119,7 +124,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 }
             });
 
-            dialog =Utils.showProgressDialog(this);
+            dialog = Utils.showProgressDialog(this);
 
             dashboardViewModel.mePreferences();
 
@@ -150,7 +155,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             timeZoneET.setText(getString(R.string.MST));
                             myApplicationObj.setTempTimezone(getString(R.string.MST));
                             myApplicationObj.setTempTimezoneID(1);
-                            myApplicationObj.setStrPreference("MST");
+                            myApplicationObj.setStrPreference("America/Denver");
                         } else if (preferences.getData().getTimeZone() == 2) {
                             timeZoneET.setText(getString(R.string.CST));
                             myApplicationObj.setTempTimezone(getString(R.string.CST));
@@ -160,7 +165,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             timeZoneET.setText(getString(R.string.EST));
                             myApplicationObj.setTempTimezone(getString(R.string.EST));
                             myApplicationObj.setTempTimezoneID(3);
-                            myApplicationObj.setStrPreference("EST");
+                            myApplicationObj.setStrPreference("America/New_York");
                         } else if (preferences.getData().getTimeZone() == 4) {
                             timeZoneET.setText(getString(R.string.HST));
                             myApplicationObj.setTempTimezone(getString(R.string.HST));
@@ -186,18 +191,18 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(UserPreference userPreference) {
                 if (userPreference != null) {
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
-                        Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "");
-                    }else{
+                        Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
+                    } else {
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
                             myApplicationObj.setStrPreference("PST");
                         } else if (myApplicationObj.getTempTimezoneID() == 1) {
-                            myApplicationObj.setStrPreference("MST");
+                            myApplicationObj.setStrPreference("America/Denver");
                         } else if (myApplicationObj.getTempTimezoneID() == 2) {
                             myApplicationObj.setStrPreference("CST");
                         } else if (myApplicationObj.getTempTimezoneID() == 3) {
-                            myApplicationObj.setStrPreference("EST");
+                            myApplicationObj.setStrPreference("America/New_York");
                         } else if (myApplicationObj.getTempTimezoneID() == 4) {
                             myApplicationObj.setStrPreference("HST");
                         } else if (myApplicationObj.getTempTimezoneID() == 5) {
@@ -215,22 +220,25 @@ public class PreferencesActivity extends AppCompatActivity {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
-                if(profilesResponse!=null){
-                    accountET.setText(profilesResponse.getData().get(0).getEntityName());
+                if (profilesResponse != null) {
+                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
 
-                    if(profilesResponse.getStatus().equals("SUCCESS")){
-                        if(profilesResponse.getData().size() > 1){
+                    if (profilesResponse.getStatus().equals("SUCCESS")) {
+                        if (profilesResponse.getData().size() > 1) {
                             disableView.setVisibility(View.GONE);
                             accountDDIV.setVisibility(View.VISIBLE);
                             accountET.setClickable(true);
                             accountET.setEnabled(true);
-                        }else{
-                            Log.e("else","else");
+                            Utils.setUpperHintColor(accountTIL, getColor(R.color.black));
+
+                        } else {
+                            Log.e("else", "else");
                             accountDDIV.setVisibility(View.GONE);
                             disableView.setVisibility(View.VISIBLE);
                             accountET.setClickable(false);
                             accountET.setEnabled(false);
-                            Log.e("else","else");
+                            Log.e("else", "else");
+                            Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
                         }
 
 
@@ -242,7 +250,7 @@ public class PreferencesActivity extends AppCompatActivity {
         dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
-                if(apiError==null){
+                if (apiError == null) {
                     dialog.dismiss();
                 }
             }

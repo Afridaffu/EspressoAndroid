@@ -40,50 +40,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-<!--                    <androidx.cardview.widget.CardView-->
-<!--                        android:id="@+id/cvProfileSmall"-->
-<!--                        android:layout_width="@dimen/_30sdp"-->
-<!--                        android:layout_height="@dimen/_30sdp"-->
-<!--                        app:cardBackgroundColor="@color/white"-->
-<!--                        app:cardCornerRadius="@dimen/_15sdp">-->
-
-<!--                        <RelativeLayout-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent">-->
-
-<!--                            <ProgressBar-->
-<!--                                style="?android:attr/progressBarStyleHorizontal"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="match_parent"-->
-<!--                                android:background="@drawable/circle_shape"-->
-<!--                                android:indeterminate="false"-->
-<!--                                android:max="100"-->
-<!--                                android:progress="100"-->
-<!--                                android:progressDrawable="@drawable/circular_progress_bar" />-->
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/tvUserInfoSmall"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_centerInParent="true"-->
-<!--                                android:fontFamily="@font/opensans_bold"-->
-<!--                                android:text=""-->
-<!--                                android:textColor="@color/text_color"-->
-<!--                                android:textSize="14sp"-->
-<!--                                android:visibility="visible" />-->
-
-
-<!--                            <ImageView-->
-<!--                                android:id="@+id/imgProfileSmall"-->
-<!--                                android:layout_width="@dimen/_25sdp"-->
-<!--                                android:layout_height="@dimen/_25sdp"-->
-<!--                                android:layout_centerInParent="true"-->
-<!--                                android:scaleType="fitXY"-->
-<!--                                android:src="@drawable/ic_profile"-->
-<!--                                android:visibility="visible" />-->
-<!--                        </RelativeLayout>-->
-<!--                    </androidx.cardview.widget.CardView>-->
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cvProfileSmall"
                         android:layout_width="@dimen/_32sdp"
@@ -98,10 +54,11 @@
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/userProfileCV"
-                            android:layout_width="@dimen/_27sdp"
-                            android:layout_height="@dimen/_27sdp"
+                            android:layout_width="@dimen/_29sdp"
+                            android:layout_height="@dimen/_29sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
+                            app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="@dimen/_15sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +82,7 @@
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="VT"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_20sdp"
+                                android:textSize="@dimen/_14sdp"
                                 android:visibility="gone" />
                         </androidx.cardview.widget.CardView>
 
@@ -145,11 +102,18 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/notificationsSmallLL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:src="@drawable/ic_notifications" />
+                    android:layout_marginEnd="@dimen/_17sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -181,50 +145,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-<!--                    <androidx.cardview.widget.CardView-->
-<!--                        android:id="@+id/cvProfile"-->
-<!--                        android:layout_width="@dimen/_29sdp"-->
-<!--                        android:layout_height="@dimen/_29sdp"-->
-<!--                        app:cardBackgroundColor="@color/white"-->
-<!--                        app:cardCornerRadius="18dp">-->
-
-<!--                        <RelativeLayout-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent">-->
-
-<!--                            <ProgressBar-->
-<!--                                android:id="@+id/progressBar"-->
-<!--                                style="?android:attr/progressBarStyleHorizontal"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="match_parent"-->
-<!--                                android:background="@drawable/circle_shape"-->
-<!--                                android:indeterminate="false"-->
-<!--                                android:max="100"-->
-<!--                                android:progress="100"-->
-<!--                                android:progressDrawable="@drawable/circular_progress_bar" />-->
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/tvUserInfo"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_centerInParent="true"-->
-<!--                                android:fontFamily="@font/opensans_bold"-->
-<!--                                android:text=""-->
-<!--                                android:textColor="@color/text_color"-->
-<!--                                android:textSize="14sp"-->
-<!--                                android:visibility="gone" />-->
-
-<!--                            <ImageView-->
-<!--                                android:id="@+id/imgProfile"-->
-<!--                                android:layout_width="@dimen/_25sdp"-->
-<!--                                android:layout_height="@dimen/_25sdp"-->
-<!--                                android:layout_centerInParent="true"-->
-<!--                                android:scaleType="fitXY"-->
-<!--                                android:src="@drawable/ic_profile"-->
-<!--                                android:visibility="visible" />-->
-<!--                        </RelativeLayout>-->
-<!--                    </androidx.cardview.widget.CardView>-->
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cvProfile"
                         android:layout_width="@dimen/_32sdp"
@@ -242,6 +162,7 @@
                             android:layout_height="@dimen/_27sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
+                            app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="@dimen/_15sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -263,10 +184,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="VT"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_20sdp"
-                                android:visibility="gone" />
+                                android:textSize="@dimen/_14sdp"
+                                android:visibility="gone"
+                                tools:text="VT" />
                         </androidx.cardview.widget.CardView>
 
 
@@ -285,11 +206,41 @@
                         android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:src="@drawable/ic_notifications" />
+                <RelativeLayout
+                    android:id="@+id/notificationsLL"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginEnd="@dimen/_17sdp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/countCV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/primary_green"
+                        app:cardCornerRadius="@dimen/_10sdp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/countTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8ssp" />
+                    </androidx.cardview.widget.CardView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -350,6 +301,7 @@
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cvPayRequest"
                         android:layout_width="@dimen/_145sdp"
                         android:layout_height="@dimen/_32sdp"
                         android:layout_alignParentLeft="true"
@@ -394,444 +346,490 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/transactionsRL"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/latestTxnRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/layoutMenu"
         android:layout_below="@+id/cvHeader"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_marginEnd="@dimen/_10sdp">
 
-        <RelativeLayout
-            android:id="@+id/statusCardsRL"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/welcomeCoyniCV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_margin="1dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Welcome to Coyni!"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Tokenize Your Money With coyni"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:layout_marginBottom="@dimen/_22sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Add Payment"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <ImageView
-                                android:id="@+id/arrowIconIV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginTop="3dp"
-                                android:src="@drawable/ic_arrowicon" />
-
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/spAccountImage"
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="@dimen/_90sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_11sdp"
-                        android:src="@drawable/ic_add_payment" />
-
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/underReviewCV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_margin="1dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Account Status:"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text=" Under Review"
-                                android:textColor="@color/under_review_blue"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="@dimen/_8sdp"
-                                android:layout_height="@dimen/_8sdp"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_marginTop="@dimen/_2sdp"
-                                app:cardBackgroundColor="@color/under_review_blue"
-                                app:cardCornerRadius="@dimen/_4sdp" />
-                        </LinearLayout>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Our team is still reviewing your account. This process may take up to 3 business days."
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp" />
-
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="@dimen/_90sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_11sdp"
-                        android:src="@drawable/ic_in_progress_icon" />
-
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/additionalActionCV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_margin="1dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Additional Action Required"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Social Security number verification."
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:layout_marginBottom="@dimen/_22sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Continue"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginTop="3dp"
-                                android:src="@drawable/ic_arrowicon" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="@dimen/_90sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_11sdp"
-                        android:src="@drawable/ic_ssn_fail" />
-
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/buyTokensCV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_margin="1dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Welcome to Coyni!"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Start managing your money by Coyni tokens today!"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:layout_marginBottom="@dimen/_22sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Buy Token"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="@dimen/_90sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_11sdp"
-                        android:src="@drawable/ic_buy_token" />
-
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/recentTxnLL"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/transactionsNSV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/statusCardsRL"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:layout_above="@+id/layoutMenu"
+            android:layout_below="@+id/cvHeader"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:text="Recent Transactions"
-                android:textColor="@color/primary_green"
-                android:textSize="@dimen/_12ssp" />
-
-            <androidx.cardview.widget.CardView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="@dimen/_11sdp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
+                android:visibility="visible">
 
-                <ScrollView
+                <RelativeLayout
+                    android:id="@+id/statusCardsRL"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/welcomeCoyniCV"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
-                            android:id="@+id/rvLL"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingRight="@dimen/_10sdp">
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/txnRV"
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Welcome to Coyni!"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_12ssp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Tokenize Your Money With coyni"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:layout_marginBottom="@dimen/_22sdp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Add Payment"
+                                        android:textColor="@color/primary_color"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                    <ImageView
+                                        android:id="@+id/arrowIconIV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="15dp"
+                                        android:layout_marginTop="3dp"
+                                        android:src="@drawable/ic_arrowicon" />
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/spAccountImage"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_90sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_11sdp"
+                                android:src="@drawable/ic_add_payment" />
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/underReviewCV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingRight="@dimen/_10sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Account Status:"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="5dp"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text=" Under Review"
+                                            android:textColor="@color/under_review_blue"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="@dimen/_8sdp"
+                                            android:layout_height="@dimen/_8sdp"
+                                            android:layout_marginStart="@dimen/_5sdp"
+                                            android:layout_marginTop="@dimen/_2sdp"
+                                            app:cardBackgroundColor="@color/under_review_blue"
+                                            app:cardCornerRadius="@dimen/_4sdp" />
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Our team is still reviewing your account. This process may take \nup to 3 business days."
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="@dimen/_60sdp"
+                                android:layout_height="@dimen/_80sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_11sdp"
+                                android:src="@drawable/ic_in_progress_icon" />
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/additionalActionCV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingRight="@dimen/_10sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Additional Action Required"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp" />
+
+                                </LinearLayout>
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Social Security number verification."
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:layout_marginBottom="@dimen/_22sdp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Continue"
+                                        android:textColor="@color/primary_color"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="15dp"
+                                        android:layout_marginTop="3dp"
+                                        android:src="@drawable/ic_arrowicon" />
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_90sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_11sdp"
+                                android:src="@drawable/ic_ssn_fail" />
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/buyTokensCV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingRight="@dimen/_10sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Welcome to Coyni!"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp" />
+
+                                </LinearLayout>
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Start managing your money by Coyni tokens today!"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_7sdp"
+                                    android:layout_marginBottom="@dimen/_22sdp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Buy Token"
+                                        android:textColor="@color/primary_color"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_90sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_11sdp"
+                                android:src="@drawable/ic_buy_token" />
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/recentTxnLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/statusCardsRL"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Recent Transactions"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_12ssp" />
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <!--                    <ScrollView-->
+                        <!--                        android:layout_width="match_parent"-->
+                        <!--                        android:layout_height="match_parent">-->
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:id="@+id/rvLL"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="visible" />
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/noTxnTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_34sdp"
-                                android:fontFamily="@font/opensans_regular"
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/txnRV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/noTxnTV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_34sdp"
+                                    android:layout_marginBottom="@dimen/_100sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:gravity="center"
+                                    android:text="You have no recent transactions"
+                                    android:textColor="@color/light_gray"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/viewMoreLL"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_33sdp"
+                                android:layout_below="@id/rvLL"
+                                android:layout_centerInParent="true"
+                                android:layout_marginTop="@dimen/_26sdp"
+                                android:layout_marginBottom="@dimen/_20sdp"
+                                android:background="@drawable/shape_green_round_rect_core"
                                 android:gravity="center"
-                                android:text="You have no recent transactions"
-                                android:textColor="@color/light_gray"
-                                android:textSize="@dimen/_10ssp"
-                                android:visibility="visible" />
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
-                        </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_20sdp"
+                                    android:layout_marginEnd="@dimen/_20sdp"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:gravity="center"
+                                    android:text="View More"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="@dimen/_12ssp" />
+                            </LinearLayout>
+                        </RelativeLayout>
 
+                        <!--                    </ScrollView>-->
 
-                        <LinearLayout
-                            android:id="@+id/viewMoreLL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_33sdp"
-                            android:layout_below="@id/rvLL"
-                            android:layout_marginTop="@dimen/_36sdp"
-                            android:background="@drawable/shape_green_round_rect_core"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_centerInParent="true"
-                            android:visibility="gone"
-                            android:layout_marginBottom="@dimen/_20sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:layout_marginEnd="@dimen/_20sdp"
-                                android:fontFamily="@font/opensans_bold"
-                                android:gravity="center"
-                                android:text="View More"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_12ssp" />
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                </ScrollView>
-
-            </androidx.cardview.widget.CardView>
+                    </androidx.cardview.widget.CardView>
 
 
-        </LinearLayout>
-    </RelativeLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/getStartedCV"
@@ -1033,4 +1031,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </RelativeLayout>

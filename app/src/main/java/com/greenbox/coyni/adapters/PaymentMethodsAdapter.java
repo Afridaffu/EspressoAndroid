@@ -1,6 +1,8 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.EditCardActivity;
+import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 
 import java.util.List;
@@ -24,6 +28,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     List<PaymentsList> listPayments;
     Context mContext;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankHead, tvBankExpire, tvCardNumber, tvBankName, tvAccNumber;
@@ -82,7 +87,8 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.tvCardNumber.setVisibility(View.VISIBLE);
-                holder.tvCardNumber.setText(objData.getFirstSix() + "****" + objData.getLastFour());
+//                holder.tvCardNumber.setText(objData.getFirstSix() + " ****" + objData.getLastFour());
+                holder.tvCardNumber.setText(objData.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + objData.getLastFour());
                 if (!objData.getExpired()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
@@ -112,12 +118,12 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                     holder.tvBankExpire.setText("Expired");
                     switch (objData.getCardBrand().toUpperCase()) {
                         case "VISA":
-                            holder.tvBankHead.setText(objData.getCardBrand() + " " + objData.getCardType() + " Card");
+                            holder.tvBankHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType() + " Card"));
                             holder.imgBankIcon.setImageResource(R.drawable.ic_visaexpire);
                             holder.layoutBack.setBackgroundResource(R.drawable.ic_expiredvisa);
                             break;
                         case "MASTERCARD":
-                            holder.tvBankHead.setText(objData.getCardBrand() + " " + objData.getCardType() + " Card");
+                            holder.tvBankHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType() + " Card"));
                             holder.imgBankIcon.setImageResource(R.drawable.ic_masterexpire);
                             holder.layoutBack.setBackgroundResource(R.drawable.ic_expiredmaster);
                             break;
@@ -139,8 +145,24 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                            ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+                            if (!objData.getRelink()) {
+                                ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+                            } else {
+                                ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                            }
+                        } else if (!objData.getExpired()) {
+                            objMyApplication.setSelectedCard(objData);
+//                            Intent i = new Intent(mContext, EditCardActivity.class);
+//                            mContext.startActivity(i);
+                            ((PaymentMethodsActivity) mContext).editCard();
+                        } else {
+                            objMyApplication.setSelectedCard(objData);
+                            ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

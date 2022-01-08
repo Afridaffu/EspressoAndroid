@@ -13,7 +13,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.bank.SignOnData;
@@ -31,6 +30,7 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
             setContentView(R.layout.activity_web_view);
 
             SignOnData signOnData;

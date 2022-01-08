@@ -1,9 +1,11 @@
 package com.greenbox.coyni.utils.outline_et;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.CreateAccountActivity;
+import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
 
 public class CardNumberEditText extends ConstraintLayout {
@@ -25,10 +28,10 @@ public class CardNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
     private EditText cnET;
-    private ImageView imgCardType;
+    private ImageView imgCardType, readCardIV;
     boolean isPhoneError = false;
-
     public String cardType = "";
+    public String from = "";
 
     public CardNumberEditText(Context context) {
         this(context, null, 0);
@@ -49,39 +52,54 @@ public class CardNumberEditText extends ConstraintLayout {
         hintHolder = findViewById(R.id.hintdHolderLL);
         cnET = findViewById(R.id.pnET);
         imgCardType = findViewById(R.id.imgCardType);
+        readCardIV = findViewById(R.id.readCardIV);
         cnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                try {
-                    if (b) {
-                        hintName.setTextColor(getResources().getColor(R.color.primary_color));
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
-                    } else {
-                        if ((cnET.getText().length() > 0)) {
-                            if (!cardType.contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
-                                hintName.setTextColor(getResources().getColor(R.color.error_red));
-                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
-                                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
-                            } else if (cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() != 18) {
-                                hintName.setTextColor(getResources().getColor(R.color.error_red));
-                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
-                                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
-                            }
-                        } else if ((cnET.getText().length() == 0)) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
-                            AddCardActivity.addCardActivity.cardErrorTV.setText("Field Required");
+
+                if (from.equals("ADD_CARD")) {
+                    try {
+                        if (b) {
+                            hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            if ((cnET.getText().length() > 0)) {
+//                            if (!cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
+//                                AddCardActivity.addCardActivity.isCard = false;
+//                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+//                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+//                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
+//                                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
+//                            } else if (cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() != 18) {
+//                                AddCardActivity.addCardActivity.isCard = false;
+//                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+//                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+//                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
+//                                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
+//                            } else {
+//                                AddCardActivity.addCardActivity.isCard = true;
+//                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+//                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+//                            }
+                                cardValidation(cnET.getText().toString());
+                            } else if ((cnET.getText().length() == 0)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
+                                AddCardActivity.addCardActivity.cardErrorTV.setText("Field Required");
+                            } else {
+                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            }
+                            AddCardActivity.addCardActivity.enableOrDisableNext();
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } else {
+
                 }
+
             }
         });
 
@@ -93,47 +111,58 @@ public class CardNumberEditText extends ConstraintLayout {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                try {
-                    if (i2 > 2) {
-                        if (charSequence != null && charSequence.length() >= 15) {
+                if (from.equals("ADD_CARD")) {
+                    try {
+                        if (i2 > 2) {
                             AddCardActivity.addCardActivity.getCardype(charSequence.toString());
+                            if ((cardType.equals("american") && charSequence.toString().trim().length() != 18) || (!cardType.equals("american") && charSequence.toString().trim().length() < 19)) {
+                                AddCardActivity.addCardActivity.isCard = false;
+                            } else {
+                                AddCardActivity.addCardActivity.isCard = true;
+                            }
+                        } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {
+                            AddCardActivity.addCardActivity.isCard = true;
+                            AddCardActivity.addCardActivity.cardErrorLL.setVisibility(GONE);
+                            hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                        } else {
+                            imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
+//                            imgCardType.setVisibility(INVISIBLE);
+                            AddCardActivity.addCardActivity.isCard = false;
                         }
-                    } else if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 20) {
-                        AddCardActivity.addCardActivity.isCard = true;
-                        AddCardActivity.addCardActivity.cardErrorLL.setVisibility(GONE);
-                        hintName.setTextColor(getResources().getColor(R.color.primary_color));
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
-                    } else {
-                        AddCardActivity.addCardActivity.isCard = false;
+                        AddCardActivity.addCardActivity.enableOrDisableNext();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    AddCardActivity.addCardActivity.enableOrDisableNext();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                try {
-                    if (s.length() == 7) {
-                        AddCardActivity.addCardActivity.getCardype(s.toString());
-                    } else if (s.toString().trim().length() == 0) {
-                        imgCardType.setImageResource(R.drawable.ic_visa_inactive);
-                        AddCardActivity.addCardActivity.clearControls();
+                if (from.equals("ADD_CARD")) {
+                    try {
+                        if (s.length() == 7) {
+                            AddCardActivity.addCardActivity.getCardype(s.toString());
+                        } else if (s.toString().trim().length() == 0) {
+                            imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
+//                            imgCardType.setVisibility(INVISIBLE);
+                            AddCardActivity.addCardActivity.clearControls();
+                        }
+                        String str = cnET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            cnET.setText("");
+                            cnET.setSelection(cnET.getText().length());
+                        } else if (str.length() > 0 && str.contains(".")) {
+                            cnET.setText(cnET.getText().toString().replaceAll("\\.", ""));
+                            cnET.setSelection(cnET.getText().length());
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            cnET.setText("");
+                            cnET.setSelection(cnET.getText().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    String str = cnET.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
-                        cnET.setText("");
-                        cnET.setSelection(cnET.getText().length());
-                    } else if (str.length() > 0 && str.contains(".")) {
-                        cnET.setText(cnET.getText().toString().replaceAll("\\.", ""));
-                        cnET.setSelection(cnET.getText().length());
-                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                        cnET.setText("");
-                        cnET.setSelection(cnET.getText().length());
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
             }
         });
@@ -142,6 +171,10 @@ public class CardNumberEditText extends ConstraintLayout {
 
     public void setText(String text) {
         cnET.setText(text);
+    }
+
+    public void setSelection() {
+        cnET.setSelection(cnET.getText().length());
     }
 
     public String getText() {
@@ -166,5 +199,65 @@ public class CardNumberEditText extends ConstraintLayout {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ImageView getCardReaderIVRef() {
+        return readCardIV;
+    }
+
+    private void cardValidation(String strCard) {
+        try {
+            if (!cardType.toLowerCase().contains("american") && !strCard.equals("") && strCard.length() < 19) {
+                AddCardActivity.addCardActivity.isCard = false;
+                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
+                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
+            } else if (cardType.toLowerCase().contains("american") && !strCard.equals("") && strCard.length() != 18) {
+                AddCardActivity.addCardActivity.isCard = false;
+                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
+                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
+            } else {
+                AddCardActivity.addCardActivity.isCard = true;
+                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void disableEditText() {
+        cnET.setEnabled(false);
+        cnET.setTextColor(getResources().getColor(R.color.xdark_gray));
+        hintName.setTextColor(getResources().getColor(R.color.xdark_gray));
+        hintName.setBackgroundColor(Color.TRANSPARENT);
+        hintHolder.setBackground(null);
+    }
+
+    public void hideCamera() {
+        readCardIV.setVisibility(GONE);
+    }
+
+    public void setFrom(String strFrom) {
+        from = strFrom;
+    }
+
+    public void removeError() {
+        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
+
+    public void requestCNETFocus() {
+        cnET.requestFocus();
+        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+    }
+
+    public void hideBrandIcon() {
+//        imgCardType.setVisibility(INVISIBLE);
+        imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
     }
 }

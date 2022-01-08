@@ -1,12 +1,15 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,22 +20,27 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.wallet.WalletInfo;
@@ -42,27 +50,35 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
+    public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL;
+    LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
+    RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance;
+    public NotificationsViewModel notificationsViewModel;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV;
     MyApplication objMyApplication;
     Dialog dialog;
-    ProgressDialog progressDialog;
-    RelativeLayout cvHeaderRL, cvSmallHeaderRL, transactionsRL;
-    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
+    RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
+    NestedScrollView transactionsNSV;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, cvPayRequest, countCV;
     ImageView imgProfileSmall, imgProfile;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
+    SwipeRefreshLayout latestTxnRefresh;
+    String strName = "", strFirstUser = "";
+    ConstraintLayout cvProfileSmall, cvProfile;
+    SQLiteDatabase mydatabase;
+    Cursor dsUserDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +91,28 @@ public class DashboardActivity extends AppCompatActivity {
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
-            getStates();
+//            getStates();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        try {
+            switch (requestCode) {
+                case REQUEST_READ_CONTACTS:
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        objMyApplication.setContactPermission(true);
+                    } else {
+                        // permission denied,Disable the
+                        // functionality that depends on this permission.
+                        objMyApplication.setContactPermission(false);
+                    }
+                    startActivity(new Intent(DashboardActivity.this, AddRecipientActivity.class));
+                    break;
+            }
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -86,7 +123,7 @@ public class DashboardActivity extends AppCompatActivity {
             cvHeaderRL = findViewById(R.id.cvHeaderRL);
             cvSmallHeaderRL = findViewById(R.id.cvSmallHeaderRL);
             getStartedCV = findViewById(R.id.getStartedCV);
-            transactionsRL = findViewById(R.id.transactionsRL);
+            transactionsNSV = findViewById(R.id.transactionsNSV);
             imgProfileSmall = findViewById(R.id.imgProfileSmall);
             imgProfile = findViewById(R.id.imgProfile);
 
@@ -96,6 +133,7 @@ public class DashboardActivity extends AppCompatActivity {
             underReviewCV = findViewById(R.id.underReviewCV);
             additionalActionCV = findViewById(R.id.additionalActionCV);
             buyTokensCV = findViewById(R.id.buyTokensCV);
+            cvPayRequest = findViewById(R.id.cvPayRequest);
 
             layoutMainMenu = findViewById(R.id.layoutMainMenu);
             layoutProfile = findViewById(R.id.layoutProfile);
@@ -110,32 +148,56 @@ public class DashboardActivity extends AppCompatActivity {
             noTxnTV = findViewById(R.id.noTxnTV);
             tvBalance = findViewById(R.id.tvBalance);
             viewMoreLL = findViewById(R.id.viewMoreLL);
+            statusCardsRL = findViewById(R.id.statusCardsRL);
+            latestTxnRefresh = findViewById(R.id.latestTxnRefresh);
+            cvProfileSmall = findViewById(R.id.cvProfileSmall);
+            cvProfile = findViewById(R.id.cvProfile);
+            notificationsSmallLL = findViewById(R.id.notificationsSmallLL);
+            notificationsLL = findViewById(R.id.notificationsLL);
+            countTV = findViewById(R.id.countTV);
+            countCV = findViewById(R.id.countCV);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
-
+            notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+            SetDB();
+            if (strFirstUser.equals("")) {
+                saveFirstUser();
+            }
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            showQuickAction(DashboardActivity.this);
+                        } else {
+                            Utils.showCustomToast(DashboardActivity.this, "Please complete your Identity Verification process.", 0, "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.showQuickAction(DashboardActivity.this);
                 }
             });
 
             layoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Intent i = new Intent(DashboardActivity.this, CustomerProfileActivity.class);
+                        startActivity(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(DashboardActivity.this, CustomerProfileActivity.class);
-                    startActivity(i);
                 }
             });
 
@@ -147,6 +209,7 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     cryptoAssets();
+//                    startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
                 }
             });
 
@@ -160,6 +223,7 @@ public class DashboardActivity extends AppCompatActivity {
                     issueCards();
                 }
             });
+
             scanQr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -167,7 +231,7 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
                 }
             });
 
@@ -178,7 +242,9 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, IdentityVerificationActivity.class));
+                    Intent i = new Intent(DashboardActivity.this, BindingLayoutActivity.class);
+                    i.putExtra("screen", "profileGetStarted");
+                    startActivity(i);
                 }
             });
 
@@ -189,7 +255,8 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, PaymentMethodsActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, PaymentMethodsActivity.class)
+                            .putExtra("screen", "dashboard"));
                 }
             });
 
@@ -222,7 +289,127 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(DashboardActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "dashboard");
+                    startActivity(i);
+                }
+            });
 
+            cvPayRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
+//                    startActivity(i);
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                            return;
+                        }
+                        mLastClickTimeQA = SystemClock.elapsedRealtime();
+                        requestPermission();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            viewMoreLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    startActivity(new Intent(DashboardActivity.this, TransactionListActivity.class));
+                }
+            });
+
+            latestTxnRefresh.setColorSchemeColors(getResources().getColor(R.color.primary_green));
+
+            latestTxnRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
+                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                        dashboardViewModel.getLatestTxns();
+                        dashboardViewModel.meWallet();
+                        transactionsNSV.smoothScrollTo(0, 0);
+                    } else {
+                        latestTxnRefresh.setRefreshing(false);
+                    }
+                }
+            });
+
+            tvUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (tvUserName.getText().toString().contains("...")) {
+                        if (strName.length() == 21 || strName.length() > 21) {
+                            tvUserName.setText(strName.substring(0, 20));
+                        } else {
+                            tvUserName.setText(strName);
+                        }
+                    } else {
+                        if (strName.length() == 21) {
+                            tvUserName.setText(strName.substring(0, 20) + "...");
+                        } else if (strName.length() > 22) {
+                            tvUserName.setText(strName.substring(0, 22) + "...");
+                        } else {
+                            tvUserName.setText(strName);
+                        }
+                    }
+                }
+            });
+
+            tvUserNameSmall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (tvUserNameSmall.getText().toString().contains("...")) {
+                        if (strName.length() == 21 || strName.length() > 21) {
+                            tvUserNameSmall.setText(strName.substring(0, 20));
+                        } else {
+                            tvUserNameSmall.setText(strName);
+                        }
+                    } else {
+                        if (strName.length() == 21) {
+                            tvUserNameSmall.setText(strName.substring(0, 20) + "...");
+                        } else if (strName.length() > 22) {
+                            tvUserNameSmall.setText(strName.substring(0, 22) + "...");
+                        } else {
+                            tvUserNameSmall.setText(strName);
+                        }
+                    }
+                }
+            });
+
+            cvProfileSmall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
+                }
+            });
+
+            cvProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
+                }
+            });
+
+            notificationsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, NotificationsActivity.class));
+                }
+            });
+
+            notificationsSmallLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, NotificationsActivity.class));
                 }
             });
 
@@ -238,17 +425,24 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onChanged(Profile profile) {
                 if (profile != null) {
-                    progressDialog.dismiss();
+//                    progressDialog.dismiss();
                     objMyApplication.setMyProfile(profile);
                     identityVerificationViewModel.getStatusTracker();
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                    String strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                    if (strName != null && strName.length() > 21) {
-                        tvUserName.setText("Hi " + strName.substring(0, 21) + "...");
-                        tvUserNameSmall.setText("Hi " + strName.substring(0, 21) + "...");
+                    strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+//                    if (strName != null && strName.length() > 21) {
+//                        tvUserName.setText( strName.substring(0, 21) + "...");
+//                        tvUserNameSmall.setText( strName.substring(0, 21) + "...");
+//                    } else {
+//                        tvUserName.setText( strName);
+//                        tvUserNameSmall.setText( strName);
+//                    }
+                    if (objMyApplication.getStrUserName().length() > 20) {
+                        tvUserName.setText(strName.substring(0, 20));
+                        tvUserNameSmall.setText(strName.substring(0, 20));
                     } else {
-                        tvUserName.setText("Hi " + strName);
-                        tvUserNameSmall.setText("Hi " + strName);
+                        tvUserName.setText(strName);
+                        tvUserNameSmall.setText(strName);
                     }
                     bindImage();
                 }
@@ -266,89 +460,93 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        try {
-            identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
-                @Override
-                public void onChanged(TrackerResponse trackerResponse) {
+        identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
+            @Override
+            public void onChanged(TrackerResponse trackerResponse) {
 
-                    if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
-                        objMyApplication.setTrackerResponse(trackerResponse);
+                if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                    objMyApplication.setTrackerResponse(trackerResponse);
 
-                        if (trackerResponse.getData().isPersonIdentified()) {
+                    if (trackerResponse.getData().isPersonIdentified()) {
+                        cvHeaderRL.setVisibility(View.VISIBLE);
+                        cvSmallHeaderRL.setVisibility(View.GONE);
+                        getStartedCV.setVisibility(View.GONE);
+                        transactionsNSV.setVisibility(View.VISIBLE);
+
+                        if (trackerResponse.getData().isPaymentModeAdded()) {
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            underReviewCV.setVisibility(View.GONE);
+                            additionalActionCV.setVisibility(View.GONE);
+                            buyTokensCV.setVisibility(View.GONE);
+
+                            dashboardViewModel.getLatestTxns();
+
+                        } else {
+                            welcomeCoyniCV.setVisibility(View.VISIBLE);
+                            underReviewCV.setVisibility(View.GONE);
+                            additionalActionCV.setVisibility(View.GONE);
+                            buyTokensCV.setVisibility(View.GONE);
+                            txnRV.setVisibility(View.GONE);
+                            noTxnTV.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                            cvHeaderRL.setVisibility(View.GONE);
+                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
+                            getStartedCV.setVisibility(View.VISIBLE);
+                            transactionsNSV.setVisibility(View.GONE);
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
                             getStartedCV.setVisibility(View.GONE);
-                            transactionsRL.setVisibility(View.VISIBLE);
+                            transactionsNSV.setVisibility(View.VISIBLE);
 
-                            if (trackerResponse.getData().isPaymentModeAdded()) {
-                                welcomeCoyniCV.setVisibility(View.GONE);
-                                underReviewCV.setVisibility(View.GONE);
-                                additionalActionCV.setVisibility(View.GONE);
-                                buyTokensCV.setVisibility(View.GONE);
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            underReviewCV.setVisibility(View.VISIBLE);
+                            additionalActionCV.setVisibility(View.GONE);
+                            buyTokensCV.setVisibility(View.GONE);
 
-                                dashboardViewModel.getLatestTxns();
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
+                            cvHeaderRL.setVisibility(View.VISIBLE);
+                            cvSmallHeaderRL.setVisibility(View.GONE);
+                            getStartedCV.setVisibility(View.GONE);
+                            transactionsNSV.setVisibility(View.VISIBLE);
 
-                            } else {
-                                welcomeCoyniCV.setVisibility(View.VISIBLE);
-                                underReviewCV.setVisibility(View.GONE);
-                                additionalActionCV.setVisibility(View.GONE);
-                                buyTokensCV.setVisibility(View.GONE);
-                            }
-                        } else {
-                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                                cvHeaderRL.setVisibility(View.GONE);
-                                cvSmallHeaderRL.setVisibility(View.VISIBLE);
-                                getStartedCV.setVisibility(View.VISIBLE);
-                                transactionsRL.setVisibility(View.GONE);
-                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
-                                cvHeaderRL.setVisibility(View.VISIBLE);
-                                cvSmallHeaderRL.setVisibility(View.GONE);
-                                getStartedCV.setVisibility(View.GONE);
-                                transactionsRL.setVisibility(View.VISIBLE);
-
-                                welcomeCoyniCV.setVisibility(View.GONE);
-                                underReviewCV.setVisibility(View.VISIBLE);
-                                additionalActionCV.setVisibility(View.GONE);
-                                buyTokensCV.setVisibility(View.GONE);
-
-                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
-                                cvHeaderRL.setVisibility(View.VISIBLE);
-                                cvSmallHeaderRL.setVisibility(View.GONE);
-                                getStartedCV.setVisibility(View.GONE);
-                                transactionsRL.setVisibility(View.VISIBLE);
-
-                                welcomeCoyniCV.setVisibility(View.GONE);
-                                underReviewCV.setVisibility(View.GONE);
-                                additionalActionCV.setVisibility(View.VISIBLE);
-                                buyTokensCV.setVisibility(View.GONE);
-
-                            }
-
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            underReviewCV.setVisibility(View.GONE);
+                            additionalActionCV.setVisibility(View.VISIBLE);
+                            buyTokensCV.setVisibility(View.GONE);
 
                         }
-                    }
 
+
+                    }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+            }
+        });
 
         dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
             @Override
             public void onChanged(LatestTxnResponse latestTxnResponse) {
+                latestTxnRefresh.setRefreshing(false);
                 if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
                     cvHeaderRL.setVisibility(View.VISIBLE);
                     cvSmallHeaderRL.setVisibility(View.GONE);
                     getStartedCV.setVisibility(View.GONE);
-                    transactionsRL.setVisibility(View.VISIBLE);
+                    transactionsNSV.setVisibility(View.VISIBLE);
 
                     welcomeCoyniCV.setVisibility(View.GONE);
                     underReviewCV.setVisibility(View.GONE);
                     additionalActionCV.setVisibility(View.GONE);
-                    if (latestTxnResponse.getData().size() > 0) {
-                        buyTokensCV.setVisibility(View.GONE);
 
+                    if (latestTxnResponse.getData().size() == 0) {
+                        txnRV.setVisibility(View.GONE);
+                        noTxnTV.setVisibility(View.VISIBLE);
+                        buyTokensCV.setVisibility(View.VISIBLE);
+
+                    } else if (latestTxnResponse.getData().size() > 4) {
+                        buyTokensCV.setVisibility(View.GONE);
                         txnRV.setVisibility(View.VISIBLE);
                         viewMoreLL.setVisibility(View.VISIBLE);
                         noTxnTV.setVisibility(View.GONE);
@@ -357,10 +555,16 @@ public class DashboardActivity extends AppCompatActivity {
                         txnRV.setLayoutManager(mLayoutManager);
                         txnRV.setItemAnimator(new DefaultItemAnimator());
                         txnRV.setAdapter(latestTxnAdapter);
-                    } else {
-                        txnRV.setVisibility(View.GONE);
-                        noTxnTV.setVisibility(View.VISIBLE);
-                        buyTokensCV.setVisibility(View.VISIBLE);
+                    } else if (latestTxnResponse.getData().size() <= 4) {
+                        buyTokensCV.setVisibility(View.GONE);
+                        txnRV.setVisibility(View.VISIBLE);
+                        viewMoreLL.setVisibility(View.GONE);
+                        noTxnTV.setVisibility(View.GONE);
+                        LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
+                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
+                        txnRV.setLayoutManager(mLayoutManager);
+                        txnRV.setItemAnimator(new DefaultItemAnimator());
+                        txnRV.setAdapter(latestTxnAdapter);
                     }
 
                 }
@@ -385,6 +589,109 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
+            @Override
+            public void onChanged(Preferences preferences) {
+
+                try {
+                    if (preferences != null) {
+                        if (preferences.getData().getTimeZone() == 0) {
+                            objMyApplication.setTempTimezone(getString(R.string.PST));
+                            objMyApplication.setTempTimezoneID(0);
+                            objMyApplication.setStrPreference("PST");
+                        } else if (preferences.getData().getTimeZone() == 1) {
+                            objMyApplication.setTempTimezone(getString(R.string.MST));
+                            objMyApplication.setTempTimezoneID(1);
+                            objMyApplication.setStrPreference("America/Denver");
+                        } else if (preferences.getData().getTimeZone() == 2) {
+                            objMyApplication.setTempTimezone(getString(R.string.CST));
+                            objMyApplication.setTempTimezoneID(2);
+                            objMyApplication.setStrPreference("CST");
+                        } else if (preferences.getData().getTimeZone() == 3) {
+                            objMyApplication.setTempTimezone(getString(R.string.EST));
+                            objMyApplication.setTempTimezoneID(3);
+                            objMyApplication.setStrPreference("America/New_York");
+                        } else if (preferences.getData().getTimeZone() == 4) {
+                            objMyApplication.setTempTimezone(getString(R.string.HST));
+                            objMyApplication.setTempTimezoneID(4);
+                            objMyApplication.setStrPreference("HST");
+                        } else if (preferences.getData().getTimeZone() == 5) {
+                            objMyApplication.setTempTimezone(getString(R.string.AST));
+                            objMyApplication.setTempTimezoneID(5);
+                            objMyApplication.setStrPreference("AST");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                }
+            }
+        });
+
+        try {
+            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+//
+                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                        int count = 0;
+                        for (int i = 0; i < notifications.getData().getItems().size(); i++) {
+                            if (!notifications.getData().getItems().get(i).isRead()) {
+                                count++;
+                            }
+                        }
+                        if (count > 0) {
+                            countCV.setVisibility(View.VISIBLE);
+                            countTV.setText(count + "");
+                        } else {
+                            countCV.setVisibility(View.GONE);
+                        }
+
+                        Log.e("count", count + "");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void SetDB() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+            dsUserDetails.moveToFirst();
+            if (dsUserDetails.getCount() > 0) {
+                strFirstUser = dsUserDetails.getString(1);
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+            }
+        }
+    }
+
+    private void saveFirstUser() {
+        try {
+            if (strFirstUser.equals("")) {
+                strFirstUser = objMyApplication.getStrEmail();
+            }
+            mydatabase.execSQL("Delete from tblUserDetails");
+            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void cryptoAssets() {
@@ -455,8 +762,9 @@ public class DashboardActivity extends AppCompatActivity {
 //                notificationsViewModel.meNotifications();
 //                payViewModel.getReceiveRequests();
                 customerProfileViewModel.meSignOn();
-//                dashboardViewModel.mePaymentMethods();
+                dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
+                notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -467,26 +775,6 @@ public class DashboardActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean list) {
             super.onPostExecute(list);
 
-        }
-    }
-
-    private void getStates() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("states.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<States>>() {
-            }.getType();
-            List<States> listStates = gson.fromJson(json, type);
-            objMyApplication.setListStates(listStates);
-            Log.e("list states", listStates.size() + "");
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -542,10 +830,11 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (Utils.checkInternet(DashboardActivity.this)) {
-            progressDialog = Utils.showProgressDialog(this);
+//            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
+            dashboardViewModel.mePreferences();
         } else {
-            Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "");
+            Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }
     }
 
@@ -562,6 +851,103 @@ public class DashboardActivity extends AppCompatActivity {
                         objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
                     }
                 }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showQuickAction(final Context context) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_quick_action);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        LinearLayout scanLL = dialog.findViewById(R.id.scanLL);
+        LinearLayout payRequestLL = dialog.findViewById(R.id.payRequestLL);
+        LinearLayout buyTokenLL = dialog.findViewById(R.id.buyTokenLL);
+        LinearLayout widthdrawLL = dialog.findViewById(R.id.widthdrawLL);
+
+        scanLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
+            }
+        });
+
+        payRequestLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                requestPermission();
+//                startActivity(new Intent(DashboardActivity.this, AddRecipientActivity.class));
+            }
+        });
+
+        buyTokenLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                dialog.dismiss();
+                Intent i = new Intent(context, BuyTokenPaymentMethodsActivity.class);
+                i.putExtra("screen", "dashboard");
+                context.startActivity(i);
+            }
+        });
+
+        widthdrawLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                dialog.dismiss();
+                Intent i = new Intent(context, WithdrawPaymentMethodsActivity.class);
+                context.startActivity(i);
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    private void requestPermission() {
+        try {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
+                // show UI part if you want here to show some rationale !!!
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
+                        REQUEST_READ_CONTACTS);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
+                        REQUEST_READ_CONTACTS);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
