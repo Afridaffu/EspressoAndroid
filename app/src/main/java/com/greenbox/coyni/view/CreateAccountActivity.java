@@ -62,7 +62,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends BaseActivity {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
@@ -103,7 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     ColorStateList errorColorState, colorState;
 
     boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false, isAgreed = false;
-
+    private int mAccountType = Utils.PERSONAL_ACCOUNT;
     RelativeLayout mainRL;
     ScrollView mainSV;
     public static int focusedID = 0;
@@ -119,6 +119,9 @@ public class CreateAccountActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
+            if(getIntent() != null) {
+                mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
+            }
             initFields();
             initObservers();
         } catch (Exception e) {
@@ -327,6 +330,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (custRegisterResponse.getStatus().toLowerCase().equals("success")) {
                             try {
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
+                                i.putExtra(Utils.ACCOUNT_TYPE, mAccountType);
                                 if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                                     i.putExtra("screen", "SignUp");
                                     i.putExtra("OTP_TYPE", "MOBILE");
@@ -1012,7 +1016,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             regisRequest.setEmail(emailET.getText().toString().trim());
             regisRequest.setCreatePassword(passwordET.getText().toString().trim());
             regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
-            regisRequest.setAccountType(Utils.PERSONAL_ACCOUNT);
+            regisRequest.setAccountType(mAccountType);
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
             if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {
