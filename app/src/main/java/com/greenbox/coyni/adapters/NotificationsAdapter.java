@@ -1,9 +1,9 @@
 package com.greenbox.coyni.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -16,10 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
+import com.greenbox.coyni.model.notification.StatusRequest;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
+import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
 import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
-import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
 
 import java.util.ArrayList;
@@ -27,12 +30,14 @@ import java.util.List;
 
 public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdapter.MyViewHolder> {
     Context mContext;
+    //    String type = "";
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
 
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
         this.mContext = context;
+//        this.type = type;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -59,6 +64,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                 holder.swipeLayout.setLeftSwipeEnabled(true);
                 holder.swipeLayout.setRightSwipeEnabled(true);
+                holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
 
                 holder.fromRequesterLL.setVisibility(View.GONE);
                 holder.meRequestLL.setVisibility(View.GONE);
@@ -104,33 +110,58 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 });
             } else if (notifications.get(position).getType().equals("Received")) {
 
+                Log.e("Status", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
                 holder.swipeLayout.setLeftSwipeEnabled(false);
                 holder.swipeLayout.setRightSwipeEnabled(false);
                 holder.messageTV.setVisibility(View.GONE);
+                holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
 
-                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-                        notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-                                .getData().getWalletInfo().get(0).getWalletId())) {
-                    holder.meRequestLL.setVisibility(View.VISIBLE);
-                    holder.fromRequesterLL.setVisibility(View.GONE);
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-                        !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-                                .getData().getWalletInfo().get(0).getWalletId())) {
+
+//                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
+//                        notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+//                                .getData().getWalletInfo().get(0).getWalletId())) {
+//                    holder.meRequestLL.setVisibility(View.VISIBLE);
+//                    holder.fromRequesterLL.setVisibility(View.GONE);
+//                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
+//                        !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+//                                .getData().getWalletInfo().get(0).getWalletId())) {
+//                    holder.meRequestLL.setVisibility(View.GONE);
+//                    holder.fromRequesterLL.setVisibility(View.VISIBLE);
+//                }
+                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                    holder.payLL.setVisibility(View.VISIBLE);
+                    holder.denyLL.setVisibility(View.VISIBLE);
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
-                    Log.e("cancelled","cancelled");
+                    Log.e("cancelled", "cancelled");
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getToUser()+" cancelled this request");
+                    holder.messageTV.setText(notifications.get(position).getFromUser() + " cancelled this request");
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
                     holder.meRequestLL.setVisibility(View.VISIBLE);
                     holder.remindLL.setVisibility(View.INVISIBLE);
                     holder.remindLL.setClickable(false);
                     holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getToUser()+" sent a reminder to you");
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")) {
+                    holder.messageTV.setText(notifications.get(position).getFromUser() + " sent a reminder to you");
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
+                        && notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+                        .getData().getWalletInfo().get(0).getWalletId())) {
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText(notifications.get(position).getFromUser() + " declined this request");
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
+                        && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+                        .getData().getWalletInfo().get(0).getWalletId())) {
+                    holder.meRequestLL.setVisibility(View.GONE);
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText("You declined this request");
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
+                        && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+                        .getData().getWalletInfo().get(0).getWalletId())) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);
@@ -144,6 +175,15 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     @Override
                     public void onClick(View view) {
                         Log.e("denyLL", "denyLL");
+                        ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                        StatusRequest statusRequest = new StatusRequest();
+                        statusRequest.setId(notifications.get(position).getId());
+                        statusRequest.setStatus("Declined");
+                        statusRequest.setRemarks("");
+                        ((NotificationsActivity) mContext).updatedStatus = "Declined";
+
+                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
 
@@ -151,46 +191,50 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     @Override
                     public void onClick(View view) {
                         Log.e("payLL", "payLL");
+
+                        if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()) {
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                            TransferPayRequest request = new TransferPayRequest();
+                            request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
+                            request.setRemarks(notifications.get(position).getRemarks());
+                            request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
+
+                            ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                        } else {
+                            Utils.displayAlert("Amount exceeds available balance\nAvailable: "+objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()+" CYN",(Activity) mContext,"","");
+                        }
                     }
                 });
 
-                holder.cancelLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("cancelLL", "cancelLL");
-                    }
-                });
-
-                holder.remindLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("remindLL", "remindLL");
-                    }
-                });
 
             } else {
+                Log.e("Status Sent ", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
                 holder.swipeLayout.setLeftSwipeEnabled(false);
                 holder.swipeLayout.setRightSwipeEnabled(false);
 
                 holder.subject.setText(notifications.get(position).getContent());
                 holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
-                holder.messageTV.setVisibility(View.VISIBLE);
-                holder.messageTV.setText(notifications.get(position).getStatus() + " Received");
+                holder.messageTV.setVisibility(View.GONE);
                 holder.readStatusCV.setVisibility(View.GONE);
 
                 holder.fromRequesterLL.setVisibility(View.GONE);
 
                 if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
+//                    holder.meRequestLL.setVisibility(View.VISIBLE);
+//                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
+//                            notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
+//                                    .getData().getWalletInfo().get(0).getWalletId())) {
+//                        holder.meRequestLL.setVisibility(View.VISIBLE);
+//                        holder.fromRequesterLL.setVisibility(View.GONE);
+//                    } else {
+//                        holder.meRequestLL.setVisibility(View.GONE);
+//                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
+//                    }
                     holder.meRequestLL.setVisibility(View.VISIBLE);
-                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-                            notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-                                    .getData().getWalletInfo().get(0).getWalletId())) {
-                        holder.meRequestLL.setVisibility(View.VISIBLE);
-                        holder.fromRequesterLL.setVisibility(View.GONE);
-                    } else {
-                        holder.meRequestLL.setVisibility(View.GONE);
-                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
-                    }
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+                    holder.remindLL.setVisibility(View.VISIBLE);
+                    holder.cancelLL.setVisibility(View.VISIBLE);
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);
@@ -226,6 +270,15 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     @Override
                     public void onClick(View view) {
                         Log.e("cancelLL", "cancelLL");
+                        ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                        StatusRequest statusRequest = new StatusRequest();
+                        statusRequest.setId(notifications.get(position).getId());
+                        statusRequest.setStatus("Cancelled");
+                        statusRequest.setRemarks("");
+                        ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
+
+                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
 
@@ -233,6 +286,15 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     @Override
                     public void onClick(View view) {
                         Log.e("remindLL", "remindLL");
+                        ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                        StatusRequest statusRequest = new StatusRequest();
+                        statusRequest.setId(notifications.get(position).getId());
+                        statusRequest.setStatus("Remind");
+                        statusRequest.setRemarks("");
+                        ((NotificationsActivity) mContext).updatedStatus = "Remind";
+
+                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
             }
