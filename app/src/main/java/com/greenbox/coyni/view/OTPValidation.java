@@ -91,7 +91,7 @@ public class OTPValidation extends AppCompatActivity {
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
     Long mLastClickTime = 0L;
-
+    private int mAccountType = Utils.PERSONAL_ACCOUNT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -111,6 +111,9 @@ public class OTPValidation extends AppCompatActivity {
             MOBILE = getIntent().getStringExtra("MOBILE");
             EMAIL = getIntent().getStringExtra("EMAIL");
             strScreen = getIntent().getStringExtra("screen");
+            if(getIntent() != null) {
+                mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
+            }
             SetDB();
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             resendTV = findViewById(R.id.resendTV);
@@ -460,7 +463,8 @@ public class OTPValidation extends AppCompatActivity {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(OTPValidation.this, PINActivity.class)
                         .putExtra("screen", strScreen)
-                        .putExtra("TYPE", "CHOOSE"));
+                        .putExtra("TYPE", "CHOOSE")
+                        .putExtra(Utils.ACCOUNT_TYPE, mAccountType));
             });
 
 //            layoutMain.setOnTouchListener(new View.OnTouchListener() {

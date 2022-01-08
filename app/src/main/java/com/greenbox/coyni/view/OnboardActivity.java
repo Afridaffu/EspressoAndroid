@@ -50,7 +50,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.UUID;
 
-public class OnboardActivity extends AppCompatActivity {
+public class OnboardActivity extends BaseActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;

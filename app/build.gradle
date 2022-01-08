@@ -15,12 +15,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        dataBinding true
+    }
+
     buildTypes {
         release {
+            buildConfigField 'boolean', 'LOGGING_ENABLED', 'false'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            buildConfigField 'boolean', 'LOGGING_ENABLED', 'true'
             testCoverageEnabled true
         }
     }

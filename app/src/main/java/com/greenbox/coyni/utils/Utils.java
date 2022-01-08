@@ -131,6 +131,8 @@ public class Utils {
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
 
+    public static final String ACCOUNT_TYPE = "account_type";
+
 
     public static String getStrLang() {
         return strLang;

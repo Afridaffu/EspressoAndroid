@@ -33,14 +33,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             personalAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
-                    finish();
-                    overridePendingTransition(0, 0);
-
+                    startCreateAccountActivity(Utils.PERSONAL_ACCOUNT);
                 }
             });
 
@@ -54,11 +47,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
+                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
             });
 
@@ -66,5 +55,17 @@ public class AccountTypeActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
 
+    }
+
+    private void startCreateAccountActivity(int accountType) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        Intent inCreateAccount = new Intent(AccountTypeActivity.this, CreateAccountActivity.class);
+        inCreateAccount.putExtra(Utils.ACCOUNT_TYPE, accountType);
+        startActivity(inCreateAccount);
+        finish();
+        overridePendingTransition(0, 0);
     }
 }
