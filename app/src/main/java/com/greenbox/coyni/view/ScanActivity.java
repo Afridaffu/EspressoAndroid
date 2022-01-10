@@ -361,6 +361,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (!scanmeSetAmountTV.getText().equals("Clear Amount")) {
                             setAmountDialog = new Dialog(ScanActivity.this);
                             setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
