@@ -60,30 +60,17 @@ public class CardNumberEditText extends ConstraintLayout {
                 if (from.equals("ADD_CARD")) {
                     try {
                         if (b) {
+                            hintName.setVisibility(VISIBLE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
                             if ((cnET.getText().length() > 0)) {
-//                            if (!cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() < 19) {
-//                                AddCardActivity.addCardActivity.isCard = false;
-//                                hintName.setTextColor(getResources().getColor(R.color.error_red));
-//                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-//                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
-//                                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
-//                            } else if (cardType.toLowerCase().contains("american") && !cnET.getText().toString().equals("") && cnET.getText().toString().length() != 18) {
-//                                AddCardActivity.addCardActivity.isCard = false;
-//                                hintName.setTextColor(getResources().getColor(R.color.error_red));
-//                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-//                                AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
-//                                AddCardActivity.addCardActivity.cardErrorTV.setText("Invalid Card Number");
-//                            } else {
-//                                AddCardActivity.addCardActivity.isCard = true;
-//                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
-//                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-//                            }
+                                hintName.setVisibility(VISIBLE);
                                 cardValidation(cnET.getText().toString());
                             } else if ((cnET.getText().length() == 0)) {
-                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintName.setVisibility(GONE);
+                                cnET.setHint("Card Number");
+                                //hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
                                 AddCardActivity.addCardActivity.cardErrorTV.setText("Field Required");
