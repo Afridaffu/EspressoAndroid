@@ -865,6 +865,7 @@ public class DashboardActivity extends AppCompatActivity {
 //            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences();
+            transactionsNSV.smoothScrollTo(0, 0);
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }

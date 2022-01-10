@@ -261,7 +261,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                             mLastClickTime = SystemClock.elapsedRealtime();
                             convertDecimal();
                             if (requestValidation()) {
-                                requestPreview();
+                                if (Double.parseDouble(payRequestET.getText().toString()) > 0)
+                                    requestPreview();
+                                else
+                                    disableButtons(true);
+
                             }
                         }
                     } catch (Exception ex) {
@@ -482,11 +486,14 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                     feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                     pfee = transferFeeResponse.getData().getFee();
-                    if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0")) {
+                    if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0") && Double.parseDouble(payRequestET.getText().toString()) > 0) {
                         if (isPayClick) {
                             isPayClick = false;
+                            Log.e("payRequestET", payRequestET.getText().toString());
                             payPreview();
                         }
+                    } else {
+                        disableButtons(true);
                     }
                 }
             }

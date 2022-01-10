@@ -190,6 +190,7 @@
                                     android:gravity="center_vertical|right"
                                     android:hint="0.00"
                                     android:inputType="numberDecimal"
+                                    android:textColorHint="@color/light_gray"
                                     android:maxLength="@string/maxlength"
                                     android:textColor="@color/primary_black"
                                     android:textCursorDrawable="@drawable/cursorcolor"

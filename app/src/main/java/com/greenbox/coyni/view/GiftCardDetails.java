@@ -641,6 +641,11 @@ public class GiftCardDetails extends AppCompatActivity {
                             }
                             amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
+
+                            if (amountErrorLL.getVisibility() == VISIBLE) {
+                                amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
+                            }
                         } else {
                             amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                            Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));

@@ -425,12 +425,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     objMyApplication.setTransferFeeResponse(transferFeeResponse);
                     feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                     feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString()) > 0) {
                         Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
                         pfee = transferFeeResponse.getData().getFee();
                         dget = pay - pfee;
                         withdrawTokenPreview();
-
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
                     }
                 }
             }
