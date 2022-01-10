@@ -1193,7 +1193,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 8) {
+            if (editable.length() > 12) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 8) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);

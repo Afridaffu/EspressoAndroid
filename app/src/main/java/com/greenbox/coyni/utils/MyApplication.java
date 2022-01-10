@@ -61,7 +61,7 @@ import java.util.concurrent.TimeUnit;
 public class MyApplication extends Application {
     AgreementsPdf agreementsPdf;
     RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "";
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "", strScreen = "";
     Profile myProfile = new Profile();
     UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
@@ -746,6 +746,14 @@ public class MyApplication extends Application {
 
     public void setPayRequestResponse(PayRequestResponse payRequestResponse) {
         this.payRequestResponse = payRequestResponse;
+    }
+
+    public String getStrScreen() {
+        return strScreen;
+    }
+
+    public void setStrScreen(String strScreen) {
+        this.strScreen = strScreen;
     }
 
     public String convertBitMapToString(Bitmap bitmap) {

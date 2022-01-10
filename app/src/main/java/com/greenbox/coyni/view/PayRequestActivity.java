@@ -242,6 +242,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                                     cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
                                     calculateFee(Utils.USNumberFormat(cynValue));
                                 } else {
+                                    objMyApplication.setStrScreen("payRequest");
                                     Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
                                     i.putExtra("screen", "payRequest");
                                     startActivity(i);
@@ -892,6 +893,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                objMyApplication.setStrScreen("payRequest");
                 Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
                 i.putExtra("screen", "payRequest");
                 startActivity(i);
