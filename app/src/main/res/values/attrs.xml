@@ -42,4 +42,13 @@
         </attr>
         <attr name="clickToClose" format="boolean" />
     </declare-styleable>
+
+
+    <declare-styleable name="CalendarPicker">
+        <attr name="pickerType" format="enum">
+            <enum name="single" value="0" />
+            <enum name="range" value="1" />
+        </attr>
+        <attr name="showDayOfWeekTitle" format="boolean" />
+    </declare-styleable>
 </resources>

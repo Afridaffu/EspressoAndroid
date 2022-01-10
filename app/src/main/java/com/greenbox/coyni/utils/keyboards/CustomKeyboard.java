@@ -174,7 +174,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             WithdrawTokenActivity.withdrawTokenActivity.withdrawTokenClick();
                             break;
                         case "setAmount":
-                            ScanActivity.scanActivity.setAmountClick();
+//                            ScanActivity.scanActivity.setAmountClick();
                             break;
                     }
 

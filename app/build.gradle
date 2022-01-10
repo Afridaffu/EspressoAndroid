@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -124,9 +126,12 @@ dependencies {
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
-    implementation 'com.andrewjapar.rangedatepicker:rangedatepicker:0.3'
+//    implementation 'com.andrewjapar.rangedatepicker:rangedatepicker:0.3'
 
 //    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
 
+//    implementation "androidx.core:core-ktx:+"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.21"
 
 }
