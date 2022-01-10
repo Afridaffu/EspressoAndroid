@@ -329,7 +329,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             }
                         } else {
                             if (!etAmount.getText().toString().equals("")) {
-                                etAmount.setText("0");
+                                etAmount.setText("0.00");
+                                ctKey.setText("0.00");
                                 etAmount.setSelection(etAmount.getText().length());
                             }
                         }
@@ -977,7 +978,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
             } else {
-                tvHeading.setText("Transaction in Progress");
+                tvHeading.setText("Transaction In Progress");
                 imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
             }
             Double bal = cynValue + objMyApplication.getGBTBalance();

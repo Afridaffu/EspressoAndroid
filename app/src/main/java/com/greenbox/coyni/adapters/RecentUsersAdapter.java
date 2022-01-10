@@ -58,7 +58,15 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
                 if (objData.getUserName().contains(" ")) {
                     if (!objData.getUserName().split(" ")[0].equals("")) {
-                        holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
+                        if (objData.getUserName().split(" ").length > 2) {
+                            if (!objData.getUserName().split(" ")[1].equals("")) {
+                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
+                            } else {
+                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[2].substring(0, 1).toUpperCase());
+                            }
+                        } else {
+                            holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
+                        }
                     } else {
                         holder.tvNameHead.setText(objData.getUserName().split(" ")[0].toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
                     }

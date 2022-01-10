@@ -17,6 +17,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
 
@@ -160,17 +161,11 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                         case "buycvv":
                             BuyTokenActivity.buyTokenActivity.okClick();
                             break;
-//                        case "wpmcvv":
-//                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wpmcvv");
-//                            break;
-//                        case "wntcvv":
-//                            WithdrawPaymentMethodsActivity.withdrawPaymentMethodsActivity.okClick("wntcvv");
-//                            break;
-//                        case "withdrawcvv":
-//                            WithdrawTokenActivity.withdrawTokenActivity.okClick();
-//                            break;
                         case "withdraw":
                             WithdrawTokenActivity.withdrawTokenActivity.withdrawTokenClick();
+                            break;
+                        case "setAmount":
+//                            ScanActivity.scanActivity.setAmountClick();
                             break;
                     }
 
@@ -207,5 +202,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
 
     public void clearData() {
         enteredText = "";
+    }
+
+    public void setText(String strText) {
+        enteredText = strText;
     }
 }

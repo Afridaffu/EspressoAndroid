@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/boxbackgroundgray"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
     tools:context=".view.ScanActivity">
@@ -97,7 +98,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/flashBtnRL"
         android:layout_width="match_parent"
@@ -128,7 +128,6 @@
             android:text="Flashlight"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp"
-
             app:layout_constraintEnd_toEndOf="@+id/toglebtn"
             app:layout_constraintStart_toStartOf="@+id/toglebtn"
             app:layout_constraintTop_toBottomOf="@+id/toglebtn" />
@@ -162,7 +161,6 @@
             app:layout_constraintTop_toBottomOf="@+id/albumIV" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scannerLayout"
         android:layout_width="match_parent"
@@ -183,11 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_55sdp"
                 android:background="@drawable/scananim11" />
-
-
         </LinearLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
@@ -201,7 +195,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/_20sdp">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvQRcode"
                 android:layout_width="match_parent"
@@ -256,7 +252,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="dfbcbsbs"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
 
@@ -265,24 +261,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
                         android:layout_below="@id/tvName"
-                        android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginStart="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_11sdp"
-                        android:background="@color/viewcolor"/>
+                        android:background="@color/viewcolor" />
+
                     <TextView
                         android:id="@+id/messageQr"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Set amount to request a payment or scan QR\n code to pay me"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/_11ssp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@color/xdark_gray"
-                        android:layout_marginTop="@dimen/_13sdp"
                         android:layout_below="@id/viewLine"
-                        />
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_13sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Set amount to request a payment or scan QR\n code to pay me"
+                        android:textAlignment="center"
+                        android:textColor="@color/xdark_gray"
+                        android:textSize="@dimen/_11ssp" />
 
                     <RelativeLayout
                         android:id="@+id/qrViewRL"
@@ -377,6 +373,7 @@
                 android:layout_below="@+id/cvQRcode"
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_1sdp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -418,58 +415,57 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/divider"
-                        android:layout_marginTop="@dimen/_25sdp"
                         android:layout_marginStart="@dimen/_36sdp"
-                        >
+                        android:layout_marginTop="@dimen/_25sdp">
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:orientation="vertical"
-                            >
+                            android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgCopy"
-                            android:layout_width="@dimen/_17sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:src="@drawable/ic_copy" />
+                            <ImageView
+                                android:id="@+id/imgCopy"
+                                android:layout_width="@dimen/_17sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:src="@drawable/ic_copy" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/imgCopy"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Copy"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/imgCopy"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Copy"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="@dimen/_35sdp"
-                            android:orientation="vertical"
-                            >
+                            android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgShare"
-                            android:layout_width="@dimen/_18sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_alignParentRight="true"
-                            android:src="@drawable/ic_share" />
+                            <ImageView
+                                android:id="@+id/imgShare"
+                                android:layout_width="@dimen/_18sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:src="@drawable/ic_share" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/imgShare"
-                            android:layout_alignParentRight="true"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Share"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/imgShare"
+                                android:layout_alignParentRight="true"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Share"
 
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp" />
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
                     </RelativeLayout>
                 </RelativeLayout>
@@ -547,11 +543,12 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Alison L"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
             <View
+                android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginStart="@dimen/_11sdp"
@@ -571,9 +568,9 @@
                     android:id="@+id/tvsaveSetAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:text="160.00"
-                    android:layout_marginTop="@dimen/_3sdp"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_24ssp" />
 

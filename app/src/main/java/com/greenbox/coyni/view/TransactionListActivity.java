@@ -1,21 +1,8 @@
 package com.greenbox.coyni.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -33,31 +20,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.andrewjapar.rangedatepicker.CalendarPicker;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.andrewjapar.rangedatepicker.CalendarPicker;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
-import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedNewAdapter;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -73,19 +48,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.TimeZone;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
-import kotlin.jvm.functions.Function4;
 
-public class TransactionListActivity extends AppCompatActivity {
+public class TransactionListActivity extends AppCompatActivity implements TextWatcher {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;
@@ -116,6 +86,7 @@ public class TransactionListActivity extends AppCompatActivity {
     public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     Date startDateD = null;
     Date endDateD = null;
+    public static TransactionListActivity transactionListActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +96,7 @@ public class TransactionListActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
         try {
+            transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
             filterIV = findViewById(R.id.filterIconIV);
 
@@ -156,99 +128,100 @@ public class TransactionListActivity extends AppCompatActivity {
             });
 
             closeBtn.setOnClickListener(view -> finish());
+            searchET.addTextChangedListener(this);
 
-            searchET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() > 30) {
-//                        String search_key = charSequence.toString();
-//                        List<TransactionListPending> filterList = new ArrayList<>();
-//                        List<TransactionListPosted> filterList1 = new ArrayList<>();
-//                        int pindex = 0, poindex = 0;
-//                        if (globalPending.size() > 0) {
-//                            for (int iteration = 0; iteration < globalPending.size(); iteration++) {
-//                                pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-//                                if (pindex == 0) {
-//                                    filterList.add(globalPending.get(iteration));
-//                                }
-//                            }
-//                        }
-//                        if (globalPosted.size() > 0) {
-//                            for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
-//                                poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-//                                if (poindex == 0) {
-//                                    filterList1.add(globalPosted.get(iteration));
-//                                }
-//                            }
-//                        }
+//            searchET.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 //
-//                        if (filterList.size() == 0 && filterList1.size() == 0) {
-//                            layoutTransactionsposted.setVisibility(View.GONE);
-//                            layoutTransactionspending.setVisibility(View.GONE);
-//                            pendingTxt.setVisibility(View.GONE);
-//                            noTransactionTV.setVisibility(View.VISIBLE);
-//                        } else if (filterList.size() > 0 && filterList1.size() == 0) {
-//                            layoutTransactionsposted.setVisibility(View.GONE);
-//                            layoutTransactionspending.setVisibility(View.VISIBLE);
-//                            pendingTxt.setVisibility(View.VISIBLE);
-//                            noTransactionTV.setVisibility(View.GONE);
-//                        } else if (filterList.size() == 0 && filterList1.size() > 0) {
-//                            layoutTransactionsposted.setVisibility(View.VISIBLE);
-//                            layoutTransactionspending.setVisibility(View.GONE);
-//                            pendingTxt.setVisibility(View.GONE);
-//                            noTransactionTV.setVisibility(View.GONE);
-//                        } else {
-//                            layoutTransactionsposted.setVisibility(View.VISIBLE);
-//                            layoutTransactionspending.setVisibility(View.VISIBLE);
-//                            pendingTxt.setVisibility(View.VISIBLE);
-//                            noTransactionTV.setVisibility(View.GONE);
-//                        }
-//                        try {
-//                            transactionListPendingAdapter.updateList(filterList);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        try {
-//                            List<List<TransactionListPosted>> listedData = new ArrayList<>();
-//                            ArrayList<String> dates = new ArrayList<>();
+//                }
 //
-//                            Log.e("Size", listedData.size() + "");
-//                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
-//                            transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
-//                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-//                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-//                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-                        globalPending.clear();
-                        globalPosted.clear();
-                        TransactionListRequest transactionListRequest = new TransactionListRequest();
-                        transactionListRequest.setWalletCategory(Utils.walletCategory);
-                        transactionListRequest.setGbxTransactionId(charSequence.toString());
-                        dashboardViewModel.meTransactionList(transactionListRequest);
-                    } else if (charSequence.length() > 0 && charSequence.length() < 30) {
-                        layoutTransactionsposted.setVisibility(View.GONE);
-                        layoutTransactionspending.setVisibility(View.GONE);
-                        pendingTxt.setVisibility(View.GONE);
-                        noTransactionTV.setVisibility(View.VISIBLE);
-                    } else if (charSequence.toString().trim().length() == 0) {
-                        globalPending.clear();
-                        globalPosted.clear();
-                        dashboardViewModel.meTransactionList(objMyApplication.getTransactionListSearch());
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                    if (charSequence.length() > 30) {
+////                        String search_key = charSequence.toString();
+////                        List<TransactionListPending> filterList = new ArrayList<>();
+////                        List<TransactionListPosted> filterList1 = new ArrayList<>();
+////                        int pindex = 0, poindex = 0;
+////                        if (globalPending.size() > 0) {
+////                            for (int iteration = 0; iteration < globalPending.size(); iteration++) {
+////                                pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+////                                if (pindex == 0) {
+////                                    filterList.add(globalPending.get(iteration));
+////                                }
+////                            }
+////                        }
+////                        if (globalPosted.size() > 0) {
+////                            for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
+////                                poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
+////                                if (poindex == 0) {
+////                                    filterList1.add(globalPosted.get(iteration));
+////                                }
+////                            }
+////                        }
+////
+////                        if (filterList.size() == 0 && filterList1.size() == 0) {
+////                            layoutTransactionsposted.setVisibility(View.GONE);
+////                            layoutTransactionspending.setVisibility(View.GONE);
+////                            pendingTxt.setVisibility(View.GONE);
+////                            noTransactionTV.setVisibility(View.VISIBLE);
+////                        } else if (filterList.size() > 0 && filterList1.size() == 0) {
+////                            layoutTransactionsposted.setVisibility(View.GONE);
+////                            layoutTransactionspending.setVisibility(View.VISIBLE);
+////                            pendingTxt.setVisibility(View.VISIBLE);
+////                            noTransactionTV.setVisibility(View.GONE);
+////                        } else if (filterList.size() == 0 && filterList1.size() > 0) {
+////                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+////                            layoutTransactionspending.setVisibility(View.GONE);
+////                            pendingTxt.setVisibility(View.GONE);
+////                            noTransactionTV.setVisibility(View.GONE);
+////                        } else {
+////                            layoutTransactionsposted.setVisibility(View.VISIBLE);
+////                            layoutTransactionspending.setVisibility(View.VISIBLE);
+////                            pendingTxt.setVisibility(View.VISIBLE);
+////                            noTransactionTV.setVisibility(View.GONE);
+////                        }
+////                        try {
+////                            transactionListPendingAdapter.updateList(filterList);
+////                        } catch (Exception e) {
+////                            e.printStackTrace();
+////                        }
+////                        try {
+////                            List<List<TransactionListPosted>> listedData = new ArrayList<>();
+////                            ArrayList<String> dates = new ArrayList<>();
+////
+////                            Log.e("Size", listedData.size() + "");
+////                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
+////                            transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
+////                            getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+////                            getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+////                            getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+////                        } catch (Exception e) {
+////                            e.printStackTrace();
+////                        }
+//                        globalPending.clear();
+//                        globalPosted.clear();
+//                        TransactionListRequest transactionListRequest = new TransactionListRequest();
+//                        transactionListRequest.setWalletCategory(Utils.walletCategory);
+//                        transactionListRequest.setGbxTransactionId(charSequence.toString());
+//                        dashboardViewModel.meTransactionList(transactionListRequest);
+//                    } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+//                        layoutTransactionsposted.setVisibility(View.GONE);
+//                        layoutTransactionspending.setVisibility(View.GONE);
+//                        pendingTxt.setVisibility(View.GONE);
+//                        noTransactionTV.setVisibility(View.VISIBLE);
+//                    } else if (charSequence.toString().trim().length() == 0) {
+//                        globalPending.clear();
+//                        globalPosted.clear();
+//                        dashboardViewModel.meTransactionList(objMyApplication.getTransactionListSearch());
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//
+//                }
+//            });
 
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -394,14 +367,54 @@ public class TransactionListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        if (charSequence.length() > 30) {
+            globalPending.clear();
+            globalPosted.clear();
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setGbxTransactionId(charSequence.toString());
+            dashboardViewModel.meTransactionList(transactionListRequest);
+        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+            layoutTransactionsposted.setVisibility(View.GONE);
+            layoutTransactionspending.setVisibility(View.GONE);
+            pendingTxt.setVisibility(View.GONE);
+            noTransactionTV.setVisibility(View.VISIBLE);
+        } else if (charSequence.toString().trim().length() == 0) {
+            globalPending.clear();
+            globalPosted.clear();
+            dashboardViewModel.meTransactionList(objMyApplication.getTransactionListSearch());
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable == searchET.getEditableText()) {
+            try {
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private void initObservers() {
         dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
                 try {
-//                    if (searchET.hasFocus())
-//                        searchET.clearFocus();
-//                    searchET.setText("");
+                    if (searchET.hasFocus())
+                        searchET.clearFocus();
+                    searchET.removeTextChangedListener(TransactionListActivity.this);
+                    searchET.setText("");
+                    searchET.addTextChangedListener(TransactionListActivity.this);
+
                     if (transactionList != null && transactionList.getData().getItems() != null
                             && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                         progressBar.setVisibility(View.GONE);
@@ -767,7 +780,9 @@ public class TransactionListActivity extends AppCompatActivity {
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
 
+            searchET.removeTextChangedListener(TransactionListActivity.this);
             searchET.setText("");
+            searchET.addTextChangedListener(TransactionListActivity.this);
             transAmountStartET.setText("");
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
@@ -1349,7 +1364,9 @@ public class TransactionListActivity extends AppCompatActivity {
                 currentPage = 0;
                 total = 0;
                 isFilters = false;
+                searchET.removeTextChangedListener(TransactionListActivity.this);
                 searchET.setText("");
+                searchET.addTextChangedListener(TransactionListActivity.this);
                 transAmountStartET.clearFocus();
                 transAmountEndET.clearFocus();
                 TransactionListRequest transactionListRequest = new TransactionListRequest();
@@ -1514,14 +1531,14 @@ public class TransactionListActivity extends AppCompatActivity {
         });
 
 
-        CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
+        com.greenbox.coyni.utils.verticalcalendar.CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
         Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
         Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 //        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
         calendarPicker.setRangeDate(backwardDate, endDate.getTime());
         calendarPicker.showDayOfWeekTitle(true);
-        calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
+        calendarPicker.setMode(com.greenbox.coyni.utils.verticalcalendar.CalendarPicker.SelectionMode.RANGE);
         calendarPicker.scrollToDate(endDate.getTime());
 
 

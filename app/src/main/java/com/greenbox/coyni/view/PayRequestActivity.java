@@ -25,6 +25,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.templates.TemplateRequest;
@@ -48,6 +51,8 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
@@ -76,9 +81,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     Long mLastClickTime = 0L;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
-    boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false;
+    boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
     ProgressDialog pDialog;
     int requestedToUserId = 0;
+    PaymentMethodsResponse paymentMethodsResponse;
+    PayRequestCustomKeyboard cKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +126,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
                         tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
                     }
-                    if (Double.parseDouble(editable.toString()) > 0) {
+                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
                         disableButtons(false);
+                    } else {
+                        disableButtons(true);
                     }
-                    payRequestET.setSelection(payRequestET.getText().length());
+                    //payRequestET.setSelection(payRequestET.getText().length());
                 } else if (editable.toString().equals(".")) {
                     payRequestET.setText("");
                     disableButtons(true);
@@ -153,6 +162,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             case 235: {
                 payTransaction();
             }
+            break;
+            case 0:
+                startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("screen", "Pay"));
+                break;
         }
     }
 
@@ -221,9 +236,16 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                             mLastClickTime = SystemClock.elapsedRealtime();
                             convertDecimal();
                             if (payValidation()) {
-                                pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-                                cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-                                calculateFee(Utils.USNumberFormat(cynValue));
+                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                                    isPayClick = true;
+                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+                                    calculateFee(Utils.USNumberFormat(cynValue));
+                                } else {
+                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+                                    i.putExtra("screen", "payRequest");
+                                    startActivity(i);
+                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -324,6 +346,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             cynWallet = objMyApplication.getGbtWallet();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
+            paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+//            cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
+//            InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
+//            cKey.setInputConnection(ic);
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayRequestActivity.this)) {
@@ -334,6 +360,16 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             }
 
             payRequestET.addTextChangedListener(this);
+            if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+                payRequestET.setText(getIntent().getStringExtra("amount"));
+                USFormat(payRequestET);
+                payRequestET.setEnabled(false);
+            } else {
+                //enableButtons();
+                cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
+                InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
+                cKey.setInputConnection(ic);
+            }
             payRequestET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -408,7 +444,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             });
             SetFaceLock();
             SetTouchId();
-            enableButtons();
+//            enableButtons();
             calculateFee("10");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -447,7 +483,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                     pfee = transferFeeResponse.getData().getFee();
                     if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0")) {
-                        payPreview();
+                        if (isPayClick) {
+                            isPayClick = false;
+                            payPreview();
+                        }
                     }
                 }
             }
@@ -456,20 +495,24 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
             @Override
             public void onChanged(PayRequestResponse payRequestResponse) {
-                if (payRequestResponse != null) {
-                    objMyApplication.setPayRequestResponse(payRequestResponse);
-                    if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
-                        startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "success")
-                                .putExtra("subtype", "pay"));
+                try {
+                    if (payRequestResponse != null) {
+                        objMyApplication.setPayRequestResponse(payRequestResponse);
+                        if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                            startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "success")
+                                    .putExtra("subtype", "pay"));
 
+                        } else {
+                            startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "failed")
+                                    .putExtra("subtype", "pay"));
+                        }
                     } else {
-                        startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "failed")
-                                .putExtra("subtype", "pay"));
+                        Utils.displayAlert("something went wrong", PayRequestActivity.this, "", "");
                     }
-                } else {
-                    Utils.displayAlert("something went wrong", PayRequestActivity.this, "", "");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -601,6 +644,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
             }
+//            else if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+//                value = false;
+//                Utils.displayAlert("You can only Pay", PayRequestActivity.this, "Oops!", "");
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -728,6 +775,19 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 payViewModel.sendTokens(request);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void payTransactionRequest() {
+        try {
+            TransferPayRequest request = new TransferPayRequest();
+            request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
+            request.setRemarks(addNoteTV.getText().toString().trim());
+            request.setRecipientWalletId(recipientAddress);
+            objMyApplication.setTransferPayRequest(request);
+            objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -980,7 +1040,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userNamePayTV.setText(strUserName);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            recipAddreTV.setText(recipientAddress.substring(0, 10) + "...");
+            if (recipientAddress.length() > 13) {
+                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
+            } else {
+                recipAddreTV.setText(recipientAddress);
+            }
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
@@ -994,6 +1058,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             } else {
                 lyMessage.setVisibility(View.INVISIBLE);
             }
+            payTransactionRequest();
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1090,7 +1155,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userNamePayTV.setText(strUserName);
             tvHeading.setText("Requesting");
 
-            recipAddreTV.setText(recipientAddress.substring(0, 10) + "...");
+            if (recipientAddress.length() > 13) {
+                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
+            } else {
+                recipAddreTV.setText(recipientAddress);
+            }
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             lyProcessing.setVisibility(View.GONE);
@@ -1105,7 +1174,15 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.copyText(recipientAddress, PayRequestActivity.this);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.copyText(recipientAddress, PayRequestActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {

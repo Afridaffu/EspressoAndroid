@@ -1,17 +1,27 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,10 +29,22 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.NotificationsAdapter;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
+import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
+import com.greenbox.coyni.model.payrequest.PayRequestResponse;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
+import com.greenbox.coyni.model.userrequest.UserRequest;
+import com.greenbox.coyni.model.userrequest.UserRequestResponse;
+import com.greenbox.coyni.model.withdraw.GiftCardWithDrawInfo;
+import com.greenbox.coyni.model.withdraw.RecipientDetail;
+import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
+import com.greenbox.coyni.viewmodel.PayViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -44,15 +66,27 @@ public class NotificationsActivity extends AppCompatActivity {
     public List<NotificationsDataItems> globalNotifications = new ArrayList<>();
     public List<NotificationsDataItems> globalSentNotifications = new ArrayList<>();
     public List<NotificationsDataItems> globalReceivedNotifications = new ArrayList<>();
+    public List<NotificationsDataItems> globalRequests = new ArrayList<>();
     RecyclerView notificationsRV;
     LinearLayout notifBackbtn;
-    TextView notificationsTV, requestsTV;
+    TextView notificationsTV, requestsTV, noDataTV;
     public static NotificationsActivity notificationsActivity;
     MyApplication objMyApplication;
     String selectedTab = "NOTIFICATIONS";
     public String selectedRow = "";
-    ProgressDialog progressDialog;
+    public String updatedStatus = "";
+    public ProgressDialog progressDialog;
     NotificationsAdapter notificationsAdapter;
+
+    SQLiteDatabase mydatabase;
+    Cursor dsFacePin, dsTouchID;
+    boolean isFaceLock = false, isTouchId = false, isBiometric = false;
+    int CODE_AUTHENTICATION_VERIFICATION = 251;
+    int FOR_RESULT = 235;
+    Long mLastClickTime = 0L;
+    boolean isAuthenticationCalled = false;
+    public TransferPayRequest userPayRequest = new TransferPayRequest();
+    PayViewModel payViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +106,26 @@ public class NotificationsActivity extends AppCompatActivity {
         notifBackbtn = findViewById(R.id.notifBackbtn);
         notificationsTV = findViewById(R.id.notificationsTV);
         requestsTV = findViewById(R.id.requestsTV);
+        noDataTV = findViewById(R.id.noDataTV);
 
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+        payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
 
         try {
-            progressDialog = Utils.showProgressDialog(this);
+            progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+            progressDialog.setIndeterminate(false);
+            progressDialog.setMessage("Please wait...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
             notificationsViewModel.getNotifications();
             notificationsViewModel.getSentNotifications();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        SetFaceLock();
+        SetTouchId();
 
         notifBackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,17 +138,25 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (selectedTab.equals("REQUESTS")) {
-                    selectedTab = "NOTIFICATIONS";
                     notificationsTV.setTextColor(getResources().getColor(R.color.white));
                     notificationsTV.setBackgroundResource(R.drawable.bg_core_colorfill);
                     requestsTV.setBackgroundColor(getResources().getColor(R.color.white));
                     requestsTV.setTextColor(getResources().getColor(R.color.primary_black));
+                    if (globalNotifications.size() > 0) {
+                        notificationsRV.setVisibility(View.VISIBLE);
+                        noDataTV.setVisibility(View.GONE);
 
-                    LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                    notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
-                    notificationsRV.setLayoutManager(nLayoutManager);
-                    notificationsRV.setItemAnimator(new DefaultItemAnimator());
-                    notificationsRV.setAdapter(notificationsAdapter);
+                        LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                        notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
+                        notificationsRV.setLayoutManager(nLayoutManager);
+                        notificationsRV.setItemAnimator(new DefaultItemAnimator());
+                        notificationsRV.setAdapter(notificationsAdapter);
+                    } else {
+                        notificationsRV.setVisibility(View.GONE);
+                        noDataTV.setVisibility(View.VISIBLE);
+                        noDataTV.setText("You have no notifications");
+                    }
+                    selectedTab = "NOTIFICATIONS";
                 }
             }
         });
@@ -113,28 +165,36 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (selectedTab.equals("NOTIFICATIONS")) {
-                    selectedTab = "REQUESTS";
                     requestsTV.setTextColor(getResources().getColor(R.color.white));
                     requestsTV.setBackgroundResource(R.drawable.bg_core_colorfill);
                     notificationsTV.setBackgroundColor(getResources().getColor(R.color.white));
                     notificationsTV.setTextColor(getResources().getColor(R.color.primary_black));
 
-                    List<NotificationsDataItems> payReqNotifications = new ArrayList<>();
-                    payReqNotifications.addAll(globalReceivedNotifications);
-                    payReqNotifications.addAll(globalSentNotifications);
+                    globalRequests.clear();
+                    globalRequests = new ArrayList<>();
+                    globalRequests.addAll(globalReceivedNotifications);
+                    globalRequests.addAll(globalSentNotifications);
 
-                    Collections.sort(payReqNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
-                            .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
+                    if (globalRequests.size() > 0) {
+                        notificationsRV.setVisibility(View.VISIBLE);
+                        noDataTV.setVisibility(View.GONE);
+                        Collections.sort(globalRequests, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
+                                .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
 
-                    LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                    notificationsAdapter = new NotificationsAdapter(payReqNotifications, NotificationsActivity.this);
-                    notificationsRV.setLayoutManager(nLayoutManager);
-                    notificationsRV.setItemAnimator(new DefaultItemAnimator());
-                    notificationsRV.setAdapter(notificationsAdapter);
+                        LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                        notificationsAdapter = new NotificationsAdapter(globalRequests, NotificationsActivity.this);
+                        notificationsRV.setLayoutManager(nLayoutManager);
+                        notificationsRV.setItemAnimator(new DefaultItemAnimator());
+                        notificationsRV.setAdapter(notificationsAdapter);
+                    } else {
+                        notificationsRV.setVisibility(View.GONE);
+                        noDataTV.setVisibility(View.VISIBLE);
+                        noDataTV.setText("You have no requests");
+                    }
+                    selectedTab = "REQUESTS";
                 }
             }
         });
-
 
     }
 
@@ -169,26 +229,48 @@ public class NotificationsActivity extends AppCompatActivity {
                     if (progressDialog != null) {
                         progressDialog.dismiss();
                     }
-                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        notificationsViewModel.getSentNotifications();
-                        globalReceivedNotifications.clear();
-                        globalReceivedNotifications = notifications.getData().getItems();
-                        for (int i = 0; i < globalReceivedNotifications.size(); i++) {
-                            globalReceivedNotifications.get(i).setType("Received");
-                            globalReceivedNotifications.get(i).setTimeAgo(convertNotificationTime(globalReceivedNotifications.get(i).getRequestedDate(), i,
-                                    "Receive"));
+                    if (notifications != null) {
+                        if (notifications.getStatus().equalsIgnoreCase("success")) {
+                            globalReceivedNotifications.clear();
+
+                            List<NotificationsDataItems> localData = notifications.getData().getItems();
+                            for (int i = 0; i < localData.size(); i++) {
+                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                    globalReceivedNotifications.add(localData.get(i));
+                                }
+                            }
+
+                            for (int i = 0; i < globalReceivedNotifications.size(); i++) {
+                                globalReceivedNotifications.get(i).setType("Received");
+                                globalReceivedNotifications.get(i).setTimeAgo(convertNotificationTime(globalReceivedNotifications.get(i).getRequestedDate(), i,
+                                        "Receive"));
+                            }
+                            globalNotifications.addAll(globalReceivedNotifications);
+
+                            if (globalNotifications.size() > 0) {
+                                notificationsRV.setVisibility(View.VISIBLE);
+                                noDataTV.setVisibility(View.GONE);
+
+                                Collections.sort(globalNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
+                                        .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
+
+                                LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                                notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
+                                notificationsRV.setLayoutManager(nLayoutManager);
+                                notificationsRV.setItemAnimator(new DefaultItemAnimator());
+                                notificationsRV.setAdapter(notificationsAdapter);
+                            } else {
+                                notificationsRV.setVisibility(View.GONE);
+                                noDataTV.setVisibility(View.VISIBLE);
+                                noDataTV.setText("You have no notifications");
+                            }
+                        } else {
+                            Utils.displayAlert(notifications.getError().getErrorDescription(), NotificationsActivity.this, "",
+                                    notifications.getError().getFieldErrors().get(0));
                         }
-                        globalNotifications.addAll(globalReceivedNotifications);
-
-                        Collections.sort(globalNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
-                                .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
-
-                        LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                        notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
-                        notificationsRV.setLayoutManager(nLayoutManager);
-                        notificationsRV.setItemAnimator(new DefaultItemAnimator());
-                        notificationsRV.setAdapter(notificationsAdapter);
                     }
+
                 }
             });
         } catch (Exception e) {
@@ -200,7 +282,16 @@ public class NotificationsActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(Notifications notifications) {
                     if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        globalSentNotifications.addAll(notifications.getData().getItems());
+//                        globalSentNotifications.addAll(notifications.getData().getItems());
+
+                        List<NotificationsDataItems> localData = notifications.getData().getItems();
+                        for (int i = 0; i < localData.size(); i++) {
+                            if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                    localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                globalSentNotifications.add(localData.get(i));
+                            }
+                        }
+
                         for (int i = 0; i < globalSentNotifications.size(); i++) {
                             globalSentNotifications.get(i).setType("Sent");
                             globalSentNotifications.get(i).setTimeAgo(convertNotificationTime(globalSentNotifications.get(i).getRequestedDate(), i,
@@ -217,6 +308,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getMarkReadResponse().observe(this, new Observer<UnReadDelResponse>() {
                 @Override
                 public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
                         globalNotifications.get(Integer.parseInt(selectedRow)).setRead(true);
                         notificationsAdapter.updateList(globalNotifications);
@@ -233,6 +327,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getMarkUnReadResponse().observe(this, new Observer<UnReadDelResponse>() {
                 @Override
                 public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
                         globalNotifications.get(Integer.parseInt(selectedRow)).setRead(false);
                         notificationsAdapter.updateList(globalNotifications);
@@ -249,11 +346,113 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getDeleteNotifResponse().observe(this, new Observer<UnReadDelResponse>() {
                 @Override
                 public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
                         globalNotifications.remove(Integer.parseInt(selectedRow));
                         notificationsAdapter.updateList(globalNotifications);
                     } else {
                         Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            notificationsViewModel.getNotificationStatusUpdateResponse().observe(this, new Observer<UserRequestResponse>() {
+                @Override
+                public void onChanged(UserRequestResponse userRequestResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
+                    if (userRequestResponse != null) {
+                        if (userRequestResponse.getStatus().equalsIgnoreCase("success")) {
+                            if (selectedTab.equals("NOTIFICATIONS")) {
+                                globalNotifications.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
+                                notificationsAdapter.updateList(globalNotifications);
+                                if (updatedStatus.equals("Declined")) {
+                                    for (int i = 0; i < globalRequests.size(); i++) {
+                                        if (globalRequests.get(i).getId() == globalNotifications.get(Integer.parseInt(selectedRow)).getId()) {
+                                            globalRequests.get(i).setStatus(updatedStatus);
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                globalRequests.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
+                                notificationsAdapter.updateList(globalRequests);
+                                if (updatedStatus.equals("Declined")) {
+                                    for (int i = 0; i < globalNotifications.size(); i++) {
+                                        if (globalNotifications.get(i).getId() == globalRequests.get(Integer.parseInt(selectedRow)).getId()) {
+                                            globalNotifications.get(i).setStatus(updatedStatus);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            Utils.displayAlert(userRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", userRequestResponse.getError().getFieldErrors().get(0));
+                        }
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
+                @Override
+                public void onChanged(PayRequestResponse payRequestResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
+                    if (payRequestResponse != null) {
+                        objMyApplication.setPayRequestResponse(payRequestResponse);
+                        if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                            Utils.showCustomToast(NotificationsActivity.this, "Payment has successfully sent", R.drawable.ic_payment_successful, "");
+
+                            StatusRequest statusRequest = new StatusRequest();
+
+                            if (selectedTab.equals("NOTIFICATIONS")) {
+                                for (int i = 0; i < globalRequests.size(); i++) {
+                                    if (globalReceivedNotifications.get(i).getId() == globalNotifications.get(Integer.parseInt(selectedRow)).getId()) {
+                                        globalReceivedNotifications.remove(i);
+                                        break;
+                                    }
+                                }
+
+                                statusRequest.setId(globalNotifications.get(Integer.parseInt(selectedRow)).getId());
+                                globalNotifications.remove(Integer.parseInt(selectedRow));
+                                notificationsAdapter.updateList(globalNotifications);
+
+                            } else {
+                                for (int i = 0; i < globalNotifications.size(); i++) {
+                                    if (globalNotifications.get(i).getId() == globalReceivedNotifications.get(Integer.parseInt(selectedRow)).getId()) {
+                                        globalNotifications.remove(i);
+                                        break;
+                                    }
+                                }
+
+                                statusRequest.setId(globalRequests.get(Integer.parseInt(selectedRow)).getId());
+                                globalRequests.remove(Integer.parseInt(selectedRow));
+                                notificationsAdapter.updateList(globalRequests);
+                            }
+
+                            statusRequest.setStatus("Completed");
+                            statusRequest.setRemarks("");
+                            updatedStatus = "Completed";
+                            userRequestStatusUpdateCall(statusRequest);
+
+                        } else {
+                            Utils.displayAlert(payRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", payRequestResponse.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+                        Utils.displayAlert("something went wrong", NotificationsActivity.this, "", "");
                     }
                 }
             });
@@ -328,30 +527,32 @@ public class NotificationsActivity extends AppCompatActivity {
 
             if (type.equals("Notification")) {
                 globalNotifications.get(position).setLongTime(past.getTime());
-                if (days > 0)
-                    globalNotifications.get(position).setIsToday(0);
-                else
-                    globalNotifications.get(position).setIsToday(1);
+//                if (days > 0)
+//                    globalNotifications.get(position).setIsToday(0);
+//                else
+//                    globalNotifications.get(position).setIsToday(1);
+                globalNotifications.get(position).setIsToday(getIsToday(now.getTime(), past.getTime()));
 
             } else if (type.equals("Receive")) {
                 globalReceivedNotifications.get(position).setLongTime(past.getTime());
-                if (days > 0)
-                    globalReceivedNotifications.get(position).setIsToday(0);
-                else
-                    globalReceivedNotifications.get(position).setIsToday(1);
+//                if (days > 0)
+//                    globalReceivedNotifications.get(position).setIsToday(0);
+//                else
+//                    globalReceivedNotifications.get(position).setIsToday(1);
+                globalReceivedNotifications.get(position).setIsToday(getIsToday(now.getTime(), past.getTime()));
             } else {
                 globalSentNotifications.get(position).setLongTime(past.getTime());
-                if (days > 0)
-                    globalSentNotifications.get(position).setIsToday(0);
-                else
-                    globalSentNotifications.get(position).setIsToday(1);
+//                if (days > 0)
+//                    globalSentNotifications.get(position).setIsToday(0);
+//                else
+//                    globalSentNotifications.get(position).setIsToday(1);
+                globalSentNotifications.get(position).setIsToday(getIsToday(now.getTime(), past.getTime()));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return timeAgo;
     }
-
 
     public void markReadAPICall(List<Integer> list) {
         notificationsViewModel.setReadNotification(list);
@@ -363,5 +564,205 @@ public class NotificationsActivity extends AppCompatActivity {
 
     public void deleteNotificationCall(List<Integer> list) {
         notificationsViewModel.setDeleteNotification(list);
+    }
+
+    public void userRequestStatusUpdateCall(StatusRequest request) {
+        notificationsViewModel.notificationStatusUpdate(request);
+    }
+
+    public void showPayRequestPreview(NotificationsDataItems dataItem, TransferPayRequest request) {
+        try {
+            Utils.hideKeypad(NotificationsActivity.this);
+            Dialog prevDialog = new Dialog(NotificationsActivity.this);
+            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            prevDialog.setContentView(R.layout.notification_pay_preview);
+            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView payingToTV = prevDialog.findViewById(R.id.payingToTV);
+            TextView myUserIDTV = prevDialog.findViewById(R.id.myUserIDTV);
+            TextView messageTV = prevDialog.findViewById(R.id.messageTV);
+            TextView requesterIDTV = prevDialog.findViewById(R.id.requesterIDTV);
+            LinearLayout messageLL = prevDialog.findViewById(R.id.messageLL);
+            LinearLayout requesterIDLL = prevDialog.findViewById(R.id.requesterIDLL);
+            ImageView requesterIDIV = prevDialog.findViewById(R.id.requesterIDIV);
+            TextView balanceTV = prevDialog.findViewById(R.id.balanceTV);
+
+            TextView amountTV = prevDialog.findViewById(R.id.amountTV);
+            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
+
+            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
+
+            amountTV.setText(Utils.convertTwoDecimal(dataItem.getAmount().toString()));
+            payingToTV.setText("Paying " + dataItem.getToUser());
+            requesterIDTV.setText(dataItem.getRequesterWalletId().substring(0, 10) + "...");
+            balanceTV.setText("Available: " + objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + " CYN");
+
+            if (!dataItem.getRemarks().equals("")) {
+                messageLL.setVisibility(View.VISIBLE);
+                messageTV.setText(dataItem.getRemarks());
+                myUserIDTV.setText(dataItem.getFromUser() + " Says:");
+            } else {
+                messageLL.setVisibility(View.GONE);
+            }
+            requesterIDLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(dataItem.getRequesterWalletId(), NotificationsActivity.this);
+                }
+            });
+
+            isAuthenticationCalled = false;
+
+            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+                @Override
+                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+                }
+
+                @Override
+                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        userPayRequest = request;
+                        if (!isAuthenticationCalled) {
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(NotificationsActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(NotificationsActivity.this)) || (isFaceLock))) {
+                                    prevDialog.dismiss();
+                                    isAuthenticationCalled = true;
+                                    Utils.checkAuthentication(NotificationsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    prevDialog.dismiss();
+                                    isAuthenticationCalled = true;
+                                    startActivityForResult(new Intent(NotificationsActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "Notifications"), FOR_RESULT);
+                                }
+                            } else {
+                                Log.e("elsee", "elssee");
+                                prevDialog.dismiss();
+                                isAuthenticationCalled = true;
+                                startActivityForResult(new Intent(NotificationsActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "Notifications"), FOR_RESULT);
+                            }
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                }
+
+                @Override
+                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+                }
+            });
+
+            Window window = prevDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            prevDialog.setCanceledOnTouchOutside(true);
+            prevDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+            case 235: {
+                notificationPayCall();
+            }
+            break;
+        }
+    }
+
+    private void notificationPayCall() {
+        try {
+            if (Utils.checkInternet(NotificationsActivity.this)) {
+                payViewModel.sendTokens(userPayRequest);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetFaceLock() {
+        try {
+            isFaceLock = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetTouchId() {
+        try {
+            isTouchId = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public int getIsToday(long now, long past) {
+        int value = 0;
+        Date dateNow = new Date(now);
+        Date datePast = new Date(past);
+        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
+        String nowStr = df2.format(dateNow);
+        String pastStr = df2.format(datePast);
+        Log.e("dates", nowStr + " " + pastStr);
+        if (nowStr.equals(pastStr)) {
+            value = 1;
+        } else {
+            value = 0;
+        }
+        return value;
     }
 }
