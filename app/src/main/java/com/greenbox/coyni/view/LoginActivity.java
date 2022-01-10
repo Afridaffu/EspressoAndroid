@@ -197,7 +197,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
-
             if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
                 layoutClose.setVisibility(GONE);
             } else {

@@ -907,7 +907,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(BuyTokenActivity.this);
-                etAmount.setText(String.valueOf(usdValue));
+//                etAmount.setText(String.valueOf(usdValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(usdValue)));
                 etAmount.addTextChangedListener(BuyTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());
@@ -1371,16 +1372,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 8) {
+            if (editable.length() > 12) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 65));
-//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 55));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 8) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
             } else if (editable.length() > 5) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 75));
-//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 65));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
             } else {

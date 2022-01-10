@@ -964,7 +964,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="Crypto"
-                android:textColor="@color/light_gray"
+                android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_8ssp"></TextView>
         </LinearLayout>
 
@@ -1003,7 +1003,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
                 android:text="Issue\nCard"
-                android:textColor="@color/light_gray"
+                android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_8ssp"></TextView>
         </LinearLayout>
 
@@ -1026,7 +1026,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="Profile"
-                android:textColor="@color/light_gray"
+                android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_8ssp"></TextView>
         </LinearLayout>
 
