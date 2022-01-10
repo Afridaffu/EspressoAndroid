@@ -82,6 +82,7 @@
                         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- "
                         android:hint="Name / Account Address "
                         android:imeOptions="actionDone"
+                        android:maxLength="60"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/primary_black"

@@ -275,6 +275,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         closeBtnScanCode.setVisibility(View.GONE);
                         mcodeScanner.setFlashEnabled(false);
                         mcodeScanner.stopPreview();
+                        if (scanAmountLL.getVisibility() == View.VISIBLE) {
+                            scanMeRequestAmount.setText("");
+                            scanAmountLL.setVisibility(View.GONE);
+                            scanmeSetAmountTV.setText("Set Amount");
+                            generateQRCode(strWallet);
+                            ctKey.clearData();
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -366,6 +373,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                             ctKey.setKeyAction("OK");
                             ctKey.setScreenName("setAmount");
                             fontSize = setAmount.getTextSize();
+                            setAmount.requestFocus();
                             setAmount.setShowSoftInputOnFocus(false);
                             setAmount.addTextChangedListener(ScanActivity.this);
                             setAmount.setOnClickListener(new View.OnClickListener() {

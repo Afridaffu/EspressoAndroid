@@ -257,6 +257,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             TextView gcProcessingTV = findViewById(R.id.gcProcessingTV);
             TextView tvReference = findViewById(R.id.refIDTV);
             LinearLayout lyMessage = findViewById(R.id.lyMessage);
+            LinearLayout lyReference = findViewById(R.id.refIDLL);
             CardView doneCV = findViewById(R.id.doneCV);
             gcProcessingTV.setVisibility(View.GONE);
             lyMessage.setVisibility(View.GONE);
@@ -271,7 +272,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             } else {
                 tvReference.setText(objMyApplication.getPayRequestResponse().getData().getGbxTransactionId());
             }
-            tvReference.setOnClickListener(new View.OnClickListener() {
+            lyReference.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {

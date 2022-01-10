@@ -202,7 +202,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         }
                         search_text = search_key;
                         if (!search_key.trim().equals("") && search_key.trim().length() > 2) {
-                            lyCoyniUsers.setVisibility(View.VISIBLE);
+                            //lyCoyniUsers.setVisibility(View.VISIBLE);
                             tvSearchUsers.setVisibility(View.GONE);
                             payViewModel.getCoyniUsers(search_key.toLowerCase());
                         } else {
