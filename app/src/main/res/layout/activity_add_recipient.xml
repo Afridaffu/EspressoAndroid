@@ -180,13 +180,15 @@
                     android:textSize="@dimen/_12ssp"></TextView>
 
                 <TextView
+                    android:id="@+id/tvContactMsg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:text="You can invite your friends from your contacts"
                     android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/_9ssp"></TextView>
+                    android:textSize="@dimen/_9ssp"
+                    android:visibility="gone"></TextView>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"

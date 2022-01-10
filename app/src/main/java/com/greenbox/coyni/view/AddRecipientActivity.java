@@ -63,7 +63,7 @@ public class AddRecipientActivity extends AppCompatActivity {
     RecyclerView rvContacts, rvCoyniUsers, rvRecent;
     List<RecentUsersData> usersList;
     List<CoyniUsersData> listCoyniUsers;
-    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers;
+    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers,tvContactMsg;
     RecentUsersAdapter recentUsersAdapter;
     CoyniUsersAdapter coyniUsersAdapter;
     ContactsAdapter contactsAdapter;
@@ -112,6 +112,7 @@ public class AddRecipientActivity extends AppCompatActivity {
             lyRecentUsers = findViewById(R.id.lyRecentUsers);
             lyContacts = findViewById(R.id.lyContacts);
             lyCoyniUsers = findViewById(R.id.lyCoyniUsers);
+            tvContactMsg = findViewById(R.id.tvContactMsg);
             imgScan = findViewById(R.id.imgScan);
             etSearch = findViewById(R.id.etSearch);
             if (Utils.checkInternet(AddRecipientActivity.this)) {
