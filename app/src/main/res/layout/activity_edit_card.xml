@@ -97,7 +97,7 @@
                             android:hint=""
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapSentences"
-                            android:maxLength="30"
+                            android:maxLength="50"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
                             android:singleLine="true"

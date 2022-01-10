@@ -425,12 +425,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     objMyApplication.setTransferFeeResponse(transferFeeResponse);
                     feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                     feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString()) > 0) {
                         Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
                         pfee = transferFeeResponse.getData().getFee();
                         dget = pay - pfee;
                         withdrawTokenPreview();
-
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
                     }
                 }
             }
@@ -1191,7 +1193,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 8) {
+            if (editable.length() > 12) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 8) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
@@ -1361,7 +1367,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
-                etAmount.setText(String.valueOf(cynValue));
+//                etAmount.setText(String.valueOf(cynValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
                 etAmount.addTextChangedListener(WithdrawTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());

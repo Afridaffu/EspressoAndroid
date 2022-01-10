@@ -36,9 +36,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
+import com.greenbox.coyni.adapters.NotificationsAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
@@ -54,6 +56,8 @@ import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -79,6 +83,7 @@ public class DashboardActivity extends AppCompatActivity {
     ConstraintLayout cvProfileSmall, cvProfile;
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails;
+    int globalCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -644,20 +649,47 @@ public class DashboardActivity extends AppCompatActivity {
                 public void onChanged(Notifications notifications) {
 //
                     if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        int count = 0;
+                        globalCount = 0;
                         for (int i = 0; i < notifications.getData().getItems().size(); i++) {
                             if (!notifications.getData().getItems().get(i).isRead()) {
-                                count++;
+                                globalCount++;
                             }
                         }
-                        if (count > 0) {
-                            countCV.setVisibility(View.VISIBLE);
-                            countTV.setText(count + "");
-                        } else {
-                            countCV.setVisibility(View.GONE);
-                        }
+                        notificationsViewModel.getReceivedNotifications();
+                        Log.e("count notif", globalCount + "");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                        Log.e("count", count + "");
+        try {
+            notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+
+                    try {
+                        if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                            List<NotificationsDataItems> localData = notifications.getData().getItems();
+                            for (int i = 0; i < localData.size(); i++) {
+                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                    globalCount++;
+                                }
+                            }
+
+                            if (globalCount > 0) {
+                                countCV.setVisibility(View.VISIBLE);
+                                countTV.setText(globalCount + "");
+                            } else {
+                                countCV.setVisibility(View.GONE);
+                            }
+
+                            Log.e("count total", globalCount + "");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -833,6 +865,7 @@ public class DashboardActivity extends AppCompatActivity {
 //            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences();
+            transactionsNSV.smoothScrollTo(0, 0);
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }

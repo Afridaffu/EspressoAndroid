@@ -91,13 +91,16 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //        if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
-        if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
-            ControlMethod("paymentMethods");
-            strCurrent = "paymentMethods";
-        } else if (strCurrent.equals("externalBank")) {
-            ControlMethod("addpayment");
-            strCurrent = "addpayment";
+        if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
+            if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
+                ControlMethod("paymentMethods");
+                strCurrent = "paymentMethods";
+            } else if (strCurrent.equals("externalBank")) {
+                ControlMethod("addpayment");
+                strCurrent = "addpayment";
+            }
         } else {
+            objMyApplication.setStrScreen("");
             super.onBackPressed();
         }
     }
@@ -129,12 +132,16 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
-                if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    //ControlMethod("addpayment");
-                    ControlMethod("paymentMethods");
-                    strCurrent = "paymentMethods";
-                    isDeCredit = true;
-                    getPaymentMethods();
+                if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
+                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                        //ControlMethod("addpayment");
+                        ControlMethod("paymentMethods");
+                        strCurrent = "paymentMethods";
+                        isDeCredit = true;
+                        getPaymentMethods();
+                    }
+                } else {
+                    onBackPressed();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);

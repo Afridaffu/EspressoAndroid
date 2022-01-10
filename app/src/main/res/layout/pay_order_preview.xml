@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="1"
+            android:layout_weight="0.8"
             android:fontFamily="@font/opensans_regular"
             android:text="Recipient’s Address"
             android:textColor="@color/dark_grey"
@@ -93,7 +93,7 @@
             android:id="@+id/copyRecipientLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

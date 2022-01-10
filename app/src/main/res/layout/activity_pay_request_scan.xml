@@ -543,11 +543,12 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Alison L"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
             <View
+                android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginStart="@dimen/_11sdp"

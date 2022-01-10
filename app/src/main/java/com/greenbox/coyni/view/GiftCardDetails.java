@@ -408,8 +408,8 @@ public class GiftCardDetails extends AppCompatActivity {
                     try {
                         if (charSequence.toString().trim().length() > 0) {
 
-                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_green));
+//                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
 
                             Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
                             Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
@@ -507,8 +507,8 @@ public class GiftCardDetails extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                         isFirstName = true;
                         firstNameErrorLL.setVisibility(GONE);
-                        firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_green));
+//                        firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_black));
                     } else if (firstNameET.getText().toString().trim().length() == 0) {
                         firstNameErrorLL.setVisibility(VISIBLE);
                         firstNameErrorTV.setText("Field Required");
@@ -551,8 +551,8 @@ public class GiftCardDetails extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                         isLastName = true;
                         lastNameErrorLL.setVisibility(GONE);
-                        lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_green));
+//                        lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_black));
                     } else if (lastNameET.getText().toString().trim().length() == 0) {
                         lastNameErrorLL.setVisibility(VISIBLE);
                         lastNameErrorTV.setText("Field Required");
@@ -590,8 +590,8 @@ public class GiftCardDetails extends AppCompatActivity {
 
                     if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         emailErrorLL.setVisibility(GONE);
-                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(emailTIL, getResources().getColor(R.color.primary_green));
+//                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(emailTIL, getResources().getColor(R.color.primary_black));
 
                     } else if (emailET.getText().toString().trim().length() == 0) {
                         emailErrorLL.setVisibility(VISIBLE);
@@ -641,6 +641,11 @@ public class GiftCardDetails extends AppCompatActivity {
                             }
                             amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
+
+                            if (amountErrorLL.getVisibility() == VISIBLE) {
+                                amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
+                            }
                         } else {
                             amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                            Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));

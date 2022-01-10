@@ -188,12 +188,16 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 0) {
-                        isDOBSelected = true;
-                    } else {
-                        isDOBSelected = false;
+                    try {
+                        if (charSequence.toString().trim().length() > 0) {
+                            isDOBSelected = true;
+                        } else {
+                            isDOBSelected = false;
+                        }
+                        enableNext();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    enableNext();
 
                 }
 
@@ -210,15 +214,24 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() == 4) {
-                        isSSNSelected = true;
-                        ssnErrorLL.setVisibility(GONE);
-                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_green));
-                    } else {
-                        isSSNSelected = false;
+                    try {
+                        if (charSequence.toString().trim().length()>0&&charSequence.toString().trim().length()<4){
+                            isSSNSelected = false;
+                            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
+                        }
+                        else if (charSequence.toString().trim().length() == 4) {
+                            isSSNSelected = true;
+                            ssnErrorLL.setVisibility(GONE);
+    //                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
+                        }
+                        else {
+                            isSSNSelected = false;
+                        }
+                        enableNext();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
                     }
-                    enableNext();
                 }
 
                 @Override
@@ -235,17 +248,21 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() > 0) {
-                        isMailAddr1 = true;
-                        address1ErrorLL.setVisibility(GONE);
-                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_green));
-                    } else {
-                        address1ErrorLL.setVisibility(VISIBLE);
-                        address1ErrorTV.setText("Field Required");
-                        isMailAddr1 = false;
+                    try {
+                        if (charSequence.length() > 0) {
+                            isMailAddr1 = true;
+                            address1ErrorLL.setVisibility(GONE);
+    //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_black));
+                        } else {
+                            address1ErrorLL.setVisibility(VISIBLE);
+                            address1ErrorTV.setText("Field Required");
+                            isMailAddr1 = false;
+                        }
+                        enableORdiableSubmit();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
                     }
-                    enableORdiableSubmit();
 
                 }
 
@@ -278,17 +295,20 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if(charSequence.length() > 0){
-//                    isAddress2 = true;
-//                    address2ErrorLL.setVisibility(GONE);
-//                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
-//                }else{
+                    try {
+                        if(charSequence.length() > 0){
+
+                            Utils.setUpperHintColor(mailingAddlineoptTIL,getResources().getColor(R.color.primary_black));
+                        }
+//                else{
 //                    address2ErrorLL.setVisibility(VISIBLE);
 //                    address2ErrorTV.setText("Field Required");
 //                    isAddress2 = false;
 //                }
-                    enableORdiableSubmit();
+                        enableORdiableSubmit();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -319,17 +339,21 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() > 0) {
-                        isCity = true;
-                        cityErrorLL.setVisibility(GONE);
-                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
-                    } else {
-                        cityErrorLL.setVisibility(VISIBLE);
-                        cityErrorTV.setText("Field Required");
-                        isCity = false;
+                    try {
+                        if (charSequence.length() > 0) {
+                            isCity = true;
+                            cityErrorLL.setVisibility(GONE);
+    //                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
+                        } else {
+                            cityErrorLL.setVisibility(VISIBLE);
+                            cityErrorTV.setText("Field Required");
+                            isCity = false;
+                        }
+                        enableORdiableSubmit();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
                     }
-                    enableORdiableSubmit();
                 }
 
                 @Override
@@ -367,14 +391,18 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() > 0) {
-                        Utils.setUpperHintColor(stateTIL,getResources().getColor(R.color.primary_black));
-                        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        isState = true;
-                    } else {
-                        isState = false;
+                    try {
+                        if (charSequence.length() > 0) {
+                            Utils.setUpperHintColor(stateTIL,getResources().getColor(R.color.primary_black));
+                            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            isState = true;
+                        } else {
+                            isState = false;
+                        }
+                        enableORdiableSubmit();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
                     }
-                    enableORdiableSubmit();
                 }
 
                 @Override
@@ -391,22 +419,26 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() == 5) {
-                        isZip = true;
-                        zipcodeErrorLL.setVisibility(GONE);
-                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                    } else if (charSequence.length() < 5) {
-                        isZip = false;
-                        zipcodeErrorLL.setVisibility(GONE);
-                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                    } else if (charSequence.length() == 0) {
-                        isZip = false;
-                        zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Field Required");
+                    try {
+                        if (charSequence.length() == 5) {
+                            isZip = true;
+                            zipcodeErrorLL.setVisibility(GONE);
+    //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
+                        } else if (charSequence.length() < 5&&charSequence.length()>0) {
+                            isZip = false;
+                            zipcodeErrorLL.setVisibility(GONE);
+    //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
+                        } else if (charSequence.length() == 0) {
+                            isZip = false;
+                            zipcodeErrorLL.setVisibility(VISIBLE);
+                            zipcodeErrorTV.setText("Field Required");
+                        }
+                        enableORdiableSubmit();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
                     }
-                    enableORdiableSubmit();
                 }
 
                 @Override
@@ -424,140 +456,144 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     public void focusWatchers() {
 
-        mailAddr1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    mailAddr1.setHint("");
-                    if (mailAddr1.getText().toString().trim().length() > 0) {
-                        address1ErrorLL.setVisibility(GONE);
-                        mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_black));
+        try {
+            mailAddr1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        mailAddr1.setHint("");
+                        if (mailAddr1.getText().toString().trim().length() > 0) {
+                            address1ErrorLL.setVisibility(GONE);
+                            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_black));
+
+                        } else {
+                            mailingAddTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.light_gray));
+                            address1ErrorLL.setVisibility(VISIBLE);
+                            address1ErrorTV.setText("Field Required");
+                        }
+                    } else {
+                        mailAddr1.setHint("Street Address");
+                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
+                    }
+                }
+            });
+            mailAddr2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        mailAddr2.setHint("");
+                        if (mailAddr2.getText().toString().trim().length()>0){
+                            Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_black));
+                            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        }
+                        else {
+                            Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.light_gray));
+                            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+                        }
 
                     } else {
-                        mailingAddTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.light_gray));
-                        address1ErrorLL.setVisibility(VISIBLE);
-                        address1ErrorTV.setText("Field Required");
+                        mailAddr2.setHint("Apt#, Suit, Floor");
                     }
-                } else {
-                    mailAddr1.setHint("Street Address");
-                    mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
                 }
-            }
-        });
-        mailAddr2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    mailAddr2.setHint("");
-                    if (mailAddr2.getText().toString().trim().length()>0){
-                        Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_black));
-                        mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                    }
-                    else {
-                        Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.light_gray));
-                        mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            });
 
-                    }
+            cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        cityET.setHint("");
+                        if (cityET.getText().toString().trim().length() > 0) {
+                            cityErrorLL.setVisibility(GONE);
+                            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
 
-                } else {
-                    mailAddr2.setHint("Apt#, Suit, Floor");
-                }
-            }
-        });
-
-        cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    cityET.setHint("");
-                    if (cityET.getText().toString().trim().length() > 0) {
-                        cityErrorLL.setVisibility(GONE);
-                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
-
+                        } else {
+                            cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
+                            cityErrorLL.setVisibility(VISIBLE);
+                            cityErrorTV.setText("Field Required");
+                        }
                     } else {
-                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
-                        cityErrorLL.setVisibility(VISIBLE);
-                        cityErrorTV.setText("Field Required");
+                        cityET.setHint("City");
+                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
                     }
-                } else {
-                    cityET.setHint("City");
-                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
                 }
-            }
-        });
+            });
 
 
-        zipcode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    zipcode.setHint("");
-                    if (zipcode.getText().toString().trim().length() == 5) {
-                        zipcodeErrorLL.setVisibility(GONE);
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
+            zipcode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        zipcode.setHint("");
+                        if (zipcode.getText().toString().trim().length() == 5) {
+                            zipcodeErrorLL.setVisibility(GONE);
+                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
 
-                    } else if (zipcode.getText().toString().trim().length() < 5 && zipcode.getText().toString().trim().length() > 0) {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
-                        zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                        } else if (zipcode.getText().toString().trim().length() < 5 && zipcode.getText().toString().trim().length() > 0) {
+                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
+                            zipcodeErrorLL.setVisibility(VISIBLE);
+                            zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
+                        } else {
+                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
+                            zipcodeErrorLL.setVisibility(VISIBLE);
+                            zipcodeErrorTV.setText("Field Required");
+                        }
                     } else {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
-                        zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Field Required");
+                        zipcode.setHint("Zip Code");
+                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
                     }
-                } else {
-                    zipcode.setHint("Zip Code");
-                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
                 }
-            }
-        });
+            });
 
-        dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                Utils.hideKeypad(IdentityVerificationActivity.this);
-            }
-        });
-
-        ssnET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
+            dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
                     Utils.hideKeypad(IdentityVerificationActivity.this);
-                    if (ssnET.getText().toString().trim().length() == 4) {
-                        ssnErrorLL.setVisibility(GONE);
-                        ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_black));
-
-                    } else if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() < 4) {
-                        ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
-                        ssnErrorLL.setVisibility(VISIBLE);
-                        ssnErrorTV.setText("Minimum 4 Characters Required");
-
-                    } else {
-                        ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
-                        ssnErrorLL.setVisibility(VISIBLE);
-                        ssnErrorTV.setText("Field Required");
-                    }
-                } else {
-                    ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
                 }
-            }
-        });
+            });
+
+            ssnET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
+                        if (ssnET.getText().toString().trim().length() == 4) {
+                            ssnErrorLL.setVisibility(GONE);
+                            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_black));
+
+                        } else if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() < 4) {
+                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
+                            ssnErrorLL.setVisibility(VISIBLE);
+                            ssnErrorTV.setText("Minimum 4 Characters Required");
+
+                        } else {
+                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
+                            ssnErrorLL.setVisibility(VISIBLE);
+                            ssnErrorTV.setText("Field Required");
+                        }
+                    } else {
+                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
