@@ -58,6 +58,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         try {
 
             holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+            holder.swipeLayout.close(true,true);
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
             holder.tvNotifDate.setPadding(40, 30, 0, 0);

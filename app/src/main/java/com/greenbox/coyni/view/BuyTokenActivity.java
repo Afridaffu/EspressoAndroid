@@ -888,7 +888,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(BuyTokenActivity.this);
-                etAmount.setText(String.valueOf(cynValue));
+//                etAmount.setText(String.valueOf(cynValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
                 etAmount.addTextChangedListener(BuyTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());

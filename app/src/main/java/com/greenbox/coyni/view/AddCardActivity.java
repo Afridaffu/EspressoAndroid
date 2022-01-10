@@ -191,6 +191,7 @@ public class AddCardActivity extends AppCompatActivity {
 //            etCardNumber.requestCNETFocus();
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
+            etName.setHint("Name on card");
             try {
                 MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
                 mRecognizer = new BlinkCardRecognizer();
@@ -333,21 +334,21 @@ public class AddCardActivity extends AppCompatActivity {
                 }
             });
 
-            if (objMyApplication.getMyProfile() != null) {
-                etAddress1.setText(objMyApplication.getMyProfile().getData().getAddressLine1());
-                etAddress2.setText(objMyApplication.getMyProfile().getData().getAddressLine2());
-                etCity.setText(objMyApplication.getMyProfile().getData().getCity());
-                etState.setText(objMyApplication.getMyProfile().getData().getState());
-                etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
-                if (!etAddress1.getText().toString().trim().equals("") && !etCity.getText().toString().trim().equals("") &&
-                        !etState.getText().toString().trim().equals("") && !etZipCode.getText().toString().trim().equals("")) {
-                    isAddress1 = true;
-                    isCity = true;
-                    isState = true;
-                    isZipcode = true;
-                }
-                enableOrDisableNext();
-            }
+//            if (objMyApplication.getMyProfile() != null) {
+//                etAddress1.setText(objMyApplication.getMyProfile().getData().getAddressLine1());
+//                etAddress2.setText(objMyApplication.getMyProfile().getData().getAddressLine2());
+//                etCity.setText(objMyApplication.getMyProfile().getData().getCity());
+//                etState.setText(objMyApplication.getMyProfile().getData().getState());
+//                etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
+//                if (!etAddress1.getText().toString().trim().equals("") && !etCity.getText().toString().trim().equals("") &&
+//                        !etState.getText().toString().trim().equals("") && !etZipCode.getText().toString().trim().equals("")) {
+//                    isAddress1 = true;
+//                    isCity = true;
+//                    isState = true;
+//                    isZipcode = true;
+//                }
+//                enableOrDisableNext();
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
