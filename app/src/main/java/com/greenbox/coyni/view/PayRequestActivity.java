@@ -51,6 +51,7 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -84,6 +85,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     ProgressDialog pDialog;
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
+    PayRequestCustomKeyboard cKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +126,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
                         tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
                     }
-                    if (Double.parseDouble(editable.toString()) > 0) {
+                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
                         disableButtons(false);
+                    } else {
+                        disableButtons(true);
                     }
-                    payRequestET.setSelection(payRequestET.getText().length());
+                    //payRequestET.setSelection(payRequestET.getText().length());
                 } else if (editable.toString().equals(".")) {
                     payRequestET.setText("");
                     disableButtons(true);
@@ -343,6 +347,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+//            cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
+//            InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
+//            cKey.setInputConnection(ic);
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayRequestActivity.this)) {
@@ -358,7 +365,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 USFormat(payRequestET);
                 payRequestET.setEnabled(false);
             } else {
-                enableButtons();
+                //enableButtons();
+                cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
+                InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
+                cKey.setInputConnection(ic);
             }
             payRequestET.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1030,7 +1040,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userNamePayTV.setText(strUserName);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            recipAddreTV.setText(recipientAddress.substring(0, 10) + "...");
+            if (recipientAddress.length() > 13) {
+                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
+            } else {
+                recipAddreTV.setText(recipientAddress);
+            }
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
@@ -1141,7 +1155,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userNamePayTV.setText(strUserName);
             tvHeading.setText("Requesting");
 
-            recipAddreTV.setText(recipientAddress.substring(0, 10) + "...");
+            if (recipientAddress.length() > 13) {
+                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
+            } else {
+                recipAddreTV.setText(recipientAddress);
+            }
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             lyProcessing.setVisibility(View.GONE);
@@ -1156,7 +1174,15 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.copyText(recipientAddress, PayRequestActivity.this);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.copyText(recipientAddress, PayRequestActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
