@@ -338,11 +338,11 @@
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
-<!--        <com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard-->
-<!--            android:id="@+id/payReqCK"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            />-->
+        <!--        <com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard-->
+        <!--            android:id="@+id/payReqCK"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            />-->
 
         <LinearLayout
             android:layout_width="match_parent"

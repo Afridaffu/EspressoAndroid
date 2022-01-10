@@ -327,6 +327,7 @@ public class AddCardActivity extends AppCompatActivity {
                     if (!isLicense) {
                         startScanning();
                     } else {
+                        Utils.hideKeypad(AddCardActivity.this, view);
                         Utils.displayAlert("License has expired", AddCardActivity.this, "", "");
                     }
                 }
