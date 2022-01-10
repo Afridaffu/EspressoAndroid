@@ -76,6 +76,8 @@
                         android:imeOptions="actionDone"
                         android:maxLength="50"
                         android:maxLines="1"
+                        android:fontFamily="@font/opensans_bold"
+
                         android:singleLine="true"
                         android:textColor="@color/primary_black"
                         android:textColorHint="@color/dark_grey"

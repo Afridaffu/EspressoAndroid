@@ -859,7 +859,7 @@ public class AddCardActivity extends AppCompatActivity {
                             isName = true;
                         }
                     }
-                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 61) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
