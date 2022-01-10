@@ -75,7 +75,7 @@ public class NotificationsActivity extends AppCompatActivity {
     String selectedTab = "NOTIFICATIONS";
     public String selectedRow = "";
     public String updatedStatus = "";
-    ProgressDialog progressDialog;
+    public ProgressDialog progressDialog;
     NotificationsAdapter notificationsAdapter;
 
     SQLiteDatabase mydatabase;
@@ -112,7 +112,12 @@ public class NotificationsActivity extends AppCompatActivity {
         payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
 
         try {
-            progressDialog = Utils.showProgressDialog(this);
+            progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+            progressDialog.setIndeterminate(false);
+            progressDialog.setMessage("Please wait...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
             notificationsViewModel.getNotifications();
             notificationsViewModel.getSentNotifications();
         } catch (Exception e) {
@@ -224,43 +229,48 @@ public class NotificationsActivity extends AppCompatActivity {
                     if (progressDialog != null) {
                         progressDialog.dismiss();
                     }
-                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        globalReceivedNotifications.clear();
+                    if (notifications != null) {
+                        if (notifications.getStatus().equalsIgnoreCase("success")) {
+                            globalReceivedNotifications.clear();
 
-                        List<NotificationsDataItems> localData = notifications.getData().getItems();
-                        for (int i = 0; i < localData.size(); i++) {
-                            if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                    localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
-                                globalReceivedNotifications.add(localData.get(i));
+                            List<NotificationsDataItems> localData = notifications.getData().getItems();
+                            for (int i = 0; i < localData.size(); i++) {
+                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                    globalReceivedNotifications.add(localData.get(i));
+                                }
                             }
-                        }
 
-                        for (int i = 0; i < globalReceivedNotifications.size(); i++) {
-                            globalReceivedNotifications.get(i).setType("Received");
-                            globalReceivedNotifications.get(i).setTimeAgo(convertNotificationTime(globalReceivedNotifications.get(i).getRequestedDate(), i,
-                                    "Receive"));
-                        }
-                        globalNotifications.addAll(globalReceivedNotifications);
+                            for (int i = 0; i < globalReceivedNotifications.size(); i++) {
+                                globalReceivedNotifications.get(i).setType("Received");
+                                globalReceivedNotifications.get(i).setTimeAgo(convertNotificationTime(globalReceivedNotifications.get(i).getRequestedDate(), i,
+                                        "Receive"));
+                            }
+                            globalNotifications.addAll(globalReceivedNotifications);
 
-                        if (globalNotifications.size() > 0) {
-                            notificationsRV.setVisibility(View.VISIBLE);
-                            noDataTV.setVisibility(View.GONE);
+                            if (globalNotifications.size() > 0) {
+                                notificationsRV.setVisibility(View.VISIBLE);
+                                noDataTV.setVisibility(View.GONE);
 
-                            Collections.sort(globalNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
-                                    .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
+                                Collections.sort(globalNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
+                                        .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
 
-                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                            notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
-                            notificationsRV.setLayoutManager(nLayoutManager);
-                            notificationsRV.setItemAnimator(new DefaultItemAnimator());
-                            notificationsRV.setAdapter(notificationsAdapter);
+                                LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                                notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
+                                notificationsRV.setLayoutManager(nLayoutManager);
+                                notificationsRV.setItemAnimator(new DefaultItemAnimator());
+                                notificationsRV.setAdapter(notificationsAdapter);
+                            } else {
+                                notificationsRV.setVisibility(View.GONE);
+                                noDataTV.setVisibility(View.VISIBLE);
+                                noDataTV.setText("You have no notifications");
+                            }
                         } else {
-                            notificationsRV.setVisibility(View.GONE);
-                            noDataTV.setVisibility(View.VISIBLE);
-                            noDataTV.setText("You have no notifications");
+                            Utils.displayAlert(notifications.getError().getErrorDescription(), NotificationsActivity.this, "",
+                                    notifications.getError().getFieldErrors().get(0));
                         }
-
                     }
+
                 }
             });
         } catch (Exception e) {
@@ -298,6 +308,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getMarkReadResponse().observe(this, new Observer<UnReadDelResponse>() {
                 @Override
                 public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
                         globalNotifications.get(Integer.parseInt(selectedRow)).setRead(true);
                         notificationsAdapter.updateList(globalNotifications);
@@ -314,6 +327,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getMarkUnReadResponse().observe(this, new Observer<UnReadDelResponse>() {
                 @Override
                 public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
                         globalNotifications.get(Integer.parseInt(selectedRow)).setRead(false);
                         notificationsAdapter.updateList(globalNotifications);
@@ -330,6 +346,9 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getDeleteNotifResponse().observe(this, new Observer<UnReadDelResponse>() {
                 @Override
                 public void onChanged(UnReadDelResponse unReadDelResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
                         globalNotifications.remove(Integer.parseInt(selectedRow));
                         notificationsAdapter.updateList(globalNotifications);
@@ -346,34 +365,39 @@ public class NotificationsActivity extends AppCompatActivity {
             notificationsViewModel.getNotificationStatusUpdateResponse().observe(this, new Observer<UserRequestResponse>() {
                 @Override
                 public void onChanged(UserRequestResponse userRequestResponse) {
-                    if (userRequestResponse != null && userRequestResponse.getStatus().equalsIgnoreCase("success")) {
-
-                        if (selectedTab.equals("NOTIFICATIONS")) {
-                            globalNotifications.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
-                            notificationsAdapter.updateList(globalNotifications);
-                            if (updatedStatus.equals("Declined")) {
-                                for (int i = 0; i < globalRequests.size(); i++) {
-                                    if (globalRequests.get(i).getId() == globalNotifications.get(Integer.parseInt(selectedRow)).getId()) {
-                                        globalRequests.get(i).setStatus(updatedStatus);
-                                        break;
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
+                    if (userRequestResponse != null) {
+                        if (userRequestResponse.getStatus().equalsIgnoreCase("success")) {
+                            if (selectedTab.equals("NOTIFICATIONS")) {
+                                globalNotifications.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
+                                notificationsAdapter.updateList(globalNotifications);
+                                if (updatedStatus.equals("Declined")) {
+                                    for (int i = 0; i < globalRequests.size(); i++) {
+                                        if (globalRequests.get(i).getId() == globalNotifications.get(Integer.parseInt(selectedRow)).getId()) {
+                                            globalRequests.get(i).setStatus(updatedStatus);
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                globalRequests.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
+                                notificationsAdapter.updateList(globalRequests);
+                                if (updatedStatus.equals("Declined")) {
+                                    for (int i = 0; i < globalNotifications.size(); i++) {
+                                        if (globalNotifications.get(i).getId() == globalRequests.get(Integer.parseInt(selectedRow)).getId()) {
+                                            globalNotifications.get(i).setStatus(updatedStatus);
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         } else {
-                            globalRequests.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
-                            notificationsAdapter.updateList(globalRequests);
-                            if (updatedStatus.equals("Declined")) {
-                                for (int i = 0; i < globalNotifications.size(); i++) {
-                                    if (globalNotifications.get(i).getId() == globalRequests.get(Integer.parseInt(selectedRow)).getId()) {
-                                        globalNotifications.get(i).setStatus(updatedStatus);
-                                        break;
-                                    }
-                                }
-                            }
+                            Utils.displayAlert(userRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", userRequestResponse.getError().getFieldErrors().get(0));
                         }
-                    } else {
-                        Utils.displayAlert(userRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", userRequestResponse.getError().getFieldErrors().get(0));
                     }
+
                 }
             });
         } catch (Exception e) {
@@ -384,6 +408,9 @@ public class NotificationsActivity extends AppCompatActivity {
             payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
                 @Override
                 public void onChanged(PayRequestResponse payRequestResponse) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     if (payRequestResponse != null) {
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
