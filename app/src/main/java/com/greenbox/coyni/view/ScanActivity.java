@@ -350,6 +350,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (!scanmeSetAmountTV.getText().equals("Clear Amount")) {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
