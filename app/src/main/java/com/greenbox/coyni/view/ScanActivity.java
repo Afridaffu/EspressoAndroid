@@ -611,7 +611,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     if (!strScanWallet.equals(strWallet)) {
                                         getUserDetails(strScanWallet);
                                     } else {
-                                        Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+//                                        Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+                                        displayAlert("Tokens can not request to your own wallet", "");
                                     }
                                 } else {
                                     Utils.displayAlert("Unable to scan the QR code.", ScanActivity.this, "", "");
@@ -876,7 +877,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         if (!strScanWallet.equals(strWallet)) {
                             getUserDetails(strScanWallet);
                         } else {
-                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+//                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+                            displayAlert("Tokens can not request to your own wallet", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
