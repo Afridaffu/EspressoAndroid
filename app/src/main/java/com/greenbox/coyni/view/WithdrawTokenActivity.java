@@ -1361,7 +1361,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
-                etAmount.setText(String.valueOf(cynValue));
+//                etAmount.setText(String.valueOf(cynValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
                 etAmount.addTextChangedListener(WithdrawTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());

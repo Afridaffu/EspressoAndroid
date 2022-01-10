@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.zxing.Reader;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
@@ -22,21 +21,16 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -55,11 +49,9 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,9 +60,7 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.SetLimitFragment;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
@@ -86,7 +76,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -366,6 +355,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (!scanmeSetAmountTV.getText().equals("Clear Amount")) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
                             setAmountDialog = new Dialog(ScanActivity.this);
                             setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                             setAmountDialog.setContentView(R.layout.fragment_set_limit);
@@ -1037,7 +1030,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 

@@ -123,12 +123,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etEmail.setText(value);
                 Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
                 etPassword.setText("");
+                etPassword.setHint("");
+                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             } else {
                 etPassword.setText("");
+                etPassword.setHint("");
+                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             }
         } catch (Exception e) {
             e.printStackTrace();
             etPassword.setText("");
+            etPassword.setHint("");
+            Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
         }
         if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
             if (chkRemember.isChecked()) {
@@ -297,7 +303,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                             etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
-                            if(etPassword.getText().toString().length() > 0)
+                            if (etPassword.getText().toString().length() > 0)
                                 etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             else
                                 etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
