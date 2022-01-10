@@ -351,9 +351,25 @@ public class NotificationsActivity extends AppCompatActivity {
                         if (selectedTab.equals("NOTIFICATIONS")) {
                             globalNotifications.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
                             notificationsAdapter.updateList(globalNotifications);
+                            if (updatedStatus.equals("Completed")) {
+                                for (int i = 0; i < globalRequests.size(); i++) {
+                                    if (globalRequests.get(i).getId() == globalNotifications.get(Integer.parseInt(selectedRow)).getId()) {
+                                        globalRequests.get(i).setStatus(updatedStatus);
+                                        break;
+                                    }
+                                }
+                            }
                         } else {
                             globalRequests.get(Integer.parseInt(selectedRow)).setStatus(updatedStatus);
                             notificationsAdapter.updateList(globalRequests);
+                            if (updatedStatus.equals("Completed")) {
+                                for (int i = 0; i < globalNotifications.size(); i++) {
+                                    if (globalNotifications.get(i).getId() == globalRequests.get(Integer.parseInt(selectedRow)).getId()) {
+                                        globalNotifications.get(i).setStatus(updatedStatus);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     } else {
                         Utils.displayAlert(userRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", userRequestResponse.getError().getFieldErrors().get(0));
