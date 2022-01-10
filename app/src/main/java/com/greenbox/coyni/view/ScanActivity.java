@@ -350,10 +350,6 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (!scanmeSetAmountTV.getText().equals("Clear Amount")) {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
@@ -417,19 +413,21 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        mcodeScanner.startPreview();
-                        scanCode.setTextColor(getResources().getColor(R.color.white));
-                        scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
-                        scanMe.setBackgroundResource(R.drawable.bg_white);
-                        scanMe.setTextColor(getResources().getColor(R.color.primary_black));
-                        scanMeSV.setVisibility(View.GONE);
-                        layoutHead.setVisibility(View.GONE);
-                        closeBtnScanMe.setVisibility(View.GONE);
-                        //ScanCode Visible
-                        mycodeScannerView.setVisibility(View.VISIBLE);
-                        scannerLayout.setVisibility(View.VISIBLE);
-                        flashLL.setVisibility(View.VISIBLE);
-                        closeBtnScanCode.setVisibility(View.VISIBLE);
+                        mcodeScanner.setFlashEnabled(false);
+                        finish();
+//                        mcodeScanner.startPreview();
+//                        scanCode.setTextColor(getResources().getColor(R.color.white));
+//                        scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
+//                        scanMe.setBackgroundResource(R.drawable.bg_white);
+//                        scanMe.setTextColor(getResources().getColor(R.color.primary_black));
+//                        scanMeSV.setVisibility(View.GONE);
+//                        layoutHead.setVisibility(View.GONE);
+//                        closeBtnScanMe.setVisibility(View.GONE);
+//                        //ScanCode Visible
+//                        mycodeScannerView.setVisibility(View.VISIBLE);
+//                        scannerLayout.setVisibility(View.VISIBLE);
+//                        flashLL.setVisibility(View.VISIBLE);
+//                        closeBtnScanCode.setVisibility(View.VISIBLE);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
