@@ -34,7 +34,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     //    String type = "";
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
-    Long mLastClickTime=0L;
+    Long mLastClickTime = 0L;
 
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
@@ -90,6 +90,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
                         ((NotificationsActivity) mContext).selectedRow = position + "";
 
                         List<Integer> list = new ArrayList<>();
@@ -110,6 +111,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
                         ((NotificationsActivity) mContext).selectedRow = position + "";
 
                         List<Integer> list = new ArrayList<>();
@@ -118,6 +120,12 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                         ((NotificationsActivity) mContext).deleteNotificationCall(list);
                     }
                 });
+
+                for(int i=0;i < notifications.size();i++){
+                    if(notifications.get(i).getId()!= notifications.get(position).getId()){
+                        holder.swipeLayout.close(true);
+                    }
+                }
             } else if (notifications.get(position).getType().equals("Received")) {
 
                 Log.e("Status", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
@@ -143,8 +151,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
                     holder.payLL.setVisibility(View.VISIBLE);
                     holder.denyLL.setVisibility(View.VISIBLE);
-                }
-                else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
+                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
                     Log.e("cancelled", "cancelled");
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
@@ -188,6 +195,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
                         Log.e("denyLL", "denyLL");
                         ((NotificationsActivity) mContext).selectedRow = position + "";
 
@@ -209,6 +217,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         Log.e("payLL", "payLL");
+                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
 
                         if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()) {
                             ((NotificationsActivity) mContext).selectedRow = position + "";
@@ -220,7 +229,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                             ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
                         } else {
-                            Utils.displayAlert("Amount exceeds available balance\nAvailable: "+objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()+" CYN",(Activity) mContext,"","");
+                            Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
                         }
                     }
                 });
@@ -233,6 +242,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         Log.e("cancelLL", "cancelLL");
+                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
                         ((NotificationsActivity) mContext).selectedRow = position + "";
 
                         StatusRequest statusRequest = new StatusRequest();
