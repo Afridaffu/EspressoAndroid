@@ -27,7 +27,7 @@
         android:layout_marginBottom="@dimen/_20sdp"
         android:text="Crypto Assets Coming Soon…"
         android:textColor="#008581"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="@dimen/_16ssp"
         android:textStyle="bold"></TextView>
 
     <ImageView
