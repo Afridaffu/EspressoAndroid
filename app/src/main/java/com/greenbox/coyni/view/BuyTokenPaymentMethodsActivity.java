@@ -98,6 +98,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             } else if (strCurrent.equals("externalBank")) {
                 ControlMethod("addpayment");
                 strCurrent = "addpayment";
+            } else {
+                super.onBackPressed();
             }
         } else {
             objMyApplication.setStrScreen("");
