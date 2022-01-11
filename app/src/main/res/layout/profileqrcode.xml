@@ -288,11 +288,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/saveprofileIV"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/image"
+                    android:layout_width="@dimen/_34sdp"
+                    android:layout_height="@dimen/_34sdp"
                     android:visibility="visible" />
 
                 <TextView

@@ -501,24 +501,25 @@
             android:paddingBottom="@dimen/_22sdp">
 
 
+
+
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/_34sdp"
                 android:layout_height="@dimen/_34sdp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_11sdp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_17sdp"
+                android:layout_marginTop="@dimen/_11sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/saveprofileIV"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/image"
+                    android:layout_width="@dimen/_34sdp"
+                    android:layout_height="@dimen/_34sdp"
                     android:visibility="visible" />
 
                 <TextView
@@ -534,8 +535,6 @@
                     android:textSize="@dimen/_14ssp"
                     android:visibility="gone" />
             </androidx.cardview.widget.CardView>
-
-
             <TextView
                 android:id="@+id/tvNameSave"
                 android:layout_width="wrap_content"
