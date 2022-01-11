@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -48,6 +50,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
 
     private void initialization() {
         try {
@@ -132,7 +135,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Invalid Email");
+                            tvEmailError.setText("Please Enter a valid Email");
                             etEmail.clearFocus();
                         } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());

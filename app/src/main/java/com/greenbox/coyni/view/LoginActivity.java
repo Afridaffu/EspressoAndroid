@@ -252,7 +252,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                                 layoutEmailError.setVisibility(VISIBLE);
-                                tvEmailError.setText("Invalid Email");
+                                tvEmailError.setText("Please Enter a valid Email");
                             } else if (etEmail.getText().toString().trim().length() == 0) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));

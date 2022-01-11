@@ -206,6 +206,11 @@ public class GiftCardDetails extends AppCompatActivity {
             giftCardDetailsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        Utils.hideKeypad(GiftCardDetails.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     finish();
                 }
             });
@@ -1220,5 +1225,11 @@ public class GiftCardDetails extends AppCompatActivity {
                 return match.matches();
             }
         };
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

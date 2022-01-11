@@ -79,6 +79,7 @@ import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ScanActivity extends AppCompatActivity implements TextWatcher {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
@@ -112,7 +113,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     //Saved To Album Layout Comp..
     TextView tvSaveUserName, saveProfileTitle, saveSetAmount;
-    ImageView savedImageView, saveProfileIV;
+    ImageView savedImageView;
+    CircleImageView saveProfileIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
