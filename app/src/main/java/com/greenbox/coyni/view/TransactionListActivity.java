@@ -1394,7 +1394,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                     Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
 
                     if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
-                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == (mMonth + 1)
                             && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
                         String str = sdf.format(new Date());

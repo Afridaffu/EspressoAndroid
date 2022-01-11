@@ -141,12 +141,14 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     usdValue = 0.0;
                     cynValidation = 0.0;
                     disableButtons(true);
+                    cKey.clearData();
                 } else {
                     payRequestET.setText("");
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
                     disableButtons(true);
+                    cKey.clearData();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -255,18 +257,22 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     break;
                 case R.id.tvRequest:
                     try {
-                        if (isReqClickable) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            convertDecimal();
-                            if (requestValidation()) {
-                                if (Double.parseDouble(payRequestET.getText().toString()) > 0)
-                                    requestPreview();
-                                else
-                                    disableButtons(true);
+                        if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+                            Utils.displayAlert("You can only Pay", PayRequestActivity.this, "", "");
+                        } else {
+                            if (isReqClickable) {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                convertDecimal();
+                                if (requestValidation()) {
+                                    if (Double.parseDouble(payRequestET.getText().toString().replace(",", "")) > 0)
+                                        requestPreview();
+                                    else
+                                        disableButtons(true);
 
+                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -728,7 +734,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 8) {
+            if (editable.length() > 12) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 8) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);

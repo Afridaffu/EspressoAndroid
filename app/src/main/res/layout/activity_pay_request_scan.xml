@@ -419,6 +419,7 @@
                         android:layout_marginTop="@dimen/_25sdp">
 
                         <LinearLayout
+                            android:id="@+id/lyCopy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
@@ -441,7 +442,14 @@
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
 
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_centerInParent="true"
+                            android:background="@color/light_gray"></View>
+
                         <LinearLayout
+                            android:id="@+id/lyShare"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"

@@ -305,6 +305,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                 lyContacts.setVisibility(View.VISIBLE);
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
                         == PackageManager.PERMISSION_GRANTED) {
+                    dialog = Utils.showProgressDialog(AddRecipientActivity.this);
                     if (objMyApplication.getListContacts() != null && objMyApplication.getListContacts().size() > 0) {
                         mobileArray = objMyApplication.getListContacts();
                     } else {
@@ -479,8 +480,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                 }
                 if (listUsers != null && listUsers.size() > 0) {
                     if (Utils.checkInternet(AddRecipientActivity.this)) {
-                        dialog = new ProgressDialog(AddRecipientActivity.this, R.style.MyAlertDialogStyle);
-                        dialog = Utils.showProgressDialog(AddRecipientActivity.this);
+//                        dialog = Utils.showProgressDialog(AddRecipientActivity.this);
                         payViewModel.registeredUsers(listUsers);
                     } else {
                         Utils.displayAlert(getString(R.string.internet), AddRecipientActivity.this, "", "");

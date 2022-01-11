@@ -337,13 +337,17 @@ public class DashboardActivity extends AppCompatActivity {
             latestTxnRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
-                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
-                        dashboardViewModel.getLatestTxns();
-                        dashboardViewModel.meWallet();
-                        transactionsNSV.smoothScrollTo(0, 0);
-                    } else {
-                        latestTxnRefresh.setRefreshing(false);
+                    try {
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
+                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                            dashboardViewModel.getLatestTxns();
+                            dashboardViewModel.meWallet();
+                            transactionsNSV.smoothScrollTo(0, 0);
+                        } else {
+                            latestTxnRefresh.setRefreshing(false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
