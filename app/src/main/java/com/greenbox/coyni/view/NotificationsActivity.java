@@ -541,7 +541,7 @@ public class NotificationsActivity extends AppCompatActivity {
                             Utils.displayAlert(payRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", payRequestResponse.getError().getFieldErrors().get(0));
                         }
                     } else {
-                        Utils.displayAlert("something went wrong", NotificationsActivity.this, "", "");
+                        Utils.displayAlert(getString(R.string.something_went_wrong), NotificationsActivity.this, "", "");
                     }
                 }
             });

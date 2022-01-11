@@ -670,24 +670,36 @@ public class DashboardActivity extends AppCompatActivity {
                 public void onChanged(Notifications notifications) {
 
                     try {
-                        if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                            List<NotificationsDataItems> localData = notifications.getData().getItems();
-                            for (int i = 0; i < localData.size(); i++) {
-                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
-                                    globalCount++;
+                        if (notifications != null) {
+                            if (notifications.getStatus().equalsIgnoreCase("success")) {
+                                List<NotificationsDataItems> localData = notifications.getData().getItems();
+                                for (int i = 0; i < localData.size(); i++) {
+                                    if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                            localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                        globalCount++;
+                                    }
+                                }
+
+                                if (globalCount > 0) {
+                                    countCV.setVisibility(View.VISIBLE);
+                                    countTV.setText(globalCount + "");
+                                } else {
+                                    countCV.setVisibility(View.GONE);
+                                }
+
+                                Log.e("count total", globalCount + "");
+                            } else {
+                                if (globalCount > 0) {
+                                    countCV.setVisibility(View.VISIBLE);
+                                    countTV.setText(globalCount + "");
+                                } else {
+                                    countCV.setVisibility(View.GONE);
                                 }
                             }
-
-                            if (globalCount > 0) {
-                                countCV.setVisibility(View.VISIBLE);
-                                countTV.setText(globalCount + "");
-                            } else {
-                                countCV.setVisibility(View.GONE);
-                            }
-
-                            Log.e("count total", globalCount + "");
+                        } else {
+                            Utils.displayAlert(getString(R.string.something_went_wrong), DashboardActivity.this, "", "");
                         }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

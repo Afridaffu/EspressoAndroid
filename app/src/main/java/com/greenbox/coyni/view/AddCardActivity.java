@@ -633,7 +633,7 @@ public class AddCardActivity extends AppCompatActivity {
                             }
 
                             if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
-                                etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1).toLowerCase());
+                                etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1));
                             }
 
                         } else {
