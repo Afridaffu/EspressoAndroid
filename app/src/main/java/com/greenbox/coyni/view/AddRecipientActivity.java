@@ -63,7 +63,7 @@ public class AddRecipientActivity extends AppCompatActivity {
     RecyclerView rvContacts, rvCoyniUsers, rvRecent;
     List<RecentUsersData> usersList;
     List<CoyniUsersData> listCoyniUsers;
-    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers,tvContactMsg;
+    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers, tvContactMsg;
     RecentUsersAdapter recentUsersAdapter;
     CoyniUsersAdapter coyniUsersAdapter;
     ContactsAdapter contactsAdapter;
@@ -455,7 +455,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         obj.setUserName(mobileArray.get(i).getName());
                         obj.setImagePath(mobileArray.get(i).getPhoto());
                         listUsers.add(obj);
-                    } else {
+                    } else if (mobileArray.get(i).getNumber() != null) {
                         for (int j = 0; j < mobileArray.get(i).getNumber().size(); j++) {
                             obj = new RegisteredUsersRequest();
                             if (mobileArray.get(i).getNumber().get(j).startsWith("+1")) {
