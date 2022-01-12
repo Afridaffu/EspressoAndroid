@@ -420,19 +420,6 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     try {
                         mcodeScanner.setFlashEnabled(false);
                         finish();
-//                        mcodeScanner.startPreview();
-//                        scanCode.setTextColor(getResources().getColor(R.color.white));
-//                        scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
-//                        scanMe.setBackgroundResource(R.drawable.bg_white);
-//                        scanMe.setTextColor(getResources().getColor(R.color.primary_black));
-//                        scanMeSV.setVisibility(View.GONE);
-//                        layoutHead.setVisibility(View.GONE);
-//                        closeBtnScanMe.setVisibility(View.GONE);
-//                        //ScanCode Visible
-//                        mycodeScannerView.setVisibility(View.VISIBLE);
-//                        scannerLayout.setVisibility(View.VISIBLE);
-//                        flashLL.setVisibility(View.VISIBLE);
-//                        closeBtnScanCode.setVisibility(View.VISIBLE);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -944,20 +931,36 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     public void setAmountClick() {
         try {
-            if (setAmountDialog != null) {
-                setAmountDialog.dismiss();
+            if (validation()) {
+                if (setAmountDialog != null) {
+                    setAmountDialog.dismiss();
+                }
+                scanmeSetAmountTV.setText("Clear Amount");
+                scanMeRequestAmount.setText(USFormat(setAmount));
+                saveSetAmount.setText(USFormat(setAmount));
+                scanAmountLL.setVisibility(View.VISIBLE);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("cynAmount", scanMeRequestAmount.getText().toString());
+                jsonObject.put("referenceID", strWallet);
+                generateQRCode(jsonObject.toString());
             }
-            scanmeSetAmountTV.setText("Clear Amount");
-            scanMeRequestAmount.setText(USFormat(setAmount));
-            saveSetAmount.setText(USFormat(setAmount));
-            scanAmountLL.setVisibility(View.VISIBLE);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("cynAmount", scanMeRequestAmount.getText().toString());
-            jsonObject.put("referenceID", strWallet);
-            generateQRCode(jsonObject.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private Boolean validation() {
+        Boolean value = true;
+        try {
+            String strPay = setAmount.getText().toString().trim().replace("\"", "");
+            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+                value = false;
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
     }
 
     private String USFormat(EditText etAmount) {

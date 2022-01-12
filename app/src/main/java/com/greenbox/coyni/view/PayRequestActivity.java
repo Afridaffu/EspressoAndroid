@@ -238,17 +238,21 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                             mLastClickTime = SystemClock.elapsedRealtime();
                             convertDecimal();
                             if (payValidation()) {
-                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                                    isPayClick = true;
-                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-                                    calculateFee(Utils.USNumberFormat(cynValue));
-                                } else {
-                                    objMyApplication.setStrScreen("payRequest");
-                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-                                    i.putExtra("screen", "payRequest");
-                                    startActivity(i);
-                                }
+                                isPayClick = true;
+                                pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+                                cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+                                calculateFee(Utils.USNumberFormat(cynValue));
+//                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                                    isPayClick = true;
+//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+//                                    calculateFee(Utils.USNumberFormat(cynValue));
+//                                } else {
+//                                    objMyApplication.setStrScreen("payRequest");
+//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                                    i.putExtra("screen", "payRequest");
+//                                    startActivity(i);
+//                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -635,6 +639,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 //                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
 //                return value = false;
 //            }
+
             if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
@@ -644,6 +649,17 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 //                value = false;
 //            }
 
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                                    isPayClick = true;
+//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+//                                    calculateFee(Utils.USNumberFormat(cynValue));
+//                                } else {
+//                                    objMyApplication.setStrScreen("payRequest");
+//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                                    i.putExtra("screen", "payRequest");
+//                                    startActivity(i);
+//                                }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

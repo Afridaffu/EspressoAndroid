@@ -13,8 +13,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -59,6 +61,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     TextView tvCurrency, tvAmount, tvCYN, tvLable, tvBalance;
     MotionLayout paySlideToConfirm;
     CardView cvLock, im_lock;
+    float fontSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +159,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             im_lock = findViewById(R.id.im_lock);
             tvBalance.setText("Available: " + Utils.USNumberFormat(objMyApplication.getGBTBalance()) + "CYN");
             avaBal = objMyApplication.getGBTBalance();
+            fontSize = tvAmount.getTextSize();
             paySlideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
                 @Override
                 public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
@@ -208,6 +212,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
                 tvAmount.setText(getIntent().getStringExtra("amount"));
                 USFormat(tvAmount);
+                cynValue = Double.parseDouble(tvAmount.getText().toString().trim().replace(",", ""));
             }
             lyPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -456,6 +461,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            changeTextSize(strReturn);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -553,6 +559,28 @@ public class PayToPersonalActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
             startActivity(getIntent());
             overridePendingTransition(0, 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void changeTextSize(String editable) {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            if (editable.length() > 12) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            } else if (editable.length() > 8) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 5) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+            } else {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
+            }
+            tvAmount.setFilters(FilterArray);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

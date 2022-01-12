@@ -528,7 +528,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 ex.printStackTrace();
             }
 
-            if (walletResponse != null) {
+            if (walletResponse != null && walletResponse.getData().getWalletInfo().size() > 0) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);
