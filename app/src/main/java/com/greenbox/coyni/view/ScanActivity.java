@@ -711,6 +711,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
                 mcodeScanner.startPreview();
+                scannerLayout.setVisibility(View.VISIBLE);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
