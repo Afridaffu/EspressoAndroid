@@ -91,8 +91,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         if (charSequence == firstName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 firstNameErrorLL.setVisibility(GONE);
-                firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_green));
+//                firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_black));
             }
             else if (firstName.getText().toString().trim().length() == 0) {
                 firstNameErrorLL.setVisibility(VISIBLE);
@@ -102,8 +102,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         } else if (charSequence == lastName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 lastNameErrorLL.setVisibility(GONE);
-                lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_green));
+//                lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_black));
             }
             else if (lastName.getText().toString().trim().length() == 0) {
                 lastNameErrorLL.setVisibility(VISIBLE);
