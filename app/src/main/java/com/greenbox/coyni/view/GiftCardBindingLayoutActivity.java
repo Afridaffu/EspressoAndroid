@@ -1,11 +1,18 @@
 package com.greenbox.coyni.view;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -13,25 +20,33 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 import java.util.List;
 
@@ -42,6 +57,9 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     CardView doneCV, cvTryAgain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
+    ProgressDialog pDialog;
+    int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
+    CoyniViewModel coyniViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +88,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             learnMoreTV = findViewById(R.id.learnMoreTV);
             refIDLL = findViewById(R.id.refIDLL);
             doneCV = findViewById(R.id.doneCV);
-
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             tvMessage = findViewById(R.id.tvMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
 
@@ -290,6 +308,18 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
+
+            if (!objMyApplication.getBiometric()) {
+                if (Utils.getIsBiometric()) {
+                    if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
+                        if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
+                            loadSecurePay("TOUCH");
+                        } else {
+                            loadSecurePay("FACE");
+                        }
+                    }
+                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -372,9 +402,113 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    private void loadSecurePay(String enableType) {
+        try {
+            final Dialog dialog = new Dialog(GiftCardBindingLayoutActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.securepaylayout);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView message = dialog.findViewById(R.id.tvMessage);
+            CardView enableFaceCV = dialog.findViewById(R.id.enableFaceCV);
+            LinearLayout layoutNotnowFace = dialog.findViewById(R.id.layoutNotnowFace);
+            TextView dontRemindFace = dialog.findViewById(R.id.dontRemindFace);
+            TextView tvEnableFace = dialog.findViewById(R.id.tvEnableFace);
+
+            if (enableType.equals("TOUCH")) {
+                tvEnableFace.setText("Enable Touch ID");
+                message.setText("Enable Touch ID to Use touch to complete payments quickly and securely.");
+            } else {
+                tvEnableFace.setText("Enable Face ID");
+                message.setText("Enable Face ID to Use face recognition to complete payments quickly and securely.");
+            }
+
+            layoutNotnowFace.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dontRemindFace.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            enableFaceCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
+                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                        if (!fingerprintManager.isHardwareDetected()) {
+                            Log.e("Not support", "Not support");
+                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                    BIOMETRIC_STRONG);
+                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                        } else {
+                            pDialog = new ProgressDialog(GiftCardBindingLayoutActivity.this, R.style.MyAlertDialogStyle);
+                            pDialog.setIndeterminate(false);
+                            pDialog.setMessage("Please wait...");
+                            pDialog.show();
+                            BiometricRequest biometricRequest = new BiometricRequest();
+                            biometricRequest.setBiometricEnabled(true);
+                            biometricRequest.setDeviceId(Utils.getDeviceID());
+                            coyniViewModel.saveBiometric(biometricRequest);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
+
+                pDialog = new ProgressDialog(GiftCardBindingLayoutActivity.this, R.style.MyAlertDialogStyle);
+                pDialog.setIndeterminate(false);
+                pDialog.setMessage("Please wait...");
+                pDialog.show();
+                BiometricRequest biometricRequest = new BiometricRequest();
+                biometricRequest.setBiometricEnabled(true);
+                biometricRequest.setDeviceId(Utils.getDeviceID());
+                coyniViewModel.saveBiometric(biometricRequest);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
