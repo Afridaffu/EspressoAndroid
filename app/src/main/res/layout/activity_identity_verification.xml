@@ -279,6 +279,7 @@
                             android:clickable="true"
                             android:cursorVisible="false"
                             android:editable="false"
+                            android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="@string/dobhint"
                             android:imeOptions="actionDone"
@@ -287,8 +288,7 @@
                             android:padding="@dimen/_14sdp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/light_gray"
-                            android:textSize="@dimen/_12ssp"
-                            android:focusable="false"/>
+                            android:textSize="@dimen/_12ssp" />
 
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -342,7 +342,6 @@
         </RelativeLayout>
 
     </LinearLayout>
-
 
     <RelativeLayout
         android:id="@+id/scrlViewIV2nd"
@@ -737,7 +736,7 @@
 
                 <TextView
                     android:id="@+id/btnExit"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/_43sdp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/_26sdp"

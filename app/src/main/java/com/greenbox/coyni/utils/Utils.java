@@ -182,6 +182,8 @@ public class Utils {
 
     public static final float slidePercentage = 0.3f;
 
+    public static boolean isKeyboardVisible = false;
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
 

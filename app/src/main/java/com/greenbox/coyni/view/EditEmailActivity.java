@@ -205,9 +205,11 @@ public class EditEmailActivity extends AppCompatActivity {
 //        }
 
         try {
+            String beforeText = "";
             newEmailET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    Log.e("beforeTextChanged", charSequence.toString());
                 }
 
                 @Override
@@ -230,6 +232,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         isNewEmail = false;
                     }
                     enableOrDisableSave();
+
                 }
 
                 @Override

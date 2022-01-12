@@ -115,7 +115,12 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 //                    ssnaacTIL.setHintTextColor(ColorStateList.valueOf(getColor(R.color.error_red)));
                     ssnErrorLL.setVisibility(VISIBLE);
                     ssnErrorTV.setText("Field Required");
-                } else if (ssnET.getText().toString().length() == 9) {
+                }
+//                else if (ssnET.getText().toString().length() > 0 && ssnET.getText().toString().length() < 9) {
+//                    ssnErrorLL.setVisibility(VISIBLE);
+//                    ssnErrorTV.setText("Please enter a valid SSN");
+//                }
+                else if (ssnET.getText().toString().length() == 9) {
                     ssnErrorLL.setVisibility(GONE);
                 }
             }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -58,7 +59,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         try {
 
             holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-            holder.swipeLayout.close(true, true);
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
             holder.tvNotifDate.setPadding(40, 30, 0, 0);
@@ -127,6 +127,40 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                         holder.swipeLayout.close(true);
                     }
                 }
+
+                holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                    @Override
+                    public void onStartOpen(SwipeLayout layout) {
+                        Log.e("onStartOpen", "onStartOpen");
+
+                    }
+
+                    @Override
+                    public void onOpen(SwipeLayout layout) {
+                        if (((NotificationsActivity) mContext).previousItemPos != position && ((NotificationsActivity) mContext).previousItemPos != -1) {
+
+
+                        }
+                        ((NotificationsActivity) mContext).previousItemPos = position;
+
+                    }
+
+                    @Override
+                    public void onStartClose(SwipeLayout layout) {
+                    }
+
+                    @Override
+                    public void onClose(SwipeLayout layout) {
+                    }
+
+                    @Override
+                    public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                    }
+
+                    @Override
+                    public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                    }
+                });
             } else if (notifications.get(position).getType().equals("Received")) {
 
                 Log.e("Status", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());

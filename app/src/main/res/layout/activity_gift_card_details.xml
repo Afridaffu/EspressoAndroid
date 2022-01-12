@@ -102,8 +102,7 @@
                         android:autoLink="web"
                         android:ellipsize="end"
                         android:fontFamily="@font/opensans_semibold"
-                        android:maxLines="2"
-                        android:nestedScrollingEnabled="false"
+                        android:maxLines="3"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp"
                         tools:text="Description" />
