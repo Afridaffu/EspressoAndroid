@@ -100,7 +100,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     DashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
     boolean isTorchOn = true;
-    private ImageView toglebtn1;
+    ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "";
     ProgressDialog dialog;
     Dialog errorDialog;
@@ -679,9 +679,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     mcodeScanner.setFlashEnabled(false);
                                     torchTogle(isTorchOn);
                                 }
-
                             }
                         });
+
                     } else {
                         Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
                     }

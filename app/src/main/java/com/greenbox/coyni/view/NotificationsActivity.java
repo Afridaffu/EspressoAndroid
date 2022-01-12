@@ -95,7 +95,7 @@ public class NotificationsActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_notifications);
-
+        Utils.hideKeypad(this);
         initFields();
         initObservers();
     }
@@ -661,7 +661,6 @@ public class NotificationsActivity extends AppCompatActivity {
 
     public void showPayRequestPreview(NotificationsDataItems dataItem, TransferPayRequest request) {
         try {
-            Utils.hideKeypad(NotificationsActivity.this);
             Dialog prevDialog = new Dialog(NotificationsActivity.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.notification_pay_preview);
@@ -864,4 +863,5 @@ public class NotificationsActivity extends AppCompatActivity {
         }
         return value;
     }
+
 }

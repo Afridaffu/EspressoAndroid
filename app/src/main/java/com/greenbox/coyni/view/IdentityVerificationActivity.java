@@ -103,7 +103,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     MyApplication myApplicationObj;
     Long mLastClickTime = 0L;
     DashboardViewModel dashboardViewModel;
-    Date selectedDate;
+
+    private DatePicker datepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +150,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         try {
 
             Calendar c = Calendar.getInstance();
-//            if (selectedDate != null) {
-//                c.set(Calendar.YEAR, selectedDate.getYear());
-//                c.set(Calendar.MONTH, selectedDate.getMonth());
-//                c.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
-//            }
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -171,9 +167,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                 dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
                                 enableNext();
                                 ssnET.clearFocus();
-
-                                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
-                                selectedDate = spf.parse(dateOfBirth);
+                                datepicker = new DatePicker(IdentityVerificationActivity.this);
+                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -183,13 +178,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             long years = 568025136000L;
             long yearsback = c.getTimeInMillis() - years;
             datePickerDialog.getDatePicker().setMaxDate(yearsback);
-            if (selectedDate != null) {
-                datePickerDialog.getDatePicker().updateDate(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
-//                c.set(Calendar.YEAR, selectedDate.getYear());
-//                c.set(Calendar.MONTH, selectedDate.getMonth());
-//                c.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
+            if (datepicker != null) {
+                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
             }
-
             datePickerDialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();

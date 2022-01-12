@@ -25,7 +25,8 @@
         app:frameCornersSize="30dp"
         app:frameSize="0.65"
         app:frameThickness="5dp"
-        app:maskColor="#2CFDFBFB" />
+        app:maskColor="#2CFDFBFB"
+        />
 
     <ImageView
         android:id="@+id/closeBtnSC"

@@ -128,4 +128,5 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1'
 }

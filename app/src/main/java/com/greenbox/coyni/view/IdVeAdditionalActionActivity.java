@@ -5,13 +5,11 @@ import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,7 +49,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         ssnErrorLL = findViewById(R.id.ssnErrorLL);
         ssnErrorTV = findViewById(R.id.ssnErrorTV);
         idveridoneBtn = findViewById(R.id.idveridoneBtn);
-        ssnaacTIL=findViewById(R.id.ssnTIL);
+        ssnaacTIL = findViewById(R.id.ssnTIL);
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
@@ -112,13 +110,12 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(ssnET.getText().toString().length()==0){
+                if (ssnET.getText().toString().length() == 0) {
 //                    ssnaacTIL.setBoxStrokeColor(getColor(R.color.error_red));
 //                    ssnaacTIL.setHintTextColor(ColorStateList.valueOf(getColor(R.color.error_red)));
                     ssnErrorLL.setVisibility(VISIBLE);
                     ssnErrorTV.setText("Field Required");
-                }
-                else if (ssnET.getText().toString().length()==9){
+                } else if (ssnET.getText().toString().length() == 9) {
                     ssnErrorLL.setVisibility(GONE);
                 }
             }
@@ -207,10 +204,10 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 //                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
 //                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
 //                                || respCode.equalsIgnoreCase("CI24")) {
-                            //Success
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "SUCCESS"));
-                            finish();
+                        //Success
+                        startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                .putExtra("screen", "SUCCESS"));
+                        finish();
 //                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
 //                            //SSN Error
 //                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdVeAdditionalActionActivity.class));

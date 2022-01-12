@@ -58,7 +58,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         try {
 
             holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-            holder.swipeLayout.close(true,true);
+            holder.swipeLayout.close(true, true);
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
             holder.tvNotifDate.setPadding(40, 30, 0, 0);
@@ -122,8 +122,8 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     }
                 });
 
-                for(int i=0;i < notifications.size();i++){
-                    if(notifications.get(i).getId()!= notifications.get(position).getId()){
+                for (int i = 0; i < notifications.size(); i++) {
+                    if (notifications.get(i).getId() != notifications.get(position).getId()) {
                         holder.swipeLayout.close(true);
                     }
                 }
@@ -218,7 +218,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         Log.e("payLL", "payLL");
-                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+//                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
 
                         if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()) {
                             ((NotificationsActivity) mContext).selectedRow = position + "";
@@ -445,4 +445,5 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     public int getSwipeLayoutResourceId(int position) {
         return R.id.swipeLL;
     }
+
 }
