@@ -231,6 +231,7 @@
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center_vertical|right"
                                 android:hint="0.00"
+                                android:textColorHint="@color/light_gray"
                                 android:inputType="numberDecimal"
                                 android:maxLength="@string/maxlength"
                                 android:textColor="@color/primary_black"
