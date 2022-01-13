@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
@@ -32,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -121,7 +123,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (cursor.getCount() > 0) {
                 String value = cursor.getString(1);
                 etEmail.setText(value);
-                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                if (isEmailValid(etEmail.getText().toString().trim())) {
+                    Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    layoutEmailError.setVisibility(GONE);
+                }
                 etPassword.setText("");
                 etPassword.setHint("");
                 Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
@@ -143,7 +149,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 chkRemember.setChecked(false);
             }
             etEmail.setText(objMyApplication.getStrRetrEmail());
-            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+            if (isEmailValid(etEmail.getText().toString().trim())) {
+                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                layoutEmailError.setVisibility(GONE);
+            }
 
         }
     }
@@ -267,6 +277,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 layoutEmailError.setVisibility(GONE);
                             }
                         } else {
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(LoginActivity.this);
                             etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
                             etEmail.setHint("Coyni@example.com");
@@ -299,6 +311,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             }
                             etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         } else {
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(LoginActivity.this);
                             etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                             etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
@@ -408,6 +422,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             forgotpwd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    hideAndClearFocus();
                     Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                     i.putExtra("screen", "ForgotPwd");
                     i.putExtra("email", etEmail.getText().toString().trim());
@@ -418,6 +433,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             tvRetEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    hideAndClearFocus();
                     Intent i = new Intent(LoginActivity.this, RetrieveEmailActivity.class);
                     startActivity(i);
                 }
@@ -431,7 +447,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        Utils.hideKeypad(LoginActivity.this, v);
+                        hideAndClearFocus();
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
                             strPwd = etPassword.getText().toString().trim();
@@ -549,8 +565,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dsRemember.moveToFirst();
             if (dsRemember.getCount() > 0) {
                 etEmail.setText(dsRemember.getString(1));
-                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-
+                if (isEmailValid(etEmail.getText().toString().trim())) {
+                    Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    layoutEmailError.setVisibility(GONE);
+                }
                 chkRemember.setChecked(true);
             } else {
                 chkRemember.setChecked(false);
@@ -827,6 +846,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         } else {
             loginBGIV.setAlpha(1.0f);
         }
+        Utils.isKeyboardVisible = visible;
     }
 
     private void getStatesUrl(String strCode) {
@@ -898,5 +918,24 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             List<States> listStates = gson.fromJson(result, type);
             objMyApplication.setListStates(listStates);
         }
+    }
+
+    public void hideAndClearFocus() {
+        etEmail.clearFocus();
+        etPassword.clearFocus();
+        if (Utils.isKeyboardVisible)
+            Utils.hideKeypad(LoginActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideAndClearFocus();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.e("new Config",newConfig.toString());
     }
 }

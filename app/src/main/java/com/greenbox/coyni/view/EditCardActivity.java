@@ -190,6 +190,8 @@ public class EditCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(EditCardActivity.this);
                     Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -201,6 +203,8 @@ public class EditCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(EditCardActivity.this);
                     Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -212,6 +216,8 @@ public class EditCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(EditCardActivity.this);
                     Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
                 }
             });

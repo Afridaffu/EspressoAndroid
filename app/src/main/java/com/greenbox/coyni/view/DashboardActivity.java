@@ -758,6 +758,7 @@ public class DashboardActivity extends AppCompatActivity {
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             dialog.getWindow().setAttributes(lp);
             dialog.show();
+            transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -786,6 +787,7 @@ public class DashboardActivity extends AppCompatActivity {
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             dialog.getWindow().setAttributes(lp);
             dialog.show();
+            transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -706,9 +706,10 @@
                         android:focusable="false"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/countryhint"
+                        android:text="@string/countryhint"
                         android:imeOptions="actionDone"
                         android:padding="@dimen/_12sdp"
-                        android:textColor="@color/light_gray"
+                        android:textColor="@color/primary_black"
                         android:textColorHint="@color/light_gray"
                         android:textSize="@dimen/_12sdp" />
 

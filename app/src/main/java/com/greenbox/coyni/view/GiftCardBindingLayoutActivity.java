@@ -511,4 +511,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

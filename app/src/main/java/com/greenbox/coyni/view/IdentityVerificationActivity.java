@@ -175,6 +175,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                                 ssnET.clearFocus();
                                 datepicker = new DatePicker(IdentityVerificationActivity.this);
                                 datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
+                                Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -507,6 +508,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
                         }
                     } else {
+                        mailingAddlineoptTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_green));
                         mailAddr2.setHint("Apt#, Suit, Floor");
                     }
                 }
@@ -795,6 +798,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -803,6 +808,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -811,6 +818,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 

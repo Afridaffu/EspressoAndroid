@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +23,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
@@ -55,7 +58,6 @@ public class EditEmailActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     LoginViewModel loginViewModel;
     LinearLayout editEmailCloseLL;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -454,4 +456,5 @@ public class EditEmailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }
