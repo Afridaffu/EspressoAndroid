@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Email"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:errorTextColor="@color/error_red"
