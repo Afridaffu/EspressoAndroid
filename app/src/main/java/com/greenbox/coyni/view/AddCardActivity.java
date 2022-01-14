@@ -191,7 +191,7 @@ public class AddCardActivity extends AppCompatActivity {
 //            etCardNumber.requestCNETFocus();
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
-            etName.setHint("Name on card");
+            etName.setHint("Name on Card");
             try {
                 MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
                 mRecognizer = new BlinkCardRecognizer();
@@ -643,7 +643,7 @@ public class AddCardActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            etName.setHint("Name on card");
+                            etName.setHint("Name on Card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                             InputMethodManager imm = (InputMethodManager) AddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
