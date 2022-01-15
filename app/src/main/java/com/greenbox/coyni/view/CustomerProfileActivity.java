@@ -57,6 +57,7 @@ import java.util.Locale;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
@@ -425,7 +426,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             TextView userFullName, userInfo, walletAddress;
             // saved to album
             TextView tvSaveUserName, saveProfileTitle, saveToAlbumTV;
-            ImageView savedImageView, saveProfileIV;
+            ImageView savedImageView;
+            CircleImageView saveProfileIV;
             LinearLayout saveToAlbumLL;
 
 
@@ -526,7 +528,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 ex.printStackTrace();
             }
 
-            if (walletResponse != null) {
+            if (walletResponse != null && walletResponse.getData().getWalletInfo().size() > 0) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);

@@ -90,7 +90,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     public static boolean isMailAddr1 = false, isCity = false, isState = false, isZip = false, isSubmit = false, isNext = false;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     public static File identityFile;
-    public static String dateOfBirth;
+    public static String dateOfBirth = "";
     public static int identityType = 0;
     public static boolean isFileSelected = false, isSSNSelected = false, isDOBSelected = false;
 
@@ -103,6 +103,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     MyApplication myApplicationObj;
     Long mLastClickTime = 0L;
     DashboardViewModel dashboardViewModel;
+    Date selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +147,17 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     private void setToDate(EditText dob) {
         try {
+
             Calendar c = Calendar.getInstance();
+//            if (selectedDate != null) {
+//                c.set(Calendar.YEAR, selectedDate.getYear());
+//                c.set(Calendar.MONTH, selectedDate.getMonth());
+//                c.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
+//            }
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
+
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.CalendarDialogTheme,
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -163,6 +171,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                 dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
                                 enableNext();
                                 ssnET.clearFocus();
+
+                                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+                                selectedDate = spf.parse(dateOfBirth);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -172,6 +183,13 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             long years = 568025136000L;
             long yearsback = c.getTimeInMillis() - years;
             datePickerDialog.getDatePicker().setMaxDate(yearsback);
+            if (selectedDate != null) {
+                datePickerDialog.getDatePicker().updateDate(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
+//                c.set(Calendar.YEAR, selectedDate.getYear());
+//                c.set(Calendar.MONTH, selectedDate.getMonth());
+//                c.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
+            }
+
             datePickerDialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -215,17 +233,15 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if (charSequence.toString().trim().length()>0&&charSequence.toString().trim().length()<4){
+                        if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 4) {
                             isSSNSelected = false;
                             Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
-                        }
-                        else if (charSequence.toString().trim().length() == 4) {
+                        } else if (charSequence.toString().trim().length() == 4) {
                             isSSNSelected = true;
                             ssnErrorLL.setVisibility(GONE);
-    //                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            //                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
-                        }
-                        else {
+                        } else {
                             isSSNSelected = false;
                         }
                         enableNext();
@@ -252,7 +268,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         if (charSequence.length() > 0) {
                             isMailAddr1 = true;
                             address1ErrorLL.setVisibility(GONE);
-    //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_black));
                         } else {
                             address1ErrorLL.setVisibility(VISIBLE);
@@ -296,9 +312,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if(charSequence.length() > 0){
+                        if (charSequence.length() > 0) {
 
-                            Utils.setUpperHintColor(mailingAddlineoptTIL,getResources().getColor(R.color.primary_black));
+                            Utils.setUpperHintColor(mailingAddlineoptTIL, getResources().getColor(R.color.primary_black));
                         }
 //                else{
 //                    address2ErrorLL.setVisibility(VISIBLE);
@@ -343,7 +359,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         if (charSequence.length() > 0) {
                             isCity = true;
                             cityErrorLL.setVisibility(GONE);
-    //                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            //                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                         } else {
                             cityErrorLL.setVisibility(VISIBLE);
@@ -393,7 +409,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(stateTIL,getResources().getColor(R.color.primary_black));
+                            Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
                             stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             isState = true;
                         } else {
@@ -423,12 +439,12 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         if (charSequence.length() == 5) {
                             isZip = true;
                             zipcodeErrorLL.setVisibility(GONE);
-    //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
-                        } else if (charSequence.length() < 5&&charSequence.length()>0) {
+                        } else if (charSequence.length() < 5 && charSequence.length() > 0) {
                             isZip = false;
                             zipcodeErrorLL.setVisibility(GONE);
-    //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZip = false;
@@ -485,11 +501,10 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         mailAddr2.setHint("");
-                        if (mailAddr2.getText().toString().trim().length()>0){
+                        if (mailAddr2.getText().toString().trim().length() > 0) {
                             Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_black));
                             mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        }
-                        else {
+                        } else {
                             Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.light_gray));
                             mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
@@ -691,7 +706,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    
+
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -1318,14 +1333,14 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         identityFile = null;
         isFileSelected = false;
 
-        isSSNSelected=false;
-        isDOBSelected=false;
-        isMailAddr1=false;
-        isCity=false;
-        isState=false;
-        isZip=false;
-        isSubmit=false;
-        isNext=false;
+        isSSNSelected = false;
+        isDOBSelected = false;
+        isMailAddr1 = false;
+        isCity = false;
+        isState = false;
+        isZip = false;
+        isSubmit = false;
+        isNext = false;
 
     }
 }

@@ -63,7 +63,7 @@ public class AddRecipientActivity extends AppCompatActivity {
     RecyclerView rvContacts, rvCoyniUsers, rvRecent;
     List<RecentUsersData> usersList;
     List<CoyniUsersData> listCoyniUsers;
-    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers,tvContactMsg;
+    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers, tvContactMsg;
     RecentUsersAdapter recentUsersAdapter;
     CoyniUsersAdapter coyniUsersAdapter;
     ContactsAdapter contactsAdapter;
@@ -305,6 +305,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                 lyContacts.setVisibility(View.VISIBLE);
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
                         == PackageManager.PERMISSION_GRANTED) {
+                    dialog = Utils.showProgressDialog(AddRecipientActivity.this);
                     if (objMyApplication.getListContacts() != null && objMyApplication.getListContacts().size() > 0) {
                         mobileArray = objMyApplication.getListContacts();
                     } else {
@@ -454,7 +455,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         obj.setUserName(mobileArray.get(i).getName());
                         obj.setImagePath(mobileArray.get(i).getPhoto());
                         listUsers.add(obj);
-                    } else {
+                    } else if (mobileArray.get(i).getNumber() != null) {
                         for (int j = 0; j < mobileArray.get(i).getNumber().size(); j++) {
                             obj = new RegisteredUsersRequest();
                             if (mobileArray.get(i).getNumber().get(j).startsWith("+1")) {
@@ -479,8 +480,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                 }
                 if (listUsers != null && listUsers.size() > 0) {
                     if (Utils.checkInternet(AddRecipientActivity.this)) {
-                        dialog = new ProgressDialog(AddRecipientActivity.this, R.style.MyAlertDialogStyle);
-                        dialog = Utils.showProgressDialog(AddRecipientActivity.this);
+//                        dialog = Utils.showProgressDialog(AddRecipientActivity.this);
                         payViewModel.registeredUsers(listUsers);
                     } else {
                         Utils.displayAlert(getString(R.string.internet), AddRecipientActivity.this, "", "");

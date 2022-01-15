@@ -904,7 +904,7 @@ public class CreateAccountActivity extends BaseActivity {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Invalid Email");
+                            emailErrorTV.setText("Please Enter a valid Email");
                         } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));

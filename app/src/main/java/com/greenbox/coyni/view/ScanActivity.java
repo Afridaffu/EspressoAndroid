@@ -79,6 +79,7 @@ import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ScanActivity extends AppCompatActivity implements TextWatcher {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
@@ -102,6 +103,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "";
     ProgressDialog dialog;
+    Dialog errorDialog;
     ConstraintLayout scannerLayout;
     View scannerBar;
     float fontSize;
@@ -111,7 +113,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     //Saved To Album Layout Comp..
     TextView tvSaveUserName, saveProfileTitle, saveSetAmount;
-    ImageView savedImageView, saveProfileIV;
+    ImageView savedImageView;
+    CircleImageView saveProfileIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -401,7 +404,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        mcodeScanner.setFlashEnabled(false);
+                        if (mcodeScanner != null) {
+                            mcodeScanner.setFlashEnabled(false);
+                        }
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -415,19 +420,6 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     try {
                         mcodeScanner.setFlashEnabled(false);
                         finish();
-//                        mcodeScanner.startPreview();
-//                        scanCode.setTextColor(getResources().getColor(R.color.white));
-//                        scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
-//                        scanMe.setBackgroundResource(R.drawable.bg_white);
-//                        scanMe.setTextColor(getResources().getColor(R.color.primary_black));
-//                        scanMeSV.setVisibility(View.GONE);
-//                        layoutHead.setVisibility(View.GONE);
-//                        closeBtnScanMe.setVisibility(View.GONE);
-//                        //ScanCode Visible
-//                        mycodeScannerView.setVisibility(View.VISIBLE);
-//                        scannerLayout.setVisibility(View.VISIBLE);
-//                        flashLL.setVisibility(View.VISIBLE);
-//                        closeBtnScanCode.setVisibility(View.VISIBLE);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -497,11 +489,19 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 }
                 try {
                     if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Intent i = new Intent(ScanActivity.this, PayRequestActivity.class);
-                        i.putExtra("walletId", strScanWallet);
-                        i.putExtra("amount", strQRAmount);
-                        i.putExtra("screen", "scan");
-                        startActivity(i);
+                        if (strQRAmount.equals("")) {
+                            Intent i = new Intent(ScanActivity.this, PayRequestActivity.class);
+                            i.putExtra("walletId", strScanWallet);
+                            i.putExtra("amount", strQRAmount);
+                            i.putExtra("screen", "scan");
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
+                            i.putExtra("walletId", strScanWallet);
+                            i.putExtra("amount", strQRAmount);
+                            i.putExtra("screen", "scan");
+                            startActivity(i);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -525,7 +525,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     } else {
                         if (mycodeScannerView.getVisibility() == View.VISIBLE) {
 //                            Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", apiError.getError().getErrorDescription());
-                            displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                            if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+                                displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                            }
                         }
                     }
                 }
@@ -539,7 +541,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 if (s != null && !s.equals("")) {
                     if (mycodeScannerView.getVisibility() == View.VISIBLE) {
 //                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
-                        displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                        if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+                            displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                        }
                     }
                 }
             }
@@ -878,7 +882,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                             getUserDetails(strScanWallet);
                         } else {
 //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
-                            displayAlert("Tokens can not request to your own wallet", "");
+                            if (errorDialog == null) {
+                                displayAlert("Tokens can not request to your own wallet", "");
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -886,8 +892,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
 
                 } catch (Exception e) {
-//                    Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
-                    displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                    if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+                        displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                    }
                     e.printStackTrace();
                 }
             } catch (FileNotFoundException e) {
@@ -924,20 +931,36 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     public void setAmountClick() {
         try {
-            if (setAmountDialog != null) {
-                setAmountDialog.dismiss();
+            if (validation()) {
+                if (setAmountDialog != null) {
+                    setAmountDialog.dismiss();
+                }
+                scanmeSetAmountTV.setText("Clear Amount");
+                scanMeRequestAmount.setText(USFormat(setAmount));
+                saveSetAmount.setText(USFormat(setAmount));
+                scanAmountLL.setVisibility(View.VISIBLE);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("cynAmount", scanMeRequestAmount.getText().toString());
+                jsonObject.put("referenceID", strWallet);
+                generateQRCode(jsonObject.toString());
             }
-            scanmeSetAmountTV.setText("Clear Amount");
-            scanMeRequestAmount.setText(USFormat(setAmount));
-            saveSetAmount.setText(USFormat(setAmount));
-            scanAmountLL.setVisibility(View.VISIBLE);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("cynAmount", scanMeRequestAmount.getText().toString());
-            jsonObject.put("referenceID", strWallet);
-            generateQRCode(jsonObject.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private Boolean validation() {
+        Boolean value = true;
+        try {
+            String strPay = setAmount.getText().toString().trim().replace("\"", "");
+            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+                value = false;
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
     }
 
     private String USFormat(EditText etAmount) {
@@ -988,18 +1011,18 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void displayAlert(String msg, String headerText) {
         // custom dialog
-        final Dialog dialog = new Dialog(ScanActivity.this);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        errorDialog = new Dialog(ScanActivity.this);
+        errorDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        errorDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        errorDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         DisplayMetrics mertics = getResources().getDisplayMetrics();
         int width = mertics.widthPixels;
 
-        TextView header = dialog.findViewById(R.id.tvHead);
-        TextView message = dialog.findViewById(R.id.tvMessage);
-        CardView actionCV = dialog.findViewById(R.id.cvAction);
-        TextView actionText = dialog.findViewById(R.id.tvAction);
+        TextView header = errorDialog.findViewById(R.id.tvHead);
+        TextView message = errorDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = errorDialog.findViewById(R.id.cvAction);
+        TextView actionText = errorDialog.findViewById(R.id.tvAction);
 
         if (!headerText.equals("")) {
             header.setVisibility(View.VISIBLE);
@@ -1010,7 +1033,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onClick(View view) {
                 try {
-                    dialog.dismiss();
+                    errorDialog.dismiss();
+                    errorDialog = null;
                     mcodeScanner.startPreview();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1019,7 +1043,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         });
 
         message.setText(msg);
-        Window window = dialog.getWindow();
+        Window window = errorDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -1028,10 +1052,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        errorDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        errorDialog.setCanceledOnTouchOutside(false);
+        errorDialog.show();
     }
 
 }

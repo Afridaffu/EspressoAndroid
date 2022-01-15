@@ -50,7 +50,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/_10sdp"
         android:fontFamily="@font/opensans_regular"
-        android:text="Date"
+        android:text=""
         android:textColor="@color/xdark_gray"
         android:textSize="@dimen/_11ssp" />
 
