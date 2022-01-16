@@ -574,6 +574,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
                             objMyApplication.setUserId(login.getData().getUserId());
+                            objMyApplication.setAccountType(login.getData().getAccountType());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             getStatesUrl(login.getData().getStateList().getUS());
@@ -593,6 +594,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
                                     i.putExtra("screen", "login");
+                                    i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
                                     startActivity(i);
                                 } else {
                                     loginResponse = login;
@@ -641,6 +643,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                             objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
@@ -648,12 +651,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
                                 i.putExtra("TYPE", "ENTER");
+                                i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
+                                launchDashboard();
                             }
                         } else {
                             if (loginResponse.getData() != null) {
@@ -699,6 +701,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void launchDashboard() {
+        Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
+        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
+        }
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(dashboardIntent);
     }
 
     private void login() {

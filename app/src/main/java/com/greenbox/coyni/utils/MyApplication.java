@@ -73,6 +73,7 @@ public class MyApplication extends Application {
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
     int timezoneID = 0, tempTimezoneID = 0, userId;
+    int accountType = Utils.PERSONAL_ACCOUNT;
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
@@ -84,7 +85,6 @@ public class MyApplication extends Application {
     List<Contacts> listContacts = new ArrayList<>();
     TransactionListRequest transactionListSearch = new TransactionListRequest();
     Double withdrawAmount;
-
 
     public UserDetails getUserDetails() {
         return userDetails;
@@ -754,6 +754,14 @@ public class MyApplication extends Application {
 
     public void setStrScreen(String strScreen) {
         this.strScreen = strScreen;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 
     public String convertBitMapToString(Bitmap bitmap) {

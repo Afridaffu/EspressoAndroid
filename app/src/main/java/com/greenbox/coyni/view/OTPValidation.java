@@ -91,12 +91,12 @@ public class OTPValidation extends AppCompatActivity {
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails;
     String strFirstUser = "";
-
+    private int mAccountType = Utils.PERSONAL_ACCOUNT;
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
     Long mLastClickTime = 0L;
-    private int mAccountType = Utils.PERSONAL_ACCOUNT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
