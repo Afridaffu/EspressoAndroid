@@ -36,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,9 +88,10 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     TextInputEditText dobET, ssnET, cityET, mailAddr1, mailAddr2, state, zipcode;
     TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
     ConstraintLayout idveriDOBConLayout, stateCL;
-    LinearLayout bottomSheet, fileSelectedLL, firstIVeri, ssnErrorLL, swipeLL, bottomNaviLL;
+    LinearLayout bottomSheet, fileSelectedLL, ssnErrorLL, swipeLL, bottomNaviLL;
+    ScrollView firstIVeri;
     public static CardView btnNext, btnSubmit;
-    RelativeLayout secondIVeri;
+    ScrollView secondIVeri;
     View viewLeft, viewRight;
     ImageButton closebtn, backbtn;
     ImageView upIdSuccessImg;
@@ -175,6 +177,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                                 ssnET.clearFocus();
                                 datepicker = new DatePicker(IdentityVerificationActivity.this);
                                 datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
+                                Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -507,6 +510,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
                         }
                     } else {
+                        mailingAddlineoptTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_green));
                         mailAddr2.setHint("Apt#, Suit, Floor");
                     }
                 }
@@ -663,7 +668,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             fileSelectedLL = findViewById(R.id.fileSelectedLL);
             ssnErrorLL = findViewById(R.id.ssnErrorLL);
             ssnErrorTV = findViewById(R.id.ssnErrorTV);
-            swipeLL = findViewById(R.id.swipeLL);
 
             mailingAddTIL = findViewById(R.id.mailingAddTIL);
             mailingAddlineoptTIL = findViewById(R.id.mailingAddlineoptTIL);
@@ -795,6 +799,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -803,6 +809,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -811,6 +819,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -884,16 +894,15 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 }
             });
 
-            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.light_gray));
-            Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.light_gray));
+            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            dobTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
-            Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.light_gray));
-            Utils.setUpperHintColor(mailingAddlineoptTIL, getResources().getColor(R.color.light_gray));
-            Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.light_gray));
-            Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.light_gray));
-            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.light_gray));
-            Utils.setUpperHintColor(countryTIL, getResources().getColor(R.color.light_gray));
-
+            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
         } catch (Exception e) {
             e.printStackTrace();

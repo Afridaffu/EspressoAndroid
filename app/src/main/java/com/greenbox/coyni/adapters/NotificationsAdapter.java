@@ -477,7 +477,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
     @Override
     public int getSwipeLayoutResourceId(int position) {
-        return R.id.swipeLL;
+        return R.id.swipeLayout;
     }
 
 }

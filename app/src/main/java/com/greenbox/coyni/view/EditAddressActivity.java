@@ -155,6 +155,8 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, myApplicationObj);
             });
 
@@ -163,6 +165,8 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, myApplicationObj);
             });
 
@@ -171,6 +175,8 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, myApplicationObj);
             });
 
