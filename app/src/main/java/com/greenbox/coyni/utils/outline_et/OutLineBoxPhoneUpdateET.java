@@ -96,7 +96,8 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 epa.newPhoneErrorLL.setVisibility(VISIBLE);
                                 epa.newPhoneErrorTV.setText("Field Required");
-                            } else {
+                            }
+                            else {
                                 epa.newPhoneErrorLL.setVisibility(GONE);
                                 hintName.setTextColor(getResources().getColor(R.color.primary_black));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));

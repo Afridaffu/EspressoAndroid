@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_45sdp"
-            android:src="@drawable/ic_close"></ImageView>
+            android:src="@drawable/ic_close" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:fontFamily="@font/opensans_bold"
             android:text="My QR Code"
             android:textColor="@color/black"
-            android:textSize="@dimen/_16ssp"></TextView>
+            android:textSize="@dimen/_16ssp" />
     </LinearLayout>
 
     <ScrollView
@@ -53,7 +53,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/_37sdp">
+                    android:paddingBottom="@dimen/_24sdp">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cvProfile"
@@ -98,16 +98,17 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Jonathan Joestar"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_13ssp" />
 
                     <RelativeLayout
-                        android:layout_width="210dp"
-                        android:layout_height="210dp"
+                        android:id="@+id/qrRL"
+                        android:layout_width="@dimen/_142sdp"
+                        android:layout_height="@dimen/_140sdp"
                         android:layout_below="@+id/tvName"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_26sdp"
-                        android:padding="@dimen/_2sdp"
-                        android:background="@drawable/ic_qr_img_outline">
+                        android:background="@drawable/ic_qr_img_outline"
+                        android:padding="@dimen/_2sdp">
 
                         <ImageView
                             android:id="@+id/idIVQrcode"
@@ -121,6 +122,25 @@
                             android:contentDescription="@string/qr_code"
                             android:scaleType="fitCenter" />
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/qrRL"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/savetoAlbumTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Save to Album"
+                            android:textColor="@color/primary_green"
+                            android:textSize="@dimen/_12ssp" />
+
+
+                    </LinearLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
@@ -140,7 +160,7 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="20dp"
                     android:paddingRight="15dp"
-                    android:paddingBottom="30dp">
+                    android:paddingBottom="@dimen/_25sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -148,7 +168,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Recipient’s Address"
                         android:textColor="@color/xdark_gray"
-                        android:textSize="@dimen/_11ssp"></TextView>
+                        android:textSize="@dimen/_11ssp" />
 
                     <TextView
                         android:id="@+id/tvWalletAddress"
@@ -158,7 +178,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:text="f4184fc596403b9d6…"
                         android:textColor="#404040"
-                        android:textSize="@dimen/_10ssp"></TextView>
+                        android:textSize="@dimen/_10ssp" />
 
                     <View
                         android:id="@+id/divider"
@@ -166,52 +186,206 @@
                         android:layout_height="1dp"
                         android:layout_below="@+id/tvWalletAddress"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:background="@color/at_gray"></View>
+                        android:background="@color/at_gray" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/divider"
-                        android:layout_marginTop="@dimen/_25sdp"
-                        android:paddingLeft="@dimen/_40sdp"
-                        android:paddingRight="@dimen/_35sdp">
+                        android:layout_marginStart="@dimen/_36sdp"
+                        android:layout_marginTop="@dimen/_25sdp">
 
-                        <ImageView
-                            android:id="@+id/imgCopy"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_copy"></ImageView>
+                            android:layout_alignParentStart="true"
+                            android:orientation="vertical">
 
-                        <TextView
+                            <ImageView
+                                android:id="@+id/imgCopy"
+                                android:layout_width="@dimen/_17sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:src="@drawable/ic_copy" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/imgCopy"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Copy"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/imgCopy"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Copy"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp"></TextView>
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="@dimen/_35sdp"
+                            android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgShare"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:src="@drawable/ic_share"></ImageView>
+                            <ImageView
+                                android:id="@+id/imgShare"
+                                android:layout_width="@dimen/_18sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:src="@drawable/ic_share" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/imgShare"
-                            android:layout_alignParentRight="true"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Share"
-
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_11ssp"></TextView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/imgShare"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Share"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+                        </LinearLayout>
                     </RelativeLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/saveToAlbumLL"
+        android:layout_width="@dimen/_286sdp"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_green"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/_26sdp"
+        android:paddingBottom="@dimen/_56sdp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="@dimen/_115sdp"
+            android:layout_height="@dimen/_46sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_coyni_logo_full_white" />
+
+        <LinearLayout
+            android:layout_width="@dimen/_264sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_22sdp"
+            android:layout_marginEnd="@dimen/_11sdp"
+            android:background="@drawable/saveimagebg"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_22sdp">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/_34sdp"
+                android:layout_height="@dimen/_34sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_11sdp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_17sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/saveprofileIV"
+                    android:layout_width="@dimen/_34sdp"
+                    android:layout_height="@dimen/_34sdp"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/saveprofileTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primary_green"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:maxLength="2"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14ssp"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/tvNameSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Alison L"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:background="@color/vlight_gray" />
+
+            <LinearLayout
+                android:id="@+id/setAmountLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <TextView
+                    android:id="@+id/tvsaveSetAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="160.00"
+                    android:textColor="@color/primary_green"
+                    android:textSize="@dimen/_24ssp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="CYN"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/_144sdp"
+                android:layout_height="@dimen/_144sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:background="@drawable/ic_qr_img_outline">
+
+                <ImageView
+                    android:id="@+id/qrImageIV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_5sdp" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Use “Scan” in coyni app to scan the QR code "
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_11ssp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 </RelativeLayout>

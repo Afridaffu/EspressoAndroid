@@ -16,7 +16,8 @@ public class LoginData {
     private Boolean coyniPin;
     private Boolean paymentAdded;
     private Boolean biometricEnabled;
-
+    private StateList stateList;
+    private int accountType;
 
     public int getUserId() {
         return userId;
@@ -136,6 +137,22 @@ public class LoginData {
 
     public void setBiometricEnabled(Boolean biometricEnabled) {
         this.biometricEnabled = biometricEnabled;
+    }
+
+    public StateList getStateList() {
+        return stateList;
+    }
+
+    public void setStateList(StateList stateList) {
+        this.stateList = stateList;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 }
 

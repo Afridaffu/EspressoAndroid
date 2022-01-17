@@ -18,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +30,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,12 +40,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
-import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -94,8 +92,9 @@ public class UserDetailsActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_user_details);
+
             initFields();
-            getStates();
+//            getStates();
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,7 +118,9 @@ public class UserDetailsActivity extends AppCompatActivity {
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
 
-            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
+//            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
+            isBiometric = Utils.getIsBiometric();
+
             SetToken(myApplicationObj, this);
             SetFaceLock(myApplicationObj, this);
             SetTouchId(myApplicationObj, this);
@@ -237,7 +238,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 strFileName = myApplicationObj.getMyProfile().getData().getImage();
                 userEmailIdTV.setText(profile.getData().getEmail());
-                userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
 
                 userPhoneNumTV.setText(phoneFormat);
 
@@ -294,7 +295,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                         dashboardViewModel.meProfile();
                         Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                     } else {
-                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
+                        Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "", imageResponse.getError().getFieldErrors().get(0));
                     }
 
                 }
@@ -308,7 +309,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
                 if (imageResponse != null) {
-                    Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "");
+                    Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "", imageResponse.getError().getFieldErrors().get(0));
                 }
             }
         });
@@ -324,10 +325,8 @@ public class UserDetailsActivity extends AppCompatActivity {
                         bindImage(myApplicationObj.getMyProfile().getData().getImage());
                         strFileName = myApplicationObj.getMyProfile().getData().getImage();
                         userEmailIdTV.setText(profile.getData().getEmail());
-                        userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-
+                        userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         userPhoneNumTV.setText(phoneFormat);
-
                         String addressFormatted = "";
                         if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
@@ -482,7 +481,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                                     })
                                     .show();
                         } else {
-                            Utils.displayAlert("No Profile image found to remove", UserDetailsActivity.this, "");
+                            Utils.displayAlert("No Profile image found to remove", UserDetailsActivity.this, "", "");
                         }
                     } else if (optionsMenu[i].equals("Cancel")) {
                         dialogInterface.dismiss();
@@ -510,7 +509,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             //End
 
 //            Uri tempUri = getImageUri(context, bitmap);
-            Uri tempUri = getImageUri(this, scaled);
+            Uri tempUri = getImageUri(UserDetailsActivity.this, scaled);
 
             File file = new File(getRealPathFromURI(tempUri));
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -532,7 +531,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage,
-                myApplicationObj.getMyProfile().getData().getId() + "_profile", null);
+                myApplicationObj.getMyProfile().getData().getId() + "_profile" + System.currentTimeMillis(), null);
         return Uri.parse(path);
     }
 
@@ -576,11 +575,11 @@ public class UserDetailsActivity extends AppCompatActivity {
             case REQUEST_ID_MULTIPLE_PERMISSIONS:
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "");
+                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Your Storage.", UserDetailsActivity.this, "");
+                    Utils.displayAlert("Requires Access to Your Storage.", UserDetailsActivity.this, "", "");
 
                 } else {
 //                    chooseImage(this);
@@ -680,6 +679,8 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dashboardViewModel.meProfile();
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     public static void showImagePickerDialog(Activity activity) {

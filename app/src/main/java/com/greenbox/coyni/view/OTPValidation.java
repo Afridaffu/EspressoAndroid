@@ -6,11 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,11 +18,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -41,9 +38,10 @@ import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
@@ -65,6 +63,13 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.otpview.PinView;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,7 +91,7 @@ public class OTPValidation extends AppCompatActivity {
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails;
     String strFirstUser = "";
-
+    private int mAccountType = Utils.PERSONAL_ACCOUNT;
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
@@ -111,6 +116,9 @@ public class OTPValidation extends AppCompatActivity {
             MOBILE = getIntent().getStringExtra("MOBILE");
             EMAIL = getIntent().getStringExtra("EMAIL");
             strScreen = getIntent().getStringExtra("screen");
+            if(getIntent() != null) {
+                mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
+            }
             SetDB();
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             resendTV = findViewById(R.id.resendTV);
@@ -132,7 +140,7 @@ public class OTPValidation extends AppCompatActivity {
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
             objMyApplication = (MyApplication) getApplicationContext();
-
+            objMyApplication.setStrEmail(EMAIL);
             if (strScreen != null && !strScreen.equals("")) {
                 switch (strScreen) {
                     case "ForgotPwd":
@@ -284,13 +292,13 @@ public class OTPValidation extends AppCompatActivity {
 //                            loginViewModel.smsotpresend(resend);
                         }
                     } else {
-                        if(strScreen.equals("SignUp")){
+                        if (strScreen.equals("SignUp")) {
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             layoutEntry.setVisibility(View.VISIBLE);
                             layoutFailure.setVisibility(View.GONE);
-                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again",OTPValidation.this,"");
+                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", "");
                         }
 
                     }
@@ -460,7 +468,8 @@ public class OTPValidation extends AppCompatActivity {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 startActivity(new Intent(OTPValidation.this, PINActivity.class)
                         .putExtra("screen", strScreen)
-                        .putExtra("TYPE", "CHOOSE"));
+                        .putExtra("TYPE", "CHOOSE")
+                        .putExtra(Utils.ACCOUNT_TYPE, mAccountType));
             });
 
 //            layoutMain.setOnTouchListener(new View.OnTouchListener() {
@@ -518,6 +527,8 @@ public class OTPValidation extends AppCompatActivity {
                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                             shakeAnimateLeftRight();
                         } else {
+                            objMyApplication.setUserId(emailResponse.getData().getUserId());
+                            getStatesUrl(emailResponse.getData().getStateList().getUS());
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
                             new Handler().postDelayed(new Runnable() {
@@ -528,7 +539,7 @@ public class OTPValidation extends AppCompatActivity {
                                             switch (strScreen) {
                                                 case "ForgotPwd":
                                                     startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class)
-                                                    .putExtra("screen","ForgotPwd"));
+                                                            .putExtra("screen", "ForgotPwd"));
                                                     break;
                                                 case "ForgotPin":
                                                     startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
@@ -545,7 +556,7 @@ public class OTPValidation extends AppCompatActivity {
                                                         layoutType = "SECURE";
                                                         layoutEntry.setVisibility(View.GONE);
                                                         layoutFailure.setVisibility(View.GONE);
-                                                        saveFirstUser();
+                                                        //saveFirstUser();
                                                     }
                                                     break;
                                             }
@@ -576,16 +587,16 @@ public class OTPValidation extends AppCompatActivity {
                             shakeAnimateLeftRight();
                             if (strScreen != null && strScreen.equals("login")) {
                                 if (resendCounter >= 5) {
-                                    Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                                    Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                                 }
                             } else {
                                 if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
                                         smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
                                     try {
-                                        if(smsValidate.getError().getErrorDescription().equals("")){
-                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "");
-                                        }else{
-                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "");
+                                        if (smsValidate.getError().getErrorDescription().equals("")) {
+                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
+                                        } else {
+                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -681,19 +692,20 @@ public class OTPValidation extends AppCompatActivity {
                         startTimer();
                         if (strScreen != null && strScreen.equals("login")) {
                             if (resendCounter >= 5) {
-                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error");
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                             }
                         }
                     } else {
                         try {
-                            if(smsResponse.getError().getErrorDescription().equals("")){
-                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
-                            }else{
-                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                            if (smsResponse.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                            } else {
+                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }                    }
+                        }
+                    }
                 }
 
             }
@@ -712,10 +724,10 @@ public class OTPValidation extends AppCompatActivity {
                             startTimer();
                         } else {
                             try {
-                                if(emailResponse.getError().getErrorDescription().equals("")){
-                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
-                                }else{
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                if (emailResponse.getError().getErrorDescription().equals("")) {
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                } else {
+                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -742,7 +754,7 @@ public class OTPValidation extends AppCompatActivity {
                         layoutEntry.setVisibility(View.GONE);
                         layoutFailure.setVisibility(View.GONE);
                     } else {
-                        Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                        Utils.displayAlert(initializeCustomerResponse.getError().getErrorDescription(), OTPValidation.this, "", initializeCustomerResponse.getError().getFieldErrors().get(0));
                     }
                 }
             }
@@ -778,9 +790,9 @@ public class OTPValidation extends AppCompatActivity {
                 }
                 if (apiError != null) {
                     if (!apiError.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this, "");
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), OTPValidation.this, "", apiError.getError().getFieldErrors().get(0));
                     } else {
-                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this, "");
+                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), OTPValidation.this, "", apiError.getError().getFieldErrors().get(0));
                     }
                 }
             }
@@ -858,7 +870,7 @@ public class OTPValidation extends AppCompatActivity {
                                             finish();
                                         } else {
                                             try {
-                                                if(EditPhoneActivity.editPhoneActivity!=null){
+                                                if (EditPhoneActivity.editPhoneActivity != null) {
                                                     EditPhoneActivity.editPhoneActivity.finish();
                                                 }
                                                 finish();
@@ -893,10 +905,10 @@ public class OTPValidation extends AppCompatActivity {
                             startTimer();
                         } else {
                             try {
-                                if(emailResponse.getError().getErrorDescription().equals("")){
-                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "");
-                                }else{
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "");
+                                if (emailResponse.getError().getErrorDescription().equals("")) {
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                } else {
+                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1023,9 +1035,9 @@ public class OTPValidation extends AppCompatActivity {
         try {
             switch (layoutType) {
                 case "SECURE":
-                    Intent intent = new Intent(OTPValidation.this, OnboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+//                    Intent intent = new Intent(OTPValidation.this, OnboardActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
                     break;
                 case "OTP": {
                     super.onBackPressed();
@@ -1067,49 +1079,76 @@ public class OTPValidation extends AppCompatActivity {
         }
     }
 
-//    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
-//        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-//        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//
-//            private boolean alreadyOpen;
-//            private final int defaultKeyboardHeightDP = 100;
-//            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
-//            private final Rect rect = new Rect();
-//
-//            @Override
-//            public void onGlobalLayout() {
-//                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
-//                parentView.getWindowVisibleDisplayFrame(rect);
-//                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
-//                boolean isShown = heightDiff >= estimatedKeyboardHeight;
-//
-//                if (isShown == alreadyOpen) {
-//                    Log.i("Keyboard state", "Ignoring global layout change...");
-//                    return;
-//                }
-//                alreadyOpen = isShown;
-//                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public void onVisibilityChanged(boolean visible) {
-//        if (visible) {
-//            Log.e("Visible","Visible");
-//
-//        } else {
-//            Log.e("Visible","Not Visible");
-//            otpPV.requestFocus();
-//            new Handler().post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (!layoutType.equals("SECURE")) {
-//                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-//                    }
-//                }
-//            });
-//        }
-//    }
+    private void getStatesUrl(String strCode) {
+        try {
+            byte[] valueDecoded = new byte[0];
+            valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
+            objMyApplication.setStrStatesUrl(new String(valueDecoded));
+            Log.e("States url", objMyApplication.getStrStatesUrl() + "   sdssd");
+            try {
+                new HttpGetRequest().execute("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public class HttpGetRequest extends AsyncTask<String, Void, String> {
+        public static final String REQUEST_METHOD = "GET";
+        public static final int READ_TIMEOUT = 15000;
+        public static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected String doInBackground(String... params) {
+            String stringUrl = params[0];
+            String result;
+            String inputLine;
+            try {
+                //Create a URL object holding our url
+                URL myUrl = new URL(objMyApplication.getStrStatesUrl());
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection)
+                        myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.connect();
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new
+                        InputStreamReader(connection.getInputStream());
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                //Check if the line we are reading is not null
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+                }
+                //Close our InputStream and Buffered reader
+                reader.close();
+                streamReader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = null;
+            }
+            return result;
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(result, type);
+            objMyApplication.setListStates(listStates);
+//            Log.e("result", result);
+        }
+    }
+
 }

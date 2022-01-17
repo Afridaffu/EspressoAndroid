@@ -24,14 +24,19 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.transaction.TransactionDetails;
+import com.greenbox.coyni.model.transaction.TransactionList;
+import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.UserDetailsData;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -55,13 +60,25 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<UserDetails> userDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LatestTxnResponse> getUserLatestTxns = new MutableLiveData<>();
+    private MutableLiveData<TransactionDetails> transactionDetailsMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
     }
 
+    private MutableLiveData<TransactionList> transactionListMutableLiveData = new MutableLiveData<>();
+
+
+    public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
+        return transactionListMutableLiveData;
+    }
+
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
         return userDetailsMutableLiveData;
+    }
+
+    public MutableLiveData<UserPreference> getUserPreferenceMutableLiveData() {
+        return userPreferenceMutableLiveData;
     }
 
     public MutableLiveData<ProfilesResponse> getProfileRespMutableLiveData() {
@@ -89,11 +106,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return agreementsMutableLiveData;
     }
 
-    public void setAgreementsMutableLiveData(MutableLiveData<Agreements> agreementsMutableLiveData) {
-        this.agreementsMutableLiveData = agreementsMutableLiveData;
-    }
-
-
     public DashboardViewModel(@NonNull Application application) {
         super(application);
     }
@@ -116,6 +128,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> getErrorMutableLiveData() {
         return errorMutableLiveData;
+    }
+
+    public MutableLiveData<TransactionDetails> getTransactionDetailsMutableLiveData() {
+        return transactionDetailsMutableLiveData;
     }
 
     public void meProfile() {
@@ -532,7 +548,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void getLatestTxns(){
+    public void getLatestTxns() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<LatestTxnResponse> mCall = apiService.getLatestTransactions();
@@ -568,4 +584,73 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void meTransactionList(TransactionListRequest request) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<TransactionList> mcall = apiService.meTransactionList(request);
+        mcall.enqueue(new Callback<TransactionList>() {
+            @Override
+            public void onResponse(Call<TransactionList> call, Response<TransactionList> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        TransactionList obj = response.body();
+                        transactionListMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<TransactionList>() {
+                        }.getType();
+                        TransactionList errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        transactionListMutableLiveData.setValue(errorResponse);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransactionList> call, Throwable t) {
+                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                apiErrorMutableLiveData.setValue(null);
+            }
+        });
+
+    }
+
+    public void getTransactionDetails(String gbxTxnIdType, int txnType, int txnSubType) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<TransactionDetails> call = apiService.getTransactionDetails(gbxTxnIdType, txnType, txnSubType);
+            call.enqueue(new Callback<TransactionDetails>() {
+                @Override
+                public void onResponse(Call<TransactionDetails> call, Response<TransactionDetails> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            TransactionDetails obj = response.body();
+                            transactionDetailsMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<TransactionList>() {
+                            }.getType();
+                            TransactionDetails errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            transactionDetailsMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        transactionListMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TransactionDetails> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 }

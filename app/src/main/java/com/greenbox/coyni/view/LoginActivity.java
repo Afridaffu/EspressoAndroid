@@ -4,32 +4,29 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,12 +40,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -56,7 +56,17 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlEmail, etlPassword;
@@ -105,7 +115,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dialog.dismiss();
         }
         isPwdEye = false;
-
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
@@ -113,14 +122,20 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (cursor.getCount() > 0) {
                 String value = cursor.getString(1);
                 etEmail.setText(value);
-            } else {
-                etEmail.setText("");
+                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
                 etPassword.setText("");
+                etPassword.setHint("");
+                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+            } else {
+                etPassword.setText("");
+                etPassword.setHint("");
+                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            etEmail.setText("");
             etPassword.setText("");
+            etPassword.setHint("");
+            Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
         }
         if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
             if (chkRemember.isChecked()) {
@@ -129,6 +144,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 chkRemember.setChecked(false);
             }
             etEmail.setText(objMyApplication.getStrRetrEmail());
+            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+
         }
     }
 
@@ -145,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 biometricLogin();
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "", "");
                         }
                     }
                 });
@@ -181,7 +198,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
-
             if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
                 layoutClose.setVisibility(GONE);
             } else {
@@ -233,24 +249,28 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
                         if (!hasFocus) {
-                            if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                            if (etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                                 layoutEmailError.setVisibility(VISIBLE);
-                                tvEmailError.setText("Invalid Email");
-                            } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                                tvEmailError.setText("Please Enter a valid Email");
+                            } else if (etEmail.getText().toString().trim().length() == 0) {
+                                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
+                                etEmail.setHint("");
+                                etlEmail.setHint("Email");
+                                layoutEmailError.setVisibility(GONE);
+                            } else if ((etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim()))) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
+                                etEmail.setHint("");
+                                etlEmail.setHint("Email");
                                 layoutEmailError.setVisibility(GONE);
-                            } else {
-                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                                layoutEmailError.setVisibility(VISIBLE);
-                                tvEmailError.setText("Field Required");
                             }
                         } else {
                             etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
+                            etEmail.setHint("Coyni@example.com");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -268,19 +288,25 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                                 layoutPwdError.setVisibility(VISIBLE);
                                 tvPwdError.setText("Invalid Password");
+                            } else if (etPassword.getText().toString().trim().length() == 0) {
+                                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+                                etPassword.setHint("");
+                                layoutPwdError.setVisibility(GONE);
                             } else if (etPassword.getText().toString().trim().length() >= 8) {
                                 etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
                                 layoutPwdError.setVisibility(GONE);
-                            } else {
-                                etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
-                                layoutPwdError.setVisibility(VISIBLE);
-                                tvPwdError.setText("Field Required");
                             }
+                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         } else {
                             etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
+                            etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
+                            if (etPassword.getText().toString().length() > 0)
+                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                            else
+                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                         }
 
                     } catch (Exception ex) {
@@ -303,6 +329,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
                             etEmail.setSelection(etEmail.getText().length());
                         }
+                        if (s.length() > 0) {
+                            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -311,10 +340,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5  && etPassword.getText().toString().length() >= 8) {
+                        if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5 && etPassword.getText().toString().length() >= 8) {
                             cvNext.setEnabled(true);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                         } else {
+                            layoutEmailError.setVisibility(GONE);
                             cvNext.setEnabled(false);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
@@ -345,7 +375,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
                         if (s.length() == 0) {
                             // No entered text so will show hint
-                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                            if (etPassword.hasFocus())
+                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                            else
+                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         } else {
                             etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         }
@@ -363,6 +396,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             layoutEmailError.setVisibility(GONE);
                             layoutPwdError.setVisibility(GONE);
                         } else {
+                            layoutPwdError.setVisibility(GONE);
                             cvNext.setEnabled(false);
                             cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
@@ -409,7 +443,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
-                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "");
+                            Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -516,6 +550,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dsRemember.moveToFirst();
             if (dsRemember.getCount() > 0) {
                 etEmail.setText(dsRemember.getString(1));
+                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+
                 chkRemember.setChecked(true);
             } else {
                 chkRemember.setChecked(false);
@@ -539,8 +575,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
                             objMyApplication.setUserId(login.getData().getUserId());
+                            objMyApplication.setAccountType(login.getData().getAccountType());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
+                            getStatesUrl(login.getData().getStateList().getUS());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -557,16 +595,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
                                     i.putExtra("screen", "login");
+                                    i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
                                     startActivity(i);
                                 } else {
                                     loginResponse = login;
-//                                    Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-//                                    i.putExtra("screen", "login");
-//                                    i.putExtra("OTP_TYPE", "MOBILE");
-//                                    i.putExtra("MOBILE", login.getData().getPhoneNumber());
-//                                    i.putExtra("EMAIL", login.getData().getEmail());
-//                                    i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(login.getData().getPhoneNumber()));
-//                                    startActivity(i);
                                     SMSResend resend = new SMSResend();
                                     resend.setCountryCode(Utils.getStrCCode());
                                     resend.setPhoneNumber(login.getData().getPhoneNumber());
@@ -581,7 +613,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "");
+                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "", login.getError().getFieldErrors().get(0));
                             }
                         }
                     }
@@ -596,11 +628,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-//                    if (!apiError.getError().getErrorDescription().equals("")) {
-//                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this);
-//                    } else {
-//                        Utils.displayAlert(apiError.getError().getFieldErrors().get(0), LoginActivity.this);
-//                    }
                     Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                 }
@@ -614,16 +641,22 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 try {
                     if (loginResponse != null) {
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                            Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
+                            Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
+                            objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
+                            getStatesUrl(loginResponse.getData().getStateList().getUS());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
                                 i.putExtra("TYPE", "ENTER");
+                                i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
+                                launchDashboard();
                             }
                         } else {
                             if (loginResponse.getData() != null) {
@@ -632,7 +665,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "");
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
                             }
                         }
                     }
@@ -658,80 +691,26 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(loginResponse.getData().getPhoneNumber()));
                         startActivity(i);
                     } else {
-                        Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error");
+                        Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error", "");
                     }
                 }
 
             }
         });
-    }
 
-    private Boolean emailValidation() {
-        Boolean value = true;
-        try {
-            if (etEmail.getText().toString().trim().equals("")) {
-                etlEmail.setErrorEnabled(true);
-                etlEmail.setError(" ");
-                layoutEmailError.setVisibility(View.VISIBLE);
-                tvEmailError.setText("Please enter Email");
-                return value = false;
-            } else if (etEmail.getText().toString().trim().startsWith(" ")) {
-                etlEmail.setErrorEnabled(true);
-                etlEmail.setError(" ");
-                layoutEmailError.setVisibility(View.VISIBLE);
-                tvEmailError.setText("Please enter valid Email");
-                return value = false;
-            } else if (!isEmailValid(etEmail.getText().toString().trim())) {
-                etlEmail.setErrorEnabled(true);
-                etlEmail.setError(" ");
-                layoutEmailError.setVisibility(View.VISIBLE);
-                tvEmailError.setText("Please enter valid Email");
-                return value = false;
-            } else {
-                etlEmail.setErrorEnabled(false);
-                etlEmail.setError("");
-                layoutEmailError.setVisibility(View.GONE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return value;
-    }
-
-    private Boolean passwordValidation() {
-        Boolean value = true;
-        try {
-            if (etPassword.getText().toString().equals("")) {
-                etlPassword.setErrorEnabled(true);
-                etlPassword.setError(" ");
-                layoutPwdError.setVisibility(View.VISIBLE);
-                tvPwdError.setText("Please enter Password");
-                return value = false;
-            } else if (etPassword.getText().toString().startsWith(" ")) {
-                etlPassword.setErrorEnabled(true);
-                etlPassword.setError(" ");
-                layoutPwdError.setVisibility(View.VISIBLE);
-                tvPwdError.setText("Please enter valid Password");
-                return value = false;
-            } else if (etPassword.getText().toString().trim().equals("")) {
-                etlPassword.setErrorEnabled(true);
-                etlPassword.setError(" ");
-                layoutPwdError.setVisibility(View.VISIBLE);
-                tvPwdError.setText("Please enter valid Password");
-                return value = false;
-            } else {
-                etlPassword.setErrorEnabled(false);
-                etlPassword.setError("");
-                layoutPwdError.setVisibility(View.GONE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return value;
     }
 
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void launchDashboard() {
+        Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
+        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
+        }
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(dashboardIntent);
     }
 
     private void login() {
@@ -769,10 +748,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void saveCredentials() {
         try {
-//            if (strEmail.equals("") && strPwd.equals("")) {
-//                strEmail = etEmail.getText().toString().trim().toLowerCase();
-//                strPwd = etPassword.getText().toString().trim();
-//            }
             if (strEmail.equals("")) {
                 strEmail = etEmail.getText().toString().trim().toLowerCase();
             }
@@ -824,7 +799,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 strMsg = "Do you want to register with FaceID/Pin.";
             } else {
                 etlPassword.setPasswordVisibilityToggleEnabled(false);
-//                etlPassword.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeclose));
             }
         } catch (Exception ex) {
@@ -864,6 +838,77 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             loginBGIV.setAlpha(0.2f);
         } else {
             loginBGIV.setAlpha(1.0f);
+        }
+    }
+
+    private void getStatesUrl(String strCode) {
+        try {
+            byte[] valueDecoded = new byte[0];
+            valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
+            objMyApplication.setStrStatesUrl(new String(valueDecoded));
+            Log.e("States url", objMyApplication.getStrStatesUrl() + "   sdssd");
+            try {
+                new HttpGetRequest().execute("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public class HttpGetRequest extends AsyncTask<String, Void, String> {
+        public static final String REQUEST_METHOD = "GET";
+        public static final int READ_TIMEOUT = 15000;
+        public static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected String doInBackground(String... params) {
+            String stringUrl = params[0];
+            String result;
+            String inputLine;
+            try {
+                //Create a URL object holding our url
+                URL myUrl = new URL(objMyApplication.getStrStatesUrl());
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection)
+                        myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.connect();
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new
+                        InputStreamReader(connection.getInputStream());
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                //Check if the line we are reading is not null
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+                }
+                //Close our InputStream and Buffered reader
+                reader.close();
+                streamReader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = null;
+            }
+            return result;
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(result, type);
+            objMyApplication.setListStates(listStates);
         }
     }
 }

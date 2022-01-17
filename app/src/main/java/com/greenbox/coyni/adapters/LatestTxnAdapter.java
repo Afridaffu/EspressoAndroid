@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.LoginActivity;
+import com.greenbox.coyni.view.TransactionDetailsActivity;
 
 import java.util.List;
 
@@ -25,12 +26,13 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txnDescTV, amountTV, dateTV, statusTV, balanceTV;
+        public TextView txnDescrip,txnDescripExtention, amountTV, dateTV, statusTV, balanceTV;
         LinearLayout statusLL;
 
         public MyViewHolder(View view) {
             super(view);
-            txnDescTV = (TextView) view.findViewById(R.id.txnDescTV);
+            txnDescrip = (TextView) view.findViewById(R.id.latestmessageTV);
+            txnDescripExtention=view.findViewById(R.id.latestmessagTV);
             amountTV = (TextView) view.findViewById(R.id.amountTV);
             dateTV = (TextView) view.findViewById(R.id.dateTV);
             statusTV = (TextView) view.findViewById(R.id.statusTV);
@@ -56,10 +58,29 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-            holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
+            LatestTxnResponse.Daata objData = latestTxns.getData().get(position);
+
+            String[] data = objData.getTxnDescription().replace("****","-").split("-");
+            try {
+                if (data.length > 1) {
+                    holder.txnDescripExtention.setVisibility(View.VISIBLE);
+                    holder.txnDescrip.setText(data[0]);
+                    holder.txnDescripExtention.setText("**"+data[1]);
+                    holder.txnDescrip.setVisibility(View.VISIBLE);
+                } else {
+                    holder.txnDescrip.setText(objData.getTxnDescription());
+                    holder.txnDescripExtention.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+//            holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
+//
             holder.amountTV.setText(latestTxns.getData().get(position).getAmount());
-            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
-            holder.balanceTV.setText("Balance "+Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
+//            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
+            holder.balanceTV.setText("Balance " + Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
             String strType = "";
 
             if (latestTxns.getData().get(position).getTxnTypeDn().toLowerCase().contains("withdraw")) {
@@ -90,15 +111,16 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("Completed")) {
                 holder.statusLL.setVisibility(View.GONE);
                 holder.dateTV.setVisibility(View.VISIBLE);
-                holder.dateTV.setText(Utils.convertTxnDate(latestTxns.getData().get(position).getUpdatedAt()).split(" ")[0]);
+                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("In Progress")) {
                 holder.statusTV.setText(latestTxns.getData().get(position).getTxnStatusDn());
                 holder.statusTV.setTextColor(mContext.getColor(R.color.under_review_blue));
                 holder.statusLL.setBackground(mContext.getDrawable(R.drawable.txn_inprogress_bg));
 
+                // comment
 //                holder.statusLL.setVisibility(View.GONE);
 //                holder.dateTV.setVisibility(View.VISIBLE);
-//                holder.dateTV.setText(Utils.convertTxnDate(latestTxns.getData().get(position).getUpdatedAt()));
+//                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("Pending")) {
                 holder.statusTV.setText(latestTxns.getData().get(position).getTxnStatusDn());
                 holder.statusTV.setTextColor(mContext.getColor(R.color.orange));
@@ -111,6 +133,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 @Override
                 public void onClick(View v) {
                     try {
+                        Intent i = new Intent(mContext, TransactionDetailsActivity.class);
+                        i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
+                        i.putExtra("txnType", objData.getTxnTypeDn());
+                        i.putExtra("txnSubType", objData.getTxnSubTypeDn());
+                        mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

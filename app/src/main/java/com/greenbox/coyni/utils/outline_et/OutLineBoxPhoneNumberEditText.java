@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,10 +19,10 @@ import com.santalu.maskara.widget.MaskEditText;
 
 public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
-    private TextView hintName1;
-    private LinearLayout hintHolder1;
+    private TextView hintName;
+    private LinearLayout hintHolder;
     private MaskEditText pnET;
-    boolean isPhoneError1 = false;
+    boolean isPhoneError = false;
 
     public String FROM = "";
 
@@ -39,51 +40,68 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     }
 
     private void init(Context context, AttributeSet attributeSet) {
-        LayoutInflater.from(context).inflate(R.layout.company_outlinebox_phone_number_layout, this, true);
-        hintName1 = findViewById(R.id.hintTV);
-        hintHolder1 = findViewById(R.id.hintdHolderLL);
+        LayoutInflater.from(context).inflate(R.layout.outlinebox_phone_number_layout, this, true);
+        hintName = findViewById(R.id.hintTV);
+        hintHolder = findViewById(R.id.hintdHolderLL);
         pnET = findViewById(R.id.pnET);
         pnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 try {
 
-                    if (isPhoneError1) {
+                    if (isPhoneError) {
                         if (b) {
                             CreateAccountActivity.focusedID = pnET.getId();
-                            hintName1.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
-                            hintName1.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     } else {
                         if (b) {
                             CreateAccountActivity.focusedID = pnET.getId();
-                            hintName1.setTextColor(getResources().getColor(R.color.primary_color));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                            hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
-                            hintName1.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
 
                     }
                     if (FROM.equals("Retrieve") && !b) {
                         if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
-                            hintName1.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
                             rea.phoneErrorLL.setVisibility(VISIBLE);
                             rea.phoneErrorTV.setText("Invalid Phone Number");
                         } else if ((pnET.getText().length() == 0)) {
-                            hintName1.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
                             rea.phoneErrorLL.setVisibility(VISIBLE);
                             rea.phoneErrorTV.setText("Field Required");
                         } else {
-                            hintName1.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        }
+                    } else if (FROM.equals("CREATE_ACCOUNT") && !b) {
+                        if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+                            caa.phoneErrorLL.setVisibility(VISIBLE);
+                            caa.phoneErrorTV.setText("Invalid Phone Number");
+                        } else if ((pnET.getText().length() == 0)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+                            caa.phoneErrorLL.setVisibility(VISIBLE);
+                            caa.phoneErrorTV.setText("Field Required");
+                        } else {
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     }
                 } catch (Exception ex) {
@@ -91,6 +109,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                 }
             }
         });
+
         pnET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -103,7 +122,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                 if (FROM.equals("CREATE_ACCOUNT")) {
                     CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
                     if (charSequence.length() == 14) {
-                        isPhoneError1 = false;
+                        isPhoneError = false;
 //                        hintName.setTextColor(getResources().getColor(R.color.primary_green));
 //                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         createAccountAct.phoneErrorLL.setVisibility(GONE);
@@ -127,10 +146,10 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         caa.phoneErrorLL.setVisibility(VISIBLE);
                         caa.phoneErrorTV.setText("Field Required");
                     }
-                }else if (FROM.equals("Retrieve")) {
+                } else if (FROM.equals("Retrieve")) {
                     RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
                     if (charSequence.length() == 14) {
-                        isPhoneError1 = false;
+                        isPhoneError = false;
                         rea.phoneErrorLL.setVisibility(GONE);
                     }
 
@@ -158,16 +177,14 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     }
 
     public void setErrorOutlineBox() {
-        isPhoneError1 = true;
-        hintName1.setTextColor(getResources().getColor(R.color.error_red));
-        hintHolder1.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+        isPhoneError = true;
+        hintName.setTextColor(getResources().getColor(R.color.error_red));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
     }
-
 
     public void setFrom(String fromm) {
         FROM = fromm;
     }
-
 
     public void setText(String text) {
         pnET.setText(text);
@@ -181,7 +198,8 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         return pnET.getId();
     }
 
-    public void requestETFocus(){
+    public void requestETFocus() {
         pnET.requestFocus();
     }
+
 }

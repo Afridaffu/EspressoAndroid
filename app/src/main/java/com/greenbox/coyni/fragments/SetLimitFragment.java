@@ -27,7 +27,8 @@ import com.greenbox.coyni.view.PINActivity;
  * Use the {@link SetLimitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SetLimitFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class
+SetLimitFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     EditText inputEV;
     private String strAmount=new String();
@@ -200,7 +201,7 @@ public class SetLimitFragment extends BottomSheetDialogFragment implements View.
                 break;
             case R.id.keyDotTV:
                 if (!strAmount.contains(".")){
-                    strAmount=strAmount.concat(".");
+                    strAmount=strAmount+".";
                     inputEV.setText(strAmount);
                 }
                 break;

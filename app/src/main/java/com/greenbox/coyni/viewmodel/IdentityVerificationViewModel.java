@@ -40,6 +40,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<IdentityImageResponse> uploadIdentityImageResponse = new MutableLiveData<>();
     private MutableLiveData<RemoveIdentityResponse> removeIdentityImageResponse = new MutableLiveData<>();
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressResponse = new MutableLiveData<>();
+    private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressPatchResponse = new MutableLiveData<>();
     private MutableLiveData<TrackerResponse> getStatusTracker = new MutableLiveData<>();
     private MutableLiveData<GetIdentityResponse> getIdentity = new MutableLiveData<>();
 
@@ -49,6 +50,10 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
     public MutableLiveData<APIError> getApiErrorMutableLiveData() {
         return apiErrorMutableLiveData;
+    }
+
+    public MutableLiveData<IdentityAddressResponse> getUploadIdentityAddressPatchResponse() {
+        return uploadIdentityAddressPatchResponse;
     }
 
     public MutableLiveData<GetIdentityResponse> getGetIdentity() {
@@ -234,6 +239,41 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<GetIdentityResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void uploadIdentityAddressPatch(IdentityAddressRequest identityAddressRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<IdentityAddressResponse> mCall = apiService.uploadIdentityAddressPatch(identityAddressRequest);
+            mCall.enqueue(new Callback<IdentityAddressResponse>() {
+                @Override
+                public void onResponse(Call<IdentityAddressResponse> call, Response<IdentityAddressResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            IdentityAddressResponse obj = response.body();
+                            uploadIdentityAddressPatchResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<IdentityAddressResponse>() {
+                            }.getType();
+                            IdentityAddressResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            uploadIdentityAddressPatchResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        uploadIdentityAddressPatchResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<IdentityAddressResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

@@ -9,19 +9,20 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
-import android.preference.PreferenceActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableString;
@@ -41,6 +42,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
@@ -49,28 +51,43 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
 import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
-import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
-import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
+import com.greenbox.coyni.view.WebViewActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,10 +98,12 @@ public class Utils {
     public static String strCode = "12345";
     public static String strCCode = "";
     public static String strAuth;
+    public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
+    public static Boolean isBiometric;
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
@@ -121,15 +140,51 @@ public class Utils {
     public static String deviceID = "";
     public static Long mLastClickTime = 0L;
     public static final int duration = 1000;
+    public static final int userTypeCust = 0;
 
     public static int[][] errorState, state;
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
-    public static String tempState = "";
+    public static String tempStateCode = "";
+    public static String tempStateName = "";
     public static String[] for_Apptoved = {"1111", "2222", "3333", "5555", "7777", "8888", "9999", "GP01", "RT00", "RT03", "RT05", "ND00"};
     public static String[] for_Declined = {"RT01", "RT02"};
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
+    //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
+    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+skkD6XebOu1kYPMIy3HJXuIErNxvYkSdOTdpwY0Pn49l1koS9o2CfCe9Fa01YifNtCgXc37XRU5Di4z/Sspcjs9qrHOS0RFiGtmr5BaQcKjpuy/r5ukCVuNMHEK++HZYlahdIqFxGLjSll50XTn3j+YZFvIMd7CcXCmx9UP+zkdtcr5ib3+AyVdC/w5JKAMVRuNpN6PEGC02woYfYHB/uJmBZw==";
+
+    public static final int payRequest = 12;
+    public static final int buyTokens = 2;
+    public static final int saleOrder = 10;
+    public static final int withdraw = 3;
+    public static final int refund = 9;
+    public static final int accountTransfer = 0; //Not available
+    public static final int paidInvoice = 15;
+
+    public static final int sent = 8;
+    public static final int received = 9;
+    public static final int bankAccount = 0;
+    public static final int creditCard = 2;
+    public static final int debitCard = 3;
+    public static final int signet = 7;
+    public static final int instantPay = 1;
+    public static final int giftCard = 6;
+    public static final int saleOrderToken = 11; //need to confirm
+    public static final int failedWithdraw = 11; // need to confirm
+    public static final int cancelledWithdraw = 18;
+
+    public static final int pending = 1;
+    public static final int completed = 2;
+    public static final int cancelled = 4;//Not available
+    public static final int inProgress = 0;
+    public static final int failed = 3;
+
+    public static final float slidePercentage = 0.3f;
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
+    public static final String ACCOUNT_TYPE = "account_type";
 
 
     public static String getStrLang() {
@@ -138,6 +193,14 @@ public class Utils {
 
     public static String getStrCode() {
         return strCode;
+    }
+
+    public static String getAppVersion() {
+        return appVersion;
+    }
+
+    public static void setAppVersion(String appVersion) {
+        Utils.appVersion = appVersion;
     }
 
     public static String getStrAuth() {
@@ -186,6 +249,14 @@ public class Utils {
 
     public static void setIsTouchEnabled(Boolean isTouchEnabled) {
         Utils.isTouchEnabled = isTouchEnabled;
+    }
+
+    public static Boolean getIsBiometric() {
+        return isBiometric;
+    }
+
+    public static void setIsBiometric(Boolean isBiometric) {
+        Utils.isBiometric = isBiometric;
     }
 
     public static String getDeviceID() {
@@ -287,7 +358,7 @@ public class Utils {
         return strDate;
     }
 
-    public static void displayAlert(String msg, Activity activity, String header) {
+    public static void displayAlert(String msg, Activity activity, String header, String fieldError) {
 //        Context context = new ContextThemeWrapper(activity, R.style.Theme_Coyni);
 //        new MaterialAlertDialogBuilder(context)
 //                .setTitle(R.string.app_name)
@@ -297,7 +368,11 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        displayAlertNew(msg, activity, header);
+        if (!msg.equals("")) {
+            displayAlertNew(msg, activity, header);
+        } else {
+            displayAlertNew(fieldError, activity, header);
+        }
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -346,7 +421,7 @@ public class Utils {
                     context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
                 }
             } else
-                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context, "");
+                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context, "", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -407,7 +482,17 @@ public class Utils {
         TextView textTV = dialog.findViewById(R.id.toastTV);
         ImageView imageIV = dialog.findViewById(R.id.toastIV);
         textTV.setText(text);
-        imageIV.setImageResource(imageID);
+        if (imageID == 0) {
+            imageIV.setVisibility(View.GONE);
+        } else {
+            try {
+                imageIV.setVisibility(View.VISIBLE);
+                imageIV.setImageResource(imageID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
@@ -723,6 +808,7 @@ public class Utils {
 
             DisplayMetrics mertics = context.getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
+//            List<States> statesFromAssets = getStates(context);
 
             Log.e("editext", editText.getText().toString());
             CardView actionCV = dialog.findViewById(R.id.cvAction);
@@ -734,9 +820,18 @@ public class Utils {
 
             List<States> listStates = myApplicationObj.getListStates();
 
+//            if(listStates.size()==0 ){
+//                listStates = statesFromAssets;
+//            }
+
+            tempStateName = "";
+            tempStateCode = "";
+
             for (int i = 0; i < listStates.size(); i++) {
-                if (editText.getText().toString().trim().equals(listStates.get(i).getIsocode())) {
+                if (editText.getText().toString().toLowerCase().trim().equals(listStates.get(i).getName().toLowerCase())) {
                     listStates.get(i).setSelected(true);
+                    Utils.tempStateName = listStates.get(i).getName();
+                    Utils.tempStateCode = listStates.get(i).getIsocode();
                 } else {
                     listStates.get(i).setSelected(false);
                 }
@@ -797,7 +892,9 @@ public class Utils {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    editText.setText(tempState);
+                    if (!tempStateName.equals("")) {
+                        editText.setText(tempStateName);
+                    }
                 }
             });
 
@@ -813,6 +910,15 @@ public class Utils {
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
             dialog.setCanceledOnTouchOutside(true);
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (editText.getText().toString().equals("")) {
+                        tempStateName = "";
+                        tempStateCode = "";
+                    }
+                }
+            });
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -865,67 +971,6 @@ public class Utils {
         return dpvalue;
     }
 
-    public static void showQuickAction(final Context context) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_quick_action);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
-        int width = mertics.widthPixels;
-
-        LinearLayout scanLL = dialog.findViewById(R.id.scanLL);
-        LinearLayout payRequestLL = dialog.findViewById(R.id.payRequestLL);
-        LinearLayout buyTokenLL = dialog.findViewById(R.id.buyTokenLL);
-        LinearLayout widthdrawLL = dialog.findViewById(R.id.widthdrawLL);
-
-        scanLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        payRequestLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        buyTokenLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent i = new Intent(context, PaymentMethodsActivity.class);
-                i.putExtra("screen", "buy");
-                context.startActivity(i);
-            }
-        });
-
-        widthdrawLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        WindowManager.LayoutParams wlp = window.getAttributes();
-
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
-
     public static String convertTwoDecimal(String strAmount) {
         String strValue = "", strAmt = "";
         try {
@@ -956,4 +1001,63 @@ public class Utils {
         }
         return strDate;
     }
+
+    public static String convertTwoDecimalPoints(Double value) {
+        return df.format(value);
+    }
+
+    public static void copyText(String strText, Context context) {
+        try {
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Wallet Address", strText);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static float pixelsToSp(Context context, float px) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return px / scaledDensity;
+    }
+
+    public static String newDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public static List<States> getStates(Context context) {
+        String json = null;
+        List<States> listStates = new ArrayList<>();
+        try {
+            InputStream is = context.getAssets().open("states.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            listStates = gson.fromJson(json, type);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return listStates;
+    }
+
+    public static void openKeyPad(Context context, View view) {
+        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    }
+
 }

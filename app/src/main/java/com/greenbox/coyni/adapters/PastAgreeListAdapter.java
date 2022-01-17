@@ -65,13 +65,13 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
                     if (objData.getSignatureType() == 0) {
                         Intent inte = new Intent(Intent.ACTION_VIEW);
                         inte.setDataAndType(
-                                Uri.parse(tosURL),
+                                Uri.parse(tosURL+"?"+System.currentTimeMillis()),
                                 "application/pdf");
                         mContext.startActivity(inte);
                     } else {
                         Intent inte = new Intent(Intent.ACTION_VIEW);
                         inte.setDataAndType(
-                                Uri.parse(privacyURL),
+                                Uri.parse(privacyURL+"?"+System.currentTimeMillis()),
                                 "application/pdf");
                         mContext.startActivity(inte);
                     }

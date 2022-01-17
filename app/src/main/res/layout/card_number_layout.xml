@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_7sdp"
-                android:src="@drawable/ic_visa_inactive" />
+                android:src="@drawable/ic_issue_card_inactive" />
 
             <View
                 android:layout_width="1.5dp"
@@ -46,7 +46,8 @@
             android:background="@android:color/transparent"
             android:digits="0123456789"
             android:fontFamily="@font/opensans_semibold"
-            android:hint="XXXX XXXX XXXX XXXX"
+            android:gravity="center_vertical"
+            android:hint="Card Number"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="19"
@@ -62,6 +63,7 @@
 
 
         <ImageView
+            android:id="@+id/readCardIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_9sdp"
@@ -85,6 +87,7 @@
         android:text="Card Number"
         android:textColor="@color/primary_black"
         android:textSize="@dimen/text_size_11sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/hintdHolderLL"
         app:layout_constraintStart_toStartOf="@+id/hintdHolderLL"
         app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />

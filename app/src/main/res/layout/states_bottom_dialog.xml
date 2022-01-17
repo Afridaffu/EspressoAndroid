@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:focusable="true"
             android:fontFamily="@font/opensans_semibold"
             android:hint="States Name"
@@ -60,8 +60,8 @@
             android:maxLines="1"
             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
             android:singleLine="true"
-            android:textColorHint="@color/light_gray"
             android:textColor="@color/primary_black"
+            android:textColorHint="@color/light_gray"
             android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="@dimen/_10sdp" />
     </LinearLayout>

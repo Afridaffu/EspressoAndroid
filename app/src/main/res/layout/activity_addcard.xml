@@ -66,14 +66,6 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Please enter card details"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -94,13 +86,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/tvCardMsg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Please enter card details"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/etlName"
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name on card"
-                    android:textColorHint="@color/primary_black"
+                    android:layout_below="@+id/tvCardMsg"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:hint="Name on Card"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:hintTextColor="@color/primary_green">
@@ -112,8 +115,8 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions"
-                        android:maxLength="30"
+                        android:inputType="text|textCapSentences"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -206,10 +209,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Card Exp"
-                            android:textColorHint="@color/primary_black"
+                            android:textColorHint="@color/light_gray"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
-                            app:expandedHintEnabled="false"
                             app:hintTextColor="@color/primary_green">
 
                             <com.santalu.maskara.widget.MaskEditText
@@ -218,7 +220,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:hint="MM/YY"
+                                android:hint=""
                                 android:imeOptions="actionNext"
                                 android:inputType="number"
                                 android:longClickable="false"
@@ -274,10 +276,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="CVV/CVC"
-                            android:textColorHint="@color/primary_black"
+                            android:textColorHint="@color/light_gray"
                             app:boxStrokeColor="@color/primary_green"
                             app:errorIconDrawable="@null"
-                            app:expandedHintEnabled="false"
                             app:hintTextColor="@color/primary_green">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -285,7 +286,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:hint="123"
+                                android:hint=""
                                 android:imeOptions="actionDone"
                                 android:inputType="numberPassword"
                                 android:longClickable="false"
@@ -333,12 +334,13 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvNext"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_below="@+id/layoutExpiry"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:gravity="center"
                     app:cardBackgroundColor="@color/inactive_color"
-                    app:cardCornerRadius="20dp">
+                    app:cardCornerRadius="@dimen/_22sdp"
+                    app:cardElevation="0dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -372,12 +374,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tvAddMsg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Please confirm your billing address"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/etlAddress1"
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:hint="Billing Address Line 1"
                     android:textColorHint="@color/black"
                     app:boxStrokeColor="@color/primary_green"
@@ -389,9 +401,9 @@
                         android:id="@+id/etAddress1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="3131 Camino Del Rio North"
+                        android:hint="Billing Address Line 1"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
@@ -449,9 +461,9 @@
                         android:id="@+id/etAddress2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Suite 1400"
+                        android:hint="Billing Address Line 2(Optional)"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
@@ -474,6 +486,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="City"
+                    android:importantForAutofill="no"
                     android:textColorHint="@color/black"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -486,7 +499,7 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="San Diego"
+                        android:hint="City"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="50"
@@ -556,6 +569,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_14sdp"
                         android:hint="State"
+                        android:importantForAutofill="no"
                         android:textColorHint="@color/black"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -567,13 +581,15 @@
                             android:id="@+id/etState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:cursorVisible="false"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:editable="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint="CA"
+                            android:hint="State"
                             android:imeOptions="actionNext"
                             android:inputType="text|textNoSuggestions"
+                            android:longClickable="false"
                             android:maxLength="30"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
@@ -620,7 +636,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="Zipcode"
+                    android:hint="Zip Code"
                     android:textColorHint="@color/black"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -631,11 +647,12 @@
                         android:id="@+id/etZipCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="1234567890"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="92108"
+                        android:hint="Zip Code"
                         android:imeOptions="actionDone"
                         android:inputType="number|textNoSuggestions"
-                        android:maxLength="7"
+                        android:maxLength="5"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -681,7 +698,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_39sdp"
+                        android:layout_height="@dimen/_43sdp"
                         android:layout_marginTop="@dimen/_6sdp"
                         android:background="@drawable/disable_bg" />
 
@@ -691,7 +708,7 @@
                         android:layout_height="wrap_content"
                         android:enabled="false"
                         android:hint="Country"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/xdark_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
                         app:expandedHintEnabled="false"
@@ -723,11 +740,12 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvAddCard"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/_43sdp"
                     android:layout_marginTop="@dimen/_43sdp"
                     android:gravity="center"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="20dp">
+                    app:cardCornerRadius="@dimen/_22sdp"
+                    app:cardElevation="0dp">
 
                     <TextView
                         android:layout_width="match_parent"

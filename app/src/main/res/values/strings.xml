@@ -176,12 +176,27 @@
     <string name="enable_touch_message">Enable Touch ID to use touch recognition to complete payments quickly and securely.</string>
     <string name="error_code">117004</string>
     <string name="bank_error_code">117007</string>
-    <string name="view_all">View all</string>
+    <string name="view_all"><u>View all</u></string>
+    <string name="view_less"><u>View less</u></string>
     <string name="bank_exhausthead">Too Many Bank Accounts</string>
     <string name="bank_exhaust">There is an account limit of 4 total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.</string>
 
     <string name="currency">CYN</string>
     <string name="edit"><u>Edit</u></string>
+    <string name="reference_id_hyper"><u>[Reference ID (hyper</u></string>
+    <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
+    <string name="maxlength">8</string>
+    <string name="maxlendecimal">13</string>
+    <string name="payrequestMaxAmt">1000000</string>
+
+    <string name="calendar_sunday">S</string>
+    <string name="calendar_monday">M</string>
+    <string name="calendar_tuesday">T</string>
+    <string name="calendar_wednesday">W</string>
+    <string name="calendar_thursday">T</string>
+    <string name="calendar_friday">F</string>
+    <string name="calendar_saturday">S</string>
+    <string name="something_went_wrong">something went wrong</string>
 
 </resources>

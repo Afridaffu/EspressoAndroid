@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
@@ -26,10 +28,12 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvEmail;
+        public ImageView imgProfilePic;
 
         public MyViewHolder(View view) {
             super(view);
             tvEmail = (TextView) view.findViewById(R.id.tvEmail);
+            imgProfilePic = (ImageView) view.findViewById(R.id.imgProfilePic);
         }
     }
 
@@ -53,6 +57,14 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
             RetUserResData objData = listEmails.get(position);
 //            holder.tvEmail.setText(objData.getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
             holder.tvEmail.setText(objData.getEmail());
+            if (objData.getProfileImage() != null && !objData.getProfileImage().equals("")) {
+                Glide.with(mContext)
+                        .load(objData.getProfileImage())
+                        .placeholder(R.drawable.ic_profilelogo)
+                        .into(holder.imgProfilePic);
+            } else {
+                holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

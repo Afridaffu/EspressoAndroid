@@ -6,11 +6,12 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.view.business.GetstartedSuccessAcivity;
+import com.greenbox.coyni.utils.Utils;
 
 
 public class AccountTypeActivity extends AppCompatActivity {
@@ -32,14 +33,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             personalAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
-                    finish();
-                    overridePendingTransition(0, 0);
-
+                    startCreateAccountActivity(Utils.PERSONAL_ACCOUNT);
                 }
             });
 
@@ -53,13 +47,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(AccountTypeActivity.this, GetstartedSuccessAcivity.class);
-                    startActivity(intent);
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
+                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
             });
 
@@ -67,5 +55,17 @@ public class AccountTypeActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
 
+    }
+
+    private void startCreateAccountActivity(int accountType) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        Intent inCreateAccount = new Intent(AccountTypeActivity.this, CreateAccountActivity.class);
+        inCreateAccount.putExtra(Utils.ACCOUNT_TYPE, accountType);
+        startActivity(inCreateAccount);
+        finish();
+        overridePendingTransition(0, 0);
     }
 }

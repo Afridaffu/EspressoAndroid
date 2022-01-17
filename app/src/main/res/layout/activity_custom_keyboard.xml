@@ -227,7 +227,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="6dp"
                 android:layout_weight="1"
-                android:background="@drawable/custom_keyboard_action_btn_bg"
+                android:background="@drawable/custom_keyboard_action_btn_disable_bg"
                 android:gravity="center">
 
                 <TextView
