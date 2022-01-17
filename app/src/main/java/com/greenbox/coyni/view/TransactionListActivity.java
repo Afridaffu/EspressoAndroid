@@ -1154,6 +1154,25 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                 if (!hasFocus) {
                     transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
+
+                    try {
+
+                        if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
+
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            if (endAmount < startAmount) {
+                                Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
+                                transAmountEndET.setText("");
+                                strEndAmount = "";
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
@@ -1179,19 +1198,12 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                             Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
-
-                                try {
-                                    transAmountStartET.setText("");
-                                    strStartAmount = "";
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
                                 transAmountEndET.setText("");
                                 strEndAmount = "";
                             }
                         }
-
                         if (transAmountStartET.getText().toString().equals("")) {
                             transAmountStartET.setText("0.00");
                         }
@@ -1235,78 +1247,95 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("type", transactionType.size() + "");
-                Log.e("subtype", transactionSubType.size() + "");
-                Log.e("status", txnStatus.size() + "");
-
-                pendingTxt.setVisibility(View.GONE);
-                layoutTransactionspending.setVisibility(View.GONE);
-                layoutTransactionsposted.setVisibility(View.GONE);
-                nestedScrollView.smoothScrollTo(0, 0);
-
-                globalPending.clear();
-                globalPosted.clear();
-                currentPage = 0;
-                total = 0;
-                isFilters = false;
-                searchET.removeTextChangedListener(TransactionListActivity.this);
-                searchET.setText("");
-                searchET.addTextChangedListener(TransactionListActivity.this);
-                transAmountStartET.clearFocus();
-                transAmountEndET.clearFocus();
-                TransactionListRequest transactionListRequest = new TransactionListRequest();
-                transactionListRequest.setPageNo(String.valueOf(currentPage));
-                transactionListRequest.setWalletCategory(Utils.walletCategory);
-                transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-
-                if (transactionType.size() > 0) {
-                    isFilters = true;
-                    transactionListRequest.setTransactionType(transactionType);
-                }
-                if (transactionSubType.size() > 0) {
-                    isFilters = true;
-                    transactionListRequest.setTransactionSubType(transactionSubType);
-                }
-                if (txnStatus.size() > 0) {
-                    isFilters = true;
-                    transactionListRequest.setTxnStatus(txnStatus);
-                }
-                if (!transAmountStartET.getText().toString().trim().equals("")) {
-                    isFilters = true;
-                    transactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
-                    transactionListRequest.setFromAmountOperator(">=");
+                if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
+                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    if (endAmount < startAmount) {
+                        Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+                        transAmountStartET.setText("");
+                        strStartAmount = "";
+                        transAmountEndET.setText("");
+                        strEndAmount = "";
+                    }
                 } else {
-                    strStartAmount = "";
-                }
-                if (!transAmountEndET.getText().toString().trim().equals("")) {
-                    isFilters = true;
-                    transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
-                    transactionListRequest.setToAmountOperator("<=");
-                } else {
-                    strEndAmount = "";
-                }
-                if (!strFromDate.equals("")) {
-                    isFilters = true;
-                    transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
-                    transactionListRequest.setUpdatedFromDateOperator(">=");
-                }
-                if (!strToDate.equals("")) {
-                    isFilters = true;
-                    transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
-                    transactionListRequest.setUpdatedToDateOperator("<=");
+                    pendingTxt.setVisibility(View.GONE);
+                    layoutTransactionspending.setVisibility(View.GONE);
+                    layoutTransactionsposted.setVisibility(View.GONE);
+                    nestedScrollView.smoothScrollTo(0, 0);
+
+                    globalPending.clear();
+                    globalPosted.clear();
+                    currentPage = 0;
+                    total = 0;
+                    isFilters = false;
+                    searchET.removeTextChangedListener(TransactionListActivity.this);
+                    searchET.setText("");
+                    searchET.addTextChangedListener(TransactionListActivity.this);
+                    transAmountStartET.clearFocus();
+                    transAmountEndET.clearFocus();
+                    TransactionListRequest transactionListRequest = new TransactionListRequest();
+                    transactionListRequest.setPageNo(String.valueOf(currentPage));
+                    transactionListRequest.setWalletCategory(Utils.walletCategory);
+                    transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+
+
+                    if (transactionType.size() > 0) {
+                        isFilters = true;
+                        transactionListRequest.setTransactionType(transactionType);
+                    }
+                    if (transactionSubType.size() > 0) {
+                        isFilters = true;
+                        transactionListRequest.setTransactionSubType(transactionSubType);
+                    }
+                    if (txnStatus.size() > 0) {
+                        isFilters = true;
+                        transactionListRequest.setTxnStatus(txnStatus);
+                    }
+                    if (!transAmountStartET.getText().toString().trim().equals("")) {
+                        isFilters = true;
+                        transactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
+                        transactionListRequest.setFromAmountOperator(">=");
+                    } else {
+                        strStartAmount = "";
+                    }
+                    if (!transAmountEndET.getText().toString().trim().equals("")) {
+                        isFilters = true;
+                        transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
+                        transactionListRequest.setToAmountOperator("<=");
+
+                        if (transAmountStartET.getText().toString().trim().equals("") || transAmountStartET.getText().toString().trim().equals("0.00")) {
+                            transactionListRequest.setFromAmount("0.00");
+                            transactionListRequest.setFromAmountOperator(">=");
+                            strStartAmount = "0.00";
+                        }
+                    } else {
+                        strEndAmount = "";
+                    }
+                    if (!strFromDate.equals("")) {
+                        isFilters = true;
+                        transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
+                        transactionListRequest.setUpdatedFromDateOperator(">=");
+                    }
+                    if (!strToDate.equals("")) {
+                        isFilters = true;
+                        transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
+                        transactionListRequest.setUpdatedToDateOperator("<=");
+                    }
+
+                    if (isFilters) {
+                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
+                    } else {
+                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+                    }
+
+                    transactionsAPI(transactionListRequest);
+                    objMyApplication.initializeTransactionSearch();
+                    objMyApplication.setTransactionListSearch(transactionListRequest);
+                    noMoreTransactionTV.setVisibility(View.GONE);
+                    dialog.dismiss();
+
                 }
 
-                if (isFilters) {
-                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
-                } else {
-                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-                }
-                transactionsAPI(transactionListRequest);
-                objMyApplication.initializeTransactionSearch();
-                objMyApplication.setTransactionListSearch(transactionListRequest);
-                noMoreTransactionTV.setVisibility(View.GONE);
-                dialog.dismiss();
             }
         });
 
@@ -1531,14 +1560,6 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             ex.printStackTrace();
         }
         return Double.parseDouble(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-    }
-
-    private void bindTransactions() {
-        try {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private void transactionsAPI(TransactionListRequest transactionListRequest) {
