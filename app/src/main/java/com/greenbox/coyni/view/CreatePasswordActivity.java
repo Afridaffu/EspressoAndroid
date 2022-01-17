@@ -386,7 +386,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                                     Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                                 } else {
                                     passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                                 }
                             } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                                 isConfirm = true;

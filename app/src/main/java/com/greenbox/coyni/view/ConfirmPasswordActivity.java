@@ -176,6 +176,11 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            currentPassET.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void clearField() {
