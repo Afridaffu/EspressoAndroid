@@ -83,7 +83,7 @@ public class NotificationsActivity extends AppCompatActivity {
     Cursor dsFacePin, dsTouchID;
     boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     int CODE_AUTHENTICATION_VERIFICATION = 251;
-    int FOR_RESULT = 235;
+    public int FOR_RESULT = 235,previousItemPos=-1;
     Long mLastClickTime = 0L;
     boolean isAuthenticationCalled = false;
     public TransferPayRequest userPayRequest = new TransferPayRequest();
@@ -95,7 +95,6 @@ public class NotificationsActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_notifications);
-
         initFields();
         initObservers();
     }
@@ -661,7 +660,6 @@ public class NotificationsActivity extends AppCompatActivity {
 
     public void showPayRequestPreview(NotificationsDataItems dataItem, TransferPayRequest request) {
         try {
-            Utils.hideKeypad(NotificationsActivity.this);
             Dialog prevDialog = new Dialog(NotificationsActivity.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.notification_pay_preview);
@@ -864,4 +862,5 @@ public class NotificationsActivity extends AppCompatActivity {
         }
         return value;
     }
+
 }

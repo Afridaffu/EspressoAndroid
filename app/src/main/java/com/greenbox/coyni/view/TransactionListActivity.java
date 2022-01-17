@@ -89,7 +89,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
     Date endDateD = null;
     public static TransactionListActivity transactionListActivity;
 
-    ProgressDialog progressDialog;
+//    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -310,8 +310,8 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             @Override
             public void onChanged(TransactionList transactionList) {
                 try {
-                    if (progressDialog != null)
-                        progressDialog.dismiss();
+//                    if (progressDialog != null)
+//                        progressDialog.dismiss();
 //                    if (searchET.hasFocus()) {
 //                        searchET.clearFocus();
 //                        Utils.hideKeypad(TransactionListActivity.this);
@@ -320,82 +320,82 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
 //                    searchET.setText("");
 //                    searchET.addTextChangedListener(TransactionListActivity.this);
 
-                    if (transactionList != null && transactionList.getData().getItems() != null
-                            && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        progressBar.setVisibility(View.GONE);
-                        loadMoreTV.setVisibility(View.GONE);
-                        try {
-                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
-                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
-                            //Pending RV
-                            globalPending.addAll(transactionList.getData().getItems().getPendingTransactions());
-                            globalPosted.addAll(transactionList.getData().getItems().getPostedTransactions());
-                            total = transactionList.getData().getTotalPages();
+                    if (transactionList != null && transactionList.getData().getItems() != null) {
+                        if (transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            progressBar.setVisibility(View.GONE);
+                            loadMoreTV.setVisibility(View.GONE);
+                            try {
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
+                                LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
+                                //Pending RV
+                                globalPending.addAll(transactionList.getData().getItems().getPendingTransactions());
+                                globalPosted.addAll(transactionList.getData().getItems().getPostedTransactions());
+                                total = transactionList.getData().getTotalPages();
 
-                            getRvTransactionsPosted.setNestedScrollingEnabled(false);
-                            rvTransactionsPending.setNestedScrollingEnabled(false);
-                            rvTransactionsPending.setExpanded(true);
-                            getRvTransactionsPosted.setExpanded(true);
+                                getRvTransactionsPosted.setNestedScrollingEnabled(false);
+                                rvTransactionsPending.setNestedScrollingEnabled(false);
+                                rvTransactionsPending.setExpanded(true);
+                                getRvTransactionsPosted.setExpanded(true);
 
-                            if (globalPending.size() > 0 && globalPosted.size() == 0) {
-                                noTransactionTV.setVisibility(View.GONE);
-                                layoutTransactionspending.setVisibility(View.VISIBLE);
-                                layoutTransactionsposted.setVisibility(View.GONE);
-                                transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
-                                pendingTxt.setVisibility(View.VISIBLE);
-                                rvTransactionsPending.setLayoutManager(mLayoutManager);
-                                rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
-                                rvTransactionsPending.setAdapter(transactionListPendingAdapter);
-                                if (currentPage > 0) {
-                                    int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
-                                    rvTransactionsPending.scrollToPosition(myPos);
+                                if (globalPending.size() > 0 && globalPosted.size() == 0) {
+                                    noTransactionTV.setVisibility(View.GONE);
+                                    layoutTransactionspending.setVisibility(View.VISIBLE);
+                                    layoutTransactionsposted.setVisibility(View.GONE);
+                                    transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
+                                    pendingTxt.setVisibility(View.VISIBLE);
+                                    rvTransactionsPending.setLayoutManager(mLayoutManager);
+                                    rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
+                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
+                                    if (currentPage > 0) {
+                                        int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
+                                        rvTransactionsPending.scrollToPosition(myPos);
+                                    } else {
+                                        rvTransactionsPending.scrollToPosition(0);
+                                    }
+                                } else if (globalPending.size() == 0 && globalPosted.size() > 0) {
+                                    noTransactionTV.setVisibility(View.GONE);
+                                    layoutTransactionspending.setVisibility(View.GONE);
+                                    pendingTxt.setVisibility(View.GONE);
+                                    layoutTransactionsposted.setVisibility(View.VISIBLE);
+                                    transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, TransactionListActivity.this);
+                                    getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+                                    getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+                                    getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+                                    if (currentPage > 0) {
+                                        int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
+                                        getRvTransactionsPosted.scrollToPosition(myPos);
+                                    } else {
+                                        getRvTransactionsPosted.scrollToPosition(0);
+                                    }
+                                } else if (globalPending.size() > 0 && globalPosted.size() > 0) {
+                                    noTransactionTV.setVisibility(View.GONE);
+                                    layoutTransactionspending.setVisibility(View.VISIBLE);
+                                    layoutTransactionsposted.setVisibility(View.VISIBLE);
+                                    transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
+                                    pendingTxt.setVisibility(View.VISIBLE);
+                                    rvTransactionsPending.setLayoutManager(mLayoutManager);
+                                    rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
+                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
+
+                                    transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, TransactionListActivity.this);
+                                    getRvTransactionsPosted.setLayoutManager(nLayoutManager);
+                                    getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+                                    getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
+
+                                    if (currentPage > 0) {
+                                        int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
+                                        getRvTransactionsPosted.scrollToPosition(myPos);
+                                    } else {
+                                        getRvTransactionsPosted.scrollToPosition(0);
+                                    }
+
                                 } else {
-                                    rvTransactionsPending.scrollToPosition(0);
+                                    noTransactionTV.setVisibility(View.VISIBLE);
+                                    layoutTransactionspending.setVisibility(View.GONE);
+                                    layoutTransactionsposted.setVisibility(View.GONE);
+                                    pendingTxt.setVisibility(View.GONE);
+
                                 }
-                            } else if (globalPending.size() == 0 && globalPosted.size() > 0) {
-                                noTransactionTV.setVisibility(View.GONE);
-                                layoutTransactionspending.setVisibility(View.GONE);
-                                pendingTxt.setVisibility(View.GONE);
-                                layoutTransactionsposted.setVisibility(View.VISIBLE);
-                                transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, TransactionListActivity.this);
-                                getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-                                getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-                                getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
-                                if (currentPage > 0) {
-                                    int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
-                                    getRvTransactionsPosted.scrollToPosition(myPos);
-                                } else {
-                                    getRvTransactionsPosted.scrollToPosition(0);
-                                }
-                            } else if (globalPending.size() > 0 && globalPosted.size() > 0) {
-                                noTransactionTV.setVisibility(View.GONE);
-                                layoutTransactionspending.setVisibility(View.VISIBLE);
-                                layoutTransactionsposted.setVisibility(View.VISIBLE);
-                                transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, TransactionListActivity.this);
-                                pendingTxt.setVisibility(View.VISIBLE);
-                                rvTransactionsPending.setLayoutManager(mLayoutManager);
-                                rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
-                                rvTransactionsPending.setAdapter(transactionListPendingAdapter);
-
-                                transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, TransactionListActivity.this);
-                                getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-                                getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-                                getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
-
-                                if (currentPage > 0) {
-                                    int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
-                                    getRvTransactionsPosted.scrollToPosition(myPos);
-                                } else {
-                                    getRvTransactionsPosted.scrollToPosition(0);
-                                }
-
-                            } else {
-                                noTransactionTV.setVisibility(View.VISIBLE);
-                                layoutTransactionspending.setVisibility(View.GONE);
-                                layoutTransactionsposted.setVisibility(View.GONE);
-                                pendingTxt.setVisibility(View.GONE);
-
-                            }
 
 //                                //Posted RV
 //                                if (globalPosted.size() > 0) {
@@ -424,12 +424,16 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
 //                                    noTransactionTV.setVisibility(View.VISIBLE);
 //                                }
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Utils.displayAlert(transactionList.getError().getErrorDescription(), TransactionListActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                         }
                     } else {
-                        Utils.displayAlert(transactionList.getError().getErrorDescription(), TransactionListActivity.this, "", transactionList.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(getString(R.string.something_went_wrong), TransactionListActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -606,12 +610,16 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             }
 
             if (!strStartAmount.trim().equals("")) {
-//                transAmountStartET.setText(strStartAmount.replace(",", "").split("\\.")[0]);
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountStartET.setFilters(FilterArray);
                 transAmountStartET.setText(strStartAmount);
-//                transAmountStartET.setText(strStartAmount.replace(",", ""));
             }
 
             if (!strEndAmount.trim().equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountEndET.setFilters(FilterArray);
                 transAmountEndET.setText(strEndAmount);
             }
 
@@ -1535,7 +1543,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
 
     private void transactionsAPI(TransactionListRequest transactionListRequest) {
         try {
-            progressDialog = Utils.showProgressDialog(this);
+//            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meTransactionList(transactionListRequest);
         } catch (Exception ex) {
             ex.printStackTrace();

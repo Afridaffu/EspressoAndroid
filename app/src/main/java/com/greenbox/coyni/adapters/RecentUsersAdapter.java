@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
     List<RecentUsersData> listUsers;
     Context mContext;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameHead, tvUserName, tvWalletAddress;
@@ -92,6 +94,11 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletAddress());
                         i.putExtra("name", objData.getUserName());

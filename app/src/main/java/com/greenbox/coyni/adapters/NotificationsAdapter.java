@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -31,7 +32,6 @@ import java.util.List;
 
 public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdapter.MyViewHolder> {
     Context mContext;
-    //    String type = "";
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
     Long mLastClickTime = 0L;
@@ -39,7 +39,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
         this.mContext = context;
-//        this.type = type;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -58,7 +57,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         try {
 
             holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-            holder.swipeLayout.close(true,true);
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
             holder.tvNotifDate.setPadding(40, 30, 0, 0);
@@ -122,11 +120,46 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     }
                 });
 
-                for(int i=0;i < notifications.size();i++){
-                    if(notifications.get(i).getId()!= notifications.get(position).getId()){
-                        holder.swipeLayout.close(true);
+                holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                    @Override
+                    public void onStartOpen(SwipeLayout layout) {
+                        mItemManger.closeAllExcept(layout);
                     }
-                }
+
+                    @Override
+                    public void onOpen(SwipeLayout layout) {
+//                        notifications.get(position).setSwipeOpen(true);
+////                        notifyDataSetChanged();
+//                        if (((NotificationsActivity) mContext).previousItemPos != position && ((NotificationsActivity) mContext).previousItemPos != -1) {
+////                            Log.e("poss",((NotificationsActivity) mContext).previousItemPos+"");
+//                            notifyItemChanged(((NotificationsActivity) mContext).previousItemPos);
+////                            holder.swipeLayout.open();
+//                        }
+//                        ((NotificationsActivity) mContext).previousItemPos = position;
+//
+////                        for (int i = 0; i < notifications.size(); i++) {
+////                            if (i != position && notifications.get(i).getType().equals("Notification")) {
+////                                notifyItemChanged(i);
+////                            }
+////                        }
+                    }
+
+                    @Override
+                    public void onStartClose(SwipeLayout layout) {
+                    }
+
+                    @Override
+                    public void onClose(SwipeLayout layout) {
+                    }
+
+                    @Override
+                    public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                    }
+
+                    @Override
+                    public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                    }
+                });
             } else if (notifications.get(position).getType().equals("Received")) {
 
                 Log.e("Status", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
@@ -135,18 +168,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.messageTV.setVisibility(View.GONE);
                 holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
 
-
-//                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-//                        notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-//                                .getData().getWalletInfo().get(0).getWalletId())) {
-//                    holder.meRequestLL.setVisibility(View.VISIBLE);
-//                    holder.fromRequesterLL.setVisibility(View.GONE);
-//                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-//                        !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-//                                .getData().getWalletInfo().get(0).getWalletId())) {
-//                    holder.meRequestLL.setVisibility(View.GONE);
-//                    holder.fromRequesterLL.setVisibility(View.VISIBLE);
-//                }
                 if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
@@ -218,7 +239,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         Log.e("payLL", "payLL");
-                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+//                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
 
                         if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()) {
                             ((NotificationsActivity) mContext).selectedRow = position + "";
@@ -289,16 +310,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.fromRequesterLL.setVisibility(View.GONE);
 
                 if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
-//                    holder.meRequestLL.setVisibility(View.VISIBLE);
-//                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-//                            notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-//                                    .getData().getWalletInfo().get(0).getWalletId())) {
-//                        holder.meRequestLL.setVisibility(View.VISIBLE);
-//                        holder.fromRequesterLL.setVisibility(View.GONE);
-//                    } else {
-//                        holder.meRequestLL.setVisibility(View.GONE);
-//                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
-//                    }
                     holder.meRequestLL.setVisibility(View.VISIBLE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.remindLL.setVisibility(View.VISIBLE);
@@ -389,10 +400,12 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     }
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        mItemManger.bind(holder.itemView, position);
     }
 
     @Override
@@ -443,6 +456,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
     @Override
     public int getSwipeLayoutResourceId(int position) {
-        return R.id.swipeLL;
+        return R.id.swipeLayout;
     }
+
 }
