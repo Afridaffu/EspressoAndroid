@@ -6,12 +6,11 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.GetstartedSuccessAcivity;
 
 
 public class AccountTypeActivity extends AppCompatActivity {
@@ -54,11 +53,13 @@ public class AccountTypeActivity extends AppCompatActivity {
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AccountTypeActivity.this, GetstartedSuccessAcivity.class);
+                    startActivity(intent);
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
                 }
             });
 

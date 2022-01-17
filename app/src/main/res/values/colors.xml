@@ -10,6 +10,8 @@
     <color name="primary_green">#00A6A2</color>
     <color name="text_color">#151515</color>
     <color name="error">#E32B25</color>
+    <color name="light_gray_black">#404040</color>
+
 
 
     <color name="vlight_gray">#E8E8E8</color>

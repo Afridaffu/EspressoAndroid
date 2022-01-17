@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/white"
+        />
+    <item android:top="180dp"
+        android:bottom="-150dp"
+        android:left="-260dp"
+        android:right="-260dp"
+        >
+        <rotate
+            android:fromDegrees="-0"
+            android:pivotX="0%"
+            android:pivotY="100%">
+            <shape
+                android:shape="oval"
+                >
+                <solid
+                    android:color="@color/et_bg_gray"
+                    tools:targetApi="lollipop" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<shape-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:shape="oval">-->
+<!--    <solid android:color="@color/white"/>-->
+<!--    <size-->
+<!--        android:width="700dp"-->
+<!--        android:height="100dp"/>-->
+
+<!--</shape>-->
