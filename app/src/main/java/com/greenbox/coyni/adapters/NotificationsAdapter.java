@@ -32,7 +32,6 @@ import java.util.List;
 
 public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdapter.MyViewHolder> {
     Context mContext;
-    //    String type = "";
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
     Long mLastClickTime = 0L;
@@ -40,7 +39,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
         this.mContext = context;
-//        this.type = type;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -122,27 +120,28 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     }
                 });
 
-                for (int i = 0; i < notifications.size(); i++) {
-                    if (notifications.get(i).getId() != notifications.get(position).getId()) {
-                        holder.swipeLayout.close(true);
-                    }
-                }
-
                 holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
                     @Override
                     public void onStartOpen(SwipeLayout layout) {
-                        Log.e("onStartOpen", "onStartOpen");
-
+                        mItemManger.closeAllExcept(layout);
                     }
 
                     @Override
                     public void onOpen(SwipeLayout layout) {
-                        if (((NotificationsActivity) mContext).previousItemPos != position && ((NotificationsActivity) mContext).previousItemPos != -1) {
-
-
-                        }
-                        ((NotificationsActivity) mContext).previousItemPos = position;
-
+//                        notifications.get(position).setSwipeOpen(true);
+////                        notifyDataSetChanged();
+//                        if (((NotificationsActivity) mContext).previousItemPos != position && ((NotificationsActivity) mContext).previousItemPos != -1) {
+////                            Log.e("poss",((NotificationsActivity) mContext).previousItemPos+"");
+//                            notifyItemChanged(((NotificationsActivity) mContext).previousItemPos);
+////                            holder.swipeLayout.open();
+//                        }
+//                        ((NotificationsActivity) mContext).previousItemPos = position;
+//
+////                        for (int i = 0; i < notifications.size(); i++) {
+////                            if (i != position && notifications.get(i).getType().equals("Notification")) {
+////                                notifyItemChanged(i);
+////                            }
+////                        }
                     }
 
                     @Override
@@ -169,18 +168,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.messageTV.setVisibility(View.GONE);
                 holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
 
-
-//                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-//                        notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-//                                .getData().getWalletInfo().get(0).getWalletId())) {
-//                    holder.meRequestLL.setVisibility(View.VISIBLE);
-//                    holder.fromRequesterLL.setVisibility(View.GONE);
-//                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-//                        !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-//                                .getData().getWalletInfo().get(0).getWalletId())) {
-//                    holder.meRequestLL.setVisibility(View.GONE);
-//                    holder.fromRequesterLL.setVisibility(View.VISIBLE);
-//                }
                 if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
@@ -323,16 +310,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.fromRequesterLL.setVisibility(View.GONE);
 
                 if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
-//                    holder.meRequestLL.setVisibility(View.VISIBLE);
-//                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested") &&
-//                            notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponse()
-//                                    .getData().getWalletInfo().get(0).getWalletId())) {
-//                        holder.meRequestLL.setVisibility(View.VISIBLE);
-//                        holder.fromRequesterLL.setVisibility(View.GONE);
-//                    } else {
-//                        holder.meRequestLL.setVisibility(View.GONE);
-//                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
-//                    }
                     holder.meRequestLL.setVisibility(View.VISIBLE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.remindLL.setVisibility(View.VISIBLE);
@@ -423,10 +400,12 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     }
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        mItemManger.bind(holder.itemView, position);
     }
 
     @Override
