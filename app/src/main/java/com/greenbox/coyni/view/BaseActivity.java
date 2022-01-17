@@ -17,4 +17,8 @@ public class BaseActivity extends AppCompatActivity {
         LogUtils.d(TAG, getClass().getName());
 
     }
+
+    public void showProgressDialog() {
+
+    }
 }

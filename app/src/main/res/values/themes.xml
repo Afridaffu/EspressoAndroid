@@ -196,7 +196,9 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/calendar_day_normal_font</item>
     </style>
+    <style name="MaterialComponentsFullScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
+    </style>
 
 
 </resources>

@@ -1,4 +1,4 @@
-package com.greenbox.coyni.view;
+package com.greenbox.coyni.view.business;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.databinding.ActivityBusinessRegistrationTrackingBinding;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessRegistrationTrackingViewModel;
 
 public class BusinessRegistrationTrackingActivity extends BaseActivity {
@@ -20,5 +21,7 @@ public class BusinessRegistrationTrackingActivity extends BaseActivity {
         BusinessRegistrationTrackingViewModel businessRegistrationTrackingViewModel = new ViewModelProvider(this).get(BusinessRegistrationTrackingViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setBusinessRegistrationTrackingViewModel(businessRegistrationTrackingViewModel);
+
+        //showProgressDialog("Please wait..");
     }
 }

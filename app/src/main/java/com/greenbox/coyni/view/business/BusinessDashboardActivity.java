@@ -1,4 +1,4 @@
-package com.greenbox.coyni.view;
+package com.greenbox.coyni.view.business;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.databinding.ActivityBusinessDashboardBinding;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 public class BusinessDashboardActivity extends BaseActivity {
