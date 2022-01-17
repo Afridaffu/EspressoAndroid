@@ -473,6 +473,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
                                 .putExtra("status", "failed")
                                 .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
+                        finish();
                     }
                 } else {
                     Utils.displayAlert("something went wrong", WithdrawTokenActivity.this, "", "");
@@ -488,6 +489,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
                             .putExtra("status", "failed")
                             .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
+                    finish();
                 }
             }
         });
