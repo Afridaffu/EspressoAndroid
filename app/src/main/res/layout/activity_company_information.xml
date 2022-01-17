@@ -226,22 +226,22 @@
                 >
 
                 <ImageButton
-                    android:id="@+id/timezoneIV"
+                    android:id="@+id/dropdown_entity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:src="@drawable/ic_down"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/NameTIL"
+                    app:layout_constraintEnd_toEndOf="@+id/businessTIL"
                     app:layout_constraintHorizontal_bias="0.952"
-                    app:layout_constraintStart_toStartOf="@+id/NameTIL"
-                    app:layout_constraintTop_toTopOf="@+id/NameTIL"
+                    app:layout_constraintStart_toStartOf="@+id/businessTIL"
+                    app:layout_constraintTop_toTopOf="@+id/businessTIL"
                     app:layout_constraintVertical_bias="0.507"
                     app:layout_editor_absoluteX="336.24dp"
                     app:layout_editor_absoluteY="26.28dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/NameTIL"
+                    android:id="@+id/businessTIL"
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -254,61 +254,63 @@
                     tools:ignore="MissingConstraints">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/firstNameET"
+                        android:id="@+id/businessET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:longClickable="false"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="Choose from the list"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:paddingRight="@dimen/_14sdp"
-                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                        android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
-                        android:textCursorDrawable="@drawable/cursor_color"
-                        android:textIsSelectable="false"
+                        android:textIsSelectable="true"
                         android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
                </androidx.constraintlayout.widget.ConstraintLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ssn"
-                style="@style/TextInputLayout.OutlinedBox"
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/ssn"-->
+<!--                style="@style/TextInputLayout.OutlinedBox"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_14sdp"-->
+<!--                android:textColorHint="@color/black"-->
+<!--                android:fontFamily="@font/opensans_semibold"-->
+<!--                app:boxStrokeColor="@color/primary_green"-->
+<!--                app:errorIconDrawable="@null"-->
+<!--                app:expandedHintEnabled="false"-->
+<!--                app:prefixText="SSN"-->
+<!--                app:hintTextColor="@color/primary_green">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/SSN"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:fontFamily="@font/opensans_semibold"-->
+<!--                    android:imeOptions="actionNext"-->
+<!--                    android:inputType="number"-->
+<!--                    android:maxLength="9"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:padding="@dimen/_14sdp"-->
+<!--                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/text_color"-->
+<!--                    android:textColorHint="@color/light_gray"-->
+<!--                    android:textCursorDrawable="@drawable/cursor_color"-->
+<!--                    android:textIsSelectable="false"-->
+<!--                    android:textSize="@dimen/_12ssp" />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+            <com.greenbox.coyni.utils.outline_et.SSNOutlineBoxNumberEditText
+                android:layout_marginTop="@dimen/_14sdp"
+                android:id="@+id/SsnOET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp"
-                android:textColorHint="@color/black"
-                android:fontFamily="@font/opensans_semibold"
-                app:boxStrokeColor="@color/primary_green"
-                app:errorIconDrawable="@null"
-                app:expandedHintEnabled="false"
-                app:prefixText="SSN"
-                app:hintTextColor="@color/primary_green">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/SSN"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLength="9"
-                    android:maxLines="1"
-                    android:padding="@dimen/_14sdp"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                    android:singleLine="true"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textIsSelectable="false"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
+                />
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

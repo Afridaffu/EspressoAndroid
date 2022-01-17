@@ -3,6 +3,8 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,7 +12,10 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,12 +31,13 @@ import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 
 public class CompanyInformationActivity extends AppCompatActivity {
     public CardView nextCV;
-    ImageView close,timezone;
+    ImageView close,dropdown;
     CompanyOutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText companynameET, companyemailET,timeZoneET;
     TextInputLayout companynametil, companyemailtil;
     public LinearLayout companynameErrorLL,companyemailErrorLL,phoneNumberErrorLL;
     public TextView companynameerrorTV, companyemailerrorTV,phonenumberTV;
+    Dialog chooseEntity;
 
     public boolean iscompanyName = false, iscompanyEmail = false,isPhoneNumber=false,isNextEnabled = false;
     boolean isEmailError = false, isPhoneError = false;
@@ -52,37 +58,47 @@ public class CompanyInformationActivity extends AppCompatActivity {
         textWatchers();
         close = findViewById(R.id.closeIV);
 
-//        timezone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        dropdown = findViewById(R.id.dropdown_entity);
+        dropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choosebusinessEntityPopup(CompanyInformationActivity.this);
 
+            }
+        });
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CompanyInformationActivity.this, StartBusinessAccountActivity.class);
+                Intent intent = new Intent(CompanyInformationActivity.this, BusinessRegistrationTrackerActivity.class);
                 startActivity(intent);
             }
         });
 
     }
 
-//    protected void onResume() {
-//        super.onResume();
-//
-//        if (companynameET.getId() == focusedID) {
-//            companynameET.requestFocus();
-//        } else if (companyemailET.getId() == focusedID) {
-//            companyemailET.requestFocus();
-//        } else if (phoneNumberET.getId() == focusedID) {
-//            phoneNumberET.requestFocus();
-//        }else {
-//            companynameET.requestFocus();
-//        }
-//        Log.e("ID", "" + focusedID);
-//    }
+    private void choosebusinessEntityPopup(final Context context) {
+        try {
+            chooseEntity = new Dialog(context);
+            chooseEntity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            chooseEntity.setContentView(R.layout.activity_choose_business_entity);
+            chooseEntity.setCancelable(true);
+            Window window = chooseEntity.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            chooseEntity.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+            chooseEntity.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            chooseEntity.show();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     public void initFields() {
         try {
             companyemailET = findViewById(R.id.companyemailET);
@@ -101,11 +117,6 @@ public class CompanyInformationActivity extends AppCompatActivity {
             phoneNumberET = findViewById(R.id.CompanyphoneNumberOET);
             phoneNumberErrorLL = findViewById(R.id.CompanyphoneNumberErrorLL);
             nextCV = findViewById(R.id.nextCv);
-
-
-//            timezone = findViewById(R.id.timezoneButton);
-//            timeZoneET = findViewById(R.id.timezoneET);
-
 
         } catch (Exception e) {
             e.printStackTrace();

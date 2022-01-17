@@ -20,7 +20,7 @@ public CardView cardnextcv;
         cardnextcv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountHasCreatedSucessful.this,StartBusinessAccountActivity.class);
+                Intent intent = new Intent(AccountHasCreatedSucessful.this, BusinessRegistrationTrackerActivity.class);
                 startActivity(intent);
             }
         });

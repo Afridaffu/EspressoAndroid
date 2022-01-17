@@ -14,13 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
 
-public class StartBusinessAccountActivity extends AppCompatActivity {
+public class BusinessRegistrationTrackerActivity extends AppCompatActivity {
 TextView start,start2,start3,start4,start5;
 Dialog choose;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_business_account);
+        setContentView(R.layout.activity_business_tracker_account);
 
         start = findViewById(R.id.startTV);
         start2 = findViewById(R.id.startTV2);
@@ -31,14 +31,14 @@ Dialog choose;
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartBusinessAccountActivity.this, CompanyInformationActivity.class);
+                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, CompanyInformationActivity.class);
                 startActivity(intent);
             }
         });
         start2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbaBotmsheetPopUp(StartBusinessAccountActivity.this);
+                dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
             }
         });
 
@@ -46,21 +46,21 @@ Dialog choose;
         start3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartBusinessAccountActivity.this, AddBenificialOwnerActivity.class);
+                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBenificialOwnerActivity.class);
                 startActivity(intent);
             }
         });
         start4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartBusinessAccountActivity.this, AccountHasCreatedSucessful.class);
+                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AccountHasCreatedSucessful.class);
                 startActivity(intent);
             }
         });
         start5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartBusinessAccountActivity.this, MerchantsAgrementActivity.class);
+                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
                 startActivity(intent);
                }
         });
@@ -86,7 +86,7 @@ Dialog choose;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        Intent intent = new Intent(StartBusinessAccountActivity.this, DBAbasicInformationAcivity.class);
+        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAbasicInformationAcivity.class);
         startActivity(intent);
 
     }

@@ -41,7 +41,7 @@ public class AddBenificialOwnerActivity extends AppCompatActivity {
         closeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddBenificialOwnerActivity.this, StartBusinessAccountActivity.class);
+                Intent intent = new Intent(AddBenificialOwnerActivity.this, BusinessRegistrationTrackerActivity.class);
                 startActivity(intent);
             }
         });

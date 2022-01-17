@@ -36,7 +36,7 @@ public CardView doneCV;
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MerchantsAgrementActivity.this,StartBusinessAccountActivity.class);
+                Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
                 startActivity(intent);
             }
         });

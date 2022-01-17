@@ -357,7 +357,7 @@ public class DBAddressActivity extends AppCompatActivity {
             nextcv1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(DBAddressActivity.this, StartBusinessAccountActivity.class);
+                    Intent intent = new Intent(DBAddressActivity.this, BusinessRegistrationTrackerActivity.class);
                     startActivity(intent);
                 }
             });

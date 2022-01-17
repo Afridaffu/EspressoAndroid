@@ -51,7 +51,7 @@ Dialog choosefile;
         DoneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdditionDocInfoActivity.this, StartBusinessAccountActivity.class);
+                Intent intent = new Intent(AdditionDocInfoActivity.this, BusinessRegistrationTrackerActivity.class);
                 startActivity(intent);
             }
         });

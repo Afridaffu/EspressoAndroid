@@ -21,7 +21,7 @@ public class GetstartedSuccessAcivity extends AppCompatActivity {
             getstartcv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(GetstartedSuccessAcivity.this, StartBusinessAccountActivity.class);
+                    Intent intent = new Intent(GetstartedSuccessAcivity.this, BusinessRegistrationTrackerActivity.class);
                     startActivity(intent);
                 }
             });
