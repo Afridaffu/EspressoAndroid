@@ -197,5 +197,18 @@
     <string name="calendar_friday">F</string>
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
+    <string name="signet_account">Signet Account</string>
+    <string name="signet_ac_withdrawing_funds">Can be used for withdrawing funds from \nyour coyni account.</string>
+    <string name="select_withdraw_method">Select Withdraw Method</string>
+    <string name="external_bank_account">External Bank Account</string>
+    <string name="withdraw_to_usd">Withdraw to USD</string>
+    <string name="scan">Scan</string>
+    <string name="pay_request">Pay/Request</string>
+    <string name="buy_tokens">Buy Tokens</string>
+    <string name="select_payment_method">Select Payment Method</string>
+    <string name="bank_of_america">Bank of America</string>
+    <string name="_5359">••••5359</string>
+    <string name="_6ghy7_53s9">6Ghy7•••53s9</string>
+    <string name="add_new_payment_method">Add New Payment Method</string>
 
 </resources>
