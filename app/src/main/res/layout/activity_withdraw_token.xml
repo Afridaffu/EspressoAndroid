@@ -163,7 +163,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Your [daily or weekly] limit is [amount]"
                         android:textColor="@color/xdark_gray"
-                        android:textSize="@dimen/_9ssp"></TextView>
+                        android:textSize="@dimen/_9ssp"/>
 
                     <ImageView
                         android:id="@+id/imgArrow"
@@ -231,6 +231,7 @@
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center_vertical|right"
                                 android:hint="0.00"
+                                android:textColorHint="@color/light_gray"
                                 android:inputType="numberDecimal"
                                 android:maxLength="@string/maxlength"
                                 android:textColor="@color/primary_black"
@@ -245,7 +246,7 @@
                                 android:text=" CYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp"
-                                android:visibility="visible"></TextView>
+                                android:visibility="visible"/>
                         </LinearLayout>
 
                         <View

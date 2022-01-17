@@ -97,6 +97,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             else if (firstName.getText().toString().trim().length() == 0) {
                 firstNameErrorLL.setVisibility(VISIBLE);
                 firstNameErrorTV.setText("Field Required");
+                firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
             }
             enableButton();
         } else if (charSequence == lastName.getEditableText()) {
@@ -108,6 +109,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             else if (lastName.getText().toString().trim().length() == 0) {
                 lastNameErrorLL.setVisibility(VISIBLE);
                 lastNameErrorTV.setText("Field Required");
+                lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
             }
             enableButton();
         }
