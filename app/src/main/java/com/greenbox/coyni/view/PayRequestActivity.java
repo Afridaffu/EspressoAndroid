@@ -939,7 +939,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
                 i.putExtra("screen", "payRequest");
                 startActivity(i);
-                finish();
+                //finish();
             }
         });
 
