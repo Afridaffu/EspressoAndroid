@@ -42,7 +42,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
-
     @NonNull
     @Override
     public NotificationsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -60,6 +59,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
             holder.tvNotifDate.setPadding(40, 30, 0, 0);
+            holder.swipeLayout.close();
 
             if (notifications.get(position).getType().equals("Notification")) {
 
@@ -128,20 +128,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                     @Override
                     public void onOpen(SwipeLayout layout) {
-//                        notifications.get(position).setSwipeOpen(true);
-////                        notifyDataSetChanged();
-//                        if (((NotificationsActivity) mContext).previousItemPos != position && ((NotificationsActivity) mContext).previousItemPos != -1) {
-////                            Log.e("poss",((NotificationsActivity) mContext).previousItemPos+"");
-//                            notifyItemChanged(((NotificationsActivity) mContext).previousItemPos);
-////                            holder.swipeLayout.open();
-//                        }
-//                        ((NotificationsActivity) mContext).previousItemPos = position;
-//
-////                        for (int i = 0; i < notifications.size(); i++) {
-////                            if (i != position && notifications.get(i).getType().equals("Notification")) {
-////                                notifyItemChanged(i);
-////                            }
-////                        }
+
                     }
 
                     @Override
@@ -413,7 +400,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         Log.e("size", notifications.size() + "");
         return notifications.size();
     }
-
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         CardView readStatusCV, cvNotification;

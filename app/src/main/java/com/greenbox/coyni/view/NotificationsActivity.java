@@ -83,7 +83,7 @@ public class NotificationsActivity extends AppCompatActivity {
     Cursor dsFacePin, dsTouchID;
     boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     int CODE_AUTHENTICATION_VERIFICATION = 251;
-    public int FOR_RESULT = 235,previousItemPos=-1;
+    public int FOR_RESULT = 235, previousItemPos = -1;
     Long mLastClickTime = 0L;
     boolean isAuthenticationCalled = false;
     public TransferPayRequest userPayRequest = new TransferPayRequest();
@@ -783,14 +783,26 @@ public class NotificationsActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case RESULT_OK:
-            case 235: {
-                notificationPayCall();
-            }
-            case RESULT_CANCELED:
-                if (progressDialog != null)
-                    progressDialog.dismiss();
+        switch (requestCode) {
+            case 251:
+                if (resultCode == RESULT_OK) {
+                    notificationPayCall();
+                } else if (resultCode == RESULT_CANCELED) {
+                    if (progressDialog != null)
+                        progressDialog.dismiss();
+                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION)
+                        startActivityForResult(new Intent(NotificationsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "Notifications"), FOR_RESULT);
+                }
+                break;
+            case 235:
+                if (resultCode == RESULT_OK) {
+                    notificationPayCall();
+                } else if (resultCode == RESULT_CANCELED) {
+                    if (progressDialog != null)
+                        progressDialog.dismiss();
+                }
                 break;
         }
     }
