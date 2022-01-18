@@ -77,10 +77,17 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,10 +98,12 @@ public class Utils {
     public static String strCode = "12345";
     public static String strCCode = "";
     public static String strAuth;
+    public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
+    public static Boolean isBiometric;
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
@@ -142,7 +151,8 @@ public class Utils {
     public static String[] for_Declined = {"RT01", "RT02"};
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
-    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
+    //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
+    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+skkD6XebOu1kYPMIy3HJXuIErNxvYkSdOTdpwY0Pn49l1koS9o2CfCe9Fa01YifNtCgXc37XRU5Di4z/Sspcjs9qrHOS0RFiGtmr5BaQcKjpuy/r5ukCVuNMHEK++HZYlahdIqFxGLjSll50XTn3j+YZFvIMd7CcXCmx9UP+zkdtcr5ib3+AyVdC/w5JKAMVRuNpN6PEGC02woYfYHB/uJmBZw==";
 
     public static final int payRequest = 12;
     public static final int buyTokens = 2;
@@ -170,6 +180,10 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    public static final float slidePercentage = 0.3f;
+
+    public static boolean isKeyboardVisible = false;
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
 
@@ -179,6 +193,14 @@ public class Utils {
 
     public static String getStrCode() {
         return strCode;
+    }
+
+    public static String getAppVersion() {
+        return appVersion;
+    }
+
+    public static void setAppVersion(String appVersion) {
+        Utils.appVersion = appVersion;
     }
 
     public static String getStrAuth() {
@@ -229,6 +251,14 @@ public class Utils {
         Utils.isTouchEnabled = isTouchEnabled;
     }
 
+    public static Boolean getIsBiometric() {
+        return isBiometric;
+    }
+
+    public static void setIsBiometric(Boolean isBiometric) {
+        Utils.isBiometric = isBiometric;
+    }
+
     public static String getDeviceID() {
         return deviceID;
     }
@@ -253,6 +283,11 @@ public class Utils {
     public static void hideKeypad(Context context, View view) {
         InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void shwForcedKeypad(Context context) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     public static void hideKeypad(Context context) {
@@ -338,9 +373,9 @@ public class Utils {
 //                    dialog.dismiss();
 //                }).show();
 
-        if(!msg.equals("")){
+        if (!msg.equals("")) {
             displayAlertNew(msg, activity, header);
-        }else{
+        } else {
             displayAlertNew(fieldError, activity, header);
         }
     }
@@ -452,11 +487,17 @@ public class Utils {
         TextView textTV = dialog.findViewById(R.id.toastTV);
         ImageView imageIV = dialog.findViewById(R.id.toastIV);
         textTV.setText(text);
-        try {
-            imageIV.setImageResource(imageID);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (imageID == 0) {
+            imageIV.setVisibility(View.GONE);
+        } else {
+            try {
+                imageIV.setVisibility(View.VISIBLE);
+                imageIV.setImageResource(imageID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
@@ -836,6 +877,13 @@ public class Utils {
                             if (filterList.size() > 0) {
                                 statesRV.setVisibility(View.VISIBLE);
                                 notFoundTV.setVisibility(View.GONE);
+                                for (int i = 0; i < filterList.size(); i++) {
+                                    if (editText.getText().toString().toLowerCase().trim().equals(filterList.get(i).getName().toLowerCase())) {
+                                        filterList.get(i).setSelected(true);
+                                    } else {
+                                        filterList.get(i).setSelected(false);
+                                    }
+                                }
                                 finalStatesListAdapter.updateList(filterList);
                             } else {
                                 statesRV.setVisibility(View.GONE);
@@ -1017,6 +1065,11 @@ public class Utils {
             ex.printStackTrace();
         }
         return listStates;
+    }
+
+    public static void openKeyPad(Context context, View view) {
+        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
 }

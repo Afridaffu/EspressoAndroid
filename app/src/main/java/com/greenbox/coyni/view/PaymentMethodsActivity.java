@@ -76,9 +76,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (strCurrent.equals("addpay")) {
+            if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment"))
+                    && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
+            } else if (strCurrent.equals("externalBank")) {
+                ControlMethod("addpayment");
+                strCurrent = "addpayment";
             } else {
                 super.onBackPressed();
             }
@@ -105,7 +109,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    ControlMethod("addpayment");
+                    //ControlMethod("addpayment");
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
                     getPaymentMethods();
                     isDeCredit = true;
                 }
@@ -147,11 +153,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
             addPayment();
             paymentMethods();
-//            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("editcard")) {
-//                if (getIntent().getStringExtra("action") != null && getIntent().getStringExtra("action").equals("remove")) {
-//                    deleteBank(PaymentMethodsActivity.this, objMyApplication.getSelectedCard());
-//                }
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -166,7 +167,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 //                strCurrent = "addpay";
                 addPayment();
             } else {
-                getPaymentMethods();
+                if (!isPayments) {
+                    getPaymentMethods();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -187,14 +190,19 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             signOnData = signOn.getData();
                             objMyApplication.setStrSignOnError("");
                             strSignOn = "";
-                            if (objMyApplication.getResolveUrl() && !isBank) {
-                                callResolveFlow();
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(PaymentMethodsActivity.this, strSignOn, signOnData);
                             }
                         } else {
-                            objMyApplication.setSignOnData(null);
-                            signOnData = null;
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                            strSignOn = signOn.getError().getErrorDescription();
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -270,12 +278,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-                    if (isDeCredit) {
-                        isDeCredit = false;
-                        ControlMethod("addpayment");
-                        strCurrent = "addpayment";
-                        numberOfAccounts();
-                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                    if (isDeCredit) {
+//                        isDeCredit = false;
+//                        ControlMethod("addpayment");
+//                        strCurrent = "addpayment";
+//                        numberOfAccounts();
+//                    } else
+                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
@@ -284,7 +293,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         isPayments = false;
                         ControlMethod("addpayment");
                         strCurrent = "addpayment";
-                        numberOfAccounts();
+//                        numberOfAccounts();
+                        addPayment();
                     }
                 }
             }
@@ -337,7 +347,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvBankError = findViewById(R.id.tvBankError);
             tvDCardError = findViewById(R.id.tvDCardError);
             tvCCardError = findViewById(R.id.tvCCardError);
-            lyExternal = findViewById(R.id.lyExternal);
+            lyExternal = findViewById(R.id.lyAddExternal);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvExtBHead = findViewById(R.id.tvExtBHead);
             tvExtBankHead = findViewById(R.id.tvExtBankHead);
@@ -365,12 +375,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 tvExtBHead.setText("Bank Account");
                 tvMessage.setText("Choose a payment method");
                 tvMessage.setVisibility(View.VISIBLE);
-//            } else if (strScreen != null && strScreen.equals("quick_action")) {
             } else {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \\nlinked to your account. Please follow one of \\nthe prompts below to link an account.");
+                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
+                if (strScreen.equals("") && strCurrent.equals("addpayment")) {
+                    tvMessage.setVisibility(View.VISIBLE);
+                    imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
+                }
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -405,10 +418,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
-//                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-//                            i.putExtra("card", "debit");
-//                            startActivity(i);
-
                             Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
                             startActivityForResult(i, 3);
@@ -425,10 +434,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                             strCurrent = "credit";
-//                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-//                            i.putExtra("card", "credit");
-//                            startActivity(i);
-
                             Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "credit");
                             startActivityForResult(i, 3);

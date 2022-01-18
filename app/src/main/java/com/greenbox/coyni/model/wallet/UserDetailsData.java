@@ -8,7 +8,11 @@ public class UserDetailsData {
     private int userId;
     private String email;
     private String walletCatagory;
+    private String image;
 
+    public String getImage() {
+        return image;
+    }
     public String getWalletId() {
         return walletId;
     }

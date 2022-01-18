@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_rounded_bg"
     android:orientation="vertical"
-    tools:context=".fragments.SetLimitFragment">
+    android:paddingBottom="@dimen/_10sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,295 +33,89 @@
     <LinearLayout
         android:id="@+id/payLL"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_72sdp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_26sdp"
         android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_weight="3.3"
+            android:gravity="right"
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/setAmountET"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:digits="0123456789."
+                android:cursorVisible="true"
+                android:ellipsize="end"
                 android:fontFamily="@font/opensans_bold"
+                android:gravity="center_vertical|right"
                 android:hint="0.00"
-                android:gravity="bottom"
-                android:editable="false"
-                android:clickable="false"
-                android:focusable="false"
-                android:inputType="number"
+                android:inputType="numberDecimal"
+                android:maxLength="@string/maxlength"
                 android:singleLine="true"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/light_gray"
-                android:textDirection="rtl"
-                android:textCursorDrawable="@drawable/cursor_color_text"
-                android:textSize="@dimen/_54ssp"
+                android:textCursorDrawable="@drawable/cursorcolor"
+                android:textSize="@dimen/_53ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.753"
+                app:layout_constraintHorizontal_bias="0.222"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_bold"
-            android:text="CYN"
-            android:layout_marginTop="@dimen/_40sdp"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_11ssp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.652"
-            app:layout_constraintStart_toStartOf="@+id/setAmountET"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.78" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="4">
-
-            <TextView
-                android:id="@+id/keyOneTV"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_keyboard_key_bg"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/keyTwoTV"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_keyboard_key_bg"
-                android:gravity="center"
-                android:text="2"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/keyThreeTV"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_keyboard_key_bg"
-                android:gravity="center"
-                android:text="3"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/keyBackLL"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_keyboard_key_bg"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_outline_backspace" />
-
-            </LinearLayout>
-
-
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/_4sdp">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.34"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.34"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/keyFourTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="4"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/keyFiveTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="5"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/keySixTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="6"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.34"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/keySevenTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="7"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/keyEightTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="8"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/keyNineTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="9"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.34"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/keyZeroTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/keyDotTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_keyboard_key_bg"
-                        android:gravity="center"
-                        android:text="."
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_16sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/keyActionLL"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="6dp"
-                android:layout_weight="1"
-                android:background="@color/inactive_color"
-                android:gravity="center">
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/keyActionTV"
+                    android:id="@+id/coyniTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Ok"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:layout_marginEnd="1dp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="CYN"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.079"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.733" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:background="@color/light_gray" />
+
+    <com.greenbox.coyni.utils.keyboards.CustomKeyboard
+        android:id="@+id/customKeyBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50sdp" />
 
 </LinearLayout>

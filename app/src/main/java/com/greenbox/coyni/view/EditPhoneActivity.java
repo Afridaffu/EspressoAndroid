@@ -120,6 +120,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                     }
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,6 +202,6 @@ public class EditPhoneActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        newPhoneET.clearFocus();
+//        newPhoneET.clearFocus();
     }
 }

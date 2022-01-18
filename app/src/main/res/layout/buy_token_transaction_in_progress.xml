@@ -153,7 +153,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="left"
                 android:paddingLeft="@dimen/_10sdp"
-                android:text="We are processing your request, please allow a few \nminutes for your coyni Debit/Credit card purchase to be "
+                android:text="We are processing your request, please allow a few \nminutes for your Coyni Debit/Credit card purchase to be "
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_10sdp" />
 

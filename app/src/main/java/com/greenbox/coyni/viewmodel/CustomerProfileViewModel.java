@@ -218,11 +218,17 @@ public class CustomerProfileViewModel extends AndroidViewModel {
                             SignOn obj = response.body();
                             signOnMutableLiveData.setValue(obj);
                         } else {
+                            String strResponse = response.errorBody().string();
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(strResponse, type);
+//                            apiErrorMutableLiveData.setValue(errorResponse);
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<SignOn>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            //apiErrorMutableLiveData.setValue(errorResponse);
+                            SignOn errorResponse1 = gson.fromJson(strResponse, type);
+                            signOnMutableLiveData.setValue(errorResponse1);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

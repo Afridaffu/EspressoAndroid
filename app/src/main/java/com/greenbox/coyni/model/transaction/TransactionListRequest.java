@@ -22,6 +22,7 @@ public class TransactionListRequest {
 
     private String updatedToDate;
     private String updatedToDateOperator;
+    private String gbxTransactionId;
 
     private ArrayList<Integer> transactionType ;
     private ArrayList<Integer> transactionSubType ;
@@ -137,5 +138,13 @@ public class TransactionListRequest {
 
     public void setUpdatedToDateOperator(String updatedToDateOperator) {
         this.updatedToDateOperator = updatedToDateOperator;
+    }
+
+    public String getGbxTransactionId() {
+        return gbxTransactionId;
+    }
+
+    public void setGbxTransactionId(String gbxTransactionId) {
+        this.gbxTransactionId = gbxTransactionId;
     }
 }

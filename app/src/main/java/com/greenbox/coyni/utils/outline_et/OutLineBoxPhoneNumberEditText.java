@@ -86,7 +86,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
-                    }else if (FROM.equals("CREATE_ACCOUNT") && !b) {
+                    } else if (FROM.equals("CREATE_ACCOUNT") && !b) {
                         if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -146,7 +146,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         caa.phoneErrorLL.setVisibility(VISIBLE);
                         caa.phoneErrorTV.setText("Field Required");
                     }
-                }else if (FROM.equals("Retrieve")) {
+                } else if (FROM.equals("Retrieve")) {
                     RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
                     if (charSequence.length() == 14) {
                         isPhoneError = false;
@@ -198,7 +198,7 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
         return pnET.getId();
     }
 
-    public void requestETFocus(){
+    public void requestETFocus() {
         pnET.requestFocus();
     }
 

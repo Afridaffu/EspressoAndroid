@@ -11,7 +11,7 @@
         android:layout_width="@dimen/_43sdp"
         android:layout_height="@dimen/_2sdp"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_28sdp"
         android:background="@drawable/bg_core_colorfill" />
 
@@ -81,7 +81,7 @@
                 android:id="@+id/tvBankName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_weight="0.7"
                 android:fontFamily="@font/opensans_semibold"
                 android:singleLine="true"

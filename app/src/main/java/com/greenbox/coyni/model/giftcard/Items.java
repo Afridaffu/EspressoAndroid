@@ -19,6 +19,7 @@ public class Items implements Serializable {
     private String redemptionInstructions;
     private Double minValue;
     private Double maxValue;
+    private boolean isSelected =false;
 
     public String getUtid() {
         return utid;
@@ -138,5 +139,13 @@ public class Items implements Serializable {
 
     public void setMaxValue(Double maxValue) {
         this.maxValue = maxValue;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

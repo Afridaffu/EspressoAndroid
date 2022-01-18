@@ -14,6 +14,7 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.coyniusers.CoyniUsers;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -22,6 +23,11 @@ import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.StatusRequest;
+import com.greenbox.coyni.model.notification.UnReadDelResponse;
+import com.greenbox.coyni.model.payrequest.PayRequestResponse;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -54,6 +60,7 @@ import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneValidateRequest;
+import com.greenbox.coyni.model.recentusers.RecentUsers;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -65,10 +72,14 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
+import com.greenbox.coyni.model.reguser.RegUsersResponse;
+import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.templates.TemplateRequest;
+import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
@@ -78,6 +89,8 @@ import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
+import com.greenbox.coyni.model.userrequest.UserRequest;
+import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
@@ -87,6 +100,7 @@ import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -301,4 +315,44 @@ public interface ApiService {
 
     @GET("api/v2/giftcard/giftCardBrandItems")
     Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
+
+    @GET("api/v2/user-requests/me/receive")
+    Call<Notifications> getReceivedNotifications();
+
+    @GET("api/v2/user-requests/me/sent")
+    Call<Notifications> getSentNotifications();
+
+    @GET("api/v2/notifications/me")
+    Call<Notifications> getNotifications();
+
+    @GET("api/v2/profile/me/recentUsers")
+    Call<RecentUsers> recentUsers();
+
+    @GET("api/v2/user-requests/user-details/search")
+    Call<CoyniUsers> getCoyniUsers(@Query("searchKey") String searchKey);
+
+    @POST("api/v2/profile/registeredUsers")
+    Call<RegUsersResponse> registeredUsers(@Body List<RegisteredUsersRequest> request);
+
+    @POST("api/v2/comm-temp/invite/{templateId}/view")
+    Call<TemplateResponse> getTemplate(@Path("templateId") int templateId, @Body TemplateRequest request);
+
+    @POST("api/v2/node/sendTokens")
+    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
+
+    @POST("api/v2/notifications/me/mark-read")
+    Call<UnReadDelResponse> notificationsMarkRead(@Body List<Integer> list);
+
+    @POST("api/v2/notifications/me/mark-unread")
+    Call<UnReadDelResponse> notificationsMarkUnRead(@Body List<Integer> list);
+
+    @POST("api/v2/notifications/me/mark-clear")
+    Call<UnReadDelResponse> notificationDelete(@Body List<Integer> list);
+
+    @POST("api/v2/user-requests")
+    Call<UserRequestResponse> userRequests(@Body UserRequest request);
+
+    @PATCH("api/v2/user-requests")
+    Call<UserRequestResponse> updateUserRequests(@Body StatusRequest request);
+
 }

@@ -1,21 +1,9 @@
 package com.greenbox.coyni.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -33,31 +21,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.andrewjapar.rangedatepicker.CalendarPicker;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.andrewjapar.rangedatepicker.CalendarPicker;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
-import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedNewAdapter;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -73,23 +49,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.TimeZone;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
-import kotlin.jvm.functions.Function4;
 
-public class TransactionListActivity extends AppCompatActivity {
+public class TransactionListActivity extends AppCompatActivity implements TextWatcher {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     NestedScrollView nestedScrollView;
     SwipeRefreshLayout swipeRefreshLayout;
     public ProgressBar progressBar;
@@ -116,6 +87,9 @@ public class TransactionListActivity extends AppCompatActivity {
     public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     Date startDateD = null;
     Date endDateD = null;
+    public static TransactionListActivity transactionListActivity;
+
+//    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +99,7 @@ public class TransactionListActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
         try {
+            transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
             filterIV = findViewById(R.id.filterIconIV);
 
@@ -156,115 +131,11 @@ public class TransactionListActivity extends AppCompatActivity {
             });
 
             closeBtn.setOnClickListener(view -> finish());
-
-            searchET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    String search_key = charSequence.toString();
-                    List<TransactionListPending> filterList = new ArrayList<>();
-                    List<TransactionListPosted> filterList1 = new ArrayList<>();
-                    int pindex = 0, poindex = 0;
-                    if (globalPending.size() > 0) {
-                        for (int iteration = 0; iteration < globalPending.size(); iteration++) {
-                            pindex = globalPending.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-                            if (pindex == 0) {
-                                filterList.add(globalPending.get(iteration));
-                            }
-                        }
-                    }
-                    if (globalPosted.size() > 0) {
-                        for (int iteration = 0; iteration < globalPosted.size(); iteration++) {
-                            poindex = globalPosted.get(iteration).getGbxTransactionId().toLowerCase().indexOf(search_key.toLowerCase());
-                            if (poindex == 0) {
-                                filterList1.add(globalPosted.get(iteration));
-                            }
-                        }
-                    }
-
-                    if (filterList.size() == 0 && filterList1.size() == 0) {
-                        layoutTransactionsposted.setVisibility(View.GONE);
-                        layoutTransactionspending.setVisibility(View.GONE);
-                        pendingTxt.setVisibility(View.GONE);
-                        noTransactionTV.setVisibility(View.VISIBLE);
-                    } else if (filterList.size() > 0 && filterList1.size() == 0) {
-                        layoutTransactionsposted.setVisibility(View.GONE);
-                        layoutTransactionspending.setVisibility(View.VISIBLE);
-                        pendingTxt.setVisibility(View.VISIBLE);
-                        noTransactionTV.setVisibility(View.GONE);
-                    } else if (filterList.size() == 0 && filterList1.size() > 0) {
-                        layoutTransactionsposted.setVisibility(View.VISIBLE);
-                        layoutTransactionspending.setVisibility(View.GONE);
-                        pendingTxt.setVisibility(View.GONE);
-                        noTransactionTV.setVisibility(View.GONE);
-                    } else {
-                        layoutTransactionsposted.setVisibility(View.VISIBLE);
-                        layoutTransactionspending.setVisibility(View.VISIBLE);
-                        pendingTxt.setVisibility(View.VISIBLE);
-                        noTransactionTV.setVisibility(View.GONE);
-                    }
-                    try {
-                        transactionListPendingAdapter.updateList(filterList);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        List<List<TransactionListPosted>> listedData = new ArrayList<>();
-                        ArrayList<String> dates = new ArrayList<>();
-
-//                        for (int k = 0; k < filterList1.size(); k++) {
-//                            String datee = objMyApplication.convertZoneDateLastYear(filterList1.get(k).getUpdatedAt().split("\\.")[0]);
-//                            if (!dates.contains(datee)) {
-//                                dates.add(datee);
-//                            }
-//                        }
-//
-//                        for (int j = 0; j < dates.size(); j++) {
-//                            List<TransactionListPosted> individualDateData = new ArrayList<>();
-//                            for (int l = 0; l < filterList1.size(); l++) {
-//                                String datee = objMyApplication.convertZoneDateLastYear(filterList1.get(l).getUpdatedAt().split("\\.")[0]);
-//                                if (dates.get(j).equals(datee)) {
-//                                    individualDateData.add(filterList1.get(l));
-//                                }
-//                            }
-//                            listedData.add(individualDateData);
-//                        }
-
-                        Log.e("Size", listedData.size() + "");
-                        LinearLayoutManager nLayoutManager = new LinearLayoutManager(TransactionListActivity.this);
-                        transactionListPostedAdapter = new TransactionListPostedNewAdapter(filterList1, TransactionListActivity.this);
-                        getRvTransactionsPosted.setLayoutManager(nLayoutManager);
-                        getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
-                        getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
-//                        transactionListPostedAdapter.updateList(listedData);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+            searchET.addTextChangedListener(this);
 
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-//                    globalPosted.clear();
-//                    globalPending.clear();
-//                    currentPage = 0;
-//                    total = 0;
-//                    TransactionListRequest transactionListRequest = new TransactionListRequest();
-//                    transactionListRequest.setPageNo(String.valueOf(currentPage));
-//                    transactionListRequest.setWalletCategory(Utils.walletCategory);
-//                    transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-//                    dashboardViewModel.meTransactionList(transactionListRequest);
-//                    dashboardViewModel.mePreferences();
                     try {
                         noMoreTransactionTV.setVisibility(View.GONE);
 
@@ -290,7 +161,9 @@ public class TransactionListActivity extends AppCompatActivity {
                         transactionListRequest.setWalletCategory(Utils.walletCategory);
                         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
-                        dashboardViewModel.meTransactionList(transactionListRequest);
+                        transactionsAPI(transactionListRequest);
+                        objMyApplication.initializeTransactionSearch();
+                        objMyApplication.setTransactionListSearch(transactionListRequest);
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -368,7 +241,10 @@ public class TransactionListActivity extends AppCompatActivity {
 //                                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                                 }
 
-                                dashboardViewModel.meTransactionList(transactionListRequest);
+                                transactionsAPI(transactionListRequest);
+                                objMyApplication.initializeTransactionSearch();
+                                objMyApplication.setTransactionListSearch(transactionListRequest);
+
                                 noMoreTransactionTV.setVisibility(View.GONE);
                             } else {
                                 noMoreTransactionTV.setVisibility(View.VISIBLE);
@@ -385,25 +261,67 @@ public class TransactionListActivity extends AppCompatActivity {
                 }
             });
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void initObservers() {
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        try {
-            dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
-                @Override
-                public void onChanged(TransactionList transactionList) {
-                    try {
-                        if (searchET.hasFocus())
-                            searchET.clearFocus();
-                        searchET.setText("");
-                        if (transactionList != null && transactionList.getData().getItems() != null
-                                && transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        if (charSequence.length() > 30) {
+            globalPending.clear();
+            globalPosted.clear();
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setGbxTransactionId(charSequence.toString());
+            transactionsAPI(transactionListRequest);
+        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+            layoutTransactionsposted.setVisibility(View.GONE);
+            layoutTransactionspending.setVisibility(View.GONE);
+            pendingTxt.setVisibility(View.GONE);
+            noTransactionTV.setVisibility(View.VISIBLE);
+        } else if (charSequence.toString().trim().length() == 0) {
+            globalPending.clear();
+            globalPosted.clear();
+            objMyApplication.getTransactionListSearch().setPageNo("0");
+            transactionsAPI(objMyApplication.getTransactionListSearch());
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable == searchET.getEditableText()) {
+            try {
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void initObservers() {
+        dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
+            @Override
+            public void onChanged(TransactionList transactionList) {
+                try {
+//                    if (progressDialog != null)
+//                        progressDialog.dismiss();
+//                    if (searchET.hasFocus()) {
+//                        searchET.clearFocus();
+//                        Utils.hideKeypad(TransactionListActivity.this);
+//                    }
+//                    searchET.removeTextChangedListener(TransactionListActivity.this);
+//                    searchET.setText("");
+//                    searchET.addTextChangedListener(TransactionListActivity.this);
+
+                    if (transactionList != null && transactionList.getData().getItems() != null) {
+                        if (transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             progressBar.setVisibility(View.GONE);
                             loadMoreTV.setVisibility(View.GONE);
                             try {
@@ -512,49 +430,20 @@ public class TransactionListActivity extends AppCompatActivity {
                         } else {
                             Utils.displayAlert(transactionList.getError().getErrorDescription(), TransactionListActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        Utils.displayAlert(getString(R.string.something_went_wrong), TransactionListActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                     }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        try {
-//            globalPending.clear();
-//            globalPosted.clear();
-//            transactionType.clear();
-//            transactionSubType.clear();
-//            txnStatus.clear();
-//            currentPage = 0;
-//            strFromDate = "";
-//            strToDate = "";
-//            strStartAmount = "";
-//            strEndAmount = "";
-//            startDateD = null;
-//            endDateD = null;
-//            startDateLong = 0L;
-//            endDateLong = 0L;
-//            strSelectedDate = "";
-//            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-//
-//            noMoreTransactionTV.setVisibility(View.GONE);
-//            TransactionListRequest transactionListRequest = new TransactionListRequest();
-//            transactionListRequest.setPageNo(String.valueOf(currentPage));
-//            transactionListRequest.setWalletCategory(Utils.walletCategory);
-//            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-//
-//            dashboardViewModel.meTransactionList(transactionListRequest);
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     public void showFiltersPopup() {
@@ -721,12 +610,17 @@ public class TransactionListActivity extends AppCompatActivity {
             }
 
             if (!strStartAmount.trim().equals("")) {
-//                transAmountStartET.setText(strStartAmount.replace(",", "").split("\\.")[0]);
-                transAmountStartET.setText(strStartAmount.replace(",", ""));
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountStartET.setFilters(FilterArray);
+                transAmountStartET.setText(strStartAmount);
             }
 
             if (!strEndAmount.trim().equals("")) {
-                transAmountEndET.setText(strEndAmount.replace(",", ""));
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountEndET.setFilters(FilterArray);
+                transAmountEndET.setText(strEndAmount);
             }
 
             if (!strSelectedDate.equals("")) {
@@ -751,6 +645,10 @@ public class TransactionListActivity extends AppCompatActivity {
         }
 
         resetFiltersTV.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                return;
+            }
+            mLastClickTimeFilters = SystemClock.elapsedRealtime();
             transactionType.clear();
             transactionSubType.clear();
             txnStatus.clear();
@@ -766,7 +664,10 @@ public class TransactionListActivity extends AppCompatActivity {
             strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
+
+            searchET.removeTextChangedListener(TransactionListActivity.this);
             searchET.setText("");
+            searchET.addTextChangedListener(TransactionListActivity.this);
             transAmountStartET.setText("");
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
@@ -806,7 +707,17 @@ public class TransactionListActivity extends AppCompatActivity {
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
 
-
+            globalPending.clear();
+            globalPosted.clear();
+            currentPage = 0;
+            total = 0;
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            transactionsAPI(transactionListRequest);
+            objMyApplication.initializeTransactionSearch();
+            objMyApplication.setTransactionListSearch(transactionListRequest);
         });
 
         transTypePR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -1243,6 +1154,25 @@ public class TransactionListActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
+
+                    try {
+
+                        if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
+
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            if (endAmount < startAmount) {
+                                Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
+                                transAmountEndET.setText("");
+                                strEndAmount = "";
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
@@ -1252,16 +1182,30 @@ public class TransactionListActivity extends AppCompatActivity {
         transAmountEndET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+
+                if (transAmountStartET.getText().toString().equals("")) {
+                    transAmountStartET.setText("0.00");
+                }
+
                 if (!hasFocus) {
                     transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     try {
+
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
-                            if (getUSFormat(transAmountEndET.getText().toString()) < getUSFormat(transAmountStartET.getText().toString())) {
+
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
                                 transAmountStartET.setText("");
                                 strStartAmount = "";
+                                transAmountEndET.setText("");
+                                strEndAmount = "";
                             }
+                        }
+                        if (transAmountStartET.getText().toString().equals("")) {
+                            transAmountStartET.setText("0.00");
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -1292,6 +1236,9 @@ public class TransactionListActivity extends AppCompatActivity {
                     transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountEndET, "END");
                     transAmountEndET.clearFocus();
+                    if (transAmountStartET.getText().toString().equals("")) {
+                        transAmountStartET.setText("0.00");
+                    }
                 }
                 return false;
             }
@@ -1300,9 +1247,6 @@ public class TransactionListActivity extends AppCompatActivity {
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("type", transactionType.size() + "");
-                Log.e("subtype", transactionSubType.size() + "");
-                Log.e("status", txnStatus.size() + "");
 
                 pendingTxt.setVisibility(View.GONE);
                 layoutTransactionspending.setVisibility(View.GONE);
@@ -1314,7 +1258,9 @@ public class TransactionListActivity extends AppCompatActivity {
                 currentPage = 0;
                 total = 0;
                 isFilters = false;
+                searchET.removeTextChangedListener(TransactionListActivity.this);
                 searchET.setText("");
+                searchET.addTextChangedListener(TransactionListActivity.this);
                 transAmountStartET.clearFocus();
                 transAmountEndET.clearFocus();
                 TransactionListRequest transactionListRequest = new TransactionListRequest();
@@ -1339,11 +1285,21 @@ public class TransactionListActivity extends AppCompatActivity {
                     isFilters = true;
                     transactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
                     transactionListRequest.setFromAmountOperator(">=");
+                } else {
+                    strStartAmount = "";
                 }
                 if (!transAmountEndET.getText().toString().trim().equals("")) {
                     isFilters = true;
                     transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
                     transactionListRequest.setToAmountOperator("<=");
+
+                    if (transAmountStartET.getText().toString().trim().equals("") || transAmountStartET.getText().toString().trim().equals("0.00")) {
+                        transactionListRequest.setFromAmount("0.00");
+                        transactionListRequest.setFromAmountOperator(">=");
+                        strStartAmount = "0.00";
+                    }
+                } else {
+                    strEndAmount = "";
                 }
                 if (!strFromDate.equals("")) {
                     isFilters = true;
@@ -1355,15 +1311,37 @@ public class TransactionListActivity extends AppCompatActivity {
                     transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                     transactionListRequest.setUpdatedToDateOperator("<=");
                 }
-
                 if (isFilters) {
                     filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
                 } else {
                     filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                 }
-                dashboardViewModel.meTransactionList(transactionListRequest);
-                noMoreTransactionTV.setVisibility(View.GONE);
-                dialog.dismiss();
+
+                if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
+                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    if (endAmount < startAmount) {
+                        Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+                        transAmountStartET.setText("");
+                        strStartAmount = "";
+                        transAmountEndET.setText("");
+                        strEndAmount = "";
+                    } else {
+                        transactionsAPI(transactionListRequest);
+                        objMyApplication.initializeTransactionSearch();
+                        objMyApplication.setTransactionListSearch(transactionListRequest);
+                        noMoreTransactionTV.setVisibility(View.GONE);
+                        dialog.dismiss();
+                    }
+                } else {
+                    transactionsAPI(transactionListRequest);
+                    objMyApplication.initializeTransactionSearch();
+                    objMyApplication.setTransactionListSearch(transactionListRequest);
+                    noMoreTransactionTV.setVisibility(View.GONE);
+                    dialog.dismiss();
+
+                }
+
             }
         });
 
@@ -1376,10 +1354,10 @@ public class TransactionListActivity extends AppCompatActivity {
         dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
                 showCalendar(getDateFromPickerET);
             }
         });
@@ -1387,10 +1365,10 @@ public class TransactionListActivity extends AppCompatActivity {
         getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
                 showCalendar(getDateFromPickerET);
             }
         });
@@ -1459,7 +1437,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
 
                     if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
-                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == mMonth
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == (mMonth + 1)
                             && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
                         String str = sdf.format(new Date());
@@ -1477,14 +1455,14 @@ public class TransactionListActivity extends AppCompatActivity {
         });
 
 
-        CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
+        com.greenbox.coyni.utils.verticalcalendar.CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
         Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
         Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 //        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
         calendarPicker.setRangeDate(backwardDate, endDate.getTime());
         calendarPicker.showDayOfWeekTitle(true);
-        calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
+        calendarPicker.setMode(com.greenbox.coyni.utils.verticalcalendar.CalendarPicker.SelectionMode.RANGE);
         calendarPicker.scrollToDate(endDate.getTime());
 
 
@@ -1570,7 +1548,9 @@ public class TransactionListActivity extends AppCompatActivity {
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
-            dashboardViewModel.meTransactionList(transactionListRequest);
+            transactionsAPI(transactionListRequest);
+            objMyApplication.initializeTransactionSearch();
+            objMyApplication.setTransactionListSearch(transactionListRequest);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1578,12 +1558,22 @@ public class TransactionListActivity extends AppCompatActivity {
     }
 
     public Double getUSFormat(String amount) {
-        String strAmount = "`";
+        String strAmount = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(amount.trim().replace(",", ""));
+//            strAmount = Utils.convertBigDecimalUSDC(amount.trim().replace(",", ""));
+            strAmount = amount.trim().replace(",", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return Double.parseDouble(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+    }
+
+    private void transactionsAPI(TransactionListRequest transactionListRequest) {
+        try {
+//            progressDialog = Utils.showProgressDialog(this);
+            dashboardViewModel.meTransactionList(transactionListRequest);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

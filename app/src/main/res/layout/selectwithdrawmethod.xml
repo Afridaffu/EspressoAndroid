@@ -82,12 +82,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_toLeftOf="@+id/imgBankArrow"
                     android:layout_toRightOf="@+id/imgBankIcon"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tvExtBHead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
@@ -96,7 +94,6 @@
                         android:textSize="@dimen/_12ssp" />
 
                     <TextView
-                        android:id="@+id/tvExtBankMsg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
@@ -108,7 +105,6 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imgBankArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -150,7 +146,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tvDCHead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
@@ -159,7 +154,6 @@
                         android:textSize="@dimen/_12ssp" />
 
                     <TextView
-                        android:id="@+id/tvDCardMsg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
@@ -171,7 +165,6 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imgDCardArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -228,20 +221,9 @@
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9sdp" />
 
-                    <TextView
-                        android:id="@+id/tvCCardError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="This method has reached maximum 4 cards"
-                        android:textColor="@color/error"
-                        android:textSize="@dimen/_9sdp"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imgCCardArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

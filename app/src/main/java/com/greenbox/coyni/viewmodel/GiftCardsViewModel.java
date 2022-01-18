@@ -12,6 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
+import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
+import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
@@ -28,7 +30,6 @@ public class GiftCardsViewModel extends AndroidViewModel {
     }
     private MutableLiveData<BrandsResponse> giftCardsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BrandsResponse> giftCardDetailsMutableLiveData = new MutableLiveData<>();
-
 
     public MutableLiveData<BrandsResponse> getGiftCardsMutableLiveData() {
         return giftCardsMutableLiveData;
@@ -103,4 +104,5 @@ public class GiftCardsViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
 }

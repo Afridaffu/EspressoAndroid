@@ -54,7 +54,24 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         TransactionListPosted objData = transactionListItemsposted.get(position);
         String strType = "";
 
-        holder.txnDescrip.setText(objData.getTxnDescription());
+
+        String[] data = objData.getTxnDescription().replace("****","-").split("-");
+        try {
+            if (data.length > 1) {
+                holder.txnDescripExtention.setVisibility(View.VISIBLE);
+                holder.txnDescrip.setText(data[0]);
+               holder.txnDescripExtention.setText("**"+data[1]);
+               holder.txnDescrip.setVisibility(View.VISIBLE);
+            } else {
+                holder.txnDescrip.setText(objData.getTxnDescription());
+                holder.txnDescripExtention.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+//        holder.txnDescrip.setText(objData.getTxnDescription());
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
 
         if (position == transactionListItemsposted.size() - 1) {
@@ -137,7 +154,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txnDescrip, amount, txnStatus, walletBal;
+        TextView txnDescrip, txnDescripExtention, amount, txnStatus, walletBal;
         RelativeLayout itemRL;
         LinearLayout lineItem;
         View blankView;
@@ -145,6 +162,8 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txnDescrip = itemView.findViewById(R.id.messageTV);
+            txnDescripExtention = itemView.findViewById(R.id.messagTV);
+
             amount = itemView.findViewById(R.id.amountTV);
             txnStatus = itemView.findViewById(R.id.statusTV);
             walletBal = itemView.findViewById(R.id.balanceTV);

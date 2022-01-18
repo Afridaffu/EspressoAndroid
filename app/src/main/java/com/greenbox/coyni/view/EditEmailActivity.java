@@ -3,8 +3,11 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,10 +19,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
@@ -52,7 +58,6 @@ public class EditEmailActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     LoginViewModel loginViewModel;
     LinearLayout editEmailCloseLL;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +135,8 @@ public class EditEmailActivity extends AppCompatActivity {
 
             editEmailCloseLL.setOnClickListener(view -> {
                 finish();
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             });
 
             contactUsTV.setOnClickListener(new View.OnClickListener() {
@@ -200,9 +207,11 @@ public class EditEmailActivity extends AppCompatActivity {
 //        }
 
         try {
+            String beforeText = "";
             newEmailET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    Log.e("beforeTextChanged", charSequence.toString());
                 }
 
                 @Override
@@ -225,6 +234,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         isNewEmail = false;
                     }
                     enableOrDisableSave();
+
                 }
 
                 @Override
@@ -256,7 +266,7 @@ public class EditEmailActivity extends AppCompatActivity {
                             newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
                             newEmailErrorLL.setVisibility(VISIBLE);
-                            newEmailErrorTV.setText("Invalid Email");
+                            newEmailErrorTV.setText("Please Enter a valid Email");
                         } else if (newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(newEmailET.getText().toString().trim())) {
                             newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
@@ -291,7 +301,7 @@ public class EditEmailActivity extends AppCompatActivity {
 //                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.error_red));
 //                            currentEmailErrorLL.setVisibility(VISIBLE);
-//                            currentEmailErrorTV.setText("Invalid Email");
+//                            currentEmailErrorTV.setText("Please Enter a valid Email");
 //                        } else if (currentEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(currentEmailET.getText().toString().trim())) {
 //                            currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //                            Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
@@ -446,4 +456,5 @@ public class EditEmailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }

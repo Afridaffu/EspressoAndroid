@@ -184,9 +184,7 @@
                             android:paddingLeft="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
                             android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp"
-
-                            >
+                            android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -488,9 +486,9 @@
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_weight=".9"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="Recipient Email"
                                 android:textColor="@color/dark_grey"
@@ -498,8 +496,9 @@
 
                             <TextView
                                 android:id="@+id/withGiftReciEmailTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1.1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
                                 android:textColor="@color/primary_black"

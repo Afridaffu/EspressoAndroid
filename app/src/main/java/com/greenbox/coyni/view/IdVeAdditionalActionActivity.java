@@ -1,5 +1,8 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +18,8 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
 import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
@@ -26,9 +30,10 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 public class IdVeAdditionalActionActivity extends AppCompatActivity {
-    EditText ssnET;
+    TextInputEditText ssnET;
+    TextInputLayout ssnaacTIL;
     CardView idveridoneBtn;
-    boolean isssn = false, isSubmitEnabled = false;
+    boolean isssn = false, isSubmitEnabled = true;
     LinearLayout ssnCloseLL, ssnErrorLL;
     TextView ssnErrorTV;
     IdentityVerificationViewModel identityVerificationViewModel;
@@ -44,6 +49,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         ssnErrorLL = findViewById(R.id.ssnErrorLL);
         ssnErrorTV = findViewById(R.id.ssnErrorTV);
         idveridoneBtn = findViewById(R.id.idveridoneBtn);
+        ssnaacTIL = findViewById(R.id.ssnTIL);
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
@@ -52,9 +58,10 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         ssnCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(IdVeAdditionalActionActivity.this, DashboardActivity.class));
+                finish();
             }
         });
+
 
         ssnET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -64,32 +71,38 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() == 9) {
-                    isssn = true;
-                    isSubmitEnabled = true;
-                } else {
-                    isssn = false;
-                    isSubmitEnabled = false;
+                if (ssnET.getText().toString().length() == 0) {
+                    ssnErrorLL.setVisibility(VISIBLE);
+                    ssnErrorTV.setText("Field Required");
                 }
-                enableORdiableNext();
-
+//                else if (ssnET.getText().toString().length() > 0 && ssnET.getText().toString().length() < 9) {
+//                    ssnErrorLL.setVisibility(VISIBLE);
+//                    ssnErrorTV.setText("Please enter a valid SSN");
+//                }
+                else if (ssnET.getText().toString().length() == 9) {
+                    ssnErrorLL.setVisibility(GONE);
+                }
             }
-
 
             @Override
             public void afterTextChanged(Editable editable) {
 
             }
         });
-
         idveridoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String SSN = ssnET.getText().toString();
 
-                Log.e("ssn", SSN);
-                Log.e("ssn", ssnET.getText().toString());
-                if (isSubmitEnabled) {
+                if (SSN.length() == 0) {
+                    ssnErrorLL.setVisibility(VISIBLE);
+                    ssnErrorTV.setText("Field Required");
+                } else if (SSN.length() > 0 && ssnET.getText().toString().length() < 9) {
+                    ssnErrorLL.setVisibility(VISIBLE);
+                    ssnErrorTV.setText("Please enter a valid SSN");
+                } else if (SSN.length() == 9) {
+                    ssnErrorLL.setVisibility(GONE);
+
                     dialog = Utils.showProgressDialog(IdVeAdditionalActionActivity.this);
                     IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
                     try {
@@ -134,8 +147,8 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                     }
 
                     identityVerificationViewModel.uploadIdentityAddressPatch(identityAddressRequest);
-
                 }
+
             }
         });
 
@@ -161,10 +174,10 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
 //                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
 //                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
 //                                || respCode.equalsIgnoreCase("CI24")) {
-                            //Success
-                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "SUCCESS"));
-                            finish();
+                        //Success
+                        startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                .putExtra("screen", "SUCCESS"));
+                        finish();
 //                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
 //                            //SSN Error
 //                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdVeAdditionalActionActivity.class));

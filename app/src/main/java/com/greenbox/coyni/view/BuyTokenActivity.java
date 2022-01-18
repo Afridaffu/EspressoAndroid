@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -38,7 +39,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
@@ -54,9 +57,9 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
-import java.math.BigDecimal;
 
 public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
@@ -70,6 +73,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
+    DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
@@ -83,6 +87,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
+    boolean isBuyTokenAPICalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +103,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        dashboardViewModel.mePaymentMethods();
+        super.onResume();
     }
 
     @Override
@@ -125,14 +136,17 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         isUSD = true;
                         convertUSDValue();
                     }
-
-                    if (editable.length() > 5) {
+                    if (editable.length() > 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() > 5) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                     } else {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
                     }
+
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -150,6 +164,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     ctKey.disableButton();
                     tvError.setVisibility(View.INVISIBLE);
                     ctKey.clearData();
+                    setDefaultLength();
                 } else {
                     etAmount.setText("");
                     cynValue = 0.0;
@@ -163,6 +178,25 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            if (requestCode == 1 && data == null) {
+                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+                } else {
+                    pDialog = Utils.showProgressDialog(this);
+                    customerProfileViewModel.meSyncAccount();
+                }
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } catch (Exception ex) {
+            super.onActivityResult(requestCode, resultCode, data);
+            ex.printStackTrace();
+        }
+    }
+
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -171,6 +205,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -258,7 +293,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (etAmount.getText().toString().trim().length() > 0) {
+                        if (etAmount.getText().toString().trim().length() > 0 && Double.parseDouble(etAmount.getText().toString().replace(",", "")) != 0) {
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
@@ -266,7 +301,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -282,7 +317,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + usdValidation + " USD");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -292,6 +327,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                     }
                                 }
                             }
+                        } else {
+                            if (!etAmount.getText().toString().equals("")) {
+                                etAmount.setText("0.00");
+                                ctKey.setText("0.00");
+                                etAmount.setSelection(etAmount.getText().length());
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -299,6 +340,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             });
             calculateFee("10");
+            strSignOn = objMyApplication.getStrSignOnError();
+            signOnData = objMyApplication.getSignOnData();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -313,7 +357,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         objResponse = transactionLimitResponse;
                         setDailyWeekLimit(transactionLimitResponse.getData());
                         if (etAmount.getText().toString().trim().length() > 0) {
-                            validation();
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -375,6 +423,67 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             public void onChanged(BuyTokenResponse buyTokenResponse) {
                 if (buyTokenResponse != null) {
                     buyTokenFailure(buyTokenResponse);
+                }
+            }
+        });
+
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            signOnData = signOn.getData();
+                            objMyApplication.setStrSignOnError("");
+                            strSignOn = "";
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(BuyTokenActivity.this, strSignOn, signOnData);
+                            }
+                        } else {
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+            @Override
+            public void onChanged(SyncAccount syncAccount) {
+                try {
+                    pDialog.dismiss();
+                    if (syncAccount != null) {
+                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                    paymentMethodsResponse = payMethodsResponse;
+                    if (objMyApplication.getSelectedCard() != null) {
+                        selectedCard = objMyApplication.getSelectedCard();
+                        bindPayMethod(selectedCard);
+                    }
                 }
             }
         });
@@ -492,9 +601,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 public void onClick(View v) {
                     try {
                         payDialog.dismiss();
+//                        Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                        i.putExtra("screen", "addpay");
+//                        startActivity(i);
+
                         Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "addpay");
-                        startActivity(i);
+                        i.putExtra("screen", "buytoken");
+                        startActivityForResult(i, 3);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -577,15 +690,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strPay = String.valueOf(cynValue);
             } else {
                 strPay = String.valueOf(usdValue);
-                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
             }
-//            if (Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
-            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
-                if (tvCYN.getVisibility() == View.VISIBLE) {
-                    tvError.setText("Minimum Amount is " + cynValidation + " CYN");
-                } else {
-                    tvError.setText("Minimum Amount is " + usdValidation + " USD");
-                }
+            usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
+//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+//                if (tvCYN.getVisibility() == View.VISIBLE) {
+//                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                } else {
+//                    tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                }
+//                tvError.setVisibility(View.VISIBLE);
+//                return value = false;
+//            }
+            if (tvCYN.getVisibility() == View.VISIBLE && Double.parseDouble(strPay.replace(",", "")) < cynValidation) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                return value = false;
+            } else if (tvCYN.getVisibility() == View.GONE && Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
@@ -615,7 +737,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
-
+            isBuyTokenAPICalled = false;
             TextView tvGet = prevDialog.findViewById(R.id.tvGet);
             TextView tvBankName = prevDialog.findViewById(R.id.tvBankName);
             TextView tvAccount = prevDialog.findViewById(R.id.tvAccount);
@@ -628,6 +750,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
@@ -673,16 +796,24 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        if (!isBuyTokenAPICalled)
+                            buyToken();
+                    }
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
-                        slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-                        buyToken();
-                    }
+//                    if (currentId == motionLayout.getEndState()) {
+//                        slideToConfirm.setInteractionEnabled(false);
+//                        tv_lable.setText("Verifying");
+//                        buyToken();
+//                    }
                 }
 
                 @Override
@@ -757,7 +888,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(BuyTokenActivity.this);
-                etAmount.setText(String.valueOf(cynValue));
+//                etAmount.setText(String.valueOf(cynValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
                 etAmount.addTextChangedListener(BuyTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());
@@ -775,7 +907,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(BuyTokenActivity.this);
-                etAmount.setText(String.valueOf(usdValue));
+//                etAmount.setText(String.valueOf(usdValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(usdValue)));
                 etAmount.addTextChangedListener(BuyTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());
@@ -804,6 +937,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void buyToken() {
         try {
+            isBuyTokenAPICalled = true;
             BuyTokenRequest request = new BuyTokenRequest();
             request.setBankId(strBankId);
             request.setCardId(strCardId);
@@ -846,7 +980,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
             } else {
-                tvHeading.setText("Transaction in Progress");
+                tvHeading.setText("Transaction In Progress");
                 imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
             }
             Double bal = cynValue + objMyApplication.getGBTBalance();
@@ -1025,6 +1159,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     public void expiry() {
         try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
             final Dialog dialog = new Dialog(BuyTokenActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_expire);
@@ -1062,6 +1199,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     try {
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                             Intent i = new Intent(BuyTokenActivity.this, EditCardActivity.class);
+                            i.putExtra("screen", "buy");
                             startActivity(i);
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
@@ -1191,6 +1329,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     private void buyTokenFailure(BuyTokenResponse objData) {
         try {
+            prevDialog.dismiss();
             prevDialog = new Dialog(BuyTokenActivity.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.buy_token_transaction_failed);
@@ -1233,16 +1372,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 8) {
+            if (editable.length() > 12) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 65));
-//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 55));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 8) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
             } else if (editable.length() > 5) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 75));
-//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, 65));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
             } else {

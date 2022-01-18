@@ -65,18 +65,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                        android:maxLength="25"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_toLeftOf="@id/filterIconIV"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:cursorVisible="true"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                        android:fontFamily="@font/opensans_bold"
                         android:hint="Reference ID."
-                        android:maxLines="1"
-                        android:singleLine="true"
                         android:imeOptions="actionDone"
+                        android:maxLength="35"
+                        android:maxLines="1"
+
+                        android:singleLine="true"
                         android:textColor="@color/primary_black"
                         android:textColorHint="@color/dark_grey"
                         android:textCursorDrawable="@drawable/cursor_color"
@@ -206,7 +208,7 @@
                     android:id="@+id/progressBarLoadMore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/loadMoreTV"
@@ -218,8 +220,7 @@
                     android:text="Load More"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_10ssp"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/noMoreTransactions"

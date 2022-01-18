@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +16,9 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,6 +37,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -98,7 +102,7 @@ public class AddCardActivity extends AppCompatActivity {
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
-    public Boolean isCard = false, isScan = false, isCardClear = false;
+    public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
     private RecognizerBundle mRecognizerBundle;
@@ -113,8 +117,8 @@ public class AddCardActivity extends AppCompatActivity {
             initialization();
             textWatchers();
             focusWatchers();
-            etName.setText(objMyApplication.getStrUserName());
-            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+            //etName.setText(objMyApplication.getStrUserName());
+//            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -184,16 +188,23 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress1 = findViewById(R.id.etlAddress1);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
-            etCardNumber.requestCNETFocus();
-
+//            etCardNumber.requestCNETFocus();
+            etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
-            MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
-            mRecognizer = new BlinkCardRecognizer();
-            mRecognizer.setExtractCvv(false);
-            mRecognizer.setExtractIban(false);
-            // bundle recognizers into RecognizerBundle
-            mRecognizerBundle = new RecognizerBundle(mRecognizer);
-
+            etName.setHint("Name on Card");
+            try {
+                MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
+                mRecognizer = new BlinkCardRecognizer();
+                mRecognizer.setExtractCvv(false);
+                mRecognizer.setExtractIban(false);
+                // bundle recognizers into RecognizerBundle
+                mRecognizerBundle = new RecognizerBundle(mRecognizer);
+            } catch (Exception ex) {
+                if (ex.toString().toLowerCase().contains("invalidlicencekeyexception")) {
+                    isLicense = true;
+                }
+                ex.printStackTrace();
+            }
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
@@ -214,6 +225,8 @@ public class AddCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddCardActivity.this);
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -225,6 +238,8 @@ public class AddCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddCardActivity.this);
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -236,6 +251,8 @@ public class AddCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddCardActivity.this);
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -298,11 +315,15 @@ public class AddCardActivity extends AppCompatActivity {
             divider1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (layoutAddress.getVisibility() == View.VISIBLE) {
-                        layoutCard.setVisibility(View.VISIBLE);
-                        layoutAddress.setVisibility(View.GONE);
-                        divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
-                        divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                    try {
+                        if (layoutAddress.getVisibility() == View.VISIBLE) {
+                            layoutCard.setVisibility(View.VISIBLE);
+                            layoutAddress.setVisibility(View.GONE);
+                            divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                            divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -310,22 +331,30 @@ public class AddCardActivity extends AppCompatActivity {
             etCardNumber.getCardReaderIVRef().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startScanning();
+                    if (!isLicense) {
+                        startScanning();
+                    } else {
+                        Utils.hideKeypad(AddCardActivity.this, view);
+                        Utils.displayAlert("License has expired", AddCardActivity.this, "", "");
+                    }
                 }
             });
 
-            if (objMyApplication.getMyProfile() != null) {
-                etAddress1.setText(objMyApplication.getMyProfile().getData().getAddressLine1());
-                etAddress2.setText(objMyApplication.getMyProfile().getData().getAddressLine2());
-                etCity.setText(objMyApplication.getMyProfile().getData().getCity());
-                etState.setText(objMyApplication.getMyProfile().getData().getState());
-                etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
-                isAddress1 = true;
-                isCity = true;
-                isState = true;
-                isZipcode = true;
-                enableOrDisableNext();
-            }
+//            if (objMyApplication.getMyProfile() != null) {
+//                etAddress1.setText(objMyApplication.getMyProfile().getData().getAddressLine1());
+//                etAddress2.setText(objMyApplication.getMyProfile().getData().getAddressLine2());
+//                etCity.setText(objMyApplication.getMyProfile().getData().getCity());
+//                etState.setText(objMyApplication.getMyProfile().getData().getState());
+//                etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
+//                if (!etAddress1.getText().toString().trim().equals("") && !etCity.getText().toString().trim().equals("") &&
+//                        !etState.getText().toString().trim().equals("") && !etZipCode.getText().toString().trim().equals("")) {
+//                    isAddress1 = true;
+//                    isCity = true;
+//                    isState = true;
+//                    isZipcode = true;
+//                }
+//                enableOrDisableNext();
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -353,10 +382,16 @@ public class AddCardActivity extends AppCompatActivity {
                             if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
                                 displayPreAuth();
                             } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
-                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
+//                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
+                                displayAlert("Card details are invalid, please try with a valid card", "");
                             }
                         } else {
-                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
+//                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
+                            if (errData != null && !errData.getErrorDescription().equals("")) {
+                                displayAlert(errData.getErrorDescription(), "");
+                            } else {
+                                displayAlert(cardResponse.getError().getFieldErrors().get(0), "");
+                            }
                         }
                     }
                 } catch (
@@ -604,11 +639,11 @@ public class AddCardActivity extends AppCompatActivity {
                             }
 
                             if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
-                                etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1).toLowerCase());
+                                etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1));
                             }
 
                         } else {
-                            etName.setHint("Name on card");
+                            etName.setHint("Name on Card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                             InputMethodManager imm = (InputMethodManager) AddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -674,7 +709,7 @@ public class AddCardActivity extends AppCompatActivity {
                                     cvvErrorTV.setText("Field Required");
                                     Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
                                 } else {
-                                    cvvErrorTV.setText("Please enter valid CVV");
+                                    cvvErrorTV.setText("Please enter a valid CVV");
                                     Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
                                 }
                             } else {
@@ -832,7 +867,7 @@ public class AddCardActivity extends AppCompatActivity {
                             isName = true;
                         }
                     }
-                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 61) {
                         isName = true;
                         nameErrorLL.setVisibility(GONE);
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -881,7 +916,7 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 6) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 6 && validateExpiry()) {
                         isExpiry = true;
                         expiryErrorLL.setVisibility(GONE);
                         etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -1354,6 +1389,9 @@ public class AddCardActivity extends AppCompatActivity {
 
     private void displayPreAuthFail() {
         try {
+            if (preAuthDialog != null) {
+                preAuthDialog.dismiss();
+            }
             CardView cvAddBank;
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1374,7 +1412,7 @@ public class AddCardActivity extends AppCompatActivity {
             cvAddBank.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    preDialog.dismiss();
+                    //preDialog.dismiss();
                     onBackPressed();
                     finish();
                 }
@@ -1435,6 +1473,62 @@ public class AddCardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void displayAlert(String msg, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(AddCardActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = dialog.findViewById(R.id.tvHead);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    dialog.dismiss();
+                    if (layoutAddress.getVisibility() == View.VISIBLE) {
+                        layoutCard.setVisibility(View.VISIBLE);
+                        layoutAddress.setVisibility(View.GONE);
+                        divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                        etCardNumber.setText("");
+                        etExpiry.setText("");
+                        etCVV.setText("");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     // method within MyActivity from previous step

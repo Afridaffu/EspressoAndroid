@@ -1,9 +1,11 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -18,9 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,13 +34,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
-import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.adapters.NotificationsAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
@@ -48,31 +52,38 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
+    public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL;
+    LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
+    RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance;
+    public NotificationsViewModel notificationsViewModel;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV;
     MyApplication objMyApplication;
     Dialog dialog;
-    ProgressDialog progressDialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
     NestedScrollView transactionsNSV;
-    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV;
+    CardView getStartedCV, welcomeCoyniCV, underReviewCV, additionalActionCV, buyTokensCV, newUserGetStartedCV, cvPayRequest, countCV;
     ImageView imgProfileSmall, imgProfile;
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
-    String strName = "";
+    String strName = "", strFirstUser = "";
     ConstraintLayout cvProfileSmall, cvProfile;
+    SQLiteDatabase mydatabase;
+    Cursor dsUserDetails;
+    int globalCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +97,27 @@ public class DashboardActivity extends AppCompatActivity {
             initialization();
             initObserver();
 //            getStates();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        try {
+            switch (requestCode) {
+                case REQUEST_READ_CONTACTS:
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        objMyApplication.setContactPermission(true);
+                    } else {
+                        // permission denied,Disable the
+                        // functionality that depends on this permission.
+                        objMyApplication.setContactPermission(false);
+                    }
+                    startActivity(new Intent(DashboardActivity.this, AddRecipientActivity.class));
+                    break;
+            }
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -106,6 +138,7 @@ public class DashboardActivity extends AppCompatActivity {
             underReviewCV = findViewById(R.id.underReviewCV);
             additionalActionCV = findViewById(R.id.additionalActionCV);
             buyTokensCV = findViewById(R.id.buyTokensCV);
+            cvPayRequest = findViewById(R.id.cvPayRequest);
 
             layoutMainMenu = findViewById(R.id.layoutMainMenu);
             layoutProfile = findViewById(R.id.layoutProfile);
@@ -124,12 +157,20 @@ public class DashboardActivity extends AppCompatActivity {
             latestTxnRefresh = findViewById(R.id.latestTxnRefresh);
             cvProfileSmall = findViewById(R.id.cvProfileSmall);
             cvProfile = findViewById(R.id.cvProfile);
+            notificationsSmallLL = findViewById(R.id.notificationsSmallLL);
+            notificationsLL = findViewById(R.id.notificationsLL);
+            countTV = findViewById(R.id.countTV);
+            countCV = findViewById(R.id.countCV);
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
-
+            notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+            SetDB();
+            if (strFirstUser.equals("")) {
+                saveFirstUser();
+            }
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -195,7 +236,7 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
                 }
             });
 
@@ -253,12 +294,30 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    Intent i = new Intent(DashboardActivity.this, PaymentMethodsActivity.class);
-//                    i.putExtra("screen", "quick_action");
-//                    startActivity(i);
                     Intent i = new Intent(DashboardActivity.this, BuyTokenPaymentMethodsActivity.class);
                     i.putExtra("screen", "dashboard");
                     startActivity(i);
+                }
+            });
+
+            cvPayRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
+//                    startActivity(i);
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                            return;
+                        }
+                        mLastClickTimeQA = SystemClock.elapsedRealtime();
+                        requestPermission();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -278,13 +337,17 @@ public class DashboardActivity extends AppCompatActivity {
             latestTxnRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
-                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
-                        dashboardViewModel.getLatestTxns();
-                        dashboardViewModel.meWallet();
-                        transactionsNSV.smoothScrollTo(0, 0);
-                    } else {
-                        latestTxnRefresh.setRefreshing(false);
+                    try {
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
+                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                            dashboardViewModel.getLatestTxns();
+                            dashboardViewModel.meWallet();
+                            transactionsNSV.smoothScrollTo(0, 0);
+                        } else {
+                            latestTxnRefresh.setRefreshing(false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -344,6 +407,21 @@ public class DashboardActivity extends AppCompatActivity {
                     startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
                 }
             });
+
+            notificationsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, NotificationsActivity.class));
+                }
+            });
+
+            notificationsSmallLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DashboardActivity.this, NotificationsActivity.class));
+                }
+            });
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -568,6 +646,100 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        try {
+            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+//
+                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                        globalCount = 0;
+                        for (int i = 0; i < notifications.getData().getItems().size(); i++) {
+                            if (!notifications.getData().getItems().get(i).isRead()) {
+                                globalCount++;
+                            }
+                        }
+                        notificationsViewModel.getReceivedNotifications();
+                        Log.e("count notif", globalCount + "");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+
+                    try {
+                        if (notifications != null) {
+                            if (notifications.getStatus().equalsIgnoreCase("success")) {
+                                List<NotificationsDataItems> localData = notifications.getData().getItems();
+                                for (int i = 0; i < localData.size(); i++) {
+                                    if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                            localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                        globalCount++;
+                                    }
+                                }
+
+                                if (globalCount > 0) {
+                                    countCV.setVisibility(View.VISIBLE);
+                                    countTV.setText(globalCount + "");
+                                } else {
+                                    countCV.setVisibility(View.GONE);
+                                }
+
+                                Log.e("count total", globalCount + "");
+                            } else {
+                                if (globalCount > 0) {
+                                    countCV.setVisibility(View.VISIBLE);
+                                    countTV.setText(globalCount + "");
+                                } else {
+                                    countCV.setVisibility(View.GONE);
+                                }
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.something_went_wrong), DashboardActivity.this, "", "");
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void SetDB() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+            dsUserDetails.moveToFirst();
+            if (dsUserDetails.getCount() > 0) {
+                strFirstUser = dsUserDetails.getString(1);
+            }
+        } catch (Exception ex) {
+            if (ex.getMessage().toString().contains("no such table")) {
+                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+            }
+        }
+    }
+
+    private void saveFirstUser() {
+        try {
+            if (strFirstUser.equals("")) {
+                strFirstUser = objMyApplication.getStrEmail();
+            }
+            mydatabase.execSQL("Delete from tblUserDetails");
+            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void cryptoAssets() {
@@ -586,6 +758,7 @@ public class DashboardActivity extends AppCompatActivity {
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             dialog.getWindow().setAttributes(lp);
             dialog.show();
+            transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -614,6 +787,7 @@ public class DashboardActivity extends AppCompatActivity {
             lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             dialog.getWindow().setAttributes(lp);
             dialog.show();
+            transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -640,6 +814,7 @@ public class DashboardActivity extends AppCompatActivity {
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();
+                notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -708,6 +883,7 @@ public class DashboardActivity extends AppCompatActivity {
 //            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences();
+            transactionsNSV.smoothScrollTo(0, 0);
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }
@@ -755,18 +931,20 @@ public class DashboardActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                startActivity(new Intent(DashboardActivity.this, PayRequestScanActivity.class));
+                startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
             }
         });
 
         payRequestLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                dialog.dismiss();
+                requestPermission();
+//                startActivity(new Intent(DashboardActivity.this, AddRecipientActivity.class));
             }
         });
 
@@ -810,6 +988,21 @@ public class DashboardActivity extends AppCompatActivity {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    private void requestPermission() {
+        try {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
+                // show UI part if you want here to show some rationale !!!
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
+                        REQUEST_READ_CONTACTS);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
+                        REQUEST_READ_CONTACTS);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

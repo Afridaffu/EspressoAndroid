@@ -18,18 +18,24 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,6 +45,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.profile.ImageResponse;
@@ -60,7 +67,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UserDetailsActivity extends AppCompatActivity {
+public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
 
     ImageView editProfileIV, userProfileIV;
     TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV;
@@ -91,6 +98,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_user_details);
+
             initFields();
 //            getStates();
             initObservers();
@@ -101,6 +109,8 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     public void initFields() {
         try {
+            setKeyboardVisibilityListener(UserDetailsActivity.this);
+
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             myApplicationObj = (MyApplication) getApplicationContext();
             userDetailsActivity = this;
@@ -116,7 +126,9 @@ public class UserDetailsActivity extends AppCompatActivity {
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
 
-            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
+//            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
+            isBiometric = Utils.getIsBiometric();
+
             SetToken(myApplicationObj, this);
             SetFaceLock(myApplicationObj, this);
             SetTouchId(myApplicationObj, this);
@@ -234,7 +246,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 strFileName = myApplicationObj.getMyProfile().getData().getImage();
                 userEmailIdTV.setText(profile.getData().getEmail());
-                userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
 
                 userPhoneNumTV.setText(phoneFormat);
 
@@ -321,10 +333,8 @@ public class UserDetailsActivity extends AppCompatActivity {
                         bindImage(myApplicationObj.getMyProfile().getData().getImage());
                         strFileName = myApplicationObj.getMyProfile().getData().getImage();
                         userEmailIdTV.setText(profile.getData().getEmail());
-                        userNameTV.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-
+                        userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         userPhoneNumTV.setText(phoneFormat);
-
                         String addressFormatted = "";
                         if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
@@ -677,6 +687,9 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         dashboardViewModel.meProfile();
+       if (Utils.isKeyboardVisible){
+           Utils.hideKeypad(UserDetailsActivity.this);
+       }
     }
 
     public static void showImagePickerDialog(Activity activity) {
@@ -779,6 +792,43 @@ public class UserDetailsActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+        } else {
+            Utils.isKeyboardVisible = false;
+        }
+        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
     }
 
 }

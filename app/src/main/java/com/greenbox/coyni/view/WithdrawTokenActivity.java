@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -9,17 +10,27 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -35,15 +46,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
-import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
-import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
@@ -52,11 +64,14 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
+import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.ArrayList;
@@ -64,7 +79,7 @@ import java.util.List;
 
 public class WithdrawTokenActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
-    PaymentsList selectedCard, objSelected, prevSelectedCard;
+    PaymentsList selectedCard, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal;
     RelativeLayout lyPayMethod;
@@ -75,18 +90,24 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     CustomerProfileViewModel customerProfileViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
     BuyTokenViewModel buyTokenViewModel;
+    DashboardViewModel dashboardViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
-    Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0, avaBal = 0.0;
+    Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     SignOnData signOnData;
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
     Boolean isUSD = false, isCYN = false, isBank = false;
-    TextInputEditText etCVV;
+    Boolean isFaceLock = false, isTouchId = false;
+    SQLiteDatabase mydatabase;
+    Cursor dsFacePin, dsTouchID;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private static int FOR_RESULT = 235;
+    boolean isAuthenticationCalled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +122,40 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        dashboardViewModel.mePaymentMethods();
+        super.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                if (data == null) {
+                    if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                        Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
+                    } else {
+                        pDialog = Utils.showProgressDialog(this);
+                        customerProfileViewModel.meSyncAccount();
+                    }
+                }
+                break;
+            case RESULT_OK:
+            case 235: {
+                withdrawToken();
+            }
+            break;
+            case 0:
+                startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                        .putExtra("screen", "Withdraw"));
+                break;
         }
     }
 
@@ -120,24 +175,22 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             try {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     etAmount.setHint("");
-                    lyBalance.setVisibility(View.VISIBLE);
-                    if (tvCYN.getVisibility() == View.VISIBLE) {
-                        isCYN = true;
-                        isUSD = false;
-                        convertCYNValue();
-                    } else {
-                        isCYN = false;
-                        isUSD = true;
-                        convertUSDValue();
-                    }
+                    //lyBalance.setVisibility(View.VISIBLE);
+                    isCYN = false;
+                    isUSD = true;
+                    convertUSDValue();
 
-                    if (editable.length() > 5) {
+                    if (editable.length() > 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() > 5) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                     } else {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                        etAmount.setTextSize(Utils.pixelsToSp(WithdrawTokenActivity.this, fontSize));
+                        tvCurrency.setTextSize(Utils.pixelsToSp(WithdrawTokenActivity.this, dollarFont));
                     }
+
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
@@ -148,20 +201,20 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     etAmount.setHint("0.00");
-                    lyBalance.setVisibility(View.GONE);
+//                    lyBalance.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
-                    usdValidation = 0.0;
                     ctKey.disableButton();
-                    tvError.setVisibility(View.INVISIBLE);
+                    tvError.setVisibility(View.GONE);
                     ctKey.clearData();
+                    setDefaultLength();
                 } else {
                     etAmount.setText("");
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
-                    usdValidation = 0.0;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -177,6 +230,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -206,10 +260,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etAmount.requestFocus();
             etAmount.setShowSoftInputOnFocus(false);
             avaBal = objMyApplication.getGBTBalance();
-            tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()) + getString(R.string.currency));
-            if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
-                strCvv = getIntent().getStringExtra("cvv");
-            }
+            tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
+            SetFaceLock();
+            SetTouchId();
+
             bindPayMethod(selectedCard);
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
@@ -267,6 +321,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etRemarks.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     displayComments();
                 }
             });
@@ -276,17 +334,24 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 public void onClick(View view) {
                     try {
                         if (etAmount.getText().toString().trim().length() > 0) {
-                            USFormat(etAmount);
+                            convertDecimal();
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
                             if (tvCYN.getVisibility() == View.GONE) {
                                 tvCYN.setVisibility(View.VISIBLE);
                                 tvCurrency.setVisibility(View.INVISIBLE);
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-                                convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     lyBalance.setVisibility(View.GONE);
-                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                                    } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
+                                        tvError.setText("Amount entered exceeds available balance");
+                                    } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
+                                        tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -301,13 +366,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                                 tvCYN.setVisibility(View.GONE);
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
-                                convertCYNtoUSD();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     lyBalance.setVisibility(View.GONE);
-                                    //tvError.setText("Minimum Amount is " + usdValidation + " USD");
-                                    //tvError.setText("Minimum Amount is " + cynValidation + " CYN");
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                                    } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
+                                        tvError.setText("Amount entered exceeds available balance");
+                                    } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
+                                        tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -327,6 +393,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             });
 
             calculateFee("10");
+            strSignOn = objMyApplication.getStrSignOnError();
+            signOnData = objMyApplication.getSignOnData();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -340,7 +408,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     objResponse = transactionLimitResponse;
                     setDailyWeekLimit(transactionLimitResponse.getData());
                     if (etAmount.getText().toString().trim().length() > 0) {
-                        validation();
+                        if (validation()) {
+                            ctKey.enableButton();
+                        } else {
+                            ctKey.disableButton();
+                        }
                     }
                 }
             }
@@ -353,11 +425,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     objMyApplication.setTransferFeeResponse(transferFeeResponse);
                     feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                     feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString()) > 0) {
                         Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
                         pfee = transferFeeResponse.getData().getFee();
                         dget = pay - pfee;
                         withdrawTokenPreview();
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
                     }
                 }
             }
@@ -380,28 +455,147 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             }
         });
 
-        buyTokenViewModel.getBuyTokResponseMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+        buyTokenViewModel.getWithdrawResponseMutableLiveData().observe(this, new Observer<WithdrawResponse>() {
             @Override
-            public void onChanged(BuyTokenResponse buyTokenResponse) {
+            public void onChanged(WithdrawResponse withdrawResponse) {
                 if (prevDialog != null) {
                     prevDialog.dismiss();
                 }
-                if (buyTokenResponse != null) {
-                    if (buyTokenResponse.getStatus().trim().toLowerCase().equals("success")) {
-                        //buyTokenInProgress(buyTokenResponse.getData());
+                pDialog.dismiss();
+                if (withdrawResponse != null) {
+                    objMyApplication.setWithdrawResponse(withdrawResponse);
+                    if (withdrawResponse.getStatus().trim().toLowerCase().equals("success")) {
+                        //withdrawTokenInProgress(withdrawResponse.getData());
+                        startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "inprogress")
+                                .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
+                    } else {
+                        startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "failed")
+                                .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
+                        finish();
                     }
+                } else {
+                    Utils.displayAlert("something went wrong", WithdrawTokenActivity.this, "", "");
                 }
             }
         });
 
-        buyTokenViewModel.getBuyTokenFailureMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+        buyTokenViewModel.getWithdrawFailureResponseMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
-            public void onChanged(BuyTokenResponse buyTokenResponse) {
-                if (buyTokenResponse != null) {
-                    //buyTokenFailure(buyTokenResponse);
+            public void onChanged(APIError withdrawResponse) {
+                if (withdrawResponse != null) {
+//                    withdrawTokenFailure(withdrawResponse);
+                    startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
+                            .putExtra("status", "failed")
+                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase()));
+                    finish();
                 }
             }
         });
+
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            signOnData = signOn.getData();
+                            objMyApplication.setStrSignOnError("");
+                            strSignOn = "";
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(WithdrawTokenActivity.this, strSignOn, signOnData);
+                            }
+                        } else {
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+            @Override
+            public void onChanged(SyncAccount syncAccount) {
+                try {
+                    pDialog.dismiss();
+                    if (syncAccount != null) {
+                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                    paymentMethodsResponse = payMethodsResponse;
+                    if (objMyApplication.getSelectedCard() != null) {
+                        selectedCard = objMyApplication.getSelectedCard();
+                        bindPayMethod(selectedCard);
+                    }
+                }
+            }
+        });
+    }
+
+    public void SetFaceLock() {
+        try {
+            isFaceLock = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetTouchId() {
+        try {
+            isTouchId = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void selectPayMethod() {
@@ -453,7 +647,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     try {
                         payDialog.dismiss();
                         Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "addpay");
+                        i.putExtra("screen", "withdraw");
                         startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -594,10 +788,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     public void bindSelectedBank(PaymentsList objData) {
         try {
-            objSelected = objData;
             prevSelectedCard = null;
-            strCvv = "";
-            bindPayMethod(objSelected);
+            bindPayMethod(objData);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -608,19 +800,13 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = etAmount.getText().toString().trim().replace("\"", "");
-            //usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
-//            String strPay = "";
-//            if (tvCYN.getVisibility() == View.VISIBLE) {
-//                strPay = String.valueOf(cynValue);
-//            } else {
-//                strPay = String.valueOf(usdValue);
-//                usdValidation = (cynValidation + (cynValidation * (feeInPercentage / 100))) + feeInAmount;
-//            }
-            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation) || Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
-                tvError.setText("Minimum Amount is " + cynValidation + " CYN");
+            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
+                value = false;
+            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
+                value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
                 if (strLimit.equals("daily")) {
                     tvError.setText("Amount entered exceeds your daily limit");
@@ -629,19 +815,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 }
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
-            } else if(Double.parseDouble(strPay.replace(",", "")) > avaBal){
+                value = false;
+            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
                 tvError.setText("Amount entered exceeds available balance");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
-            } else if(cynValue > avaBal){
+                value = false;
+            } else if (cynValue > avaBal) {
                 tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
-                return value = false;
-            } else{
-                tvError.setVisibility(View.INVISIBLE);
+                value = false;
+            } else {
+                tvError.setVisibility(View.GONE);
                 lyBalance.setVisibility(View.VISIBLE);
             }
 
@@ -676,16 +862,20 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             tvPaymentHead.setText("Withdraw to");
             tvPurchaseHead.setText("Withdraw Amount");
             tvCYN.setVisibility(View.GONE);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            tvGet.setText("$ " + Utils.USNumberFormat(usdValue));
-            tvPurchaseAmt.setText(Utils.USNumberFormat(usdValue) + " " + getString(R.string.currency));
+            tvGet.setText("$ " + Utils.USNumberFormat(cynValue));
+            tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " " + getString(R.string.currency));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-            total = usdValue + Double.parseDouble(strPFee);
+            total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
+            isAuthenticationCalled = false;
+            createWithdrawRequest();
+
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
@@ -724,15 +914,62 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
 
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+
+                        if (!isAuthenticationCalled) {
+                            isAuthenticationCalled = true;
+                            prevDialog.dismiss();
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                                            .putExtra("screen", "Withdraw"));
+                                }
+                            } else {
+                                startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                                        .putExtra("screen", "Withdraw"));
+                            }
+                        }
+
+                    }
+
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                    if (currentId == motionLayout.getEndState()) {
-                        slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-                        withdrawToken();
-                    }
+//                    if (currentId == motionLayout.getEndState()) {
+//                        try {
+//                            slideToConfirm.setInteractionEnabled(false);
+//                            tv_lable.setText("Verifying");
+//                            //withdrawToken();
+//                            prevDialog.dismiss();
+//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
+//                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
+//                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                                } else {
+//                                    startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+//                                            .putExtra("TYPE", "ENTER")
+//                                            .putExtra("screen", "GiftCard"), FOR_RESULT);
+//                                }
+//                            } else {
+//                                startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
+//                            }
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
                 }
 
                 @Override
@@ -761,6 +998,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     public void expiry() {
         try {
+            if (payDialog != null) {
+                payDialog.dismiss();
+            }
             final Dialog dialog = new Dialog(WithdrawTokenActivity.this);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.payment_expire);
@@ -798,6 +1038,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     try {
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                             Intent i = new Intent(WithdrawTokenActivity.this, EditCardActivity.class);
+                            i.putExtra("screen", "withdraw");
                             startActivity(i);
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
@@ -925,107 +1166,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         }
     }
 
-    public void displayCVV(PaymentsList objData) {
+    public void bindSelectedCard(PaymentsList objData) {
         try {
-            if (payDialog != null) {
-                payDialog.dismiss();
-            }
-            objSelected = objData;
-            cvvDialog = new Dialog(WithdrawTokenActivity.this);
-            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            cvvDialog.setContentView(R.layout.cvvlayout);
-            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-            DisplayMetrics mertics = getResources().getDisplayMetrics();
-            int width = mertics.widthPixels;
-
-            etCVV = cvvDialog.findViewById(R.id.etCVV);
-            CustomKeyboard ctKey;
-            ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK");
-            ctKey.setScreenName("withdrawcvv");
-            InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
-            ctKey.setInputConnection(ic);
-            etCVV.setShowSoftInputOnFocus(false);
-            etCVV.requestFocus();
-
-            etCVV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.hideSoftKeypad(WithdrawTokenActivity.this, v);
-                }
-            });
-            etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    Utils.hideSoftKeypad(WithdrawTokenActivity.this, view);
-                }
-            });
-            etCVV.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (editable.length() > 2) {
-                        ctKey.enableButton();
-                    } else {
-                        ctKey.disableButton();
-                    }
-                }
-            });
-
-            Window window = cvvDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-
-            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-            cvvDialog.show();
-            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    if (dialogInterface != null) {
-                        if (prevSelectedCard != null) {
-                            objMyApplication.setSelectedCard(prevSelectedCard);
-                            selectedCard = prevSelectedCard;
-                        }
-
-                    }
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void okClick() {
-        try {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                return;
-            }
-            mLastClickTime = SystemClock.elapsedRealtime();
-            if (!etCVV.getText().toString().trim().equals("")) {
-                prevSelectedCard = null;
-                cvvDialog.dismiss();
-                strCvv = etCVV.getText().toString().trim();
-                bindPayMethod(objSelected);
-            } else {
-                Utils.displayAlert("Please enter CVV", WithdrawTokenActivity.this, "", "");
-            }
-
+            prevSelectedCard = null;
+            bindPayMethod(objData);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1051,7 +1195,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 8) {
+            if (editable.length() > 12) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            } else if (editable.length() > 8) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                 tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
@@ -1082,28 +1230,16 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     private void withdrawToken() {
         try {
-            WithdrawRequest request = new WithdrawRequest();
-            if (!strBankId.equals("")) {
-                bankId = Long.parseLong(strBankId);
-            }
-            if (!strCardId.equals("")) {
-                cardId = Long.parseLong(strCardId);
-            }
-            request.setBankId(bankId);
-            request.setCardId(cardId);
-            request.setGiftCardWithDrawInfo(null);
-            request.setTokens(total);
-            request.setRemarks(etRemarks.getText().toString().trim());
-            request.setWithdrawType(strSubType);
+            pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-                buyTokenViewModel.withdrawTokens(request);
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void displayComments() {
+    private void displayComments() {
         try {
             cvvDialog = new Dialog(WithdrawTokenActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1115,6 +1251,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
             EditText addNoteET = cvvDialog.findViewById(R.id.addNoteET);
             CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
+            TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -1125,11 +1262,45 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
                 }
             }, 100);
+            addNoteET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length() == 0) {
+                        addNoteTIL.setCounterEnabled(false);
+                    } else {
+                        addNoteTIL.setCounterEnabled(true);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = addNoteET.getText().toString();
+                        if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                            addNoteET.setText("");
+                            addNoteET.setSelection(addNoteET.getText().length());
+                        } else if (str.length() > 0 && str.contains(".")) {
+                            addNoteET.setText(addNoteET.getText().toString().replaceAll("\\.", ""));
+                            addNoteET.setSelection(addNoteET.getText().length());
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            addNoteET.setText("");
+                            addNoteET.setSelection(addNoteET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             if (!etRemarks.getText().toString().trim().equals("")) {
                 addNoteET.setText(etRemarks.getText().toString().trim());
                 addNoteET.setSelection(addNoteET.getText().toString().trim().length());
             }
-
             Window window = cvvDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
@@ -1152,10 +1323,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (addNoteET.getText().toString().trim().length() > 0) {
-                            etRemarks.setText(addNoteET.getText().toString().trim());
-                            cvvDialog.dismiss();
-                        }
+                        etRemarks.setText(addNoteET.getText().toString().trim());
+                        cvvDialog.dismiss();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1171,12 +1340,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
+            cynValue = Double.parseDouble(etAmount.getText().toString().trim());
             mLastClickTime = SystemClock.elapsedRealtime();
-            if (tvCYN.getVisibility() == View.VISIBLE) {
-                convertUSDtoCYN();
-            } else {
-                convertCYNtoUSD();
-            }
+            convertUSDtoCYN();
             calculateFee(Utils.USNumberFormat(cynValue));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1188,21 +1354,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             if (isUSD) {
                 isUSD = false;
                 usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                cynValue = ((usdValue + feeInAmount) * 100) / (100 + feeInPercentage);
                 cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void convertCYNValue() {
-        try {
-            if (isCYN) {
-                isCYN = false;
-                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                usdValue = (cynValue - (cynValue * (feeInPercentage / 100))) + feeInAmount;
-                usdValue = ((cynValue - feeInAmount) * 100) / (100 + feeInPercentage);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1217,7 +1369,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
-                etAmount.setText(String.valueOf(cynValue));
+//                etAmount.setText(String.valueOf(cynValue));
+                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
                 etAmount.addTextChangedListener(WithdrawTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());
@@ -1227,22 +1380,189 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         }
     }
 
-    private void convertCYNtoUSD() {
+    private void convertDecimal() {
         try {
-            convertCYNValue();
-            if (usdValue != 0.0) {
-                InputFilter[] FilterArray = new InputFilter[1];
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                etAmount.setFilters(FilterArray);
-                etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
-                etAmount.setText(String.valueOf(usdValue));
-                etAmount.addTextChangedListener(WithdrawTokenActivity.this);
-                USFormat(etAmount);
-                etAmount.setSelection(etAmount.getText().length());
-            }
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+            etAmount.setFilters(FilterArray);
+            USFormat(etAmount);
+            etAmount.setSelection(etAmount.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+    private void withdrawTokenInProgress(WithdrawResponseData objData) {
+        try {
+            prevDialog = new Dialog(WithdrawTokenActivity.this);
+            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            prevDialog.setContentView(R.layout.withdraw_token_trans_inprogress);
+            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvAmount = prevDialog.findViewById(R.id.tvAmount);
+            TextView tvMessage = prevDialog.findViewById(R.id.tvWDMessage);
+            TextView tvReferenceID = prevDialog.findViewById(R.id.tvReferenceID);
+            TextView tvBalance = prevDialog.findViewById(R.id.tvBalance);
+//            TextView tvLearnMore = prevDialog.findViewById(R.id.tvLearnMore);
+            TextView tvHeading = prevDialog.findViewById(R.id.tvHeading);
+            TextView tvDescription = prevDialog.findViewById(R.id.tvDescription);
+            LinearLayout layoutReference = prevDialog.findViewById(R.id.layoutReference);
+            ImageView imgLogo = prevDialog.findViewById(R.id.imgLogo);
+            CardView cvDone = prevDialog.findViewById(R.id.cvDone);
+            if (objData.getGbxTransactionId().length() > 10) {
+                tvReferenceID.setText(objData.getGbxTransactionId().substring(0, 10) + "...");
+            } else {
+                tvReferenceID.setText(objData.getGbxTransactionId());
+            }
+            String strMessage = "";
+            if (!strBankId.equals("")) {
+                strMessage = "We are processing  your request, please allow a 3-5 business days for your coyni bank withdrawal to be reflected in your bank account. Learn More";
+            }
+            if (!strCardId.equals("")) {
+                strMessage = "We are processing your request, please allow a few minutes for your coyni instant withdrawal to be reflected in your bank account. Learn More";
+            }
+            SpannableString ss = new SpannableString(strMessage);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.populateLearnMore(WithdrawTokenActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.parseColor("#00a6a2"));
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+
+            tvDescription.setText(ss);
+
+            tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+            tvHeading.setText("Transaction in Progress");
+            imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
+            Double bal = cynValue + objMyApplication.getGBTBalance();
+            String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+            tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
+            tvAmount.setText("$ " + Utils.USNumberFormat(cynValue));
+//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as Coyni.");
+            Window window = prevDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            prevDialog.setCancelable(false);
+            prevDialog.show();
+
+            cvDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(WithdrawTokenActivity.this, DashboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+            });
+            layoutReference.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getGbxTransactionId(), WithdrawTokenActivity.this);
+                }
+            });
+//            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Utils.populateLearnMore(WithdrawTokenActivity.this);
+//                }
+//            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void withdrawTokenFailure(APIError objData) {
+        try {
+            prevDialog = new Dialog(WithdrawTokenActivity.this);
+            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            prevDialog.setContentView(R.layout.buy_token_transaction_failed);
+            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvMessage = prevDialog.findViewById(R.id.tvMessage);
+            CardView cvTryAgain = prevDialog.findViewById(R.id.cvTryAgain);
+
+            tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription() + ". Please try again.");
+            Window window = prevDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            prevDialog.setCancelable(false);
+            prevDialog.show();
+
+            cvTryAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    prevDialog.dismiss();
+                    onBackPressed();
+                    finish();
+                }
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private WithdrawRequest createWithdrawRequest() {
+        WithdrawRequest request = new WithdrawRequest();
+        if (!strBankId.equals("")) {
+            bankId = Long.parseLong(strBankId);
+        }
+        if (!strCardId.equals("")) {
+            cardId = Long.parseLong(strCardId);
+        }
+        request.setBankId(bankId);
+        request.setCardId(cardId);
+        request.setGiftCardWithDrawInfo(null);
+        request.setTokens(cynValue);
+        request.setRemarks(etRemarks.getText().toString().trim());
+        request.setWithdrawType(strSubType);
+        objMyApplication.setWithdrawRequest(request);
+        objMyApplication.setWithdrawAmount(cynValue);
+
+        return request;
+    }
 }

@@ -62,6 +62,7 @@ public class EditCardActivity extends AppCompatActivity {
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
     public static EditCardActivity editCardActivity;
+    String strScreen = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,10 +148,12 @@ public class EditCardActivity extends AppCompatActivity {
                 isState = true;
                 isZipcode = true;
                 if (selectedCard.getExpired()) {
+                    isExpiry = false;
                     etExpiry.setEnabled(true);
                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                 } else {
+                    isExpiry = true;
                     etExpiry.setEnabled(true);
                 }
                 enableOrDisableNext();
@@ -169,7 +172,9 @@ public class EditCardActivity extends AppCompatActivity {
                         break;
                 }
             }
-
+            if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
+                strScreen = getIntent().getStringExtra("screen");
+            }
             layoutBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -185,6 +190,8 @@ public class EditCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(EditCardActivity.this);
                     Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -196,6 +203,8 @@ public class EditCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(EditCardActivity.this);
                     Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -207,6 +216,8 @@ public class EditCardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(EditCardActivity.this);
                     Utils.populateStates(EditCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -275,13 +286,14 @@ public class EditCardActivity extends AppCompatActivity {
                 if (cardEditResponse != null) {
                     try {
                         if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
-                            //displayAlertNew(cardEditResponse.getData(), EditCardActivity.this, "");
                             Utils.showCustomToast(EditCardActivity.this, cardEditResponse.getData(), R.drawable.ic_custom_tick, "");
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
-                                        objMyApplication.setSelectedCard(null);
+                                        if (!strScreen.equals("withdraw") && !strScreen.equals("buy")) {
+                                            objMyApplication.setSelectedCard(null);
+                                        }
                                         onBackPressed();
                                         finish();
                                     } catch (Exception ex) {
@@ -325,7 +337,9 @@ public class EditCardActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
-                                objMyApplication.setSelectedCard(null);
+                                if (!strScreen.equals("withdraw") && !strScreen.equals("buy")) {
+                                    objMyApplication.setSelectedCard(null);
+                                }
                                 onBackPressed();
                                 finish();
                             } catch (Exception ex) {
@@ -513,8 +527,8 @@ public class EditCardActivity extends AppCompatActivity {
                         if (validateExpiry()) {
                             isExpiry = true;
                             expiryErrorLL.setVisibility(GONE);
-                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
+//                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                         } else {
                             isExpiry = false;
                             expiryErrorLL.setVisibility(VISIBLE);
@@ -562,8 +576,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 101) {
                         isAddress1 = true;
                         address1ErrorLL.setVisibility(GONE);
-                        etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
+//                        etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
                     } else {
                         isAddress1 = false;
                     }
@@ -605,8 +619,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 51) {
                         isCity = true;
                         cityErrorLL.setVisibility(GONE);
-                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
+//                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
                     } else {
                         isCity = false;
                     }
@@ -676,8 +690,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
-                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+//                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
 //                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
@@ -716,14 +730,16 @@ public class EditCardActivity extends AppCompatActivity {
 
     public void enableOrDisableNext() {
         try {
-            if (isAddress1 && isCity && isZipcode && isState) {
-                if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
-                    isAddEnabled = true;
-                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                } else {
-                    isAddEnabled = false;
-                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                }
+            if (isAddress1 && isCity && isZipcode && isState && isExpiry) {
+//                if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
+//                    isAddEnabled = true;
+//                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//                } else {
+//                    isAddEnabled = false;
+//                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                }
+                isAddEnabled = true;
+                cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             } else {
                 isAddEnabled = false;
                 cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));

@@ -21,6 +21,7 @@ import android.graphics.Point;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -56,6 +57,7 @@ import java.util.Locale;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
@@ -86,7 +88,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     String authenticateType = "";
-
+    boolean isLoggedOut = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +134,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
-            isBiometric = Utils.checkBiometric(CustomerProfileActivity.this);
+//            isBiometric = Utils.checkBiometric(CustomerProfileActivity.this);
+            isBiometric = Utils.getIsBiometric();
             SetToken(objMyApplication, this);
             SetFaceLock(objMyApplication, this);
             SetTouchId(objMyApplication, this);
@@ -215,11 +218,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        isLoggedOut = true;
                         dropAllTables();
                         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
-                        finishAffinity();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -421,6 +424,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
             ImageView imgClose, copyRecipientAddress;
             ImageView meQrCode, shareImage, imgProfile;
             TextView userFullName, userInfo, walletAddress;
+            // saved to album
+            TextView tvSaveUserName, saveProfileTitle, saveToAlbumTV;
+            ImageView savedImageView;
+            CircleImageView saveProfileIV;
+            LinearLayout saveToAlbumLL;
+
+
             qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             qrDialog.setContentView(R.layout.profileqrcode);
@@ -441,6 +451,52 @@ public class CustomerProfileActivity extends AppCompatActivity {
             imgProfile = qrDialog.findViewById(R.id.imgProfile);
             walletAddress = qrDialog.findViewById(R.id.tvWalletAddress);
             shareImage = qrDialog.findViewById(R.id.imgShare);
+            //init Saved to Album Layout
+            savedImageView = qrDialog.findViewById(R.id.qrImageIV);
+            tvSaveUserName = qrDialog.findViewById(R.id.tvNameSave);
+            saveProfileIV = qrDialog.findViewById(R.id.saveprofileIV);
+            saveProfileTitle = qrDialog.findViewById(R.id.saveprofileTitle);
+            saveToAlbumTV = qrDialog.findViewById(R.id.savetoAlbumTV);
+            saveToAlbumLL = qrDialog.findViewById(R.id.saveToAlbumLL);
+
+            String savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+
+            if (savedStrName != null && savedStrName.length() > 22) {
+                tvSaveUserName.setText(savedStrName.substring(0, 22) + "...");
+            } else {
+                tvSaveUserName.setText(savedStrName);
+            }
+
+            try {
+                saveProfileIV.setVisibility(View.GONE);
+                saveProfileTitle.setVisibility(View.VISIBLE);
+                String imageString = objMyApplication.getMyProfile().getData().getImage();
+                String imageTextNew = "";
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                saveProfileTitle.setText(imageTextNew);
+
+                if (imageString != null && !imageString.trim().equals("")) {
+                    saveProfileIV.setVisibility(View.VISIBLE);
+                    saveProfileTitle.setVisibility(View.GONE);
+                    Glide.with(this)
+                            .load(imageString)
+                            .placeholder(R.drawable.ic_profile_male_user)
+                            .into(saveProfileIV);
+                } else {
+                    saveProfileIV.setVisibility(View.GONE);
+                    saveProfileTitle.setVisibility(View.VISIBLE);
+                    String imageText = "";
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                    saveProfileTitle.setText(imageText);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
 
             try {
@@ -472,10 +528,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 ex.printStackTrace();
             }
 
-            if (walletResponse != null) {
+            if (walletResponse != null && walletResponse.getData().getWalletInfo().size() > 0) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);
+                savedImageView.setImageBitmap(bitmap);
                 walletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
             }
             imgClose.setOnClickListener(new View.OnClickListener() {
@@ -529,6 +586,39 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     myClipboard.setPrimaryClip(myClip);
 //                    showToast();
                     Utils.showCustomToast(CustomerProfileActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
+                }
+            });
+
+            saveToAlbumTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    try {
+                        saveToAlbumLL.setDrawingCacheEnabled(true);
+                        saveToAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+                        saveToAlbumLL.layout(0, 0, saveToAlbumLL.getMeasuredWidth(), saveToAlbumLL.getMeasuredHeight());
+
+                        saveToAlbumLL.buildDrawingCache(true);
+                        Bitmap b = Bitmap.createBitmap(saveToAlbumLL.getDrawingCache());
+                        saveToAlbumLL.setDrawingCacheEnabled(false);
+
+
+//            Bitmap b=Bitmap.createBitmap(imageSaveAlbumLL.getWidth(),imageSaveAlbumLL.getHeight(),Bitmap.Config.ARGB_8888);
+//            Canvas canvas=new Canvas(b);
+//            imageSaveAlbumLL.draw(canvas);
+//            savedImageView.setImageBitmap(b);
+
+
+                        MediaStore.Images.Media.insertImage(getContentResolver(), b, "Coyni-Qr", "this is QR");
+
+                        Utils.showCustomToast(CustomerProfileActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
                 }
             });
 
@@ -707,11 +797,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
                                 saveFace("false");
                                 saveThumb("true");
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
                             } else {
                                 saveFace("true");
                                 saveThumb("false");
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
                             }
 
                             isSwitchEnabled = true;
@@ -720,9 +812,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             objMyApplication.setBiometric(true);
                         } else {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
                             } else {
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
                             }
                             objMyApplication.setBiometric(false);
                             saveFace("false");

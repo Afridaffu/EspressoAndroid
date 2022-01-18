@@ -35,7 +35,7 @@ public class BuyTokenViewModel extends AndroidViewModel {
     private MutableLiveData<BuyTokenResponse> buyTokResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BuyTokenResponse> buyTokenFailureMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<WithdrawResponse> withdrawResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<WithdrawResponse> withdrawFailureResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<APIError> withdrawFailureResponseMutableLiveData = new MutableLiveData<>();
 
     public BuyTokenViewModel(@NonNull Application application) {
         super(application);
@@ -65,7 +65,7 @@ public class BuyTokenViewModel extends AndroidViewModel {
         return withdrawResponseMutableLiveData;
     }
 
-    public MutableLiveData<WithdrawResponse> getWithdrawFailureResponseMutableLiveData() {
+    public MutableLiveData<APIError> getWithdrawFailureResponseMutableLiveData() {
         return withdrawFailureResponseMutableLiveData;
     }
 
@@ -207,22 +207,37 @@ public class BuyTokenViewModel extends AndroidViewModel {
                             withdrawResponseMutableLiveData.setValue(obj);
                         } else if (response.code() == 400) {
                             strResponse = response.errorBody().string().replaceAll("\"", "'");
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            if (errorResponse != null) {
+//                                withdrawFailureResponseMutableLiveData.setValue(errorResponse);
+//                            } else {
+//                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+//                                withdrawFailureResponseMutableLiveData.setValue(errorResponse1);
+//                            }
                             Gson gson = new Gson();
                             Type type = new TypeToken<WithdrawResponse>() {
                             }.getType();
                             WithdrawResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
                             if (errorResponse != null) {
-                                withdrawFailureResponseMutableLiveData.setValue(errorResponse);
+                                withdrawResponseMutableLiveData.setValue(errorResponse);
                             } else {
                                 WithdrawResponse errorResponse1 = gson.fromJson(strResponse, type);
-                                withdrawFailureResponseMutableLiveData.setValue(errorResponse1);
+                                withdrawResponseMutableLiveData.setValue(errorResponse1);
                             }
                         } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            apiErrorMutableLiveData.setValue(errorResponse);
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<WithdrawResponse>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            WithdrawResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            withdrawResponseMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
