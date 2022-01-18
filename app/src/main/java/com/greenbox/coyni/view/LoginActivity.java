@@ -136,26 +136,34 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etPassword.setText("");
                 etPassword.setHint("");
                 Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
             } else {
                 etPassword.setText("");
                 etPassword.setHint("");
                 Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
             }
         } catch (Exception e) {
             e.printStackTrace();
             etPassword.setText("");
             etPassword.setHint("");
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
         }
         if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
             if (chkRemember.isChecked()) {
                 etEmail.setText("");
                 etPassword.setText("");
                 chkRemember.setChecked(false);
+                Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
+                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
             }
             etEmail.setText(objMyApplication.getStrRetrEmail());
             if (isEmailValid(etEmail.getText().toString().trim())) {
-                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.light_gray));
                 etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                 layoutEmailError.setVisibility(GONE);
             }
