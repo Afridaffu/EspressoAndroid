@@ -601,7 +601,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
             userName.setText(imageTextNew);
-            userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+            if (userDetails.getData().getWalletId().length() > 9) {
+                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 9) + "...");
+            } else {
+                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+            }
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
@@ -939,7 +943,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
                 i.putExtra("screen", "payRequest");
                 startActivity(i);
-                finish();
+                //finish();
             }
         });
 

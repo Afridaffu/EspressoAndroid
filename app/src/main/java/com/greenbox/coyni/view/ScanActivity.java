@@ -99,7 +99,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
     DashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
-    boolean isTorchOn = true;
+    boolean isTorchOn = true, isQRScan = false;
     ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "";
     ProgressDialog dialog;
@@ -614,7 +614,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     }
 //                                    getUserDetails(strScanWallet);
                                     if (!strScanWallet.equals(strWallet)) {
-                                        getUserDetails(strScanWallet);
+                                        if (!isQRScan) {
+                                            isQRScan = true;
+                                            getUserDetails(strScanWallet);
+                                        }
                                     } else {
 //                                        Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
                                         displayAlert("Tokens can not request to your own wallet", "");
@@ -695,6 +698,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     protected void onResume() {
         try {
             super.onResume();
+            isQRScan = false;
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -934,6 +938,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     public void setAmountClick() {
         try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             if (validation()) {
                 if (setAmountDialog != null) {
                     setAmountDialog.dismiss();

@@ -83,7 +83,7 @@ public class NotificationsActivity extends AppCompatActivity {
     Cursor dsFacePin, dsTouchID;
     boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     int CODE_AUTHENTICATION_VERIFICATION = 251;
-    public int FOR_RESULT = 235,previousItemPos=-1;
+    public int FOR_RESULT = 235, previousItemPos = -1;
     Long mLastClickTime = 0L;
     boolean isAuthenticationCalled = false;
     public TransferPayRequest userPayRequest = new TransferPayRequest();
@@ -615,25 +615,12 @@ public class NotificationsActivity extends AppCompatActivity {
 
             if (type.equals("Notification")) {
                 globalNotifications.get(position).setLongTime(past.getTime());
-//                if (days > 0)
-//                    globalNotifications.get(position).setIsToday(0);
-//                else
-//                    globalNotifications.get(position).setIsToday(1);
                 globalNotifications.get(position).setIsToday(getIsToday(now.getTime(), past.getTime()));
-
             } else if (type.equals("Receive")) {
                 globalReceivedNotifications.get(position).setLongTime(past.getTime());
-//                if (days > 0)
-//                    globalReceivedNotifications.get(position).setIsToday(0);
-//                else
-//                    globalReceivedNotifications.get(position).setIsToday(1);
                 globalReceivedNotifications.get(position).setIsToday(getIsToday(now.getTime(), past.getTime()));
             } else {
                 globalSentNotifications.get(position).setLongTime(past.getTime());
-//                if (days > 0)
-//                    globalSentNotifications.get(position).setIsToday(0);
-//                else
-//                    globalSentNotifications.get(position).setIsToday(1);
                 globalSentNotifications.get(position).setIsToday(getIsToday(now.getTime(), past.getTime()));
             }
         } catch (Exception ex) {
@@ -643,19 +630,35 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     public void markReadAPICall(List<Integer> list) {
-        notificationsViewModel.setReadNotification(list);
+        try {
+            notificationsViewModel.setReadNotification(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void markUnReadAPICall(List<Integer> list) {
-        notificationsViewModel.setUnReadNotification(list);
+        try {
+            notificationsViewModel.setUnReadNotification(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteNotificationCall(List<Integer> list) {
-        notificationsViewModel.setDeleteNotification(list);
+        try {
+            notificationsViewModel.setDeleteNotification(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void userRequestStatusUpdateCall(StatusRequest request) {
-        notificationsViewModel.notificationStatusUpdate(request);
+        try {
+            notificationsViewModel.notificationStatusUpdate(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showPayRequestPreview(NotificationsDataItems dataItem, TransferPayRequest request) {
@@ -783,14 +786,26 @@ public class NotificationsActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case RESULT_OK:
-            case 235: {
-                notificationPayCall();
-            }
-            case RESULT_CANCELED:
-                if (progressDialog != null)
-                    progressDialog.dismiss();
+        switch (requestCode) {
+            case 251:
+                if (resultCode == RESULT_OK) {
+                    notificationPayCall();
+                } else if (resultCode == RESULT_CANCELED) {
+                    if (progressDialog != null)
+                        progressDialog.dismiss();
+                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION)
+                        startActivityForResult(new Intent(NotificationsActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "Notifications"), FOR_RESULT);
+                }
+                break;
+            case 235:
+                if (resultCode == 235) {
+                    notificationPayCall();
+                } else if (resultCode == RESULT_CANCELED) {
+                    if (progressDialog != null)
+                        progressDialog.dismiss();
+                }
                 break;
         }
     }
@@ -849,16 +864,20 @@ public class NotificationsActivity extends AppCompatActivity {
 
     public int getIsToday(long now, long past) {
         int value = 0;
-        Date dateNow = new Date(now);
-        Date datePast = new Date(past);
-        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
-        String nowStr = df2.format(dateNow);
-        String pastStr = df2.format(datePast);
-        Log.e("dates", nowStr + " " + pastStr);
-        if (nowStr.equals(pastStr)) {
-            value = 1;
-        } else {
-            value = 0;
+        try {
+            Date dateNow = new Date(now);
+            Date datePast = new Date(past);
+            SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
+            String nowStr = df2.format(dateNow);
+            String pastStr = df2.format(datePast);
+            Log.e("dates", nowStr + " " + pastStr);
+            if (nowStr.equals(pastStr)) {
+                value = 1;
+            } else {
+                value = 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return value;
     }
