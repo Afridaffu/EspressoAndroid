@@ -800,7 +800,7 @@ public class NotificationsActivity extends AppCompatActivity {
                 }
                 break;
             case 235:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == 235) {
                     notificationPayCall();
                 } else if (resultCode == RESULT_CANCELED) {
                     if (progressDialog != null)
