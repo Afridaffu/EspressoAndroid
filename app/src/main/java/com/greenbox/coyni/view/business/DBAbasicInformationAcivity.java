@@ -23,10 +23,10 @@ import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 
 public class DBAbasicInformationAcivity extends AppCompatActivity {
 TextInputLayout dbaNameTIL,dbaEmailTIL;
-LinearLayout dbanameLL,dbaemailLL;
+public LinearLayout dbanameLL,dbaemailLL,customerphonenumLL;
 CompanyOutLineBoxPhoneNumberEditText phoneNumberET;
-TextInputEditText dbanameET,dbaemailET;
-TextView dbanameTV,dbaemailTV;
+public TextInputEditText dbanameET,dbaemailET,customernumberET;
+public TextView dbanameTV,dbaemailTV,customernumTV;
 public CardView dbaNextCV;
 public static int focusedID = 0;
 public static DBAbasicInformationAcivity dbAbasicInformationAcivity;
@@ -72,8 +72,11 @@ boolean isEmailError = false, isPhoneError = false;
         dbanameTV = findViewById(R.id.DBAnameErrorTV);
         dbaemailTV = findViewById(R.id.DBAemailErrorTV);
         dbaNextCV = findViewById(R.id.dbaNextCV);
-        phoneNumberET = findViewById(R.id.phoneNumberET);
+        phoneNumberET = findViewById(R.id.customerphoneNumberET);
+        phoneNumberET.setFrom("DbaInfo");
 
+        customerphonenumLL = findViewById(R.id.customerphoneNumberErrorLL);
+        customernumTV = findViewById(R.id.customerphoneNumberErrorTV);
 
     }
 
@@ -214,5 +217,20 @@ boolean isEmailError = false, isPhoneError = false;
             });
         }
     }
+
+//    public void enableButton() {
+//        try {
+//            if (!phoneNumberET.getText().toString().trim().equals("") && phoneNumberET.getText().toString().length() == 14
+//                    && dbanameET.getText().length()>=2 && dbaemailET.getText().length()>=2) {
+//                dbaNextCV.setEnabled(true);
+//                dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//            } else {
+//                dbaNextCV.setEnabled(false);
+//                dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 }

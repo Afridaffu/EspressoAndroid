@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.view.business.DBAbasicInformationAcivity;
 import com.santalu.maskara.widget.MaskEditText;
 
 public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
@@ -85,6 +86,24 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     }
+                    if (FROM.equals("DbaInfo") && !b) {
+                        if ((phnET.getText().length() > 0 && phnET.getText().length() < 14)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            DBAbasicInformationAcivity dba = DBAbasicInformationAcivity.dbAbasicInformationAcivity;
+                            dba.customerphonenumLL.setVisibility(VISIBLE);
+                            dba.customernumTV.setText("Invalid Phone Number");
+                        } else if ((phnET.getText().length() == 0)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            DBAbasicInformationAcivity dba = DBAbasicInformationAcivity.dbAbasicInformationAcivity;
+                            dba.customerphonenumLL.setVisibility(VISIBLE);
+                            dba.customernumTV.setText("Field Required");
+                        } else {
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        }
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,11 +143,24 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         comapnyAct1.phoneNumberErrorLL.setVisibility(VISIBLE);
                         comapnyAct1.phonenumberTV.setText("Field Required");
                     }
+                    else if (FROM.equals("DbaInfo")) {
+                        DBAbasicInformationAcivity dba = DBAbasicInformationAcivity.dbAbasicInformationAcivity;
+                        if (charSequence.length() == 14) {
+                            isPhoneError = false;
+                            dba.customerphonenumLL.setVisibility(GONE);
+                        }
+
+                        if ((phnET.getText().length() == 0)) {
+                            dba.customerphonenumLL.setVisibility(VISIBLE);
+                            dba.customernumTV.setText("Field Required");
+                        }
+                    }
                 }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

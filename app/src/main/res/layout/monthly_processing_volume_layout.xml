@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/ssnhintdHolderLL"
+        android:id="@+id/volhintdHolderLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/outline_box_unfocused"
@@ -14,7 +14,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -25,16 +24,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SSN"
-                android:textColor="@color/primary_black"
+                android:text="$"
+                android:textColor="@color/primary_green"
                 android:layout_marginStart="5dp"
-                android:fontFamily="@font/opensans_regular"
-                android:textSize="@dimen/_12ssp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_down"
-                android:layout_marginStart="@dimen/_20sdp"/>
+                android:fontFamily="@font/opensans_bold"
+                android:textSize="@dimen/_16ssp"/>
+
             <View
                 android:layout_width="1.5dp"
                 android:layout_height="wrap_content"
@@ -44,21 +39,22 @@
 
         </LinearLayout>
 
-        <com.santalu.maskara.widget.MaskEditText
-            android:id="@+id/ssnET"
+
+        <EditText
+            android:id="@+id/volET"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:inputType="number|textNoSuggestions"
             android:padding="14dp"
-            android:hint="•••-•••-••••"
+            android:hint="Enter the amount"
             android:background="@android:color/transparent"
             android:textColor="@color/primary_black"
             android:textColorHint="@color/light_gray"
             android:textSize="@dimen/_12ssp"
-            app:mask="__-_______"
             android:singleLine="true"
             android:maxLines="1"
+            android:maxLength="7"
             android:textCursorDrawable="@drawable/cursor_color"
             android:fontFamily="@font/opensans_semibold"
             android:digits="0123456789"
@@ -67,6 +63,21 @@
 
     </LinearLayout>
 
-
+    <TextView
+        android:id="@+id/volumehintTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textSize="@dimen/text_size_11sp"
+        android:fontFamily="@font/opensans_semibold"
+        android:text="Monthly Processing Volume"
+        android:textColor="@color/primary_black"
+        app:layout_constraintBottom_toTopOf="@+id/volumehintdHolderLL"
+        app:layout_constraintStart_toStartOf="@+id/volumehintdHolderLL"
+        app:layout_constraintTop_toTopOf="@+id/volumehintdHolderLL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,8 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/_21sdp"
-        android:paddingRight="@dimen/_21sdp"
+        android:paddingStart="@dimen/_21sdp"
+        android:paddingEnd="@dimen/_21sdp"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_x"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 />
             <View
                 android:layout_width="@dimen/_107sdp"
@@ -37,7 +37,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@drawable/view_primary_gren_color"
-                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 />
             <View
                 android:layout_width="@dimen/_107sdp"
@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@drawable/view_light_color"
-                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 />
 
 
@@ -125,6 +125,8 @@
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
+
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/DBAemailTIL"
             style="@style/TextInputLayout.OutlinedBox"
@@ -181,13 +183,13 @@
         </LinearLayout>
 
         <com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
-            android:id="@+id/phoneNumberET"
+            android:id="@+id/customerphoneNumberET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
             />
         <LinearLayout
-            android:id="@+id/CompanyphoneNumberErrorLL"
+            android:id="@+id/customerphoneNumberErrorLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
@@ -201,7 +203,7 @@
                 android:src="@drawable/ic_erro" />
 
             <TextView
-                android:id="@+id/CompanyphoneNumberErrorTV"
+                android:id="@+id/customerphoneNumberErrorTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -226,16 +228,16 @@
                 android:background="@color/white"
                 android:src="@drawable/ic_down"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/NameTIL"
+                app:layout_constraintEnd_toEndOf="@+id/TypeTIL"
                 app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@+id/NameTIL"
-                app:layout_constraintTop_toTopOf="@+id/NameTIL"
+                app:layout_constraintStart_toStartOf="@+id/TypeTIL"
+                app:layout_constraintTop_toTopOf="@+id/TypeTIL"
                 app:layout_constraintVertical_bias="0.507"
                 app:layout_editor_absoluteX="336.24dp"
                 app:layout_editor_absoluteY="26.28dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/NameTIL"
+                android:id="@+id/TypeTIL"
                 style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -248,7 +250,7 @@
                 tools:ignore="MissingConstraints">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/firstNameET"
+                    android:id="@+id/TypeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -290,6 +292,7 @@
                  android:textColor="@color/primary_black"
                  android:textSize="@dimen/_11ssp"
                  android:layout_gravity="center"
+                 android:layout_marginEnd="@dimen/_11sdp"
                  />
 
                  <RadioButton
@@ -307,201 +310,36 @@
                  android:fontFamily="@font/opensans_semibold"
                  android:textColor="@color/primary_black"
                  android:textSize="@dimen/_11ssp"
-                 android:layout_marginLeft="@dimen/_5sdp"
+                 android:layout_marginStart="@dimen/_5sdp"
                  android:layout_gravity="center"
                  />
          </RadioGroup>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.greenbox.coyni.utils.outline_et.WebsiteOutlineEditText
+            android:id="@+id/WebsiteET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_14sdp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="$"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/opensans_bold"
-                android:layout_marginLeft="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:textColor="@color/primary_color"
-                tools:ignore="MissingConstraints"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@+id/amount"
-                app:layout_constraintTop_toTopOf="@+id/amount"
-                app:layout_constraintVertical_bias="0.507"
-                app:layout_editor_absoluteX="336.24dp"
-                app:layout_editor_absoluteY="26.28dp" />
-            <View
-                android:layout_width="1.5dp"
-                android:layout_height="match_parent"
-                android:background="@color/light_gray"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                tools:ignore="MissingConstraints" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/amount"
-                style="@style/TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:hint="Monthly Processing Volume"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary_green"
-                app:errorIconDrawable="@null"
-                app:hintTextColor="@color/primary_green"
-                tools:ignore="MissingConstraints">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/amountt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:imeOptions="actionNext"
-                    android:inputType="text|textNoSuggestions"
-                    android:maxLength="30"
-                    android:maxLines="1"
-                    android:paddingRight="@dimen/_14sdp"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                    android:singleLine="true"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textIsSelectable="false"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+            />
+        <com.greenbox.coyni.utils.outline_et.MonthlyProcessingVolumeEditText
+            android:id="@+id/volumeET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_14sdp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="$"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/opensans_bold"
-                android:layout_marginLeft="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:textColor="@color/primary_color"
-                tools:ignore="MissingConstraints"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@+id/amountTIL1"
-                app:layout_constraintTop_toTopOf="@+id/amountTIL1"
-                app:layout_constraintVertical_bias="0.507"
-                app:layout_editor_absoluteX="336.24dp"
-                app:layout_editor_absoluteY="26.28dp" />
-            <View
-                android:layout_width="1.5dp"
-                android:layout_height="match_parent"
-                android:background="@color/light_gray"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                tools:ignore="MissingConstraints" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/amountTIL1"
-                style="@style/TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:hint="High Ticket"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary_green"
-                app:errorIconDrawable="@null"
-                app:hintTextColor="@color/primary_green"
-                tools:ignore="MissingConstraints">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/amountET1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:imeOptions="actionNext"
-                    android:inputType="text|textNoSuggestions"
-                    android:maxLength="30"
-                    android:maxLines="1"
-                    android:paddingRight="@dimen/_14sdp"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                    android:singleLine="true"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textIsSelectable="false"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="@dimen/_14sdp"
+            />
+        <com.greenbox.coyni.utils.outline_et.MonthlyProcessingVolumeEditText
+            android:id="@+id/highET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_14sdp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="$"
-                android:textSize="@dimen/_14ssp"
-                android:fontFamily="@font/opensans_bold"
-                android:layout_marginLeft="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:textColor="@color/primary_color"
-                tools:ignore="MissingConstraints"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@+id/amountTIL"
-                app:layout_constraintTop_toTopOf="@+id/amountTIL"
-                app:layout_constraintVertical_bias="0.507"
-                app:layout_editor_absoluteX="336.24dp"
-                app:layout_editor_absoluteY="26.28dp" />
-            <View
-                android:layout_width="1.5dp"
-                android:layout_height="match_parent"
-                android:background="@color/light_gray"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                tools:ignore="MissingConstraints" />
+            android:layout_marginTop="@dimen/_14sdp"
+            />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/amountTIL"
-                style="@style/TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:hint="Average Ticket"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary_green"
-                app:errorIconDrawable="@null"
-                app:hintTextColor="@color/primary_green"
-                tools:ignore="MissingConstraints">
+        <com.greenbox.coyni.utils.outline_et.MonthlyProcessingVolumeEditText
+            android:id="@+id/averageET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/amountET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:imeOptions="actionNext"
-                    android:inputType="text|textNoSuggestions"
-                    android:maxLength="30"
-                    android:maxLines="1"
-                    android:paddingRight="@dimen/_14sdp"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                    android:singleLine="true"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textIsSelectable="false"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -509,22 +347,23 @@
             android:background="@drawable/bg_white_color_light_border"
             android:paddingTop="@dimen/_13sdp"
             android:paddingBottom="@dimen/_14sdp"
-            android:paddingLeft="@dimen/_8sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
+            android:paddingStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:visibility="gone"
             >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_upload"
-                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
                 />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2.6"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
