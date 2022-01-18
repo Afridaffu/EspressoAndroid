@@ -85,20 +85,24 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.readStatusLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                        List<Integer> list = new ArrayList<>();
-                        list.add(notifications.get(position).getId());
+                            List<Integer> list = new ArrayList<>();
+                            list.add(notifications.get(position).getId());
 
-                        if (notifications.get(position).isRead()) {
-                            ((NotificationsActivity) mContext).markUnReadAPICall(list);
-                        } else {
-                            ((NotificationsActivity) mContext).markReadAPICall(list);
+                            if (notifications.get(position).isRead()) {
+                                ((NotificationsActivity) mContext).markUnReadAPICall(list);
+                            } else {
+                                ((NotificationsActivity) mContext).markReadAPICall(list);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -106,17 +110,21 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.deleteLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                            List<Integer> list = new ArrayList<>();
+                            list.add(notifications.get(position).getId());
+
+                            ((NotificationsActivity) mContext).deleteNotificationCall(list);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                        List<Integer> list = new ArrayList<>();
-                        list.add(notifications.get(position).getId());
-
-                        ((NotificationsActivity) mContext).deleteNotificationCall(list);
                     }
                 });
 
@@ -221,24 +229,27 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.payLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Log.e("payLL", "payLL");
-//                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            Log.e("payLL", "payLL");
 
-                        if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()) {
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
+                            if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount()) {
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                            TransferPayRequest request = new TransferPayRequest();
-                            request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
-                            request.setRemarks(notifications.get(position).getRemarks());
-                            request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
+                                TransferPayRequest request = new TransferPayRequest();
+                                request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
+                                request.setRemarks(notifications.get(position).getRemarks());
+                                request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
 
-                            ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
-                        } else {
-                            Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                                ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                            } else {
+                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -246,41 +257,49 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.cancelLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            Log.e("cancelLL", "cancelLL");
+                            ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                            StatusRequest statusRequest = new StatusRequest();
+                            statusRequest.setId(notifications.get(position).getId());
+                            statusRequest.setStatus("Cancelled");
+                            statusRequest.setRemarks("");
+                            ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
+
+                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Log.e("cancelLL", "cancelLL");
-                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                        StatusRequest statusRequest = new StatusRequest();
-                        statusRequest.setId(notifications.get(position).getId());
-                        statusRequest.setStatus("Cancelled");
-                        statusRequest.setRemarks("");
-                        ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
-
-                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
 
                 holder.remindLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            Log.e("remindLL", "remindLL");
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                            StatusRequest statusRequest = new StatusRequest();
+                            statusRequest.setId(notifications.get(position).getId());
+                            statusRequest.setStatus("Remind");
+                            statusRequest.setRemarks("");
+                            ((NotificationsActivity) mContext).updatedStatus = "Remind";
+
+                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Log.e("remindLL", "remindLL");
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                        StatusRequest statusRequest = new StatusRequest();
-                        statusRequest.setId(notifications.get(position).getId());
-                        statusRequest.setStatus("Remind");
-                        statusRequest.setRemarks("");
-                        ((NotificationsActivity) mContext).updatedStatus = "Remind";
-
-                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
 
@@ -321,40 +340,48 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                 holder.cancelLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            Log.e("cancelLL", "cancelLL");
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                            StatusRequest statusRequest = new StatusRequest();
+                            statusRequest.setId(notifications.get(position).getId());
+                            statusRequest.setStatus("Cancelled");
+                            statusRequest.setRemarks("");
+                            ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
+
+                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Log.e("cancelLL", "cancelLL");
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                        StatusRequest statusRequest = new StatusRequest();
-                        statusRequest.setId(notifications.get(position).getId());
-                        statusRequest.setStatus("Cancelled");
-                        statusRequest.setRemarks("");
-                        ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
-
-                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
 
                 holder.remindLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        try {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            Log.e("remindLL", "remindLL");
+                            ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                            StatusRequest statusRequest = new StatusRequest();
+                            statusRequest.setId(notifications.get(position).getId());
+                            statusRequest.setStatus("Remind");
+                            statusRequest.setRemarks("");
+                            ((NotificationsActivity) mContext).updatedStatus = "Remind";
+
+                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Log.e("remindLL", "remindLL");
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                        StatusRequest statusRequest = new StatusRequest();
-                        statusRequest.setId(notifications.get(position).getId());
-                        statusRequest.setStatus("Remind");
-                        statusRequest.setRemarks("");
-                        ((NotificationsActivity) mContext).updatedStatus = "Remind";
-
-                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
                     }
                 });
             }
