@@ -102,8 +102,13 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 super.onBackPressed();
             }
         } else {
-            objMyApplication.setStrScreen("");
-            super.onBackPressed();
+            if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                ControlMethod("addpayment");
+                strCurrent = "addpayment";
+            } else {
+                objMyApplication.setStrScreen("");
+                super.onBackPressed();
+            }
         }
     }
 
