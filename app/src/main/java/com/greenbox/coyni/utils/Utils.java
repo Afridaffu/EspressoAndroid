@@ -1072,4 +1072,38 @@ public class Utils {
         mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
+    public static void emailPasswordIncorrectDialog(String msg, final Context context, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.fragment_login__em_pa_incorrect__bottom_sheet);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        CardView cvEmailOK = dialog.findViewById(R.id.cvEmailOK);
+
+        cvEmailOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
 }
