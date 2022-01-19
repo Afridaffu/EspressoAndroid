@@ -653,7 +653,7 @@ public class Utils {
     public static Boolean checkBiometric(Context context) {
         Boolean isBiometric = false;
         try {
-            BiometricManager biometricManager = BiometricManager.from(context.getApplicationContext());
+            BiometricManager biometricManager = BiometricManager.from(context);
             switch (biometricManager.canAuthenticate()) {
                 case BiometricManager.BIOMETRIC_SUCCESS:
                     Log.e("BIOMETRIC_STRONG", "App can authenticate using biometrics.");
