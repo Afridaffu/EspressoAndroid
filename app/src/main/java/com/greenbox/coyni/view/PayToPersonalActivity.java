@@ -184,6 +184,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
                     }
                 }
             });
+
             paySlideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
                 @Override
                 public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
@@ -578,17 +579,14 @@ public class PayToPersonalActivity extends AppCompatActivity {
 
     private void changeSlideState() {
         try {
-//            cvLock.setAlpha(0f);
-//            paySlideToConfirm.transitionToState(paySlideToConfirm.getStartState());
-//            paySlideToConfirm.setInteractionEnabled(true);
-//            tvLable.setText("Slide to Confirm");
-//            cvLock.setVisibility(View.INVISIBLE);
-//            im_lock.setVisibility(View.VISIBLE);
-//            im_lock.setAlpha(1.0f);
-            finish();
-            overridePendingTransition(0, 0);
-            startActivity(getIntent());
-            overridePendingTransition(0, 0);
+
+            paySlideToConfirm.setInteractionEnabled(true);
+            paySlideToConfirm.setTransition(R.id.start, R.id.start);
+            tvLable.setText("Slide to Confirm");
+            paySlideToConfirm.setProgress(0);
+            im_lock.setAlpha(1.0f);
+            isPayCalled = false;
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -623,4 +621,13 @@ public class PayToPersonalActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+            changeSlideState();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
