@@ -128,7 +128,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             ControlMethod("withdrawpay");
             withdrawPaymentMethod("card");
             strScreen = "withdrawpay";
-        } else if (strScreen.equals("withdrawpay")) {
+        } else if (strScreen.equals("withdrawpay") || strCurrent.equals("addpayment")) {
             ControlMethod("withdrawmethod");
             selectWithdrawMethod();
             strScreen = "withdrawmethod";
@@ -846,6 +846,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         payDialog.dismiss();
                         ControlMethod("addpayment");
                         addPayment();
+                        strCurrent = "addpayment";
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
