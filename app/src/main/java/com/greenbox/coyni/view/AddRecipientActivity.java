@@ -398,25 +398,28 @@ public class AddRecipientActivity extends AppCompatActivity {
                             }
                         }
                         objContact.setNumber(lstNumbers);
-//                        listContacts.add(objContact);
                         pCur.close();
                     }
-                    Bitmap photo = null;
-
-                    try {
-                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
-                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(id)));
-
-                        if (inputStream != null) {
-                            photo = BitmapFactory.decodeStream(inputStream);
-                        }
-
-                        if (inputStream != null) inputStream.close();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    objContact.setPhoto(objMyApplication.convertBitMapToString(photo));
+                  String  image_uri = cur
+                            .getString(cur
+                                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+//                    Bitmap photo = null;
+//
+//                    try {
+//                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
+//                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(id)));
+//
+//                        if (inputStream != null) {
+//                            photo = BitmapFactory.decodeStream(inputStream);
+//                        }
+//
+//                        if (inputStream != null) inputStream.close();
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    objContact.setPhoto(objMyApplication.convertBitMapToString(photo));
+                    objContact.setPhoto(image_uri);
                     listContacts.add(objContact);
                 }
             }

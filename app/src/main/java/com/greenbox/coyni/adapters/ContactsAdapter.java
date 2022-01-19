@@ -98,7 +98,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                                 .placeholder(R.drawable.ic_profilelogo)
                                 .into(holder.imgUser);
                     } else {
-                        holder.imgUser.setImageBitmap(objMyApplication.convertStringToBitMap(objData.getImage().trim()));
+//                        holder.imgUser.setImageBitmap(objMyApplication.convertStringToBitMap(objData.getImage().trim()));
+                        holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                     }
                 } else {
                     holder.imgUser.setVisibility(View.GONE);
