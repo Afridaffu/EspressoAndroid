@@ -579,7 +579,6 @@ public class PayToPersonalActivity extends AppCompatActivity {
 
     private void changeSlideState() {
         try {
-
             paySlideToConfirm.setInteractionEnabled(true);
             paySlideToConfirm.setTransition(R.id.start, R.id.start);
             tvLable.setText("Slide to Confirm");
