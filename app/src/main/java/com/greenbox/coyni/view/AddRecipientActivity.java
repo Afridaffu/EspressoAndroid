@@ -326,10 +326,20 @@ public class AddRecipientActivity extends AppCompatActivity {
         usersList = new ArrayList<>();
         try {
             if (users != null && users.size() > 0) {
-                for (int i = 0; i < users.size(); i++) {
-                    if (!users.get(i).getWalletAddress().equals(objMyApplication.getGbtWallet().getWalletId())) {
-                        usersList.add(users.get(i));
+//                for (int i = 0; i < users.size(); i++) {
+//                    if (!users.get(i).getWalletAddress().equals(objMyApplication.getGbtWallet().getWalletId())) {
+//                        usersList.add(users.get(i));
+//                    }
+//                }
+
+                if (users.size() > 5) {
+                    for (int i = 0; i < users.size(); i++) {
+                        if (i < 5) {
+                            usersList.add(users.get(i));
+                        }
                     }
+                } else {
+                    usersList.addAll(users);
                 }
 
                 recentUsersAdapter = new RecentUsersAdapter(usersList, AddRecipientActivity.this);
@@ -400,7 +410,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         objContact.setNumber(lstNumbers);
                         pCur.close();
                     }
-                  String  image_uri = cur
+                    String image_uri = cur
                             .getString(cur
                                     .getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
 //                    Bitmap photo = null;
@@ -498,13 +508,23 @@ public class AddRecipientActivity extends AppCompatActivity {
     private void bindContacts(List<RegUsersResponseData> contacts) {
         try {
             contactsList = new ArrayList<>();
+            List<RegUsersResponseData> wWAList = new ArrayList<>();
+            List<RegUsersResponseData> nWAList = new ArrayList<>();
             if (contacts != null && contacts.size() > 0) {
                 for (int i = 0; i < contacts.size(); i++) {
                     if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getGbtWallet().getWalletId())) {
-                        contactsList.add(contacts.get(i));
+//                        contactsList.add(contacts.get(i));
+                        wWAList.add(contacts.get(i));
                     } else if (contacts.get(i).getWalletAddress() == null) {
-                        contactsList.add(contacts.get(i));
+//                        contactsList.add(contacts.get(i));
+                        nWAList.add(contacts.get(i));
                     }
+                }
+                if (wWAList != null && wWAList.size() > 0) {
+                    contactsList.addAll(wWAList);
+                }
+                if (nWAList != null && nWAList.size() > 0) {
+                    contactsList.addAll(nWAList);
                 }
 
                 contactsAdapter = new ContactsAdapter(contactsList, AddRecipientActivity.this);
