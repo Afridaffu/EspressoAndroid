@@ -196,6 +196,8 @@ public class OnboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (Utils.isKeyboardVisible)
+            Utils.hideKeypad(OnboardActivity.this);
     }
 
     @Override
@@ -254,8 +256,10 @@ public class OnboardActivity extends AppCompatActivity {
                         } else {
                             if (loginResponse.getData() != null) {
                                 if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+
+                                    Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
                                 }
                             } else {
                                 Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
