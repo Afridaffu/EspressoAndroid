@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 
@@ -68,7 +70,7 @@ public class MyApplication extends Application {
     UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true;
+    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
@@ -756,6 +758,14 @@ public class MyApplication extends Application {
         this.strScreen = strScreen;
     }
 
+    public Boolean getCardSave() {
+        return isCardSave;
+    }
+
+    public void setCardSave(Boolean cardSave) {
+        isCardSave = cardSave;
+    }
+
     public String convertBitMapToString(Bitmap bitmap) {
         String temp = "";
         try {
@@ -773,6 +783,18 @@ public class MyApplication extends Application {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    public Bitmap convertImageURIToBitMap(String encodedString) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media
+                    .getBitmap(getContentResolver(),
+                            Uri.parse(encodedString));
             return bitmap;
         } catch (Exception e) {
             e.getMessage();

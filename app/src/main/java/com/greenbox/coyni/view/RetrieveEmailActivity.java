@@ -336,8 +336,10 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         dialog.dismiss();
                         if (retrieveEmailResponse.getData() != null) {
                             if (!retrieveEmailResponse.getData().getMessage().equals("")) {
-                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+
+                                Utils.emailPasswordIncorrectDialog("",RetrieveEmailActivity.this,"");
                             }
                         } else {
                             Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this, "", "");

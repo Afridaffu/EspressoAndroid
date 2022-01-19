@@ -304,7 +304,13 @@ public class AddCardActivity extends AppCompatActivity {
                             strState = etState.getText().toString().trim();
                             strZip = etZipCode.getText().toString().trim();
                             strCountry = Utils.getStrCCode();
-                            prepareJson();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    prepareJson();
+                                }
+                            }, 100);
+//                            prepareJson();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1305,27 +1311,57 @@ public class AddCardActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 displayAuthorization();
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("amount", etPreAmount.getText().toString().trim());
-                jsonObject.put("transactionId", cardResponseData.getTransactionId());
-                jsonObject.put("name", strName);
-                jsonObject.put("state", strState);
-                jsonObject.put("zipCode", strZip);
-                jsonObject.put("city", strCity);
-                jsonObject.put("country", strCountry);
-                jsonObject.put("addressLine1", strAdd1);
-                jsonObject.put("addressLine2", strAdd2);
-                jsonObject.put("cardNumber", strCardNo);
-                String strUUID = UUID.randomUUID().toString();
-                EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
-                if (encrypt != null) {
-                    PreAuthRequest request = new PreAuthRequest();
-                    request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
-                    request.setPayload(encrypt.getEncryptData());
-                    paymentMethodsViewModel.preAuthVerify(request);
-                } else {
-                    preDialog.dismiss();
-                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("amount", etPreAmount.getText().toString().trim());
+                            jsonObject.put("transactionId", cardResponseData.getTransactionId());
+                            jsonObject.put("name", strName);
+                            jsonObject.put("state", strState);
+                            jsonObject.put("zipCode", strZip);
+                            jsonObject.put("city", strCity);
+                            jsonObject.put("country", strCountry);
+                            jsonObject.put("addressLine1", strAdd1);
+                            jsonObject.put("addressLine2", strAdd2);
+                            jsonObject.put("cardNumber", strCardNo);
+                            String strUUID = UUID.randomUUID().toString();
+                            EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
+                            if (encrypt != null) {
+                                PreAuthRequest request = new PreAuthRequest();
+                                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+                                request.setPayload(encrypt.getEncryptData());
+                                paymentMethodsViewModel.preAuthVerify(request);
+                            } else {
+                                preDialog.dismiss();
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }, 100);
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("amount", etPreAmount.getText().toString().trim());
+//                jsonObject.put("transactionId", cardResponseData.getTransactionId());
+//                jsonObject.put("name", strName);
+//                jsonObject.put("state", strState);
+//                jsonObject.put("zipCode", strZip);
+//                jsonObject.put("city", strCity);
+//                jsonObject.put("country", strCountry);
+//                jsonObject.put("addressLine1", strAdd1);
+//                jsonObject.put("addressLine2", strAdd2);
+//                jsonObject.put("cardNumber", strCardNo);
+//                String strUUID = UUID.randomUUID().toString();
+//                EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
+//                if (encrypt != null) {
+//                    PreAuthRequest request = new PreAuthRequest();
+//                    request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+//                    request.setPayload(encrypt.getEncryptData());
+//                    paymentMethodsViewModel.preAuthVerify(request);
+//                } else {
+//                    preDialog.dismiss();
+//                }
             } else {
                 Utils.displayAlert("Please enter Amount", AddCardActivity.this, "", "");
             }
@@ -1359,10 +1395,7 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        //preDialog.dismiss();
-//                        Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
-//                        startActivity(i);
-//                        finish();
+                        objMyApplication.setCardSave(true);
                         Intent i = new Intent();
                         setResult(RESULT_OK, i);
                         finish();

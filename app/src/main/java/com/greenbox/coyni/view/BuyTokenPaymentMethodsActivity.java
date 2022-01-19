@@ -92,7 +92,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     public void onBackPressed() {
 //        if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
         if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
-            if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
+            if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
             } else if (strCurrent.equals("externalBank")) {
@@ -141,10 +141,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
                     if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                        //ControlMethod("addpayment");
-                        ControlMethod("paymentMethods");
-                        strCurrent = "paymentMethods";
-                        isDeCredit = true;
+                        if (!objMyApplication.getCardSave()) {
+                            isDeCredit = true;
+                            ControlMethod("addpayment");
+                        } else {
+                            objMyApplication.setCardSave(false);
+                            ControlMethod("paymentMethods");
+                            strCurrent = "paymentMethods";
+                        }
                         getPaymentMethods();
                     }
                 } else {
@@ -298,13 +302,12 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-//                    if (isDeCredit) {
-//                        isDeCredit = false;
-//                        ControlMethod("addpayment");
-//                        strCurrent = "addpayment";
-//                        numberOfAccounts();
-//                    } else
-                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (isDeCredit) {
+                        isDeCredit = false;
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                        numberOfAccounts();
+                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";

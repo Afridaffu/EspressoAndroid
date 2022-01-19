@@ -234,17 +234,29 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(LoginActivity.this);
                         if (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled()) {
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
                                 if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
                                     Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
-                                    FaceIdDisabled_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
-                                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+//                                    FaceIdDisabled_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+//                                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                                    if (isFaceLock) {
+                                        Utils.displayAlert(getResources().getString(R.string.faceiddisable), LoginActivity.this, "Face ID Temporarily disabled", "");
+                                    } else if (isTouchId) {
+                                        Utils.displayAlert(getResources().getString(R.string.touchiddisable), LoginActivity.this, "Touch ID Temporarily disabled", "");
+                                    }
                                 }
                             } else {
-                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-                                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+//                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
+//                                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
+                                if (Utils.getIsTouchEnabled()) {
+                                    Utils.displayAlert(getResources().getString(R.string.touchidnotavaidescri), LoginActivity.this, "Touch ID Not available", "");
+                                } else if (Utils.getIsFaceEnabled()) {
+                                    Utils.displayAlert(getResources().getString(R.string.faceidnotavaidescri), LoginActivity.this, "Face ID Not available", "");
+                                }
                             }
                         } else {
                             if (!isPwdEye) {
@@ -467,8 +479,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             if (compareCredentials()) {
                                 login();
                             } else {
-                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                                Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+//                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "", "");
@@ -638,8 +651,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             if (login.getData() != null) {
                                 if (!login.getData().getMessage().equals("") && login.getData().getPasswordFailedAttempts() > 0) {
-                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                                    Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                 }
                             } else {
                                 Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "", login.getError().getFieldErrors().get(0));
@@ -657,8 +671,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             public void onChanged(APIError apiError) {
                 dialog.dismiss();
                 if (apiError != null) {
-                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                    Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                 }
             }
         });
@@ -690,8 +705,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             if (loginResponse.getData() != null) {
                                 if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                                    Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                 }
                             } else {
                                 Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
@@ -949,6 +965,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.e("new Config",newConfig.toString());
+        Log.e("new Config", newConfig.toString());
     }
 }
