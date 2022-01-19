@@ -25,6 +25,9 @@
         tools:ignore="ProtectedPermissions" />
 
     <permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
+        android:protectionLevel="signature" />
+    <permission
         android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
         android:protectionLevel="signature" />
 
@@ -40,201 +43,239 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.PayToPersonalActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PayRequestActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AddRecipientActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.GiftCardBindingLayoutActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.GiftCardDetails"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.GiftCardActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.NotificationsActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.WithdrawTokenActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.WithdrawPaymentMethodsActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountsActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.BuyTokenPaymentMethodsActivity"
-            android:exported="true"
+            android:configChanges="uiMode"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.TransactionDetailsActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.EditCardActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.BuyTokenActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".custom_camera.RetakeActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.TransactionListActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AddCardActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.WebViewActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PaymentMethodsActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PreferencesActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.ScanActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PdfViewAgreementsActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.ConfirmPasswordActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.IdVeAdditionalActionActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.UserDetailsActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditPhoneActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditAddressActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditEmailActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EnableAuthID"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".view.CustomerProfileActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountLimitsActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.BindingLayoutActivity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.RetrieveEmailActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
+            android:configChanges="uiMode"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.PINActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".view.OTPValidation"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.CreateAccountActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.OnboardActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
@@ -246,17 +287,20 @@
         </activity>
         <activity
             android:name=".view.AccountTypeActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.CreatePasswordActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.ForgotPasswordActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
@@ -272,110 +316,37 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.DashboardActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.IdentityVerificationActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/ThemeFullSCreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.AgreementsActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:configChanges="uiMode"
             android:permission="@string/crop_image_menu_crop"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".custom_camera.CameraActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.IdentityVerificationBindingLayoutActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- //Business -->
-        <activity
-            android:name=".view.business.GetstartedSuccessAcivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.BusinessRegistrationTrackerActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.CompanyInformationActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.DBAbasicInformationAcivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.ReviewApplicationActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.CompanyAddress2Activity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.AdditionDocInfoActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.DBAinfoBtmSheetActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.DBAddressActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.AddBenificialOwnerActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.AddBankAccountActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.BenificialMaillingAddressActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.SignupMaillingAddresActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.AccountHasCreatedSucessful"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.MerchantsAgrementActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.ChooseBusinessEntity"
+            android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

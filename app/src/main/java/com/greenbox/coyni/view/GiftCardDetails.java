@@ -183,11 +183,11 @@ public class GiftCardDetails extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         Utils.hideKeypad(GiftCardDetails.this, view);
-                        if (brandDescTV.getMaxLines() == 2) {
+                        if (brandDescTV.getMaxLines() == 3) {
                             brandDescTV.setMaxLines(Integer.MAX_VALUE);
                             viewAllTV.setText(getResources().getString(R.string.view_less));
                         } else {
-                            brandDescTV.setMaxLines(2);
+                            brandDescTV.setMaxLines(3);
                             viewAllTV.setText(getResources().getString(R.string.view_all));
                         }
 //                        if (viewAllTV.getText().toString().equals(getResources().getString(R.string.view_all))) {
@@ -304,8 +304,8 @@ public class GiftCardDetails extends AppCompatActivity {
 //                            } else {
 //                                brandDescTV.setText(Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim()));
 //                            }
-                            strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " ")).toString().trim());
-                            brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " ")).toString().trim()));
+                            strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "),Html.FROM_HTML_MODE_COMPACT).toString().trim());
+                            brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "),Html.FROM_HTML_MODE_COMPACT).toString().trim()));
                             Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
                             if (objBrand.getItems() != null && objBrand.getItems().size() > 0) {

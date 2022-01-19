@@ -380,14 +380,13 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
                     android:paddingTop="20dp"
-                    android:paddingRight="15dp"
                     android:paddingBottom="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="Recipient’s Address"
                         android:textColor="@color/xdark_gray"
@@ -398,6 +397,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginEnd="15dp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text=""
                         android:textColor="#404040"
@@ -415,8 +415,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/divider"
-                        android:layout_marginStart="@dimen/_36sdp"
-                        android:layout_marginTop="@dimen/_25sdp">
+                        android:layout_marginTop="@dimen/_25sdp"
+                        android:paddingStart="@dimen/_36sdp">
 
                         <LinearLayout
                             android:id="@+id/lyCopy"
@@ -444,9 +444,9 @@
 
                         <View
                             android:layout_width="1dp"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_height="@dimen/_35sdp"
                             android:layout_centerInParent="true"
-                            android:background="@color/light_gray"></View>
+                            android:background="@color/et_bg_gray"></View>
 
                         <LinearLayout
                             android:id="@+id/lyShare"
@@ -508,16 +508,13 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/_22sdp">
 
-
-
-
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/_34sdp"
                 android:layout_height="@dimen/_34sdp"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_11sdp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_17sdp"
-                android:layout_marginTop="@dimen/_11sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -543,6 +540,7 @@
                     android:textSize="@dimen/_14ssp"
                     android:visibility="gone" />
             </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/tvNameSave"
                 android:layout_width="wrap_content"

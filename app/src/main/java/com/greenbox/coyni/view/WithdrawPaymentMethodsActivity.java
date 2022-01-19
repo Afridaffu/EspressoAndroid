@@ -97,9 +97,14 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    ControlMethod("withdrawmethod");
-                    selectWithdrawMethod();
-                    strScreen = "withdrawmethod";
+                    if (cardList != null && cardList.size() > 0) {
+                        isDeCredit = true;
+                        ControlMethod("addpayment");
+                    } else {
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
+                    }
                     getPaymentMethods();
                 }
             } else {

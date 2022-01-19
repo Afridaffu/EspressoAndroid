@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +21,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -40,6 +44,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
@@ -73,7 +78,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OTPValidation extends AppCompatActivity {
+public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextView resendTV, newCodeTV, subHeaderTV, headerTV;
     PinView otpPV;
     ImageView otpValidationCloseIV;
@@ -104,7 +109,7 @@ public class OTPValidation extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_otpvalidation);
-
+            setKeyboardVisibilityListener(OTPValidation.this);
             SmsRetriever.getClient(this).startSmsUserConsent(null);
 
             IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
@@ -972,8 +977,10 @@ public class OTPValidation extends AppCompatActivity {
             @Override
             public void run() {
                 if (!layoutType.equals("SECURE")) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(OTPValidation.this);
+//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
             }
         });
@@ -1149,6 +1156,42 @@ public class OTPValidation extends AppCompatActivity {
             objMyApplication.setListStates(listStates);
 //            Log.e("result", result);
         }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+        } else {
+            Utils.isKeyboardVisible = false;
+        }
+        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
     }
 
 }

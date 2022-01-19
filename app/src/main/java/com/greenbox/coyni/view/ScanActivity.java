@@ -99,8 +99,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
     DashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
-    boolean isTorchOn = true;
-    private ImageView toglebtn1;
+    boolean isTorchOn = true, isQRScan = false;
+    ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "";
     ProgressDialog dialog;
     Dialog errorDialog;
@@ -148,7 +148,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     public void afterTextChanged(Editable editable) {
         if (editable == setAmount.getEditableText()) {
             try {
-                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00") && Double.parseDouble(editable.toString()) > 0) {
+//                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00") && Double.parseDouble(editable.toString()) > 0) {
+                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     setAmount.setHint("");
                     if (editable.length() > 8) {
                         setAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
@@ -554,10 +555,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         try {
             if (scanAmountLL.getVisibility() == View.VISIBLE) {
                 setAmountLL.setVisibility(View.VISIBLE);
-                divider.setVisibility(View.GONE);
+                //divider.setVisibility(View.GONE);
             } else {
                 setAmountLL.setVisibility(View.GONE);
-                divider.setVisibility(View.VISIBLE);
+                //divider.setVisibility(View.VISIBLE);
             }
             imageSaveAlbumLL.setDrawingCacheEnabled(true);
             imageSaveAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -613,7 +614,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     }
 //                                    getUserDetails(strScanWallet);
                                     if (!strScanWallet.equals(strWallet)) {
-                                        getUserDetails(strScanWallet);
+                                        if (!isQRScan) {
+                                            isQRScan = true;
+                                            getUserDetails(strScanWallet);
+                                        }
                                     } else {
 //                                        Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
                                         displayAlert("Tokens can not request to your own wallet", "");
@@ -666,9 +670,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     mcodeScanner.setFlashEnabled(false);
                                     torchTogle(isTorchOn);
                                 }
-
                             }
                         });
+
                     } else {
                         Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
                     }
@@ -694,10 +698,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     protected void onResume() {
         try {
             super.onResume();
+            isQRScan = false;
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
                 mcodeScanner.startPreview();
+                scannerLayout.setVisibility(View.VISIBLE);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -931,6 +938,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     public void setAmountClick() {
         try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             if (validation()) {
                 if (setAmountDialog != null) {
                     setAmountDialog.dismiss();
@@ -956,6 +967,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
+            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
+                value = false;
+                Utils.displayAlert("Amount should be grater than zero.", ScanActivity.this, "Oops!", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

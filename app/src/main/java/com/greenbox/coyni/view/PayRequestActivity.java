@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
@@ -461,6 +462,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             SetTouchId();
 //            enableButtons();
             calculateFee("10");
+            if (Utils.checkInternet(PayRequestActivity.this)) {
+                TransactionLimitRequest obj = new TransactionLimitRequest();
+                obj.setTransactionType(Integer.parseInt(Utils.payType));
+                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
+                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -594,7 +601,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
             userName.setText(imageTextNew);
-            userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+            if (userDetails.getData().getWalletId().length() > 9) {
+                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 9) + "...");
+            } else {
+                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+            }
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
@@ -639,9 +650,18 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 //                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
 //                return value = false;
 //            }
-
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
+//                objMyApplication.setStrScreen("payRequest");
+//                Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                i.putExtra("screen", "payRequest");
+//                startActivity(i);
+//                value = false;
+//            } else
             if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+                value = false;
+            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
                 value = false;
             }
 //            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
@@ -923,7 +943,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
                 i.putExtra("screen", "payRequest");
                 startActivity(i);
-                finish();
+                //finish();
             }
         });
 

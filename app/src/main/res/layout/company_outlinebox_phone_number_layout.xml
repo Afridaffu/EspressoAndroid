@@ -61,7 +61,8 @@
             android:textCursorDrawable="@drawable/cursor_color"
             android:fontFamily="@font/opensans_semibold"
             android:digits="0123456789"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext"
+            android:autofillHints="creditCardSecurityCode"/>
 
 
     </LinearLayout>

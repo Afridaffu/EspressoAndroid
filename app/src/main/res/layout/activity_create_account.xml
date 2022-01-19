@@ -86,7 +86,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,7 +143,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -189,8 +191,8 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                         android:fontFamily="@font/opensans_semibold"
-                        android:importantForAutofill="no"
                         android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
                         android:inputType="textEmailAddress|textNoSuggestions"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -199,7 +201,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -296,7 +299,8 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -405,7 +409,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

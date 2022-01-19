@@ -116,7 +116,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:inputType="text|textCapSentences"
-                        android:maxLength="50"
+                        android:maxLength="60"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -511,7 +511,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

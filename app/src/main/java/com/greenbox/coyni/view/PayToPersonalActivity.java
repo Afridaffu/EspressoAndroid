@@ -53,7 +53,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     Dialog prevDialog;
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;
-    Boolean isFaceLock = false, isTouchId = false;
+    Boolean isFaceLock = false, isTouchId = false, isCancel = false;
     Double pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0, total = 0.0, cynValue = 0.0, avaBal = 0.0;
     String strUserName = "", strAddress = "";
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
@@ -61,7 +61,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
     TextView tvCurrency, tvAmount, tvCYN, tvLable, tvBalance;
     MotionLayout paySlideToConfirm;
     CardView cvLock, im_lock;
-    float fontSize;
+    float fontSize, dollarFont;
+    ImageView imgConvert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             break;
             case 0:
                 try {
+                    isCancel = true;
                     if (prevDialog != null) {
                         prevDialog.dismiss();
                     }
@@ -154,12 +156,34 @@ public class PayToPersonalActivity extends AppCompatActivity {
             tvLable = findViewById(R.id.tvLable);
             tvBalance = findViewById(R.id.tvBalance);
             paySlideToConfirm = findViewById(R.id.paySlideToConfirm);
+            imgConvert = findViewById(R.id.imgConvert);
             isPayCalled = false;
             cvLock = findViewById(R.id.im_lock_);
             im_lock = findViewById(R.id.im_lock);
             tvBalance.setText("Available: " + Utils.USNumberFormat(objMyApplication.getGBTBalance()) + "CYN");
             avaBal = objMyApplication.getGBTBalance();
             fontSize = tvAmount.getTextSize();
+            dollarFont = tvCurrency.getTextSize();
+            imgConvert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (tvAmount.getText().toString().trim().length() > 0) {
+                            if (tvCYN.getVisibility() == View.GONE) {
+                                tvCYN.setVisibility(View.VISIBLE);
+                                tvCurrency.setVisibility(View.GONE);
+                                tvAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                            } else {
+                                tvCYN.setVisibility(View.GONE);
+                                tvCurrency.setVisibility(View.VISIBLE);
+                                tvAmount.setGravity(Gravity.CENTER_VERTICAL);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             paySlideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
                 @Override
                 public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
@@ -381,11 +405,15 @@ public class PayToPersonalActivity extends AppCompatActivity {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayToPersonalActivity.this)) || (isFaceLock))) {
                                     Utils.checkAuthentication(PayToPersonalActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
+                                    isCancel = true;
+                                    prevDialog.dismiss();
                                     startActivity(new Intent(PayToPersonalActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
                                             .putExtra("screen", "Pay"));
                                 }
                             } else {
+                                isCancel = true;
+                                prevDialog.dismiss();
                                 startActivity(new Intent(PayToPersonalActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Pay"));
@@ -407,7 +435,9 @@ public class PayToPersonalActivity extends AppCompatActivity {
             prevDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
-                    changeSlideState();
+                    if (!isCancel) {
+                        changeSlideState();
+                    }
                 }
             });
             Window window = prevDialog.getWindow();
@@ -526,7 +556,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
@@ -569,18 +599,25 @@ public class PayToPersonalActivity extends AppCompatActivity {
             InputFilter[] FilterArray = new InputFilter[1];
             if (editable.length() > 12) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
             } else if (editable.length() > 8) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
             } else if (editable.length() > 5) {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
+                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
             } else {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
                 tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
+                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
             }
             tvAmount.setFilters(FilterArray);
+            tvAmount.setText(Utils.USNumberFormat(Double.parseDouble(editable.replace(",", ""))));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
