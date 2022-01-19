@@ -88,7 +88,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     String authenticateType = "";
-
+    boolean isLoggedOut = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,11 +218,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        isLoggedOut = true;
                         dropAllTables();
                         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
-                        finishAffinity();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -627,7 +627,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
-
     private void dropAllTables() {
         try {
             enableBiometric(false);
@@ -798,11 +797,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
                                 saveFace("false");
                                 saveThumb("true");
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
                             } else {
                                 saveFace("true");
                                 saveThumb("false");
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
                             }
 
                             isSwitchEnabled = true;
@@ -811,9 +812,11 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             objMyApplication.setBiometric(true);
                         } else {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
                             } else {
-                                Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
+                                if (!isLoggedOut)
+                                    Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
                             }
                             objMyApplication.setBiometric(false);
                             saveFace("false");

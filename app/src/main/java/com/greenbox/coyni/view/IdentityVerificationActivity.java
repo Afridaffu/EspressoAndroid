@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -20,16 +22,21 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +53,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -75,14 +83,15 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class IdentityVerificationActivity extends AppCompatActivity {
-    TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL;
+public class IdentityVerificationActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+    TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
     TextInputEditText dobET, ssnET, cityET, mailAddr1, mailAddr2, state, zipcode;
     TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
     ConstraintLayout idveriDOBConLayout, stateCL;
-    LinearLayout bottomSheet, fileSelectedLL, firstIVeri, ssnErrorLL, swipeLL, bottomNaviLL;
+    LinearLayout bottomSheet, fileSelectedLL, ssnErrorLL, swipeLL, bottomNaviLL;
+    ScrollView firstIVeri;
     public static CardView btnNext, btnSubmit;
-    RelativeLayout secondIVeri;
+    ScrollView secondIVeri;
     View viewLeft, viewRight;
     ImageButton closebtn, backbtn;
     ImageView upIdSuccessImg;
@@ -103,7 +112,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     MyApplication myApplicationObj;
     Long mLastClickTime = 0L;
     DashboardViewModel dashboardViewModel;
-    Date selectedDate;
+    private DatePicker datepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +158,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         try {
 
             Calendar c = Calendar.getInstance();
-//            if (selectedDate != null) {
-//                c.set(Calendar.YEAR, selectedDate.getYear());
-//                c.set(Calendar.MONTH, selectedDate.getMonth());
-//                c.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
-//            }
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -171,9 +175,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                                 dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
                                 enableNext();
                                 ssnET.clearFocus();
-
-                                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
-                                selectedDate = spf.parse(dateOfBirth);
+                                datepicker = new DatePicker(IdentityVerificationActivity.this);
+                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
+                                Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -183,13 +187,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             long years = 568025136000L;
             long yearsback = c.getTimeInMillis() - years;
             datePickerDialog.getDatePicker().setMaxDate(yearsback);
-            if (selectedDate != null) {
-                datePickerDialog.getDatePicker().updateDate(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
-//                c.set(Calendar.YEAR, selectedDate.getYear());
-//                c.set(Calendar.MONTH, selectedDate.getMonth());
-//                c.set(Calendar.DAY_OF_MONTH, selectedDate.getDay());
+            if (datepicker != null) {
+                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
             }
-
             datePickerDialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -509,8 +509,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                             mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
                         }
-
                     } else {
+                        mailingAddlineoptTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_green));
                         mailAddr2.setHint("Apt#, Suit, Floor");
                     }
                 }
@@ -574,7 +575,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    Utils.hideKeypad(IdentityVerificationActivity.this);
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
                 }
             });
 
@@ -582,7 +584,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (ssnET.getText().toString().trim().length() == 4) {
                             ssnErrorLL.setVisibility(GONE);
                             ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -629,6 +632,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
 
     public void initFields() {
         try {
+            setKeyboardVisibilityListener(IdentityVerificationActivity.this);
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -664,13 +668,13 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             fileSelectedLL = findViewById(R.id.fileSelectedLL);
             ssnErrorLL = findViewById(R.id.ssnErrorLL);
             ssnErrorTV = findViewById(R.id.ssnErrorTV);
-            swipeLL = findViewById(R.id.swipeLL);
 
             mailingAddTIL = findViewById(R.id.mailingAddTIL);
             mailingAddlineoptTIL = findViewById(R.id.mailingAddlineoptTIL);
             cityTIL = findViewById(R.id.cityTIL);
             stateTIL = findViewById(R.id.stateTIL);
             zipcodeTIL = findViewById(R.id.zipcodeTIL);
+            countryTIL = findViewById(R.id.countryTIL);
 
             address1ErrorLL = findViewById(R.id.address1ErrorLL);
             address1ErrorTV = findViewById(R.id.address1ErrorTV);
@@ -741,13 +745,15 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             backbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     firstIVeri.setVisibility(View.VISIBLE);
                     secondIVeri.setVisibility(View.GONE);
                     backbtn.setVisibility(View.GONE);
                     closebtn.setVisibility(View.VISIBLE);
                     viewLeft.setBackgroundResource(R.drawable.button_background);
                     viewRight.setBackgroundResource(R.drawable.button_background1);
+                    if (Utils.isKeyboardVisible) {
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
+                    }
                 }
             });
 
@@ -781,6 +787,9 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     viewRight.setBackgroundResource(R.drawable.button_background1);
                     backbtn.setVisibility(View.GONE);
                     closebtn.setVisibility(View.VISIBLE);
+                    if (Utils.isKeyboardVisible) {
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
+                    }
                 }
 
             });
@@ -790,6 +799,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -798,6 +809,8 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
 
@@ -806,9 +819,10 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateStates(this, state, myApplicationObj);
             });
-
 
             btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -830,6 +844,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        ssnET.clearFocus();
                         dialog = Utils.showProgressDialog(IdentityVerificationActivity.this);
                         identityVerificationViewModel.removeIdentityImage(identityType + "");
                     }
@@ -878,6 +893,17 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            dobTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1041,7 +1067,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             identityVerificationViewModel.getUploadIdentityImageResponse().observe(this, new Observer<IdentityImageResponse>() {
                 @Override
                 public void onChanged(IdentityImageResponse identityImageResponse) {
-
                     if (dialog != null) {
                         dialog.dismiss();
                     }
@@ -1053,6 +1078,12 @@ public class IdentityVerificationActivity extends AppCompatActivity {
                         backbtn.setVisibility(VISIBLE);
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
+                        address1ErrorLL.setVisibility(GONE);
+                        if (!Utils.isKeyboardVisible) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                        }
+
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
@@ -1138,7 +1169,6 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         try {
             dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
@@ -1341,6 +1371,42 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         isZip = false;
         isSubmit = false;
         isNext = false;
-
     }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+        } else {
+            Utils.isKeyboardVisible = false;
+        }
+        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
+    }
+
 }

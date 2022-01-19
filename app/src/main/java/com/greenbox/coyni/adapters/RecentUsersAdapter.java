@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
     List<RecentUsersData> listUsers;
     Context mContext;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameHead, tvUserName, tvWalletAddress;
@@ -74,7 +76,11 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                     holder.tvNameHead.setText(objData.getUserName().substring(0, 1).toUpperCase());
                 }
                 holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
-                holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
+                if (objData.getWalletAddress().length() > 9) {
+                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, 9) + "...");
+                } else {
+                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
+                }
                 if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
                     holder.imgUser.setVisibility(View.VISIBLE);
                     holder.tvNameHead.setVisibility(View.GONE);
@@ -92,6 +98,11 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletAddress());
                         i.putExtra("name", objData.getUserName());

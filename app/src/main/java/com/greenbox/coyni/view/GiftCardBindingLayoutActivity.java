@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.SpannableString;
@@ -34,14 +35,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
@@ -51,7 +55,7 @@ import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import java.util.List;
 
 public class GiftCardBindingLayoutActivity extends AppCompatActivity {
-    String strScreen = "", fee = "";
+    String strScreen = "", enableType = "";
     TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV, tvMessage;
     LinearLayout refIDLL;
     CardView doneCV, cvTryAgain;
@@ -60,6 +64,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     ProgressDialog pDialog;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     CoyniViewModel coyniViewModel;
+    SQLiteDatabase mydatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +72,34 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_gift_card_binding_layout);
             initialization();
+            initObserver();
             if (getIntent().getStringExtra("status") != null && !getIntent().getStringExtra("status").equals("")) {
                 strScreen = getIntent().getStringExtra("status");
                 ControlMethod(strScreen, getIntent().getStringExtra("subtype"));
             }
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void saveThumb(String value) {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+            mydatabase.execSQL("Delete from tblThumbPinLock");
+            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void saveFace(String value) {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+            mydatabase.execSQL("Delete from tblFacePinLock");
+            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -96,6 +124,51 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void initObserver() {
+        coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
+            @Override
+            public void onChanged(BiometricResponse biometricResponse) {
+                pDialog.dismiss();
+                if (biometricResponse != null) {
+                    Log.e("bio resp", new Gson().toJson(biometricResponse));
+                    if (enableType.equals("FACE")) {
+                        saveFace("true");
+                        saveThumb("false");
+                        Utils.showCustomToast(GiftCardBindingLayoutActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(d);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }, 2000);
+                    } else if (enableType.equals("TOUCH")) {
+                        saveFace("false");
+                        saveThumb("true");
+                        Utils.showCustomToast(GiftCardBindingLayoutActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(d);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }, 2000);
+                    }
+                }
+            }
+        });
     }
 
     private void ControlMethod(String methodToShow, String type) {
@@ -313,8 +386,10 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 if (Utils.getIsBiometric()) {
                     if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                         if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
+                            enableType = "TOUCH";
                             loadSecurePay("TOUCH");
                         } else {
+                            enableType = "FACE";
                             loadSecurePay("FACE");
                         }
                     }
@@ -338,9 +413,14 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         try {
+                            if (type.equals("giftcard")) {
+                                GiftCardDetails.giftCardDetails.finish();
+                                GiftCardActivity.giftCardActivity.finish();
+                            } else {
+                                Intent i = new Intent(GiftCardBindingLayoutActivity.this, WithdrawPaymentMethodsActivity.class);
+                                startActivity(i);
+                            }
                             finish();
-                            GiftCardDetails.giftCardDetails.finish();
-                            GiftCardActivity.giftCardActivity.finish();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -448,7 +528,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-
+                        dialog.dismiss();
                         FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                         if (!fingerprintManager.isHardwareDetected()) {
                             Log.e("Not support", "Not support");
@@ -511,4 +591,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

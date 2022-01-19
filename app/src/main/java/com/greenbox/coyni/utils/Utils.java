@@ -182,6 +182,8 @@ public class Utils {
 
     public static final float slidePercentage = 0.3f;
 
+    public static boolean isKeyboardVisible = false;
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public static final String ACCOUNT_TYPE = "account_type";
@@ -283,6 +285,11 @@ public class Utils {
     public static void hideKeypad(Context context, View view) {
         InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void shwForcedKeypad(Context context) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     public static void hideKeypad(Context context) {
@@ -872,6 +879,13 @@ public class Utils {
                             if (filterList.size() > 0) {
                                 statesRV.setVisibility(View.VISIBLE);
                                 notFoundTV.setVisibility(View.GONE);
+                                for (int i = 0; i < filterList.size(); i++) {
+                                    if (editText.getText().toString().toLowerCase().trim().equals(filterList.get(i).getName().toLowerCase())) {
+                                        filterList.get(i).setSelected(true);
+                                    } else {
+                                        filterList.get(i).setSelected(false);
+                                    }
+                                }
                                 finalStatesListAdapter.updateList(filterList);
                             } else {
                                 statesRV.setVisibility(View.GONE);
