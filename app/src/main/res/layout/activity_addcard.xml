@@ -391,10 +391,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:hint="Billing Address Line 1"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -403,7 +402,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Billing Address Line 1"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
@@ -452,10 +450,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Billing Address Line 2(Optional)"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -464,7 +461,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Billing Address Line 2(Optional)"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
@@ -488,10 +484,9 @@
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="City"
                     android:importantForAutofill="no"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -500,7 +495,6 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="City"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="50"
@@ -572,10 +566,9 @@
                         android:layout_marginTop="@dimen/_14sdp"
                         android:hint="State"
                         android:importantForAutofill="no"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
-                        app:expandedHintEnabled="false"
                         app:hintTextColor="@color/primary_green"
                         tools:ignore="MissingConstraints">
 
@@ -588,7 +581,6 @@
                             android:editable="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint="State"
                             android:imeOptions="actionNext"
                             android:inputType="text|textNoSuggestions"
                             android:longClickable="false"
@@ -639,10 +631,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Zip Code"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
-                    app:expandedHintEnabled="false"
                     app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -651,7 +642,6 @@
                         android:layout_height="wrap_content"
                         android:digits="1234567890"
                         android:fontFamily="@font/opensans_semibold"
-                        android:hint="Zip Code"
                         android:imeOptions="actionDone"
                         android:inputType="number|textNoSuggestions"
                         android:maxLength="5"

@@ -169,12 +169,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
 
         }
-        if (etEmail.getText().toString().equals("")){
-            etEmail.requestFocus();
-        }
-        else {
-            etlPassword.requestFocus();
-        }
+//        if (etEmail.getText().toString().equals("")){
+//            etEmail.requestFocus();
+//        }
+//        else {
+//            etlPassword.requestFocus();
+//        }
     }
 
     @Override

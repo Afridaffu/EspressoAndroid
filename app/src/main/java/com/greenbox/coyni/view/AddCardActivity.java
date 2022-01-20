@@ -748,6 +748,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etAddress1.setHint("");
                             if (etAddress1.getText().toString().trim().length() > 0) {
                                 address1ErrorLL.setVisibility(GONE);
                                 etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -755,13 +756,39 @@ public class AddCardActivity extends AppCompatActivity {
 
                             } else {
                                 etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlAddress1, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                                 address1ErrorLL.setVisibility(VISIBLE);
                                 address1ErrorTV.setText("Field Required");
                             }
                         } else {
+                            etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            etAddress2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            etAddress2.setHint("");
+                            if (etAddress2.getText().toString().trim().length() > 0) {
+                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+
+                            } else {
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                            }
+                        } else {
+                            etAddress2.setHint("Billing Address Line 2(Optional)");
+                            etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -774,6 +801,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etCity.setHint("");
                             if (etCity.getText().toString().trim().length() > 0) {
                                 cityErrorLL.setVisibility(GONE);
                                 etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -781,11 +809,12 @@ public class AddCardActivity extends AppCompatActivity {
 
                             } else {
                                 etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlCity, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
                             }
                         } else {
+                            etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                         }
@@ -826,6 +855,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etZipCode.setHint("");
                             if (etZipCode.getText().toString().trim().length() == 5) {
                                 zipErrorLL.setVisibility(GONE);
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -838,7 +868,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 zipErrorTV.setText("Minimum 5 Characters Required");
                             } else if (etZipCode.getText().toString().trim().length() == 0) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
                             }
@@ -850,6 +880,7 @@ public class AddCardActivity extends AppCompatActivity {
 //                                isZipcode = false;
 //                            }
                         } else {
+                            etZipCode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                         }
@@ -1118,8 +1149,10 @@ public class AddCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0) {
                         isState = true;
                         stateErrorLL.setVisibility(GONE);
+                        Utils.setUpperHintColor(etlState,getColor(R.color.primary_black));
                     } else {
                         isState = false;
+                        Utils.setUpperHintColor(etlState,getColor(R.color.light_gray));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
