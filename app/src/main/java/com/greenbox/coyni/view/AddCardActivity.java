@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,7 +35,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -91,7 +88,7 @@ public class AddCardActivity extends AppCompatActivity {
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etCVV, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlCity, etlZipCode;
+    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1,etlAddress2, etlCity, etlZipCode;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -186,6 +183,7 @@ public class AddCardActivity extends AppCompatActivity {
             zipErrorLL = findViewById(R.id.zipErrorLL);
             zipErrorTV = findViewById(R.id.zipErrorTV);
             etlAddress1 = findViewById(R.id.etlAddress1);
+            etlAddress2 = findViewById(R.id.etlAddress2);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
 //            etCardNumber.requestCNETFocus();
@@ -217,6 +215,15 @@ public class AddCardActivity extends AppCompatActivity {
             } else {
                 tvCardHead.setText("Add New Credit Card");
             }
+
+            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+            etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
             clStates.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -304,7 +311,13 @@ public class AddCardActivity extends AppCompatActivity {
                             strState = etState.getText().toString().trim();
                             strZip = etZipCode.getText().toString().trim();
                             strCountry = Utils.getStrCCode();
-                            prepareJson();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    prepareJson();
+                                }
+                            }, 100);
+//                            prepareJson();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1305,27 +1318,57 @@ public class AddCardActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 displayAuthorization();
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("amount", etPreAmount.getText().toString().trim());
-                jsonObject.put("transactionId", cardResponseData.getTransactionId());
-                jsonObject.put("name", strName);
-                jsonObject.put("state", strState);
-                jsonObject.put("zipCode", strZip);
-                jsonObject.put("city", strCity);
-                jsonObject.put("country", strCountry);
-                jsonObject.put("addressLine1", strAdd1);
-                jsonObject.put("addressLine2", strAdd2);
-                jsonObject.put("cardNumber", strCardNo);
-                String strUUID = UUID.randomUUID().toString();
-                EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
-                if (encrypt != null) {
-                    PreAuthRequest request = new PreAuthRequest();
-                    request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
-                    request.setPayload(encrypt.getEncryptData());
-                    paymentMethodsViewModel.preAuthVerify(request);
-                } else {
-                    preDialog.dismiss();
-                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("amount", etPreAmount.getText().toString().trim());
+                            jsonObject.put("transactionId", cardResponseData.getTransactionId());
+                            jsonObject.put("name", strName);
+                            jsonObject.put("state", strState);
+                            jsonObject.put("zipCode", strZip);
+                            jsonObject.put("city", strCity);
+                            jsonObject.put("country", strCountry);
+                            jsonObject.put("addressLine1", strAdd1);
+                            jsonObject.put("addressLine2", strAdd2);
+                            jsonObject.put("cardNumber", strCardNo);
+                            String strUUID = UUID.randomUUID().toString();
+                            EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
+                            if (encrypt != null) {
+                                PreAuthRequest request = new PreAuthRequest();
+                                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+                                request.setPayload(encrypt.getEncryptData());
+                                paymentMethodsViewModel.preAuthVerify(request);
+                            } else {
+                                preDialog.dismiss();
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }, 100);
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("amount", etPreAmount.getText().toString().trim());
+//                jsonObject.put("transactionId", cardResponseData.getTransactionId());
+//                jsonObject.put("name", strName);
+//                jsonObject.put("state", strState);
+//                jsonObject.put("zipCode", strZip);
+//                jsonObject.put("city", strCity);
+//                jsonObject.put("country", strCountry);
+//                jsonObject.put("addressLine1", strAdd1);
+//                jsonObject.put("addressLine2", strAdd2);
+//                jsonObject.put("cardNumber", strCardNo);
+//                String strUUID = UUID.randomUUID().toString();
+//                EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
+//                if (encrypt != null) {
+//                    PreAuthRequest request = new PreAuthRequest();
+//                    request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+//                    request.setPayload(encrypt.getEncryptData());
+//                    paymentMethodsViewModel.preAuthVerify(request);
+//                } else {
+//                    preDialog.dismiss();
+//                }
             } else {
                 Utils.displayAlert("Please enter Amount", AddCardActivity.this, "", "");
             }
@@ -1359,10 +1402,7 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        //preDialog.dismiss();
-//                        Intent i = new Intent(AddCardActivity.this, PaymentMethodsActivity.class);
-//                        startActivity(i);
-//                        finish();
+                        objMyApplication.setCardSave(true);
                         Intent i = new Intent();
                         setResult(RESULT_OK, i);
                         finish();

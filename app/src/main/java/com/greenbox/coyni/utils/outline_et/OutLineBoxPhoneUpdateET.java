@@ -4,7 +4,10 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -96,8 +99,7 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 epa.newPhoneErrorLL.setVisibility(VISIBLE);
                                 epa.newPhoneErrorTV.setText("Field Required");
-                            }
-                            else {
+                            } else {
                                 epa.newPhoneErrorLL.setVisibility(GONE);
                                 hintName.setTextColor(getResources().getColor(R.color.primary_black));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
@@ -139,7 +141,7 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                     if ((pnET.getText().length() == 0)) {
                         epa.currentPhoneErrorLL.setVisibility(VISIBLE);
                         epa.currentPhoneErrorTV.setText("Field Required");
-                    }else if(pnET.getText().length() > 0){
+                    } else if (pnET.getText().length() > 0) {
                         epa.currentPhoneErrorLL.setVisibility(GONE);
                     }
 
@@ -160,7 +162,7 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                     if ((pnET.getText().length() == 0)) {
                         epa.newPhoneErrorLL.setVisibility(VISIBLE);
                         epa.newPhoneErrorTV.setText("Field Required");
-                    }else if(pnET.getText().length() > 0){
+                    } else if (pnET.getText().length() > 0) {
                         epa.newPhoneErrorLL.setVisibility(GONE);
                     }
 
@@ -170,6 +172,7 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                pnET.setSelection(pnET.getText().toString().length());
             }
         });
 
@@ -192,12 +195,13 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
         pnET.setHint(hint);
         hintName.setText(hint);
 
-        if (hint.contains("Current")){
+        if (hint.contains("Current")) {
             pnET.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        }else{
+        } else {
             pnET.setImeOptions(EditorInfo.IME_ACTION_DONE);
         }
     }
+
     public void setFocus() {
         pnET.requestFocus();
     }
@@ -206,7 +210,7 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
         pnET.clearFocus();
     }
 
-    public void disable(){
+    public void disable() {
         pnET.setFocusable(false);
         pnET.setClickable(false);
         pnET.setEnabled(false);

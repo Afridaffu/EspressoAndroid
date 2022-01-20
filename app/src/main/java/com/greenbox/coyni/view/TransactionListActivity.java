@@ -1154,6 +1154,25 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                 if (!hasFocus) {
                     transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
                     USFormat(transAmountStartET, "START");
+
+                    try {
+
+                        if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
+
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            if (endAmount < startAmount) {
+                                Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
+                                transAmountEndET.setText("");
+                                strEndAmount = "";
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
                 }
@@ -1179,19 +1198,12 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                             Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
-
-                                try {
-                                    transAmountStartET.setText("");
-                                    strStartAmount = "";
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
                                 transAmountEndET.setText("");
                                 strEndAmount = "";
                             }
                         }
-
                         if (transAmountStartET.getText().toString().equals("")) {
                             transAmountStartET.setText("0.00");
                         }
@@ -1235,9 +1247,6 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("type", transactionType.size() + "");
-                Log.e("subtype", transactionSubType.size() + "");
-                Log.e("status", txnStatus.size() + "");
 
                 pendingTxt.setVisibility(View.GONE);
                 layoutTransactionspending.setVisibility(View.GONE);
@@ -1283,6 +1292,12 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                     isFilters = true;
                     transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
                     transactionListRequest.setToAmountOperator("<=");
+
+                    if (transAmountStartET.getText().toString().trim().equals("") || transAmountStartET.getText().toString().trim().equals("0.00")) {
+                        transactionListRequest.setFromAmount("0.00");
+                        transactionListRequest.setFromAmountOperator(">=");
+                        strStartAmount = "0.00";
+                    }
                 } else {
                     strEndAmount = "";
                 }
@@ -1296,17 +1311,37 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                     transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                     transactionListRequest.setUpdatedToDateOperator("<=");
                 }
-
                 if (isFilters) {
                     filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
                 } else {
                     filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                 }
-                transactionsAPI(transactionListRequest);
-                objMyApplication.initializeTransactionSearch();
-                objMyApplication.setTransactionListSearch(transactionListRequest);
-                noMoreTransactionTV.setVisibility(View.GONE);
-                dialog.dismiss();
+
+                if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
+                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    if (endAmount < startAmount) {
+                        Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
+                        transAmountStartET.setText("");
+                        strStartAmount = "";
+                        transAmountEndET.setText("");
+                        strEndAmount = "";
+                    } else {
+                        transactionsAPI(transactionListRequest);
+                        objMyApplication.initializeTransactionSearch();
+                        objMyApplication.setTransactionListSearch(transactionListRequest);
+                        noMoreTransactionTV.setVisibility(View.GONE);
+                        dialog.dismiss();
+                    }
+                } else {
+                    transactionsAPI(transactionListRequest);
+                    objMyApplication.initializeTransactionSearch();
+                    objMyApplication.setTransactionListSearch(transactionListRequest);
+                    noMoreTransactionTV.setVisibility(View.GONE);
+                    dialog.dismiss();
+
+                }
+
             }
         });
 
@@ -1531,14 +1566,6 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             ex.printStackTrace();
         }
         return Double.parseDouble(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-    }
-
-    private void bindTransactions() {
-        try {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private void transactionsAPI(TransactionListRequest transactionListRequest) {
