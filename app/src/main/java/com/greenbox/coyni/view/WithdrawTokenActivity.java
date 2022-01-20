@@ -201,7 +201,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     etAmount.setHint("0.00");
-//                    lyBalance.setVisibility(View.GONE);
                     lyBalance.setVisibility(View.VISIBLE);
                     cynValue = 0.0;
                     usdValue = 0.0;
@@ -332,63 +331,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             imgConvert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        if (etAmount.getText().toString().trim().length() > 0) {
-                            convertDecimal();
-                            if (validation()) {
-                                ctKey.enableButton();
-                            } else {
-                                ctKey.disableButton();
-                            }
-                            if (tvCYN.getVisibility() == View.GONE) {
-                                tvCYN.setVisibility(View.VISIBLE);
-                                tvCurrency.setVisibility(View.INVISIBLE);
-                                etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-                                if (tvError.getVisibility() == View.VISIBLE) {
-                                    lyBalance.setVisibility(View.GONE);
-                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                                    } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
-                                        tvError.setText("Amount entered exceeds available balance");
-                                    } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
-                                        tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
-                                    } else {
-                                        if (strLimit.equals("daily")) {
-                                            tvError.setText("Amount entered exceeds your daily limit");
-                                        } else if (strLimit.equals("week")) {
-                                            tvError.setText("Amount entered exceeds your weekly limit");
-                                        }
-                                    }
-                                } else {
-                                    lyBalance.setVisibility(View.VISIBLE);
-                                }
-                            } else {
-                                tvCYN.setVisibility(View.GONE);
-                                tvCurrency.setVisibility(View.VISIBLE);
-                                etAmount.setGravity(Gravity.CENTER_VERTICAL);
-                                if (tvError.getVisibility() == View.VISIBLE) {
-                                    lyBalance.setVisibility(View.GONE);
-                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                                    } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
-                                        tvError.setText("Amount entered exceeds available balance");
-                                    } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
-                                        tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
-                                    } else {
-                                        if (strLimit.equals("daily")) {
-                                            tvError.setText("Amount entered exceeds your daily limit");
-                                        } else if (strLimit.equals("week")) {
-                                            tvError.setText("Amount entered exceeds your weekly limit");
-                                        }
-                                    }
-                                } else {
-                                    lyBalance.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    enableButton();
                 }
             });
 
@@ -1564,5 +1507,65 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         objMyApplication.setWithdrawAmount(cynValue);
 
         return request;
+    }
+
+    private void enableButton() {
+        try {
+            if (etAmount.getText().toString().trim().length() > 0) {
+                convertDecimal();
+                if (validation()) {
+                    ctKey.enableButton();
+                } else {
+                    ctKey.disableButton();
+                }
+                if (tvCYN.getVisibility() == View.GONE) {
+                    tvCYN.setVisibility(View.VISIBLE);
+                    tvCurrency.setVisibility(View.INVISIBLE);
+                    etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                    if (tvError.getVisibility() == View.VISIBLE) {
+                        lyBalance.setVisibility(View.GONE);
+                        if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                        } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
+                            tvError.setText("Amount entered exceeds available balance");
+                        } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
+                            tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+                        } else {
+                            if (strLimit.equals("daily")) {
+                                tvError.setText("Amount entered exceeds your daily limit");
+                            } else if (strLimit.equals("week")) {
+                                tvError.setText("Amount entered exceeds your weekly limit");
+                            }
+                        }
+                    } else {
+                        lyBalance.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    tvCYN.setVisibility(View.GONE);
+                    tvCurrency.setVisibility(View.VISIBLE);
+                    etAmount.setGravity(Gravity.CENTER_VERTICAL);
+                    if (tvError.getVisibility() == View.VISIBLE) {
+                        lyBalance.setVisibility(View.GONE);
+                        if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                        } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
+                            tvError.setText("Amount entered exceeds available balance");
+                        } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
+                            tvError.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+                        } else {
+                            if (strLimit.equals("daily")) {
+                                tvError.setText("Amount entered exceeds your daily limit");
+                            } else if (strLimit.equals("week")) {
+                                tvError.setText("Amount entered exceeds your weekly limit");
+                            }
+                        }
+                    } else {
+                        lyBalance.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -59,7 +59,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     Dialog payDialog;
-    String strSignOn = "", strCurrent = "", strScreen = "";
+    String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
     LinearLayout lyAPayClose, lyExternalClose;
@@ -139,7 +139,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (strCurrent.equals("externalBank")) {
+        if (strOnPauseScreen.equals("externalBank")) {
+            ControlMethod("externalBank");
+            strCurrent = "externalBank";
+            strOnPauseScreen = "";
+        } else if (strCurrent.equals("externalBank")) {
             ControlMethod("withdrawpay");
             withdrawPaymentMethod("bank");
             strScreen = "withdrawpay";
@@ -689,6 +693,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         if (strPay.equals("bank")) {
                             ControlMethod("externalBank");
                             strCurrent = "externalBank";
+                            strOnPauseScreen = "externalBank";
                             LinearLayout lyExternalClose = findViewById(R.id.lyExternalClose);
                             TextView tvLearnMore = findViewById(R.id.tvLearnMore);
                             cvNext = findViewById(R.id.cvNext);

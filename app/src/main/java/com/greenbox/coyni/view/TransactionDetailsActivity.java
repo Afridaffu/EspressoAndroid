@@ -178,7 +178,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 amount.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
 //                amount.setText(objData.getAmount().replace("CYN", "").trim());
                 name.setText(objData.getRecipientName());
-                accountadress.setText((objData.getRecipientWalletAddress().substring(0, 10) + "..."));
+                accountadress.setText((objData.getRecipientWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
                 fee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
                 total.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
                 lyAccAdd.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +192,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 findViewById(R.id.payreqTAmountLL).setVisibility(View.GONE);
                 findViewById(R.id.payreqPfLL).setVisibility(View.GONE);
                 name.setText(objData.getSenderName());
-                accountadress.setText((objData.getSenderWalletAddress().substring(0, 10) + "..."));
+                accountadress.setText((objData.getSenderWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
                 lyAccAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -208,7 +208,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             completed.setText(objData.getStatus());
             datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
             balance.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
-            refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+            refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
 
 
             switch (objData.getStatus().toLowerCase()) {
@@ -329,14 +329,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
         balance.setText(Utils.convertTwoDecimal((objData.getAccountBalance().replace("CYN", "").trim())) + " CYN");
 
-        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+        refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         descriptorname.setText(objData.getDescriptorName());
         name.setText(objData.getCardHolderName());
         cardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
         expiryDate.setText(objData.getCardExpiryDate());
-        depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
-//        successadd.setText(("Successfully added "+"["+trasactionDetails.getData().getYouGet()+"]" +" to token account"));
-//        chargeback.setText(("["+trasactionDetails.getData().getReferenceId().substring(0, 8) + "...")+"(hyper");
+        depositIDTV.setText(objData.getDepositid().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         lyPRClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -417,15 +415,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         fee.setText("$" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("USD", "").trim()));
         total.setText("$" + Utils.convertTwoDecimal(objData.getYouPay().replace("USD", "").trim()));
         bankAccNumTV.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
-        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+        refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         descriptorname.setText(objData.getDescriptorName());
-        depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
+        depositIDTV.setText(objData.getDepositid().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         bankNameTV.setText(objData.getBankName());
 
 
         nameOnAccTV.setText(objData.getNameOnBankAccount());
-//        successadd.setText(("Successfully added "+"["+trasactionDetails.getData().getYouGet()+"]" +" to token account"));
-//        chargeback.setText(("["+trasactionDetails.getData().getReferenceId().substring(0, 8) + "...")+"(hyper");
         lyPRClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -504,7 +500,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withGiftcardname.setText(objData.getGiftCardName());
 
-        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+        refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         recipientname.setText(Utils.capitalize(objData.getRecipientName()));
         email.setText(objData.getRecipientEmail());
 
@@ -517,7 +513,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
         if (objData.getWithdrawId().length() > 10) {
-            withid.setText(objData.getWithdrawId().substring(0, 10) + "...");
+            withid.setText(objData.getWithdrawId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         } else {
             withid.setText(objData.getWithdrawId());
         }
@@ -614,12 +610,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withiaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withiwithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            withiwithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         } else {
             withiwithdrawalId.setText(objData.getWithdrawalId());
         }
 
-        withirefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+        withirefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
 
         withicardHolderName.setText(objData.getCardHolderName());
 
@@ -737,12 +733,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withbankaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withbankwithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            withbankwithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         } else {
             withbankwithdrawalId.setText(objData.getWithdrawalId());
         }
 
-        withbankrefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+        withbankrefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
 
         withbanknameonaccount.setText(objData.getNameOnBankAccount());
 
