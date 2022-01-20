@@ -210,7 +210,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/_28sdp">
+                    android:paddingBottom="@dimen/_24sdp">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cvProfile"
@@ -306,6 +306,7 @@
                         android:layout_below="@id/qrViewRL"
                         android:layout_marginTop="@dimen/_9sdp"
                         android:gravity="center"
+                        android:layout_marginBottom="-20dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
 
@@ -447,7 +448,7 @@
                             android:layout_width="1dp"
                             android:layout_height="@dimen/_35sdp"
                             android:layout_centerInParent="true"
-                            android:background="@color/light_gray"></View>
+                            android:background="@color/vlight_gray"></View>
 
                         <LinearLayout
                             android:id="@+id/lyShare"

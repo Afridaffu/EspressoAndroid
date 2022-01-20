@@ -222,6 +222,14 @@ public class CreateAccountActivity extends AppCompatActivity {
             passwordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
             confirmPasswordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
 
+
+            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+
             textWatchers();
             focusWatchers();
 //            firstNameET.requestFocus();
@@ -673,7 +681,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                             } else {
                                 passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                             }
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             isConfirmPassword = true;

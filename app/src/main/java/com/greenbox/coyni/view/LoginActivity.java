@@ -156,6 +156,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
 
         }
+        if (etEmail.getText().toString().equals("")){
+            etEmail.requestFocus();
+        }
+        else {
+            etlPassword.requestFocus();
+        }
     }
 
     @Override
@@ -207,6 +213,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+
             if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
                 layoutClose.setVisibility(GONE);
             } else {
