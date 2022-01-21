@@ -620,7 +620,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                         }
                                     } else {
 //                                        Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
-                                        displayAlert("Tokens can not request to your own wallet", "");
+                                        displayAlert(getString(R.string.tokens_msg), "");
                                     }
                                 } else {
                                     Utils.displayAlert("Unable to scan the QR code.", ScanActivity.this, "", "");
@@ -890,7 +890,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         } else {
 //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
                             if (errorDialog == null) {
-                                displayAlert("Tokens can not request to your own wallet", "");
+                                displayAlert(getString(R.string.tokens_msg), "");
                             }
                         }
                     } catch (Exception ex) {

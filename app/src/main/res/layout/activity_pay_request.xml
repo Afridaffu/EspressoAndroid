@@ -152,7 +152,7 @@
                         <RelativeLayout
                             android:id="@+id/payLL"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/_80sdp"
                             android:layout_marginTop="@dimen/_17sdp"
                             android:orientation="horizontal"
                             android:paddingLeft="@dimen/_20sdp"

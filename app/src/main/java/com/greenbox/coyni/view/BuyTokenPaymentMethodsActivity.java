@@ -61,13 +61,13 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     LinearLayout lyAPayClose, lyExternalClose, lySelBack, lyAddPay;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
-    String strCurrent = "", strSignOn = "", strScreen = "";
+    String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
-    CardView cvNext, cvAddPayment, cvTryAgain, cvDone;
+    CardView cvNext, cvTryAgain, cvDone;
     Boolean isBank = false, isPayments = false, isDeCredit = false;
     TextInputEditText etCVV;
     RecyclerView rvSelPayMethods;
@@ -98,7 +98,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             } else if (strCurrent.equals("externalBank")) {
                 ControlMethod("addpayment");
                 strCurrent = "addpayment";
-            } else {
+            } else if (!strCurrent.equals("firstError")) {
                 super.onBackPressed();
             }
         } else {
@@ -116,7 +116,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+            if (strOnPauseScreen.equals("externalBank")) {
+                ControlMethod("externalBank");
+                strCurrent = "externalBank";
+                strOnPauseScreen = "";
+            } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                 ControlMethod("addpayment");
             } else if (strScreen != null && !strScreen.equals("addpay")) {
                 if (!isPayments) {
@@ -447,6 +451,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                         if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
                             ControlMethod("externalBank");
                             strCurrent = "externalBank";
+                            strOnPauseScreen = "externalBank";
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -695,13 +700,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvErrorMessage = findViewById(R.id.tvErrorMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
             tvErrorHead.setText(getString(R.string.bank_exhausthead));
-//            tvErrorMessage.setText(getString(R.string.bank_exhaust));
+            strCurrent = "firstError";
             tvErrorMessage.setText("There is an account limit of " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.");
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpay";
                     ControlMethod("externalBank");
                     strCurrent = "externalBank";
                 }
@@ -740,10 +743,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            TextView cvvErrorTV = cvvDialog.findViewById(R.id.cvvErrorTV);
-            etCVV = cvvDialog.findViewById(R.id.etCVV);
-            TextInputLayout etlCVV = cvvDialog.findViewById(R.id.etlCVV);
-            LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
+            etCVV = (TextInputEditText) cvvDialog.findViewById(R.id.etCVV);
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("OK");
@@ -751,7 +751,6 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
             etCVV.setShowSoftInputOnFocus(false);
-//            etCVV.setEnabled(false);
             etCVV.requestFocus();
 
             etCVV.setOnClickListener(new View.OnClickListener() {
@@ -979,17 +978,12 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             mLastClickTime = SystemClock.elapsedRealtime();
             if (!etCVV.getText().toString().trim().equals("")) {
                 cvvDialog.dismiss();
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                    return;
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
                 i.putExtra("cvv", etCVV.getText().toString().trim());
                 startActivity(i);
             } else {
                 Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "", "");
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -169,6 +169,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
 
         }
+//        if (etEmail.getText().toString().equals("")){
+//            etEmail.requestFocus();
+//        }
+//        else {
+//            etlPassword.requestFocus();
+//        }
     }
 
     @Override
@@ -220,6 +226,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+
             if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
                 layoutClose.setVisibility(GONE);
             } else {
@@ -618,7 +628,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
-                            objMyApplication.setUserId(login.getData().getUserId());
+//                            objMyApplication.setUserId(login.getData().getUserId());
+                            objMyApplication.setLoginUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             getStatesUrl(login.getData().getStateList().getUS());
@@ -687,7 +698,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+//                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());

@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -27,10 +29,13 @@ import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -50,6 +55,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -62,7 +68,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
@@ -154,6 +160,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     public void initFields() {
         try {
+            setKeyboardVisibilityListener(this);
             createAccountActivity = this;
             errorState = new int[][]{new int[]{android.R.attr.state_focused}};
             errorColor = new int[]{getResources().getColor(R.color.error_red)};
@@ -221,6 +228,14 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             passwordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
             confirmPasswordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+
+
+            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
 
             textWatchers();
             focusWatchers();
@@ -603,7 +618,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                             confPasswordTIL.setHint("Confirm Password");
 
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+                            if (confirmPasswordET.getText().toString().trim().length() == 0)
+                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+                            else
+                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
 
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             isConfirmPassword = true;
@@ -673,7 +691,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                             } else {
                                 passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                             }
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim()) &&
                                 strong.matcher(passwordET.getText().toString().trim()).matches()) {
@@ -766,6 +784,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                             firstNameErrorTV.setText("Field Required");
                         }
                     } else {
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         focusedID = firstNameET.getId();
                         firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -796,6 +816,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                             lastNameErrorTV.setText("Field Required");
                         }
                     } else {
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         focusedID = lastNameET.getId();
                         lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -809,6 +831,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
 
                     if (b) {
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         passwordET.setHint("8-12 Characters");
                         stregnthViewLL.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -861,6 +885,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
@@ -923,6 +949,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                             emailErrorTV.setText("Field Required");
                         }
                     } else {
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         focusedID = emailET.getId();
                         emailET.setHint("Email");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -1124,20 +1152,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
-//        ClickableSpan clickableSpan2 = new ClickableSpan() {
-//            @Override
-//            public void onClick(View textView) {
-//                Log.e("Click", "click");
-//
-//
-//            }
-//
-//            @Override
-//            public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(true);
-//            }
-//        };
+
         ss.setSpan(clickableSpan, 31, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 47, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1199,5 +1214,36 @@ public class CreateAccountActivity extends AppCompatActivity {
 //        }
 //        return super.dispatchTouchEvent(ev);
 //    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
 
 }

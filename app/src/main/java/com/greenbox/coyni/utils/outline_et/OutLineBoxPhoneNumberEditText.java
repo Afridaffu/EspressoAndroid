@@ -13,9 +13,9 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
-import com.santalu.maskara.widget.MaskEditText;
 
 public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
