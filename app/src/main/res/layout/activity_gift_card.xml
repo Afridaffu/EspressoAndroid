@@ -130,19 +130,6 @@
                 android:background="@drawable/fullradius_list_items"
                 android:orientation="vertical">
 
-
-                <!--                <com.greenbox.coyni.utils.ExpandableHeightGridView-->
-                <!--                    android:id="@+id/brandsGV"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:fitsSystemWindows="true"-->
-                <!--                    android:horizontalSpacing="@dimen/_10sdp"-->
-                <!--                    android:numColumns="2"-->
-                <!--                    android:padding="@dimen/_10sdp"-->
-                <!--                    android:verticalSpacing="@dimen/_10sdp"-->
-                <!--                    android:stretchMode="columnWidth"-->
-                <!--                    android:isScrollContainer="false"/>-->
-
                 <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
                     android:id="@+id/brandsGV"
                     android:layout_width="match_parent"

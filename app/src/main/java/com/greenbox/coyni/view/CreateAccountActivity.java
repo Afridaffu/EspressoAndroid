@@ -1132,20 +1132,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
-//        ClickableSpan clickableSpan2 = new ClickableSpan() {
-//            @Override
-//            public void onClick(View textView) {
-//                Log.e("Click", "click");
-//
-//
-//            }
-//
-//            @Override
-//            public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(true);
-//            }
-//        };
+
         ss.setSpan(clickableSpan, 31, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 47, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

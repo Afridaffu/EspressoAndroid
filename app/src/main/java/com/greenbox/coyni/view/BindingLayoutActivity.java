@@ -1,29 +1,24 @@
 package com.greenbox.coyni.view;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
-import com.santalu.maskara.widget.MaskEditText;
 
 import java.util.List;
 
