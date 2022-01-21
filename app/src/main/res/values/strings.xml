@@ -197,5 +197,7 @@
     <string name="calendar_friday">F</string>
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
+    <string name="waddress_length">10</string>
+    <string name="tokens_msg">Tokens cannot Pay/Request from or to your wallet</string>
 
 </resources>

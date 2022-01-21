@@ -51,6 +51,7 @@ import com.greenbox.coyni.model.preauth.PreAuthData;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
+import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.encryption.AESEncrypt;
@@ -64,7 +65,6 @@ import com.microblink.blinkcard.entities.recognizers.RecognizerBundle;
 import com.microblink.blinkcard.entities.recognizers.blinkcard.BlinkCardRecognizer;
 import com.microblink.blinkcard.uisettings.ActivityRunner;
 import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
-import com.santalu.maskara.widget.MaskEditText;
 
 import org.json.JSONObject;
 

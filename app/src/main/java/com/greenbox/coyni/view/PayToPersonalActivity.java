@@ -318,7 +318,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
             tvTitle.setText(imageTextNew);
-            tvWAddress.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 10) + "...");
+            tvWAddress.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
             tvTitle.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
@@ -624,6 +624,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     protected void onResume() {
         try {
             super.onResume();
+            isCancel = false;
             changeSlideState();
         } catch (Exception e) {
             e.printStackTrace();

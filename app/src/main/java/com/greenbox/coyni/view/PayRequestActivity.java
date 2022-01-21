@@ -601,8 +601,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
             userName.setText(imageTextNew);
-            if (userDetails.getData().getWalletId().length() > 9) {
-                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 9) + "...");
+            if (userDetails.getData().getWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
+                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
             } else {
                 userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
             }
