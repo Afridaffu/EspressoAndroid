@@ -62,7 +62,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     MyApplication objMyApplication;
     private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText, keyPay, keyRquest;
     private ImageView keyBack;
-    EditText payRequestET;
+    EditText payRequestET, addNoteET;
     Dialog cvvDialog, prevDialog;
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;
@@ -172,6 +172,24 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         .putExtra("screen", "Pay"));
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            if (cvvDialog != null && addNoteET.hasFocus()) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        addNoteET.requestFocus();
+                        Utils.openKeyPad(PayRequestActivity.this, addNoteET);
+                    }
+                }, 100);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        super.onResume();
     }
 
     @Override
@@ -363,9 +381,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
-//            cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
-//            InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
-//            cKey.setInputConnection(ic);
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayRequestActivity.this)) {
@@ -973,7 +988,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            EditText addNoteET = cvvDialog.findViewById(R.id.addNoteET);
+            addNoteET = cvvDialog.findViewById(R.id.addNoteET);
             CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
             TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
@@ -981,8 +996,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void run() {
                     addNoteET.requestFocus();
-                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.showSoftInput(addNoteET, InputMethodManager.SHOW_IMPLICIT);
+                    Utils.openKeyPad(PayRequestActivity.this, addNoteET);
 
                 }
             }, 100);
@@ -1140,7 +1154,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
-                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
+                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
                                     Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
                                     startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
