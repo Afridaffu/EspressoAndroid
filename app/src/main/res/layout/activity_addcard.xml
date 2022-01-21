@@ -125,7 +125,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -214,7 +215,7 @@
                             app:errorIconDrawable="@null"
                             app:hintTextColor="@color/primary_green">
 
-                            <com.santalu.maskara.widget.MaskEditText
+                            <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
                                 android:id="@+id/etExpiry"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -299,7 +300,8 @@
                                 android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursor_color"
                                 android:textIsSelectable="false"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_12ssp"
+                                android:autofillHints="creditCardSecurityCode"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -415,7 +417,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -476,7 +479,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -601,7 +605,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -663,7 +668,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -734,7 +740,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>
