@@ -83,6 +83,7 @@
                         android:id="@+id/addressLineOneET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -145,6 +146,7 @@
                         android:id="@+id/addressLineTwoET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -209,6 +211,7 @@
                         android:id="@+id/cityET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/cityhint"
@@ -296,6 +299,7 @@
                             android:id="@+id/stateET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:cursorVisible="false"
                             android:editable="false"
                             android:focusable="false"
@@ -337,6 +341,7 @@
                         android:id="@+id/zipcodeET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="0123456789"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionDone"
@@ -425,7 +430,8 @@
                             android:padding="@dimen/_12sdp"
                             android:text="United States"
                             android:textColor="@color/xdark_gray"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
