@@ -1,19 +1,23 @@
-package com.greenbox.coyni.fragments.onboarding;
+package com.greenbox.coyni.fragments.identityFrag;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+
 import com.greenbox.coyni.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StatesListFragment#newInstance} factory method to
+ * Use the {@link IdentityFragmentOne#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
-public class StatesListFragment extends Fragment {
+public class IdentityFragmentOne extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,26 +28,26 @@ public class StatesListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    public IdentityFragmentOne() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StatesListFragment.
+     * @return A new instance of fragment FragmentOne.
      */
     // TODO: Rename and change types and number of parameters
-    public static StatesListFragment newInstance(String param1, String param2) {
-        StatesListFragment fragment = new StatesListFragment();
+    public static IdentityFragmentOne newInstance(String param1, String param2) {
+        IdentityFragmentOne fragment = new IdentityFragmentOne();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public StatesListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -59,6 +63,10 @@ public class StatesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_states_list, container, false);
+        View view  = inflater.inflate(R.layout.identity_fragment_one, container, false);
+
+        ImageView imageView = view.findViewById(R.id.topIV);
+        imageView.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.rotate));
+        return  view;
     }
 }

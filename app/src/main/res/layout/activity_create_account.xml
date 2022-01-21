@@ -87,7 +87,8 @@
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
                         android:textSize="@dimen/_12ssp"
-                        android:autofillHints="creditCardSecurityCode"/>
+                        android:autofillHints="creditCardSecurityCode"
+                        />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
