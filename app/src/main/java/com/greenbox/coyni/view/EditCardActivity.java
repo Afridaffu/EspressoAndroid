@@ -144,6 +144,7 @@ public class EditCardActivity extends AppCompatActivity {
             etName.setEnabled(false);
 //            etExpiry.setEnabled(false);
             etlCard.disableEditText();
+            etlCard.enableHint();
             etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
                 etName.setText(Utils.capitalize(selectedCard.getName()));

@@ -9,6 +9,7 @@ public class RegUsersResponseData {
     private String walletAddress;
     private String image;
     private String status;
+    private String fullName;
 
     public String getCountryCode() {
         return countryCode;
@@ -72,6 +73,14 @@ public class RegUsersResponseData {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
 

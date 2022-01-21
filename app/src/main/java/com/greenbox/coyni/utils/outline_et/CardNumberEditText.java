@@ -247,4 +247,10 @@ public class CardNumberEditText extends ConstraintLayout {
 //        imgCardType.setVisibility(INVISIBLE);
         imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
     }
+
+    public void enableHint() {
+        hintName.setVisibility(VISIBLE);
+        hintName.setBackgroundColor(getResources().getColor(R.color.white));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+    }
 }

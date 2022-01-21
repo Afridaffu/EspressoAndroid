@@ -114,7 +114,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_43sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_12sdp"
                             android:background="@drawable/disable_bg" />
 
                         <com.greenbox.coyni.utils.outline_et.CardNumberEditText

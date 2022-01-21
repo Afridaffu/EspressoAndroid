@@ -132,6 +132,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             ControlMethod("withdrawmethod");
             selectWithdrawMethod();
             strScreen = "withdrawmethod";
+            strCurrent = "";
         } else {
             super.onBackPressed();
         }
@@ -287,8 +288,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-                        ControlMethod("paymentMethods");
-                        strCurrent = "paymentMethods";
+//                        ControlMethod("paymentMethods");
+//                        strCurrent = "paymentMethods";
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
                     } else if (isPayments && strCurrent.equals("debit")) {
                         isPayments = false;
                         ControlMethod("withdrawpay");
