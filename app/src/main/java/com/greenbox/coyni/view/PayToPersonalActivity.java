@@ -624,6 +624,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     protected void onResume() {
         try {
             super.onResume();
+            isCancel = false;
             changeSlideState();
         } catch (Exception e) {
             e.printStackTrace();
