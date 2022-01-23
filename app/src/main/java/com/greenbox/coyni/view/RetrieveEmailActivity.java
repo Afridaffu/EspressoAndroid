@@ -97,7 +97,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             else if (firstName.getText().toString().trim().length() == 0) {
                 firstNameErrorLL.setVisibility(VISIBLE);
                 firstNameErrorTV.setText("Field Required");
-                firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
             }
             enableButton();
         } else if (charSequence == lastName.getEditableText()) {
@@ -109,7 +108,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             else if (lastName.getText().toString().trim().length() == 0) {
                 lastNameErrorLL.setVisibility(VISIBLE);
                 lastNameErrorTV.setText("Field Required");
-                lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
             }
             enableButton();
         }
@@ -336,8 +334,10 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         dialog.dismiss();
                         if (retrieveEmailResponse.getData() != null) {
                             if (!retrieveEmailResponse.getData().getMessage().equals("")) {
-                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+
+                                Utils.emailPasswordIncorrectDialog("",RetrieveEmailActivity.this,"");
                             }
                         } else {
                             Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this, "", "");

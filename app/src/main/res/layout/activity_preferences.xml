@@ -97,7 +97,8 @@
                         android:inputType="text"
                         android:padding="@dimen/_12sdp"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>
@@ -146,7 +147,8 @@
                         android:padding="@dimen/_12sdp"
                         android:text="US dollar"
                         android:textColor="@color/xdark_gray"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -240,7 +242,8 @@
                             android:padding="@dimen/_12sdp"
                             android:text=""
                             android:textColor="@color/xdark_gray"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>

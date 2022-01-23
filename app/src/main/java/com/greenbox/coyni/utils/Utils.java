@@ -655,7 +655,7 @@ public class Utils {
     public static Boolean checkBiometric(Context context) {
         Boolean isBiometric = false;
         try {
-            BiometricManager biometricManager = BiometricManager.from(context.getApplicationContext());
+            BiometricManager biometricManager = BiometricManager.from(context);
             switch (biometricManager.canAuthenticate()) {
                 case BiometricManager.BIOMETRIC_SUCCESS:
                     Log.e("BIOMETRIC_STRONG", "App can authenticate using biometrics.");
@@ -1070,8 +1070,44 @@ public class Utils {
     }
 
     public static void openKeyPad(Context context, View view) {
-        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+//        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    public static void emailPasswordIncorrectDialog(String msg, final Context context, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.fragment_login__em_pa_incorrect__bottom_sheet);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        CardView cvEmailOK = dialog.findViewById(R.id.cvEmailOK);
+
+        cvEmailOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
 }

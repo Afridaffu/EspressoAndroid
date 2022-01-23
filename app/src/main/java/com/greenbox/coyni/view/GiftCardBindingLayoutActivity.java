@@ -105,6 +105,17 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
+    private void saveToken(String value) {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+            mydatabase.execSQL("Delete from tblPermanentToken");
+            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -133,6 +144,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 pDialog.dismiss();
                 if (biometricResponse != null) {
                     Log.e("bio resp", new Gson().toJson(biometricResponse));
+                    saveToken(biometricResponse.getData().getToken());
+                    Utils.generateUUID(GiftCardBindingLayoutActivity.this);
                     if (enableType.equals("FACE")) {
                         saveFace("true");
                         saveThumb("false");
@@ -166,6 +179,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                             }
                         }, 2000);
                     }
+                    objMyApplication.setBiometric(true);
                 }
             }
         });
@@ -383,17 +397,18 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             });
 
             if (!objMyApplication.getBiometric()) {
-                if (Utils.getIsBiometric()) {
-                    if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
-                        if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
-                            enableType = "TOUCH";
-                            loadSecurePay("TOUCH");
-                        } else {
-                            enableType = "FACE";
-                            loadSecurePay("FACE");
-                        }
+//                if (Utils.getIsBiometric()) {
+                if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
+                    if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
+                        enableType = "TOUCH";
+                        loadSecurePay("TOUCH");
+                    } else {
+
+                        enableType = "FACE";
+                        loadSecurePay("FACE");
                     }
                 }
+//                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

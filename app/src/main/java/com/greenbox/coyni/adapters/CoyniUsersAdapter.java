@@ -74,8 +74,8 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
                     holder.tvNameHead.setText(objData.getFullName().substring(0, 1).toUpperCase());
                 }
                 holder.tvUserName.setText(Utils.capitalize(objData.getFullName()));
-                if (objData.getWalletId().length() > 9) {
-                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId().substring(0, 9) + "...");
+                if (objData.getWalletId().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
+                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
                 } else {
                     holder.tvWalletAddress.setText("Account Address " + objData.getWalletId());
                 }
