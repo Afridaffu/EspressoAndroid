@@ -35,7 +35,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -46,6 +45,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -54,6 +55,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.identity_verification.AddressObj;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -64,7 +66,6 @@ import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.OnSwipeTouchListener;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
@@ -114,21 +115,60 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     DashboardViewModel dashboardViewModel;
     private DatePicker datepicker;
 
+    IdentityPagerAdapter identityPagerAdapter;
+    static AutoScrollViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_identity_verification);
 
+            identityPagerAdapter = new IdentityPagerAdapter();
+            viewPager = findViewById(R.id.view_pager);
+            viewPager.setAdapter(identityPagerAdapter);
+            viewPager.setPagingEnabled(true);
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    Log.e("onPageScrolled", "onPageScrolled " + position);
+                    if (position == 0) {
+                        backbtn.setVisibility(View.GONE);
+                        closebtn.setVisibility(View.VISIBLE);
+                        viewLeft.setBackgroundResource(R.drawable.button_background);
+                        viewRight.setBackgroundResource(R.drawable.button_background1);
+                        if (Utils.isKeyboardVisible) {
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
+                        }
+                    }else{
+                        backbtn.setVisibility(VISIBLE);
+                        closebtn.setVisibility(GONE);
+                        viewLeft.setBackgroundResource(R.drawable.button_background1);
+                        viewRight.setBackgroundResource(R.drawable.button_background);
+                        if (Utils.isKeyboardVisible) {
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
+                        }
+                    }
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             identityVerificationActivity = this;
             myApplicationObj = (MyApplication) getApplicationContext();
             dashboardViewModel.meProfile();
-//            setStates();
             initFields();
             initObservers();
-//            swipeListeners();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -745,8 +785,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             backbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    firstIVeri.setVisibility(View.VISIBLE);
-                    secondIVeri.setVisibility(View.GONE);
+                    viewPager.setCurrentItem(0);
+//                    firstIVeri.setVisibility(View.VISIBLE);
+//                    secondIVeri.setVisibility(View.GONE);
                     backbtn.setVisibility(View.GONE);
                     closebtn.setVisibility(View.VISIBLE);
                     viewLeft.setBackgroundResource(R.drawable.button_background);
@@ -781,8 +822,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             viewLeft.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    firstIVeri.setVisibility(View.VISIBLE);
-                    secondIVeri.setVisibility(View.GONE);
+                    viewPager.setCurrentItem(0);
+//                    firstIVeri.setVisibility(View.VISIBLE);
+//                    secondIVeri.setVisibility(View.GONE);
                     viewLeft.setBackgroundResource(R.drawable.button_background);
                     viewRight.setBackgroundResource(R.drawable.button_background1);
                     backbtn.setVisibility(View.GONE);
@@ -1053,9 +1095,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             if (isFileSelected && isSSNSelected && isDOBSelected) {
                 isNext = true;
                 btnNext.setCardBackgroundColor(identityVerificationActivity.getResources().getColor(R.color.primary_color));
+                viewPager.setPagingEnabled(true);
             } else {
                 isNext = false;
                 btnNext.setCardBackgroundColor(identityVerificationActivity.getResources().getColor(R.color.inactive_color));
+                viewPager.setPagingEnabled(false);
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
@@ -1071,8 +1115,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         dialog.dismiss();
                     }
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        firstIVeri.setVisibility(GONE);
-                        secondIVeri.setVisibility(VISIBLE);
+//                        firstIVeri.setVisibility(GONE);
+//                        secondIVeri.setVisibility(VISIBLE);
+                        viewPager.setCurrentItem(1);
                         viewLeft.setBackgroundResource(R.drawable.button_background1);
                         viewRight.setBackgroundResource(R.drawable.button_background);
                         backbtn.setVisibility(VISIBLE);
@@ -1205,157 +1250,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         }
     }
 
-    public void swipeListeners() {
-        swipeLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-            public void onSwipeRight() {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
-            }
-
-            public void onSwipeLeft() {
-                if (isNext) {
-                    firstIVeri.setVisibility(GONE);
-                    secondIVeri.setVisibility(VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background1);
-                    viewRight.setBackgroundResource(R.drawable.button_background);
-                    backbtn.setVisibility(VISIBLE);
-                    closebtn.setVisibility(GONE);
-                }
-            }
-
-
-        });
-
-        ssnTIL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-            public void onSwipeRight() {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
-            }
-
-            public void onSwipeLeft() {
-                if (isNext) {
-                    firstIVeri.setVisibility(GONE);
-                    secondIVeri.setVisibility(VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background1);
-                    viewRight.setBackgroundResource(R.drawable.button_background);
-                    backbtn.setVisibility(VISIBLE);
-                    closebtn.setVisibility(GONE);
-                }
-            }
-
-
-        });
-
-        dobTIL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-            public void onSwipeRight() {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
-            }
-
-            public void onSwipeLeft() {
-                if (isNext) {
-                    firstIVeri.setVisibility(GONE);
-                    secondIVeri.setVisibility(VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background1);
-                    viewRight.setBackgroundResource(R.drawable.button_background);
-                    backbtn.setVisibility(VISIBLE);
-                    closebtn.setVisibility(GONE);
-                }
-            }
-
-
-        });
-
-        bottomNaviLL.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-            public void onSwipeRight() {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
-            }
-
-            public void onSwipeLeft() {
-                if (isNext) {
-                    firstIVeri.setVisibility(GONE);
-                    secondIVeri.setVisibility(VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background1);
-                    viewRight.setBackgroundResource(R.drawable.button_background);
-                    backbtn.setVisibility(VISIBLE);
-                    closebtn.setVisibility(GONE);
-                }
-            }
-
-
-        });
-
-        dobET.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-            public void onSwipeRight() {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
-            }
-
-            public void onSwipeLeft() {
-                if (isNext) {
-                    firstIVeri.setVisibility(GONE);
-                    secondIVeri.setVisibility(VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background1);
-                    viewRight.setBackgroundResource(R.drawable.button_background);
-                    backbtn.setVisibility(VISIBLE);
-                    closebtn.setVisibility(GONE);
-                }
-            }
-
-
-        });
-
-        bottomSheet.setOnTouchListener(new OnSwipeTouchListener(IdentityVerificationActivity.this) {
-
-            public void onSwipeRight() {
-                firstIVeri.setVisibility(View.VISIBLE);
-                secondIVeri.setVisibility(View.GONE);
-                viewLeft.setBackgroundResource(R.drawable.button_background);
-                viewRight.setBackgroundResource(R.drawable.button_background1);
-                backbtn.setVisibility(View.GONE);
-                closebtn.setVisibility(View.VISIBLE);
-            }
-
-            public void onSwipeLeft() {
-                if (isNext) {
-                    firstIVeri.setVisibility(GONE);
-                    secondIVeri.setVisibility(VISIBLE);
-                    viewLeft.setBackgroundResource(R.drawable.button_background1);
-                    viewRight.setBackgroundResource(R.drawable.button_background);
-                    backbtn.setVisibility(VISIBLE);
-                    closebtn.setVisibility(GONE);
-                }
-            }
-
-
-        });
-    }
 
     @Override
     protected void onDestroy() {
@@ -1409,4 +1303,35 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
     }
 
+    class IdentityPagerAdapter extends PagerAdapter {
+
+        @Override
+        public Object instantiateItem(ViewGroup collection, int position) {
+            int resId = 0;
+            switch (position) {
+                case 0:
+                    resId = R.id.linearLayoutIdVe;
+                    break;
+                case 1:
+                    resId = R.id.scrlViewIV2nd;
+                    break;
+            }
+            return findViewById(resId);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1) {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            // No super
+        }
+    }
 }
