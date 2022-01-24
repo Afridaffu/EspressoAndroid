@@ -10,6 +10,11 @@
     <color name="primary_green">#00A6A2</color>
     <color name="text_color">#151515</color>
     <color name="error">#E32B25</color>
+    <color name="bg_inactive">#b5e2e0</color>
+    <color name="light_primary_color">#1900A6A2</color>
+
+
+
 
 
     <color name="vlight_gray">#E8E8E8</color>
@@ -38,6 +43,7 @@
     <color name="trans_black">#66000000</color>
     <color name="blue_light">#d8e2f0</color>
     <color name="text_grey_msg">#C4C5C7</color>
+    <color name="bg_view_color">#f2f4f5</color>
 
     <color name="teal_700_trans">#22018786</color>
     <color name="slidebtn_bg">#DFF4F3</color>

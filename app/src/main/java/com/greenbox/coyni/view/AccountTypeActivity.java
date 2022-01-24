@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.DashboardAddBenifitialOwnersActivity;
 
 
 public class AccountTypeActivity extends AppCompatActivity {
@@ -47,7 +48,9 @@ public class AccountTypeActivity extends AppCompatActivity {
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
+//                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
+                    Intent i = new Intent(AccountTypeActivity.this, DashboardAddBenifitialOwnersActivity.class);
+                    startActivity(i);
                 }
             });
 

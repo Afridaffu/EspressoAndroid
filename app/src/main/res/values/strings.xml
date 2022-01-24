@@ -6,7 +6,6 @@
     <string name="password_strength_strong">Strong</string>
     <string name="password_strength_very_strong">Very Strong</string>
     <string name="emailotpmsg">We have sent you a 6-digit code sent to the register email address: </string>
-
     <string name="remembertxt">   Remember Me</string>
     <string name="forgotpwdtxt">Forgot Password</string>
     <string name="retrievemail">Retrieve Email</string>
@@ -36,8 +35,6 @@
     <string name="foundacc">We’ve Found Your Account!</string>
     <string name="belowtxtre">Click the Link below to log in</string>
     <string name="jona_gmail_com">Jona***@gmail.com</string>
-
-
     <string name="cu_profile_name">Jonathan Joestar</string>
     <string name="accountid">Account ID </string>
     <string name="status_unverified">Account Status: </string>
@@ -75,6 +72,7 @@
     <string name="exitbtn">Exit</string>
 
     <string name="identity">Identity Verification</string>
+    <string name="MaillingAddress">Mailling Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
     <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
     <string name="city">City</string>
@@ -197,5 +195,19 @@
     <string name="calendar_friday">F</string>
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
+
+    <string name="AB_owner">Add Beneficial Owner</string>
+    <string name="Next">Next</string>
+    <string name="Savedautomatically">Saved automatically</string>
+
+    <string name="Ownership">Ownership %</string>
+
+    <string name="AB_owners">Additional Beneficial Owner(s)</string>
+    <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional</string>
+    <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
+    <string name="percentage"> 51% or</string>
+    <string name="greater">greater.</string>
+    <string name="ownership">Ownership(%)</string>
+    <string name="beneficialnreach">Please add an additional beneficial owner below to\nreach 51%</string>
 
 </resources>
