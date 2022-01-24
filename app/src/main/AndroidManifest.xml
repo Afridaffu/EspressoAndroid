@@ -41,7 +41,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".view.business.DBAInfoDetails"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.CompanyInfoDetails"
+            android:exported="false" />
         <activity
             android:name=".view.PayToPersonalActivity"
             android:exported="false"
@@ -389,7 +394,6 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
     </application>
 
 </manifest>
