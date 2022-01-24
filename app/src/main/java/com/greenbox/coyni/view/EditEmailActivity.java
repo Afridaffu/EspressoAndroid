@@ -135,8 +135,6 @@ public class EditEmailActivity extends AppCompatActivity {
 
             editEmailCloseLL.setOnClickListener(view -> {
                 finish();
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             });
 
             contactUsTV.setOnClickListener(new View.OnClickListener() {

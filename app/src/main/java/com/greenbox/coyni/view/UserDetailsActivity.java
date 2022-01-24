@@ -157,7 +157,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     authenticateType = "EMAIL";
 
                     if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
                             Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
                             startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
@@ -186,7 +186,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     authenticateType = "ADDRESS";
 
                     if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
                             Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
                             startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
@@ -217,7 +217,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     authenticateType = "PHONE";
 
                     if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
                             Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
                             startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
