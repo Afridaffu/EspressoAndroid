@@ -60,7 +60,6 @@
             android:id="@+id/tvCardHead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="Add New Debit Card"
             android:textColor="@color/black"
@@ -125,7 +124,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -214,7 +214,7 @@
                             app:errorIconDrawable="@null"
                             app:hintTextColor="@color/primary_green">
 
-                            <com.santalu.maskara.widget.MaskEditText
+                            <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
                                 android:id="@+id/etExpiry"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -299,7 +299,8 @@
                                 android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursor_color"
                                 android:textIsSelectable="false"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_12ssp"
+                                android:autofillHints="creditCardSecurityCode"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -415,7 +416,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -446,6 +448,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etlAddress2"
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -475,7 +478,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -497,6 +501,7 @@
                         android:id="@+id/etCity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="City"
@@ -511,8 +516,7 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp"
-                        android:autofillHints="creditCardSecurityCode"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -600,7 +604,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -662,7 +667,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -733,7 +739,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>

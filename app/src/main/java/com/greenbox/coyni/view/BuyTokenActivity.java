@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -66,7 +67,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
-    RelativeLayout lyPayMethod;
+    RelativeLayout lyPayMethod, lyMainLayout;
     LinearLayout lyCDetails, lyBuyClose, lyBDetails;
     EditText etAmount;
     CustomKeyboard ctKey;
@@ -218,6 +219,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvCYN = findViewById(R.id.tvCYN);
             tvCurrency = findViewById(R.id.tvCurrency);
             lyPayMethod = findViewById(R.id.lyPayMethod);
+            lyMainLayout = findViewById(R.id.lyMainLayout);
             lyBuyClose = findViewById(R.id.lyBuyClose);
             etAmount = findViewById(R.id.etAmount);
             lyCDetails = findViewById(R.id.lyCDetails);
@@ -264,6 +266,20 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            lyMainLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    try {
+                        if (etAmount.hasFocus()) {
+                            etAmount.clearFocus();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    return false;
                 }
             });
 
@@ -601,10 +617,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 public void onClick(View v) {
                     try {
                         payDialog.dismiss();
-//                        Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                        i.putExtra("screen", "addpay");
-//                        startActivity(i);
-
                         Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
                         i.putExtra("screen", "buytoken");
                         startActivityForResult(i, 3);

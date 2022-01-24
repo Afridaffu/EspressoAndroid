@@ -31,11 +31,11 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends AppCompatActivity {
-
     CardView enableFaceCV, enableTouchCV, successGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
     RelativeLayout faceIDRL, touchIDRL, successRL;
@@ -47,6 +47,7 @@ public class EnableAuthID extends AppCompatActivity {
     ProgressDialog dialog;
     Long mLastClickTime = 0L;
     LinearLayout layoutNotnow, layoutNotnowFace;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class EnableAuthID extends AppCompatActivity {
             succesCloseIV = findViewById(R.id.succesCloseIV);
 
             enableType = getIntent().getStringExtra("ENABLE_TYPE");
-
+            objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra("screen") != null) {
                 strScreen = getIntent().getStringExtra("screen");
             }
@@ -331,6 +332,7 @@ public class EnableAuthID extends AppCompatActivity {
                             }
                         }, 2000);
                     }
+                    objMyApplication.setBiometric(true);
                 }
             }
         });

@@ -129,7 +129,7 @@
                 android:paddingBottom="@dimen/_10sdp">
 
                 <ImageView
-                    android:id="@+id/imgDCardLogo"
+                    android:id="@+id/imgSDCardLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -141,8 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_toLeftOf="@+id/imgDCardArrow"
-                    android:layout_toRightOf="@+id/imgDCardLogo"
+                    android:layout_toRightOf="@+id/imgSDCardLogo"
                     android:orientation="vertical">
 
                     <TextView
@@ -188,7 +187,7 @@
                 android:paddingBottom="@dimen/_10sdp">
 
                 <ImageView
-                    android:id="@+id/imgCCardLogo"
+                    android:id="@+id/imgGCardLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -199,8 +198,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_14sdp"
-                    android:layout_toLeftOf="@+id/imgCCardArrow"
-                    android:layout_toRightOf="@+id/imgCCardLogo"
+                    android:layout_toRightOf="@+id/imgGCardLogo"
                     android:orientation="vertical">
 
 

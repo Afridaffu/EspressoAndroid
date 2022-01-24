@@ -79,8 +79,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 }
                 holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
                 if (objData.getWalletAddress() != null && !objData.getWalletAddress().equals("")) {
-                    if (objData.getWalletAddress().length() > 9) {
-                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, 9) + "...");
+                    if (objData.getWalletAddress().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
+                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
                     } else {
                         holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
                     }
@@ -98,7 +98,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                                 .placeholder(R.drawable.ic_profilelogo)
                                 .into(holder.imgUser);
                     } else {
-                        holder.imgUser.setImageBitmap(objMyApplication.convertStringToBitMap(objData.getImage().trim()));
+//                        holder.imgUser.setImageBitmap(objMyApplication.convertStringToBitMap(objData.getImage().trim()));
+                        holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                     }
                 } else {
                     holder.imgUser.setVisibility(View.GONE);

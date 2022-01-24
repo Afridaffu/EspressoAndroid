@@ -19,23 +19,23 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
         android:layout_marginRight="@dimen/_20sdp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_14sdp">
+        android:paddingBottom="@dimen/_10sdp">
 
         <ImageView
             android:layout_width="@dimen/_23sdp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:src="@drawable/ic_scan"
-            android:contentDescription="@string/scan"/>
+            android:layout_height="@dimen/_23sdp"
+            android:layout_marginRight="@dimen/_6sdp"
+            android:src="@drawable/ic_scan" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_9sdp"
+            android:layout_marginLeft="@dimen/_9sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="@string/scan"
+            android:text="Scan"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
@@ -47,7 +47,7 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="1.5dp"
+            android:layout_height="1dp"
             android:layout_marginLeft="@dimen/_24sdp"
             android:layout_marginRight="@dimen/_24sdp"
             android:background="@color/blue_light" />
@@ -59,24 +59,23 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
         android:layout_marginRight="@dimen/_20sdp"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_10sdp">
 
         <ImageView
             android:layout_width="@dimen/_23sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:src="@drawable/ic_send_icon"
-            android:contentDescription="@string/pay_request"/>
+            android:layout_height="@dimen/_23sdp"
+            android:layout_marginRight="@dimen/_6sdp"
+            android:src="@drawable/ic_send_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:layout_marginBottom="@dimen/_16sdp"
+            android:layout_marginLeft="9dp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="@string/pay_request"
+            android:text="Pay/Request"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
@@ -88,9 +87,9 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="1.5dp"
-            android:layout_marginStart="@dimen/_24sdp"
-            android:layout_marginEnd="@dimen/_24sdp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_24sdp"
+            android:layout_marginRight="@dimen/_24sdp"
             android:background="@color/blue_light" />
     </LinearLayout>
 
@@ -98,26 +97,25 @@
         android:id="@+id/buyTokenLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:orientation="horizontal">
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_10sdp">
 
         <ImageView
             android:layout_width="@dimen/_23sdp"
             android:layout_height="@dimen/_23sdp"
-            android:layout_marginTop="@dimen/_12ssp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:src="@drawable/ic_buy_icon"
-            android:contentDescription="@string/buy_tokens"/>
+            android:layout_marginRight="@dimen/_6sdp"
+            android:src="@drawable/ic_buy_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_6sdp"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_marginLeft="@dimen/_6sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="@string/buy_tokens"
+            android:text="Buy Tokens"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
@@ -129,9 +127,9 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="1.5dp"
-            android:layout_marginStart="@dimen/_24sdp"
-            android:layout_marginEnd="@dimen/_24sdp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_24sdp"
+            android:layout_marginRight="@dimen/_24sdp"
             android:background="@color/blue_light" />
     </LinearLayout>
 
@@ -139,26 +137,25 @@
         android:id="@+id/widthdrawLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:orientation="horizontal">
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_10sdp">
 
         <ImageView
             android:layout_width="@dimen/_23sdp"
             android:layout_height="@dimen/_23sdp"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:src="@drawable/ic_withdraw_icon"
-            android:contentDescription="@string/withdraw_to_usd"/>
+            android:layout_marginRight="@dimen/_6sdp"
+            android:src="@drawable/ic_withdraw_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_6sdp"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
+            android:layout_marginLeft="@dimen/_6sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="@string/withdraw_to_usd"
+            android:text="Withdraw to USD"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
@@ -166,14 +163,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="@dimen/_26sdp">
+        android:layout_marginBottom="@dimen/_26sdp"
+        android:orientation="vertical">
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="1.5dp"
-            android:layout_marginStart="@dimen/_24sdp"
-            android:layout_marginEnd="@dimen/_24sdp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/_24sdp"
+            android:layout_marginRight="@dimen/_24sdp"
             android:background="@color/blue_light" />
     </LinearLayout>
 </LinearLayout>

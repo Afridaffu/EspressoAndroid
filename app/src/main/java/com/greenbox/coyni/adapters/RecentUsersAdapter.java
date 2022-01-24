@@ -76,8 +76,8 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                     holder.tvNameHead.setText(objData.getUserName().substring(0, 1).toUpperCase());
                 }
                 holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
-                if (objData.getWalletAddress().length() > 9) {
-                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, 9) + "...");
+                if (objData.getWalletAddress().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
+                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
                 } else {
                     holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
                 }

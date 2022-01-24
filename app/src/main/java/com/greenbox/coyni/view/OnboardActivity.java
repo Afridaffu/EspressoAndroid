@@ -74,7 +74,6 @@ public class OnboardActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             onboardActivity = this;
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
@@ -196,6 +195,8 @@ public class OnboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (Utils.isKeyboardVisible)
+            Utils.hideKeypad(OnboardActivity.this);
     }
 
     @Override
@@ -236,7 +237,8 @@ public class OnboardActivity extends BaseActivity {
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+//                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                             Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
@@ -254,8 +256,10 @@ public class OnboardActivity extends BaseActivity {
                         } else {
                             if (loginResponse.getData() != null) {
                                 if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+
+                                    Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
                                 }
                             } else {
                                 Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));

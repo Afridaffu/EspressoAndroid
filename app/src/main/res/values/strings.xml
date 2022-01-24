@@ -220,6 +220,8 @@
     <string name="_8429">••••8429</string>
     <string name="saved_automatically">Saved automatically</string>
     <string name="title_activity_transactions_filter">TransactionsFilterActivity</string>
+    <string name="waddress_length">10</string>
+    <string name="tokens_msg">Tokens cannot Pay/Request from or to your wallet</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

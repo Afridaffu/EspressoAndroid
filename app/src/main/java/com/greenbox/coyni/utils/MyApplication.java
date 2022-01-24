@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 
@@ -68,12 +70,12 @@ public class MyApplication extends Application {
     UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true;
+    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
-    int timezoneID = 0, tempTimezoneID = 0, userId;
     int accountType = Utils.PERSONAL_ACCOUNT;
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId;
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
@@ -276,12 +278,12 @@ public class MyApplication extends Application {
         this.strFiservError = strFiservError;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getLoginUserId() {
+        return loginUserId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setLoginUserId(int logUserId) {
+        this.loginUserId = logUserId;
     }
 
     public void getStates() {
@@ -762,6 +764,14 @@ public class MyApplication extends Application {
 
     public void setAccountType(int accountType) {
         this.accountType = accountType;
+	}
+	
+    public Boolean getCardSave() {
+        return isCardSave;
+    }
+
+    public void setCardSave(Boolean cardSave) {
+        isCardSave = cardSave;
     }
 
     public String convertBitMapToString(Bitmap bitmap) {
@@ -781,6 +791,18 @@ public class MyApplication extends Application {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    public Bitmap convertImageURIToBitMap(String encodedString) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media
+                    .getBitmap(getContentResolver(),
+                            Uri.parse(encodedString));
             return bitmap;
         } catch (Exception e) {
             e.getMessage();

@@ -22,7 +22,6 @@ public class NotificationsDataItems {
     private String timeAgo = "";
     private Long longTime = 0L;
     private int isToday = 0; // 0 = past and 1 = today
-    private boolean isSwipeOpen = false; // 0 = past and 1 = today
 
 
     //Notifications
@@ -234,11 +233,4 @@ public class NotificationsDataItems {
         this.longTime = longTime;
     }
 
-    public boolean isSwipeOpen() {
-        return isSwipeOpen;
-    }
-
-    public void setSwipeOpen(boolean swipeOpen) {
-        isSwipeOpen = swipeOpen;
-    }
 }

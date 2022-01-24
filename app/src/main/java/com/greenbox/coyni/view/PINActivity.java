@@ -450,6 +450,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     .putExtra("status", "failed")
                                     .putExtra("subtype", "pay"));
                         }
+                        finish();
                     } else {
                         Utils.displayAlert("something went wrong", PINActivity.this, "", "");
                     }
