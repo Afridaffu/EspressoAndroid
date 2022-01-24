@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/boxbackgroundgray"
     android:orientation="vertical"
-    tools:context=".SelectWithdrawMethodActivity">
+    tools:context=".view.business.SelectWithdrawMethodActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

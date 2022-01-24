@@ -17,7 +17,9 @@ import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
 import com.santalu.maskara.widget.MaskEditText;
 
-public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
+public class
+
+OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
     private TextView hintName;
     private LinearLayout hintHolder;

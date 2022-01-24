@@ -210,5 +210,28 @@
     <string name="_5359">••••5359</string>
     <string name="_6ghy7_53s9">6Ghy7•••53s9</string>
     <string name="add_new_payment_method">Add New Payment Method</string>
+    <string name="when_you_send_or_receive_money">When you send or receive money from a source \noutside the coyni environment, it can take up to \na few minutes to complete those requests. \nTransactions made within the coyni environment \n(token to token transactions) happen instantly. \nHere is some information on specific transaction \ntypes that you might encounter:</string>
+    <string name="bank_accounts"><b>Bank Accounts:</b> All Bank account transactions \ntypically take up to 3 business days to process. </string>
+    <string name="add_bank_account">Add Bank Account</string>
+    <string name="coyni_uses_fiserv">Coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
+    <string name="i_m_ready">I’m Ready</string>
+    <string name="your_bank_account_has_been_successfully">Your bank account has been successfully \nauthorized and added to your merchant \napplication.</string>
+    <string name="wells_fargo">Wells Fargo</string>
+    <string name="_8429">••••8429</string>
+    <string name="saved_automatically">Saved automatically</string>
+    <string name="title_activity_transactions_filter">TransactionsFilterActivity</string>
 
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="business_type">Business Type</string>
+    <string name="an_account">There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.</string>
+    <string name="making_coyni_purchases">Can be used for making Coyni purchases \nor withdrawing funds.</string>
+    <string name="buying_tokens">Used for buying tokens or withdrawing \nfunds.</string>
+    <string name="can_only_be_used_for_instant_pay_withdraw">Can only be used for instant pay withdraw.</string>
+    <string name="add_a_signet_account">Add A Signet Account</string>
+    <string name="please_enter_card_details">Please enter card details</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="add">Add</string>
+    <string name="ca">CA</string>
+    <string name="zipcode">Zipcode</string>
 </resources>
