@@ -1068,8 +1068,10 @@ public class Utils {
     }
 
     public static void openKeyPad(Context context, View view) {
-        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+//        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        mgr.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     public static void emailPasswordIncorrectDialog(String msg, final Context context, String headerText) {

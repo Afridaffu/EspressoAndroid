@@ -84,7 +84,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal;
     RelativeLayout lyPayMethod;
     LinearLayout lyCDetails, lyWithdrawClose, lyBDetails, lyBalance;
-    EditText etAmount;
+    EditText etAmount, addNoteET;
     CustomKeyboard ctKey;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
@@ -127,7 +127,21 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     @Override
     protected void onResume() {
-        dashboardViewModel.mePaymentMethods();
+        try {
+            dashboardViewModel.mePaymentMethods();
+            if (cvvDialog != null && addNoteET.hasFocus()) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        addNoteET.requestFocus();
+                        Utils.openKeyPad(WithdrawTokenActivity.this, addNoteET);
+
+                    }
+                }, 100);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         super.onResume();
     }
 
@@ -1192,7 +1206,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            EditText addNoteET = cvvDialog.findViewById(R.id.addNoteET);
+            addNoteET = cvvDialog.findViewById(R.id.addNoteET);
             CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
             TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
@@ -1200,9 +1214,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void run() {
                     addNoteET.requestFocus();
-                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.showSoftInput(addNoteET, InputMethodManager.SHOW_IMPLICIT);
-
+                    Utils.openKeyPad(WithdrawTokenActivity.this, addNoteET);
                 }
             }, 100);
             addNoteET.addTextChangedListener(new TextWatcher() {

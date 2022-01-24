@@ -67,7 +67,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
-    CardView cvNext, cvAddPayment, cvTryAgain, cvDone;
+    CardView cvNext, cvTryAgain, cvDone;
     Boolean isBank = false, isPayments = false, isDeCredit = false;
     TextInputEditText etCVV;
     RecyclerView rvSelPayMethods;
@@ -98,7 +98,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             } else if (strCurrent.equals("externalBank")) {
                 ControlMethod("addpayment");
                 strCurrent = "addpayment";
-            } else {
+            } else if (!strCurrent.equals("firstError")) {
                 super.onBackPressed();
             }
         } else {
@@ -700,13 +700,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvErrorMessage = findViewById(R.id.tvErrorMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
             tvErrorHead.setText(getString(R.string.bank_exhausthead));
-//            tvErrorMessage.setText(getString(R.string.bank_exhaust));
+            strCurrent = "firstError";
             tvErrorMessage.setText("There is an account limit of " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.");
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpay";
                     ControlMethod("externalBank");
                     strCurrent = "externalBank";
                 }

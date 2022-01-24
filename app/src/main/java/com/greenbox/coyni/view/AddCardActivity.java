@@ -88,7 +88,7 @@ public class AddCardActivity extends AppCompatActivity {
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etCVV, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1,etlAddress2, etlCity, etlZipCode;
+    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -208,7 +208,8 @@ public class AddCardActivity extends AppCompatActivity {
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
+//            paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
+            paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
             objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
