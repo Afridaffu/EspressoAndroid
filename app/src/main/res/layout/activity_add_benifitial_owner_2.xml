@@ -64,7 +64,7 @@ tools:context=".view.business.AddBenifitialOwnerActivity2">
             android:textSize="@dimen/_12ssp" />
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/mailing_address_TIL"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
@@ -122,7 +122,7 @@ tools:context=".view.business.AddBenifitialOwnerActivity2">
         </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/m_a_optionalTIL"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
@@ -180,7 +180,7 @@ tools:context=".view.business.AddBenifitialOwnerActivity2">
         </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/City_TIL"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
@@ -326,7 +326,7 @@ tools:context=".view.business.AddBenifitialOwnerActivity2">
         </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
            android:id="@+id/Zip_TIL"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
@@ -383,7 +383,7 @@ tools:context=".view.business.AddBenifitialOwnerActivity2">
         </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
            android:id="@+id/Country_TIL"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"

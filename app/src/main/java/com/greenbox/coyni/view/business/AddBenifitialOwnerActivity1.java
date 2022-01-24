@@ -52,11 +52,13 @@ public class AddBenifitialOwnerActivity1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_add_benifitial_owner_1);
         initfields();
         textWatchers();
         focusWatchers();
-        uploadLL = findViewById(R.id.UploadLL);
+
         uploadLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +93,7 @@ public class AddBenifitialOwnerActivity1 extends AppCompatActivity {
                 dialog.show();
             }
         });
-        closeIV = findViewById(R.id.addbenifitialownerCloseIV);
+
         closeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +124,8 @@ public class AddBenifitialOwnerActivity1 extends AppCompatActivity {
     }
 
     private void initfields() {
-
+        closeIV = findViewById(R.id.addbenifitialownerCloseIV);
+        uploadLL = findViewById(R.id.UploadLL);
         fnametil = findViewById(R.id.FirstNameTIL);
         lnametil = findViewById(R.id.LastNameTIL);
         dobtil = findViewById(R.id.IdveriDOBTIL);

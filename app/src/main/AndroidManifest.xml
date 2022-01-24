@@ -357,7 +357,7 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/MaterialComponentsFullScreenTheme">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
@@ -402,6 +402,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/MaterialComponentsFullScreenTheme">
 
+        </activity>
+        <activity
+            android:name=".view.business.BusinessDashboardMainActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/MaterialComponentsFullScreenTheme">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
     </application>

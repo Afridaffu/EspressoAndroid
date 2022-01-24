@@ -3,6 +3,7 @@ package com.greenbox.coyni.view.business;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ public class DashboardAddBenifitialOwnersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_dashboard_add_benifitial_owners);
 
 
@@ -25,8 +28,12 @@ public class DashboardAddBenifitialOwnersActivity extends AppCompatActivity {
         startTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DashboardAddBenifitialOwnersActivity.this,AddBenifitialOwnerActivity1.class);
-           startActivity(i);
+                try {
+                    Intent i = new Intent(DashboardAddBenifitialOwnersActivity.this,AddBenifitialOwnerActivity1.class);
+                    startActivity(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

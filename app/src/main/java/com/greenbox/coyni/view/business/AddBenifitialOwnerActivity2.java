@@ -54,6 +54,8 @@ public class AddBenifitialOwnerActivity2 extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_add_benifitial_owner_2);
 
         stateimg = findViewById(R.id.Stateimg);
@@ -63,7 +65,7 @@ public class AddBenifitialOwnerActivity2 extends AppCompatActivity {
                 Dialog dialog = new Dialog((AddBenifitialOwnerActivity2.this));
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-                dialog.setContentView(R.layout.activity_choose_id_dialog);
+                dialog.setContentView(R.layout.states_bottom_dialog);
                 Window window = dialog.getWindow();
 //                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.45);
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);

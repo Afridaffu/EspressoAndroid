@@ -199,7 +199,6 @@
     <string name="AB_owner">Add Beneficial Owner</string>
     <string name="Next">Next</string>
     <string name="Savedautomatically">Saved automatically</string>
-
     <string name="Ownership">Ownership %</string>
 
     <string name="AB_owners">Additional Beneficial Owner(s)</string>
@@ -209,5 +208,38 @@
     <string name="greater">greater.</string>
     <string name="ownership">Ownership(%)</string>
     <string name="beneficialnreach">Please add an additional beneficial owner below to\nreach 51%</string>
+
+    <string name="dba_name">Hi! [DBA Name]</string>
+    <string name="MerchantBalance">Merchant Balance</string>
+    <string name="processing_volume">Processing Volume</string>
+    <string name="lastmonth">Last Month</string>
+    <string name="grossamount">Gross Amount</string>
+    <string name="transactions">Transactions</string>
+    <string name="refunds">Refunds</string>
+    <string name="processingfee">Processing Fees</string>
+    <string name="miscfee">MISC Fees</string>
+    <string name="netamount">Net Amount</string>
+    <string name="highestticket">Highest Ticket</string>
+    <string name="averageticket">Average Ticket</string>
+    <string name="view_m_transactions">View Merchant’s Transactions</string>
+    <string name="batchpayouts">Batch Payouts</string>
+    <string name="all_p_deposit">All Payouts are deposited into</string>
+    <string name="businesstoken">Business Token</string>
+    <string name="ac">Account.</string>
+    <string name="outAt">out at.</string>
+    <string name="nextpayout"> Next Payout.</string>
+    <string name="lastpayout"> Last Payout</string>
+    <string name="batchnow"> Batch Now</string>
+    <string name="manual"> Manual</string>
+    <string name="v_p_history"> View Full Payouts History</string>
+    <string name="reservebalance"> Reserve Balance</string>
+    <string name="nextrelease"> Next Release</string>
+    <string name="lastrelease"> Last Release</string>
+    <string name="v_r_history"> View Full Reserve Release History</string>
+    <string name="dashboard"> Dashboard</string>
+    <string name="profile"> Profile</string>
+    <string name="reserverule"> Reserve Rule: [%] per Sale Order with a 90 day rolling\nperiod.</string>
+    <string name="a_u_pay">Your active batch is set to automatically pay.</string>
+    <string name="merchant_balance">Merchant Balance = Net volume processed since your\nlast batch + Reserve Balance</string>
 
 </resources>
