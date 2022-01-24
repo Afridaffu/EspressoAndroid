@@ -27,14 +27,15 @@
                 android:id="@+id/topbarll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_32sdp">
+                android:layout_marginEnd="@dimen/_32sdp"
+                android:layout_marginTop="@dimen/_45sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:gravity="center">
 
                 <ImageButton
                     android:id="@+id/closeBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_45sdp"
-                    android:layout_marginBottom="@dimen/_14sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:background="@color/white"
                     android:src="@drawable/ic_close"
                     android:visibility="visible"
@@ -42,11 +43,9 @@
 
                 <ImageButton
                     android:id="@+id/backBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_45sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_14sdp"
                     android:background="@color/white"
                     android:src="@drawable/ic_back"
                     android:visibility="gone"
@@ -57,7 +56,6 @@
                     android:layout_width="@dimen/_100sdp"
                     android:layout_height="@dimen/_4sdp"
                     android:layout_marginStart="@dimen/_28sdp"
-                    android:layout_marginTop="@dimen/_50sdp"
                     android:layout_weight="1"
                     android:background="@drawable/button_background" />
 
@@ -66,7 +64,6 @@
                     android:layout_width="@dimen/_100sdp"
                     android:layout_height="@dimen/_4sdp"
                     android:layout_marginStart="@dimen/_18sdp"
-                    android:layout_marginTop="@dimen/_50sdp"
                     android:layout_weight="1"
                     android:background="@drawable/button_background1" />
 
@@ -412,7 +409,7 @@
                                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionNext"
-                                android:inputType="textPostalAddress|textNoSuggestions"
+                                android:inputType="textVisiblePassword|textNoSuggestions"
                                 android:maxLength="100"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"
@@ -474,7 +471,7 @@
                                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionNext"
-                                android:inputType="textPostalAddress|textNoSuggestions"
+                                android:inputType="textVisiblePassword|textNoSuggestions"
                                 android:maxLength="100"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"
@@ -536,7 +533,7 @@
                                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionNext"
-                                android:inputType="text|textNoSuggestions"
+                                android:inputType="textVisiblePassword|textNoSuggestions"
                                 android:maxLength="50"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"

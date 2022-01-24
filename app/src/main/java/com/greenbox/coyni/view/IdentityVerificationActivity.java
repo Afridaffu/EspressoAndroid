@@ -127,33 +127,30 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             identityPagerAdapter = new IdentityPagerAdapter();
             viewPager = findViewById(R.id.view_pager);
             viewPager.setAdapter(identityPagerAdapter);
-            viewPager.setPagingEnabled(true);
+            viewPager.setPagingEnabled(false);
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
                     if (position == 0) {
                         backbtn.setVisibility(View.GONE);
                         closebtn.setVisibility(View.VISIBLE);
                         viewLeft.setBackgroundResource(R.drawable.button_background);
                         viewRight.setBackgroundResource(R.drawable.button_background1);
-                        if (Utils.isKeyboardVisible) {
-                            Utils.hideKeypad(IdentityVerificationActivity.this);
-                        }
-                    }else{
-                        backbtn.setVisibility(VISIBLE);
-                        closebtn.setVisibility(GONE);
+                    } else if (position == 1) {
                         viewLeft.setBackgroundResource(R.drawable.button_background1);
                         viewRight.setBackgroundResource(R.drawable.button_background);
-                        if (Utils.isKeyboardVisible) {
-                            Utils.hideKeypad(IdentityVerificationActivity.this);
-                        }
+                        backbtn.setVisibility(VISIBLE);
+                        closebtn.setVisibility(GONE);
+                        mailAddr1.requestFocus();
+                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
+
                     }
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-
                 }
 
                 @Override
@@ -870,18 +867,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onClick(View view) {
                     if (isNext) {
-//                        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), identityFile);
-//                        MultipartBody.Part idFile = MultipartBody.Part.createFormData("identityFile", identityFile.getName(), requestBody);
-//                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identityType+"");
-//                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText().toString());
-//                        identityVerificationViewModel.uploadIdentityImage(idFile,idType,idNumber);
-//
-//                        firstIVeri.setVisibility(GONE);
-//                        secondIVeri.setVisibility(VISIBLE);
-//                        viewLeft.setBackgroundResource(R.drawable.button_background1);
-//                        viewRight.setBackgroundResource(R.drawable.button_background);
-//                        backbtn.setVisibility(VISIBLE);
-//                        closebtn.setVisibility(GONE);
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -1125,8 +1110,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         mailAddr1.requestFocus();
                         address1ErrorLL.setVisibility(GONE);
                         if (!Utils.isKeyboardVisible) {
-                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         }
 
                     } else {
