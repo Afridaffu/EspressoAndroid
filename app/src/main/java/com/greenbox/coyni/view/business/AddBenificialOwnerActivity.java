@@ -107,8 +107,7 @@ public class AddBenificialOwnerActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(fnametil, getColor(R.color.primary_black));
                     }
                     else if (fnameET.getText().toString().trim().length() == 1) {
-                        fnametil.setBoxStrokeColor(getResources().getColor(R.color.error_red));
-                        fnameET.setHintTextColor(getColor(R.color.error_red));
+                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(fnametil, getColor(R.color.error_red));
                         fnameLL.setVisibility(VISIBLE);
                         fnameTV.setText("Field Required Mininmum 2 characters");

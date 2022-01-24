@@ -6,12 +6,11 @@ import static android.view.View.VISIBLE;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -32,21 +31,40 @@ import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 public class CompanyInformationActivity extends AppCompatActivity {
     public CardView nextCV;
     ImageView close,dropdown;
-    CompanyOutLineBoxPhoneNumberEditText phoneNumberET;
+    CompanyOutLineBoxPhoneNumberEditText compphoneNumberET;
     TextInputEditText companynameET, companyemailET,timeZoneET;
     TextInputLayout companynametil, companyemailtil;
-    public LinearLayout companynameErrorLL,companyemailErrorLL,phoneNumberErrorLL;
-    public TextView companynameerrorTV, companyemailerrorTV,phonenumberTV;
+    public LinearLayout companynameErrorLL,companyemailErrorLL,compphoneNumberErrorLL;
+    public TextView companynameerrorTV, companyemailerrorTV,compphonenumberTV;
     Dialog chooseEntity;
 
-    public boolean iscompanyName = false, iscompanyEmail = false,isPhoneNumber=false,isNextEnabled = false;
+    public boolean iscompanyName = false, iscompanyEmail = false,iscompPhoneNumber=false,isNextEnabled = false;
     boolean isEmailError = false, isPhoneError = false;
     public static CompanyInformationActivity companyInformationActivity;
     public static int focusedID = 0;
 
-    public static boolean isValidEmail(String target) {
-        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+
+    int[][] errorState, state;
+    int[] errorColor, color;
+    ColorStateList errorColorState, colorState;
+
+
+    protected void onResume() {
+        super.onResume();
+        if (companynameET.getId() == focusedID) {
+            companynameET.requestFocus();
+        } else if (companyemailET.getId() == focusedID) {
+            companyemailET.requestFocus();
+        } else if (compphoneNumberET.getId() == focusedID) {
+            compphoneNumberET.requestFocus();
+        } else {
+            companynameET.requestFocus();
+        }
+
+        companynameET.getText().toString();
+        companyemailET.getText().toString();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +119,15 @@ public class CompanyInformationActivity extends AppCompatActivity {
 
     public void initFields() {
         try {
+            companyInformationActivity = this;
+            errorState = new int[][]{new int[]{android.R.attr.state_focused}};
+            errorColor = new int[]{getResources().getColor(R.color.error_red)};
+            errorColorState = new ColorStateList(errorState, errorColor);
+
+            state = new int[][]{new int[]{android.R.attr.state_enabled}};
+            color = new int[]{getResources().getColor(R.color.primary_green)};
+            colorState = new ColorStateList(state, color);
+
             companyemailET = findViewById(R.id.companyemailET);
             companyemailtil = findViewById(R.id.companyemailTIL);
 
@@ -113,9 +140,11 @@ public class CompanyInformationActivity extends AppCompatActivity {
             companyemailerrorTV = findViewById(R.id.companyemailErrorTV);
             companyemailErrorLL = findViewById(R.id.companyemailErrorLL);
 
-            phonenumberTV = findViewById(R.id.CompanyphoneNumberErrorTV);
-            phoneNumberET = findViewById(R.id.CompanyphoneNumberOET);
-            phoneNumberErrorLL = findViewById(R.id.CompanyphoneNumberErrorLL);
+            compphonenumberTV = findViewById(R.id.CompanyphoneNumberErrorTV);
+            compphoneNumberET = findViewById(R.id.CompanyphoneNumberOET);
+            compphoneNumberET.setFrom("Company_Information");
+            compphoneNumberErrorLL = findViewById(R.id.CompanyphoneNumberErrorLL);
+
             nextCV = findViewById(R.id.nextCv);
 
         } catch (Exception e) {
@@ -124,71 +153,78 @@ public class CompanyInformationActivity extends AppCompatActivity {
     }
 
     private void focusWatchers() {
-        companynameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    companynameET.setHint("");
-                    if (companynameET.getText().toString().trim().length() > 1) {
+        try {
+            companynameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    if (!hasFocus) {
+                        companynameET.setHint("");
+                        if (companynameET.getText().toString().trim().length() > 1) {
+                            companynameErrorLL.setVisibility(GONE);
+                            companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companynameET.setHintTextColor(getColor(R.color.light_gray));
+                            Utils.setUpperHintColor(companynametil, getColor(R.color.primary_black));
+
+                        } else if (companynameET.getText().toString().trim().length() == 1) {
+                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
+                            companynameErrorLL.setVisibility(VISIBLE);
+                            companynameerrorTV.setText("Minimum 2 Characters Required");
+                        } else {
+                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companynameET.setHintTextColor(getColor(R.color.light_gray));
+                            companynameErrorLL.setVisibility(VISIBLE);
+                            companynameerrorTV.setText("Field Required");
+
+                        }
+                    } else {
+                        companynameET.setHint("Company’s Name");
+                        focusedID = companynameET.getId();
+                        companynametil.setBoxStrokeColor(getColor(R.color.primary_green));
+                        companynameET.setHintTextColor(getColor(R.color.light_gray));
                         companynameErrorLL.setVisibility(GONE);
-                        companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        companynameET.setHintTextColor(getColor(R.color.light_gray));
-                        Utils.setUpperHintColor(companynametil, getColor(R.color.primary_black));
-
-                    } else if (companynameET.getText().toString().trim().length() == 1) {
-                        companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
-                        companynameErrorLL.setVisibility(VISIBLE);
-                        companynameerrorTV.setText("Minimum 2 Characters Required");
-                    } else {
-                        companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        companynameET.setHintTextColor(getColor(R.color.light_gray));
-                        companynameErrorLL.setVisibility(VISIBLE);
-                        companynameerrorTV.setText("Field Required");
-
                     }
-                } else {
-                    companynameET.setHint("Company’s Name");
-                    focusedID = companynameET.getId();
-                    companynametil.setBoxStrokeColor(getColor(R.color.primary_green));
-                    companynameET.setHintTextColor(getColor(R.color.light_gray));
-                    companynameErrorLL.setVisibility(GONE);
-                }
 
-            }
-        });
-        companyemailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    companyemailET.setHint("");
-                    if (companyemailET.getText().toString().trim().length() > 2 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) {
-                        companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
-                        companyemailErrorLL.setVisibility(VISIBLE);
-                        companyemailerrorTV.setText("Invalid Email");
-                    } else if (companyemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(companyemailET.getText().toString().trim())) {
-                        companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_black));
-                        companyemailErrorLL.setVisibility(GONE);
+                }
+            });
+
+            companyemailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        companyemailET.setHint("");
+                        if (companyemailET.getText().toString().trim().length() > 2 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) {
+                            companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
+                            companyemailErrorLL.setVisibility(VISIBLE);
+                            companyemailerrorTV.setText("Invalid Email");
+                        } else if (companyemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(companyemailET.getText().toString().trim())) {
+                            companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_black));
+                            companyemailErrorLL.setVisibility(GONE);
+                        } else {
+                            companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(companyemailtil, getColor(R.color.light_gray));
+                            companyemailErrorLL.setVisibility(VISIBLE);
+                            companyemailerrorTV.setText("Field Required");
+                        }
                     } else {
-                        companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                        Utils.setUpperHintColor(companyemailtil, getColor(R.color.light_gray));
-                        companyemailErrorLL.setVisibility(VISIBLE);
-                        companyemailerrorTV.setText("Field Required");
+                        companyemailET.setHint("123@coyni.com");
+                        focusedID = companyemailET.getId();
+                        companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                     }
-                } else {
-                    companyemailET.setHint("123@coyni.com");
-                    focusedID = companyemailET.getId();
-                    companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                 }
-            }
-        });
-
+            });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void textWatchers() {
+        try{
         companynameET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -252,19 +288,23 @@ public class CompanyInformationActivity extends AppCompatActivity {
                 }
             }
         });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void enableOrDisableNext() {
 
         try {
-            if (iscompanyName && iscompanyEmail && isPhoneNumber) {
+            if (iscompanyName && iscompanyEmail && iscompPhoneNumber) {
                 isNextEnabled = true;
                 nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                Log.e("All boolean", iscompanyName + " "+ iscompanyEmail + " "+ isPhoneNumber + " ");
+                Log.e("All boolean", iscompanyName + " "+ iscompanyEmail + " "+ iscompPhoneNumber + " ");
             } else {
 
-                Log.e("All boolean", iscompanyName + " "+ isPhoneNumber + " " + iscompanyEmail + " " );
+                Log.e("All boolean", iscompanyName + " "+ iscompanyEmail + " "+ iscompPhoneNumber + " ");
 
                 isNextEnabled = false;
                 nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -280,6 +320,9 @@ public class CompanyInformationActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
+                }
+                else{
+                    nextCV.setClickable(false);
                 }
 
     }

@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.greenbox.coyni.R;
 
 public class DBAinfoBtmSheetActivity extends AppCompatActivity {
@@ -22,7 +20,7 @@ public class DBAinfoBtmSheetActivity extends AppCompatActivity {
         samebtn = findViewById(R.id.sameBtnLL);
         sametv = findViewById(R.id.sameTV);
 
-        sametv.setOnClickListener(new View.OnClickListener() {
+        samebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DBAinfoBtmSheetActivity.this, DBAbasicInformationAcivity.class);

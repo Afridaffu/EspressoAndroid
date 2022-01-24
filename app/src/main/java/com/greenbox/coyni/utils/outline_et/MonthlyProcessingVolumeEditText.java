@@ -37,6 +37,7 @@ public class MonthlyProcessingVolumeEditText extends ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.monthly_processing_volume_layout, this, true);
         hintHolder = findViewById(R.id.volhintdHolderLL);
         volumeET = findViewById(R.id.volET);
+        volumehintName = findViewById(R.id.volumehintTV);
 
         volumeET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
@@ -60,6 +61,8 @@ public class MonthlyProcessingVolumeEditText extends ConstraintLayout {
     public void setText(String text) {
         volumeET.setText(text);
     }
+
+    public void setHint(String text){volumehintName.setText(text);}
 
     public String getText() {
         return volumeET.getText().toString().trim();

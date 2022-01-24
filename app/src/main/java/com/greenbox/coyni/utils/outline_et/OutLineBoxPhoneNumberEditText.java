@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -49,7 +48,8 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
             public void onFocusChange(View view, boolean b) {
                 try {
 
-                    if (isPhoneError) {
+                    if (isPhoneError)
+                    {
                         if (b) {
                             CreateAccountActivity.focusedID = pnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
@@ -58,7 +58,8 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
-                    } else {
+                    }
+                    else {
                         if (b) {
                             CreateAccountActivity.focusedID = pnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
@@ -69,7 +70,8 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         }
 
                     }
-                    if (FROM.equals("Retrieve") && !b) {
+                    if (FROM.equals("Retrieve") && !b)
+                    {
                         if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -86,7 +88,9 @@ public class OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
-                    } else if (FROM.equals("CREATE_ACCOUNT") && !b) {
+                    }
+                    else if (FROM.equals("CREATE_ACCOUNT") && !b)
+                    {
                         if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));

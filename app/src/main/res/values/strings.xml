@@ -198,5 +198,16 @@
     <string name="calendar_friday">F</string>
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
+    <string name="business_type">Business Type</string>
+    <string name="application_completed">Application completed!</string>
+    <string name="start">Start</string>
+    <string name="dba_information">DBA Information</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="beneficial_owner">Beneficial Owner</string>
+    <string name="add_bank_account">Add Bank Account</string>
+    <string name="merchant_s_agreement">Merchant’s Agreement</string>
+    <string name="review_application">Review Application</string>
+    <string name="company_information">Company Information</string>
+    <string name="basic_information">Basic Information</string>
 
 </resources>
