@@ -373,6 +373,7 @@ public class EditCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etExpiry.setHint("");
                             if (etExpiry.getText().toString().trim().length() > 0) {
                                 if (validateExpiry()) {
                                     expiryErrorLL.setVisibility(GONE);
@@ -391,6 +392,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                             }
                         } else {
+                            etExpiry.setHint("Card Exp");
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                         }
@@ -405,6 +407,7 @@ public class EditCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etAddress1.setHint("");
                             if (etAddress1.getText().toString().trim().length() > 0) {
                                 address1ErrorLL.setVisibility(GONE);
                                 etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -417,6 +420,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 address1ErrorTV.setText("Field Required");
                             }
                         } else {
+                            etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
@@ -431,11 +435,13 @@ public class EditCardActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
+                        etAddress2.setHint("Billing Address Line 2(Optional)");
                         etAddress2.setSelection(etAddress2.getText().length());
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     }
                     else {
+                        etAddress2.setHint("");
                         etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     }
@@ -447,6 +453,7 @@ public class EditCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etCity.setHint("");
                             if (etCity.getText().toString().trim().length() > 0) {
                                 cityErrorLL.setVisibility(GONE);
                                 etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -459,6 +466,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 cityErrorTV.setText("Field Required");
                             }
                         } else {
+                            etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                             etCity.setSelection(etCity.getText().length());
@@ -500,6 +508,7 @@ public class EditCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etZipcode.setHint("");
                             if (etZipcode.getText().toString().trim().length() > 0 && etZipcode.getText().toString().trim().length() > 4) {
                                 isZipcode = true;
                                 zipErrorLL.setVisibility(GONE);
@@ -518,6 +527,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 isZipcode = false;
                             }
                         } else {
+                            etZipcode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                             etZipcode.setSelection(etZipcode.getText().length());
@@ -860,5 +870,15 @@ public class EditCardActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
         return value;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            etExpiry.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
