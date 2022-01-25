@@ -4,10 +4,8 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.ActionMode;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -16,10 +14,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.view.CreateAccountActivity;
+import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.EditPhoneActivity;
-import com.greenbox.coyni.view.RetrieveEmailActivity;
-import com.santalu.maskara.widget.MaskEditText;
 
 public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
 
@@ -146,7 +142,6 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                     }
 
                 } else {
-
                     epa.isNewPhone = pnET.getText().toString().trim().length() > 13;
 
                     if (epa.isCurrentPhone &&
@@ -172,7 +167,6 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                pnET.setSelection(pnET.getText().toString().length());
             }
         });
 

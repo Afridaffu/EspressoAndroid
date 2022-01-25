@@ -532,7 +532,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                             shakeAnimateLeftRight();
                         } else {
-                            objMyApplication.setUserId(emailResponse.getData().getUserId());
+//                            objMyApplication.setUserId(emailResponse.getData().getUserId());
+                            objMyApplication.setLoginUserId(emailResponse.getData().getUserId());
                             getStatesUrl(emailResponse.getData().getStateList().getUS());
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();

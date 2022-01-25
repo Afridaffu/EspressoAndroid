@@ -72,7 +72,7 @@
                         android:background="@android:color/transparent"
                         android:cursorVisible="true"
                         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                        android:fontFamily="@font/opensans_bold"
+                        android:fontFamily="@font/opensans_regular"
                         android:hint="Reference ID."
                         android:imeOptions="actionDone"
                         android:maxLength="35"

@@ -83,7 +83,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             } else if (strCurrent.equals("externalBank")) {
                 ControlMethod("addpayment");
                 strCurrent = "addpayment";
-            } else {
+            } else if (!strCurrent.equals("firstError")) {
                 super.onBackPressed();
             }
         } catch (Exception ex) {
@@ -109,11 +109,15 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    //ControlMethod("addpayment");
-                    ControlMethod("paymentMethods");
-                    strCurrent = "paymentMethods";
+                    if (!objMyApplication.getCardSave()) {
+                        isDeCredit = true;
+                        ControlMethod("addpayment");
+                    } else {
+                        objMyApplication.setCardSave(false);
+                        ControlMethod("paymentMethods");
+                        strCurrent = "paymentMethods";
+                    }
                     getPaymentMethods();
-                    isDeCredit = true;
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -278,13 +282,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
-//                    if (isDeCredit) {
-//                        isDeCredit = false;
-//                        ControlMethod("addpayment");
-//                        strCurrent = "addpayment";
-//                        numberOfAccounts();
-//                    } else
-                    if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (isDeCredit) {
+                        isDeCredit = false;
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                        numberOfAccounts();
+                    } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
@@ -526,13 +529,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvErrorMessage = findViewById(R.id.tvErrorMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
             tvErrorHead.setText(getString(R.string.bank_exhausthead));
-//            tvErrorMessage.setText(getString(R.string.bank_exhaust));
+            strCurrent = "firstError";
             tvErrorMessage.setText("There is an account limit of " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.");
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpay";
                     ControlMethod("externalBank");
                     strCurrent = "externalBank";
                 }

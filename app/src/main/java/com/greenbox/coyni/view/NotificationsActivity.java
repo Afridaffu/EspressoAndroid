@@ -68,16 +68,16 @@ public class NotificationsActivity extends AppCompatActivity {
     public List<NotificationsDataItems> globalSentNotifications = new ArrayList<>();
     public List<NotificationsDataItems> globalReceivedNotifications = new ArrayList<>();
     public List<NotificationsDataItems> globalRequests = new ArrayList<>();
-    RecyclerView notificationsRV;
+    public RecyclerView notificationsRV;
     LinearLayout notifBackbtn;
-    TextView notificationsTV, requestsTV, noDataTV;
+    public TextView notificationsTV, requestsTV, noDataTV;
     public static NotificationsActivity notificationsActivity;
     MyApplication objMyApplication;
     String selectedTab = "NOTIFICATIONS";
     public String selectedRow = "";
     public String updatedStatus = "";
     public ProgressDialog progressDialog;
-    NotificationsAdapter notificationsAdapter;
+    public NotificationsAdapter notificationsAdapter;
 
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;
@@ -337,7 +337,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         if (globalNotifications.size() > 0) {
                             notificationsRV.setVisibility(View.VISIBLE);
                             noDataTV.setVisibility(View.GONE);
-                            notificationsAdapter.updateList(globalNotifications);
+                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                         } else {
                             notificationsRV.setVisibility(View.GONE);
                             noDataTV.setVisibility(View.VISIBLE);
@@ -363,7 +363,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         if (globalNotifications.size() > 0) {
                             notificationsRV.setVisibility(View.VISIBLE);
                             noDataTV.setVisibility(View.GONE);
-                            notificationsAdapter.updateList(globalNotifications);
+                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                         } else {
                             notificationsRV.setVisibility(View.GONE);
                             noDataTV.setVisibility(View.VISIBLE);
@@ -389,7 +389,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         if (globalNotifications.size() > 0) {
                             notificationsRV.setVisibility(View.VISIBLE);
                             noDataTV.setVisibility(View.GONE);
-                            notificationsAdapter.updateList(globalNotifications);
+                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                         } else {
                             notificationsRV.setVisibility(View.GONE);
                             noDataTV.setVisibility(View.VISIBLE);
@@ -418,7 +418,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                     if (globalNotifications.size() > 0) {
                                         notificationsRV.setVisibility(View.VISIBLE);
                                         noDataTV.setVisibility(View.GONE);
-                                        notificationsAdapter.updateList(globalNotifications);
+                                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                                     } else {
                                         notificationsRV.setVisibility(View.GONE);
                                         noDataTV.setVisibility(View.VISIBLE);
@@ -438,7 +438,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                     if (globalRequests.size() > 0) {
                                         notificationsRV.setVisibility(View.VISIBLE);
                                         noDataTV.setVisibility(View.GONE);
-                                        notificationsAdapter.updateList(globalRequests);
+                                        notificationsAdapter.updateList(globalRequests, Integer.parseInt(selectedRow));
                                     } else {
                                         notificationsRV.setVisibility(View.GONE);
                                         noDataTV.setVisibility(View.VISIBLE);
@@ -498,7 +498,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                 if (globalNotifications.size() > 0) {
                                     notificationsRV.setVisibility(View.VISIBLE);
                                     noDataTV.setVisibility(View.GONE);
-                                    notificationsAdapter.updateList(globalNotifications);
+                                    notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                                 } else {
                                     notificationsRV.setVisibility(View.GONE);
                                     noDataTV.setVisibility(View.VISIBLE);
@@ -524,7 +524,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                 if (globalRequests.size() > 0) {
                                     notificationsRV.setVisibility(View.VISIBLE);
                                     noDataTV.setVisibility(View.GONE);
-                                    notificationsAdapter.updateList(globalRequests);
+                                    notificationsAdapter.updateList(globalRequests, Integer.parseInt(selectedRow));
                                 } else {
                                     notificationsRV.setVisibility(View.GONE);
                                     noDataTV.setVisibility(View.VISIBLE);
@@ -688,7 +688,11 @@ public class NotificationsActivity extends AppCompatActivity {
 
             amountTV.setText(Utils.convertTwoDecimal(dataItem.getAmount().toString()));
             payingToTV.setText("Paying " + dataItem.getToUser());
-            requesterIDTV.setText(dataItem.getRequesterWalletId().substring(0, 10) + "...");
+            if (dataItem.getRequesterWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
+                requesterIDTV.setText(dataItem.getRequesterWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            } else {
+                requesterIDTV.setText(dataItem.getRequesterWalletId());
+            }
             balanceTV.setText("Available: " + objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + " CYN");
 
             if (!dataItem.getRemarks().equals("")) {

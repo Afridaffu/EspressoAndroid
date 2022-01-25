@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,12 +15,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.cards.CardTypeRequest;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
-import com.greenbox.coyni.view.CreateAccountActivity;
-import com.greenbox.coyni.view.EditCardActivity;
-import com.greenbox.coyni.view.RetrieveEmailActivity;
 
 public class CardNumberEditText extends ConstraintLayout {
 
@@ -246,5 +240,11 @@ public class CardNumberEditText extends ConstraintLayout {
     public void hideBrandIcon() {
 //        imgCardType.setVisibility(INVISIBLE);
         imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
+    }
+
+    public void enableHint() {
+        hintName.setVisibility(VISIBLE);
+        hintName.setBackgroundColor(getResources().getColor(R.color.white));
+        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
     }
 }
