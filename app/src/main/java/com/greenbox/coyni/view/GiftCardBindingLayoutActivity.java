@@ -179,6 +179,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                             }
                         }, 2000);
                     }
+                    objMyApplication.setBiometric(true);
                 }
             }
         });
@@ -396,17 +397,18 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             });
 
             if (!objMyApplication.getBiometric()) {
-                if (Utils.getIsBiometric()) {
-                    if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
-                        if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
-                            enableType = "TOUCH";
-                            loadSecurePay("TOUCH");
-                        } else {
-                            enableType = "FACE";
-                            loadSecurePay("FACE");
-                        }
+//                if (Utils.getIsBiometric()) {
+                if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
+                    if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
+                        enableType = "TOUCH";
+                        loadSecurePay("TOUCH");
+                    } else {
+
+                        enableType = "FACE";
+                        loadSecurePay("FACE");
                     }
                 }
+//                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

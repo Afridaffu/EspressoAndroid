@@ -237,7 +237,8 @@ public class OnboardActivity extends AppCompatActivity {
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+//                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                            objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                             Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());

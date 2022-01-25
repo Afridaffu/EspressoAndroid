@@ -312,6 +312,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
         <activity
             android:name=".view.IdentityVerificationActivity"
             android:configChanges="uiMode"

@@ -33,6 +33,7 @@ public class AutoScrollViewPager extends ViewPager {
   private double swipeScrollFactor = 1.0;
   private Handler handler;
   private boolean enabled;
+  private boolean swipeEnabled = true;
   @Nullable
   private DurationScroller scroller;
   public static final int SCROLL_WHAT = 0;
@@ -297,4 +298,25 @@ public class AutoScrollViewPager extends ViewPager {
     return super.dispatchTouchEvent(ev);
   }
 
+  @Override
+  public boolean onTouchEvent(MotionEvent event) {
+    if (this.swipeEnabled) {
+      return super.onTouchEvent(event);
+    }
+
+    return false;
+  }
+
+  @Override
+  public boolean onInterceptTouchEvent(MotionEvent event) {
+    if (this.swipeEnabled) {
+      return super.onInterceptTouchEvent(event);
+    }
+
+    return false;
+  }
+
+  public void setPagingEnabled(boolean enabled) {
+    this.swipeEnabled = enabled;
+  }
 }

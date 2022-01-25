@@ -74,7 +74,7 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
-    int timezoneID = 0, tempTimezoneID = 0, userId;
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId;
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
@@ -278,12 +278,12 @@ public class MyApplication extends Application {
         this.strFiservError = strFiservError;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getLoginUserId() {
+        return loginUserId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setLoginUserId(int logUserId) {
+        this.loginUserId = logUserId;
     }
 
     public void getStates() {

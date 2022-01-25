@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -34,12 +35,15 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.internal.LinkedTreeMap;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.Error;
 import com.greenbox.coyni.model.cards.CardRequest;
@@ -88,7 +92,7 @@ public class AddCardActivity extends AppCompatActivity {
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etCVV, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1,etlAddress2, etlCity, etlZipCode;
+    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -105,12 +109,45 @@ public class AddCardActivity extends AppCompatActivity {
     private RecognizerBundle mRecognizerBundle;
     CustomKeyboard ctKey;
 
+    IdentityPagerAdapter identityPagerAdapter;
+    static AutoScrollViewPager viewPager;
+    int pagerPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_addcard);
             addCardActivity = this;
+            identityPagerAdapter = new IdentityPagerAdapter();
+            viewPager = findViewById(R.id.view_pager);
+            viewPager.setAdapter(identityPagerAdapter);
+            viewPager.setPagingEnabled(false);
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    Log.e("onPageScrolled", "onPageScrolled " + position);
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    pagerPosition = position;
+                    if (position == 0) {
+                        divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                    } else if (position == 1) {
+                        divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                        divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
             initialization();
             textWatchers();
             focusWatchers();
@@ -125,9 +162,10 @@ public class AddCardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (layoutAddress.getVisibility() == View.VISIBLE) {
-                layoutCard.setVisibility(View.VISIBLE);
-                layoutAddress.setVisibility(View.GONE);
+            if (pagerPosition == 1) {
+//                layoutCard.setVisibility(View.VISIBLE);
+//                layoutAddress.setVisibility(View.GONE);
+                viewPager.setCurrentItem(0);
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                 //etCVV.setText("");
@@ -208,7 +246,8 @@ public class AddCardActivity extends AppCompatActivity {
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
+//            paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
+            paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
             objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
@@ -280,8 +319,9 @@ public class AddCardActivity extends AppCompatActivity {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            layoutCard.setVisibility(View.GONE);
-                            layoutAddress.setVisibility(View.VISIBLE);
+//                            layoutCard.setVisibility(View.GONE);
+//                            layoutAddress.setVisibility(View.VISIBLE);
+                            viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
                             strName = etName.getText().toString().trim();
@@ -330,8 +370,9 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         if (layoutAddress.getVisibility() == View.VISIBLE) {
-                            layoutCard.setVisibility(View.VISIBLE);
-                            layoutAddress.setVisibility(View.GONE);
+//                            layoutCard.setVisibility(View.VISIBLE);
+//                            layoutAddress.setVisibility(View.GONE);
+                            viewPager.setCurrentItem(0);
                             divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                         }
@@ -1149,10 +1190,10 @@ public class AddCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0) {
                         isState = true;
                         stateErrorLL.setVisibility(GONE);
-                        Utils.setUpperHintColor(etlState,getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
                     } else {
                         isState = false;
-                        Utils.setUpperHintColor(etlState,getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -1222,9 +1263,11 @@ public class AddCardActivity extends AppCompatActivity {
             if (isName && isCard && isExpiry && isCvv) {
                 isNextEnabled = true;
                 cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                viewPager.setPagingEnabled(true);
             } else {
                 isNextEnabled = false;
                 cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                viewPager.setPagingEnabled(false);
             }
             if (isAddress1 && isCity && isZipcode && isState) {
                 isAddEnabled = true;
@@ -1574,8 +1617,9 @@ public class AddCardActivity extends AppCompatActivity {
                 try {
                     dialog.dismiss();
                     if (layoutAddress.getVisibility() == View.VISIBLE) {
-                        layoutCard.setVisibility(View.VISIBLE);
-                        layoutAddress.setVisibility(View.GONE);
+//                        layoutCard.setVisibility(View.VISIBLE);
+//                        layoutAddress.setVisibility(View.GONE);
+                        viewPager.setCurrentItem(0);
                         divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                         etCardNumber.setText("");
@@ -1639,6 +1683,38 @@ public class AddCardActivity extends AppCompatActivity {
                     cardErrorLL.setVisibility(GONE);
                 }
             }
+        }
+    }
+
+    class IdentityPagerAdapter extends PagerAdapter {
+
+        @Override
+        public Object instantiateItem(ViewGroup collection, int position) {
+            int resId = 0;
+            switch (position) {
+                case 0:
+                    resId = R.id.layoutCard;
+                    break;
+                case 1:
+                    resId = R.id.layoutAddress;
+                    break;
+            }
+            return findViewById(resId);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1) {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            // No super
         }
     }
 }
