@@ -17,6 +17,7 @@ public class LoginData {
     private Boolean paymentAdded;
     private Boolean biometricEnabled;
     private StateList stateList;
+    private int accountType;
 
 
     public int getUserId() {
@@ -145,6 +146,14 @@ public class LoginData {
 
     public void setStateList(StateList stateList) {
         this.stateList = stateList;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 }
 

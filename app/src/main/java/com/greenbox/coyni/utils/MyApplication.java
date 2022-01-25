@@ -74,7 +74,7 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
-    int timezoneID = 0, tempTimezoneID = 0, loginUserId;
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
@@ -764,6 +764,14 @@ public class MyApplication extends Application {
 
     public void setCardSave(Boolean cardSave) {
         isCardSave = cardSave;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 
     public String convertBitMapToString(Bitmap bitmap) {
