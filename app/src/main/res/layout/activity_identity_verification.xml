@@ -216,7 +216,8 @@
                                 android:textColor="@color/primary_black"
                                 android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursor_color"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_12ssp"
+                                android:autofillHints="creditCardSecurityCode"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -301,7 +302,8 @@
                                     android:padding="@dimen/_14sdp"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/light_gray"
-                                    android:textSize="@dimen/_12ssp" />
+                                    android:textSize="@dimen/_12ssp"
+                                    android:autofillHints="creditCardSecurityCode"/>
 
 
                             </com.google.android.material.textfield.TextInputLayout>
@@ -416,7 +418,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -477,7 +480,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -538,7 +542,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -624,7 +629,8 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="creditCardSecurityCode"/>
 
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -663,7 +669,8 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -725,7 +732,8 @@
                         android:text="@string/countryhint"
                         android:textColor="@color/dark_grey"
                         android:textColorHint="@color/light_gray"
-                        android:textSize="@dimen/_12sdp" />
+                        android:textSize="@dimen/_12sdp"
+                        android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

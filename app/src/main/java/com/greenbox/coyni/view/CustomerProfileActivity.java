@@ -795,15 +795,21 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         Utils.generateUUID(CustomerProfileActivity.this);
                         if (!isSwitchEnabled) {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                saveFace("false");
-                                saveThumb("true");
-                                if (!isLoggedOut)
+//                                saveFace("false");
+//                                saveThumb("true");
+                                if (!isLoggedOut) {
+                                    saveFace("false");
+                                    saveThumb("true");
                                     Utils.showCustomToast(CustomerProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                                }
                             } else {
-                                saveFace("true");
-                                saveThumb("false");
-                                if (!isLoggedOut)
+//                                saveFace("true");
+//                                saveThumb("false");
+                                if (!isLoggedOut) {
+                                    saveFace("true");
+                                    saveThumb("false");
                                     Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                                }
                             }
 
                             isSwitchEnabled = true;
@@ -819,8 +825,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
                                     Utils.showCustomToast(CustomerProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
                             }
                             objMyApplication.setBiometric(false);
-                            saveFace("false");
-                            saveThumb("false");
+                            if (!isLoggedOut) {
+                                saveFace("false");
+                                saveThumb("false");
+                            }
                             isSwitchEnabled = false;
                             switchOn.setVisibility(View.GONE);
                             switchOff.setVisibility(View.VISIBLE);
@@ -829,30 +837,35 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         }
 
                     }
-                } catch (Exception e) {
+                } catch (
+                        Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
-            @Override
-            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
-                if (paymentMethodsResponse != null) {
-                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
-                }
-            }
-        });
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().
 
-        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
-            @Override
-            public void onChanged(Profile profile) {
-                if (profile != null) {
-                    objMyApplication.setMyProfile(profile);
-                    bindImage(objMyApplication.getMyProfile().getData().getImage());
-                }
-            }
-        });
+                observe(this, new Observer<PaymentMethodsResponse>() {
+                    @Override
+                    public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                        if (paymentMethodsResponse != null) {
+                            objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                        }
+                    }
+                });
+
+        dashboardViewModel.getProfileMutableLiveData().
+
+                observe(this, new Observer<Profile>() {
+                    @Override
+                    public void onChanged(Profile profile) {
+                        if (profile != null) {
+                            objMyApplication.setMyProfile(profile);
+                            bindImage(objMyApplication.getMyProfile().getData().getImage());
+                        }
+                    }
+                });
     }
 
     private boolean getLocalBiometricEnabled() {

@@ -157,7 +157,7 @@
                             android:paddingBottom="@dimen/_7sdp"
                             android:text="$"
                             android:textColor="@color/primary_green"
-                            android:textSize="@dimen/_30ssp"
+                            android:textSize="@dimen/_33ssp"
                             android:visibility="gone" />
 
                         <LinearLayout

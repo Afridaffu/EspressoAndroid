@@ -37,7 +37,8 @@
                 android:singleLine="true"
                 android:maxLines="1"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:fontFamily="@font/opensans_regular"/>
+                android:fontFamily="@font/opensans_regular"
+                android:autofillHints="creditCardSecurityCode"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 

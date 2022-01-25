@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -55,14 +57,16 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     public void onBindViewHolder(@NonNull NotificationsAdapter.MyViewHolder holder, int position) {
         try {
 
-            holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
-            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
-            holder.tvNotifDate.setPadding(40, 30, 0, 0);
-            holder.swipeLayout.close();
+//            holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+//            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
+//            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
+//            holder.tvNotifDate.setPadding(40, 30, 0, 0);
+//            holder.swipeLayout.close();
 
             if (notifications.get(position).getType().equals("Notification")) {
-
+                holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
+                holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
+                holder.tvNotifDate.setPadding(40, 30, 0, 0);
                 holder.swipeLayout.setLeftSwipeEnabled(true);
                 holder.swipeLayout.setRightSwipeEnabled(true);
                 holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
@@ -101,6 +105,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             } else {
                                 ((NotificationsActivity) mContext).markReadAPICall(list);
                             }
+                            mItemManger.closeAllItems();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -122,6 +127,8 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             list.add(notifications.get(position).getId());
 
                             ((NotificationsActivity) mContext).deleteNotificationCall(list);
+                            mItemManger.closeAllItems();
+//                            holder.swipeLayout.close(true);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -462,9 +469,27 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
     }
 
-    public void updateList(List<NotificationsDataItems> list) {
+    public void updateList(List<NotificationsDataItems> list, int pos) {
         notifications = list;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
+        notifyItemChanged(pos);
+
+//        if (notifications.size() > 0) {
+//            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.VISIBLE);
+//            ((NotificationsActivity) mContext).noDataTV.setVisibility(View.GONE);
+//
+//            LinearLayoutManager nLayoutManager = new LinearLayoutManager(mContext);
+//            ((NotificationsActivity) mContext).notificationsAdapter = new NotificationsAdapter(notifications, mContext);
+//            ((NotificationsActivity) mContext).notificationsRV.setLayoutManager(nLayoutManager);
+//            ((NotificationsActivity) mContext).notificationsRV.setItemAnimator(new DefaultItemAnimator());
+//            ((NotificationsActivity) mContext).notificationsRV.setAdapter(((NotificationsActivity) mContext).notificationsAdapter);
+//
+//            ((NotificationsActivity) mContext).notificationsRV.scrollToPosition(pos);
+//        } else {
+//            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.GONE);
+//            ((NotificationsActivity) mContext).noDataTV.setVisibility(View.VISIBLE);
+//            ((NotificationsActivity) mContext).noDataTV.setText("You have no notifications");
+//        }
     }
 
     @Override

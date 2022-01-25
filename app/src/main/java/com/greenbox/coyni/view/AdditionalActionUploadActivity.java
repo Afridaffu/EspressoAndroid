@@ -23,7 +23,6 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
-import com.santalu.maskara.widget.MaskEditText;
 
 public class AdditionalActionUploadActivity extends AppCompatActivity {
     EditText ssnET;
