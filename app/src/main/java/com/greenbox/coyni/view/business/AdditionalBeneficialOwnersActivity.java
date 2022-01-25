@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
 
-public class AddBenifitialOwnersActivity extends AppCompatActivity {
+public class AdditionalBeneficialOwnersActivity extends AppCompatActivity {
 
 ImageView BackIV;
 
@@ -18,7 +18,7 @@ ImageView BackIV;
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView(R.layout.activity_add_benifitial_owners);
+        setContentView(R.layout.activity_additional_benifitial_owners);
 
 
         BackIV = findViewById(R.id.backIV);

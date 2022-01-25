@@ -25,14 +25,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.StatesListAdapter;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddBenifitialOwnerActivity2 extends AppCompatActivity {
     TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
@@ -479,7 +474,7 @@ public class AddBenifitialOwnerActivity2 extends AppCompatActivity {
             Addbenifitialowner2CloseCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(AddBenifitialOwnerActivity2.this, AddBenifitialOwnersActivity.class);
+                    Intent intent = new Intent(AddBenifitialOwnerActivity2.this, AdditionalBeneficialOwnersActivity.class);
                     startActivity(intent);
                 }
             });

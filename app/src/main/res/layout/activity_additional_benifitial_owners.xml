@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".view.business.AddBenifitialOwnersActivity">
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    tools:context=".view.business.AdditionalBeneficialOwnersActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,21 +21,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_21sdp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/backIV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_21sdp"
                     android:layout_marginTop="@dimen/_45sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
+
                     android:layout_marginBottom="@dimen/_13sdp"
                     android:src="@drawable/ic_group_11646" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:text="Additional Beneficial Owner(s)"
@@ -42,11 +44,11 @@
                     android:textSize="@dimen/_16ssp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_21sdp"
                     android:layout_marginTop="@dimen/_21sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:lineHeight="@dimen/_16sdp"
                     android:text="@string/Beneficialownership"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
@@ -59,6 +61,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_21sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/BeneficialOwneruntil"
                         android:textColor="@color/primary_black"
@@ -76,6 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_21sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:text="@string/greater"
                     android:textColor="@color/primary_green"
@@ -83,24 +87,23 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_width="@dimen/_274sdp"
-                android:layout_height="@dimen/_66sdp"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_14sdp"
-                android:layout_marginHorizontal="@dimen/_21sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
-                android:background="@drawable/corner_bg_lt1">
+                android:background="@drawable/corner_bg_lt1"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:layout_marginBottom="@dimen/_20sdp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_9sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Johnathan Joestar"
@@ -110,7 +113,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_9sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="35% Ownership"
@@ -120,8 +123,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="@dimen/_6sdp"
-                    android:layout_height="@dimen/_9sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_249sdp"
                     android:layout_marginTop="@dimen/_26sdp"
                     android:layout_marginEnd="@dimen/_11sdp"
@@ -134,33 +137,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_21sdp"
-                android:layout_marginEnd="@dimen/_21sdp"
-
                 android:fontFamily="@font/opensans_regular"
-                android:lineHeight="@dimen/_16sdp"
                 android:text="@string/beneficialnreach"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 
             <RelativeLayout
-                android:layout_width="@dimen/_274sdp"
-                android:layout_height="@dimen/_66sdp"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_14sdp"
-                android:layout_marginEnd="@dimen/_11sdp"
-
-                android:background="@drawable/corner_bg_lt">
+                android:background="@drawable/corner_bg_lt"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_20sdp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_9sdp"
-                        android:layout_marginTop="@dimen/_16sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="@string/AB_owner"
                         android:textColor="@color/primary_black"
@@ -169,7 +169,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_9sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/ownership"

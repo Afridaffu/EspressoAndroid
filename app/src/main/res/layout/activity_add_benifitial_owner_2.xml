@@ -5,6 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:layout_marginHorizontal="@dimen/_21sdp"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
 tools:context=".view.business.AddBenifitialOwnerActivity2">
 <ScrollView
     android:layout_width="match_parent"
@@ -288,6 +289,9 @@ tools:context=".view.business.AddBenifitialOwnerActivity2">
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:focusable="false"
                     android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                     android:singleLine="true"
                     android:textColor="@color/text_color"

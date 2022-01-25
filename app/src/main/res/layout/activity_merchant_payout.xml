@@ -264,7 +264,7 @@
                     android:layout_marginStart="@dimen/_22sdp"
                     android:layout_marginTop="@dimen/_11sdp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/opensans_regular"
+                    android:fontFamily="@font/opensans_bold"
                     android:text="Payout Information"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
