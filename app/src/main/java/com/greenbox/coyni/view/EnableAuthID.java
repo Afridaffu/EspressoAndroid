@@ -36,9 +36,9 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends AppCompatActivity {
-    CardView enableFaceCV, enableTouchCV, successGetStartedCV;
+    CardView enableFaceCV, enableTouchCV, successGetStartedCV,businessGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
-    RelativeLayout faceIDRL, touchIDRL, successRL;
+    RelativeLayout faceIDRL, touchIDRL, successRL,businessSuccessRL;
     String enableType, strScreen = "";
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     SQLiteDatabase mydatabase;
@@ -76,6 +76,9 @@ public class EnableAuthID extends AppCompatActivity {
             successRL = findViewById(R.id.successRL);
             succesCloseIV = findViewById(R.id.succesCloseIV);
 
+            businessSuccessRL = findViewById(R.id.businessSuccessRL);
+            businessGetStartedCV = findViewById(R.id.businessGetStartedCV);
+
             enableType = getIntent().getStringExtra("ENABLE_TYPE");
             objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra("screen") != null) {
@@ -95,6 +98,7 @@ public class EnableAuthID extends AppCompatActivity {
                     faceIDRL.setVisibility(View.GONE);
                     touchIDRL.setVisibility(View.VISIBLE);
                     successRL.setVisibility(View.GONE);
+                    businessSuccessRL.setVisibility(View.GONE);
                     break;
                 case "FACE":
                     if (strScreen.equals("login")) {
@@ -109,11 +113,12 @@ public class EnableAuthID extends AppCompatActivity {
                     faceIDRL.setVisibility(View.VISIBLE);
                     touchIDRL.setVisibility(View.GONE);
                     successRL.setVisibility(View.GONE);
+                    businessSuccessRL.setVisibility(View.GONE);
                     break;
                 case "SUCCESS":
                     faceIDRL.setVisibility(View.GONE);
                     touchIDRL.setVisibility(View.GONE);
-                    successRL.setVisibility(View.VISIBLE);
+                    showSuccessLayout();
                     break;
             }
 
@@ -144,7 +149,7 @@ public class EnableAuthID extends AppCompatActivity {
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
-                        successRL.setVisibility(View.VISIBLE);
+                        showSuccessLayout();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -163,7 +168,7 @@ public class EnableAuthID extends AppCompatActivity {
                         } else {
                             faceIDRL.setVisibility(View.GONE);
                             touchIDRL.setVisibility(View.GONE);
-                            successRL.setVisibility(View.VISIBLE);
+                            showSuccessLayout();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -210,7 +215,7 @@ public class EnableAuthID extends AppCompatActivity {
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
-                        successRL.setVisibility(View.VISIBLE);
+                        showSuccessLayout();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -226,7 +231,7 @@ public class EnableAuthID extends AppCompatActivity {
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
-                        successRL.setVisibility(View.VISIBLE);
+                        showSuccessLayout();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -240,10 +245,12 @@ public class EnableAuthID extends AppCompatActivity {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.VISIBLE);
                         successRL.setVisibility(View.GONE);
+                        businessSuccessRL.setVisibility(View.GONE);
                     } else {
                         faceIDRL.setVisibility(View.VISIBLE);
                         touchIDRL.setVisibility(View.GONE);
                         successRL.setVisibility(View.GONE);
+                        businessSuccessRL.setVisibility(View.GONE);
                     }
                 }
             });
@@ -269,6 +276,17 @@ public class EnableAuthID extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
+                }
+            });
+
+            businessGetStartedCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
                 }
             });
 
@@ -302,7 +320,8 @@ public class EnableAuthID extends AppCompatActivity {
                                         d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(d);
                                     } else {
-                                        successRL.setVisibility(View.VISIBLE);
+//                                        successRL.setVisibility(View.VISIBLE);
+                                        showSuccessLayout();
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
@@ -324,7 +343,8 @@ public class EnableAuthID extends AppCompatActivity {
                                         d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(d);
                                     } else {
-                                        successRL.setVisibility(View.VISIBLE);
+//                                        successRL.setVisibility(View.VISIBLE);
+                                        showSuccessLayout();
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
@@ -443,4 +463,13 @@ public class EnableAuthID extends AppCompatActivity {
         }.start();
     }
 
+    private void showSuccessLayout(){
+        if(objMyApplication.getAccountType() ==Utils.PERSONAL_ACCOUNT){
+            successRL.setVisibility(View.VISIBLE);
+            businessSuccessRL.setVisibility(View.GONE);
+        }else if(objMyApplication.getAccountType() ==Utils.BUSINESS_ACCOUNT){
+            successRL.setVisibility(View.GONE);
+            businessSuccessRL.setVisibility(View.VISIBLE);
+        }
+    }
 }

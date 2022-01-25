@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
 
@@ -18,6 +19,7 @@ public class AccountTypeActivity extends AppCompatActivity {
 
     LinearLayout personalAccontLL, layoutClose, businessAccontLL;
     Long mLastClickTime = 0L;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class AccountTypeActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_account_type);
 
+            objMyApplication = (MyApplication) getApplicationContext();
             personalAccontLL = findViewById(R.id.personalAccontLL);
             businessAccontLL = findViewById(R.id.businessAccontLL);
             layoutClose = findViewById(R.id.layoutClose);
@@ -37,10 +40,10 @@ public class AccountTypeActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    objMyApplication.setAccountType(Utils.PERSONAL_ACCOUNT);
                     startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
                     finish();
                     overridePendingTransition(0, 0);
-
                 }
             });
 
@@ -58,7 +61,11 @@ public class AccountTypeActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
+                    objMyApplication.setAccountType(Utils.BUSINESS_ACCOUNT);
+                    startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
+                    finish();
+                    overridePendingTransition(0, 0);
+//                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
                 }
             });
 

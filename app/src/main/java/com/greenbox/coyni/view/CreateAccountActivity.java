@@ -60,6 +60,7 @@ import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
@@ -115,6 +116,7 @@ public class CreateAccountActivity extends AppCompatActivity implements OnKeyboa
     public static int focusedID = 0;
     CheckBox agreeCB;
 
+    MyApplication objMyApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -160,6 +162,7 @@ public class CreateAccountActivity extends AppCompatActivity implements OnKeyboa
 
     public void initFields() {
         try {
+            objMyApplication = (MyApplication) getApplicationContext();
             setKeyboardVisibilityListener(this);
             createAccountActivity = this;
             errorState = new int[][]{new int[]{android.R.attr.state_focused}};
@@ -1042,7 +1045,7 @@ public class CreateAccountActivity extends AppCompatActivity implements OnKeyboa
             regisRequest.setEmail(emailET.getText().toString().trim());
             regisRequest.setCreatePassword(passwordET.getText().toString().trim());
             regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
-            regisRequest.setAccountType(Utils.PERSONAL_ACCOUNT);
+            regisRequest.setAccountType(objMyApplication.getAccountType());
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
             if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {
