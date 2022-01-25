@@ -170,6 +170,19 @@ public class GiftCardDetails extends AppCompatActivity {
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
 
+            amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+            if (amountET.requestFocus()==true){
+                amountET.setHint("Coyni@example.com");
+                amountTIL.setBoxStrokeColorStateList(getColorStateList(R.color.primary_green));
+            }
+            else {
+                amountET.setHint("");
+            }
+
             //isBiometric = Utils.checkBiometric(GiftCardDetails.this);
             SetFaceLock();
             SetTouchId();
