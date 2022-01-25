@@ -369,12 +369,25 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (layoutAddress.getVisibility() == View.VISIBLE) {
-//                            layoutCard.setVisibility(View.VISIBLE);
-//                            layoutAddress.setVisibility(View.GONE);
+                        if (pagerPosition == 1) {
                             viewPager.setCurrentItem(0);
                             divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            divider2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (pagerPosition == 0 && isNextEnabled) {
+                            viewPager.setCurrentItem(1);
+                            divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                            divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

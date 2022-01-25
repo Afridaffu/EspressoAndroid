@@ -833,6 +833,23 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
             });
 
+            viewRight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isNext) {
+                        viewPager.setCurrentItem(1);
+                        viewLeft.setBackgroundResource(R.drawable.button_background1);
+                        viewRight.setBackgroundResource(R.drawable.button_background);
+                        backbtn.setVisibility(VISIBLE);
+                        closebtn.setVisibility(GONE);
+                        if (Utils.isKeyboardVisible) {
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
+                        }
+                    }
+                }
+
+            });
+
             stateCL.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
