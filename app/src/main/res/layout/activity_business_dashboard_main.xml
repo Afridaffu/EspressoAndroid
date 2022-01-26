@@ -1521,7 +1521,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_27sdp"
-                android:src="@drawable/ic_group_11646" />
+                android:src="@drawable/ic_close" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -1574,7 +1574,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_27sdp"
-                android:src="@drawable/ic_group_11646" />
+                android:src="@drawable/ic_close" />
 
             <TextView
                 android:layout_width="wrap_content"

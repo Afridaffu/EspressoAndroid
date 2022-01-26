@@ -31,7 +31,7 @@
                     android:layout_marginTop="@dimen/_45sdp"
 
                     android:layout_marginBottom="@dimen/_13sdp"
-                    android:src="@drawable/ic_group_11646" />
+                    android:src="@drawable/ic_close" />
 
                 <TextView
                     android:layout_width="match_parent"

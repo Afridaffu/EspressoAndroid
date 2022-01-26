@@ -180,6 +180,7 @@
     <string name="bank_exhaust">There is an account limit of 4 total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.</string>
 
     <string name="currency">CYN</string>
+    <string name="edit"><u>Edit</u></string>
     <string name="reference_id_hyper"><u>[Reference ID (hyper</u></string>
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
@@ -243,5 +244,16 @@
     <string name="reserverule"> Reserve Rule: [%] per Sale Order with a 90 day rolling\nperiod.</string>
     <string name="a_u_pay">Your active batch is set to automatically pay.</string>
     <string name="merchant_balance">Merchant Balance = Net volume processed since your\nlast batch + Reserve Balance</string>
+    <string name="business_type">Business Type</string>
+    <string name="application_completed">Application completed!</string>
+    <string name="start">Start</string>
+    <string name="dba_information">DBA Information</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="beneficial_owner">Beneficial Owner</string>
+    <string name="add_bank_account">Add Bank Account</string>
+    <string name="merchant_s_agreement">Merchant’s Agreement</string>
+    <string name="review_application">Review Application</string>
+    <string name="company_information">Company Information</string>
+    <string name="basic_information">Basic Information</string>
 
 </resources>

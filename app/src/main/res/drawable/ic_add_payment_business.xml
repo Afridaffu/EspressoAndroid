@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+  <path
+      android:pathData="M20,20m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"
+      android:fillColor="#f2f5f8"/>
+  <path
+      android:pathData="M5.996,12.392A2.847,2.847 0,0 1,8.819 9.522h19.926a2.847,2.847 0,0 1,2.823 2.87v6.263a0.609,0.609 0,0 1,-1.218 0L30.35,12.392a1.629,1.629 0,0 0,-1.605 -1.653L8.819,10.739A1.629,1.629 0,0 0,7.214 12.392v11.308a1.629,1.629 0,0 0,1.605 1.652h8.745a0.609,0.609 0,1 1,0 1.218L8.819,26.57A2.847,2.847 0,0 1,5.996 23.7z"
+      android:fillColor="#00a6a2"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M5.996,13.784a0.609,0.609 0,0 1,0.609 -0.609h24.354a0.609,0.609 0,1 1,0 1.218L6.605,14.393A0.609,0.609 0,0 1,5.996 13.784z"
+      android:fillColor="#00a6a2"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M8.431,19.873a0.609,0.609 0,0 1,0.609 -0.609h2.435a0.609,0.609 0,1 1,0 1.218L9.04,20.482a0.609,0.609 0,0 1,-0.609 -0.609z"
+      android:fillColor="#00a6a2"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M8.431,22.917A0.609,0.609 0,0 1,9.04 22.308L13.911,22.308a0.609,0.609 0,1 1,0 1.218L9.04,23.526a0.609,0.609 0,0 1,-0.609 -0.609z"
+      android:fillColor="#00a6a2"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M27.3089,21.7a5.48,5.48 0,1 0,5.48 5.48,5.48 5.48,0 0,0 -5.48,-5.48zM20.6089,27.182a6.7,6.7 0,1 1,6.7 6.7,6.7 6.7,0 0,1 -6.7,-6.7z"
+      android:fillColor="#00a6a2"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M30.333,27.747L24.279,27.747A0.568,0.568 0,0 1,23.711 27.18,0.568 0.568,0 0,1 24.279,26.612h6.054a0.568,0.568 0,0 1,0.568 0.568,0.568 0.568,0 0,1 -0.568,0.567z"
+      android:fillColor="#00a6a2"/>
+  <path
+      android:pathData="M26.738,30.207L26.738,24.153A0.568,0.568 0,0 1,27.873 24.153l-0,6.054a0.568,0.568 0,1 1,-1.135 0z"
+      android:fillColor="#00a6a2"/>
+</vector>

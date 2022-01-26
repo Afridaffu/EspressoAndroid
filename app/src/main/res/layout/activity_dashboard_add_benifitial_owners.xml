@@ -30,7 +30,7 @@
                 android:id="@+id/CrossIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_group_11646"
+                android:src="@drawable/ic_close"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_45sdp"/>
             <ImageView
