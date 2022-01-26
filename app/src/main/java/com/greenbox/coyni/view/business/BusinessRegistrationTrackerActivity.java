@@ -13,10 +13,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class BusinessRegistrationTrackerActivity extends AppCompatActivity {
-TextView start,start2,start3,start4,start5;
-Dialog choose;
+public class BusinessRegistrationTrackerActivity extends BaseActivity {
+    TextView start, start2, start3, start4, start5;
+    Dialog choose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,7 @@ Dialog choose;
 
         start = findViewById(R.id.startTV);
         start2 = findViewById(R.id.startTV2);
-        start3= findViewById(R.id.startTV3);
+        start3 = findViewById(R.id.startTV3);
         start4 = findViewById(R.id.startTV4);
         start5 = findViewById(R.id.startTV5);
 
@@ -62,7 +64,7 @@ Dialog choose;
             public void onClick(View v) {
                 Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
                 startActivity(intent);
-               }
+            }
         });
 
     }

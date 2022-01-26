@@ -29,12 +29,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraFragment;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddBenifitialOwnerActivity1 extends AppCompatActivity {
+public class AddBenifitialOwnerActivity1 extends BaseActivity {
 
     TextInputLayout fnametil, lnametil, dobtil, ssntil, ownershiptil;
     TextInputEditText fnameET, lnameET, dobET, ssnET, ownershipET;

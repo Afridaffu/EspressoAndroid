@@ -27,9 +27,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
-public class AddBenifitialOwnerActivity2 extends AppCompatActivity {
+public class AddBenifitialOwnerActivity2 extends BaseActivity {
     TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
     TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
     ConstraintLayout stateCL;

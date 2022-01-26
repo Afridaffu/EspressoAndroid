@@ -16,8 +16,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class AddBankAccountActivity extends AppCompatActivity {
+public class AddBankAccountActivity extends BaseActivity {
     ImageView closeButton;
     TextView learnmoreTV;
     CardView imReday;

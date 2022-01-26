@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,8 +26,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class CompanyInformationActivity extends AppCompatActivity {
+public class CompanyInformationActivity extends BaseActivity {
     public CardView nextCV;
     ImageView close,dropdown;
     CompanyOutLineBoxPhoneNumberEditText compphoneNumberET;
@@ -316,7 +316,7 @@ public class CompanyInformationActivity extends AppCompatActivity {
                     nextCV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(CompanyInformationActivity.this, CompanyAddress2Activity.class);
+                            Intent intent = new Intent(CompanyInformationActivity.this, CompanyAddressActivity.class);
                             startActivity(intent);
                         }
                     });

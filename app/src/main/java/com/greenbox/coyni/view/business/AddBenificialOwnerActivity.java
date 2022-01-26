@@ -17,8 +17,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class AddBenificialOwnerActivity extends AppCompatActivity {
+public class AddBenificialOwnerActivity extends BaseActivity {
 
     TextInputLayout fnametil,lnametil,dobtil,ssntil,ownershiptil;
     TextInputEditText fnameET,lnameET,dobET,ssnET,ownershipET;
