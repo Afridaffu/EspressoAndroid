@@ -170,6 +170,19 @@ public class GiftCardDetails extends AppCompatActivity {
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
 
+            amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
+            if (amountET.requestFocus()==true){
+                amountET.setHint("Coyni@example.com");
+                amountTIL.setBoxStrokeColorStateList(getColorStateList(R.color.primary_green));
+            }
+            else {
+                amountET.setHint("");
+            }
+
             //isBiometric = Utils.checkBiometric(GiftCardDetails.this);
             SetFaceLock();
             SetTouchId();
@@ -668,6 +681,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         amountET.setHint(amountETString);
                         amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_green));
+                        amountErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -699,6 +713,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
                         Utils.openKeyPad(GiftCardDetails.this, firstNameET);
+                        firstNameErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -731,6 +746,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
                         Utils.openKeyPad(GiftCardDetails.this, lastNameET);
+                        lastNameErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -768,6 +784,7 @@ public class GiftCardDetails extends AppCompatActivity {
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
                         Utils.openKeyPad(GiftCardDetails.this, emailET);
+                        emailErrorLL.setVisibility(GONE);
                     }
                 }
             });

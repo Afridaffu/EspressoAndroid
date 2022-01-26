@@ -8,8 +8,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
         android:layout_above="@+id/lyBottom"
+        android:fillViewport="true"
         android:scrollbars="none">
 
         <LinearLayout
@@ -129,10 +129,9 @@
 
                         <TextView
                             android:id="@+id/tvBankName"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_weight="0.6"
                             android:fontFamily="@font/opensans_semibold"
                             android:singleLine="true"
                             android:text="Bank of America"
@@ -141,10 +140,9 @@
 
                         <TextView
                             android:id="@+id/tvBAccNumber"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_weight="1.4"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="••••5359"
                             android:textColor="@color/primary_black"
@@ -157,14 +155,13 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/lyCDetails"
                         android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:layout_toLeftOf="@+id/imgArrow"
                         android:layout_toRightOf="@+id/imgBankIcon"
                         android:fontFamily="@font/opensans_regular"
                         android:text="Your [daily or weekly] limit is [amount]"
                         android:textColor="@color/xdark_gray"
-                        android:textSize="@dimen/_9ssp"/>
+                        android:textSize="@dimen/_9ssp" />
 
                     <ImageView
                         android:id="@+id/imgArrow"
@@ -232,10 +229,10 @@
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center_vertical|right"
                                 android:hint="0.00"
-                                android:textColorHint="@color/light_gray"
                                 android:inputType="numberDecimal"
                                 android:maxLength="@string/maxlength"
                                 android:textColor="@color/primary_black"
+                                android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursorcolor"
                                 android:textSize="@dimen/_53ssp" />
 
@@ -247,7 +244,7 @@
                                 android:text=" CYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp"
-                                android:visibility="visible"/>
+                                android:visibility="visible" />
                         </LinearLayout>
 
                         <View
@@ -338,9 +335,9 @@
                         android:layout_marginRight="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:textColorHint="@color/light_gray"
                         android:hint="Optional: Add Note (Maximum 120 characters )"
                         android:textColor="@color/primary_black"
+                        android:textColorHint="@color/light_gray"
                         android:textSize="@dimen/_10ssp"></TextView>
 
                 </LinearLayout>
@@ -368,15 +365,15 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:orientation="vertical">
 
-<!--        <TextView-->
-<!--            android:id="@+id/tvExchange"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:fontFamily="@font/opensans_regular"-->
-<!--            android:text="Exchange Rate: 1.00 CYN = $ 1.00"-->
-<!--            android:textColor="@color/xdark_gray"-->
-<!--            android:textSize="@dimen/_9ssp"></TextView>-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvExchange"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="center_horizontal"-->
+        <!--            android:fontFamily="@font/opensans_regular"-->
+        <!--            android:text="Exchange Rate: 1.00 CYN = $ 1.00"-->
+        <!--            android:textColor="@color/xdark_gray"-->
+        <!--            android:textSize="@dimen/_9ssp"></TextView>-->
 
         <com.greenbox.coyni.utils.keyboards.CustomKeyboard
             android:id="@+id/ckb"
