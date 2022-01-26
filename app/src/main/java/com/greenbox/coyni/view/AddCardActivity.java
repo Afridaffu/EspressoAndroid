@@ -73,8 +73,12 @@ import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class AddCardActivity extends AppCompatActivity {
@@ -111,7 +115,7 @@ public class AddCardActivity extends AppCompatActivity {
 
     IdentityPagerAdapter identityPagerAdapter;
     static AutoScrollViewPager viewPager;
-    int pagerPosition = 0;
+    int pagerPosition = 0, diffMonths = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,6 +261,7 @@ public class AddCardActivity extends AppCompatActivity {
 
             etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+
 
             etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -648,6 +653,11 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             Calendar cal = Calendar.getInstance();
             int month = cal.get(Calendar.MONTH) + 1;
+            if (!etExpiry.getText().toString().equals("") && etExpiry.getText().toString().length() == 5) {
+                Year year = Year.parse(etExpiry.getText().toString().split("/")[1], DateTimeFormatter.ofPattern("yy"));
+                String strDate = "01/" + etExpiry.getText().toString().split("/")[0] + "/" + year.toString();
+                diffMonths = objMyApplication.monthsBetweenDates(new Date(), getDate(strDate));
+            }
             String year = "";
             SimpleDateFormat ydf = new SimpleDateFormat("yy");
             year = ydf.format(Calendar.getInstance().getTime());
@@ -657,12 +667,25 @@ public class AddCardActivity extends AppCompatActivity {
                 value = false;
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
                 value = false;
+            } else if (diffMonths != -1 && diffMonths > Integer.parseInt(getString(R.string.expirydate))) {
+                value = false;
             }
         } catch (Exception ex) {
             value = false;
             ex.printStackTrace();
         }
         return value;
+    }
+
+    private Date getDate(String date) {
+        Date dtExpiry = null;
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+            dtExpiry = spf.parse(date);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return dtExpiry;
     }
 
     private void focusWatchers() {
