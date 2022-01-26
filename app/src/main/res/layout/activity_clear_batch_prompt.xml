@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".view.business.ClearBatchPromptActivity"
+    android:orientation="vertical"
+    android:background="@drawable/top_rounded_bg">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_3sdp"
+                android:background="@drawable/bg_core_colorfill"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_28sdp"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/closing_batch"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:fontFamily="@font/opensans_semibold"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6,890.43"
+                android:fontFamily="@font/opensans_bold"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/_35sdp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CYN"
+                android:textSize="@dimen/_11sdp"
+                android:textColor="@color/primary_green"
+                android:fontFamily="@font/opensans_bold"
+                android:layout_marginStart="@dimen/_5sdp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_21sdp"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_to"
+                android:textSize="@dimen/_11ssp"
+                android:textColor="#505050"
+                android:singleLine="true"
+                android:fontFamily="@font/opensans_regular"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="right"
+                android:layout_marginEnd="@dimen/_11sdp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/business_token_account"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/primary_black"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/available_balance"
+                    android:textSize="@dimen/_9ssp"
+                    android:fontFamily="@font/opensans_semibold"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/slideToConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_55sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_25sdp"
+            android:background="@drawable/shape_round_rectable"
+            android:elevation="@dimen/_2sdp"
+            app:layoutDescription="@xml/activity_swipe_unloack_scene"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_lable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:paddingEnd="16dp"
+                android:paddingRight="16dp"
+                android:text="Slide to Confirm"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/im_lock"
+                app:layout_constraintStart_toEndOf="@+id/im_lock"
+                app:layout_constraintTop_toTopOf="@+id/im_lock" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/im_lock"
+                android:layout_width="@dimen/_44sdp"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                app:cardBackgroundColor="@color/slidebtn_bg"
+                app:cardCornerRadius="@dimen/_21sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/double_left_bggreen" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/im_lock_"
+                android:layout_width="@dimen/_44sdp"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_20sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ProgressBar
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+    </LinearLayout>
+</LinearLayout>
