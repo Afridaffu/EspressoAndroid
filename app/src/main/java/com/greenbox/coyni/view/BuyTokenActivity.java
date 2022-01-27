@@ -523,7 +523,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 lyCDetails.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_bankactive);
-                tvBankName.setText(objData.getBankName());
+                if (objData.getBankName().length() > 15) {
+                    tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
+                } else {
+                    tvBankName.setText(objData.getBankName());
+                }
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
                     tvBAccNumber.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {

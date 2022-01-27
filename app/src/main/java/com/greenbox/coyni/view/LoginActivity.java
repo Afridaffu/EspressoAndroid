@@ -629,12 +629,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
-                            objMyApplication.setAccountType(login.getData().getAccountType());
 //                            objMyApplication.setUserId(login.getData().getUserId());
                             objMyApplication.setLoginUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                             objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                             getStatesUrl(login.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(login.getData().getAccountType());
                             if (login.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -665,8 +665,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             if (login.getData() != null) {
                                 if (!login.getData().getMessage().equals("") && login.getData().getPasswordFailedAttempts() > 0) {
-//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                     Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                 }
                             } else {
@@ -701,12 +699,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                             objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -720,8 +718,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             if (loginResponse.getData() != null) {
                                 if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                     Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                 }
                             } else {

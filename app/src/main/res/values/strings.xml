@@ -225,7 +225,7 @@
     <string name="Next">Next</string>
     <string name="Savedautomatically">Saved automatically</string>
     <string name="Ownership">Ownership %</string>
-
+    <string name="expirydate">60</string>
     <string name="AB_owners">Additional Beneficial Owner(s)</string>
     <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional</string>
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
