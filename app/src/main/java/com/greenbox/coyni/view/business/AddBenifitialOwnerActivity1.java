@@ -503,7 +503,7 @@ public class AddBenifitialOwnerActivity1 extends BaseActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     ownershipET.setHint("");
-                    if (ownershipET.getText().toString().trim().length() == 2) {
+                    if (ownershipET.getText().toString().trim().length() > 0) {
                         ownershipLL.setVisibility(GONE);
                         ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
