@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -63,6 +64,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     SQLiteDatabase mydatabase;
+    private int mAccountType = Utils.PERSONAL_ACCOUNT;
     Cursor dsDontRemind;
     Boolean isDontRemind = false;
     String resetPINValue = "ENTER";
@@ -77,6 +79,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_pin_keyboard);
             initializeComponents();
+            mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
             TYPE = getIntent().getStringExtra("TYPE");
             switch (TYPE) {
                 case "CHOOSE":
@@ -226,9 +229,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 break;
                                             case "login":
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
-                                                    Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                    startActivity(d);
+                                                    launchDashboard();
                                                 } else {
                                                     if (!isDontRemind) {
                                                         if (Utils.checkBiometric(PINActivity.this)) {
@@ -253,9 +254,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                                     .putExtra("screen", strScreen));
                                                         }
                                                     } else {
-                                                        Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        startActivity(d);
+                                                        launchDashboard();
                                                     }
                                                 }
                                                 break;
@@ -344,9 +343,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            PINActivity.this.startActivity(d);
+                                            launchDashboard();
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -361,9 +358,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            Intent d = new Intent(PINActivity.this, DashboardActivity.class);
-                                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            PINActivity.this.startActivity(d);
+                                            launchDashboard();
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -878,6 +873,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
             }
         }
+    }
+
+    private void launchDashboard() {
+        Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
+        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
+        }
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PINActivity.this.startActivity(dashboardIntent);
     }
 
     private void WithdrawMethod() {

@@ -74,4 +74,15 @@ public class AccountTypeActivity extends AppCompatActivity {
         }
 
     }
+    private void startCreateAccountActivity(int accountType) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        Intent inCreateAccount = new Intent(AccountTypeActivity.this, CreateAccountActivity.class);
+        inCreateAccount.putExtra(Utils.ACCOUNT_TYPE, accountType);
+        startActivity(inCreateAccount);
+        finish();
+        overridePendingTransition(0, 0);
+    }
 }

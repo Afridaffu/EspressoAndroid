@@ -69,7 +69,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateAccountActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class CreateAccountActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
@@ -110,7 +110,6 @@ public class CreateAccountActivity extends AppCompatActivity implements OnKeyboa
     ColorStateList errorColorState, colorState;
 
     boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false, isAgreed = false;
-
     RelativeLayout mainRL;
     ScrollView mainSV;
     public static int focusedID = 0;

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#f2f4f5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/corner_radius_white1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_dashboard_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onDashboardTabSelected"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:id="@+id/iv_dashboard_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/dashboard"
+                android:src="@drawable/ic_close" />
+
+            <TextView
+                android:id="@+id/tv_dashboard_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center_horizontal"
+                android:text="@string/dashboard"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_account_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:onClick="onAccountTabSelected"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_account_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/account"
+                android:gravity="center_horizontal"
+                android:src="@drawable/token" />
+
+            <TextView
+                android:id="@+id/tv_account_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center_horizontal"
+                android:text="@string/account"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_menu_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onQuickMenuTabSelected"
+            android:contentDescription="@string/quick_menu"
+            android:src="@drawable/quick_action_btn"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/il_transactions_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:onClick="onTransactionsTabSelected"
+            android:orientation="vertical" android:paddingTop="10dp"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:id="@+id/iv_transactions_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/transactions"
+                android:src="@drawable/ic_close" />
+
+            <TextView
+                android:id="@+id/iv_transactions_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center_horizontal"
+                android:text="@string/transactions"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_profile_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onProfileTabSelected"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:id="@+id/iv_profile_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/profile"
+                android:src="@drawable/profile" />
+
+            <TextView
+                android:id="@+id/tv_profile_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center_horizontal"
+                android:text="@string/profile"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_8sdp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

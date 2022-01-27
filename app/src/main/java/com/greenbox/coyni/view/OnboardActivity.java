@@ -50,7 +50,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class OnboardActivity extends AppCompatActivity {
+public class OnboardActivity extends BaseActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;
