@@ -8,8 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class AccountHasCreatedSucessful extends AppCompatActivity {
+public class AccountHasCreatedSucessful extends BaseActivity {
 public CardView cardnextcv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

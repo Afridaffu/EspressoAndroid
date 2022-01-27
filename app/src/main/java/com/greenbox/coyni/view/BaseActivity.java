@@ -10,12 +10,13 @@ import com.greenbox.coyni.utils.LogUtils;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private final String TAG = getClass().getName();
+    public final String TAG = getClass().getName();
+    public static BaseActivity baseActivity;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtils.d(TAG, getClass().getName());
-
+        baseActivity = this;
     }
 
     public void showProgressDialog() {

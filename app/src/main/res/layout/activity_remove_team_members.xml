@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".view.business.RemoveTeamMembersActivity"
+    android:orientation="vertical"
+    android:background="@drawable/top_rounded_bg">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_3sdp"
+                android:background="@drawable/bg_core_colorfill"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_28sdp"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_team_members"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginEnd="@dimen/_22sdp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/account_permissions"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/primary_black"
+            android:fontFamily="@font/opensans_semibold"
+            android:layout_marginEnd="@dimen/_21sdp"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:gravity="left"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_43sdp"
+                android:layout_marginBottom="@dimen/_27sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_21sdp"
+                android:layout_marginHorizontal="@dimen/_21sdp">
+
+                <TextView
+                    android:id="@+id/tvNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_corefull"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="No"
+                    android:textColor="@color/primary_color"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/tvYes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_core_colorfill"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="Yes"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

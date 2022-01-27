@@ -11,21 +11,21 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class AdditionDocInfoActivity extends AppCompatActivity {
-ImageView back2address2IV;
-TextView bottomTV;
-public CardView DoneCV;
-Dialog choosefile;
+public class CompanyAdditionalDocumentsActivity extends BaseActivity {
+    ImageView back2address2IV;
+    TextView bottomTV;
+    public CardView DoneCV;
+    Dialog chooseFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addtion_doc_info);
+        setContentView(R.layout.activity_company_additional_documents);
 
         back2address2IV = findViewById(R.id.back2address2IV);
         DoneCV = findViewById(R.id.DoneCV);
@@ -34,7 +34,7 @@ Dialog choosefile;
         back2address2IV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdditionDocInfoActivity.this, CompanyAddress2Activity.class);
+                Intent intent = new Intent(CompanyAdditionalDocumentsActivity.this, CompanyAddressActivity.class);
                 startActivity(intent);
             }
         });
@@ -43,7 +43,7 @@ Dialog choosefile;
         bottomTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choosefilePopup(AdditionDocInfoActivity.this);
+                chooseFilePopup(CompanyAdditionalDocumentsActivity.this);
 
             }
         });
@@ -51,27 +51,28 @@ Dialog choosefile;
         DoneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdditionDocInfoActivity.this, BusinessRegistrationTrackerActivity.class);
+                Intent intent = new Intent(CompanyAdditionalDocumentsActivity.this, BusinessRegistrationTrackerActivity.class);
                 startActivity(intent);
             }
         });
     }
-    private void choosefilePopup(final Context context) {
+
+    private void chooseFilePopup(final Context context) {
         try {
-            choosefile = new Dialog(context);
-            choosefile.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            choosefile.setContentView(R.layout.activity_choose_file_botm_sheet);
-            choosefile.setCancelable(true);
-            Window window = choosefile.getWindow();
+            chooseFile = new Dialog(context);
+            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
+            chooseFile.setCancelable(true);
+            Window window = chooseFile.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            choosefile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams wlp = window.getAttributes();
 
             wlp.gravity = Gravity.BOTTOM;
             wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             window.setAttributes(wlp);
-            choosefile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            choosefile.show();
+            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            chooseFile.show();
             DoneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
         } catch (Exception ex) {

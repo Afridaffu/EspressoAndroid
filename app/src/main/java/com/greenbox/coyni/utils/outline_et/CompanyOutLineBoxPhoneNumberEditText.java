@@ -42,7 +42,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.company_outlinebox_phone_number_layout, this, true);
         hintName = findViewById(R.id.companyhintTV);
         hintHolder = findViewById(R.id.companyhintdHolderLL);
-        phnET = findViewById(R.id.companypnET);
+        phnET = findViewById(R.id.pnET);
 
         phnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override

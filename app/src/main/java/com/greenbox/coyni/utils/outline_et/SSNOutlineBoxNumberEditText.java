@@ -11,11 +11,12 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     private TextView hintName;
     private LinearLayout hintHolder;
-    private EditText ssnET;
+    private MaskEditText ssnET;
     boolean isBusinError = false;
 
     public String FROM = "";

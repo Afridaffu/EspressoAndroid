@@ -14,15 +14,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class CompanyAddress2Activity extends AppCompatActivity {
+public class CompanyAddressActivity extends BaseActivity {
     ImageView statedropdownIV, previouspageIV;
     public CardView nextCV;
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil;
@@ -36,7 +36,7 @@ public class CompanyAddress2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_company_address2);
+        setContentView(R.layout.activity_company_address);
         initfields();
         textWatchers();
         focusWatchers();
@@ -44,7 +44,7 @@ public class CompanyAddress2Activity extends AppCompatActivity {
         previouspageIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CompanyAddress2Activity.this, CompanyInformationActivity.class);
+                Intent intent = new Intent(CompanyAddressActivity.this, CompanyInformationActivity.class);
                 startActivity(intent);
             }
         });
@@ -392,7 +392,7 @@ public class CompanyAddress2Activity extends AppCompatActivity {
             nextCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(CompanyAddress2Activity.this, AdditionDocInfoActivity.class);
+                    Intent intent = new Intent(CompanyAddressActivity.this, CompanyAdditionalDocumentsActivity.class);
                     startActivity(intent);
                 }
             });
