@@ -50,7 +50,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class OnboardActivity extends AppCompatActivity {
+public class OnboardActivity extends BaseActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;
@@ -242,6 +242,7 @@ public class OnboardActivity extends AppCompatActivity {
                             Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(OnboardActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");

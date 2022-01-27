@@ -71,7 +71,7 @@
                 android:paddingBottom="@dimen/_10sdp">
 
                 <ImageView
-                    android:id="@+id/imgBankIcon"
+                    android:id="@+id/imgSBankIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_toRightOf="@+id/imgBankIcon"
+                    android:layout_toRightOf="@+id/imgSBankIcon"
                     android:orientation="vertical">
 
                     <TextView

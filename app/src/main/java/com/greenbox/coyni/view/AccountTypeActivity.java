@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
 
@@ -18,6 +19,7 @@ public class AccountTypeActivity extends AppCompatActivity {
 
     LinearLayout personalAccontLL, layoutClose, businessAccontLL;
     Long mLastClickTime = 0L;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,20 +29,14 @@ public class AccountTypeActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_account_type);
 
+            objMyApplication = (MyApplication) getApplicationContext();
             personalAccontLL = findViewById(R.id.personalAccontLL);
             businessAccontLL = findViewById(R.id.businessAccontLL);
             layoutClose = findViewById(R.id.layoutClose);
             personalAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
-                    finish();
-                    overridePendingTransition(0, 0);
-
+                    startCreateAccountActivity(Utils.PERSONAL_ACCOUNT);
                 }
             });
 
@@ -54,11 +50,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
+                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
             });
 
@@ -66,5 +58,16 @@ public class AccountTypeActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
 
+    }
+
+    private void startCreateAccountActivity(int accountType) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        objMyApplication.setAccountType(accountType);
+        startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
+        finish();
+        overridePendingTransition(0, 0);
     }
 }

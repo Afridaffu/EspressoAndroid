@@ -186,6 +186,8 @@ public class Utils {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
+    public static final String ACCOUNT_TYPE = "account_type";
+
 
     public static String getStrLang() {
         return strLang;

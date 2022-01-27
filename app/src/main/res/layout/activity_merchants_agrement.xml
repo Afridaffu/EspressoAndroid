@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/boxbackgroundgray"
+    android:orientation="vertical">
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/_44sdp"
+        android:paddingLeft="@dimen/_21sdp"
+        android:background="@drawable/bottomradius"
+        >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_x"
+        android:layout_marginBottom="@dimen/_13sdp"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Merchant’s Agreement"
+            android:textSize="@dimen/_16ssp"
+            android:fontFamily="@font/opensans_bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="@dimen/_11sdp"
+            />
+    </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_margin="@dimen/_11sdp"
+            >
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:padding="@dimen/_11sdp"
+                >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+
+                />
+            </LinearLayout>
+            </ScrollView>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_11sdp"
+            android:layout_marginRight="@dimen/_11sdp"
+            >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white"
+                    android:padding="@dimen/_10sdp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Signature "
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/opensans_regular"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_editicon"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_13sdp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="@color/light_gray"
+                    />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_18sdp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginRight="@dimen/_21sdp">
+
+        <CheckBox
+            android:id="@+id/agreementCB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-5dp"
+            android:fontFamily="@font/opensans_regular"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp"
+            android:theme="@style/AppTheme" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text="I agree to"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:id="@+id/tosTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text=" Terms of Service"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text=" &amp; "
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:id="@+id/privacyTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/privay_policy"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_11ssp" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/AgreeDoneCv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/inactive_color"
+        app:cardCornerRadius="@dimen/_33sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginLeft="@dimen/_21sdp"
+        android:layout_marginRight="@dimen/_21sdp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:paddingTop="@dimen/_13sdp"
+            android:paddingBottom="@dimen/_13sdp"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saved automatically"
+        android:textSize="@dimen/_11ssp"
+        android:textColor="@color/dark_grey"
+        android:fontFamily="@font/opensans_regular"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_39sdp"
+        />
+
+</LinearLayout>

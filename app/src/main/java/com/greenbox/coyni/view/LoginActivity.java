@@ -60,6 +60,7 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 
@@ -628,6 +629,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
+                            objMyApplication.setAccountType(login.getData().getAccountType());
 //                            objMyApplication.setUserId(login.getData().getUserId());
                             objMyApplication.setLoginUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
@@ -650,6 +652,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("TYPE", "ENTER");
                                     i.putExtra("screen", "login");
+                                    i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
                                     startActivity(i);
                                 } else {
                                     loginResponse = login;
@@ -697,27 +700,26 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                             objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
                                 i.putExtra("TYPE", "ENTER");
+                                i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
+                                launchDashboard();
                             }
                         } else {
                             if (loginResponse.getData() != null) {
                                 if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                     Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                 }
                             } else {
@@ -758,6 +760,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void launchDashboard() {
+        Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
+        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
+        }
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(dashboardIntent);
     }
 
     private void login() {
