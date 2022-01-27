@@ -105,6 +105,30 @@
             android:textSize="@dimen/_12ssp" />
 
     </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:id="@+id/editfirstNameErrorLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/editfirstNameErrorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editlnametil"
             style="@style/TextInputLayout.OutlinedBox"
@@ -138,6 +162,31 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/editlastNameErrorLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/editlastNameErrorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editemailtil"
             style="@style/TextInputLayout.OutlinedBox"
@@ -168,6 +217,30 @@
                 android:textIsSelectable="false"
                 android:textSize="@dimen/_12ssp" />
         </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:id="@+id/editemailErrorLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/editemailErrorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
 
         <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
             android:id="@+id/phoneNumberOET"
@@ -175,6 +248,32 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_14sdp"
             android:layout_marginBottom="@dimen/_8sdp"/>
+        <LinearLayout
+            android:id="@+id/editphoneErrorLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/editphoneErrorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="User already exists. Try a new phone number or log in."
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -186,11 +285,12 @@
             />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/sendCV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_20sdp"
-            app:cardBackgroundColor="@color/primary_green"
+            app:cardBackgroundColor="@color/inactive_color"
             app:cardCornerRadius="@dimen/_22sdp">
 
             <LinearLayout
