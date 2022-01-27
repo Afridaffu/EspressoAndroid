@@ -56,12 +56,13 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onProfileTabSelected(View view) {
-        if (selectedTab != Tabs.PROFILE) {
-            selectedTab = Tabs.PROFILE;
-            LogUtils.d(TAG, "onProfileTabSelected");
+//        if (selectedTab != Tabs.PROFILE) {
+//            selectedTab = Tabs.PROFILE;
+//            LogUtils.d(TAG, "onProfileTabSelected");
 //            pushFragment(new BusinessProfileFragment());
-            startActivity(new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class));
-        }
+//        }
+        startActivity(new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class));
+
     }
 
     public void onQuickMenuTabSelected(View view) {
