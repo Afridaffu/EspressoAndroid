@@ -12,9 +12,9 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAbasicInformationAcivity;
-import com.santalu.maskara.widget.MaskEditText;
 
 public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 

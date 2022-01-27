@@ -209,5 +209,6 @@
     <string name="review_application">Review Application</string>
     <string name="company_information">Company Information</string>
     <string name="basic_information">Basic Information</string>
+    <string name="waddress_length">Adres</string>
 
 </resources>

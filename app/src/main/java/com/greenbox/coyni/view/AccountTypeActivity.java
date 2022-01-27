@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.GetstartedSuccessAcivity;
+import com.greenbox.coyni.view.business.EditTeamMember;
 
 
 public class AccountTypeActivity extends AppCompatActivity {
@@ -51,7 +51,7 @@ public class AccountTypeActivity extends AppCompatActivity {
 //                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
 //                }
                 public void onClick(View v) {
-                    Intent intent = new Intent(AccountTypeActivity.this, GetstartedSuccessAcivity.class);
+                    Intent intent = new Intent(AccountTypeActivity.this, EditTeamMember.class);
                     startActivity(intent);
              }
 

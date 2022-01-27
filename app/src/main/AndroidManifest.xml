@@ -44,6 +44,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.business.EditEmail"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.BenificialOwnerDetails"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.ChangeEmail"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.EditTeamMember"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.TeamMember"
+            android:exported="false" />
+        <activity
             android:name=".view.business.DBAInfoDetails"
             android:exported="false" />
         <activity

@@ -43,7 +43,7 @@
 
         </LinearLayout>
 
-        <com.santalu.maskara.widget.MaskEditText
+        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
             android:id="@+id/companypnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"

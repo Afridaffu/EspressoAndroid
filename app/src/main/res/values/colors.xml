@@ -40,6 +40,7 @@
     <color name="trans_black">#66000000</color>
     <color name="blue_light">#d8e2f0</color>
     <color name="text_grey_msg">#C4C5C7</color>
+    <color name="pending_color">#ffa70f</color>
 
     <color name="teal_700_trans">#22018786</color>
     <color name="slidebtn_bg">#DFF4F3</color>
