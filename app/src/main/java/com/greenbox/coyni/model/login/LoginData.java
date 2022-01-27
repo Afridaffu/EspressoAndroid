@@ -19,6 +19,7 @@ public class LoginData {
     private StateList stateList;
     private int accountType;
 
+
     public int getUserId() {
         return userId;
     }

@@ -6,18 +6,20 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.DashboardAddBenifitialOwnersActivity;
-import com.greenbox.coyni.view.business.GetstartedSuccessAcivity;
+
 
 public class AccountTypeActivity extends AppCompatActivity {
 
     LinearLayout personalAccontLL, layoutClose, businessAccontLL;
     Long mLastClickTime = 0L;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class AccountTypeActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_account_type);
 
+            objMyApplication = (MyApplication) getApplicationContext();
             personalAccontLL = findViewById(R.id.personalAccontLL);
             businessAccontLL = findViewById(R.id.businessAccontLL);
             layoutClose = findViewById(R.id.layoutClose);
@@ -45,21 +48,10 @@ public class AccountTypeActivity extends AppCompatActivity {
             });
 
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
-
                 @Override
-//                public void onClick(View v) {
-//                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
-//                }
                 public void onClick(View v) {
-//                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
-                        Intent i = new Intent(AccountTypeActivity.this, DashboardAddBenifitialOwnersActivity.class);
-                        startActivity(i);
-
+                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
-//                    Intent intent = new Intent(AccountTypeActivity.this, GetstartedSuccessAcivity.class);
-//                    startActivity(intent);
-//             }
-
             });
 
         } catch (Exception ex) {
@@ -73,9 +65,8 @@ public class AccountTypeActivity extends AppCompatActivity {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
-        Intent inCreateAccount = new Intent(AccountTypeActivity.this, CreateAccountActivity.class);
-        inCreateAccount.putExtra(Utils.ACCOUNT_TYPE, accountType);
-        startActivity(inCreateAccount);
+        objMyApplication.setAccountType(accountType);
+        startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
         finish();
         overridePendingTransition(0, 0);
     }

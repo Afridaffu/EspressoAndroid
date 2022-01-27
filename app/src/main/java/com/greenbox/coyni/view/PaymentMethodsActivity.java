@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -57,6 +58,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     ProgressDialog dialog, pDialog;
     SignOnData signOnData;
+    Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     CardView cvTryAgain, cvDone;
@@ -459,6 +461,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
                             Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);

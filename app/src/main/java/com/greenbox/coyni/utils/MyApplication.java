@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -74,8 +75,7 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
-    int accountType = Utils.PERSONAL_ACCOUNT;
-    int timezoneID = 0, tempTimezoneID = 0, loginUserId;
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
@@ -87,6 +87,7 @@ public class MyApplication extends Application {
     List<Contacts> listContacts = new ArrayList<>();
     TransactionListRequest transactionListSearch = new TransactionListRequest();
     Double withdrawAmount;
+
 
     public UserDetails getUserDetails() {
         return userDetails;
@@ -758,20 +759,20 @@ public class MyApplication extends Application {
         this.strScreen = strScreen;
     }
 
-    public int getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(int accountType) {
-        this.accountType = accountType;
-	}
-	
     public Boolean getCardSave() {
         return isCardSave;
     }
 
     public void setCardSave(Boolean cardSave) {
         isCardSave = cardSave;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 
     public String convertBitMapToString(Bitmap bitmap) {
@@ -808,5 +809,35 @@ public class MyApplication extends Application {
             e.getMessage();
             return null;
         }
+    }
+
+    public int monthsBetweenDates(Date startDate, Date endDate) {
+        int monthsBetween = 0;
+        try {
+            Calendar start = Calendar.getInstance();
+            start.setTime(startDate);
+
+            Calendar end = Calendar.getInstance();
+            end.setTime(endDate);
+
+            int dateDiff = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH);
+
+            if (dateDiff < 0) {
+                int borrrow = end.getActualMaximum(Calendar.DAY_OF_MONTH);
+                dateDiff = (end.get(Calendar.DAY_OF_MONTH) + borrrow) - start.get(Calendar.DAY_OF_MONTH);
+                monthsBetween--;
+
+                if (dateDiff > 0) {
+                    monthsBetween++;
+                }
+            } else {
+                monthsBetween++;
+            }
+            monthsBetween += end.get(Calendar.MONTH) - start.get(Calendar.MONTH);
+            monthsBetween += (end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return monthsBetween;
     }
 }

@@ -1347,7 +1347,6 @@ public class SwipeLayout extends FrameLayout {
         else if (getOpenStatus() == SwipeLayout.Status.Close) open(smooth);
     }
 
-
     /**
      * a helper function to compute the Rect area that surface will hold in.
      * @param open open status or close status.

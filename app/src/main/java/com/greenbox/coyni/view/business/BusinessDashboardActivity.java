@@ -1,6 +1,8 @@
 package com.greenbox.coyni.view.business;
 
 import androidx.fragment.app.FragmentTransaction;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,7 +20,9 @@ import com.greenbox.coyni.view.BaseActivity;
 public class BusinessDashboardActivity extends BaseActivity {
 
     private Tabs selectedTab = Tabs.DASHBOARD;
-    enum Tabs { DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE }
+
+    enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +32,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onDashboardTabSelected(View view) {
-        if(selectedTab != Tabs.DASHBOARD) {
+        if (selectedTab != Tabs.DASHBOARD) {
             selectedTab = Tabs.DASHBOARD;
             LogUtils.d(TAG, "onDashboardTabSelected");
             pushFragment(new BusinessDashboardFragment());
@@ -36,7 +40,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onAccountTabSelected(View view) {
-        if(selectedTab != Tabs.ACCOUNT) {
+        if (selectedTab != Tabs.ACCOUNT) {
             selectedTab = Tabs.ACCOUNT;
             LogUtils.d(TAG, "onAccountTabSelected");
             pushFragment(new BusinessAccountFragment());
@@ -44,7 +48,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onTransactionsTabSelected(View view) {
-        if(selectedTab != Tabs.TRANSACTIONS) {
+        if (selectedTab != Tabs.TRANSACTIONS) {
             selectedTab = Tabs.TRANSACTIONS;
             LogUtils.d(TAG, "onTransactionsTabSelected");
             pushFragment(new BusinessTransactionsFragment());
@@ -52,11 +56,13 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onProfileTabSelected(View view) {
-        if(selectedTab != Tabs.PROFILE) {
-            selectedTab = Tabs.PROFILE;
-            LogUtils.d(TAG, "onProfileTabSelected");
-            pushFragment(new BusinessProfileFragment());
-        }
+//        if (selectedTab != Tabs.PROFILE) {
+//            selectedTab = Tabs.PROFILE;
+//            LogUtils.d(TAG, "onProfileTabSelected");
+//            pushFragment(new BusinessProfileFragment());
+//        }
+        startActivity(new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class));
+
     }
 
     public void onQuickMenuTabSelected(View view) {

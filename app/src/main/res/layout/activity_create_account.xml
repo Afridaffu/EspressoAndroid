@@ -73,10 +73,11 @@
                         android:id="@+id/firstNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textCapSentences|textNoSuggestions"
+                        android:inputType="textVisiblePassword|textCapSentences|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -86,9 +87,7 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp"
-                        android:autofillHints="creditCardSecurityCode"
-                        />
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,10 +131,11 @@
                         android:id="@+id/lastNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions|textCapSentences"
+                        android:inputType="textVisiblePassword|textNoSuggestions|textCapSentences"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -144,8 +144,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:autofillHints="creditCardSecurityCode"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,6 +189,7 @@
                         android:id="@+id/emailET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -202,8 +202,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:autofillHints="creditCardSecurityCode"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -287,6 +286,7 @@
                             android:id="@+id/passwordET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
@@ -300,8 +300,7 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp"
-                            android:autofillHints="creditCardSecurityCode"/>
+                            android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -397,6 +396,7 @@
                         android:id="@+id/confirmPasswordET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="creditCardSecurityCode"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionDone"
@@ -410,8 +410,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:autofillHints="creditCardSecurityCode"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

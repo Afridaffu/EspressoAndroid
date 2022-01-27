@@ -40,6 +40,7 @@ import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.io.BufferedReader;
@@ -242,6 +243,7 @@ public class OnboardActivity extends BaseActivity {
                             Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(OnboardActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -249,7 +251,11 @@ public class OnboardActivity extends BaseActivity {
                                 startActivity(i);
                             } else {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
+                                Intent i = null;
+                                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+                                    i = new Intent(OnboardActivity.this, DashboardActivity.class);
+                                else
+                                    i = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
                             }

@@ -60,6 +60,7 @@ import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
@@ -69,7 +70,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CreateAccountActivity extends BaseActivity implements OnKeyboardVisibilityListener {
-	
+
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
@@ -109,12 +110,12 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     ColorStateList errorColorState, colorState;
 
     boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false, isAgreed = false;
-    private int mAccountType = Utils.PERSONAL_ACCOUNT;
     RelativeLayout mainRL;
     ScrollView mainSV;
     public static int focusedID = 0;
     CheckBox agreeCB;
 
+    MyApplication objMyApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -125,9 +126,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
-            if(getIntent() != null) {
-                mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
-            }
             initFields();
             initObservers();
         } catch (Exception e) {
@@ -163,6 +161,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
     public void initFields() {
         try {
+            objMyApplication = (MyApplication) getApplicationContext();
             setKeyboardVisibilityListener(this);
             createAccountActivity = this;
             errorState = new int[][]{new int[]{android.R.attr.state_focused}};
@@ -345,7 +344,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (custRegisterResponse.getStatus().toLowerCase().equals("success")) {
                             try {
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                                i.putExtra(Utils.ACCOUNT_TYPE, mAccountType);
                                 if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                                     i.putExtra("screen", "SignUp");
                                     i.putExtra("OTP_TYPE", "MOBILE");
@@ -1046,7 +1044,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             regisRequest.setEmail(emailET.getText().toString().trim());
             regisRequest.setCreatePassword(passwordET.getText().toString().trim());
             regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
-            regisRequest.setAccountType(mAccountType);
+            regisRequest.setAccountType(objMyApplication.getAccountType());
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
             if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {

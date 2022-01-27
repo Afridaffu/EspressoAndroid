@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -34,12 +35,15 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.internal.LinkedTreeMap;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.Error;
 import com.greenbox.coyni.model.cards.CardRequest;
@@ -69,8 +73,12 @@ import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class AddCardActivity extends AppCompatActivity {
@@ -105,12 +113,45 @@ public class AddCardActivity extends AppCompatActivity {
     private RecognizerBundle mRecognizerBundle;
     CustomKeyboard ctKey;
 
+    IdentityPagerAdapter identityPagerAdapter;
+    static AutoScrollViewPager viewPager;
+    int pagerPosition = 0, diffMonths = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_addcard);
             addCardActivity = this;
+            identityPagerAdapter = new IdentityPagerAdapter();
+            viewPager = findViewById(R.id.view_pager);
+            viewPager.setAdapter(identityPagerAdapter);
+            viewPager.setPagingEnabled(false);
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    Log.e("onPageScrolled", "onPageScrolled " + position);
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    pagerPosition = position;
+                    if (position == 0) {
+                        divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                        divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                    } else if (position == 1) {
+                        divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                        divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
             initialization();
             textWatchers();
             focusWatchers();
@@ -125,9 +166,10 @@ public class AddCardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (layoutAddress.getVisibility() == View.VISIBLE) {
-                layoutCard.setVisibility(View.VISIBLE);
-                layoutAddress.setVisibility(View.GONE);
+            if (pagerPosition == 1) {
+//                layoutCard.setVisibility(View.VISIBLE);
+//                layoutAddress.setVisibility(View.GONE);
+                viewPager.setCurrentItem(0);
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                 //etCVV.setText("");
@@ -220,6 +262,7 @@ public class AddCardActivity extends AppCompatActivity {
             etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
+
             etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -281,8 +324,9 @@ public class AddCardActivity extends AppCompatActivity {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            layoutCard.setVisibility(View.GONE);
-                            layoutAddress.setVisibility(View.VISIBLE);
+//                            layoutCard.setVisibility(View.GONE);
+//                            layoutAddress.setVisibility(View.VISIBLE);
+                            viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
                             strName = etName.getText().toString().trim();
@@ -330,11 +374,25 @@ public class AddCardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (layoutAddress.getVisibility() == View.VISIBLE) {
-                            layoutCard.setVisibility(View.VISIBLE);
-                            layoutAddress.setVisibility(View.GONE);
+                        if (pagerPosition == 1) {
+                            viewPager.setCurrentItem(0);
                             divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            divider2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (pagerPosition == 0 && isNextEnabled) {
+                            viewPager.setCurrentItem(1);
+                            divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                            divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -595,6 +653,11 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             Calendar cal = Calendar.getInstance();
             int month = cal.get(Calendar.MONTH) + 1;
+            if (!etExpiry.getText().toString().equals("") && etExpiry.getText().toString().length() == 5) {
+                Year year = Year.parse(etExpiry.getText().toString().split("/")[1], DateTimeFormatter.ofPattern("yy"));
+                String strDate = "01/" + etExpiry.getText().toString().split("/")[0] + "/" + year.toString();
+                diffMonths = objMyApplication.monthsBetweenDates(new Date(), getDate(strDate));
+            }
             String year = "";
             SimpleDateFormat ydf = new SimpleDateFormat("yy");
             year = ydf.format(Calendar.getInstance().getTime());
@@ -604,12 +667,25 @@ public class AddCardActivity extends AppCompatActivity {
                 value = false;
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
                 value = false;
+            } else if (diffMonths != -1 && diffMonths > Integer.parseInt(getString(R.string.expirydate))) {
+                value = false;
             }
         } catch (Exception ex) {
             value = false;
             ex.printStackTrace();
         }
         return value;
+    }
+
+    private Date getDate(String date) {
+        Date dtExpiry = null;
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+            dtExpiry = spf.parse(date);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return dtExpiry;
     }
 
     private void focusWatchers() {
@@ -749,6 +825,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etAddress1.setHint("");
                             if (etAddress1.getText().toString().trim().length() > 0) {
                                 address1ErrorLL.setVisibility(GONE);
                                 etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -756,13 +833,39 @@ public class AddCardActivity extends AppCompatActivity {
 
                             } else {
                                 etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlAddress1, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                                 address1ErrorLL.setVisibility(VISIBLE);
                                 address1ErrorTV.setText("Field Required");
                             }
                         } else {
+                            etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            etAddress2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    try {
+                        if (!b) {
+                            etAddress2.setHint("");
+                            if (etAddress2.getText().toString().trim().length() > 0) {
+                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+
+                            } else {
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                            }
+                        } else {
+                            etAddress2.setHint("Billing Address Line 2(Optional)");
+                            etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -775,6 +878,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etCity.setHint("");
                             if (etCity.getText().toString().trim().length() > 0) {
                                 cityErrorLL.setVisibility(GONE);
                                 etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -782,11 +886,12 @@ public class AddCardActivity extends AppCompatActivity {
 
                             } else {
                                 etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlCity, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
                             }
                         } else {
+                            etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                         }
@@ -827,6 +932,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            etZipCode.setHint("");
                             if (etZipCode.getText().toString().trim().length() == 5) {
                                 zipErrorLL.setVisibility(GONE);
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -839,7 +945,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 zipErrorTV.setText("Minimum 5 Characters Required");
                             } else if (etZipCode.getText().toString().trim().length() == 0) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
+                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
                             }
@@ -851,6 +957,7 @@ public class AddCardActivity extends AppCompatActivity {
 //                                isZipcode = false;
 //                            }
                         } else {
+                            etZipCode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                         }
@@ -1119,8 +1226,10 @@ public class AddCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0) {
                         isState = true;
                         stateErrorLL.setVisibility(GONE);
+                        Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
                     } else {
                         isState = false;
+                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -1190,9 +1299,11 @@ public class AddCardActivity extends AppCompatActivity {
             if (isName && isCard && isExpiry && isCvv) {
                 isNextEnabled = true;
                 cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                viewPager.setPagingEnabled(true);
             } else {
                 isNextEnabled = false;
                 cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                viewPager.setPagingEnabled(false);
             }
             if (isAddress1 && isCity && isZipcode && isState) {
                 isAddEnabled = true;
@@ -1542,8 +1653,9 @@ public class AddCardActivity extends AppCompatActivity {
                 try {
                     dialog.dismiss();
                     if (layoutAddress.getVisibility() == View.VISIBLE) {
-                        layoutCard.setVisibility(View.VISIBLE);
-                        layoutAddress.setVisibility(View.GONE);
+//                        layoutCard.setVisibility(View.VISIBLE);
+//                        layoutAddress.setVisibility(View.GONE);
+                        viewPager.setCurrentItem(0);
                         divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                         etCardNumber.setText("");
@@ -1607,6 +1719,38 @@ public class AddCardActivity extends AppCompatActivity {
                     cardErrorLL.setVisibility(GONE);
                 }
             }
+        }
+    }
+
+    class IdentityPagerAdapter extends PagerAdapter {
+
+        @Override
+        public Object instantiateItem(ViewGroup collection, int position) {
+            int resId = 0;
+            switch (position) {
+                case 0:
+                    resId = R.id.layoutCard;
+                    break;
+                case 1:
+                    resId = R.id.layoutAddress;
+                    break;
+            }
+            return findViewById(resId);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1) {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            // No super
         }
     }
 }
