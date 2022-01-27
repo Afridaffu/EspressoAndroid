@@ -44,6 +44,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.Business_ReceivePaymentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:exported="true" />
+        <activity
             android:name=".view.PayToPersonalActivity"
             android:configChanges="uiMode"
             android:exported="false"
@@ -312,7 +317,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
         <activity
             android:name=".view.IdentityVerificationActivity"
             android:configChanges="uiMode"
@@ -339,6 +343,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.IdentityVerificationBindingLayoutActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.Business_UserDetailsListenersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
