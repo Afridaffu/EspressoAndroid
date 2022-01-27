@@ -629,7 +629,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!login.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(login.getData().getJwtToken());
                             objMyApplication.setStrEmail(login.getData().getEmail());
-                            objMyApplication.setAccountType(login.getData().getAccountType());
 //                            objMyApplication.setUserId(login.getData().getUserId());
                             objMyApplication.setLoginUserId(login.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
@@ -700,7 +699,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(loginResponse.getData().getJwtToken());
                             objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                             objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                             Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
