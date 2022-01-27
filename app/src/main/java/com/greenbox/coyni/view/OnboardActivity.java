@@ -242,6 +242,7 @@ public class OnboardActivity extends BaseActivity {
                             Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(OnboardActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");

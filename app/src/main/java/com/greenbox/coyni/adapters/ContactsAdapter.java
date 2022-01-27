@@ -86,7 +86,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                     }
                     holder.imgInvite.setVisibility(View.GONE);
                 } else {
-                    holder.tvWalletAddress.setVisibility(View.INVISIBLE);
+                    //holder.tvWalletAddress.setVisibility(View.INVISIBLE);
+                    holder.tvWalletAddress.setText("");
                     holder.imgInvite.setVisibility(View.VISIBLE);
                 }
                 if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
@@ -98,7 +99,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                                 .placeholder(R.drawable.ic_profilelogo)
                                 .into(holder.imgUser);
                     } else {
-//                        holder.imgUser.setImageBitmap(objMyApplication.convertStringToBitMap(objData.getImage().trim()));
                         holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                     }
                 } else {

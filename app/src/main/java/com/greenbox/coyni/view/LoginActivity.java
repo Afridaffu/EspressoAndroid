@@ -706,6 +706,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                             objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                             getStatesUrl(loginResponse.getData().getStateList().getUS());
+                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                             if (loginResponse.getData().getPasswordExpired()) {
                                 Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                 i.putExtra("screen", "loginExpiry");
@@ -719,8 +720,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             if (loginResponse.getData() != null) {
                                 if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                                     Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                 }
                             } else {
