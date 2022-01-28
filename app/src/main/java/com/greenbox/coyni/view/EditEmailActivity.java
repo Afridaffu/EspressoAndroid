@@ -45,19 +45,19 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class EditEmailActivity extends AppCompatActivity {
 
-    TextInputEditText currentEmailET, newEmailET;
-    TextInputLayout currentEmailTIL, newEmailTIL;
+    TextInputEditText currentEmailET, newEmailET,b_newEmailET;
+    TextInputLayout currentEmailTIL, newEmailTIL,b_newEmailTIL;
     MyApplication myApplicationObj;
     NestedScrollView editEmailSV;
     public boolean isSaveEnabled = false, isCurrentEmail = true, isNewEmail = false;
-    LinearLayout currentEmailErrorLL, newEmailErrorLL;
-    TextView currentEmailErrorTV, newEmailErrorTV, contactUsTV;
-    CardView saveEmailCV;
+    LinearLayout currentEmailErrorLL, newEmailErrorLL,b_newEmailErrorLL;
+    TextView currentEmailErrorTV, newEmailErrorTV, contactUsTV,b_newEmailErrorTV;
+    CardView saveEmailCV,b_saveEmailCV;
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     LoginViewModel loginViewModel;
-    LinearLayout editEmailCloseLL;
+    LinearLayout editEmailCloseLL,b_editEmailCloseLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,15 @@ public class EditEmailActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
             initFields();
+
+            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
+                findViewById(R.id.b_topLL).setVisibility(GONE);
+                findViewById(R.id.editEmailSV).setVisibility(VISIBLE);
+            }
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                findViewById(R.id.b_topLL).setVisibility(VISIBLE);
+                findViewById(R.id.editEmailSV).setVisibility(GONE);
+            }
             initObservers();
             textWatchers();
             focusWatchers();
@@ -96,9 +105,19 @@ public class EditEmailActivity extends AppCompatActivity {
             saveEmailCV = findViewById(R.id.saveEmailCV);
             contactUsTV = findViewById(R.id.contactUsTV);
 
+            //Business..
+            b_editEmailCloseLL = findViewById(R.id.b_editEmailCloseLL);
+            b_newEmailET = findViewById(R.id.b_newEmailET);
+            b_newEmailTIL = findViewById(R.id.b_newEmailTIL);
+            b_newEmailErrorLL = findViewById(R.id.b_newEmailErrorLL);
+            b_newEmailErrorTV = findViewById(R.id.b_newEmailErrorTV);
+
+
             currentEmailET.setText(myApplicationObj.getMyProfile().getData().getEmail());
 
             newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+            b_newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+
 
 
 //            editEmailSV.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +152,32 @@ public class EditEmailActivity extends AppCompatActivity {
                 }
             });
 
+            saveEmailCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isSaveEnabled) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
+                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
+                        dialog.setIndeterminate(false);
+                        dialog.setMessage("Please wait...");
+                        dialog.show();
+
+                        callSendEmailOTPAPI();
+
+                    } else {
+                        Log.e("isSaveEnabled", isSaveEnabled + "");
+                    }
+                }
+            });
             editEmailCloseLL.setOnClickListener(view -> {
+                finish();
+            });
+
+            b_editEmailCloseLL.setOnClickListener(view -> {
                 finish();
             });
 
@@ -151,6 +195,7 @@ public class EditEmailActivity extends AppCompatActivity {
                     }
                 }
             });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,6 +293,49 @@ public class EditEmailActivity extends AppCompatActivity {
                     }
                 }
             });
+            b_newEmailET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    Log.e("beforeTextChanged", charSequence.toString());
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
+                        b_newEmailErrorLL.setVisibility(GONE);
+                        b_newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        newEmailTIL.setHintTextColor(colorState);
+                        Utils.setUpperHintColor(b_newEmailTIL, getResources().getColor(R.color.primary_green));
+                        isNewEmail = true;
+                    } else if (b_newEmailET.getText().toString().trim().length() == 0) {
+                        b_newEmailErrorLL.setVisibility(VISIBLE);
+                        b_newEmailErrorTV.setText("Field Required");
+                        isNewEmail = false;
+                    }
+                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
+                        isNewEmail = true;
+                    } else {
+                        isNewEmail = false;
+                    }
+                    enableOrDisableSave();
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = b_newEmailET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            b_newEmailET.setText(b_newEmailET.getText().toString().replaceAll(" ", ""));
+                            b_newEmailET.setSelection(b_newEmailET.getText().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,6 +370,36 @@ public class EditEmailActivity extends AppCompatActivity {
 
                         currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
+
+                    }
+                }
+            });
+            b_newEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+                        if (b_newEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(b_newEmailET.getText().toString().trim())) {
+                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
+                            b_newEmailErrorLL.setVisibility(VISIBLE);
+                            b_newEmailErrorTV.setText("Please Enter a valid Email");
+                        } else if (b_newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(b_newEmailET.getText().toString().trim())) {
+                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));
+                            b_newEmailErrorLL.setVisibility(GONE);
+                            loginViewModel.validateEmail(b_newEmailET.getText().toString().trim());
+                        } else {
+                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
+                            b_newEmailErrorLL.setVisibility(VISIBLE);
+                            b_newEmailErrorTV.setText("Field Required");
+                        }
+                    } else {
+                        b_newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_green));
+
+//                        currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
 
                     }
                 }
@@ -328,7 +446,12 @@ public class EditEmailActivity extends AppCompatActivity {
 
             UpdateEmailRequest updateEmailRequest = new UpdateEmailRequest();
             updateEmailRequest.setExistingEmail(currentEmailET.getText().toString().trim());
-            updateEmailRequest.setNewEmail(newEmailET.getText().toString().trim());
+            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                updateEmailRequest.setNewEmail(newEmailET.getText().toString().trim());
+            }
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                updateEmailRequest.setNewEmail(b_newEmailET.getText().toString().trim());
+            }
             customerProfileViewModel.updateEmailSendOTP(updateEmailRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -362,13 +485,24 @@ public class EditEmailActivity extends AppCompatActivity {
                     if (updateEmailResponse != null && updateEmailResponse.getStatus().toLowerCase().equals("success")) {
                         myApplicationObj.setUpdateEmailResponse(updateEmailResponse);
                         Utils.hideKeypad(EditEmailActivity.this);
-                        startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
-                                .putExtra("screen", "EditEmail")
-                                .putExtra("OTP_TYPE", "OTP")
-                                .putExtra("IS_OLD_EMAIL", "true")
-                                .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
-                                .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
-                        );
+                        if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                            startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
+                                    .putExtra("screen", "EditEmail")
+                                    .putExtra("OTP_TYPE", "OTP")
+                                    .putExtra("IS_OLD_EMAIL", "true")
+                                    .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
+                                    .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
+                            );
+                        }
+                        if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                            startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
+                                    .putExtra("screen", "EditEmail")
+                                    .putExtra("OTP_TYPE", "OTP")
+                                    .putExtra("IS_OLD_EMAIL", "true")
+                                    .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
+                                    .putExtra("NEW_EMAIL", b_newEmailET.getText().toString().trim()));
+                            finish();
+                        }
                     } else {
                         if (updateEmailResponse.getError().getErrorDescription().equals("")) {
                             try {
@@ -405,16 +539,30 @@ public class EditEmailActivity extends AppCompatActivity {
             public void onChanged(EmailExistsResponse emailExistsResponse) {
                 try {
                     if (emailExistsResponse != null) {
-                        if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
-                            newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
-                            newEmailErrorLL.setVisibility(GONE);
-                        } else {
-                            newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
-                            newEmailErrorLL.setVisibility(VISIBLE);
-                            newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
-                        }
+                       if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
+                           if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
+                               newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                               Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
+                               newEmailErrorLL.setVisibility(GONE);
+                           } else {
+                               newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                               Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
+                               newEmailErrorLL.setVisibility(VISIBLE);
+                               newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                           }
+                       }
+                       if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                           if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
+                               b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                               Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));
+                               b_newEmailErrorLL.setVisibility(GONE);
+                           } else {
+                               b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                               Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
+                               b_newEmailErrorLL.setVisibility(VISIBLE);
+                               b_newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
+                           }
+                       }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -450,6 +598,8 @@ public class EditEmailActivity extends AppCompatActivity {
         super.onResume();
         try {
             newEmailET.requestFocus();
+            b_newEmailET.requestFocus();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

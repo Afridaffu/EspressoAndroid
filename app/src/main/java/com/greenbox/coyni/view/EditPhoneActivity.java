@@ -29,19 +29,19 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
 public class EditPhoneActivity extends AppCompatActivity {
 
-    OutLineBoxPhoneUpdateET currentPhoneET, newPhoneET;
+    OutLineBoxPhoneUpdateET currentPhoneET, newPhoneET,b_newPhoneET;
     MyApplication myApplicationObj;
     NestedScrollView editPhoneSV;
     public boolean isSaveEnabled = false, isCurrentPhone = true, isNewPhone = false;
-    public LinearLayout currentPhoneErrorLL, newPhoneErrorLL, editPhoneCloseLL;
-    public TextView currentPhoneErrorTV, newPhoneErrorTV;
+    public LinearLayout currentPhoneErrorLL, newPhoneErrorLL, editPhoneCloseLL,b_newPhoneErrorLL,b_editPhoneCloseLL;
+    public TextView currentPhoneErrorTV, newPhoneErrorTV,b_newPhoneErrorTV;
     public CardView savePhoneCV;
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     public static EditPhoneActivity editPhoneActivity;
     String currentPhoneNumber, newPhoneNumber;
-    TextView contactUsTV;
+    TextView contactUsTV,b_contactUsTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -78,6 +78,23 @@ public class EditPhoneActivity extends AppCompatActivity {
             editPhoneCloseLL = findViewById(R.id.editPhoneCloseLL);
             contactUsTV = findViewById(R.id.contactUsTV);
 
+            //Business..
+            b_newPhoneET = findViewById(R.id.b_newPhoneET);
+            b_newPhoneET.setHint("Phone Number");
+            b_newPhoneErrorLL = findViewById(R.id.b_newPhoneErrorLL);
+            b_newPhoneErrorTV = findViewById(R.id.b_newPhoneErrorTV);
+            b_editPhoneCloseLL = findViewById(R.id.b_editPhoneCloseLL);
+            b_contactUsTV = findViewById(R.id.b_contactUsTV);
+
+            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
+                findViewById(R.id.editPhoneSV).setVisibility(View.VISIBLE);
+                findViewById(R.id.business_topLL).setVisibility(View.GONE);
+            }
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
+                findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
+            }
+
             currentPhoneET.setText(getIntent().getStringExtra("OLD_PHONE"));
 
             savePhoneCV.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +122,26 @@ public class EditPhoneActivity extends AppCompatActivity {
             editPhoneCloseLL.setOnClickListener(view -> {
                 finish();
             });
+            b_editPhoneCloseLL.setOnClickListener(view -> {
+                finish();
+            });
 
             contactUsTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+//                        Utils.hideKeypad(EditPhoneActivity.this);
+                        Utils.hideSoftKeyboard(EditPhoneActivity.this);
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(Utils.mondayURL));
+                        startActivity(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            b_contactUsTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
@@ -129,8 +164,12 @@ public class EditPhoneActivity extends AppCompatActivity {
     private void callSendPhoneOTPAPI() {
         try {
             currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
-            newPhoneNumber = newPhoneET.getText().toString().substring(1, 4) + newPhoneET.getText().toString().substring(6, 9) + newPhoneET.getText().toString().substring(10, newPhoneET.getText().length());
-
+           if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+               newPhoneNumber = newPhoneET.getText().toString().substring(1, 4) + newPhoneET.getText().toString().substring(6, 9) + newPhoneET.getText().toString().substring(10, newPhoneET.getText().length());
+           }
+           if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+               newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
+           }
             UpdatePhoneRequest updatePhoneRequest = new UpdatePhoneRequest();
             updatePhoneRequest.setCurrentPhoneNumber(currentPhoneNumber);
             updatePhoneRequest.setCurrentcountryCode(Utils.getStrCCode());

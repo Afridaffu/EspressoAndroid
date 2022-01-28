@@ -352,11 +352,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
             }
 
-            if (myApplicationObj.getAccountType()==2){
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.VISIBLE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.GONE);
             }
-            else if (myApplicationObj.getAccountType()==1){
+            else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }

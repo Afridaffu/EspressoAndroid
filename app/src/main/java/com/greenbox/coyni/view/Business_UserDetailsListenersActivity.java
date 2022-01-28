@@ -89,7 +89,8 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
                     }
                 }
             });
-        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
+        }
+        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
             heading.setText("Address");
             title.setText("Current Address");
             if (value.getText().toString().equals("")) {
@@ -130,7 +131,8 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
                 }
             });
 
-        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
+        }
+        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
             heading.setText("Phone Number");
             title.setText("Current Phone Number");
             value.setText(getIntent().getStringExtra("value"));
@@ -197,6 +199,9 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
                     }
 
                     value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
+                }
+                if (getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")){
+                    value.setText(profile.getData().getEmail());
                 }
 
 
