@@ -338,6 +338,14 @@
     <string name="edited">(Edited)</string>
     <string name="lorem_ipsum_dolor_sit_amet_consectetuer_adipiscing_elit_aenean_commodo_ligula_eget_dolor_aenean_massa">“Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. ”</string>
     <string name="prestige_worldwide">Prestige Worldwide</string>
+    <string name="transaction_details">Transaction Details</string>
+    <string name="canceled_bank_withdraw">Canceled Bank withdraw</string>
+    <string name="_100_00">100.00</string>
+    <string name="cyn">CYN</string>
+    <string name="_1d3hsm734h"><u>1d3hsM734h…</u></string>
     <color name="background_color">#8ef2f5f8</color>
+    <string name="rolling_reserves_with_a_rolling_reserve"><b>ROLLING RESERVES:</b> With a rolling reserve</string>
+    <string name="manually_reserves"><b>MANUALLY RESERVES:</b> Withdrawing money</string>
+
 
 </resources>
