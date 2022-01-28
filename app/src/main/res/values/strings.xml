@@ -256,6 +256,7 @@
     <string name="lastpayout"> Last Payout</string>
     <string name="batchnow"> Batch Now</string>
     <string name="manual"> Manual</string>
+    <string name="clickhere"><u>click here</u> </string>
     <string name="v_p_history"> View Full Payouts History</string>
     <string name="reservebalance"> Reserve Balance</string>
     <string name="nextrelease"> Next Release</string>
