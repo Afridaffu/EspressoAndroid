@@ -44,26 +44,36 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.business.ReservePayoutActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.WithdrawFailedBankWithdrawActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+        <activity
             android:name=".view.business.DBAInfoDetails"
             android:exported="false" />
         <activity
             android:name=".view.business.CompanyInfoDetails"
             android:exported="false" />
-<activity
+        <activity
             android:name=".view.business.ClearBatchPromptActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.RemoveTeamMembersActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.TeamActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.FeesActivity"
             android:exported="false"
@@ -73,7 +83,7 @@
             android:name=".view.business.BusinessProfileActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AddPaymentSignetActivity"
             android:exported="false"
@@ -88,7 +98,7 @@
             android:name=".view.business.BankAccoutAddedSuccessfullyActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AddBankAccountActivity"
             android:exported="true"
@@ -98,7 +108,7 @@
             android:name=".view.business.LearnMoreAddbankacActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.PayToPersonalActivity"
             android:configChanges="uiMode"
@@ -337,11 +347,12 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".view.AccountTypeActivity"
@@ -363,7 +374,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".view.business.BusinessRegistrationTrackingActivity"
+            android:name=".view.business.BusinessRegistrationTrackerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
@@ -378,7 +389,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
         <activity
             android:name=".view.IdentityVerificationActivity"
             android:configChanges="uiMode"
@@ -407,15 +417,7 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.IdentityVerificationBindingLayoutActivity"
             android:exported="false"
@@ -423,11 +425,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- //Business -->
         <activity
             android:name=".view.business.GetstartedSuccessAcivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.BusinessRegistrationTrackerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
@@ -445,17 +442,16 @@
             android:name=".view.business.ReviewApplicationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.CompanyAddress2Activity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.AdditionDocInfoActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- <activity -->
+        <!-- android:name=".view.business.CompanyAddress2Activity" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> -->
+        <!-- <activity -->
+        <!-- android:name=".view.business.AdditionDocInfoActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> -->
         <activity
             android:name=".view.business.DBAinfoBtmSheetActivity"
             android:exported="false"
@@ -506,44 +502,37 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AddBenifitialOwnerActivity2"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ChooseIdActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AdditionalBeneficialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BusinessDashboardMainActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BusinessAddCardActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
     </application>
 
 </manifest>
