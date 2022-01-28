@@ -33,6 +33,7 @@ import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends AppCompatActivity {
@@ -143,9 +144,7 @@ public class EnableAuthID extends AppCompatActivity {
                 try {
                     if (strScreen.equals("login")) {
                         saveDontRemind("true");
-                        Intent d = new Intent(EnableAuthID.this, DashboardActivity.class);
-                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(d);
+                        launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
@@ -162,9 +161,7 @@ public class EnableAuthID extends AppCompatActivity {
                     try {
                         if (strScreen.equals("login")) {
                             saveDontRemind("true");
-                            Intent d = new Intent(EnableAuthID.this, DashboardActivity.class);
-                            d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(d);
+                            launchDashboard();
                         } else {
                             faceIDRL.setVisibility(View.GONE);
                             touchIDRL.setVisibility(View.GONE);
@@ -209,9 +206,7 @@ public class EnableAuthID extends AppCompatActivity {
             layoutNotnow.setOnClickListener(view -> {
                 try {
                     if (strScreen.equals("login")) {
-                        Intent d = new Intent(EnableAuthID.this, DashboardActivity.class);
-                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(d);
+                        launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
@@ -225,9 +220,7 @@ public class EnableAuthID extends AppCompatActivity {
             layoutNotnowFace.setOnClickListener(view -> {
                 try {
                     if (strScreen.equals("login")) {
-                        Intent d = new Intent(EnableAuthID.this, DashboardActivity.class);
-                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(d);
+                        launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
@@ -262,9 +255,7 @@ public class EnableAuthID extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent intent = new Intent(EnableAuthID.this, DashboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    launchDashboard();
                 }
             });
 
@@ -316,9 +307,7 @@ public class EnableAuthID extends AppCompatActivity {
                                     faceIDRL.setVisibility(View.GONE);
                                     touchIDRL.setVisibility(View.GONE);
                                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
-                                        Intent d = new Intent(EnableAuthID.this, DashboardActivity.class);
-                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(d);
+                                        launchDashboard();
                                     } else {
 //                                        successRL.setVisibility(View.VISIBLE);
                                         showSuccessLayout();
@@ -339,9 +328,7 @@ public class EnableAuthID extends AppCompatActivity {
                                     faceIDRL.setVisibility(View.GONE);
                                     touchIDRL.setVisibility(View.GONE);
                                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
-                                        Intent d = new Intent(EnableAuthID.this, DashboardActivity.class);
-                                        d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(d);
+                                        launchDashboard();
                                     } else {
 //                                        successRL.setVisibility(View.VISIBLE);
                                         showSuccessLayout();
@@ -471,5 +458,14 @@ public class EnableAuthID extends AppCompatActivity {
             successRL.setVisibility(View.GONE);
             businessSuccessRL.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void launchDashboard() {
+        Intent dashboardIntent = new Intent(EnableAuthID.this, DashboardActivity.class);
+        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
+        }
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(dashboardIntent);
     }
 }
