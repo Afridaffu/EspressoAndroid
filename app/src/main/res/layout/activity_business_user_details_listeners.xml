@@ -35,8 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:text=""
-            android:layout_marginEnd="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_50sdp"
             android:textAlignment="center"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
@@ -61,7 +60,6 @@
             android:id="@+id/titleTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Current Address"
             android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_regular"
             android:textAlignment="center"
@@ -71,12 +69,11 @@
             android:id="@+id/contentTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="3131 Camino Del Rio,
-San Diego, CA, 92108"
-
             android:textColor="@color/primary_black"
             android:fontFamily="@font/opensans_bold"
             android:textAlignment="center"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_14sdp"
             android:textSize="@dimen/_14ssp"/>
 

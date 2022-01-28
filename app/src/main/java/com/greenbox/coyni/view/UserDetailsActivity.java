@@ -447,7 +447,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         } else {
                             userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
                             business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                            address=addressFormatted;
+                            address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
                     }
