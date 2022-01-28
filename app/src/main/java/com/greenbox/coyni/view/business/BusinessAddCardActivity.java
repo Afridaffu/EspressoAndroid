@@ -93,7 +93,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
 
         layoutCard = findViewById(R.id.LayoutCard);
         layoutAddress = findViewById(R.id.LayoutAddress);
-        layoutClose = findViewById(R.id.layoutClose);
+        layoutClose = findViewById(R.id.LayoutClose);
         nameErrorLL = findViewById(R.id.nameErrorLL);
         cardErrorLL = findViewById(R.id.CardErrorLL);
         expiryErrorLL = findViewById(R.id.ExpiryErrorLL);
@@ -245,18 +245,6 @@ public class BusinessAddCardActivity extends AppCompatActivity {
     }
 
     private void focusWatchers() {
-        try {
-            etName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                        if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
-                            etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1).toLowerCase());
-                        }
-                    }
-                    return false;
-                }
-            });
 
             etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -459,10 +447,9 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                 }
             });
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-    }
+
+
     private void textWatchers() {
 
         etName.addTextChangedListener(new TextWatcher() {

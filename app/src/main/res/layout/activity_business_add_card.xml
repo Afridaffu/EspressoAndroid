@@ -73,7 +73,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_15sdp"
         android:paddingBottom="@dimen/_20sdp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ScrollView
             android:layout_width="fill_parent"
