@@ -7,28 +7,35 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.BaseFragment;
 import com.greenbox.coyni.fragments.BusinessAccountFragment;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
-import com.greenbox.coyni.fragments.BusinessProfileFragment;
 import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 public class BusinessDashboardActivity extends BaseActivity {
-
+    BusinessDashboardViewModel businessDashboardViewModel;
+    MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
 
     enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_dashboard);
-
-        pushFragment(new BusinessDashboardFragment());
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_business_dashboard);
+            initialization();
+            pushFragment(new BusinessDashboardFragment());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void onDashboardTabSelected(View view) {
@@ -73,6 +80,15 @@ public class BusinessDashboardActivity extends BaseActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fl_content_frame, fragment);
         transaction.commit();
+    }
+
+    private void initialization() {
+        try {
+            objMyApplication = (MyApplication) getApplicationContext();
+            businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
