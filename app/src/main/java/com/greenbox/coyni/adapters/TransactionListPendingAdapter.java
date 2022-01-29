@@ -109,6 +109,12 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
             holder.blankView.setVisibility(View.GONE);
         }
 
+        holder.blankView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
