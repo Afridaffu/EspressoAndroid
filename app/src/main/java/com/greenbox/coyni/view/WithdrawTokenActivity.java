@@ -502,8 +502,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
                 if (payMethodsResponse != null) {
-                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-                    paymentMethodsResponse = payMethodsResponse;
+//                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+//                    paymentMethodsResponse = payMethodsResponse;
+                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
+                    paymentMethodsResponse = objResponse;
                     if (objMyApplication.getSelectedCard() != null) {
                         selectedCard = objMyApplication.getSelectedCard();
                         bindPayMethod(selectedCard);

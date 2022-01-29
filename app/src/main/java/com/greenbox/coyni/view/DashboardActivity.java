@@ -642,7 +642,9 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
                 if (paymentMethodsResponse != null) {
-                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+//                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
                 }
             }
         });
