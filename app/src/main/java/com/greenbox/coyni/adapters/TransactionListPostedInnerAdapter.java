@@ -55,13 +55,13 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         String strType = "";
 
 
-        String[] data = objData.getTxnDescription().replace("****","-").split("-");
+        String[] data = objData.getTxnDescription().replace("****", "-").split("-");
         try {
             if (data.length > 1) {
                 holder.txnDescripExtention.setVisibility(View.VISIBLE);
                 holder.txnDescrip.setText(data[0]);
-               holder.txnDescripExtention.setText("**"+data[1]);
-               holder.txnDescrip.setVisibility(View.VISIBLE);
+                holder.txnDescripExtention.setText("**" + data[1]);
+                holder.txnDescrip.setVisibility(View.VISIBLE);
             } else {
                 holder.txnDescrip.setText(objData.getTxnDescription());
                 holder.txnDescripExtention.setVisibility(View.GONE);
@@ -79,6 +79,13 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         } else {
             holder.blankView.setVisibility(View.GONE);
         }
+
+        holder.blankView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
