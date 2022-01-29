@@ -64,6 +64,7 @@
                 android:id="@+id/searchET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
                 android:focusable="true"
@@ -77,8 +78,7 @@
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/light_gray"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="@dimen/_10sdp"
-                android:layout_weight="1"/>
+                android:textSize="@dimen/_10sdp" />
 
             <LinearLayout
                 android:id="@+id/clearTextLL"
@@ -114,7 +114,7 @@
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_17sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="Popular Brands"
+            android:text="Brands"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp" />
 

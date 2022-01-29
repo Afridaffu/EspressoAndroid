@@ -85,11 +85,15 @@ public class CreatePasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
             setContentView(R.layout.activity_create_password);
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -543,343 +547,343 @@ public class CreatePasswordActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
 
-        try {
-            if (getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
-                oldPassword = getIntent().getStringExtra("oldpassword");
-                currentPass.setVisibility(VISIBLE);
-                currentPassET.setText(oldPassword);
-                currentPass.setEndIconOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            if (!isOldPwd) {
-                                isOldPwd = true;
-                                currentPass.setEndIconDrawable(R.drawable.ic_eyeopen);
-                                currentPassET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                            } else {
-                                isOldPwd = false;
-                                currentPass.setEndIconDrawable(R.drawable.ic_eyeclose);
-                                currentPassET.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            }
-                            if (passwordET.getText().length() > 0) {
-                                currentPassET.setSelection(currentPassET.getText().length());
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-
-                //changes
-                passwordET.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        try {
-                            if (getCurrentFocus().getId() == passwordET.getId()) {
-
-                                if (strong.matcher(charSequence).matches()) {
-                                    strengthOne.setVisibility(VISIBLE);
-                                    strengthTwo.setVisibility(VISIBLE);
-                                    strengthThree.setVisibility(VISIBLE);
-                                    strengthOne.setBackgroundColor(getResources().getColor(R.color.primary_color));
-                                    strengthTwo.setBackgroundColor(getResources().getColor(R.color.primary_color));
-                                    strengthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
-                                    tvPasswordInfo.setVisibility(GONE);
-                                } else if (medium.matcher(charSequence).matches()) {
-                                    strengthOne.setVisibility(VISIBLE);
-                                    strengthTwo.setVisibility(VISIBLE);
-                                    strengthThree.setVisibility(INVISIBLE);
-                                    strengthOne.setBackgroundColor(getResources().getColor(R.color.orange));
-                                    strengthTwo.setBackgroundColor(getResources().getColor(R.color.orange));
-                                    tvPasswordInfo.setVisibility(VISIBLE);
-                                    tvPasswordInfo.setTextColor(getResources().getColor(R.color.error_red));
-
-                                } else {
-                                    strengthOne.setVisibility(VISIBLE);
-                                    strengthTwo.setVisibility(INVISIBLE);
-                                    strengthThree.setVisibility(INVISIBLE);
-                                    strengthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
-                                    tvPasswordInfo.setVisibility(VISIBLE);
-                                    tvPasswordInfo.setTextColor(getResources().getColor(R.color.error_red));
-                                }
-
-                                if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
-                                    if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
-                                        mismatchErrorTV.setVisibility(VISIBLE);
-                                        isPassword = false;
-                                    } else {
-                                        isPassword = true;
-                                        mismatchErrorTV.setVisibility(GONE);
-                                    }
-                                } else {
-                                    isPassword = false;
-                                    mismatchErrorTV.setVisibility(GONE);
-                                }
-                                if (passwordET.getText().toString().length() == 0) {
-                                    passwordTIL.setHint("New Password");
-                                    confPasswordTIL.setHint("Confirm Password");
-
-                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                    if (confirmPasswordET.getText().toString().trim().length() == 0)
-                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-                                    else
-                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-
-                                } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                                    isConfirm = true;
-
-                                    passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                    passwordTIL.setHint("New Password");
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-
-                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                    confPasswordTIL.setHint("Confirm Password");
-                                    Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-
-                                } else {
-                                    isConfirm = false;
-
-                                    if (confirmPasswordET.getText().toString().trim().length() > 0) {
-                                        passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                        //                                passwordTIL.setHint("Password doesn’t match");
-                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-
-                                        confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                        confPasswordTIL.setHint("Password doesn’t match");
-                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-                                    } else if (confirmPasswordET.getText().toString().trim().length() == 0) {
-                                        confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                        confPasswordTIL.setHint("Confirm Password");
-                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-
-                                        passwordTIL.setHint("New Password");
-                                    }
-                                }
-                                enableOrDisableNext();
-                            }
-                        } catch (Resources.NotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        try {
-                            if (s.length() > 0 && s.toString().trim().length() == 0) {
-                                passwordET.setText("");
-                            } else if (s.length() > 0 && s.toString().contains(" ")) {
-                                passwordET.setText(s.toString().trim());
-                                passwordET.setSelection(s.toString().trim().length());
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-
-                confirmPasswordET.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        try {
-                            if (getCurrentFocus().getId() == confirmPasswordET.getId()) {
-
-                                if (confirmPasswordET.getText().toString().length() == 0) {
-                                    passwordTIL.setHint("New Password");
-                                    confPasswordTIL.setHint("Confirm Password");
-                                    if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                                        passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                                    } else {
-                                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                        //                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                                    }
-                                } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-
-                                    if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
-                                        isConfirm = false;
-                                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                        passwordTIL.setHint("New Password");
-                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-
-                                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                        confPasswordTIL.setHint("Confirm Password");
-                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-                                    } else if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                                        isConfirm = true;
-
-                                        passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                        passwordTIL.setHint("New Password");
-                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-
-                                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                        confPasswordTIL.setHint("Confirm Password");
-                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-                                    } else {
-                                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                        passwordTIL.setHint("New Password");
-                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                                    }
-
-                                } else {
-                                    isConfirm = false;
-
-                                    //                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                    //                            passwordTIL.setHint("Password doesn’t match");
-                                    //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-
-                                    confPasswordTIL.setHint("Password doesn’t match");
-
-                                }
-                                enableOrDisableNext();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        try {
-                            if (s.length() > 0 && s.toString().trim().length() == 0) {
-                                confirmPasswordET.setText("");
-                            } else if (s.length() > 0 && s.toString().contains(" ")) {
-                                confirmPasswordET.setText(s.toString().trim());
-                                confirmPasswordET.setSelection(s.toString().trim().length());
-                            }
-
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-                passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean b) {
-                        if (b) {
-                            try {
-                                passwordET.setHint("8-12 Characters");
-                                layoutIndicator.setVisibility(VISIBLE);
-                                passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-                                //                            if ((getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword"))
-                                //                                    || (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd"))) {
-                                //                                passwordTIL.setHint("New Password");
-                                //                            } else {
-                                //                                passwordTIL.setHint("Password");
-                                //                            }
-                                passwordTIL.setHint("New Password");
-                            } catch (Resources.NotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            passwordET.setHint("");
-                            layoutIndicator.setVisibility(GONE);
-
-                            //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                            //                        } else {
-                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                            //                        }
-                            //
-                            //                        if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                            //                        } else {
-                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                            //                        }
-                            if (passwordET.getText().toString().trim().length() == 0) {
-                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.light_gray));
-                            } else if (!strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                            } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                                if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                                } else {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                                }
-                            } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                                //                                passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                                } else {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                                }
-                                //                            passwordTIL.setHint("Password doesn’t match");
-                                confPasswordTIL.setHint("Password doesn’t match");
-                            } else if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
-                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-                            } else {
-                                passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                            }
-                        }
-                    }
-                });
-
-                confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean b) {
-                        if (b) {
-                            confirmPasswordET.setHint("Confirm Password");
-                            confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-                            confPasswordTIL.setHint("Confirm Password");
-                        } else {
-                            confirmPasswordET.setHint("");
-                            //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            //                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            //                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                            //                        } else {
-                            //                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            //                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-                            //                        }
-                            if (confirmPasswordET.getText().toString().trim().length() == 0) {
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-                            } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                            } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-                                //                            passwordTIL.setHint("Password doesn’t match");
-                                confPasswordTIL.setHint("Password doesn’t match");
-                            } else {
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                            }
-                        }
-
-                    }
-                });
-            } else {
-                currentPass.setVisibility(GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            if (getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
+//                oldPassword = getIntent().getStringExtra("oldpassword");
+//                currentPass.setVisibility(VISIBLE);
+//                currentPassET.setText(oldPassword);
+//                currentPass.setEndIconOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        try {
+//                            if (!isOldPwd) {
+//                                isOldPwd = true;
+//                                currentPass.setEndIconDrawable(R.drawable.ic_eyeopen);
+//                                currentPassET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+//                            } else {
+//                                isOldPwd = false;
+//                                currentPass.setEndIconDrawable(R.drawable.ic_eyeclose);
+//                                currentPassET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+//                            }
+//                            if (passwordET.getText().length() > 0) {
+//                                currentPassET.setSelection(currentPassET.getText().length());
+//                            }
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//                //changes
+//                passwordET.addTextChangedListener(new TextWatcher() {
+//                    @Override
+//                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                        try {
+//                            if (getCurrentFocus().getId() == passwordET.getId()) {
+//
+//                                if (strong.matcher(charSequence).matches()) {
+//                                    strengthOne.setVisibility(VISIBLE);
+//                                    strengthTwo.setVisibility(VISIBLE);
+//                                    strengthThree.setVisibility(VISIBLE);
+//                                    strengthOne.setBackgroundColor(getResources().getColor(R.color.primary_color));
+//                                    strengthTwo.setBackgroundColor(getResources().getColor(R.color.primary_color));
+//                                    strengthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
+//                                    tvPasswordInfo.setVisibility(GONE);
+//                                } else if (medium.matcher(charSequence).matches()) {
+//                                    strengthOne.setVisibility(VISIBLE);
+//                                    strengthTwo.setVisibility(VISIBLE);
+//                                    strengthThree.setVisibility(INVISIBLE);
+//                                    strengthOne.setBackgroundColor(getResources().getColor(R.color.orange));
+//                                    strengthTwo.setBackgroundColor(getResources().getColor(R.color.orange));
+//                                    tvPasswordInfo.setVisibility(VISIBLE);
+//                                    tvPasswordInfo.setTextColor(getResources().getColor(R.color.error_red));
+//
+//                                } else {
+//                                    strengthOne.setVisibility(VISIBLE);
+//                                    strengthTwo.setVisibility(INVISIBLE);
+//                                    strengthThree.setVisibility(INVISIBLE);
+//                                    strengthOne.setBackgroundColor(getResources().getColor(R.color.error_red));
+//                                    tvPasswordInfo.setVisibility(VISIBLE);
+//                                    tvPasswordInfo.setTextColor(getResources().getColor(R.color.error_red));
+//                                }
+//
+//                                if (charSequence.toString().trim().length() > 7 && strong.matcher(charSequence.toString().trim()).matches()) {
+//                                    if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
+//                                        mismatchErrorTV.setVisibility(VISIBLE);
+//                                        isPassword = false;
+//                                    } else {
+//                                        isPassword = true;
+//                                        mismatchErrorTV.setVisibility(GONE);
+//                                    }
+//                                } else {
+//                                    isPassword = false;
+//                                    mismatchErrorTV.setVisibility(GONE);
+//                                }
+//                                if (passwordET.getText().toString().length() == 0) {
+//                                    passwordTIL.setHint("New Password");
+//                                    confPasswordTIL.setHint("Confirm Password");
+//
+//                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                    if (confirmPasswordET.getText().toString().trim().length() == 0)
+//                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+//                                    else
+//                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//
+//                                } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                                    isConfirm = true;
+//
+//                                    passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+//                                    passwordTIL.setHint("New Password");
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+//
+//                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                    confPasswordTIL.setHint("Confirm Password");
+//                                    Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//
+//                                } else {
+//                                    isConfirm = false;
+//
+//                                    if (confirmPasswordET.getText().toString().trim().length() > 0) {
+//                                        passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+//                                        //                                passwordTIL.setHint("Password doesn’t match");
+//                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//
+//                                        confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                        confPasswordTIL.setHint("Password doesn’t match");
+//                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+//                                    } else if (confirmPasswordET.getText().toString().trim().length() == 0) {
+//                                        confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                        confPasswordTIL.setHint("Confirm Password");
+//                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+//
+//                                        passwordTIL.setHint("New Password");
+//                                    }
+//                                }
+//                                enableOrDisableNext();
+//                            }
+//                        } catch (Resources.NotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void afterTextChanged(Editable s) {
+//                        try {
+//                            if (s.length() > 0 && s.toString().trim().length() == 0) {
+//                                passwordET.setText("");
+//                            } else if (s.length() > 0 && s.toString().contains(" ")) {
+//                                passwordET.setText(s.toString().trim());
+//                                passwordET.setSelection(s.toString().trim().length());
+//                            }
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//                confirmPasswordET.addTextChangedListener(new TextWatcher() {
+//                    @Override
+//                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                        try {
+//                            if (getCurrentFocus().getId() == confirmPasswordET.getId()) {
+//
+//                                if (confirmPasswordET.getText().toString().length() == 0) {
+//                                    passwordTIL.setHint("New Password");
+//                                    confPasswordTIL.setHint("Confirm Password");
+//                                    if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
+//                                        passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                                    } else {
+//                                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                        //                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                    }
+//                                } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//
+//                                    if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
+//                                        isConfirm = false;
+//                                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                        passwordTIL.setHint("New Password");
+//                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//
+//                                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+//                                        confPasswordTIL.setHint("Confirm Password");
+//                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+//                                    } else if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
+//                                        isConfirm = true;
+//
+//                                        passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                        passwordTIL.setHint("New Password");
+//                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//
+//                                        confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+//                                        confPasswordTIL.setHint("Confirm Password");
+//                                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+//                                    } else {
+//                                        passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                        passwordTIL.setHint("New Password");
+//                                        Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                    }
+//
+//                                } else {
+//                                    isConfirm = false;
+//
+//                                    //                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                    //                            passwordTIL.setHint("Password doesn’t match");
+//                                    //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//
+//                                    confPasswordTIL.setHint("Password doesn’t match");
+//
+//                                }
+//                                enableOrDisableNext();
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void afterTextChanged(Editable s) {
+//                        try {
+//                            if (s.length() > 0 && s.toString().trim().length() == 0) {
+//                                confirmPasswordET.setText("");
+//                            } else if (s.length() > 0 && s.toString().contains(" ")) {
+//                                confirmPasswordET.setText(s.toString().trim());
+//                                confirmPasswordET.setSelection(s.toString().trim().length());
+//                            }
+//
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
+//                });
+//                passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                    @Override
+//                    public void onFocusChange(View view, boolean b) {
+//                        if (b) {
+//                            try {
+//                                passwordET.setHint("8-12 Characters");
+//                                layoutIndicator.setVisibility(VISIBLE);
+//                                passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+//                                //                            if ((getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword"))
+//                                //                                    || (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd"))) {
+//                                //                                passwordTIL.setHint("New Password");
+//                                //                            } else {
+//                                //                                passwordTIL.setHint("Password");
+//                                //                            }
+//                                passwordTIL.setHint("New Password");
+//                            } catch (Resources.NotFoundException e) {
+//                                e.printStackTrace();
+//                            }
+//                        } else {
+//                            passwordET.setHint("");
+//                            layoutIndicator.setVisibility(GONE);
+//
+//                            //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                            //                        } else {
+//                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                            //                        }
+//                            //
+//                            //                        if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
+//                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                            //                        } else {
+//                            //                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                            //                        }
+//                            if (passwordET.getText().toString().trim().length() == 0) {
+//                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.light_gray));
+//                            } else if (!strong.matcher(passwordET.getText().toString().trim()).matches()) {
+//                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                            } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                                if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
+//                                    passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                } else {
+//                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                                }
+//                            } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                                //                                passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                                } else {
+//                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                                }
+//                                //                            passwordTIL.setHint("Password doesn’t match");
+//                                confPasswordTIL.setHint("Password doesn’t match");
+//                            } else if (passwordET.getText().toString().equals(getIntent().getStringExtra("oldpassword"))) {
+//                                passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+//                            } else {
+//                                passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                            }
+//                        }
+//                    }
+//                });
+//
+//                confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                    @Override
+//                    public void onFocusChange(View view, boolean b) {
+//                        if (b) {
+//                            confirmPasswordET.setHint("Confirm Password");
+//                            confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
+//                            confPasswordTIL.setHint("Confirm Password");
+//                        } else {
+//                            confirmPasswordET.setHint("");
+//                            //                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                            //                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            //                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//                            //                        } else {
+//                            //                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            //                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+//                            //                        }
+//                            if (confirmPasswordET.getText().toString().trim().length() == 0) {
+//                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+//                            } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//                            } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
+//                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
+//                                //                            passwordTIL.setHint("Password doesn’t match");
+//                                confPasswordTIL.setHint("Password doesn’t match");
+//                            } else {
+//                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//                            }
+//                        }
+//
+//                    }
+//                });
+//            } else {
+//                currentPass.setVisibility(GONE);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void initObserver() {

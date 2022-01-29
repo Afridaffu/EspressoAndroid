@@ -156,12 +156,12 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                             clearField();
 
                         } else {
-                            if(loginResponse.getError().getErrorDescription().contains("Invalid credentials")){
+                            if (loginResponse.getError().getErrorDescription().contains("Invalid credentials")) {
                                 layoutPwdError.setVisibility(View.VISIBLE);
                                 tvPwdError.setText("Password Not Matched");
-                            }else{
+                            } else {
                                 layoutPwdError.setVisibility(View.GONE);
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(),ConfirmPasswordActivity.this,"", loginResponse.getError().getFieldErrors().get(0));
+                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), ConfirmPasswordActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
                             }
                         }
                     }
