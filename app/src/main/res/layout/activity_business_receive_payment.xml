@@ -250,7 +250,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
-                        android:id="@+id/tvWalletAddress"
+                        android:id="@+id/b_tvWalletAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -387,10 +387,11 @@
                     android:id="@+id/saveprofileTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/primary_green"
+                    android:background="@drawable/round_color_bg"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center"
                     android:maxLength="2"
+                    android:text="df"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14ssp"

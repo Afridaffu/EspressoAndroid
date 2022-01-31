@@ -82,6 +82,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     ImageView idIVQrcode, imageShare, copyRecipientAddress, albumIV;
     ImageView closeBtnScanCode, closeBtnScanMe, imgProfile;
+    public static Business_ReceivePaymentActivity business_receivePaymentActivity;
 
     MyApplication objMyApplication;
     DashboardViewModel dashboardViewModel;
@@ -170,7 +171,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
 
             toglebtn1 = findViewById(R.id.toglebtn);
-            tvWalletAddress = findViewById(R.id.tvWalletAddress);
+            tvWalletAddress = findViewById(R.id.b_tvWalletAddress);
 //            scannerLayout = findViewById(R.id.scannerLayout);
 //            scannerBar = findViewById(R.id.lineView);
 //            flashLL = findViewById(R.id.flashBtnRL);
@@ -178,6 +179,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             idIVQrcode = (ImageView) findViewById(R.id.b_idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
+            business_receivePaymentActivity=this;
             scanMeRequestAmount = findViewById(R.id.scanMeRequestAmount);
             scanAmountLL = findViewById(R.id.scanAmountLL);
 //            layoutHead = findViewById(R.id.layoutHead);
@@ -201,6 +203,17 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
 
 
+            findViewById(R.id.receivePaymentLL).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             if (strName != null && strName.length() > 22) {
                 tvName.setText(strName.substring(0, 22) + "...");
@@ -216,12 +229,12 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-//            WalletResponse walletResponse = objMyApplication.getWalletResponse();
-//            if (walletResponse != null) {
-//                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
-//                generateQRCode(strWallet);
-//            }
-//            tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
+            WalletResponse walletResponse = objMyApplication.getWalletResponse();
+            if (walletResponse != null) {
+                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
+                generateQRCode(strWallet);
+            }
+            tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -290,7 +303,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                             InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                             ctKey.setInputConnection(ic);
                             ctKey.setKeyAction("OK");
-                            ctKey.setScreenName("setAmount");
+                            ctKey.setScreenName("receivepayments");
                             fontSize = setAmount.getTextSize();
                             setAmount.requestFocus();
                             setAmount.setShowSoftInputOnFocus(false);
@@ -330,8 +343,13 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                 @Override
                 public void onClick(View view) {
                     try {
-                        saveToGallery();
-                        Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                        if (ContextCompat.checkSelfPermission(Business_ReceivePaymentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                            ActivityCompat.requestPermissions(Business_ReceivePaymentActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+                        }
+                        else {
+                            saveToGallery();
+                            Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -632,6 +650,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             @Override
             public void onChanged(WalletResponse walletResponse) {
                 if (walletResponse!=null){
+                    objMyApplication.setWalletResponse(walletResponse);
                     strWallet=walletResponse.getData().getWalletInfo().get(0).getWalletId();
                     generateQRCode(strWallet);
                 }
@@ -687,6 +706,24 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
 //        errorDialog.setCanceledOnTouchOutside(false);
 //        errorDialog.show();
 //    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode==123){
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                Utils.displayAlert("Requires Access to Your Storage.", Business_ReceivePaymentActivity.this, "", "");
+            }
+            else if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                saveToGallery();
+                Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+            }
+        }
+    }
 }
 
 
