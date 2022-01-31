@@ -15,29 +15,31 @@ import com.greenbox.coyni.view.UserDetailsActivity;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
-    private LinearLayout feesLL, teamLL,bpbackBtn,switchOffLL,switchOnLL;
-    boolean isTogleBtn=false;
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
+    boolean isTogleBtn = false;
     private Long mLastClickTime = 0L;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_profile);
-       initFields();
+        initFields();
     }
 
     private void initFields() {
         try {
             feesLL = findViewById(R.id.feesLL);
             teamLL = findViewById(R.id.teamLL);
+            paymentMethodsLL = findViewById(R.id.paymentMethodsLL);
             bpbackBtn = findViewById(R.id.bpbackBtn);
-            switchOnLL=findViewById(R.id.switchOn);
-            switchOffLL=findViewById(R.id.switchOff);
+            switchOnLL = findViewById(R.id.switchOn);
+            switchOffLL = findViewById(R.id.switchOff);
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    isTogleBtn=true;
+                    isTogleBtn = true;
                     switchOnLL.setVisibility(View.VISIBLE);
                     switchOffLL.setVisibility(View.GONE);
                 }
@@ -46,7 +48,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             switchOnLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    isTogleBtn=false;
+                    isTogleBtn = false;
                     switchOnLL.setVisibility(View.GONE);
                     switchOffLL.setVisibility(View.VISIBLE);
                 }
@@ -64,7 +66,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent intent = new Intent(BusinessProfileActivity.this,TeamActivity.class);
+                        Intent intent = new Intent(BusinessProfileActivity.this, TeamActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -75,7 +77,19 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent intent = new Intent(BusinessProfileActivity.this,FeesActivity.class);
+                        Intent intent = new Intent(BusinessProfileActivity.this, FeesActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            paymentMethodsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, BusinessPaymentMethodsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
