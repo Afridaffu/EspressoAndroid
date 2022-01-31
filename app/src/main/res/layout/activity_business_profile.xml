@@ -217,7 +217,7 @@
                         android:paddingTop="@dimen/_11sdp">
 
                         <LinearLayout
-                            android:id="@+id/cpUserDetailsLL"
+                            android:id="@+id/business_UserDetailsLL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
@@ -425,7 +425,7 @@
                             android:background="@color/viewcolor" />
 
                         <LinearLayout
-                            android:id="@+id/PaymentMethodsLL"
+                            android:id="@+id/paymentMethodsLL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
