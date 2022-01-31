@@ -71,7 +71,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Business_ReceivePaymentActivity extends AppCompatActivity implements TextWatcher {
 
     TextView scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
-    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL;
+    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL,closeBtn;
     ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
@@ -114,9 +114,11 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
         Business_ReceivePaymentActivity = this;
         initialization();
         listeners();
+        initObservers();
 
 
     }
+
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -169,16 +171,17 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
 
             toglebtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.tvWalletAddress);
-            scannerLayout = findViewById(R.id.scannerLayout);
-            scannerBar = findViewById(R.id.lineView);
-            flashLL = findViewById(R.id.flashBtnRL);
+//            scannerLayout = findViewById(R.id.scannerLayout);
+//            scannerBar = findViewById(R.id.lineView);
+//            flashLL = findViewById(R.id.flashBtnRL);
+            closeBtn=findViewById(R.id.receivePaymentLL);
             idIVQrcode = (ImageView) findViewById(R.id.b_idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
             scanMeRequestAmount = findViewById(R.id.scanMeRequestAmount);
             scanAmountLL = findViewById(R.id.scanAmountLL);
-            layoutHead = findViewById(R.id.layoutHead);
-            scanMeSV = findViewById(R.id.scanmeScrlView);
+//            layoutHead = findViewById(R.id.layoutHead);
+//            scanMeSV = findViewById(R.id.scanmeScrlView);
             savetoAlbum = findViewById(R.id.saveToAlbumTV);
             scanmeSetAmountTV = findViewById(R.id.scanMesetAmountTV);
             imageShare = findViewById(R.id.imgShare);
@@ -186,7 +189,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             copyRecipientAddress = findViewById(R.id.imgCopy);
             imgProfile = findViewById(R.id.imgProfile);
             albumIV = findViewById(R.id.albumIV);
-            imageSaveAlbumLL = findViewById(R.id.saveToAlbumLL);
+            imageSaveAlbumLL = findViewById(R.id.b_saveToAlbumLL);
             setAmountLL = findViewById(R.id.setAmountLL);
             divider = findViewById(R.id.divider1);
 
@@ -196,6 +199,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             saveProfileIV = findViewById(R.id.saveprofileIV);
             saveProfileTitle = findViewById(R.id.saveprofileTitle);
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
+
 
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             if (strName != null && strName.length() > 22) {
@@ -212,12 +216,12 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-            WalletResponse walletResponse = objMyApplication.getWalletResponse();
-            if (walletResponse != null) {
-                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
-                generateQRCode(strWallet);
-            }
-            tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
+//            WalletResponse walletResponse = objMyApplication.getWalletResponse();
+//            if (walletResponse != null) {
+//                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
+//                generateQRCode(strWallet);
+//            }
+//            tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -369,6 +373,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     protected void onResume() {
         try {
             super.onResume();
+            dashboardViewModel.meWallet();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -435,18 +440,18 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
         }
     }
 
-    private void getUserDetails(String strWalletId) {
-        try {
-            if (Utils.checkInternet(Business_ReceivePaymentActivity.this)) {
-                dialog = Utils.showProgressDialog(Business_ReceivePaymentActivity.this);
-                dashboardViewModel.getUserDetail(strWalletId);
-            } else {
-                Utils.displayAlert(getString(R.string.internet), Business_ReceivePaymentActivity.this, "", "");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void getUserDetails(String strWalletId) {
+//        try {
+//            if (Utils.checkInternet(Business_ReceivePaymentActivity.this)) {
+//                dialog = Utils.showProgressDialog(Business_ReceivePaymentActivity.this);
+//                dashboardViewModel.getUserDetail(strWalletId);
+//            } else {
+//                Utils.displayAlert(getString(R.string.internet), Business_ReceivePaymentActivity.this, "", "");
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void bindImage() {
         try {
@@ -620,6 +625,19 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void initObservers() {
+        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
+            @Override
+            public void onChanged(WalletResponse walletResponse) {
+                if (walletResponse!=null){
+                    strWallet=walletResponse.getData().getWalletInfo().get(0).getWalletId();
+                    generateQRCode(strWallet);
+                }
+            }
+        });
+
     }
 
 //    private void displayAlert(String msg, String headerText) {
