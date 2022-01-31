@@ -2,33 +2,46 @@ package com.greenbox.coyni.view.business;
 
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.BaseFragment;
 import com.greenbox.coyni.fragments.BusinessAccountFragment;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
-import com.greenbox.coyni.fragments.BusinessProfileFragment;
 import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 public class BusinessDashboardActivity extends BaseActivity {
-
+    BusinessDashboardViewModel businessDashboardViewModel;
+    MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
 
     enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_dashboard);
-
-        pushFragment(new BusinessDashboardFragment());
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_business_dashboard);
+            initialization();
+            initObserver();
+            pushFragment(new BusinessDashboardFragment());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void onDashboardTabSelected(View view) {
@@ -73,6 +86,52 @@ public class BusinessDashboardActivity extends BaseActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fl_content_frame, fragment);
         transaction.commit();
+    }
+
+    private void initialization() {
+        try {
+            objMyApplication = (MyApplication) getApplicationContext();
+            businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            new FetchData(BusinessDashboardActivity.this).execute();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void initObserver() {
+        businessDashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                }
+            }
+        });
+    }
+
+    public class FetchData extends AsyncTask<Void, Void, Boolean> {
+
+        public FetchData(Context context) {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+//                customerProfileViewModel.meSignOn();
+                businessDashboardViewModel.meBusinessPaymentMethods();
+//                dashboardViewModel.meWallet();
+//                notificationsViewModel.getNotifications();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean list) {
+            super.onPostExecute(list);
+
+        }
     }
 
 

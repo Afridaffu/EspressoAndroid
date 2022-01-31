@@ -642,7 +642,9 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
                 if (paymentMethodsResponse != null) {
-                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+//                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
                 }
             }
         });
@@ -808,9 +810,6 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-//                buyViewModel.meBanks();
-//                notificationsViewModel.meNotifications();
-//                payViewModel.getReceiveRequests();
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();

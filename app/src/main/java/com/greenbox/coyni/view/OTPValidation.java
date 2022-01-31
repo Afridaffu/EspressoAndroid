@@ -817,10 +817,31 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
                             resendCounter = 0;
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
+                            if (objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if (getIntent().getStringExtra("IS_OLD_EMAIL").equalsIgnoreCase("true")) {
+                                                startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                        .putExtra("screen", "EditEmail")
+                                                        .putExtra("OTP_TYPE", "OTP")
+                                                        .putExtra("IS_OLD_EMAIL", "false")
+                                                        .putExtra("OLD_EMAIL", oldEmail)
+                                                        .putExtra("NEW_EMAIL", newEmail));
+                                                finish();
+                                            } else {
+                                                startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                                        .putExtra("screen", "EditEmail"));
+                                                finish();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, Utils.duration);
+                            }
+                            if (objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT){
                                         if (getIntent().getStringExtra("IS_OLD_EMAIL").equalsIgnoreCase("true")) {
                                             startActivity(new Intent(OTPValidation.this, OTPValidation.class)
                                                     .putExtra("screen", "EditEmail")
@@ -830,15 +851,20 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                     .putExtra("NEW_EMAIL", newEmail));
                                             finish();
                                         } else {
-                                            startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
-                                                    .putExtra("screen", "EditEmail"));
-                                            finish();
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+
+                                            Utils.showCustomToast(OTPValidation.this, "Email updated", R.drawable.ic_check, "EMAIL");
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        finish();
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                }  }, 2000);
                                 }
-                            }, Utils.duration);
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -860,36 +886,72 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
                             resendCounter = 0;
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        if (getIntent().getStringExtra("IS_OLD_PHONE").equalsIgnoreCase("true")) {
-                                            startActivity(new Intent(OTPValidation.this, OTPValidation.class)
-                                                    .putExtra("screen", "EditPhone")
-                                                    .putExtra("OTP_TYPE", "OTP")
-                                                    .putExtra("IS_OLD_PHONE", "false")
-                                                    .putExtra("OLD_PHONE_MASKED", oldPhoneMasked)
-                                                    .putExtra("NEW_PHONE_MASKED", newPhoneMasked)
-                                                    .putExtra("OLD_PHONE", oldPhone)
-                                                    .putExtra("NEW_PHONE", newPhone));
-                                            finish();
-                                        } else {
-                                            try {
-                                                if (EditPhoneActivity.editPhoneActivity != null) {
-                                                    EditPhoneActivity.editPhoneActivity.finish();
-                                                }
+                            if (objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if (getIntent().getStringExtra("IS_OLD_PHONE").equalsIgnoreCase("true")) {
+                                                startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                        .putExtra("screen", "EditPhone")
+                                                        .putExtra("OTP_TYPE", "OTP")
+                                                        .putExtra("IS_OLD_PHONE", "false")
+                                                        .putExtra("OLD_PHONE_MASKED", oldPhoneMasked)
+                                                        .putExtra("NEW_PHONE_MASKED", newPhoneMasked)
+                                                        .putExtra("OLD_PHONE", oldPhone)
+                                                        .putExtra("NEW_PHONE", newPhone));
                                                 finish();
-                                                Utils.showCustomToast(UserDetailsActivity.userDetailsActivity, "Phone number updated", R.drawable.ic_phone, "EditPhone");
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
+                                            } else {
+                                                try {
+                                                    if (EditPhoneActivity.editPhoneActivity != null) {
+                                                        EditPhoneActivity.editPhoneActivity.finish();
+                                                    }
+                                                    finish();
+                                                    Utils.showCustomToast(UserDetailsActivity.userDetailsActivity, "Phone number updated", R.drawable.ic_phone, "EditPhone");
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
                                     }
-                                }
-                            }, Utils.duration);
+                                }, Utils.duration);
+                            }
+                            if (objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if (getIntent().getStringExtra("IS_OLD_PHONE").equalsIgnoreCase("true")) {
+                                                startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                        .putExtra("screen", "EditPhone")
+                                                        .putExtra("OTP_TYPE", "OTP")
+                                                        .putExtra("IS_OLD_PHONE", "false")
+                                                        .putExtra("OLD_PHONE_MASKED", oldPhoneMasked)
+                                                        .putExtra("NEW_PHONE_MASKED", newPhoneMasked)
+                                                        .putExtra("OLD_PHONE", oldPhone)
+                                                        .putExtra("NEW_PHONE", newPhone));
+                                                finish();
+                                            } else {
+                                                Utils.showCustomToast(OTPValidation.this, "Phone number updated", R.drawable.ic_phone, "EditPhone");
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            finish();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                    }  }, 2000);
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, Utils.duration);
+                            }
                         }
                     }
                 } catch (Exception ex) {
