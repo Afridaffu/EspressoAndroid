@@ -27,6 +27,7 @@
             android:textSize="@dimen/_10ssp"
             android:visibility="visible" />
 
+
         <com.greenbox.coyni.utils.swipelayout.SwipeLayout
             android:id="@+id/swipeLayout"
             android:layout_width="match_parent"
@@ -34,9 +35,10 @@
             swipe:leftEdgeSwipeOffset="0dp"
             swipe:rightEdgeSwipeOffset="0dp">
 
+
             <LinearLayout
                 android:id="@+id/readStatusLL"
-                android:layout_width="@dimen/_100sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@color/txn_completed_trans"
                 android:gravity="center">
@@ -45,8 +47,8 @@
                     android:id="@+id/readStatusTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
@@ -58,7 +60,7 @@
 
             <LinearLayout
                 android:id="@+id/deleteLL"
-                android:layout_width="@dimen/_100sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@color/notif_delete_bg">
 
@@ -66,9 +68,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
                     android:src="@drawable/ic_delete" />
             </LinearLayout>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvNotification"
@@ -94,10 +98,10 @@
                             android:id="@+id/readStatusCV"
                             android:layout_width="@dimen/_6sdp"
                             android:layout_height="@dimen/_6sdp"
+                            android:layout_gravity="center"
                             android:layout_marginRight="@dimen/_5sdp"
                             app:cardBackgroundColor="@color/primary_color"
-                            app:cardCornerRadius="5dp"
-                            android:layout_gravity="center"/>
+                            app:cardCornerRadius="5dp" />
 
                         <TextView
                             android:id="@+id/subject"
