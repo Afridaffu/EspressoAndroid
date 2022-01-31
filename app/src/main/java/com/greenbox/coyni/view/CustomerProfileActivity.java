@@ -63,7 +63,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     ImageView imgQRCode, profileIV;
     LinearLayout cpbackBtn;
     //    ProgressDialog dialog;
-    TextView customerNameTV, tvACStatus, tvBMSetting, cpAccountIDTV, imageTextTV;
+    TextView customerNameTV, tvACStatus, tvBMSetting, cpAccountIDTV, imageTextTV, tvVersion;
     MyApplication objMyApplication;
     CardView cvLogout;
     ConstraintLayout userProfile;
@@ -130,6 +130,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             userProfile = findViewById(R.id.linearLayout);
             cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
             statusDotCV = findViewById(R.id.statusDotCV);
+            tvVersion = findViewById(R.id.tvVersion);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -413,6 +414,20 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 Intent i = new Intent(CustomerProfileActivity.this, BindingLayoutActivity.class);
                 i.putExtra("screen", "profileGetStarted");
                 startActivity(i);
+            });
+
+            tvVersion.setText("Version " + Utils.getAppVersion().replace("Android : ", ""));
+            tvVersion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        String strEndPoint = "";
+                        strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
+                        Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
             });
         } catch (Exception ex) {
             ex.printStackTrace();
