@@ -60,24 +60,25 @@
                 android:layout_marginHorizontal="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_21sdp"
                 android:hint="Name on Signet Account"
+                android:textCursorDrawable="@drawable/cursor_color"
                 app:boxStrokeColor="@color/primary_green"
                 app:expandedHintEnabled="false"
-                app:hintTextColor="@color/primary_green"
-                android:textCursorDrawable="@drawable/cursor_color">
+                app:hintTextColor="@color/primary_green">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Enter Name"
-                    android:singleLine="true"
                     android:padding="@dimen/_14sdp"
+                    android:singleLine="true"
                     android:textColor="@color/primary_black"
                     android:textColorHint="@color/light_gray"
-                    android:textSize="@dimen/_12ssp"
                     android:textCursorDrawable="@drawable/cursor_color"
+                    android:textSize="@dimen/_12ssp"
                     app:endIconDrawable="@drawable/ic_chevron_down" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -94,15 +95,14 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="XXXXXXXXXXXX XXXX"
-                    android:singleLine="true"
                     android:padding="@dimen/_14sdp"
+                    android:singleLine="true"
                     android:textColor="@color/primary_black"
                     android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_12ssp"
-                    app:endIconDrawable="@drawable/ic_chevron_down"
-                    android:textCursorDrawable="@drawable/cursor_color"/>
+                    app:endIconDrawable="@drawable/ic_chevron_down" />
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <View
                 android:layout_width="match_parent"
@@ -123,22 +123,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Biling Address Line 1"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     app:boxStrokeColor="@color/primary_green"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/primary_green"
-                    android:textCursorDrawable="@drawable/cursor_color">
+                    app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="3131 Camino Del Rio North "
-                        android:singleLine="true"
                         android:padding="@dimen/_14sdp"
+                        android:singleLine="true"
+                        android:text="3131 Camino Del Rio North "
                         android:textColor="@color/primary_black"
-                        app:endIconDrawable="@drawable/ic_chevron_down"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        app:endIconDrawable="@drawable/ic_chevron_down" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -147,22 +147,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="Biling Address Line 2(Optional)"
+                    android:textCursorDrawable="@drawable/cursor_color"
                     app:boxStrokeColor="@color/primary_green"
                     app:expandedHintEnabled="false"
-                    app:hintTextColor="@color/primary_green"
-                    android:textCursorDrawable="@drawable/cursor_color">
+                    app:hintTextColor="@color/primary_green">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Suite 1400"
-                        android:singleLine="true"
                         android:padding="@dimen/_14sdp"
+                        android:singleLine="true"
+                        android:text="Suite 1400"
                         android:textColor="@color/primary_black"
-                        app:endIconDrawable="@drawable/ic_chevron_down"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        app:endIconDrawable="@drawable/ic_chevron_down" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -179,13 +179,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
+                        android:padding="@dimen/_14sdp"
+                        android:singleLine="true"
                         android:text="San Diego"
                         android:textColor="@color/primary_black"
+                        android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp"
-                        android:singleLine="true"
-                        app:endIconDrawable="@drawable/ic_chevron_down"
-                        android:padding="@dimen/_14sdp"
-                        android:textCursorDrawable="@drawable/cursor_color"/>
+                        app:endIconDrawable="@drawable/ic_chevron_down" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -195,21 +195,22 @@
                     android:layout_marginTop="@dimen/_14sdp"
                     android:hint="@string/state"
                     app:boxStrokeColor="@color/primary_green"
-                    app:expandedHintEnabled="false"
+                    app:endIconDrawable="@drawable/ic_chevron_down"
                     app:endIconMode="custom"
                     app:endIconTint="@color/black"
-                    app:hintTextColor="@color/primary_green"
-                    app:endIconDrawable="@drawable/ic_chevron_down"
-                    app:errorIconDrawable="@null">
+                    app:errorIconDrawable="@null"
+                    app:expandedHintEnabled="false"
+                    app:hintTextColor="@color/primary_green">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="@string/ca"
-                        android:singleLine="true"
                         android:padding="@dimen/_14sdp"
-                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:singleLine="true"
+                        android:text="@string/ca"
                         android:textColor="@color/primary_black"
+                        android:textCursorDrawable="@drawable/cursor_color"
                         android:textSize="@dimen/_12ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -227,19 +228,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="92108"
-                        android:singleLine="true"
                         android:padding="@dimen/_14sdp"
+                        android:singleLine="true"
+                        android:text="92108"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp"
-                        android:textCursorDrawable="@drawable/cursor_color" />
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_12ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <RelativeLayout
                     android:id="@+id/currencyRL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_14sdp" >
+                    android:layout_marginTop="@dimen/_14sdp">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/countryTIL"
