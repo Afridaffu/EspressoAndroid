@@ -265,7 +265,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     String face=String.valueOf(isFaceLock);
                     String touch=String.valueOf(isTouchId);
 
-                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",emailId).putExtra("touch",touch).putExtra("face",face));
+                    try {
+                        startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",emailId).putExtra("touch",touch).putExtra("face",face));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -282,7 +286,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     String face=String.valueOf(isFaceLock);
                     String touch=String.valueOf(isTouchId);
 
-                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",address).putExtra("touch",touch).putExtra("face",face));
+                    try {
+                        startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",address).putExtra("touch",touch).putExtra("face",face));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
 
                 }
@@ -300,7 +308,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     String face=String.valueOf(isFaceLock);
                     String touch=String.valueOf(isTouchId);
 
-                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",phoneFormat).putExtra("touch",touch).putExtra("face",face));
+                    try {
+                        startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",phoneFormat).putExtra("touch",touch).putExtra("face",face));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
             });

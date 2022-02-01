@@ -14,7 +14,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:orientation="vertical">
 
             <LinearLayout
@@ -24,6 +23,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/backIV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_21sdp"
@@ -48,18 +48,18 @@
                 android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginBottom="@dimen/_55sdp"
-
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_11sdp"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
+
                         android:layout_marginTop="@dimen/_21sdp"
                         android:orientation="horizontal">
 
@@ -82,7 +82,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_19sdp"
                         android:orientation="horizontal">
 
@@ -90,6 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
+                            android:layout_weight="1"
                             android:text="Monthly Processing Volume"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -97,7 +97,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_13sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Month"
                             android:textColor="@color/primary_black"
@@ -107,7 +106,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_18sdp"
                         android:orientation="horizontal">
 
@@ -115,6 +113,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
+                            android:layout_weight="1"
                             android:text="High Ticket Limit"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -122,7 +121,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_55sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="1,000.00/Transaction"
                             android:textColor="@color/primary_black"
@@ -132,7 +130,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_31sdp"
                         android:orientation="horizontal">
 
@@ -155,7 +152,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_19sdp"
                         android:orientation="horizontal">
 
@@ -163,6 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
+                            android:layout_weight="1"
                             android:text="Bank Account"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -170,7 +167,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_88sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Week"
                             android:textColor="@color/primary_black"
@@ -180,13 +176,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_18sdp"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Signet Account"
                             android:textColor="@color/dark_grey"
@@ -195,7 +191,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_90sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Day"
                             android:textColor="@color/primary_black"
@@ -205,7 +200,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_32sdp"
                         android:orientation="horizontal">
 
@@ -229,7 +223,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_18sdp"
                         android:orientation="horizontal">
 
@@ -238,13 +231,13 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Bank Account"
+                            android:layout_weight="1"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_90sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Week"
                             android:textColor="@color/primary_black"
@@ -254,7 +247,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_18sdp"
                         android:orientation="horizontal">
 
@@ -262,6 +254,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
+                            android:layout_weight="1"
                             android:text="Instant Pay"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -269,7 +262,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_109sdp"
+
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Day"
                             android:textColor="@color/primary_black"
@@ -279,13 +272,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_18sdp"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Gift Card"
                             android:textColor="@color/dark_grey"
@@ -294,7 +287,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_113sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Week"
                             android:textColor="@color/primary_black"
@@ -304,7 +296,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_44sdp"
                         android:orientation="horizontal">
@@ -313,6 +304,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
+                            android:layout_weight="1"
                             android:text="Signet Account"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -320,7 +312,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_90sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="250,000.00/Day"
                             android:textColor="@color/primary_black"

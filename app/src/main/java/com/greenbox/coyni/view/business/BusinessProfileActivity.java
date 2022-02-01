@@ -68,7 +68,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     Cursor cursor;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     boolean isLoggedOut = false;
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
+    private LinearLayout feesLL, teamLL, bpbackBtn,accountlimitsLL, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
 
     public static void SetToken(MyApplication objMyApplication, Activity activity) {
@@ -140,6 +140,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
         try {
             feesLL = findViewById(R.id.feesLL);
             teamLL = findViewById(R.id.teamLL);
+            accountlimitsLL = findViewById(R.id.cpAccountLimitsLL);
             paymentMethodsLL = findViewById(R.id.paymentMethodsLL);
             bpbackBtn = findViewById(R.id.b_backBtn);
             cvLogout=findViewById(R.id.cvLogout);
@@ -229,7 +230,17 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-
+            accountlimitsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, BusinessAccountLimitsActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             paymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
