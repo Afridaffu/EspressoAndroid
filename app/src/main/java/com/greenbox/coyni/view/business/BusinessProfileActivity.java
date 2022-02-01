@@ -1,7 +1,5 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -9,13 +7,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.view.Business_UserDetailsListenersActivity;
+import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL;
     boolean isTogleBtn = false;
     private Long mLastClickTime = 0L;
 
@@ -35,6 +35,44 @@ public class BusinessProfileActivity extends AppCompatActivity {
             paymentMethodsLL = findViewById(R.id.paymentMethodsLL);
             bpbackBtn = findViewById(R.id.bpbackBtn);
             switchOnLL = findViewById(R.id.switchOn);
+
+            dbainfoLL = findViewById(R.id.DBAInformationLL);
+            dbainfoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, DBAInfoDetails.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+            companyinfoLL = findViewById(R.id.companyInformationLL);
+            companyinfoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){ try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, CompanyInfoDetails.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+            });
+
+            cpagreeementsLL = findViewById(R.id.cpAgreementsLL);
+            cpagreeementsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) { try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+            });
+
+
             switchOffLL = findViewById(R.id.switchOff);
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
