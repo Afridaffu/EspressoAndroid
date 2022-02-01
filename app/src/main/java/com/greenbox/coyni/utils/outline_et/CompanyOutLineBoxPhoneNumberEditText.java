@@ -22,7 +22,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
     private LinearLayout hintHolder;
     private MaskEditText phnET;
     boolean isPhoneError1 = false;
-
+    private Context mContext;
     public String FROM = "";
 
     public CompanyOutLineBoxPhoneNumberEditText(Context context) {
@@ -49,21 +49,16 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
             public void onFocusChange(View view, boolean b) {
                 try {
 
-                    if (isPhoneError1)
-                    {
+                    if (isPhoneError1) {
                         if (b) {
-                            CompanyInformationActivity.focusedID = phnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
-                    }
-                        else
-                        {
+                    } else {
                         if (b) {
-                            CompanyInformationActivity.focusedID = phnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
@@ -72,37 +67,32 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         }
 
                     }
-                    if (FROM.equals("DbaInfo") && !b)
-                    {
+                    if (FROM.equals("DbaInfo") && !b) {
+                        DBAbasicInformationAcivity dba = (DBAbasicInformationAcivity) mContext;
                         if ((phnET.getText().length() > 0 && phnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            DBAbasicInformationAcivity dba = DBAbasicInformationAcivity.dbAbasicInformationAcivity;
                             dba.customerphonenumLL.setVisibility(VISIBLE);
                             dba.customernumTV.setText("Invalid Phone Number");
                         } else if ((phnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            DBAbasicInformationAcivity dba = DBAbasicInformationAcivity.dbAbasicInformationAcivity;
                             dba.customerphonenumLL.setVisibility(VISIBLE);
                             dba.customernumTV.setText("Field Required");
                         } else {
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
-                    }
-                    else if (FROM.equals("Company_Information") && !b)
-                     {
+                    } else if (FROM.equals("Company_Information") && !b) {
+                        CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
                         if ((phnET.getText().length() > 0 && phnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            CompanyInformationActivity comp = CompanyInformationActivity.companyInformationActivity;
                             comp.compphoneNumberErrorLL.setVisibility(VISIBLE);
                             comp.compphonenumberTV.setText("Invalid Phone Number");
                         } else if ((phnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            CompanyInformationActivity comp = CompanyInformationActivity.companyInformationActivity;
                             comp.compphoneNumberErrorLL.setVisibility(VISIBLE);
                             comp.compphonenumberTV.setText("Field Required");
                         } else {
@@ -118,11 +108,15 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
         });
 
         phnET.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (FROM.equals("Company_Information")) {
-                    CompanyInformationActivity comAct = CompanyInformationActivity.companyInformationActivity;
+                    CompanyInformationActivity comAct = (CompanyInformationActivity) mContext;
                     if (charSequence.length() == 14) {
                         isPhoneError1 = false;
                         comAct.compphoneNumberErrorLL.setVisibility(GONE);
@@ -131,40 +125,38 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                     comAct.iscompPhoneNumber = phnET.getText().toString().trim().length() > 13;
 
                     if (comAct.iscompanyName && comAct.iscompanyEmail && comAct.iscompPhoneNumber) {
-                        comAct.isNextEnabled = true;
-                        comAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                        comAct.isBasicNextEnabled = true;
+                        comAct.basicNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
                     } else {
-                        comAct.isNextEnabled = false;
-                        comAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        comAct.isBasicNextEnabled = false;
+                        comAct.basicNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
 
                     if ((phnET.getText().length() == 0)) {
-                        CompanyInformationActivity caa = CompanyInformationActivity.companyInformationActivity;
-                        caa.compphoneNumberErrorLL.setVisibility(VISIBLE);
-                        caa.compphonenumberTV.setText("Field Required");
+                        comAct.compphoneNumberErrorLL.setVisibility(VISIBLE);
+                        comAct.compphonenumberTV.setText("Field Required");
                     }
-                }
-                else if (FROM.equals("DbaInfo")) {
-                    DBAbasicInformationAcivity rea = DBAbasicInformationAcivity.dbAbasicInformationAcivity;
+                } else if (FROM.equals("DbaInfo")) {
+                    DBAbasicInformationAcivity dba = (DBAbasicInformationAcivity) mContext;
                     if (charSequence.length() == 14) {
                         isPhoneError1 = false;
-                        rea.customerphonenumLL.setVisibility(GONE);
+                        dba.customerphonenumLL.setVisibility(GONE);
                     }
-                    rea.iscustPhoneNumber = phnET.getText().toString().trim().length() > 13;
+                    dba.iscustPhoneNumber = phnET.getText().toString().trim().length() > 13;
 
-                    if (rea.isdbaName && rea.isdbaEmail && rea.iscustPhoneNumber) {
-                        rea.isNextEnabled = true;
-                        rea.dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                    if (dba.isdbaName && dba.isdbaEmail && dba.iscustPhoneNumber) {
+                        dba.isNextEnabled = true;
+                        dba.dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
                     } else {
-                        rea.isNextEnabled = false;
-                        rea.dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        dba.isNextEnabled = false;
+                        dba.dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
                     if ((phnET.getText().length() == 0)) {
 
-                        rea.customerphonenumLL.setVisibility(VISIBLE);
-                        rea.customernumTV.setText("Field Required");
+                        dba.customerphonenumLL.setVisibility(VISIBLE);
+                        dba.customernumTV.setText("Field Required");
                     }
                 }
 
@@ -172,10 +164,6 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                try {
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
             }
         });
 
@@ -188,8 +176,9 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
     }
 
 
-    public void setFrom(String fromm) {
+    public void setFrom(String fromm, Context context) {
         FROM = fromm;
+        mContext = context;
     }
 
 
@@ -197,7 +186,9 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
         phnET.setText(text);
     }
 
-    public void setHintText(String text){hintName.setText(text);}
+    public void setHintText(String text) {
+        hintName.setText(text);
+    }
 
     public String getText() {
         return phnET.getText().toString().trim();
@@ -210,5 +201,10 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
     public void requestETFocus() {
         phnET.requestFocus();
     }
+
+    public String getUnmaskedText() {
+        return phnET.getUnMasked();
+    }
+
 
 }
