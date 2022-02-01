@@ -31,15 +31,17 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends AppCompatActivity {
-    CardView enableFaceCV, enableTouchCV, successGetStartedCV,businessGetStartedCV;
+    CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
-    RelativeLayout faceIDRL, touchIDRL, successRL,businessSuccessRL;
+    RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
     String enableType, strScreen = "";
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     SQLiteDatabase mydatabase;
@@ -277,8 +279,7 @@ public class EnableAuthID extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
-                    startActivity(new Intent(EnableAuthID.this, BusinessDashboardActivity.class));
+                    startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class));
                 }
             });
 
@@ -451,11 +452,11 @@ public class EnableAuthID extends AppCompatActivity {
         }.start();
     }
 
-    private void showSuccessLayout(){
-        if(objMyApplication.getAccountType() ==Utils.PERSONAL_ACCOUNT){
+    private void showSuccessLayout() {
+        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             successRL.setVisibility(View.VISIBLE);
             businessSuccessRL.setVisibility(View.GONE);
-        }else if(objMyApplication.getAccountType() ==Utils.BUSINESS_ACCOUNT){
+        } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
             successRL.setVisibility(View.GONE);
             businessSuccessRL.setVisibility(View.VISIBLE);
         }
@@ -463,8 +464,14 @@ public class EnableAuthID extends AppCompatActivity {
 
     private void launchDashboard() {
         Intent dashboardIntent = new Intent(EnableAuthID.this, DashboardActivity.class);
-        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
+        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
+            } else {
+                dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
+            }
         }
         dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(dashboardIntent);

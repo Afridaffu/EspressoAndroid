@@ -53,6 +53,7 @@ import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -61,6 +62,9 @@ import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 
@@ -92,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     private long mLastClickTime = 0;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginResponse loginResponse;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,6 +227,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             endIconIV = findViewById(R.id.endIconIV);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
 
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
@@ -500,6 +506,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+//                    startActivity(new Intent(LoginActivity.this, CompanyInformationActivity.class));
                 }
             });
 
@@ -620,139 +627,162 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void initObserver() {
-        loginViewModel.getLoginLiveData().observe(this, new Observer<LoginResponse>() {
-            @Override
-            public void onChanged(LoginResponse login) {
-                try {
-                    dialog.dismiss();
-                    if (login != null) {
-                        if (!login.getStatus().toLowerCase().equals("error")) {
-                            Utils.setStrAuth(login.getData().getJwtToken());
-                            objMyApplication.setStrEmail(login.getData().getEmail());
-//                            objMyApplication.setUserId(login.getData().getUserId());
-                            objMyApplication.setLoginUserId(login.getData().getUserId());
-                            Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
-                            objMyApplication.setBiometric(login.getData().getBiometricEnabled());
-                            getStatesUrl(login.getData().getStateList().getUS());
-                            objMyApplication.setAccountType(login.getData().getAccountType());
-                            if (login.getData().getPasswordExpired()) {
-                                Intent i = new Intent(LoginActivity.this, PINActivity.class);
-                                i.putExtra("screen", "loginExpiry");
-                                i.putExtra("TYPE", "ENTER");
-                                startActivity(i);
-                            } else {
-                                if (chkRemember.isChecked()) {
-                                    saveCredentials();
-                                } else {
-                                    mydatabase.execSQL("Delete from tblRemember");
-                                }
-                                saveFirstUser();
-                                if (login.getData().getCoyniPin()) {
+        try {
+            loginViewModel.getLoginLiveData().observe(this, new Observer<LoginResponse>() {
+                @Override
+                public void onChanged(LoginResponse login) {
+                    try {
+                        dialog.dismiss();
+                        if (login != null) {
+                            if (!login.getStatus().toLowerCase().equals("error")) {
+                                Utils.setStrAuth(login.getData().getJwtToken());
+                                objMyApplication.setStrEmail(login.getData().getEmail());
+                                //                            objMyApplication.setUserId(login.getData().getUserId());
+                                objMyApplication.setLoginUserId(login.getData().getUserId());
+                                Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
+                                objMyApplication.setBiometric(login.getData().getBiometricEnabled());
+                                getStatesUrl(login.getData().getStateList().getUS());
+                                objMyApplication.setAccountType(login.getData().getAccountType());
+                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+                                    businessIdentityVerificationViewModel.getBusinessTracker();
+                                if (login.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
+                                    i.putExtra("screen", "loginExpiry");
                                     i.putExtra("TYPE", "ENTER");
-                                    i.putExtra("screen", "login");
-                                    i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
                                     startActivity(i);
                                 } else {
-                                    loginResponse = login;
-                                    SMSResend resend = new SMSResend();
-                                    resend.setCountryCode(Utils.getStrCCode());
-                                    resend.setPhoneNumber(login.getData().getPhoneNumber());
-                                    loginViewModel.smsotpresend(resend);
+                                    if (chkRemember.isChecked()) {
+                                        saveCredentials();
+                                    } else {
+                                        mydatabase.execSQL("Delete from tblRemember");
+                                    }
+                                    saveFirstUser();
+                                    if (login.getData().getCoyniPin()) {
+                                        Intent i = new Intent(LoginActivity.this, PINActivity.class);
+                                        i.putExtra("TYPE", "ENTER");
+                                        i.putExtra("screen", "login");
+                                        i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
+                                        startActivity(i);
+                                    } else {
+                                        loginResponse = login;
+                                        SMSResend resend = new SMSResend();
+                                        resend.setCountryCode(Utils.getStrCCode());
+                                        resend.setPhoneNumber(login.getData().getPhoneNumber());
+                                        loginViewModel.smsotpresend(resend);
 
-                                }
-                            }
-                        } else {
-                            if (login.getData() != null) {
-                                if (!login.getData().getMessage().equals("") && login.getData().getPasswordFailedAttempts() > 0) {
-                                    Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                                    }
                                 }
                             } else {
-                                Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "", login.getError().getFieldErrors().get(0));
+                                if (login.getData() != null) {
+                                    if (!login.getData().getMessage().equals("") && login.getData().getPasswordFailedAttempts() > 0) {
+                                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                                    }
+                                } else {
+                                    Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "", login.getError().getFieldErrors().get(0));
+                                }
                             }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
-        });
+            });
 
-        loginViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
-            @Override
-            public void onChanged(APIError apiError) {
-                dialog.dismiss();
-                if (apiError != null) {
-//                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
-                    Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
-                }
-            }
-        });
-
-        loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
-            @Override
-            public void onChanged(LoginResponse loginResponse) {
-                dialog.dismiss();
-                try {
-                    if (loginResponse != null) {
-                        if (!loginResponse.getStatus().toLowerCase().equals("error")) {
-                            Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-//                            objMyApplication.setUserId(loginResponse.getData().getUserId());
-                            objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
-                            Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
-                            objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
-                            getStatesUrl(loginResponse.getData().getStateList().getUS());
-                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                            if (loginResponse.getData().getPasswordExpired()) {
-                                Intent i = new Intent(LoginActivity.this, PINActivity.class);
-                                i.putExtra("screen", "loginExpiry");
-                                i.putExtra("TYPE", "ENTER");
-                                i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
-                                startActivity(i);
-                            } else {
-                                Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                launchDashboard();
-                            }
-                        } else {
-                            if (loginResponse.getData() != null) {
-                                if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-                                    Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
-                                }
-                            } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
-            @Override
-            public void onChanged(SMSResponse smsResponse) {
-                if (dialog != null) {
+            loginViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+                @Override
+                public void onChanged(APIError apiError) {
                     dialog.dismiss();
-                }
-                if (smsResponse != null) {
-                    if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        Intent i = new Intent(LoginActivity.this, OTPValidation.class);
-                        i.putExtra("screen", "login");
-                        i.putExtra("OTP_TYPE", "MOBILE");
-                        i.putExtra("MOBILE", loginResponse.getData().getPhoneNumber());
-                        i.putExtra("EMAIL", loginResponse.getData().getEmail());
-                        i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(loginResponse.getData().getPhoneNumber()));
-                        startActivity(i);
-                    } else {
-                        Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error", "");
+                    if (apiError != null) {
+                        //                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                        //                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                     }
                 }
+            });
 
-            }
-        });
+            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
+                @Override
+                public void onChanged(LoginResponse loginResponse) {
+                    dialog.dismiss();
+                    try {
+                        if (loginResponse != null) {
+                            if (!loginResponse.getStatus().toLowerCase().equals("error")) {
+                                Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                                //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
+                                objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
+                                getStatesUrl(loginResponse.getData().getStateList().getUS());
+                                objMyApplication.setAccountType(loginResponse.getData().getAccountType());
+                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+                                    businessIdentityVerificationViewModel.getBusinessTracker();
+                                if (loginResponse.getData().getPasswordExpired()) {
+                                    Intent i = new Intent(LoginActivity.this, PINActivity.class);
+                                    i.putExtra("screen", "loginExpiry");
+                                    i.putExtra("TYPE", "ENTER");
+                                    i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
+                                    startActivity(i);
+                                } else {
+                                    Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    launchDashboard();
+                                }
+                            } else {
+                                if (loginResponse.getData() != null) {
+                                    if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
+                                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                                    }
+                                } else {
+                                    Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
+                @Override
+                public void onChanged(SMSResponse smsResponse) {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                    if (smsResponse != null) {
+                        if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            Intent i = new Intent(LoginActivity.this, OTPValidation.class);
+                            i.putExtra("screen", "login");
+                            i.putExtra("OTP_TYPE", "MOBILE");
+                            i.putExtra("MOBILE", loginResponse.getData().getPhoneNumber());
+                            i.putExtra("EMAIL", loginResponse.getData().getEmail());
+                            i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(loginResponse.getData().getPhoneNumber()));
+                            startActivity(i);
+                        } else {
+                            Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", LoginActivity.this, "Error", "");
+                        }
+                    }
+
+                }
+            });
+
+            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+                @Override
+                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+
+                    if (businessTrackerResponse != null) {
+                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+
+                            Log.e("Tracker resp", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
+                        }
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -762,8 +792,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void launchDashboard() {
         Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
-        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
+        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
+            } else {
+                dashboardIntent = new Intent(LoginActivity.this, BusinessRegistrationTrackerActivity.class);
+            }
         }
         dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(dashboardIntent);

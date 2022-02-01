@@ -16,77 +16,85 @@
         android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_30sdp"
         android:background="@drawable/view_primary_gren_color" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
         android:fontFamily="@font/opensans_bold"
         android:text="Business Entity"
         android:textColor="@color/black"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:textSize="@dimen/_16ssp"
-        android:layout_marginBottom="@dimen/_20sdp"/>
+        android:textSize="@dimen/_16ssp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_21sdp"
         android:layout_marginRight="@dimen/_21sdp"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_32sdp"
-        >
+        android:orientation="vertical"
+        android:paddingTop="@dimen/_11sdp">
 
         <TextView
+            android:id="@+id/soleLLCTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="Sole Proprietorship/Single LLC"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginBottom="@dimen/_15sdp"/>
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
+            android:id="@+id/cCorpTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="C Corporation"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginBottom="@dimen/_15sdp"/>
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
+            android:id="@+id/sCorpTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="S Corporation"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginBottom="@dimen/_15sdp"/>
+            android:textSize="@dimen/_12ssp" />
+
         <TextView
+            android:id="@+id/partnershipTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="Partnership"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginBottom="@dimen/_15sdp"/>
+            android:textSize="@dimen/_12ssp" />
+
         <TextView
+            android:id="@+id/trustTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="Trust/Estate"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginBottom="@dimen/_15sdp"/>
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
+            android:id="@+id/llcTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Limited Liability company"
+            android:text="Limited Liability Company"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginBottom="@dimen/_15sdp"/>
+            android:textSize="@dimen/_12ssp" />
 
     </LinearLayout>
 </LinearLayout>
