@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_view_color"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/_14sdp">
+
+            <ImageView
+                android:id="@+id/iv_signature_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:onClick="onCloseClicked"
+                android:contentDescription="@string/rotate_phone_sign"
+                android:src="@drawable/ic_close" />
+
+            <TextView
+                android:id="@+id/tv_signature_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:lineSpacingExtra="9.3sp"
+                android:layout_centerVertical="true"
+                android:onClick="onDoneClicked"
+                android:text="@string/done"
+                android:padding="@dimen/_4sdp"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_17sdp"
+            android:layout_marginStart="@dimen/_46sdp"
+            android:layout_marginEnd="@dimen/_46sdp"
+            android:background="@color/white"
+            android:layout_weight="1">
+
+            <com.greenbox.coyni.utils.CustomSignatureView
+                android:id="@+id/csv_signature_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:lineSpacingExtra="9.3sp"
+            android:text="@string/clear"
+            android:onClick="onClearClicked"
+            android:padding="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_46sdp"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_16ssp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_rotate_message_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/active_green"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/_40sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="10.7sp"
+            android:text="@string/rotate_phone_sign"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_24sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
