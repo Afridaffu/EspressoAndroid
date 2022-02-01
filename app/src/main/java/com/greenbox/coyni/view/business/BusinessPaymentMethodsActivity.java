@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -61,6 +62,45 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_payment_methods);
         initialization();
         initObserver();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try {
+            if (requestCode == 1 && data == null) {
+                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                    Utils.displayAlert("Bank integration has been cancelled", BusinessPaymentMethodsActivity.this, "", "");
+                } else {
+                    dialog = Utils.showProgressDialog(this);
+                    customerProfileViewModel.meSyncAccount();
+                }
+            } else if (requestCode == 2) {
+                if (objMyApplication.getSignet()) {
+                    isPayments = true;
+                    objMyApplication.setSignet(false);
+                    businessDashboardViewModel.meBusinessPaymentMethods();
+                }
+            }
+//            else if (requestCode == 3) {
+//                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+//                    if (!objMyApplication.getCardSave()) {
+//                        isDeCredit = true;
+//                        ControlMethod("addpayment");
+//                    } else {
+//                        objMyApplication.setCardSave(false);
+//                        ControlMethod("paymentMethods");
+//                        strCurrent = "paymentMethods";
+//                    }
+//                    getPaymentMethods();
+//                }
+//            }
+            else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        } catch (Exception ex) {
+            super.onActivityResult(requestCode, resultCode, data);
+            ex.printStackTrace();
+        }
     }
 
     private void initialization() {
@@ -269,7 +309,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 3);
+                            startActivityForResult(i, 2);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

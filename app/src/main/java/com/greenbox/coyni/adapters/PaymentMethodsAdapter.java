@@ -96,11 +96,11 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                     holder.tvBankExpire.setVisibility(View.VISIBLE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_issuesignet);
                 }
-                holder.tvBankName.setText(objData.getBankName());
-                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
-                    holder.tvAccNumber.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                holder.tvAccNumber.setVisibility(View.GONE);
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
+                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
-                    holder.tvAccNumber.setText(objData.getAccountNumber());
+                    holder.tvBankName.setText(objData.getAccountNumber());
                 }
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
