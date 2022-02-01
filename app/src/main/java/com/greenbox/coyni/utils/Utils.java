@@ -67,6 +67,7 @@ import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.WebViewActivity;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -688,14 +689,14 @@ public class Utils {
         return dialog;
     }
 
-    public static void populateTimeZones(PreferencesActivity preferenceActivity, EditText editText, MyApplication myApplicationObj) {
+    public static void populateTimeZones(Context context, EditText editText, MyApplication myApplicationObj, String from) {
         // custom dialog
-        final Dialog dialog = new Dialog(preferenceActivity);
+        final Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.timezones_bottom_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DisplayMetrics mertics = preferenceActivity.getResources().getDisplayMetrics();
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
         int width = mertics.widthPixels;
 
         CardView actionCV = dialog.findViewById(R.id.cvAction);
@@ -705,32 +706,32 @@ public class Utils {
         try {
             ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
             TimeZoneModel tzm = new TimeZoneModel();
-            tzm.setTimezone(preferenceActivity.getString(R.string.EST));
+            tzm.setTimezone(context.getString(R.string.EST));
             tzm.setTimezoneID(3);
             arrZonesList.add(tzm);
 
             tzm = new TimeZoneModel();
-            tzm.setTimezone(preferenceActivity.getString(R.string.CST));
+            tzm.setTimezone(context.getString(R.string.CST));
             tzm.setTimezoneID(2);
             arrZonesList.add(tzm);
 
             tzm = new TimeZoneModel();
-            tzm.setTimezone(preferenceActivity.getString(R.string.MST));
+            tzm.setTimezone(context.getString(R.string.MST));
             tzm.setTimezoneID(1);
             arrZonesList.add(tzm);
 
             tzm = new TimeZoneModel();
-            tzm.setTimezone(preferenceActivity.getString(R.string.PST));
+            tzm.setTimezone(context.getString(R.string.PST));
             tzm.setTimezoneID(0);
             arrZonesList.add(tzm);
 
             tzm = new TimeZoneModel();
-            tzm.setTimezone(preferenceActivity.getString(R.string.AST));
+            tzm.setTimezone(context.getString(R.string.AST));
             tzm.setTimezoneID(5);
             arrZonesList.add(tzm);
 
             tzm = new TimeZoneModel();
-            tzm.setTimezone(preferenceActivity.getString(R.string.HST));
+            tzm.setTimezone(context.getString(R.string.HST));
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
@@ -740,8 +741,8 @@ public class Utils {
                 }
             }
 
-            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, preferenceActivity);
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(preferenceActivity);
+            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
             timezonesRV.setLayoutManager(mLayoutManager);
             timezonesRV.setItemAnimator(new DefaultItemAnimator());
             timezonesRV.setAdapter(customerTimeZonesAdapter);
@@ -754,12 +755,26 @@ public class Utils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                try {
+                    if (from.equals("PREFERENCES")) {
+                        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
+                        userPreferenceModel.setLocalCurrency(0);
+                        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
+                        userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
 
-                UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
-                userPreferenceModel.setLocalCurrency(0);
-                userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-                userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
-                preferenceActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
+                        PreferencesActivity preferencesActivity = (PreferencesActivity) context;
+                        preferencesActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
+                    } else {
+                        myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
+                        myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
+                        editText.setText(myApplicationObj.getTimezone());
+                        CompanyInformationActivity companyInformationActivity = (CompanyInformationActivity) context;
+                        companyInformationActivity.isTimeZone = true;
+                        companyInformationActivity.enableOrDisableNext();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

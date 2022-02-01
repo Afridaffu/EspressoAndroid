@@ -19,6 +19,7 @@ import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -74,7 +75,7 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "", strStatesUrl = "", rsaPublicKey = "";
+    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "";
     int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
     PaymentsList selectedCard;
@@ -87,6 +88,7 @@ public class MyApplication extends Application {
     List<Contacts> listContacts = new ArrayList<>();
     TransactionListRequest transactionListSearch = new TransactionListRequest();
     Double withdrawAmount;
+    BusinessTrackerResponse businessTrackerResponse;
 
 
     public UserDetails getUserDetails() {
@@ -839,5 +841,13 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return monthsBetween;
+    }
+
+    public BusinessTrackerResponse getBusinessTrackerResponse() {
+        return businessTrackerResponse;
+    }
+
+    public void setBusinessTrackerResponse(BusinessTrackerResponse businessTrackerResponse) {
+        this.businessTrackerResponse = businessTrackerResponse;
     }
 }

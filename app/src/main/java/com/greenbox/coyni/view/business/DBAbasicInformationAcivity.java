@@ -29,22 +29,22 @@ import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.utils.outline_et.MonthlyProcessingVolumeEditText;
 
 public class DBAbasicInformationAcivity extends AppCompatActivity {
-TextInputLayout dbanameTIL,dbaemailTIL,typetil;
-public LinearLayout dbanameLL,dbaemailLL,customerphonenumLL,uploadLL;
-CompanyOutLineBoxPhoneNumberEditText customerphoneNumberET;
-MonthlyProcessingVolumeEditText volumeET1,volumeET2,volumeET3;
-public TextInputEditText dbanameET,dbaemailET;
-public TextView dbanameTV,dbaemailTV,customernumTV;
-public CardView dbaNextCV;
-public static int focusedID = 0;
-TextView uploadtext;
-ImageView businessEntity;
-Dialog entity;
-public static DBAbasicInformationAcivity dbAbasicInformationAcivity;
+    TextInputLayout dbanameTIL, dbaemailTIL, typetil;
+    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, uploadLL;
+    CompanyOutLineBoxPhoneNumberEditText customerphoneNumberET;
+    MonthlyProcessingVolumeEditText volumeET1, volumeET2, volumeET3;
+    public TextInputEditText dbanameET, dbaemailET;
+    public TextView dbanameTV, dbaemailTV, customernumTV;
+    public CardView dbaNextCV;
+    public static int focusedID = 0;
+    TextView uploadtext;
+    ImageView businessEntity;
+    Dialog entity;
+    public static DBAbasicInformationAcivity dbAbasicInformationAcivity;
 
 
-public boolean isdbaName = false, isdbaEmail = false,iscustPhoneNumber=false,isNextEnabled = false;
-boolean isEmailError = false, isPhoneError = false;
+    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isNextEnabled = false;
+    boolean isEmailError = false, isPhoneError = false;
     int[][] errorState, state;
     int[] errorColor, color;
     ColorStateList errorColorState, colorState;
@@ -67,6 +67,7 @@ boolean isEmailError = false, isPhoneError = false;
             }
         });
     }
+
     protected void onResume() {
         super.onResume();
         if (dbanameET.getId() == focusedID) {
@@ -123,7 +124,7 @@ boolean isEmailError = false, isPhoneError = false;
         dbaemailTV = findViewById(R.id.DBAemailErrorTV);
         dbaNextCV = findViewById(R.id.dbaNextCV);
         customerphoneNumberET = findViewById(R.id.customerphoneNumberOET);
-        customerphoneNumberET.setFrom("DbaInfo");
+        customerphoneNumberET.setFrom("DbaInfo",this);
         customerphoneNumberET.setHintText("Customer Service Phone Number");
 
         volumeET1 = findViewById(R.id.volumeET);
@@ -194,8 +195,7 @@ boolean isEmailError = false, isPhoneError = false;
                         dbaemailET.setHintTextColor(getColor(R.color.primary_black));
                         Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.primary_black));
 
-                    }
-                    else if (dbaemailET.getText().toString().trim().length() > 0 && dbaemailET.getText().toString().trim().length() <= 5) {
+                    } else if (dbaemailET.getText().toString().trim().length() > 0 && dbaemailET.getText().toString().trim().length() <= 5) {
                         dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.error_red));
                         dbaemailLL.setVisibility(VISIBLE);
@@ -210,13 +210,14 @@ boolean isEmailError = false, isPhoneError = false;
                 }
             }
         });
-        }
+    }
 
     private void textWatchers() {
         dbanameET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 2) {
@@ -229,8 +230,10 @@ boolean isEmailError = false, isPhoneError = false;
                 }
                 enableOrDisableNext();
             }
+
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
         dbaemailET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -282,9 +285,8 @@ boolean isEmailError = false, isPhoneError = false;
                 uploadtext.setVisibility(GONE);
                 uploadLL.setVisibility(VISIBLE);
                 dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                Log.e("All boolean", isdbaName + " " + isdbaEmail + " "+ iscustPhoneNumber);
-            }
-            else {
+                Log.e("All boolean", isdbaName + " " + isdbaEmail + " " + iscustPhoneNumber);
+            } else {
                 Log.e("All boolean", isdbaName + " " + isdbaEmail + " " + iscustPhoneNumber);
 
                 isNextEnabled = false;
@@ -293,7 +295,7 @@ boolean isEmailError = false, isPhoneError = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(isNextEnabled) {
+        if (isNextEnabled) {
             dbaNextCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

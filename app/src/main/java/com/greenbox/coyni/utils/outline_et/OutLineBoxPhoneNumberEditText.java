@@ -41,7 +41,7 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     }
 
     private void init(Context context, AttributeSet attributeSet) {
-        LayoutInflater.from(context).inflate(R.layout.outlinebox_phone_number_update_layout, this, true);
+        LayoutInflater.from(context).inflate(R.layout.outlinebox_phone_number_layout, this, true);
         hintName = findViewById(R.id.hintTV);
         hintHolder = findViewById(R.id.hintdHolderLL);
         pnET = findViewById(R.id.pnET);

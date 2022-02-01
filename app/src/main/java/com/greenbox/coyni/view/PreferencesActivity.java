@@ -91,20 +91,20 @@ public class PreferencesActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj,"PREFERENCES");
                 }
             });
 
-            timeZoneTIL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
-                }
-            });
+//            timeZoneTIL.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
+//                }
+//            });
 
             timeZoneET.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,7 +113,7 @@ public class PreferencesActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj);
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj,"PREFERENCES");
                 }
             });
 

@@ -4,7 +4,9 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
@@ -354,5 +356,14 @@ public interface ApiService {
 
     @PATCH("api/v2/user-requests")
     Call<UserRequestResponse> updateUserRequests(@Body StatusRequest request);
+
+    @GET("api/v2/business/tracker")
+    Call<BusinessTrackerResponse> getBusinessTracker();
+
+    @GET("api/v2/business/company-info")
+    Call<BusinessTrackerResponse> getCompanyInforamtion();
+
+    @PATCH("api/v2/business/company-info")
+    Call<BusinessTrackerResponse> updateBasicCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
 }

@@ -36,11 +36,13 @@ import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.io.BufferedReader;
@@ -66,6 +68,7 @@ public class OnboardActivity extends BaseActivity {
     Boolean isBiometric = false;
     RelativeLayout layoutOnBoarding, layoutAuth;
     MyApplication objMyApplication;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +136,7 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
             AutoScrollPagerAdapter autoScrollPagerAdapter =
                     new AutoScrollPagerAdapter(getSupportFragmentManager());
@@ -229,54 +233,77 @@ public class OnboardActivity extends BaseActivity {
     }
 
     private void initObserver() {
-        loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
-            @Override
-            public void onChanged(LoginResponse loginResponse) {
-                dialog.dismiss();
-                try {
-                    if (loginResponse != null) {
-                        if (!loginResponse.getStatus().toLowerCase().equals("error")) {
-                            Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-//                            objMyApplication.setUserId(loginResponse.getData().getUserId());
-                            objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
-                            Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
-                            objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
-                            getStatesUrl(loginResponse.getData().getStateList().getUS());
-                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                            if (loginResponse.getData().getPasswordExpired()) {
-                                Intent i = new Intent(OnboardActivity.this, PINActivity.class);
-                                i.putExtra("screen", "loginExpiry");
-                                i.putExtra("TYPE", "ENTER");
-                                startActivity(i);
-                            } else {
+        try {
+            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
+                @Override
+                public void onChanged(LoginResponse loginResponse) {
+                    dialog.dismiss();
+                    try {
+                        if (loginResponse != null) {
+                            if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                Intent i = null;
-                                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
-                                    i = new Intent(OnboardActivity.this, DashboardActivity.class);
-                                else
-                                    i = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
-                            }
-                        } else {
-                            if (loginResponse.getData() != null) {
-                                if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-//                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
-
-                                    Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
+                                objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                                //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
+                                objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
+                                getStatesUrl(loginResponse.getData().getStateList().getUS());
+                                objMyApplication.setAccountType(loginResponse.getData().getAccountType());
+                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+                                    businessIdentityVerificationViewModel.getBusinessTracker();
+                                if (loginResponse.getData().getPasswordExpired()) {
+                                    Intent i = new Intent(OnboardActivity.this, PINActivity.class);
+                                    i.putExtra("screen", "loginExpiry");
+                                    i.putExtra("TYPE", "ENTER");
+                                    startActivity(i);
+                                } else {
+                                    Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    Intent i = null;
+                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+                                        i = new Intent(OnboardActivity.this, DashboardActivity.class);
+                                    else
+                                        i = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
                                 }
                             } else {
-                                Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                if (loginResponse.getData() != null) {
+                                    if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
+                                        //                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                                        //                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+
+                                        Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
+                                    }
+                                } else {
+                                    Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                }
                             }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+                @Override
+                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+
+                    if (businessTrackerResponse != null) {
+                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void SetDB() {
