@@ -810,9 +810,6 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-//                buyViewModel.meBanks();
-//                notificationsViewModel.meNotifications();
-//                payViewModel.getReceiveRequests();
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
                 dashboardViewModel.meWallet();

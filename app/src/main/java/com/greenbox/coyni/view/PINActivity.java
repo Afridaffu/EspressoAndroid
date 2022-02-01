@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
@@ -43,6 +44,8 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -70,6 +73,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     String resetPINValue = "ENTER";
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +147,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             chooseCircleOne = (View) findViewById(R.id.chooseCircleOne);
             chooseCircleTwo = (View) findViewById(R.id.chooseCircleTwo);
             chooseCircleThree = (View) findViewById(R.id.chooseCircleThree);
@@ -174,6 +179,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
             objMyApplication = (MyApplication) getApplicationContext();
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                businessIdentityVerificationViewModel.getBusinessTracker();
+            }
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
                     getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
@@ -459,6 +467,24 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+
+        try {
+            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+                @Override
+                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+
+                    if (businessTrackerResponse != null) {
+                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+
+                            Log.e("Tracker resp PIN", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -877,8 +903,14 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
     private void launchDashboard() {
         Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
-        if(objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
+        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
+            } else {
+                dashboardIntent = new Intent(PINActivity.this, BusinessRegistrationTrackerActivity.class);
+            }
         }
         dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PINActivity.this.startActivity(dashboardIntent);

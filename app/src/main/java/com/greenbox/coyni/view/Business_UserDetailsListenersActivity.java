@@ -203,6 +203,12 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
                 if (getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")){
                     value.setText(profile.getData().getEmail());
                 }
+                if (getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")){
+                    String phne_number=profile.getData().getPhoneNumber().split("\\ ")[1];
+                    phne_number = "(" + phne_number.substring(0, 3) + ") " + phne_number.substring(3, 6) + "-" + phne_number.substring(6, 10);
+
+                    value.setText(phne_number);
+                }
 
 
 //                    myApplicationObj.setMyProfile(profile);

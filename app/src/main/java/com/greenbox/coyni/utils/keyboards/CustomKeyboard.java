@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
@@ -166,6 +167,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             break;
                         case "setAmount":
                             ScanActivity.scanActivity.setAmountClick();
+                            break;
+                        case "receivepayments":
+                            Business_ReceivePaymentActivity.business_receivePaymentActivity.setAmountClick();
                             break;
                     }
 
