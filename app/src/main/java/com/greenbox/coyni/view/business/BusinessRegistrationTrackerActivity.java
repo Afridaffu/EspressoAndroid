@@ -20,6 +20,8 @@ import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
 
+import org.w3c.dom.Text;
+
 public class BusinessRegistrationTrackerActivity extends BaseActivity {
     TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV;
     Dialog choose;
@@ -37,6 +39,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_tracker_account);
 
+        TextView dashboardTV = findViewById(R.id.dashboardTV);
+        dashboardTV.setOnClickListener(view -> {
+            startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
+        });
         initFields();
 
     }
