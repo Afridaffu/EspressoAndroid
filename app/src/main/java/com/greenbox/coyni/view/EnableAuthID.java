@@ -278,6 +278,7 @@ public class EnableAuthID extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 //                    startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
+                    startActivity(new Intent(EnableAuthID.this, BusinessDashboardActivity.class));
                 }
             });
 

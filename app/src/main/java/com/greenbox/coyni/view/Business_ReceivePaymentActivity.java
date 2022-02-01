@@ -71,7 +71,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Business_ReceivePaymentActivity extends AppCompatActivity implements TextWatcher {
 
     TextView scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
-    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL;
+    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL,closeBtn;
     ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
@@ -82,6 +82,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     ImageView idIVQrcode, imageShare, copyRecipientAddress, albumIV;
     ImageView closeBtnScanCode, closeBtnScanMe, imgProfile;
+    public static Business_ReceivePaymentActivity business_receivePaymentActivity;
 
     MyApplication objMyApplication;
     DashboardViewModel dashboardViewModel;
@@ -114,9 +115,11 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
         Business_ReceivePaymentActivity = this;
         initialization();
         listeners();
+        initObservers();
 
 
     }
+
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -168,17 +171,19 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
 
             toglebtn1 = findViewById(R.id.toglebtn);
-            tvWalletAddress = findViewById(R.id.tvWalletAddress);
-            scannerLayout = findViewById(R.id.scannerLayout);
-            scannerBar = findViewById(R.id.lineView);
-            flashLL = findViewById(R.id.flashBtnRL);
+            tvWalletAddress = findViewById(R.id.b_tvWalletAddress);
+//            scannerLayout = findViewById(R.id.scannerLayout);
+//            scannerBar = findViewById(R.id.lineView);
+//            flashLL = findViewById(R.id.flashBtnRL);
+            closeBtn=findViewById(R.id.receivePaymentLL);
             idIVQrcode = (ImageView) findViewById(R.id.b_idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
+            business_receivePaymentActivity=this;
             scanMeRequestAmount = findViewById(R.id.scanMeRequestAmount);
             scanAmountLL = findViewById(R.id.scanAmountLL);
-            layoutHead = findViewById(R.id.layoutHead);
-            scanMeSV = findViewById(R.id.scanmeScrlView);
+//            layoutHead = findViewById(R.id.layoutHead);
+//            scanMeSV = findViewById(R.id.scanmeScrlView);
             savetoAlbum = findViewById(R.id.saveToAlbumTV);
             scanmeSetAmountTV = findViewById(R.id.scanMesetAmountTV);
             imageShare = findViewById(R.id.imgShare);
@@ -186,7 +191,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             copyRecipientAddress = findViewById(R.id.imgCopy);
             imgProfile = findViewById(R.id.imgProfile);
             albumIV = findViewById(R.id.albumIV);
-            imageSaveAlbumLL = findViewById(R.id.saveToAlbumLL);
+            imageSaveAlbumLL = findViewById(R.id.b_saveToAlbumLL);
             setAmountLL = findViewById(R.id.setAmountLL);
             divider = findViewById(R.id.divider1);
 
@@ -196,6 +201,18 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             saveProfileIV = findViewById(R.id.saveprofileIV);
             saveProfileTitle = findViewById(R.id.saveprofileTitle);
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
+
+
+            findViewById(R.id.receivePaymentLL).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             if (strName != null && strName.length() > 22) {
@@ -286,7 +303,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                             InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                             ctKey.setInputConnection(ic);
                             ctKey.setKeyAction("OK");
-                            ctKey.setScreenName("setAmount");
+                            ctKey.setScreenName("receivepayments");
                             fontSize = setAmount.getTextSize();
                             setAmount.requestFocus();
                             setAmount.setShowSoftInputOnFocus(false);
@@ -326,8 +343,13 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                 @Override
                 public void onClick(View view) {
                     try {
-                        saveToGallery();
-                        Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                        if (ContextCompat.checkSelfPermission(Business_ReceivePaymentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                            ActivityCompat.requestPermissions(Business_ReceivePaymentActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+                        }
+                        else {
+                            saveToGallery();
+                            Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -369,6 +391,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     protected void onResume() {
         try {
             super.onResume();
+            dashboardViewModel.meWallet();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -435,18 +458,18 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
         }
     }
 
-    private void getUserDetails(String strWalletId) {
-        try {
-            if (Utils.checkInternet(Business_ReceivePaymentActivity.this)) {
-                dialog = Utils.showProgressDialog(Business_ReceivePaymentActivity.this);
-                dashboardViewModel.getUserDetail(strWalletId);
-            } else {
-                Utils.displayAlert(getString(R.string.internet), Business_ReceivePaymentActivity.this, "", "");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void getUserDetails(String strWalletId) {
+//        try {
+//            if (Utils.checkInternet(Business_ReceivePaymentActivity.this)) {
+//                dialog = Utils.showProgressDialog(Business_ReceivePaymentActivity.this);
+//                dashboardViewModel.getUserDetail(strWalletId);
+//            } else {
+//                Utils.displayAlert(getString(R.string.internet), Business_ReceivePaymentActivity.this, "", "");
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void bindImage() {
         try {
@@ -622,6 +645,20 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
         }
     }
 
+    private void initObservers() {
+        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
+            @Override
+            public void onChanged(WalletResponse walletResponse) {
+                if (walletResponse!=null){
+                    objMyApplication.setWalletResponse(walletResponse);
+                    strWallet=walletResponse.getData().getWalletInfo().get(0).getWalletId();
+                    generateQRCode(strWallet);
+                }
+            }
+        });
+
+    }
+
 //    private void displayAlert(String msg, String headerText) {
 //        // custom dialog
 //        errorDialog = new Dialog(Business_ReceivePaymentActivity.this);
@@ -669,6 +706,24 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
 //        errorDialog.setCanceledOnTouchOutside(false);
 //        errorDialog.show();
 //    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode==123){
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                Utils.displayAlert("Requires Access to Your Storage.", Business_ReceivePaymentActivity.this, "", "");
+            }
+            else if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                saveToGallery();
+                Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+            }
+        }
+    }
 }
 
 
