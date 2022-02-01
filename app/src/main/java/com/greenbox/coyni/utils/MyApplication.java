@@ -72,7 +72,7 @@ public class MyApplication extends Application {
     UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false;
+    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
     String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "";
@@ -773,32 +773,16 @@ public class MyApplication extends Application {
         return accountType;
     }
 
+    public Boolean getSignet() {
+        return isSignet;
+    }
+
+    public void setSignet(Boolean signet) {
+        isSignet = signet;
+    }
+
     public void setAccountType(int accountType) {
         this.accountType = accountType;
-    }
-
-    public String convertBitMapToString(Bitmap bitmap) {
-        String temp = "";
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] b = baos.toByteArray();
-            temp = Base64.encodeToString(b, Base64.DEFAULT);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return temp;
-    }
-
-    public Bitmap convertStringToBitMap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
     }
 
     public Bitmap convertImageURIToBitMap(String encodedString) {
@@ -841,6 +825,24 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return monthsBetween;
+    }
+
+    public PaymentMethodsResponse filterPaymentMethods(PaymentMethodsResponse objResponse) {
+        PaymentMethodsResponse payMethodsResponse = objResponse;
+        List<PaymentsList> listData = new ArrayList<>();
+        try {
+            if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
+                for (int i = 0; i < objResponse.getData().getData().size(); i++) {
+                    if (!objResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("signet")) {
+                        listData.add(objResponse.getData().getData().get(i));
+                    }
+                }
+                payMethodsResponse.getData().setData(listData);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return payMethodsResponse;
     }
 
     public BusinessTrackerResponse getBusinessTrackerResponse() {

@@ -80,6 +80,8 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.signet.SignetRequest;
+import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
@@ -365,5 +367,11 @@ public interface ApiService {
 
     @PATCH("api/v2/business/company-info")
     Call<BusinessTrackerResponse> updateBasicCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
+
+    @GET("api/v2/business/payment-methods")
+    Call<PaymentMethodsResponse> meBusinessPaymentMethods();
+
+    @POST("api/v2/banks/me")
+    Call<SignetResponse> saveBanks(@Body SignetRequest request);
 
 }

@@ -84,10 +84,27 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 } else {
                     holder.tvAccNumber.setText(objData.getAccountNumber());
                 }
+            } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                holder.tvBankHead.setText("Signet Account");
+                holder.layoutBank.setVisibility(View.VISIBLE);
+                holder.tvCardNumber.setVisibility(View.GONE);
+                holder.imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                if (!objData.getRelink()) {
+                    holder.tvBankExpire.setVisibility(View.GONE);
+                    holder.layoutBack.setBackgroundResource(R.drawable.ic_activesignet);
+                } else {
+                    holder.tvBankExpire.setVisibility(View.VISIBLE);
+                    holder.layoutBack.setBackgroundResource(R.drawable.ic_issuesignet);
+                }
+                holder.tvAccNumber.setVisibility(View.GONE);
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
+                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                } else {
+                    holder.tvBankName.setText(objData.getAccountNumber());
+                }
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.tvCardNumber.setVisibility(View.VISIBLE);
-//                holder.tvCardNumber.setText(objData.getFirstSix() + " ****" + objData.getLastFour());
                 holder.tvCardNumber.setText(objData.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + objData.getLastFour());
                 if (!objData.getExpired()) {
                     holder.tvBankExpire.setVisibility(View.GONE);

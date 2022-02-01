@@ -80,6 +80,12 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
     Long mLastClickTime = 0L;
+    String emailId="",address="",phoneNo="";
+
+    //Business
+    ImageView business_userProfileIV;
+    TextView business_imageTextTV,business_userNameTV,business_emailIdTV,business_userPhneNoTV,business_userAddreTV;
+    LinearLayout business_emailLL,business_PhoneNumLL,business_AddreLL;
 
     static SQLiteDatabase mydatabase;
     static Cursor dsPermanentToken, dsFacePin, dsTouchID;
@@ -87,7 +93,6 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    static MyApplication objMyApplication;
     String authenticateType = "";
 
     @Override
@@ -125,6 +130,17 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             phoneLL = findViewById(R.id.phoneLL);
             addressLL = findViewById(R.id.addressLL);
             userNameTV = findViewById(R.id.userNameTV);
+
+            //Business ID's
+            business_userProfileIV=findViewById(R.id.b_userProfileIV);
+            business_imageTextTV=findViewById(R.id.b_imageTextTV);
+            business_userAddreTV=findViewById(R.id.b_userAddressTV);
+            business_userNameTV=findViewById(R.id.b_userNameTV);
+            business_emailIdTV=findViewById(R.id.b_userEmailIdTV);
+            business_userPhneNoTV=findViewById(R.id.b_userPhoneNumTV);
+            business_emailLL=findViewById(R.id.b_emailLL);
+            business_PhoneNumLL=findViewById(R.id.b_phoneLL);
+            business_AddreLL=findViewById(R.id.b_addressLL);
 
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
             isBiometric = Utils.getIsBiometric();
@@ -235,6 +251,60 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 }
             });
 
+            //Business setOnClick's
+
+            business_emailLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
+                    authenticateType = "EMAIL";
+                    String face=String.valueOf(isFaceLock);
+                    String touch=String.valueOf(isTouchId);
+
+                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",emailId).putExtra("touch",touch).putExtra("face",face));
+                }
+            });
+
+            business_AddreLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
+
+                    authenticateType = "ADDRESS";
+                    String face=String.valueOf(isFaceLock);
+                    String touch=String.valueOf(isTouchId);
+
+                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",address).putExtra("touch",touch).putExtra("face",face));
+
+
+                }
+            });
+
+            business_PhoneNumLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
+                    authenticateType = "PHONE";
+                    String face=String.valueOf(isFaceLock);
+                    String touch=String.valueOf(isTouchId);
+
+                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",phoneFormat).putExtra("touch",touch).putExtra("face",face));
+
+                }
+            });
+
             userDetailsCloseLL.setOnClickListener(view -> {
                 finish();
             });
@@ -246,9 +316,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
                 strFileName = myApplicationObj.getMyProfile().getData().getImage();
                 userEmailIdTV.setText(profile.getData().getEmail());
+                business_emailIdTV.setText(profile.getData().getEmail());
                 userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-
+                business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                 userPhoneNumTV.setText(phoneFormat);
+                business_userPhneNoTV.setText(phoneFormat);
 
                 String addressFormatted = "";
                 if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
@@ -271,11 +343,22 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 if (addressFormatted.equals("")) {
                     addressFormatted = addressFormatted + "United States";
                     userAddressTV.setText(addressFormatted);
+                    business_userAddreTV.setText(addressFormatted);
                 } else {
                     userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
                 }
 
 
+            }
+
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                findViewById(R.id.businessUserDetailsLL).setVisibility(View.VISIBLE);
+                findViewById(R.id.personalUserDetailsCV).setVisibility(View.GONE);
+            }
+            else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
+                findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
+                findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }
 
 
@@ -333,8 +416,12 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         bindImage(myApplicationObj.getMyProfile().getData().getImage());
                         strFileName = myApplicationObj.getMyProfile().getData().getImage();
                         userEmailIdTV.setText(profile.getData().getEmail());
+                        business_emailIdTV.setText(profile.getData().getEmail());
+                        emailId=profile.getData().getEmail();
                         userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                        business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         userPhoneNumTV.setText(phoneFormat);
+                        business_userPhneNoTV.setText(phoneFormat);
                         String addressFormatted = "";
                         if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
@@ -356,8 +443,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         if (addressFormatted.equals("")) {
                             addressFormatted = addressFormatted + "United States";
                             userAddressTV.setText(addressFormatted);
+                            business_userAddreTV.setText(addressFormatted);
                         } else {
                             userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                            business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                            address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
                     }
@@ -388,25 +478,40 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
         try {
             userProfileIV.setVisibility(View.GONE);
             imageTextTV.setVisibility(View.VISIBLE);
+            business_userProfileIV.setVisibility(View.GONE);
+            business_imageTextTV.setVisibility(View.VISIBLE);
             String imageTextNew = "";
             imageTextNew = imageTextNew + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
                     myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
             imageTextTV.setText(imageTextNew);
+            business_imageTextTV.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
                 userProfileIV.setVisibility(View.VISIBLE);
                 imageTextTV.setVisibility(View.GONE);
+                business_userProfileIV.setVisibility(View.VISIBLE);
+                business_imageTextTV.setVisibility(View.GONE);
+
                 Glide.with(this)
                         .load(imageString)
                         .placeholder(R.drawable.ic_profile_male_user)
                         .into(userProfileIV);
+
+                Glide.with(this)
+                        .load(imageString)
+                        .placeholder(R.drawable.ic_profile_male_user)
+                        .into(business_userProfileIV);
             } else {
                 userProfileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);
+
+                business_userProfileIV.setVisibility(View.GONE);
+                business_imageTextTV.setVisibility(View.VISIBLE);
                 String imageText = "";
                 imageText = imageText + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
                         myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 imageTextTV.setText(imageText);
+                business_imageTextTV.setText(imageText);
             }
 
         } catch (Exception ex) {
