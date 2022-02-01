@@ -198,6 +198,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
         businessDashboardViewModel.getSignetResponseMutableLiveData().observe(this, new Observer<SignetResponse>() {
             @Override
             public void onChanged(SignetResponse signetResponse) {
+                progressDialog.dismiss();
                 if (signetResponse != null) {
                     if (signetResponse.getStatus().toUpperCase().equals("SUCCESS")) {
                         displaySuccess();
