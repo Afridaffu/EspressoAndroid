@@ -189,7 +189,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             try {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     etAmount.setHint("");
-                    //lyBalance.setVisibility(View.VISIBLE);
                     isCYN = false;
                     isUSD = true;
                     convertUSDValue();
@@ -210,6 +209,15 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     } else {
                         ctKey.disableButton();
                     }
+//                    if (editable.toString().contains(".") && editable.toString().split(".")[1].length() > 2) {
+//                        String strAmount = Utils.convertBigDecimalUSDC(editable.toString().trim().replace(",", ""));
+//                        String strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+//                        if ((Double.parseDouble(strReturn.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
+//                            ctKey.disableButton();
+//                        } else {
+//                            ctKey.enableButton();
+//                        }
+//                    }
                 } else if (editable.toString().equals(".")) {
                     etAmount.setText("");
                     ctKey.disableButton();
