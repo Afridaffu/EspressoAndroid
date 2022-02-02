@@ -365,4 +365,5 @@
     <string name="refund_to_customer_name">Refund to [Customer Name]</string>
     <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
     <string name="greenboxpos">Greenboxpos</string>
+    <string name="receive_payment">Receive Payment</string>
 </resources>
