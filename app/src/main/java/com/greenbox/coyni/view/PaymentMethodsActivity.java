@@ -625,7 +625,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
-                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this);
+                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this,"customer");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(PaymentMethodsActivity.this);
                 rvPaymentMethods.setLayoutManager(mLayoutManager);
                 rvPaymentMethods.setItemAnimator(new DefaultItemAnimator());

@@ -7,6 +7,7 @@ import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
@@ -373,5 +374,8 @@ public interface ApiService {
 
     @POST("api/v2/banks/me")
     Call<SignetResponse> saveBanks(@Body SignetRequest request);
+
+    @GET("api/v2/business/me/wallets")
+    Call<BusinessWalletResponse> meMerchantWallet();
 
 }
