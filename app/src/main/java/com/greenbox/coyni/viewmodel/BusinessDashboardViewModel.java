@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
@@ -24,6 +25,7 @@ import retrofit2.Response;
 public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
@@ -35,6 +37,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<SignetResponse> getSignetResponseMutableLiveData() {
         return signetResponseMutableLiveData;
+    }
+
+    public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
+        return businessWalletResponseMutableLiveData;
     }
 
     public void meBusinessPaymentMethods() {
@@ -100,6 +106,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 public void onFailure(Call<SignetResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     signetResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void meMerchantWallet() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BusinessWalletResponse> mCall = apiService.meMerchantWallet();
+            mCall.enqueue(new Callback<BusinessWalletResponse>() {
+                @Override
+                public void onResponse(Call<BusinessWalletResponse> call, Response<BusinessWalletResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BusinessWalletResponse obj = response.body();
+                            businessWalletResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BusinessWalletResponse>() {
+                            }.getType();
+                            BusinessWalletResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            businessWalletResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        businessWalletResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BusinessWalletResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    businessWalletResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

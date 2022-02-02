@@ -81,7 +81,8 @@
             android:name=".view.business.AddPaymentSignetActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.business.TransactionsFilterActivity"
             android:exported="false"

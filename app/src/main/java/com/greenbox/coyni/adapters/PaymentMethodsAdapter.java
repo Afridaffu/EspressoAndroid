@@ -21,6 +21,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
+import com.greenbox.coyni.view.business.BusinessPaymentMethodsActivity;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     Context mContext;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
+    String strScreen = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankHead, tvBankExpire, tvCardNumber, tvBankName, tvAccNumber;
@@ -50,9 +52,10 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     }
 
 
-    public PaymentMethodsAdapter(List<PaymentsList> list, Context context) {
+    public PaymentMethodsAdapter(List<PaymentsList> list, Context context, String screen) {
         this.mContext = context;
         this.listPayments = list;
+        this.strScreen = screen;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -166,20 +169,28 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                            if (!objData.getRelink()) {
-                                ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+                        if (strScreen.equals("customer")) {
+                            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                if (!objData.getRelink()) {
+                                    ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+                                } else {
+                                    ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                }
+                            } else if (!objData.getExpired()) {
+                                objMyApplication.setSelectedCard(objData);
+                                ((PaymentMethodsActivity) mContext).editCard();
                             } else {
+                                objMyApplication.setSelectedCard(objData);
                                 ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
                             }
-                        } else if (!objData.getExpired()) {
-                            objMyApplication.setSelectedCard(objData);
-//                            Intent i = new Intent(mContext, EditCardActivity.class);
-//                            mContext.startActivity(i);
-                            ((PaymentMethodsActivity) mContext).editCard();
                         } else {
-                            objMyApplication.setSelectedCard(objData);
-                            ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                if (!objData.getRelink()) {
+                                    ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
+                                } else {
+                                    ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                }
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
