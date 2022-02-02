@@ -1,7 +1,6 @@
 package com.greenbox.coyni.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,8 +9,6 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.io.FileOutputStream;
 
 public class CustomSignatureView extends View {
 
@@ -22,14 +19,6 @@ public class CustomSignatureView extends View {
     private final RectF dirtyRect = new RectF();
     private static final float PAINT_STROKE_WIDTH = 5f;
     private static final float HALF_STROKE_WIDTH = PAINT_STROKE_WIDTH / 2;
-    private Bitmap mBitmap;
-
-    public CustomSignatureView(Context context) {
-        super(context);
-        initializeView();
-
-        // this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    }
 
     public CustomSignatureView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -50,14 +39,15 @@ public class CustomSignatureView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawPath(path, paint);
+        if(isEnabled()) {
+            canvas.drawPath(path, paint);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float eventX = event.getX();
         float eventY = event.getY();
-        setEnabled(true);
         LogUtils.d(TAG, "Touch event at " + eventX + ":" + eventY);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -114,18 +104,5 @@ public class CustomSignatureView extends View {
         dirtyRect.right = Math.max(lastEventX, eventX);
         dirtyRect.top = Math.min(lastEventY, eventY);
         dirtyRect.bottom = Math.max(lastEventY, eventY);
-    }
-
-    public Bitmap save() {
-//        LogUtils.v(TAG, "Width: " + v.getWidth());
-//        LogUtils.v(TAG, "Height: " + v.getHeight());
-        if(mBitmap != null) {
-            mBitmap.recycle();
-            mBitmap = null;
-        }
-        mBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(mBitmap);
-        draw(canvas);
-        return mBitmap;
     }
 }

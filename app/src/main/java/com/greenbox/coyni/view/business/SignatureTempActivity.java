@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 
 import java.io.File;
@@ -38,20 +39,21 @@ public class SignatureTempActivity extends BaseActivity {
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
-                        Intent data = result.getData();
-                        String filePath = data.getStringExtra("data");
-                        File targetFile = new File(filePath);
-                        if(targetFile.exists()) {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
-                            LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
-                            mIVSignature.setImageBitmap(myBitmap);
-                        }
-                    }
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    getSignature(result.getData());
                 }
             });
+
+    private void getSignature(Intent data) {
+        if(data != null) {
+            String filePath = data.getStringExtra(Utils.DATA);
+            File targetFile = new File(filePath);
+            if (targetFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
+                LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
+                mIVSignature.setImageBitmap(myBitmap);
+            }
+        }
+    }
 }
