@@ -350,4 +350,19 @@
     <string name="unable_to_verify">We were unable to verify your business account\nbecause of an issue with your bank account.</string>
     <string name="please_try_again">Please try again or try a different bank account</string>
     <string name="application_canceled">Application Canceled</string>
+    <string name="payout_details">Payout Details</string>
+    <string name="payout_id">Payout ID</string>
+    <string name="id">" [#ID]"</string>
+    <string name="cyn_no_6435_21">6435.21 CYN</string>
+    <string name="payout_date">Payout Date</string>
+    <string name="date_time">07/27/2020 @ 2:20 am</string>
+    <string name="payout_reference_id">Payout Reference ID</string>
+    <string name="snd_no">SND327433N</string>
+    <string name="to_token_account">To Token Account</string>
+    <string name="as28027281">aS28027281</string>
+    <string name="recent_transactions">Recent Transactions</string>
+    <string name="_78dfbwaebfih">78dfbwaebfih</string>
+    <string name="refund_to_customer_name">Refund to [Customer Name]</string>
+    <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
+    <string name="greenboxpos">Greenboxpos</string>
 </resources>
