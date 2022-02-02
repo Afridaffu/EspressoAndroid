@@ -158,7 +158,10 @@ public class BusinessProfileActivity extends AppCompatActivity {
             business_userProfileCV = findViewById(R.id.business_userProfileCV);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
-
+            isBiometric = Utils.getIsBiometric();
+            SetToken(myApplication, this);
+            SetFaceLock(myApplication, this);
+            SetTouchId(myApplication, this);
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

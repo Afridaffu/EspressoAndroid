@@ -13,10 +13,10 @@
         android:id="@+id/customerEditAddressRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/_45sdp"
-        android:paddingStart="@dimen/_21sdp"
-        android:paddingEnd="@dimen/_21sdp"
-        android:visibility="gone"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_45sdp"
+        android:visibility="visible"
         android:fitsSystemWindows="true">
 
         <LinearLayout
@@ -470,7 +470,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#F2F4F5"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <LinearLayout
