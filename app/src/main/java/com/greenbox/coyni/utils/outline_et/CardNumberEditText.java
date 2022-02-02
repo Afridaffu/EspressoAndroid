@@ -57,6 +57,7 @@ public class CardNumberEditText extends ConstraintLayout {
                             hintName.setVisibility(VISIBLE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                            AddCardActivity.addCardActivity.cardErrorLL.setVisibility(GONE);
                         } else {
                             if ((cnET.getText().length() > 0)) {
                                 hintName.setVisibility(VISIBLE);
@@ -64,7 +65,6 @@ public class CardNumberEditText extends ConstraintLayout {
                             } else if ((cnET.getText().length() == 0)) {
                                 hintName.setVisibility(GONE);
                                 cnET.setHint("Card Number");
-                                //hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 AddCardActivity.addCardActivity.cardErrorLL.setVisibility(VISIBLE);
                                 AddCardActivity.addCardActivity.cardErrorTV.setText("Field Required");
@@ -77,10 +77,7 @@ public class CardNumberEditText extends ConstraintLayout {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                } else {
-
                 }
-
             }
         });
 
@@ -108,7 +105,6 @@ public class CardNumberEditText extends ConstraintLayout {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
                             imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
-//                            imgCardType.setVisibility(INVISIBLE);
                             AddCardActivity.addCardActivity.isCard = false;
                         }
                         AddCardActivity.addCardActivity.enableOrDisableNext();
@@ -127,9 +123,9 @@ public class CardNumberEditText extends ConstraintLayout {
                             AddCardActivity.addCardActivity.getCardype(s.toString());
                         } else if (s.toString().trim().length() == 0) {
                             imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
-//                            imgCardType.setVisibility(INVISIBLE);
                             AddCardActivity.addCardActivity.clearControls();
                         }
+
                         String str = cnET.getText().toString();
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             cnET.setText("");
@@ -186,7 +182,7 @@ public class CardNumberEditText extends ConstraintLayout {
         return readCardIV;
     }
 
-    private void cardValidation(String strCard) {
+    public void cardValidation(String strCard) {
         try {
             if (!cardType.toLowerCase().contains("american") && !strCard.equals("") && strCard.length() < 19) {
                 AddCardActivity.addCardActivity.isCard = false;
