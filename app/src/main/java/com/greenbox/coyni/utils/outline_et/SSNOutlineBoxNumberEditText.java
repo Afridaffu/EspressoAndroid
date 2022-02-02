@@ -1,8 +1,11 @@
 package com.greenbox.coyni.utils.outline_et;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,13 +15,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.view.business.DBAbasicInformationAcivity;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
-    private TextView hintName;
+    private TextView ssnType;
     private LinearLayout hintHolder;
     private MaskEditText ssnET;
-    boolean isBusinError = false;
-
+    private Context mContext;
     public String FROM = "";
 
     public SSNOutlineBoxNumberEditText(Context context) {
@@ -37,11 +41,31 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     private void init(Context context, AttributeSet attributeSet) {
         LayoutInflater.from(context).inflate(R.layout.activity_ssnoutline_box_number_edit_text, this, true);
         hintHolder = findViewById(R.id.ssnhintdHolderLL);
+        ssnType = findViewById(R.id.ssnType);
         ssnET = findViewById(R.id.ssnET);
+
         ssnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 try {
+                    CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
+                    if (b) {
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                    } else {
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 9)) {
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            comp.ssnErrorLL.setVisibility(VISIBLE);
+                            comp.ssnErrorTV.setText("Enter a Valid " + getSSNTypeText());
+                        } else if ((ssnET.getText().length() == 0)) {
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            comp.ssnErrorLL.setVisibility(VISIBLE);
+                            comp.ssnErrorTV.setText("Field Required");
+                        } else {
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            comp.ssnErrorLL.setVisibility(GONE);
+                        }
+                    }
 
 
                 } catch (Exception e) {
@@ -50,12 +74,48 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
             }
         });
 
+
+        ssnET.setOnTouchListener((view, motionEvent) -> {
+            CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
+            comp.basicInfoSL.scrollTo(comp.ssnET.getLeft(), comp.ssnET.getBottom());
+            return false;
+        });
+
+        ssnET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                CompanyInformationActivity comAct = (CompanyInformationActivity) mContext;
+                if (charSequence.length() == 9) {
+                    comAct.ssnErrorLL.setVisibility(GONE);
+                    comAct.isSSN = true;
+                } else if (charSequence.length() > 0 && charSequence.length() < 9) {
+                    comAct.isSSN = false;
+                } else if ((ssnET.getText().length() == 0)) {
+                    comAct.isSSN = false;
+                    comAct.ssnErrorLL.setVisibility(VISIBLE);
+                    comAct.ssnErrorTV.setText("Field Required");
+                }
+                comAct.enableOrDisableNext();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
-    public void setFrom(String fromm) {
+    public void setFrom(String fromm, Context context) {
         FROM = fromm;
+        mContext = context;
     }
-
 
     public void setText(String text) {
         ssnET.setText(text);
@@ -73,7 +133,12 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         ssnET.requestFocus();
     }
 
+    public void setSSNTypeText(String text) {
+        ssnType.setText(text);
+    }
 
-
+    public String getSSNTypeText() {
+        return ssnType.getText().toString();
+    }
 
 }

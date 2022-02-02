@@ -33,7 +33,7 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
         public MyViewHolder(View view) {
             super(view);
 //            etCurrencyPST = (TextInputEditText) view.findViewById(R.id.etCurrencyPST);
-            tvPreference = (TextView)view.findViewById(R.id.tvPreference);
+            tvPreference = (TextView) view.findViewById(R.id.tvPreference);
             tickIcon = (ImageView) view.findViewById(R.id.tickIcon);
             viewLine = (View) view.findViewById(R.id.viewLine);
         }
@@ -57,39 +57,34 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             holder.tvPreference.setText(listCountries.get(position).getTimezone());
-            if(listCountries.get(position).isSelected()){
+            if (listCountries.get(position).isSelected()) {
                 holder.tickIcon.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.tickIcon.setVisibility(View.GONE);
             }
             holder.tvPreference.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("text", ""+position);
+                    Log.e("text", "" + position);
                     objMyApplication.setTempTimezoneID(listCountries.get(position).getTimezoneID());
                     objMyApplication.setTempTimezone(listCountries.get(position).getTimezone());
 
-                    for(int i = 0;i<listCountries.size();i++) {
-                        Log.e("Pos, i", position+" "+i);
-                        if(position == i){
+                    for (int i = 0; i < listCountries.size(); i++) {
+                        Log.e("Pos, i", position + " " + i);
+                        if (position == i) {
                             listCountries.get(i).setSelected(true);
-                        }else{
+                        } else {
                             listCountries.get(i).setSelected(false);
                         }
                     }
 
                     notifyDataSetChanged();
-//                    CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(listCountries,mContext,editText,timezonesRV);
-//                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-//                    timezonesRV.setLayoutManager(mLayoutManager);
-//                    timezonesRV.setItemAnimator(new DefaultItemAnimator());
-//                    timezonesRV.setAdapter(customerTimeZonesAdapter);
                 }
             });
 
-            if(position==listCountries.size()-1){
+            if (position == listCountries.size() - 1) {
                 holder.viewLine.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.viewLine.setVisibility(View.VISIBLE);
             }
         } catch (Exception ex) {
@@ -102,7 +97,7 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
         return listCountries.size();
     }
 
-    public void updateList(List<TimeZoneModel> list){
+    public void updateList(List<TimeZoneModel> list) {
         listCountries = list;
         notifyDataSetChanged();
     }
