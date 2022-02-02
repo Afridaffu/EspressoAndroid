@@ -168,9 +168,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+            if (strCurrent.equals("firstError")) {
+                displayError();
+            } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
-//                strCurrent = "addpay";
                 addPayment();
             } else {
                 if (!isPayments) {
