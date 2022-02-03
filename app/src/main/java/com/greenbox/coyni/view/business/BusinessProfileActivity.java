@@ -1,16 +1,51 @@
 package com.greenbox.coyni.view.business;
 
+import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AgreementsActivity;
+import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
+import com.greenbox.coyni.view.ConfirmPasswordActivity;
+import com.greenbox.coyni.view.OnboardActivity;
+import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
+
+import org.jetbrains.annotations.Nullable;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
@@ -33,7 +68,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     Cursor cursor;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     boolean isLoggedOut = false;
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
+//    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
 
     public static void SetToken(MyApplication objMyApplication, Activity activity) {
