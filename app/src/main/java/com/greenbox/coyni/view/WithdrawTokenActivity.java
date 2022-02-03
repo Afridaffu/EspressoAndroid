@@ -209,15 +209,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     } else {
                         ctKey.disableButton();
                     }
-//                    if (editable.toString().contains(".") && editable.toString().split(".")[1].length() > 2) {
-//                        String strAmount = Utils.convertBigDecimalUSDC(editable.toString().trim().replace(",", ""));
-//                        String strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
-//                        if ((Double.parseDouble(strReturn.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
-//                            ctKey.disableButton();
-//                        } else {
-//                            ctKey.enableButton();
-//                        }
-//                    }
+
                 } else if (editable.toString().equals(".")) {
                     etAmount.setText("");
                     ctKey.disableButton();
@@ -771,7 +763,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         Boolean value = true;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = etAmount.getText().toString().trim().replace("\"", "");
+            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
                 tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
