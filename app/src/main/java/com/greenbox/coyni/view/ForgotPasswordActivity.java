@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -41,6 +42,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     TextView tvEmailError, tvMessage, tvHead;
     RelativeLayout layoutMain;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +137,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.hideKeypad(ForgotPasswordActivity.this, v);
                         if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -152,7 +158,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             dialog.setMessage("Please wait...");
                             dialog.show();
                             loginViewModel.emailotpresend(etEmail.getText().toString().trim());
-
                         } else {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
@@ -160,28 +165,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             tvEmailError.setText("Field Required");
                             etEmail.clearFocus();
                         }
-//                        if (validation()) {
-//                            dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
-//                            dialog.setIndeterminate(false);
-//                            dialog.setMessage("Please wait...");
-//                            dialog.show();
-//                            loginViewModel.emailotpresend(etEmail.getText().toString().trim());
-//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
 
-//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                        Utils.hideKeypad(ForgotPasswordActivity.this);
-//                    }
-//                    return false;
-//                }
-//            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
