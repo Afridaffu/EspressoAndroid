@@ -264,7 +264,6 @@
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_below="@+id/tvWalletAddress"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:background="@color/at_gray" />
 
@@ -303,7 +302,7 @@
                             android:layout_width="1dp"
                             android:layout_height="@dimen/_35sdp"
                             android:layout_centerInParent="true"
-                            android:background="@color/vlight_gray"></View>
+                            android:background="@color/vlight_gray"/>
 
                         <LinearLayout
                             android:id="@+id/lyShare"
