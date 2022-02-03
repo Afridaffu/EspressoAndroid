@@ -256,6 +256,7 @@
     <string name="lastpayout"> Last Payout</string>
     <string name="batchnow"> Batch Now</string>
     <string name="manual"> Manual</string>
+    <string name="clickhere"><u>click here</u> </string>
     <string name="v_p_history"> View Full Payouts History</string>
     <string name="reservebalance"> Reserve Balance</string>
     <string name="nextrelease"> Next Release</string>
@@ -308,6 +309,9 @@
     <string name="monthly_fee">Monthly Fee</string>
     <string name="buy_token">Buy Token</string>
     <string name="withdraws">Withdraws</string>
+    <string name="close">Close</string>
+    <string name="clear">Clear</string>
+    <string name="rotate_phone_sign">Please Rotate your Phone To Sign</string>
     <string name="remove_team_members">Remove Team Members</string>
     <string name="account_permissions">Are you sure to remove [Name], will be \npermanently removed from your user list \nand All lose access to their shared \naccount permissions</string>
     <string name="no">No</string>

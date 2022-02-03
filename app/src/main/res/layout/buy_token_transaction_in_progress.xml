@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_65sdp"
+                android:layout_marginTop="@dimen/_55sdp"
                 android:layout_marginBottom="@dimen/_23sdp"
                 android:src="@drawable/ic_in_progress_icon" />
 

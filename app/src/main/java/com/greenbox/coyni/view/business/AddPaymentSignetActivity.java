@@ -263,7 +263,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             isWallet = true;
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+                            Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
                         } else {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState());
