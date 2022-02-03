@@ -18,6 +18,7 @@ import com.greenbox.coyni.fragments.BusinessAccountFragment;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -130,6 +131,15 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
+            @Override
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                if (businessWalletResponse != null) {
+                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                }
+            }
+        });
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {
@@ -142,7 +152,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
-//                dashboardViewModel.meWallet();
+                businessDashboardViewModel.meMerchantWallet();
 //                notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();

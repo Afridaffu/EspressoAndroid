@@ -464,20 +464,36 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             forgotpwd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    hideAndClearFocus();
-                    Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                    i.putExtra("screen", "ForgotPwd");
-                    i.putExtra("email", etEmail.getText().toString().trim());
-                    startActivity(i);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        hideAndClearFocus();
+                        Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                        i.putExtra("screen", "ForgotPwd");
+                        i.putExtra("email", etEmail.getText().toString().trim());
+                        startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
             tvRetEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    hideAndClearFocus();
-                    Intent i = new Intent(LoginActivity.this, RetrieveEmailActivity.class);
-                    startActivity(i);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        hideAndClearFocus();
+                        Intent i = new Intent(LoginActivity.this, RetrieveEmailActivity.class);
+                        startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 

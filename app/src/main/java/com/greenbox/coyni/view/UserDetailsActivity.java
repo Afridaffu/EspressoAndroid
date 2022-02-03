@@ -444,6 +444,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                             addressFormatted = addressFormatted + "United States";
                             userAddressTV.setText(addressFormatted);
                             business_userAddreTV.setText(addressFormatted);
+                            address=addressFormatted;
                         } else {
                             userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
                             business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");

@@ -70,6 +70,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     boolean isLoggedOut = false;
 //    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
+    TextView tvVersion;
 
     public static void SetToken(MyApplication objMyApplication, Activity activity) {
         try {
@@ -142,7 +143,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             teamLL = findViewById(R.id.teamLL);
             paymentMethodsLL = findViewById(R.id.paymentMethodsLL);
             bpbackBtn = findViewById(R.id.b_backBtn);
-            cvLogout=findViewById(R.id.cvLogout);
+            cvLogout = findViewById(R.id.cvLogout);
             switchOnLL = findViewById(R.id.switchOn);
 
             dbainfoLL = findViewById(R.id.DBAInformationLL);
@@ -190,13 +191,17 @@ public class BusinessProfileActivity extends AppCompatActivity {
             account_id = findViewById(R.id.b_accountIDTV);
             userFullname = findViewById(R.id.b_nameTV);
             b_tvBMSetting = findViewById(R.id.b_tvBMSetting);
+            tvVersion = findViewById(R.id.tvVersion);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             myApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             business_userProfileCV = findViewById(R.id.business_userProfileCV);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
-
+            isBiometric = Utils.getIsBiometric();
+            SetToken(myApplication, this);
+            SetFaceLock(myApplication, this);
+            SetTouchId(myApplication, this);
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -225,8 +230,6 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 b_tvBMSetting.setText(getString(R.string.security_faceid));
             }
 
-
-
             if (getLocalBiometricEnabled()) {
                 isSwitchEnabled = true;
                 switchOffLL.setVisibility(View.GONE);
@@ -236,7 +239,6 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 switchOffLL.setVisibility(View.VISIBLE);
                 switchOnLL.setVisibility(View.GONE);
             }
-
 
             bpbackBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -256,6 +258,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+
             feesLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -323,7 +326,6 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 }
             });
 
-
             business_userProfileCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -354,6 +356,20 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            tvVersion.setText("Version " + Utils.getAppVersion().replace("Android : ", ""));
+            tvVersion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        String strEndPoint = "";
+                        strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
+                        Utils.displayAlert(strEndPoint, BusinessProfileActivity.this, "API Details", "");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -441,7 +457,8 @@ public class BusinessProfileActivity extends AppCompatActivity {
                             } else {
                                 if (!isLoggedOut)
                                     Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
-                            }myApplication.setBiometric(false);
+                            }
+                            myApplication.setBiometric(false);
                             if (!isLoggedOut) {
                                 saveFace("false");
                                 saveThumb("false");
