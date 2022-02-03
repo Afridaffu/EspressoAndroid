@@ -277,6 +277,7 @@
     <string name="merchant_s_agreement">Merchant’s Agreement</string>
     <string name="review_application">Review Application</string>
     <string name="basic_information">Basic Information</string>
+
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="an_account">There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.</string>
@@ -315,12 +316,40 @@
     <string name="remove_team_members">Remove Team Members</string>
     <string name="account_permissions">Are you sure to remove [Name], will be \npermanently removed from your user list \nand All lose access to their shared \naccount permissions</string>
     <string name="no">No</string>
-    <string name="yes">Yes</string>
     <string name="add_team_members">Add Team Members</string>
     <string name="title_activity_closing_batch">ClosingBatchActivity</string>
     <string name="closing_batch">Closing Batch</string>
     <string name="send_to">Send to</string>
     <string name="business_token_account">Business Token Account</string>
     <string name="available_balance">Available Balance 99.00 CYN</string>
-    <string name="receive_payment">Receive Payment</string>
+    <string name="decline_reserve_rules">Decline Reserve Rules?</string>
+    <string name="no_go_back">No, go back</string>
+    <string name="yes">Yes</string>
+    <string name="verification_failed">Verification Failed</string>
+    <string name="dear_name">Dear <b>[Name],</b></string>
+    <string name="legal_name_name">Legal Name:<b>[name]</b></string>
+    <string name="dba_dba">DBA: <b>[DBA]</b></string>
+    <string name="documents_required">Documents Required</string>
+    <string name="copy_of_social_security_card">Copy of Social Security card</string>
+    <string name="upload_file">Upload File</string>
+    <string name="fictitious_business_license">Fictitious Business License</string>
+    <string name="website_revisions_required">Website Revisions Required</string>
+    <string name="information_revisions">Information Revisions</string>
+    <string name="please_accept_or_decline_the_revision_suggestion">Please accept or decline the revision suggestion</string>
+    <string name="company_name">Company Name</string>
+    <string name="original">(Original)</string>
+    <string name="prestige_worldwide_inc">Prestige Worldwide Inc</string>
+    <string name="edited">(Edited)</string>
+    <string name="lorem_ipsum_dolor_sit_amet_consectetuer_adipiscing_elit_aenean_commodo_ligula_eget_dolor_aenean_massa">“Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. ”</string>
+    <string name="prestige_worldwide">Prestige Worldwide</string>
+    <string name="transaction_details">Transaction Details</string>
+    <string name="canceled_bank_withdraw">Canceled Bank withdraw</string>
+    <string name="_100_00">100.00</string>
+    <string name="cyn">CYN</string>
+    <string name="_1d3hsm734h"><u>1d3hsM734h…</u></string>
+    <color name="background_color">#8ef2f5f8</color>
+    <string name="rolling_reserves_with_a_rolling_reserve"><b>ROLLING RESERVES:</b> With a rolling reserve</string>
+    <string name="manually_reserves"><b>MANUALLY RESERVES:</b> Withdrawing money</string>
+
+
 </resources>

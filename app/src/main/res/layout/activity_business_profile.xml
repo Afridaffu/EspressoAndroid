@@ -329,7 +329,7 @@
                             android:background="@color/viewcolor" />
 
                         <LinearLayout
-                            android:id="@+id/bBAInformationLL"
+                            android:id="@+id/DBAInformationLL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
