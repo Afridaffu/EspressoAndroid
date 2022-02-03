@@ -210,6 +210,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         firstName.setHint("");
+                        String strFirstName = firstName.getText().toString().trim();
                         if (firstName.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -217,6 +218,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         } else if (firstName.getText().toString().trim().length() == 1) {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
+                            firstName.setText(strFirstName);
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
@@ -239,6 +241,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         lastName.setHint("");
+                        String strLastName = lastName.getText().toString().trim();
                         if (lastName.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
                             lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -247,6 +250,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
+                            lastName.setText(strLastName);
                             lastNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());

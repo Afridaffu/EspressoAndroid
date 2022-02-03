@@ -86,11 +86,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 tvHead.setText("Forgot Your PIN?");
                 tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
                 etEmail.setText(Utils.getUserEmail(this));
+                Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
                 etEmail.setEnabled(false);
             }
 
             if (getIntent().getStringExtra("email") != null && !getIntent().getStringExtra("email").equals("")) {
                 etEmail.setText(getIntent().getStringExtra("email"));
+                Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
             }
 
             etEmail.addTextChangedListener(new TextWatcher() {
