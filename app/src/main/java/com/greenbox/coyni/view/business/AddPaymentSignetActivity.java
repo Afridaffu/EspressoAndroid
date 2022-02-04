@@ -662,8 +662,6 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
-//                        zipErrorLL.setVisibility(VISIBLE);
-//                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
