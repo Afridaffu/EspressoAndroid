@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/corner_radius_white1"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -22,8 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onDashboardTabSelected"
             android:gravity="center_vertical"
+            android:onClick="onDashboardTabSelected"
             android:orientation="vertical"
             android:paddingTop="10dp"
             android:paddingBottom="15dp">
@@ -34,12 +35,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/dashboard"
-                android:src="@drawable/ic_close" />
+                android:src="@drawable/ic_dashboard_active" />
 
             <TextView
                 android:id="@+id/tv_dashboard_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center_horizontal"
                 android:text="@string/dashboard"
@@ -54,9 +56,9 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:onClick="onAccountTabSelected"
+            android:orientation="vertical"
             android:paddingTop="10dp"
-            android:paddingBottom="15dp"
-            android:orientation="vertical">
+            android:paddingBottom="15dp">
 
             <ImageView
                 android:id="@+id/iv_account_icon"
@@ -71,6 +73,7 @@
                 android:id="@+id/tv_account_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center_horizontal"
                 android:text="@string/account"
@@ -83,11 +86,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onQuickMenuTabSelected"
             android:contentDescription="@string/quick_menu"
-            android:src="@drawable/quick_action_btn"
+            android:onClick="onQuickMenuTabSelected"
             android:paddingTop="10dp"
-            android:paddingBottom="15dp"/>
+            android:paddingBottom="15dp"
+            android:src="@drawable/quick_action_btn" />
 
         <LinearLayout
             android:id="@+id/il_transactions_tab"
@@ -96,8 +99,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:onClick="onTransactionsTabSelected"
-            android:orientation="vertical" android:paddingTop="10dp"
-            android:paddingBottom="15dp">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/iv_transactions_icon"
@@ -105,12 +107,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/transactions"
-                android:src="@drawable/ic_close" />
+                android:src="@drawable/ic_transactions_inactive" />
 
             <TextView
                 android:id="@+id/iv_transactions_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center_horizontal"
                 android:text="@string/transactions"
@@ -123,8 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onProfileTabSelected"
             android:gravity="center_vertical"
+            android:onClick="onProfileTabSelected"
             android:orientation="vertical"
             android:paddingTop="10dp"
             android:paddingBottom="15dp">
@@ -141,6 +144,7 @@
                 android:id="@+id/tv_profile_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center_horizontal"
                 android:text="@string/profile"

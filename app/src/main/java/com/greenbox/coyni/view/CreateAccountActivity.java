@@ -70,7 +70,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CreateAccountActivity extends BaseActivity implements OnKeyboardVisibilityListener {
-
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, passwordTIL, confPasswordTIL;
@@ -116,6 +115,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     CheckBox agreeCB;
 
     MyApplication objMyApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -444,7 +444,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void textWatchers() {
-
         try {
             firstNameET.addTextChangedListener(new TextWatcher() {
 
@@ -762,7 +761,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void focusWatchers() {
-
         try {
             firstNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -788,6 +786,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
+                        firstNameErrorLL.setVisibility(GONE);
                         focusedID = firstNameET.getId();
                         firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -820,6 +819,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
+                        lastNameErrorLL.setVisibility(GONE);
                         focusedID = lastNameET.getId();
                         lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -843,16 +843,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         focusedID = passwordET.getId();
 
                     } else {
-
                         stregnthViewLL.setVisibility(GONE);
-//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-//                        } else {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//                        }
-
                         if (passwordET.getText().toString().trim().length() == 0) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             passwordTIL.setHint("Password");
@@ -873,7 +864,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//                            passwordTIL.setHint("Password doesn’t match");
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -896,14 +886,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         focusedID = confirmPasswordET.getId();
                     } else {
                         confirmPasswordET.setHint("");
-//                        if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-//                        } else {
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-//                        }
-
                         if (confirmPasswordET.getText().toString().trim().length() == 0) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
@@ -913,7 +895,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-//                            passwordTIL.setHint("Password doesn’t match");
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -953,6 +934,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
+                        emailErrorLL.setVisibility(GONE);
                         focusedID = emailET.getId();
                         emailET.setHint("Email");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -960,8 +942,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     }
                 }
             });
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -969,7 +949,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void enableOrDisableNext() {
-
         try {
             if (isFirstName && isLastName && isEmail && isPhoneNumber && isPassword && isConfirmPassword && isAgreed) {
                 isNextEnabled = true;
