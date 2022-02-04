@@ -121,7 +121,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             MOBILE = getIntent().getStringExtra("MOBILE");
             EMAIL = getIntent().getStringExtra("EMAIL");
             strScreen = getIntent().getStringExtra("screen");
-            if(getIntent() != null) {
+            if (getIntent() != null) {
                 mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
             }
             SetDB();
@@ -770,12 +770,25 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             @Override
             public void onChanged(RetrieveUsersResponse retrieveUsersResponse) {
                 try {
-                    //dialog.dismiss();
                     if (retrieveUsersResponse != null) {
                         if (!retrieveUsersResponse.getStatus().toLowerCase().equals("error")) {
                             objMyApplication.setObjRetUsers(retrieveUsersResponse);
-                            startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
-                                    .putExtra("screen", "retEmailfound"));
+                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                            shakeAnimateUpDown();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                                .putExtra("screen", "retEmailfound"));
+                                        finish();
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, Utils.duration);
+//                            startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+//                                    .putExtra("screen", "retEmailfound"));
                         } else {
                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                             shakeAnimateLeftRight();
@@ -817,7 +830,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
                             resendCounter = 0;
-                            if (objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -841,28 +854,29 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     }
                                 }, Utils.duration);
                             }
-                            if (objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT){
-                                        if (getIntent().getStringExtra("IS_OLD_EMAIL").equalsIgnoreCase("true")) {
-                                            startActivity(new Intent(OTPValidation.this, OTPValidation.class)
-                                                    .putExtra("screen", "EditEmail")
-                                                    .putExtra("OTP_TYPE", "OTP")
-                                                    .putExtra("IS_OLD_EMAIL", "false")
-                                                    .putExtra("OLD_EMAIL", oldEmail)
-                                                    .putExtra("NEW_EMAIL", newEmail));
-                                            finish();
-                                        } else {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                if (getIntent().getStringExtra("IS_OLD_EMAIL").equalsIgnoreCase("true")) {
+                                    startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                            .putExtra("screen", "EditEmail")
+                                            .putExtra("OTP_TYPE", "OTP")
+                                            .putExtra("IS_OLD_EMAIL", "false")
+                                            .putExtra("OLD_EMAIL", oldEmail)
+                                            .putExtra("NEW_EMAIL", newEmail));
+                                    finish();
+                                } else {
 
-                                            Utils.showCustomToast(OTPValidation.this, "Email updated", R.drawable.ic_check, "EMAIL");
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        finish();
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
+                                    Utils.showCustomToast(OTPValidation.this, "Email updated", R.drawable.ic_check, "EMAIL");
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                finish();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
-                                                }  }, 2000);
+                                        }
+                                    }, 2000);
                                 }
                             }
                         }
@@ -886,7 +900,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
                             resendCounter = 0;
-                            if (objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -918,7 +932,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     }
                                 }, Utils.duration);
                             }
-                            if (objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -944,7 +958,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                             e.printStackTrace();
                                                         }
 
-                                                    }  }, 2000);
+                                                    }
+                                                }, 2000);
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();

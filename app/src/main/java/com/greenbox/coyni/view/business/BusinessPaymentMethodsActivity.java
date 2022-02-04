@@ -32,6 +32,7 @@ import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
@@ -77,37 +78,69 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
-            if (requestCode == 1 && data == null) {
-                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                    Utils.displayAlert("Bank integration has been cancelled", BusinessPaymentMethodsActivity.this, "", "");
-                } else {
-                    dialog = Utils.showProgressDialog(this);
-                    customerProfileViewModel.meSyncAccount();
+            if (requestCode > 0) {
+                switch (requestCode) {
+                    case 1:
+                        if (data == null) {
+                            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                                Utils.displayAlert("Bank integration has been cancelled", BusinessPaymentMethodsActivity.this, "", "");
+                            } else {
+                                dialog = Utils.showProgressDialog(this);
+                                customerProfileViewModel.meSyncAccount();
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (objMyApplication.getSignet()) {
+                            objMyApplication.setSignet(false);
+                            getPaymentMethods();
+                        }
+                        break;
+                    case 3:
+                        if (strCurrent.equals("debit")) {
+                            if (!objMyApplication.getCardSave()) {
+                                isDeCredit = true;
+                                ControlMethod("addpayment");
+                            } else {
+                                objMyApplication.setCardSave(false);
+                                ControlMethod("paymentMethods");
+                                strCurrent = "paymentMethods";
+                            }
+                            getPaymentMethods();
+                        }
+                        break;
+                    case 4:
+                        if (data.getStringExtra("screen") != null && data.getStringExtra("screen").equals("editcard")) {
+                            if (data.getStringExtra("action") != null && data.getStringExtra("action").equals("remove")) {
+                                deleteBank(objMyApplication.getSelectedCard());
+                            }
+                        }
+                        break;
                 }
-            } else if (requestCode == 2) {
-                if (objMyApplication.getSignet()) {
-                    objMyApplication.setSignet(false);
-                    getPaymentMethods();
-                }
-            }
-//            else if (requestCode == 3) {
-//                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
-//                    if (!objMyApplication.getCardSave()) {
-//                        isDeCredit = true;
-//                        ControlMethod("addpayment");
-//                    } else {
-//                        objMyApplication.setCardSave(false);
-//                        ControlMethod("paymentMethods");
-//                        strCurrent = "paymentMethods";
-//                    }
-//                    getPaymentMethods();
-//                }
-//            }
-            else {
+            } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (strCurrent.equals("firstError")) {
+                displayError();
+            } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                ControlMethod("addpayment");
+                addPayment();
+            } else {
+                if (!isPayments) {
+                    getPaymentMethods();
+                }
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -265,6 +298,17 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                pDialog.dismiss();
+                if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                    getPaymentMethods();
+                }
+            }
+        });
     }
 
     private void addPayment() {
@@ -328,7 +372,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
+                            strCurrent = "signet";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
                             startActivityForResult(i, 2);
                         }
@@ -343,9 +387,9 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                            strCurrent = "credit";
+                            strCurrent = "debit";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "credit");
+                            i.putExtra("card", "debit");
                             startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
@@ -437,7 +481,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
         PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
-                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, BusinessPaymentMethodsActivity.this,"business");
+                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, BusinessPaymentMethodsActivity.this, "business");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(BusinessPaymentMethodsActivity.this);
                 rvPaymentMethods.setLayoutManager(mLayoutManager);
                 rvPaymentMethods.setItemAnimator(new DefaultItemAnimator());
@@ -641,6 +685,16 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
@@ -677,7 +731,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(BusinessPaymentMethodsActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
@@ -772,6 +826,15 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
 
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void editCard() {
+        try {
+            Intent i = new Intent(BusinessPaymentMethodsActivity.this, EditCardActivity.class);
+            startActivityForResult(i, 4);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -206,7 +206,6 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
                 <LinearLayout
                     android:id="@+id/emailErrorLL"
                     android:layout_width="match_parent"
