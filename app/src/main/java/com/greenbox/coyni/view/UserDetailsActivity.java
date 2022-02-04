@@ -1,12 +1,14 @@
 package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -35,16 +38,19 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
+
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
@@ -71,8 +77,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
     ImageView editProfileIV, userProfileIV;
     TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV;
+    TextInputLayout business_defaultAccTIL;
+    TextInputEditText business_defaultaccountET;
     MyApplication myApplicationObj;
     LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL;
+    @SuppressLint("StaticFieldLeak")
     public static UserDetailsActivity userDetailsActivity;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     String strFileName = "", phoneFormat = "", phoneNumber = "";
@@ -92,7 +101,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     static String strToken = "";
     static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     String authenticateType = "";
 
     @Override
@@ -141,6 +150,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             business_emailLL=findViewById(R.id.b_emailLL);
             business_PhoneNumLL=findViewById(R.id.b_phoneLL);
             business_AddreLL=findViewById(R.id.b_addressLL);
+            business_defaultAccTIL=findViewById(R.id.b_accountTIL);
+            business_defaultaccountET=findViewById(R.id.b_accountET);
 
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
             isBiometric = Utils.getIsBiometric();
@@ -253,61 +264,51 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
             //Business setOnClick's
 
-            business_emailLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-
-                    authenticateType = "EMAIL";
-                    String face=String.valueOf(isFaceLock);
-                    String touch=String.valueOf(isTouchId);
-
-                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",emailId).putExtra("touch",touch).putExtra("face",face));
+            business_emailLL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
                 }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                authenticateType = "EMAIL";
+                String face=String.valueOf(isFaceLock);
+                String touch=String.valueOf(isTouchId);
+
+                startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",emailId).putExtra("touch",touch).putExtra("face",face));
             });
 
-            business_AddreLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-
-
-                    authenticateType = "ADDRESS";
-                    String face=String.valueOf(isFaceLock);
-                    String touch=String.valueOf(isTouchId);
-
-                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",address).putExtra("touch",touch).putExtra("face",face));
-
-
+            business_AddreLL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
                 }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+
+                authenticateType = "ADDRESS";
+                String face=String.valueOf(isFaceLock);
+                String touch=String.valueOf(isTouchId);
+
+                startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",address).putExtra("touch",touch).putExtra("face",face));
+
+
             });
 
-            business_PhoneNumLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-
-                    authenticateType = "PHONE";
-                    String face=String.valueOf(isFaceLock);
-                    String touch=String.valueOf(isTouchId);
-
-                    startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",phoneFormat).putExtra("touch",touch).putExtra("face",face));
-
+            business_PhoneNumLL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
                 }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                authenticateType = "PHONE";
+                String face=String.valueOf(isFaceLock);
+                String touch=String.valueOf(isTouchId);
+
+                startActivity(new Intent(UserDetailsActivity.this,Business_UserDetailsListenersActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",phoneFormat).putExtra("touch",touch).putExtra("face",face));
+
             });
 
-            userDetailsCloseLL.setOnClickListener(view -> {
-                finish();
-            });
+            userDetailsCloseLL.setOnClickListener(view -> finish());
+
 
             if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
                 Profile profile = myApplicationObj.getMyProfile();
@@ -321,6 +322,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                 userPhoneNumTV.setText(phoneFormat);
                 business_userPhneNoTV.setText(phoneFormat);
+                business_defaultaccountET.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
 
                 String addressFormatted = "";
                 if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
@@ -360,6 +362,40 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }
+
+            business_defaultaccountET.setOnClickListener(view -> {
+
+
+                try {
+                    final Dialog dialog = new Dialog(UserDetailsActivity.this);
+                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.default_account_dialog);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                    DisplayMetrics mertics = getApplicationContext().getResources().getDisplayMetrics();
+//                    int width = mertics.widthPixels;
+
+                    CardView doneButton=dialog.findViewById(R.id.default_DoneBtn);
+
+                    Window window = dialog.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.75));
+
+                    WindowManager.LayoutParams wlp = window.getAttributes();
+
+                    wlp.gravity = Gravity.BOTTOM;
+                    wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                    window.setAttributes(wlp);
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+
+                    doneButton.setOnClickListener(view1 -> dialog.dismiss());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
 
 
         } catch (Exception e) {
