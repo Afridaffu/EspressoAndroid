@@ -91,10 +91,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         if (charSequence == firstName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 firstNameErrorLL.setVisibility(GONE);
-//                firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                 Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_black));
-            }
-            else if (firstName.getText().toString().trim().length() == 0) {
+            } else if (firstName.getText().toString().trim().length() == 0) {
                 firstNameErrorLL.setVisibility(VISIBLE);
                 firstNameErrorTV.setText("Field Required");
             }
@@ -102,10 +100,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         } else if (charSequence == lastName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 lastNameErrorLL.setVisibility(GONE);
-//                lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                 Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_black));
-            }
-            else if (lastName.getText().toString().trim().length() == 0) {
+            } else if (lastName.getText().toString().trim().length() == 0) {
                 lastNameErrorLL.setVisibility(VISIBLE);
                 lastNameErrorTV.setText("Field Required");
             }
@@ -116,26 +112,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     @Override
     public void afterTextChanged(Editable s) {
         if (s == firstName.getEditableText()) {
-//            try {
-//                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
-//                    firstNameErrorLL.setVisibility(GONE);
-//                }
-//                String str = firstName.getText().toString();
-//                if (str.length() > 0 && !isDel) {
-//                    firstName.removeTextChangedListener(RetrieveEmailActivity.this);
-//                    firstName.setText(firstName.getText().toString().trim().replaceAll(" ", ""));
-//                    firstName.setSelection(firstName.getText().toString().trim().length());
-//                    firstName.addTextChangedListener(RetrieveEmailActivity.this);
-//
-//                } else {
-//                    isDel = false;
-//                }
-//                enableButton();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-
-
             try {
                 String str = firstName.getText().toString();
                 if (str.length() > 0 && str.substring(0).equals(" ")) {
@@ -154,25 +130,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             }
 
         } else if (s == lastName.getEditableText()) {
-//            try {
-//                if (s.toString().trim().length() > 0 && s.toString().trim().length() < 31) {
-//                    lastNameErrorLL.setVisibility(GONE);
-//                }
-//                String str = lastName.getText().toString();
-//                if (str.length() > 0 && !isDel) {
-//                    lastName.removeTextChangedListener(RetrieveEmailActivity.this);
-//                    lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
-//                    lastName.setSelection(lastName.getText().length());
-//                    lastName.addTextChangedListener(RetrieveEmailActivity.this);
-//
-//                } else {
-//                    isDel = false;
-//                }
-//                enableButton();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-
             try {
                 String str = lastName.getText().toString();
                 if (str.length() > 0 && str.substring(0).equals(" ")) {
@@ -253,23 +210,25 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         firstName.setHint("");
+                        String strFirstName = firstName.getText().toString().trim();
                         if (firstName.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
-                        }
-                        else if (firstName.getText().toString().trim().length() == 1) {
+                        } else if (firstName.getText().toString().trim().length() == 1) {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
+                            firstName.setText(strFirstName);
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
-                        }else {
+                        } else {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.light_gray));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
                     } else {
+                        firstNameErrorLL.setVisibility(GONE);
                         firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
                         firstName.setHint("First Name");
@@ -282,24 +241,25 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         lastName.setHint("");
+                        String strLastName = lastName.getText().toString().trim();
                         if (lastName.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
                             lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_black));
-                        }
-                        else if (lastName.getText().toString().trim().length() == 1) {
+                        } else if (lastName.getText().toString().trim().length() == 1) {
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
+                            lastName.setText(strLastName);
                             lastNameErrorTV.setText("Minimum 2 Characters Required");
-                        }
-                        else {
+                        } else {
                             lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
                         }
                     } else {
+                        lastNameErrorLL.setVisibility(GONE);
                         lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
                         lastName.setHint("Last Name");
@@ -337,7 +297,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 //                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
 //                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
 
-                                Utils.emailPasswordIncorrectDialog("",RetrieveEmailActivity.this,"");
+                                Utils.emailPasswordIncorrectDialog("", RetrieveEmailActivity.this, "");
                             }
                         } else {
                             Utils.displayAlert(retrieveEmailResponse.getError().getErrorDescription(), RetrieveEmailActivity.this, "", "");
@@ -427,7 +387,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     public void enableButton() {
         try {
             if (!phoneNumberET.getText().toString().trim().equals("") && phoneNumberET.getText().toString().length() == 14
-                    && firstName.getText().length()>=2 && lastName.getText().length()>=2) {
+                    && firstName.getText().length() >= 2 && lastName.getText().length() >= 2) {
                 nextBtn.setEnabled(true);
                 nextBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             } else {
