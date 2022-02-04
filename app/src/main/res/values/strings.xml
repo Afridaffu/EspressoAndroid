@@ -366,4 +366,22 @@
     <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
     <string name="greenboxpos">Greenboxpos</string>
     <string name="receive_payment">Receive Payment</string>
+    <string name="scan_to_make_a_payment">Scan to make a payment.</string>
+    <string name="receive_payments">Receive payments for goods and services.</string>
+    <string name="buy_token_with">Buy token with credit/debit cards or bank account</string>
+    <string name="withdraw_token_to_usd">Withdraw token to USD</string>
+    <string name="authorization_failed">Authorization Failed</string>
+    <string name="card_authorization_failed">The card authorization failed due to error \ncode: {error code - error code \ndescription}. Please try again.</string>
+    <string name="identify_verification_failed">Identify Verification \nFailed</string>
+    <string name="thank_you_for_your_interest">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
+    <string name="account_deactivated_description">We’re sorry but your account has been deactivated by the coyni customer support</string>
+    <string name="customer"><u>customer</u></string>
+    <string name="support"><u>support.</u></string>
+    <string name="account_deactivated">Account Deactivated</string>
+    <string name="not_available">Not Available</string>
+    <string name="not_available_error">We’re sorry but this feature is not available in your coyni account. If this is an error,</string>
+    <string name="please_contact">please contact the coyni </string>
+    <string name="customer_support"><u>customer support</u></string>
+    <string name="account_logged_out">Account logged out</string>
+    <string name="accout_logged">Sorry, this account has logged in with a</string>
 </resources>
