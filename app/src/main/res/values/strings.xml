@@ -349,6 +349,10 @@
     <color name="background_color">#8ef2f5f8</color>
     <string name="rolling_reserves_with_a_rolling_reserve"><b>ROLLING RESERVES:</b> With a rolling reserve</string>
     <string name="manually_reserves"><b>MANUALLY RESERVES:</b> Withdrawing money</string>
+    <string name="new_company">New Company</string>
+    <string name="new_dba">New DBA</string>
+    <string name="add_dba">Add DBA</string>
+    <string name="open_new_account">Open New Account</string>
 
 
 </resources>
