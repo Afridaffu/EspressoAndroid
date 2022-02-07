@@ -516,7 +516,9 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
+        </activity>
         <activity
             android:name=".view.business.ChooseIdActivity"
             android:configChanges="uiMode"
@@ -556,20 +558,6 @@
 
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".view.business.BusinessAccountLimitsActivity"
-            android:configChanges="uiMode"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
-
-
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
         </activity>
         <activity android:name=".view.Business_UserDetailsListenersActivity"
             android:configChanges="uiMode"

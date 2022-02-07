@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
 import com.greenbox.coyni.view.Business_UserDetailsListenersActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
@@ -237,7 +238,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, BusinessAccountLimitsActivity.class);
+                        Intent intent = new Intent(BusinessProfileActivity.this, AccountLimitsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
