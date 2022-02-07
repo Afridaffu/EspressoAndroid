@@ -58,9 +58,9 @@ public class EditAddressActivity extends AppCompatActivity {
     StatesListAdapter statesListAdapter;
     List<States> listStates = new ArrayList<>();
     LinearLayout backIV, address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
-    LinearLayout b_backIV, b_address1ErrorLL, b_address2ErrorLL, b_cityErrorLL, b_zipcodeErrorLL;
+    LinearLayout b_backIV, b_address1ErrorLL, b_cityErrorLL, b_zipcodeErrorLL;
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
-    TextView b_address1ErrorTV, b_address2ErrorTV, b_cityErrorTV, b_zipcodeErrorTV;
+    TextView b_address1ErrorTV, b_cityErrorTV, b_zipcodeErrorTV;
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
@@ -76,18 +76,26 @@ public class EditAddressActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
             initfields();
            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
-               textWatchers();
-               focusWatchers();
-               initObservers();
-               findViewById(R.id.customerEditAddressRL).setVisibility(VISIBLE);
-               findViewById(R.id.businessEditAddressLL).setVisibility(GONE);
+               try {
+                   textWatchers();
+                   focusWatchers();
+                   initObservers();
+                   findViewById(R.id.customerEditAddressRL).setVisibility(VISIBLE);
+                   findViewById(R.id.businessEditAddressLL).setVisibility(GONE);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
            }
            else if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
-               findViewById(R.id.customerEditAddressRL).setVisibility(GONE);
-               findViewById(R.id.businessEditAddressLL).setVisibility(VISIBLE);
-               b_textWatchers();
-               b_focusWatchers();
-               initObservers();
+               try {
+                   findViewById(R.id.customerEditAddressRL).setVisibility(GONE);
+                   findViewById(R.id.businessEditAddressLL).setVisibility(VISIBLE);
+                   b_textWatchers();
+                   b_focusWatchers();
+                   initObservers();
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
            }
         } catch (Exception e) {
             e.printStackTrace();

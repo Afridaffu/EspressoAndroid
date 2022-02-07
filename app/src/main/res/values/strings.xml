@@ -369,6 +369,10 @@
     <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
     <string name="greenboxpos">Greenboxpos</string>
     <string name="receive_payment">Receive Payment</string>
+    <string name="email_curr">Current Email</string>
+    <string name="address">Address</string>
+    <string name="address_curr">Current Address</string>
+    <string name="phonenumber_curr">Current Phone Number</string>
     <string name="scan_to_make_a_payment">Scan to make a payment.</string>
     <string name="receive_payments">Receive payments for goods and services.</string>
     <string name="buy_token_with">Buy token with credit/debit cards or bank account</string>
