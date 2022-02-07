@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/et_bg_gray"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    tools:context=".view.business.BusinessDashboardMainActivity">
+    android:background="@color/et_bg_gray">
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -30,6 +27,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/merchantprofileIV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_21sdp"
@@ -66,12 +64,14 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/white">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -140,12 +140,14 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -582,12 +584,14 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -1082,12 +1086,13 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_90sdp"
+                android:background="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -1610,6 +1615,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
 </RelativeLayout>
