@@ -273,7 +273,8 @@
                             android:id="@+id/businessET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:editable="false"
+                            android:cursorVisible="false"
+                            android:focusableInTouchMode="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="Choose from the list"
@@ -394,7 +395,6 @@
                     android:id="@+id/basicNextCV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_39sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_33sdp">
 
@@ -411,6 +411,16 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginBottom="@dimen/_27sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/Savedautomatically"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/_11ssp" />
                 <View
                     android:id="@+id/pageOneView"
                     android:layout_width="match_parent"

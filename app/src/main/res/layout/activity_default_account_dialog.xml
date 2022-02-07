@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/greenboxpos"
-                    android:textSize="@dimen/_11sdp"
+                    android:textSize="@dimen/_11ssp"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
                     android:layout_marginStart="@dimen/_16sdp"
@@ -86,7 +86,7 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Jonathan Joestar"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -121,7 +121,7 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Open New Account"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -130,19 +130,20 @@
         android:id="@+id/doneRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/opennewacLL"
         android:layout_marginTop="@dimen/_5sdp"
-        android:background="@color/white"
-        android:layout_below="@+id/opennewacLL">
+        android:background="@color/white">
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cvDone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
             android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="@dimen/_21sdp"
             android:layout_marginBottom="@dimen/_27sdp"
             android:gravity="center"
             app:cardBackgroundColor="@color/primary_green"
             app:cardCornerRadius="@dimen/_22sdp"
-            android:layout_marginHorizontal="@dimen/_21sdp"
             app:cardElevation="0dp">
 
             <TextView
@@ -151,7 +152,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
-                android:text="Done"
+                android:text="Save"
                 android:textColor="#fdfdfd"
                 android:textSize="@dimen/_12ssp" />
         </androidx.cardview.widget.CardView>

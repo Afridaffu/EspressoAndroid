@@ -38,6 +38,7 @@
             android:text="@string/account_permissions"
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/primary_black"
+            android:lineHeight="@dimen/_21ssp"
             android:fontFamily="@font/opensans_semibold"
             android:layout_marginEnd="@dimen/_21sdp"
             android:layout_marginStart="@dimen/_21sdp"

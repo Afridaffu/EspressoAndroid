@@ -559,7 +559,7 @@
                     android:layout_marginHorizontal="@dimen/_21sdp"
                     android:layout_marginTop="@dimen/_21sdp"
                     android:gravity="center"
-                    app:cardBackgroundColor="@color/primary_color"
+                    app:cardBackgroundColor="@color/bg_inactive"
                     app:cardCornerRadius="@dimen/_22sdp"
                     app:cardElevation="0dp">
 

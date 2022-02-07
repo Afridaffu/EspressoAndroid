@@ -53,7 +53,6 @@
 
             @style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox
         </item>
-        <item name="boxCollapsedPaddingTop">0dp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/_10sdp</item>
         <item name="boxCornerRadiusBottomStart">@dimen/_10sdp</item>
         <item name="boxCornerRadiusTopEnd">@dimen/_10sdp</item>

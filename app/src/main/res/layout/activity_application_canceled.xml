@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_24sdp"
             android:fontFamily="@font/opensans_regular"
+            android:lineHeight="@dimen/_16ssp"
             android:text="Thank you for your interest in merchant \nprocessing through coyni. Hope to see you again "
             android:gravity="left"
             android:layout_marginStart="@dimen/_21sdp"

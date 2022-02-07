@@ -60,7 +60,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_17sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="@string/AB_owner"
             android:textColor="@color/black"
@@ -76,7 +76,6 @@
             android:id="@+id/layoutUpload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/_20sdp"
             android:visibility="visible">
 
             <ScrollView
@@ -150,9 +149,8 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_21sdp"
                         android:hint="@string/firstName"
-                        app:errorEnabled="true"
+                        android:layout_marginTop="@dimen/_21sdp"
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -168,8 +166,6 @@
                             android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="30"
                             android:maxLines="1"
-                            android:hint="@string/firstName"
-                            android:paddingVertical="@dimen/_12sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                             android:singleLine="true"
                             android:textColor="@color/primary_black"
@@ -208,10 +204,9 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_21sdp"
                         android:hint="@string/lastName"
+                        android:layout_marginTop="@dimen/_21sdp"
                         android:textColorHint="@color/light_gray"
-                        app:errorEnabled="true"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
                         app:hintTextColor="@color/primary_green">
@@ -269,10 +264,9 @@
                             style="@style/TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_21sdp"
                             android:hint="@string/dobol"
                             android:textColorHint="@color/light_gray"
-                            app:errorEnabled="true"
                             app:boxStrokeColor="@color/primary_green"
                             app:hintTextColor="@color/primary_green">
 
@@ -299,8 +293,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignEnd="@id/IdveriDOBTIL"
-                            android:layout_marginTop="@dimen/_35sdp"
-                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_45sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
                             android:src="@drawable/ic_chevron_down" />
                     </RelativeLayout>
 
@@ -336,7 +330,6 @@
                         android:layout_marginTop="@dimen/_21sdp"
                         android:hint="@string/ssnout"
                         android:textColorHint="@color/light_gray"
-                        app:errorEnabled="true"
                         app:boxStrokeColor="@color/primary_green"
 
                         app:hintTextColor="@color/primary_green">
@@ -348,7 +341,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionDone"
                             android:inputType="numberPassword"
-                            android:maxLength="4"
+                            android:maxLength="20"
                             android:paddingVertical="@dimen/_12sdp"
                             android:singleLine="true"
                             android:textColor="@color/primary_black"
@@ -388,7 +381,6 @@
                         android:layout_marginTop="@dimen/_21sdp"
                         android:hint="@string/Ownership"
                         android:textColorHint="@color/light_gray"
-                        app:errorEnabled="true"
                         app:boxStrokeColor="@color/primary_green"
 
                         app:hintTextColor="@color/primary_green">
@@ -448,6 +440,16 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/_12ssp" />
                     </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_27sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/Savedautomatically"
+                        android:textAlignment="center"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
             </ScrollView>
@@ -457,8 +459,6 @@
             android:id="@+id/layoutMailingAddress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_21sdp"
-            android:paddingBottom="@dimen/_20sdp"
             android:visibility="gone">
             <ScrollView
                 android:layout_width="fill_parent"
@@ -486,10 +486,9 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_18sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/mailingaddress1"
-                        app:errorEnabled="true"
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
@@ -845,8 +844,7 @@
                         android:id="@+id/addbenifitialowner2CloseCV"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_42sdp"
-
-                        android:layout_marginTop="@dimen/_38sdp"
+                        android:layout_marginTop="@dimen/_26sdp"
                         app:cardBackgroundColor="@color/bg_inactive"
                         app:cardCornerRadius="@dimen/_21sdp">
 
@@ -879,7 +877,6 @@
     </com.greenbox.coyni.intro_slider.AutoScrollViewPager>
 
         <TextView
-            android:id="@+id/buttom_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_6sdp"

@@ -36,6 +36,7 @@ import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.CreateAccountActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,6 +61,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     IdentityPagerAdapter identityPagerAdapter;
     static AutoScrollViewPager viewPager;
     int pagerPosition = 0, diffMonths = -1;
+    public static int focusedID = 0;
     RelativeLayout layoutUpload,layoutMailingAddress;
 
 
@@ -171,10 +173,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (fnameET.getId() == focusedID) {
+            fnameET.requestFocus();
+        }
+        else if(address1ET.getId()==focusedID){
+            address1ET.requestFocus();
+        }
     }
 
     private void initFields() {
-
         divider1 = findViewById(R.id.divider1);
         divider2 = findViewById(R.id.divider2);
         layoutUpload=findViewById(R.id.layoutUpload);
@@ -347,7 +354,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                     isfname = true;
                     fnameLL.setVisibility(GONE);
-                   // fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_green));
                 } else if (fnameET.getText().toString().trim().length() == 0) {
                     fnameLL.setVisibility(VISIBLE);
@@ -415,6 +422,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 }
             }
         });
+
         dobET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -624,7 +632,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 }
             }
         });
-
 //        stateET.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -652,7 +659,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 //
 //            }
 //        });
-
         zipcodeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -689,13 +695,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     }
 
     private void focusWatchers() {
-
         fnameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     fnameET.setHint("");
-                    if (fnameET.getText().toString().trim().length() > 1) {
+                    if (fnameET.getText().toString().trim().length() > 1 ) {
                         fnameLL.setVisibility(GONE);
                         fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(fnametil, getColor(R.color.primary_black));
@@ -712,8 +717,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                         fnameTV.setText("Field Required");
                     }
                 } else {
+                    focusedID = fnameET.getId();
                     fnameET.setHint("First Name");
-                    //fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                     Utils.setUpperHintColor(fnametil, getColor(R.color.primary_green));
                     fnameLL.setVisibility(GONE);
                 }
@@ -728,18 +734,19 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                         lnameLL.setVisibility(GONE);
                         fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(lnametil, getColor(R.color.primary_black));
-                    } else if (lnameET.getText().toString().trim().length() == 1) {
+                    }else if (lnameET.getText().toString().trim().length() == 1) {
                         lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
                         lnameTV.setText("Field Required Mininmum 2 characters");
-                    } else {
+                    }else {
                         lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
                         lnameTV.setText("Field Required");
                     }
                 } else {
+                    focusedID = lnameET.getId();
                     lnameET.setHint("LastName");
                     lnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                     Utils.setUpperHintColor(lnametil, getColor(R.color.primary_green));
