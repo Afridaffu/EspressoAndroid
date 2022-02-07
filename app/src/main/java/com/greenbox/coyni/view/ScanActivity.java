@@ -367,7 +367,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                             setAmount = setAmountDialog.findViewById(R.id.setAmountET);
                             InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                             ctKey.setInputConnection(ic);
-                            ctKey.setKeyAction("OK");
+                            ctKey.setKeyAction("OK",ScanActivity.this);
                             ctKey.setScreenName("setAmount");
                             fontSize = setAmount.getTextSize();
                             setAmount.requestFocus();

@@ -264,7 +264,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             lyBalance = findViewById(R.id.lyBalance);
             tvAvailableBal = findViewById(R.id.tvAvailableBal);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
-            ctKey.setKeyAction("Withdraw");
+            ctKey.setKeyAction("Withdraw",this);
             ctKey.setScreenName("withdraw");
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);

@@ -1370,7 +1370,7 @@ public class AddCardActivity extends AppCompatActivity {
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("Verify");
+            ctKey.setKeyAction("Verify",this);
             ctKey.setScreenName("addcard");
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());

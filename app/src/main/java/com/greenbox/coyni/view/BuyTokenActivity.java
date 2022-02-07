@@ -225,7 +225,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             lyCDetails = findViewById(R.id.lyCDetails);
             lyBDetails = findViewById(R.id.lyBDetails);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
-            ctKey.setKeyAction("Buy\nToken");
+            ctKey.setKeyAction("Buy\nToken",this);
             ctKey.setScreenName("buy");
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
@@ -1070,7 +1070,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK");
+            ctKey.setKeyAction("OK",this);
             ctKey.setScreenName("buycvv");
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
