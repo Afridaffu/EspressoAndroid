@@ -989,6 +989,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             TextView tvHeading = prevDialog.findViewById(R.id.tvHeading);
             LinearLayout layoutReference = prevDialog.findViewById(R.id.layoutReference);
             ImageView imgLogo = prevDialog.findViewById(R.id.imgLogo);
+            ImageView imgRefCopy = prevDialog.findViewById(R.id.imgRefCopy);
             CardView cvDone = prevDialog.findViewById(R.id.cvDone);
             if (objData.getGbxTransactionId().length() > 10) {
                 tvReferenceID.setText(objData.getGbxTransactionId().substring(0, 10) + "...");
@@ -1029,7 +1030,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     startActivity(i);
                 }
             });
-            layoutReference.setOnClickListener(new View.OnClickListener() {
+            tvReferenceID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getGbxTransactionId(), BuyTokenActivity.this);
+                }
+            });
+            imgRefCopy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(objData.getGbxTransactionId(), BuyTokenActivity.this);
