@@ -3,24 +3,18 @@ package com.greenbox.coyni.view;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
-import android.view.View;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 public class Business_UserDetailsListenersActivity extends AppCompatActivity {
 
@@ -28,7 +22,7 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
     TextView heading, title, value;
     CardView changeCV;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     DashboardViewModel dashboardViewModel;
     Long mLastClickTime = 0L;
     MyApplication myApplicationObj;
@@ -43,56 +37,52 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
         value = findViewById(R.id.contentTV);
         changeCV = findViewById(R.id.changeCV);
         myApplicationObj = (MyApplication) getApplicationContext();
+        isBiometric = Utils.getIsBiometric();
+
         initObservers();
-        findViewById(R.id.dialogCLoseLL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        findViewById(R.id.dialogCLoseLL).setOnClickListener(view -> {
+            try {
+                finish();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
         if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")) {
-            heading.setText("Email");
-            title.setText("Current Email");
+            heading.setText(getString(R.string.email));
+            title.setText(getString(R.string.email_curr));
             authenticateType = getIntent().getStringExtra("title");
             value.setText(getIntent().getStringExtra("value"));
             isTouchId = Boolean.parseBoolean(getIntent().getStringExtra("touch"));
             isFaceLock = Boolean.parseBoolean(getIntent().getStringExtra("face"));
-            changeCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    try {
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                            } else {
-                                startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "EditEmail"));
-                            }
+            changeCV.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                try {
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
                             startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "EditEmail"));
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "EditEmail"));
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
         else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
-            heading.setText("Address");
-            title.setText("Current Address");
+            heading.setText(getString(R.string.address));
+            title.setText(getString(R.string.address_curr));
             if (value.getText().toString().equals("")) {
                 value.setText(getIntent().getStringExtra("value"));
             }
@@ -100,73 +90,67 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
             isTouchId = Boolean.parseBoolean(getIntent().getStringExtra("touch"));
             isFaceLock = Boolean.parseBoolean(getIntent().getStringExtra("face"));
 
-            changeCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
+            changeCV.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
-                    try {
+                try {
 
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                            } else {
-                                startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "EditAddress"));
-                            }
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
                             startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "EditAddress"));
                         }
-//shiva
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "EditAddress"));
                     }
-
+//shiva
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
             });
 
         }
         else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
-            heading.setText("Phone Number");
-            title.setText("Current Phone Number");
+            heading.setText(getString(R.string.user_phonenumber));
+            title.setText(getString(R.string.phonenumber_curr));
             value.setText(getIntent().getStringExtra("value"));
             phoneFormat = getIntent().getStringExtra("value");
             authenticateType = getIntent().getStringExtra("title");
             isTouchId = Boolean.parseBoolean(getIntent().getStringExtra("touch"));
             isFaceLock = Boolean.parseBoolean(getIntent().getStringExtra("face"));
 
-            changeCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    try {
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                            } else {
-                                startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("OLD_PHONE", phoneFormat)
-                                        .putExtra("screen", "EditPhone"));
-                            }
+            changeCV.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                try {
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
                             startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("OLD_PHONE", phoneFormat)
                                     .putExtra("screen", "EditPhone"));
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("OLD_PHONE", phoneFormat)
+                                .putExtra("screen", "EditPhone"));
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
 
@@ -174,60 +158,41 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initObservers() {
-        dashboardViewModel.getProfileMutableLiveData().observe(Business_UserDetailsListenersActivity.this, new Observer<Profile>() {
-            @Override
-            public void onChanged(Profile profile) {
-                myApplicationObj.setMyProfile(profile);
-                if (getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
-                    String addressFormatted = "";
-                    if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                        addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                    }
-                    if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                        addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                    }
-                    if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                        addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                    }
-                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                        addressFormatted = addressFormatted + profile.getData().getState() + ", ";
-                    }
-
-                    if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                        addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                    }
-
-                    value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
+        dashboardViewModel.getProfileMutableLiveData().observe(Business_UserDetailsListenersActivity.this, profile -> {
+            myApplicationObj.setMyProfile(profile);
+            if (getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
+                String addressFormatted = "";
+                if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
                 }
-                if (getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")){
-                    value.setText(profile.getData().getEmail());
+                if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
                 }
-                if (getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")){
-                    String phne_number=profile.getData().getPhoneNumber().split("\\ ")[1];
-                    phne_number = "(" + phne_number.substring(0, 3) + ") " + phne_number.substring(3, 6) + "-" + phne_number.substring(6, 10);
-
-                    value.setText(phne_number);
+                if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+                }
+                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
                 }
 
+                if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+                }
 
-//                    myApplicationObj.setMyProfile(profile);
-//                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
-//                        userProfileIV.setVisibility(View.VISIBLE);
-//                        imageTextTV.setVisibility(View.GONE);
-//                        Glide.with(UserDetailsActivity.this)
-//                                .load(profile.getData().getImage())
-//                                .into(userProfileIV);
-//                    } else {
-//                        userProfileIV.setVisibility(View.GONE);
-//                        imageTextTV.setVisibility(View.VISIBLE);
-//                        String imageText ="";
-//                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
-//                                profile.getData().getLastName().substring(0,1).toUpperCase();
-//                        imageTextTV.setText(imageText);
-//                    }
-
+                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
             }
+            if (getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")){
+                value.setText(profile.getData().getEmail());
+            }
+            if (getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")){
+                String phne_number=profile.getData().getPhoneNumber().split(" ")[1];
+                phne_number = "(" + phne_number.substring(0, 3) + ") " + phne_number.substring(3, 6) + "-" + phne_number.substring(6, 10);
+
+                value.setText(phne_number);
+            }
+
         });
     }
 
@@ -235,84 +200,45 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-//            case 0:
-//                if (resultCode == RESULT_OK && data != null) {
-//                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-//                    Uri uri = getImageUri(this, selectedImage);
-//                    CropImage.activity(uri).start(this);
-//                        userProfileIV.setVisibility(View.VISIBLE);
-//                        imageTextTV.setVisibility(View.GONE);
-//                        userProfileIV.setImageBitmap(selectedImage);
-//                        uploadImage();
-//                }
-//                break;
-//            case 1:
-//                if (resultCode == RESULT_OK && data != null) {
-//                    try {
-//                        Uri selectedImage = data.getData();
-//                        if (selectedImage != null) {
-//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-////                                userProfileIV.setImageBitmap(bitmap);
-////                                userProfileIV.setVisibility(View.VISIBLE);
-////                                imageTextTV.setVisibility(View.GONE);
-////                                uploadImage();
-//                            Uri uri = getImageUri(this, bitmap);
-//                            CropImage.activity(uri).start(this);
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//                break;
-
-//            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE: {
-//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//                if (resultCode == RESULT_OK) {
-//                    Uri resultUri = result.getUri();
-//                    userProfileIV.setVisibility(View.VISIBLE);
-//                    imageTextTV.setVisibility(View.GONE);
-//                    userProfileIV.setImageURI(resultUri);
-//                    uploadImage();
-//
-//                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-//                    Exception error = result.getError();
-//                }
-//            }
-//            break;
-            case 251: {
-                if (resultCode == RESULT_OK) {
-                    if (authenticateType.equals("EMAIL")) {
+        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+            if (resultCode == RESULT_OK) {
+                switch (authenticateType) {
+                    case "EMAIL":
                         Intent ee = new Intent(Business_UserDetailsListenersActivity.this, EditEmailActivity.class);
                         startActivity(ee);
-                    } else if (authenticateType.equals("ADDRESS")) {
+                        break;
+                    case "ADDRESS":
                         Intent ea = new Intent(Business_UserDetailsListenersActivity.this, EditAddressActivity.class);
                         startActivity(ea);
-                    } else if (authenticateType.equals("PHONE")) {
+                        break;
+                    case "PHONE":
                         Intent ep = new Intent(Business_UserDetailsListenersActivity.this, EditPhoneActivity.class);
                         ep.putExtra("OLD_PHONE", phoneFormat);
                         startActivity(ep);
 
-                    }
-                } else {
-                    if (authenticateType.equals("EMAIL")) {
+                        break;
+                }
+            } else {
+                switch (authenticateType) {
+                    case "EMAIL":
                         startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("screen", "EditEmail"));
-                    } else if (authenticateType.equals("ADDRESS")) {
+                        break;
+                    case "ADDRESS":
                         startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("screen", "EditAddress"));
-                    } else if (authenticateType.equals("PHONE")) {
+                        break;
+                    case "PHONE":
                         startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("OLD_PHONE", phoneFormat)
                                 .putExtra("screen", "EditPhone"));
 
-                    }
+                        break;
                 }
             }
-            break;
         }
     }
 

@@ -322,4 +322,8 @@
     <string name="business_token_account">Business Token Account</string>
     <string name="available_balance">Available Balance 99.00 CYN</string>
     <string name="receive_payment">Receive Payment</string>
+    <string name="email_curr">Current Email</string>
+    <string name="address">Address</string>
+    <string name="address_curr">Current Address</string>
+    <string name="phonenumber_curr">Current Phone Number</string>
 </resources>
