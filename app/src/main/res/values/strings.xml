@@ -355,4 +355,9 @@
     <string name="open_new_account">Open New Account</string>
 
 
+    <string name="receive_payment">Receive Payment</string>
+    <string name="email_curr">Current Email</string>
+    <string name="address">Address</string>
+    <string name="address_curr">Current Address</string>
+    <string name="phonenumber_curr">Current Phone Number</string>
 </resources>
