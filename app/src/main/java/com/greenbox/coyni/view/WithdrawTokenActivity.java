@@ -1279,6 +1279,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 @Override
                 public void onClick(View view) {
                     cvvDialog.dismiss();
+                    Utils.hideKeypad(WithdrawTokenActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -1287,11 +1288,13 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     try {
                         etRemarks.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
+                        Utils.hideKeypad(WithdrawTokenActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

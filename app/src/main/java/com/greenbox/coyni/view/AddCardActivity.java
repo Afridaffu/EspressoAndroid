@@ -839,7 +839,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
 
                             } else {
-                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                             }
                         } else {
