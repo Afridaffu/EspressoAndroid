@@ -20,35 +20,6 @@
             android:layout_marginTop="@dimen/_102sdp"
             android:src="@drawable/ic_success_icon" />
 
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your Account Has Been Created"
-        android:textSize="@dimen/_15ssp"
-        android:layout_marginTop="@dimen/_42sdp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/_21sdp"
-        android:fontFamily="@font/opensans_bold"
-        android:textColor="@color/black"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:lineHeight="@dimen/_16ssp"
-        android:text="You’re almost there! Before you can start\ntokenizing your money. Please follow the \ninstructions."
-        android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp"
-        />
-    <androidx.cardview.widget.CardView
-        android:id="@+id/GetCV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_140sdp"
-        android:gravity="center"
-        app:cardBackgroundColor="@color/primary_color"
-        app:cardCornerRadius="@dimen/_33sdp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,6 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:lineHeight="@dimen/_16ssp"
             android:text="You’re almost there! Before you can start\ntokenizing your money. Please follow the \ninstructions."
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
