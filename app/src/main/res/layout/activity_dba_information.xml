@@ -52,9 +52,7 @@
         android:fontFamily="@font/opensans_bold"
         android:text="DBA Information"
         android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp"
-
-        />
+        android:textSize="@dimen/_16ssp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -365,17 +363,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_6sdp"
                     android:src="@drawable/ic_upload" />
+
                 <TextView
                     android:id="@+id/uploadTextTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="Upload DBA filing"
-                    android:layout_gravity="center"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_10ssp"
-                    android:visibility="visible"
-                    />
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/uploadLL"
@@ -455,5 +453,14 @@
                 android:textSize="@dimen/_11ssp" />
         </LinearLayout>
     </ScrollView>
+
+    <com.greenbox.coyni.intro_slider.AutoScrollViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </com.greenbox.coyni.intro_slider.AutoScrollViewPager>
+
 
 </LinearLayout>

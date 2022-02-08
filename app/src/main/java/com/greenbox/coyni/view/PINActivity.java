@@ -1,30 +1,21 @@
 package com.greenbox.coyni.view;
 
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.fingerprint.FingerprintManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -35,10 +26,10 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
+import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
-import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -48,13 +39,7 @@ import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
-import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import okhttp3.CertificatePinner;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -179,9 +164,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
             objMyApplication = (MyApplication) getApplicationContext();
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                businessIdentityVerificationViewModel.getBusinessTracker();
-            }
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
                     getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
@@ -486,6 +468,89 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             e.printStackTrace();
         }
 
+        try {
+            coyniViewModel.getStepUpResponseMutableLiveData().observe(this, new Observer<StepUpResponse>() {
+                @Override
+                public void onChanged(StepUpResponse stepUpResponse) {
+                    try {
+                        if (stepUpResponse != null) {
+                            if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
+                                Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
+                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                    businessIdentityVerificationViewModel.getBusinessTracker();
+                                }
+                                shakeAnimateUpDown();//new
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+
+                                            String strScreen = "";
+                                            if (getIntent().getStringExtra("screen") != null) {
+                                                strScreen = getIntent().getStringExtra("screen");
+                                            }
+                                            if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+                                                launchDashboard();
+                                            } else {
+                                                if (!isDontRemind) {
+                                                    if (Utils.checkBiometric(PINActivity.this)) {
+                                                        if (Utils.checkAuthentication(PINActivity.this)) {
+                                                            if (Utils.isFingerPrint(PINActivity.this)) {
+                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                        .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                        .putExtra("screen", strScreen));
+                                                            } else {
+                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                        .putExtra("ENABLE_TYPE", "FACE")
+                                                                        .putExtra("screen", strScreen));
+                                                            }
+                                                        } else {
+                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                    .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                    .putExtra("screen", strScreen));
+                                                        }
+                                                    } else {
+                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                .putExtra("screen", strScreen));
+                                                    }
+                                                } else {
+                                                    launchDashboard();
+                                                }
+                                            }
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                }, Utils.duration);
+                            } else {
+                                setErrorPIN();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+            @Override
+            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+
+                if (businessTrackerResponse != null) {
+                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+
+                        Log.e("Tracker resp", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -736,14 +801,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
     private void validatePIN() {
         try {
-//            dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
-//            dialog.setIndeterminate(false);
-//            dialog.setMessage("Please wait...");
-//            dialog.getWindow().setGravity(Gravity.CENTER);
-//            dialog.show();
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
-            coyniViewModel.validateCoyniPin(request);
+            //Uncomment for stepup process
+//            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
+//                coyniViewModel.stepUpPin(request);
+//            } else {
+                coyniViewModel.validateCoyniPin(request);
+//            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -936,4 +1002,5 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             ex.printStackTrace();
         }
     }
+
 }

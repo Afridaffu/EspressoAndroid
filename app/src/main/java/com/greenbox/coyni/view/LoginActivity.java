@@ -643,8 +643,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                                 getStatesUrl(login.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(login.getData().getAccountType());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
+//                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+//                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (login.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
@@ -715,8 +715,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
+//                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+//                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (loginResponse.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");

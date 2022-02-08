@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.greenbox.coyni.view.IdentityVerificationActivity;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -60,7 +61,7 @@ public class ImageUtility {
         return bitmap;
     }
 
-    public static Uri savePicture(Context context, Bitmap bitmap, ImageView photoImageView) {
+    public static Uri savePicture(Context context, Bitmap bitmap, ImageView photoImageView, String from) {
 
         Uri fileContentUri = null;
         try {
@@ -92,8 +93,19 @@ public class ImageUtility {
             fileContentUri = Uri.fromFile(mediaFile);
             mediaScannerIntent.setData(fileContentUri);
             context.sendBroadcast(mediaScannerIntent);
-            IdentityVerificationActivity.identityFile = mediaFile;
-            IdentityVerificationActivity.isFileSelected = true;
+            if (from.equals("IDVE")) {
+                IdentityVerificationActivity.identityFile = mediaFile;
+                IdentityVerificationActivity.isFileSelected = true;
+            } else if (from.equals("CI-AOI")) {
+                CompanyInformationActivity.aoiFile = mediaFile;
+                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(5);
+            } else if (from.equals("CI-EINLETTER")) {
+                CompanyInformationActivity.einLetterFile = mediaFile;
+                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(6);
+            } else if (from.equals("CI-W9")) {
+                CompanyInformationActivity.w9FormFile = mediaFile;
+                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

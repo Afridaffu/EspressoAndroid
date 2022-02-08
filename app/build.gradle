@@ -71,7 +71,8 @@ android {
             buildConfigField 'String', 'Country_Code', '\"US\"'
         }
         dev {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.172.13.210:9001/\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com/\"'
+//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.172.13.210:9001/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
