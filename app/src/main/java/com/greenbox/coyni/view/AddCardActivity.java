@@ -155,8 +155,6 @@ public class AddCardActivity extends AppCompatActivity {
             initialization();
             textWatchers();
             focusWatchers();
-            //etName.setText(objMyApplication.getStrUserName());
-//            Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
             initObserver();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -167,12 +165,9 @@ public class AddCardActivity extends AppCompatActivity {
     public void onBackPressed() {
         try {
             if (pagerPosition == 1) {
-//                layoutCard.setVisibility(View.VISIBLE);
-//                layoutAddress.setVisibility(View.GONE);
                 viewPager.setCurrentItem(0);
                 divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                 divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                //etCVV.setText("");
             } else {
                 super.onBackPressed();
             }
@@ -228,7 +223,6 @@ public class AddCardActivity extends AppCompatActivity {
             etlAddress2 = findViewById(R.id.etlAddress2);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
-//            etCardNumber.requestCNETFocus();
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
             etName.setHint("Name on Card");
@@ -250,7 +244,6 @@ public class AddCardActivity extends AppCompatActivity {
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-//            paymentMethodsViewModel.getPublicKey(objMyApplication.getUserId());
             paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
             objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
@@ -323,9 +316,9 @@ public class AddCardActivity extends AppCompatActivity {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(AddCardActivity.this);
                             mLastClickTime = SystemClock.elapsedRealtime();
-//                            layoutCard.setVisibility(View.GONE);
-//                            layoutAddress.setVisibility(View.VISIBLE);
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
@@ -362,7 +355,6 @@ public class AddCardActivity extends AppCompatActivity {
                                     prepareJson();
                                 }
                             }, 100);
-//                            prepareJson();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -412,21 +404,6 @@ public class AddCardActivity extends AppCompatActivity {
                 }
             });
 
-//            if (objMyApplication.getMyProfile() != null) {
-//                etAddress1.setText(objMyApplication.getMyProfile().getData().getAddressLine1());
-//                etAddress2.setText(objMyApplication.getMyProfile().getData().getAddressLine2());
-//                etCity.setText(objMyApplication.getMyProfile().getData().getCity());
-//                etState.setText(objMyApplication.getMyProfile().getData().getState());
-//                etZipCode.setText(objMyApplication.getMyProfile().getData().getZipCode());
-//                if (!etAddress1.getText().toString().trim().equals("") && !etCity.getText().toString().trim().equals("") &&
-//                        !etState.getText().toString().trim().equals("") && !etZipCode.getText().toString().trim().equals("")) {
-//                    isAddress1 = true;
-//                    isCity = true;
-//                    isState = true;
-//                    isZipcode = true;
-//                }
-//                enableOrDisableNext();
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -722,7 +699,6 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 isName = false;
                                 etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                                Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
                                 Utils.setUpperHintColor(etlName, getColor(R.color.light_gray));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
@@ -738,6 +714,7 @@ public class AddCardActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                             InputMethodManager imm = (InputMethodManager) AddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
                             imm.showSoftInput(etName, 0);
+                            nameErrorLL.setVisibility(GONE);
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -777,6 +754,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etExpiry.setHint("MM/YY");
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
+                            expiryErrorLL.setVisibility(GONE);
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -812,6 +790,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etCVV.setHint("123");
                             etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_green));
+                            cvvErrorLL.setVisibility(GONE);
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -841,6 +820,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
+                            address1ErrorLL.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -894,6 +874,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
+                            cityErrorLL.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -920,6 +901,7 @@ public class AddCardActivity extends AppCompatActivity {
                         } else {
                             etlState.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlState, getColor(R.color.primary_green));
+                            stateErrorLL.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -949,17 +931,11 @@ public class AddCardActivity extends AppCompatActivity {
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
                             }
-//                            else {
-//                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                                Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
-//                                zipErrorLL.setVisibility(VISIBLE);
-//                                zipErrorTV.setText("Zip Code must have at least 5 numbers");
-//                                isZipcode = false;
-//                            }
                         } else {
                             etZipCode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
+                            zipErrorLL.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1370,7 +1346,7 @@ public class AddCardActivity extends AppCompatActivity {
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("Verify");
+            ctKey.setKeyAction("Verify",this);
             ctKey.setScreenName("addcard");
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());

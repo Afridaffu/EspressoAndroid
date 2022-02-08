@@ -60,9 +60,11 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.BindingLayoutActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
+import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -142,7 +144,7 @@ public class Utils {
     public static Long mLastClickTime = 0L;
     public static final int duration = 1000;
     public static final int userTypeCust = 0;
-
+    public static final String DATA = "data";
     public static int[][] errorState, state;
     public static int[] errorColor, color;
     public static ColorStateList errorColorState, colorState;
@@ -380,17 +382,15 @@ public class Utils {
     }
 
     public static void displayAlert(String msg, Activity activity, String header, String fieldError) {
-//        Context context = new ContextThemeWrapper(activity, R.style.Theme_Coyni);
-//        new MaterialAlertDialogBuilder(context)
-//                .setTitle(R.string.app_name)
-//                .setMessage(msg)
-//                .setCancelable(false)
-//                .setPositiveButton("OK", (dialog, which) -> {
-//                    dialog.dismiss();
-//                }).show();
 
         if (!msg.equals("")) {
-            displayAlertNew(msg, activity, header);
+            if(msg.equals("Access token expired")){
+                Intent i = new Intent(activity, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(i);
+            }else{
+                displayAlertNew(msg, activity, header);
+            }
         } else {
             displayAlertNew(fieldError, activity, header);
         }

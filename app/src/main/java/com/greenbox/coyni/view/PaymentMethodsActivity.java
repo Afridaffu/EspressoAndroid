@@ -168,9 +168,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+            if (strCurrent.equals("firstError")) {
+                displayError();
+            } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
-//                strCurrent = "addpay";
                 addPayment();
             } else {
                 if (!isPayments) {
@@ -625,7 +626,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
-                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this);
+                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this,"customer");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(PaymentMethodsActivity.this);
                 rvPaymentMethods.setLayoutManager(mLayoutManager);
                 rvPaymentMethods.setItemAnimator(new DefaultItemAnimator());

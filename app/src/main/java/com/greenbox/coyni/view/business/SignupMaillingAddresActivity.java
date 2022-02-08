@@ -24,7 +24,7 @@ TextView textTV;
         addbenif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignupMaillingAddresActivity.this,AddBenificialOwnerActivity.class);
+                Intent intent = new Intent(SignupMaillingAddresActivity.this,AddBeneficialOwnerActivity.class);
                 startActivity(intent);
                 textTV.setVisibility(View.GONE);
             }

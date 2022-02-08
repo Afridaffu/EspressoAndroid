@@ -331,12 +331,18 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-6dp"
+        android:scrollbars="none"
+        >
     <LinearLayout
         android:id="@+id/businessUserDetailsLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+
         android:visibility="visible">
 
     <androidx.cardview.widget.CardView
@@ -344,7 +350,7 @@
         android:layout_height="@dimen/_88sdp"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:visibility="visible"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
@@ -463,7 +469,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.7dp"
+                android:layout_height="1dp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@color/light_gray" />
@@ -516,7 +522,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.7dp"
+                android:layout_height="1dp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@color/light_gray" />
@@ -569,7 +575,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.7dp"
+                android:layout_height="1dp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@color/light_gray" />
@@ -602,6 +608,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/cityErrorLL"
+            android:paddingBottom="@dimen/_23sdp"
             android:layout_marginTop="@dimen/_14sdp">
 
             <ImageButton
@@ -611,16 +618,16 @@
                 android:background="@color/white"
                 android:src="@drawable/ic_down"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/accountTIL"
+                app:layout_constraintEnd_toEndOf="@+id/b_accountTIL"
                 app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@+id/accountTIL"
-                app:layout_constraintTop_toTopOf="@+id/accountTIL"
-                app:layout_constraintVertical_bias="0.367"
+                app:layout_constraintStart_toStartOf="@+id/b_accountTIL"
+                app:layout_constraintTop_toTopOf="@+id/b_accountTIL"
+                app:layout_constraintVertical_bias="0.567"
                 app:layout_editor_absoluteX="336.24dp"
                 app:layout_editor_absoluteY="26.28dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/accountTIL"
+                android:id="@+id/b_accountTIL"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -629,11 +636,11 @@
                 app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                 app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                 app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                android:clickable="true"
                 app:boxCornerRadiusTopStart="@dimen/_10sdp"
                 app:boxStrokeColor="@color/primary_color"
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_23sdp"
                 app:expandedHintEnabled="false"
                 app:hintTextColor="@color/primary_color"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -641,12 +648,13 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/accountET"
+                    android:id="@+id/b_accountET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="creditCardSecurityCode"
                     android:cursorVisible="false"
                     android:editable="false"
+                    android:clickable="true"
                     android:focusable="false"
                     android:fontFamily="@font/opensans_semibold"
                     android:imeOptions="actionNext"
@@ -670,4 +678,5 @@
     </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+    </ScrollView>
 </LinearLayout>

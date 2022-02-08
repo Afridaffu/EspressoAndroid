@@ -9,6 +9,7 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
@@ -108,9 +109,11 @@ import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -121,6 +124,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface ApiService {
 
@@ -382,5 +386,8 @@ public interface ApiService {
 
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
+
+    @GET("api/v2/business/me/wallets")
+    Call<BusinessWalletResponse> meMerchantWallet();
 
 }

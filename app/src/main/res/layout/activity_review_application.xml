@@ -1533,7 +1533,6 @@
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_21sdp"
-                android:layout_marginBottom="@dimen/_40sdp"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -1550,7 +1549,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="I agree to"
+                    android:text="By clicking this box, I acknowledge I have read and agree to the"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
@@ -1586,7 +1585,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_30sdp"
                 android:layout_marginRight="@dimen/_21sdp"
                 android:layout_marginBottom="@dimen/_6sdp"
                 app:cardBackgroundColor="@color/inactive_color"

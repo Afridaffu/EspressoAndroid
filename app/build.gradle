@@ -63,7 +63,7 @@ android {
             buildConfigField 'String', 'Country_Code', '\"US\"'
         }
         qa {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-qa.coyni.com\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-qa.coyni.com/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://sat-qa-api-1367964791.us-east-1.elb.amazonaws.com/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.204.152.195:9001/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
@@ -71,7 +71,7 @@ android {
             buildConfigField 'String', 'Country_Code', '\"US\"'
         }
         dev {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com/\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com:80/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.172.13.210:9001/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
@@ -119,10 +119,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.4.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
-    implementation 'androidx.navigation:navigation-ui:2.3.5'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

@@ -300,7 +300,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
                         if (!hasFocus) {
-                            if (etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                            if ((etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim()))
+                                    || (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() < 6)) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                                 layoutEmailError.setVisibility(VISIBLE);
@@ -340,7 +341,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                                 layoutPwdError.setVisibility(VISIBLE);
-                                tvPwdError.setText("Invalid Password");
+//                                tvPwdError.setText("Invalid Password");
+                                tvPwdError.setText("Please enter a valid Password");
                             } else if (etPassword.getText().toString().trim().length() == 0) {
                                 etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
@@ -464,20 +466,36 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             forgotpwd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    hideAndClearFocus();
-                    Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                    i.putExtra("screen", "ForgotPwd");
-                    i.putExtra("email", etEmail.getText().toString().trim());
-                    startActivity(i);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        hideAndClearFocus();
+                        Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                        i.putExtra("screen", "ForgotPwd");
+                        i.putExtra("email", etEmail.getText().toString().trim());
+                        startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
             tvRetEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    hideAndClearFocus();
-                    Intent i = new Intent(LoginActivity.this, RetrieveEmailActivity.class);
-                    startActivity(i);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        hideAndClearFocus();
+                        Intent i = new Intent(LoginActivity.this, RetrieveEmailActivity.class);
+                        startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -497,8 +515,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 login();
                             } else {
                                 Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
-//                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.internet), LoginActivity.this, "", "");
@@ -693,8 +709,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onChanged(APIError apiError) {
                     dialog.dismiss();
                     if (apiError != null) {
-                        //                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-                        //                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
                         Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                     }
                 }

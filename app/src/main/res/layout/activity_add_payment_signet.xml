@@ -109,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/etlName"
-                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginHorizontal="@dimen/_26sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -166,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/etlName"
-                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginHorizontal="@dimen/_26sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -559,7 +559,7 @@
                     android:layout_marginHorizontal="@dimen/_21sdp"
                     android:layout_marginTop="@dimen/_21sdp"
                     android:gravity="center"
-                    app:cardBackgroundColor="@color/primary_color"
+                    app:cardBackgroundColor="@color/bg_inactive"
                     app:cardCornerRadius="@dimen/_22sdp"
                     app:cardElevation="0dp">
 

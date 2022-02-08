@@ -43,8 +43,8 @@
 
         </LinearLayout>
 
-        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
-            android:id="@+id/pnET"
+        <com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
+            android:id="@+id/companypnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center"

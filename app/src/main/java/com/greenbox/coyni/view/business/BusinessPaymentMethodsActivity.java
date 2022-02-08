@@ -9,11 +9,17 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,19 +28,23 @@ import android.widget.TextView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.PaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.List;
 
@@ -43,9 +53,10 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     PaymentMethodsResponse paymentMethodsResponse;
     BusinessDashboardViewModel businessDashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
+    PaymentMethodsViewModel paymentMethodsViewModel;
     String strSignOn = "", strCurrent = "";
     SignOnData signOnData;
-    ProgressDialog dialog;
+    ProgressDialog dialog, pDialog;
     RecyclerView rvPaymentMethods;
     LinearLayout lyAPayClose, lyExternalClose, lyPayBack;
     TextView tvBankError, tvSignetError, tvDCardError, tvLearnMore, tvBankCount, tvSignetCount, tvDCardCount;
@@ -67,38 +78,69 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
-            if (requestCode == 1 && data == null) {
-                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                    Utils.displayAlert("Bank integration has been cancelled", BusinessPaymentMethodsActivity.this, "", "");
-                } else {
-                    dialog = Utils.showProgressDialog(this);
-                    customerProfileViewModel.meSyncAccount();
+            if (requestCode > 0) {
+                switch (requestCode) {
+                    case 1:
+                        if (data == null) {
+                            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                                Utils.displayAlert("Bank integration has been cancelled", BusinessPaymentMethodsActivity.this, "", "");
+                            } else {
+                                dialog = Utils.showProgressDialog(this);
+                                customerProfileViewModel.meSyncAccount();
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (objMyApplication.getSignet()) {
+                            objMyApplication.setSignet(false);
+                            getPaymentMethods();
+                        }
+                        break;
+                    case 3:
+                        if (strCurrent.equals("debit")) {
+                            if (!objMyApplication.getCardSave()) {
+                                isDeCredit = true;
+                                ControlMethod("addpayment");
+                            } else {
+                                objMyApplication.setCardSave(false);
+                                ControlMethod("paymentMethods");
+                                strCurrent = "paymentMethods";
+                            }
+                            getPaymentMethods();
+                        }
+                        break;
+                    case 4:
+                        if (data.getStringExtra("screen") != null && data.getStringExtra("screen").equals("editcard")) {
+                            if (data.getStringExtra("action") != null && data.getStringExtra("action").equals("remove")) {
+                                deleteBank(objMyApplication.getSelectedCard());
+                            }
+                        }
+                        break;
                 }
-            } else if (requestCode == 2) {
-                if (objMyApplication.getSignet()) {
-                    isPayments = true;
-                    objMyApplication.setSignet(false);
-                    businessDashboardViewModel.meBusinessPaymentMethods();
-                }
-            }
-//            else if (requestCode == 3) {
-//                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
-//                    if (!objMyApplication.getCardSave()) {
-//                        isDeCredit = true;
-//                        ControlMethod("addpayment");
-//                    } else {
-//                        objMyApplication.setCardSave(false);
-//                        ControlMethod("paymentMethods");
-//                        strCurrent = "paymentMethods";
-//                    }
-//                    getPaymentMethods();
-//                }
-//            }
-            else {
+            } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (strCurrent.equals("firstError")) {
+                displayError();
+            } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                ControlMethod("addpayment");
+                addPayment();
+            } else {
+                if (!isPayments) {
+                    getPaymentMethods();
+                }
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -109,6 +151,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
+            paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             if (Utils.checkInternet(BusinessPaymentMethodsActivity.this)) {
                 if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
                     customerProfileViewModel.meSignOn();
@@ -244,6 +287,28 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+            @Override
+            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                pDialog.dismiss();
+                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    getPaymentMethods();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                pDialog.dismiss();
+                if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                    getPaymentMethods();
+                }
+            }
+        });
     }
 
     private void addPayment() {
@@ -307,7 +372,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
+                            strCurrent = "signet";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
                             startActivityForResult(i, 2);
                         }
@@ -322,9 +387,9 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                            strCurrent = "credit";
+                            strCurrent = "debit";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "credit");
+                            i.putExtra("card", "debit");
                             startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
@@ -416,7 +481,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
         PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
-                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, BusinessPaymentMethodsActivity.this);
+                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, BusinessPaymentMethodsActivity.this, "business");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(BusinessPaymentMethodsActivity.this);
                 rvPaymentMethods.setLayoutManager(mLayoutManager);
                 rvPaymentMethods.setItemAnimator(new DefaultItemAnimator());
@@ -486,6 +551,16 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
 
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void getPaymentMethods() {
+        try {
+            isPayments = true;
+            dialog = Utils.showProgressDialog(this);
+            businessDashboardViewModel.meBusinessPaymentMethods();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -575,6 +650,191 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 }
                 break;
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteBank(PaymentsList objPayment) {
+        try {
+            final Dialog dialog = new Dialog(BusinessPaymentMethodsActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.payment_remove);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            ImageView imgBankIcon = dialog.findViewById(R.id.imgBankIcon);
+            TextView tvBankName = dialog.findViewById(R.id.tvBankName);
+            TextView tvCardName = dialog.findViewById(R.id.tvCardName);
+            TextView tvAccount = dialog.findViewById(R.id.tvAccount);
+            TextView tvCardNumber = dialog.findViewById(R.id.tvCardNumber);
+            TextView tvNo = dialog.findViewById(R.id.tvNo);
+            TextView tvYes = dialog.findViewById(R.id.tvYes);
+            LinearLayout layoutCard = dialog.findViewById(R.id.layoutCard);
+            LinearLayout layoutBank = dialog.findViewById(R.id.layoutBank);
+            if (objPayment != null) {
+                if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+                    tvBankName.setText(objPayment.getBankName());
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
+                        tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvAccount.setText(objPayment.getAccountNumber());
+                    }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
+                } else {
+                    layoutCard.setVisibility(View.VISIBLE);
+                    layoutBank.setVisibility(View.GONE);
+                    tvCardNumber.setText("****" + objPayment.getLastFour());
+                    switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
+                        case "VISA":
+                            tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            imgBankIcon.setImageResource(R.drawable.ic_visaactive);
+                            break;
+                        case "MASTERCARD":
+                            tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
+                            imgBankIcon.setImageResource(R.drawable.ic_masteractive);
+                            break;
+                        case "AMERICANEXPRESS":
+                            tvCardName.setText("American Express Card");
+                            imgBankIcon.setImageResource(R.drawable.ic_amexactive);
+                            break;
+                        case "DISCOVER":
+                            tvCardName.setText("Discover Card");
+                            imgBankIcon.setImageResource(R.drawable.ic_discoveractive);
+                            break;
+                    }
+                }
+            }
+
+            tvNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            tvYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    pDialog = Utils.showProgressDialog(BusinessPaymentMethodsActivity.this);
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                        paymentMethodsViewModel.deleteBanks(objPayment.getId());
+                    } else {
+                        paymentMethodsViewModel.deleteCards(objPayment.getId());
+                    }
+                }
+            });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void expiry(PaymentsList objPayment) {
+        try {
+            final Dialog dialog = new Dialog(BusinessPaymentMethodsActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.payment_expire);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvMessage = dialog.findViewById(R.id.tvMessage);
+            TextView tvRemove = dialog.findViewById(R.id.tvRemove);
+            TextView tvEdit = dialog.findViewById(R.id.tvEdit);
+            if (objPayment != null) {
+                if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    tvMessage.setText("Seems like you have an issue with your bank account");
+                    tvEdit.setText("Relink");
+                    customerProfileViewModel.meSignOn();
+                } else {
+                    tvMessage.setText("Seems like you have an issue with your card");
+                    tvEdit.setText("Edit");
+                }
+
+            }
+            tvRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    deleteBank(objPayment);
+                }
+            });
+
+            tvEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    try {
+                        if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, EditCardActivity.class);
+                            startActivity(i);
+                        } else {
+                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                                isBank = true;
+                                objMyApplication.setResolveUrl(true);
+                                Intent i = new Intent(BusinessPaymentMethodsActivity.this, WebViewActivity.class);
+                                i.putExtra("signon", signOnData);
+                                startActivityForResult(i, 1);
+                            } else {
+                                Utils.displayAlert(strSignOn, BusinessPaymentMethodsActivity.this, "", "");
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void editCard() {
+        try {
+            Intent i = new Intent(BusinessPaymentMethodsActivity.this, EditCardActivity.class);
+            startActivityForResult(i, 4);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

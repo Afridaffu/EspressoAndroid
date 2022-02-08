@@ -225,7 +225,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             lyCDetails = findViewById(R.id.lyCDetails);
             lyBDetails = findViewById(R.id.lyBDetails);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
-            ctKey.setKeyAction("Buy\nToken");
+            ctKey.setKeyAction("Buy\nToken",this);
             ctKey.setScreenName("buy");
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
@@ -989,6 +989,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             TextView tvHeading = prevDialog.findViewById(R.id.tvHeading);
             LinearLayout layoutReference = prevDialog.findViewById(R.id.layoutReference);
             ImageView imgLogo = prevDialog.findViewById(R.id.imgLogo);
+            ImageView imgRefCopy = prevDialog.findViewById(R.id.imgRefCopy);
             CardView cvDone = prevDialog.findViewById(R.id.cvDone);
             if (objData.getGbxTransactionId().length() > 10) {
                 tvReferenceID.setText(objData.getGbxTransactionId().substring(0, 10) + "...");
@@ -1029,7 +1030,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     startActivity(i);
                 }
             });
-            layoutReference.setOnClickListener(new View.OnClickListener() {
+            tvReferenceID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getGbxTransactionId(), BuyTokenActivity.this);
+                }
+            });
+            imgRefCopy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(objData.getGbxTransactionId(), BuyTokenActivity.this);
@@ -1070,7 +1077,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK");
+            ctKey.setKeyAction("OK",this);
             ctKey.setScreenName("buycvv");
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);

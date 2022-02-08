@@ -102,6 +102,21 @@ public class OnboardActivity extends BaseActivity {
             SetTouchId();
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
             Utils.setIsBiometric(isBiometric);
+
+            if (!isDeviceID()) {
+                Utils.generateUUID(OnboardActivity.this);
+            }
+            strDeviceID = Utils.getDeviceID();
+            getStarted = findViewById(R.id.getStartedLL);
+            layoutLogin = findViewById(R.id.layoutLogin);
+            String url = BuildConfig.URL_PRODUCTION;
+            String refererUrl = BuildConfig.Referer;
+            Utils.setStrCCode(BuildConfig.Country_Code);
+            if (!url.equals("")) {
+                Utils.setStrURL_PRODUCTION(url);
+                Utils.setStrReferer(refererUrl);
+            }
+
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
                     layoutOnBoarding.setVisibility(View.GONE);
@@ -123,19 +138,19 @@ public class OnboardActivity extends BaseActivity {
                 }
             }
 
-            if (!isDeviceID()) {
-                Utils.generateUUID(OnboardActivity.this);
-            }
-            strDeviceID = Utils.getDeviceID();
-            getStarted = findViewById(R.id.getStartedLL);
-            layoutLogin = findViewById(R.id.layoutLogin);
-            String url = BuildConfig.URL_PRODUCTION;
-            String refererUrl = BuildConfig.Referer;
-            Utils.setStrCCode(BuildConfig.Country_Code);
-            if (!url.equals("")) {
-                Utils.setStrURL_PRODUCTION(url);
-                Utils.setStrReferer(refererUrl);
-            }
+//            if (!isDeviceID()) {
+//                Utils.generateUUID(OnboardActivity.this);
+//            }
+//            strDeviceID = Utils.getDeviceID();
+//            getStarted = findViewById(R.id.getStartedLL);
+//            layoutLogin = findViewById(R.id.layoutLogin);
+//            String url = BuildConfig.URL_PRODUCTION;
+//            String refererUrl = BuildConfig.Referer;
+//            Utils.setStrCCode(BuildConfig.Country_Code);
+//            if (!url.equals("")) {
+//                Utils.setStrURL_PRODUCTION(url);
+//                Utils.setStrReferer(refererUrl);
+//            }
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 

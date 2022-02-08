@@ -189,7 +189,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             try {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     etAmount.setHint("");
-                    //lyBalance.setVisibility(View.VISIBLE);
                     isCYN = false;
                     isUSD = true;
                     convertUSDValue();
@@ -210,6 +209,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     } else {
                         ctKey.disableButton();
                     }
+
                 } else if (editable.toString().equals(".")) {
                     etAmount.setText("");
                     ctKey.disableButton();
@@ -264,7 +264,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             lyBalance = findViewById(R.id.lyBalance);
             tvAvailableBal = findViewById(R.id.tvAvailableBal);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
-            ctKey.setKeyAction("Withdraw");
+            ctKey.setKeyAction("Withdraw",this);
             ctKey.setScreenName("withdraw");
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
@@ -763,7 +763,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         Boolean value = true;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = etAmount.getText().toString().trim().replace("\"", "");
+            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
                 tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);

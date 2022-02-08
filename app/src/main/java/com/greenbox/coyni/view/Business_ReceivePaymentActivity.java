@@ -48,11 +48,14 @@ import com.bumptech.glide.Glide;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import org.json.JSONException;
@@ -71,7 +74,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Business_ReceivePaymentActivity extends AppCompatActivity implements TextWatcher {
 
     TextView scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
-    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL,closeBtn;
+    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL, closeBtn;
     ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
@@ -85,7 +88,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     public static Business_ReceivePaymentActivity business_receivePaymentActivity;
 
     MyApplication objMyApplication;
-    DashboardViewModel dashboardViewModel;
+    BusinessDashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
     boolean isTorchOn = true, isQRScan = false;
     ImageView toglebtn1;
@@ -165,7 +168,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
 
     private void initialization() {
         try {
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
             closeBtnScanCode = findViewById(R.id.closeBtnSC);
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
@@ -175,11 +178,11 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
 //            scannerLayout = findViewById(R.id.scannerLayout);
 //            scannerBar = findViewById(R.id.lineView);
 //            flashLL = findViewById(R.id.flashBtnRL);
-            closeBtn=findViewById(R.id.receivePaymentLL);
+            closeBtn = findViewById(R.id.receivePaymentLL);
             idIVQrcode = (ImageView) findViewById(R.id.b_idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
-            business_receivePaymentActivity=this;
+            business_receivePaymentActivity = this;
             scanMeRequestAmount = findViewById(R.id.scanMeRequestAmount);
             scanAmountLL = findViewById(R.id.scanAmountLL);
 //            layoutHead = findViewById(R.id.layoutHead);
@@ -229,12 +232,12 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-            WalletResponse walletResponse = objMyApplication.getWalletResponse();
+            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
             if (walletResponse != null) {
-                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
+                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
                 generateQRCode(strWallet);
             }
-            tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
+            tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -302,7 +305,7 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
                             setAmount = setAmountDialog.findViewById(R.id.setAmountET);
                             InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                             ctKey.setInputConnection(ic);
-                            ctKey.setKeyAction("OK");
+                            ctKey.setKeyAction("OK", com.greenbox.coyni.view.Business_ReceivePaymentActivity.this);
                             ctKey.setScreenName("receivepayments");
                             fontSize = setAmount.getTextSize();
                             setAmount.requestFocus();
@@ -337,16 +340,13 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
             });
 
 
-
-
             savetoAlbum.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
                         if (ContextCompat.checkSelfPermission(Business_ReceivePaymentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                             ActivityCompat.requestPermissions(Business_ReceivePaymentActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
-                        }
-                        else {
+                        } else {
                             saveToGallery();
                             Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
                         }
@@ -386,12 +386,11 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     }
 
 
-
     @Override
     protected void onResume() {
         try {
             super.onResume();
-            dashboardViewModel.meWallet();
+            dashboardViewModel.meMerchantWallet();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -646,12 +645,12 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     }
 
     private void initObservers() {
-        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
+        dashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
-            public void onChanged(WalletResponse walletResponse) {
-                if (walletResponse!=null){
-                    objMyApplication.setWalletResponse(walletResponse);
-                    strWallet=walletResponse.getData().getWalletInfo().get(0).getWalletId();
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                if (businessWalletResponse != null) {
+                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                    strWallet = businessWalletResponse.getData().getWalletNames().get(0).getWalletId();
                     generateQRCode(strWallet);
                 }
             }
@@ -712,13 +711,12 @@ public class Business_ReceivePaymentActivity extends AppCompatActivity implement
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode==123){
+        if (requestCode == 123) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 Utils.displayAlert("Requires Access to Your Storage.", Business_ReceivePaymentActivity.this, "", "");
-            }
-            else if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            } else if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 saveToGallery();
                 Utils.showCustomToast(Business_ReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
             }

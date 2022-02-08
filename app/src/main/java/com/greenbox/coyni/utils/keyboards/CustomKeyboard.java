@@ -28,7 +28,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
     private LinearLayout keyBack, keyAction;
     private SparseArray<String> keyValues = new SparseArray<>();
     InputConnection inputConnection;
-    Context mContext;
+    Context mContext, activityContext;
     String strScreen = "";
     String enteredText = "";
 
@@ -154,7 +154,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             AddCardActivity.addCardActivity.verifyClick();
                             break;
                         case "cvv":
-                            BuyTokenPaymentMethodsActivity.buyTokenPaymentMethodsActivity.okClick();
+                            BuyTokenPaymentMethodsActivity bpm = (BuyTokenPaymentMethodsActivity) activityContext;
+                            bpm.okClick();
+//                            BuyTokenPaymentMethodsActivity.buyTokenPaymentMethodsActivity.okClick();
                             break;
                         case "buy":
                             BuyTokenActivity.buyTokenActivity.buyTokenClick();
@@ -185,8 +187,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         inputConnection = ic;
     }
 
-    public void setKeyAction(String actionName) {
+    public void setKeyAction(String actionName, Context context) {
         keyActionText.setText(actionName);
+        activityContext = context;
     }
 
 

@@ -20,6 +20,7 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -89,6 +90,7 @@ public class MyApplication extends Application {
     TransactionListRequest transactionListSearch = new TransactionListRequest();
     Double withdrawAmount;
     BusinessTrackerResponse businessTrackerResponse;
+    WalletResponseData walletResponseData;
 
 
     public UserDetails getUserDetails() {
@@ -783,6 +785,14 @@ public class MyApplication extends Application {
 
     public void setAccountType(int accountType) {
         this.accountType = accountType;
+    }
+
+    public WalletResponseData getWalletResponseData() {
+        return walletResponseData;
+    }
+
+    public void setWalletResponseData(WalletResponseData walletResponseData) {
+        this.walletResponseData = walletResponseData;
     }
 
     public Bitmap convertImageURIToBitMap(String encodedString) {

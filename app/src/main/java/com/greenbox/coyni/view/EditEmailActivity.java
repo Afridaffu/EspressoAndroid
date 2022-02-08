@@ -597,8 +597,13 @@ public class EditEmailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            newEmailET.requestFocus();
-            b_newEmailET.requestFocus();
+
+            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                newEmailET.requestFocus();
+            }
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT) {
+                b_newEmailET.requestFocus();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
