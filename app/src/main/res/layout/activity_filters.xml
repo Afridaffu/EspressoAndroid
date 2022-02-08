@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/_10sdp"
     android:paddingEnd="@dimen/_20sdp"
     android:paddingBottom="@dimen/_20sdp"
-    android:theme="@style/Theme.Coyni">
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <View
         android:layout_width="@dimen/_43sdp"
@@ -209,6 +209,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:clickable="false"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Account Transfer"
                         android:textAlignment="center"
@@ -216,8 +217,7 @@
                         android:textSize="@dimen/_11ssp"
                         android:visibility="invisible"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
-                        app:chipMinHeight="@dimen/_32sdp"
-                        android:clickable="false"/>
+                        app:chipMinHeight="@dimen/_32sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -385,9 +385,9 @@
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
+                        android:visibility="gone"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
-                        app:chipMinHeight="@dimen/_32sdp"
-                        android:visibility="gone"/>
+                        app:chipMinHeight="@dimen/_32sdp" />
 
                 </LinearLayout>
 
@@ -397,26 +397,27 @@
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:orientation="horizontal">
 
-<!--                    <com.google.android.material.chip.Chip-->
-<!--                        android:id="@+id/transSubTypeIP"-->
-<!--                        style="@style/Widget.MaterialComponents.Chip.Choice"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginRight="@dimen/_10sdp"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:fontFamily="@font/opensans_semibold"-->
-<!--                        android:text="Instant Pay"-->
-<!--                        android:textAlignment="center"-->
-<!--                        android:textColor="@color/chip_text_color"-->
-<!--                        android:textSize="@dimen/_11ssp"-->
-<!--                        app:chipBackgroundColor="@color/chipbackgroundcolor"-->
-<!--                        app:chipMinHeight="@dimen/_32sdp" />-->
+                    <!--                    <com.google.android.material.chip.Chip-->
+                    <!--                        android:id="@+id/transSubTypeIP"-->
+                    <!--                        style="@style/Widget.MaterialComponents.Chip.Choice"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginRight="@dimen/_10sdp"-->
+                    <!--                        android:layout_weight="1"-->
+                    <!--                        android:fontFamily="@font/opensans_semibold"-->
+                    <!--                        android:text="Instant Pay"-->
+                    <!--                        android:textAlignment="center"-->
+                    <!--                        android:textColor="@color/chip_text_color"-->
+                    <!--                        android:textSize="@dimen/_11ssp"-->
+                    <!--                        app:chipBackgroundColor="@color/chipbackgroundcolor"-->
+                    <!--                        app:chipMinHeight="@dimen/_32sdp" />-->
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transSubTypeGiftCard"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Gift Card"
@@ -424,8 +425,7 @@
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
-                        app:chipMinHeight="@dimen/_32sdp"
-                        android:layout_marginRight="@dimen/_10sdp"/>
+                        app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transSubTypeFW"
@@ -450,26 +450,27 @@
                     android:orientation="horizontal">
 
 
-<!--                    <com.google.android.material.chip.Chip-->
-<!--                        android:id="@+id/transSubTypeFW"-->
-<!--                        style="@style/Widget.MaterialComponents.Chip.Choice"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginRight="@dimen/_10sdp"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:fontFamily="@font/opensans_semibold"-->
-<!--                        android:text="Failed Withdraw"-->
-<!--                        android:textAlignment="center"-->
-<!--                        android:textColor="@color/chip_text_color"-->
-<!--                        android:textSize="@dimen/_11ssp"-->
-<!--                        app:chipBackgroundColor="@color/chipbackgroundcolor"-->
-<!--                        app:chipMinHeight="@dimen/_32sdp" />-->
+                    <!--                    <com.google.android.material.chip.Chip-->
+                    <!--                        android:id="@+id/transSubTypeFW"-->
+                    <!--                        style="@style/Widget.MaterialComponents.Chip.Choice"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginRight="@dimen/_10sdp"-->
+                    <!--                        android:layout_weight="1"-->
+                    <!--                        android:fontFamily="@font/opensans_semibold"-->
+                    <!--                        android:text="Failed Withdraw"-->
+                    <!--                        android:textAlignment="center"-->
+                    <!--                        android:textColor="@color/chip_text_color"-->
+                    <!--                        android:textSize="@dimen/_11ssp"-->
+                    <!--                        app:chipBackgroundColor="@color/chipbackgroundcolor"-->
+                    <!--                        app:chipMinHeight="@dimen/_32sdp" />-->
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transSubTypeCW"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Canceled Withdraw"
@@ -477,8 +478,7 @@
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
-                        app:chipMinHeight="@dimen/_32sdp"
-                        android:layout_marginRight="@dimen/_10sdp"/>
+                        app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transSubTypeSOToken"
@@ -487,6 +487,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
+                        android:clickable="false"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Sale Order: Token"
                         android:textAlignment="center"
@@ -494,8 +495,7 @@
                         android:textSize="@dimen/_11ssp"
                         android:visibility="invisible"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
-                        app:chipMinHeight="@dimen/_32sdp"
-                        android:clickable="false"/>
+                        app:chipMinHeight="@dimen/_32sdp" />
 
 
                 </LinearLayout>
@@ -687,16 +687,22 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_weight="1"
                             android:background="@android:color/transparent"
+                            android:digits="0123456789."
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="(CYN)"
                             android:imeOptions="actionDone"
                             android:inputType="numberDecimal"
                             android:maxLength="@string/maxlength"
+                            android:maxLines="1"
+                            android:singleLine="true"
                             android:textColor="@color/primary_black"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
+                            android:textIsSelectable="false"
                             android:textSize="@dimen/_11ssp" />
+
                     </LinearLayout>
+
 
                     <TextView
                         android:layout_width="wrap_content"

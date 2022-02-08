@@ -220,6 +220,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         isLoggedOut = true;
+                        objMyApplication.setStrRetrEmail("");
                         dropAllTables();
                         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -105,7 +105,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     public static BusinessAddCardActivity businessaddCardActivity;
     CardTypeResponse objCard;
-    Boolean isName = false, isExpiry = false,  isNextEnabled = false;
+    Boolean isName = false, isExpiry = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
     TextView tvError;
@@ -257,7 +257,6 @@ public class BusinessAddCardActivity extends AppCompatActivity {
             }
 
             etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
-
 
 
             etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -615,7 +614,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                 etExpiry.requestFocus();
                 Utils.displayAlert("Please enter valid Expiry Date", BusinessAddCardActivity.this, "", "");
                 return value = false;
-            }else if (!objCard.getData().getValid()) {
+            } else if (!objCard.getData().getValid()) {
                 Utils.displayAlert("Invalid request! Please check the card and try again.", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit") && objCard.getData().getCardType().toLowerCase().equals("credit")) {
@@ -1275,7 +1274,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("Verify");
+            ctKey.setKeyAction("Verify", BusinessAddCardActivity.this);
             ctKey.setScreenName("addcard");
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
