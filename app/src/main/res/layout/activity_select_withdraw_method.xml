@@ -77,7 +77,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
                     android:layout_marginBottom="@dimen/_12sdp"
@@ -167,7 +166,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Use a Visa or MasterCard debit cards for instant coyni withdraws via Instant Pay"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9sdp" />
+                        android:textSize="@dimen/_9ssp" />
 
                 </LinearLayout>
                 <ImageView
@@ -224,7 +223,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Purchase gift cards from over 100 popular stores, restaurants, and more"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9sdp" />
+                        android:textSize="@dimen/_9ssp" />
 
                 </LinearLayout>
 
@@ -283,7 +282,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/signet_ac_withdrawing_funds"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9sdp" />
+                        android:textSize="@dimen/_9ssp" />
 
                 </LinearLayout>
 

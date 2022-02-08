@@ -172,6 +172,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:text="07/27/2020 10:36:14"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
                                 android:textColor="@color/primary_black"
@@ -201,7 +202,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text=""
+                                android:text="$100.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -230,7 +231,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text=""
+                                android:text="$1.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -274,7 +275,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text=""
+                                android:text="$101.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -327,7 +328,7 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="right"
-                                    android:text=""
+                                    android:text="874jeM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -368,7 +369,7 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="right"
-                                    android:text=""
+                                    android:text="1d3hsM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -403,7 +404,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text=""
+                                android:text="BUYTOKENCYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -450,7 +451,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text=""
+                                android:text="Dan Nusinovich"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -478,7 +479,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="123456"
+                                android:text="••••5359"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 

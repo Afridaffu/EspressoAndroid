@@ -195,7 +195,8 @@
                 android:layout_marginHorizontal="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_129sdp"
                 app:cardBackgroundColor="@color/bg_inactive"
-                app:cardCornerRadius="@dimen/_21sdp">
+                app:cardCornerRadius="@dimen/_21sdp"
+                tools:ignore="MissingClass">
 
                 <TextView
                     android:layout_width="wrap_content"

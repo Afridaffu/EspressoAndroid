@@ -128,7 +128,7 @@
                 android:paddingEnd="16dp"
                 android:paddingRight="16dp"
                 android:text="Slide to Confirm"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_color"
                 android:textSize="@dimen/_15sdp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/im_lock"
@@ -153,7 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:src="@drawable/double_left_bggreen" />
+                    android:src="@drawable/ic_double_left" />
 
             </androidx.cardview.widget.CardView>
 
