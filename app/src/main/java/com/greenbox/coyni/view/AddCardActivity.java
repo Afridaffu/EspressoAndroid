@@ -633,7 +633,7 @@ public class AddCardActivity extends AppCompatActivity {
             if (!etExpiry.getText().toString().equals("") && etExpiry.getText().toString().length() == 5) {
                 Year year = Year.parse(etExpiry.getText().toString().split("/")[1], DateTimeFormatter.ofPattern("yy"));
                 String strDate = "01/" + etExpiry.getText().toString().split("/")[0] + "/" + year.toString();
-                diffMonths = objMyApplication.monthsBetweenDates(new Date(), getDate(strDate));
+                diffMonths = objMyApplication.monthsBetweenDates(new Date(), objMyApplication.getDate(strDate));
             }
             String year = "";
             SimpleDateFormat ydf = new SimpleDateFormat("yy");
@@ -652,17 +652,6 @@ public class AddCardActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
         return value;
-    }
-
-    private Date getDate(String date) {
-        Date dtExpiry = null;
-        try {
-            SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
-            dtExpiry = spf.parse(date);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return dtExpiry;
     }
 
     private void focusWatchers() {
@@ -1346,7 +1335,7 @@ public class AddCardActivity extends AppCompatActivity {
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("Verify",this);
+            ctKey.setKeyAction("Verify", this);
             ctKey.setScreenName("addcard");
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
