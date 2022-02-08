@@ -56,14 +56,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
     CardView cvSave, cvLogin;
     LinearLayout layoutNewPassword;
     RelativeLayout layoutDone;
-    TextInputLayout etlPassword, etlCPassword;
-    TextInputEditText etPassword, etCPassword;
-    TextView tvPasswordInfo, tvHead, tvMessage, tvchangepass;
+    TextView tvPasswordInfo, tvHead, tvMessage, tvchangepass, passwordErrorTV, confPassErrorTV;
     TextInputLayout passwordTIL, confPasswordTIL, currentPass;
     TextInputEditText passwordET, confirmPasswordET, currentPassET;
     LinearLayout layoutIndicator;
     ProgressDialog dialog;
-    LinearLayout mismatchErrorTV;
+    LinearLayout passwordErrorLL, confPassErrorLL;
     private Pattern strong, medium;
     Boolean isPassword = false, isConfirm = false, isPwdEye = false, isCPwdEye = false, isOldPwd = true;
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
@@ -127,7 +125,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
             tvPasswordInfo = findViewById(R.id.tvPasswordInfo);
             strengthOne = findViewById(R.id.strengthOne);
             strengthTwo = findViewById(R.id.strengthTwo);
-            mismatchErrorTV = findViewById(R.id.oldnewMatchTV);
+            passwordErrorLL = findViewById(R.id.passwordErrorLL);
+            confPassErrorLL = findViewById(R.id.confPassErrorLL);
             strengthThree = findViewById(R.id.strengthThree);
             layoutNewPassword = findViewById(R.id.layoutNewPassword);
             layoutDone = findViewById(R.id.layoutDone);
@@ -136,6 +135,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
             tvchangepass = findViewById(R.id.tvMessageChangePass);
             tvHead = findViewById(R.id.tvHead);
             tvMessage = findViewById(R.id.tvMessage);
+            passwordErrorTV = findViewById(R.id.passwordErrorTV);
+            confPassErrorTV = findViewById(R.id.confPassErrorTV);
             strong = Pattern.compile(STRONG_PATTERN);
             medium = Pattern.compile(MEDIUM_PATTERN);
             cvSave.setEnabled(false);
@@ -177,12 +178,13 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
                         try {
-//                            passwordET.setHint("8-12 Characters");
                             passwordET.setHint("Password");
                             layoutIndicator.setVisibility(VISIBLE);
                             passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
                             passwordTIL.setHint("New Password");
+                            tvPasswordInfo.setVisibility(VISIBLE);
+                            passwordErrorLL.setVisibility(GONE);
                         } catch (Resources.NotFoundException e) {
                             e.printStackTrace();
                         }
@@ -193,6 +195,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         if (passwordET.getText().toString().trim().length() == 0) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.light_gray));
+                            tvPasswordInfo.setVisibility(GONE);
+                            passwordErrorLL.setVisibility(VISIBLE);
+                            passwordErrorTV.setText("Field Required");
                         } else if (!strong.matcher(passwordET.getText().toString().trim()).matches()) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
@@ -219,11 +224,14 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                         confPasswordTIL.setHint("Confirm Password");
+                        confPassErrorLL.setVisibility(GONE);
                     } else {
                         confirmPasswordET.setHint("");
                         if (confirmPasswordET.getText().toString().trim().length() == 0) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+                            confPassErrorLL.setVisibility(VISIBLE);
+                            confPassErrorTV.setText("Field Required");
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));

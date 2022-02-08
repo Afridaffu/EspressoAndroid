@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_26sdp"
             android:fontFamily="@font/opensans_semibold"
+            android:lineHeight="@dimen/_26ssp"
             android:text="Is your DBA information the same as your\ncompany information?"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />

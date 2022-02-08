@@ -65,6 +65,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
+                            android:text="Fire BBQ"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_14ssp" />
 
@@ -73,6 +74,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_6sdp"
+                            android:text="Account ID M-1234"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_10ssp" />
@@ -97,6 +99,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
+                                android:text="Active"
+
+                                android:textColor="@color/active_green"
                                 android:layout_marginTop="@dimen/_6sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp" />
@@ -329,7 +334,7 @@
                             android:background="@color/viewcolor" />
 
                         <LinearLayout
-                            android:id="@+id/bBAInformationLL"
+                            android:id="@+id/DBAInformationLL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"

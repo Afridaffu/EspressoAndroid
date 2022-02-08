@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_33sdp"
                 android:fontFamily="@font/opensans_regular"
+                android:lineHeight="@dimen/_21ssp"
                 android:text="@string/your_bank_account_has_been_successfully"
                 android:textAlignment="center"
                 android:textColor="@color/primary_black"
@@ -149,16 +150,16 @@
             android:textSize="@dimen/_12ssp" />
     </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/saveTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_36sdp"
-            android:fontFamily="@font/opensans_regular"
-            android:text="@string/saved_automatically"
-            android:textAlignment="center"
-            android:textColor="@color/xdark_gray"
-            android:textSize="@dimen/_11sdp" />
+    <TextView
+        android:id="@+id/saveTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_36sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:text="@string/saved_automatically"
+        android:textAlignment="center"
+        android:textColor="@color/xdark_gray"
+        android:textSize="@dimen/_11ssp" />
 </RelativeLayout>
