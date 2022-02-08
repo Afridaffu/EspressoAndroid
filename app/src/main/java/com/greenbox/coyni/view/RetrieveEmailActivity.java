@@ -92,19 +92,21 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 firstNameErrorLL.setVisibility(GONE);
                 Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_black));
-            } else if (firstName.getText().toString().trim().length() == 0) {
-                firstNameErrorLL.setVisibility(VISIBLE);
-                firstNameErrorTV.setText("Field Required");
             }
+//            else if (firstName.getText().toString().trim().length() == 0) {
+//                firstNameErrorLL.setVisibility(VISIBLE);
+//                firstNameErrorTV.setText("Field Required");
+//            }
             enableButton();
         } else if (charSequence == lastName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 lastNameErrorLL.setVisibility(GONE);
                 Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_black));
-            } else if (lastName.getText().toString().trim().length() == 0) {
-                lastNameErrorLL.setVisibility(VISIBLE);
-                lastNameErrorTV.setText("Field Required");
             }
+//            else if (lastName.getText().toString().trim().length() == 0) {
+//                lastNameErrorLL.setVisibility(VISIBLE);
+//                lastNameErrorTV.setText("Field Required");
+//            }
             enableButton();
         }
     }
@@ -113,7 +115,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     public void afterTextChanged(Editable s) {
         if (s == firstName.getEditableText()) {
             try {
-                String str = firstName.getText().toString();
+                String str = firstName.getText().toString().trim();
                 if (str.length() > 0 && str.substring(0).equals(" ")) {
                     firstName.setText("");
                     firstName.setSelection(firstName.getText().length());
@@ -123,6 +125,11 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                 } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
                     firstName.setText("");
                     firstName.setSelection(firstName.getText().length());
+                } else if (firstName.getText().toString().trim().isEmpty()) {
+                    firstName.removeTextChangedListener(RetrieveEmailActivity.this);
+                    firstName.setText("");
+                    firstName.addTextChangedListener(RetrieveEmailActivity.this);
+                    firstName.setSelection(firstName.getText().length());
                 }
 
             } catch (Exception ex) {
@@ -131,12 +138,17 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 
         } else if (s == lastName.getEditableText()) {
             try {
-                String str = lastName.getText().toString();
+                String str = lastName.getText().toString().trim();
                 if (str.length() > 0 && str.substring(0).equals(" ")) {
                     lastName.setText("");
                     lastName.setSelection(lastName.getText().length());
                 } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
                     lastName.setText(lastName.getText().toString().replaceAll(".", ""));
+                    lastName.setSelection(lastName.getText().length());
+                } else if (lastName.getText().toString().trim().isEmpty()) {
+                    lastName.removeTextChangedListener(RetrieveEmailActivity.this);
+                    lastName.setText("");
+                    lastName.addTextChangedListener(RetrieveEmailActivity.this);
                     lastName.setSelection(lastName.getText().length());
                 }
 
@@ -278,10 +290,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             public void onChanged(RetrieveEmailResponse retrieveEmailResponse) {
                 if (retrieveEmailResponse != null) {
                     if (!retrieveEmailResponse.getStatus().toLowerCase().equals("error")) {
-//                        SMSResend resend = new SMSResend();
-//                        resend.setCountryCode(Utils.getStrCCode());
-//                        resend.setPhoneNumber(phoneNumber);
-//                        loginViewModel.smsotpresend(resend);
                         Intent i = new Intent(RetrieveEmailActivity.this, OTPValidation.class);
                         i.putExtra("OTP_TYPE", "MOBILE");
                         i.putExtra("MOBILE", phoneNumber);
@@ -294,9 +302,6 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         dialog.dismiss();
                         if (retrieveEmailResponse.getData() != null) {
                             if (!retrieveEmailResponse.getData().getMessage().equals("")) {
-//                                Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
-//                                emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
-
                                 Utils.emailPasswordIncorrectDialog("", RetrieveEmailActivity.this, "");
                             }
                         } else {
@@ -310,9 +315,10 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         loginViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError apiError) {
-                dialog.dismiss();
+//                dialog.dismiss();
                 if (apiError != null) {
                     if (apiError.getError().getErrorCode().equals("218020") || apiError.getError().getErrorDescription().contains("issue with your OTP")) {
+                        dialog.dismiss();
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), RetrieveEmailActivity.this, "", apiError.getError().getFieldErrors().get(0));
                         } else {
@@ -371,14 +377,13 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 
     private void displayNoAccount() {
         try {
-            if (dialog != null) {
-                dialog.dismiss();
-            }
+//            if (dialog != null) {
+//                dialog.dismiss();
+//            }
             Intent i = new Intent(RetrieveEmailActivity.this, BindingLayoutActivity.class);
             i.putExtra("screen", "retEmailfail");
             startActivity(i);
             finish();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
