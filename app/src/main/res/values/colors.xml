@@ -21,6 +21,7 @@
     <color name="at_gray">#f2f5f8</color>
     <color name="boxbackgroundgray">#F2F4F5</color>
     <color name="light_gray">#C5C5C5</color>
+    <color name="primary_light_gray">#D8E2F0</color>
     <color name="et_bg_gray">#f2f4f5</color>
     <color name="dark_gray">#909090</color>
     <color name="xdark_gray">#767676</color>

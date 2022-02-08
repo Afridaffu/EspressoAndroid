@@ -36,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:lineHeight="@dimen/_16ssp"
         android:text="You’re almost there! Before you can start\ntokenizing your money. Please follow the \ninstructions."
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_12ssp"

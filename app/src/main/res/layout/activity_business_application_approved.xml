@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:text="Thank you for your interest in coyni. After\ncarefully reviewing. The coyni team made\ndecision to approve your application with"
         android:textSize="@dimen/_11ssp"
+        android:lineHeight="@dimen/_16ssp"
         android:textColor="@color/primary_black"
         android:fontFamily="@font/opensans_regular"
         android:layout_gravity="center"
@@ -53,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/primary_black"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:textSize="@dimen/_11ssp"
                 android:text="reserve conditions."
                 android:fontFamily="@font/opensans_semibold"
@@ -61,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_x"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginLeft="@dimen/_5sdp"
                 />
         </LinearLayout>
@@ -134,6 +137,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
             app:cardCornerRadius="@dimen/_7sdp"
             android:layout_marginBottom="@dimen/_55sdp"
             >

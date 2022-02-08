@@ -33,6 +33,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lineHeight="@dimen/_26sdp"
             android:text="Are you sure you want to decline this \nreserve rule and cancel your merchant \napplication? You will need to complete \nanother application to apply again."
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/primary_black"

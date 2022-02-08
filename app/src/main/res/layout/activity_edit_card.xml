@@ -314,6 +314,7 @@
                             android:layout_height="wrap_content"
                             android:autofillHints="creditCardSecurityCode"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="textVisiblePassword|textCapSentences"

@@ -302,7 +302,7 @@
                             android:layout_width="1dp"
                             android:layout_height="@dimen/_35sdp"
                             android:layout_centerInParent="true"
-                            android:background="@color/vlight_gray"></View>
+                            android:background="@color/vlight_gray"/>
 
                         <LinearLayout
                             android:id="@+id/lyShare"

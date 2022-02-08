@@ -290,7 +290,7 @@
             android:layout_height="@dimen/_43sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_20sdp"
-            app:cardBackgroundColor="@color/inactive_color"
+            app:cardBackgroundColor="@color/primary_color"
             app:cardCornerRadius="@dimen/_22sdp">
 
             <LinearLayout

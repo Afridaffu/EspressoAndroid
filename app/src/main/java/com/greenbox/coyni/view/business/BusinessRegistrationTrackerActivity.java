@@ -184,7 +184,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (businessTrackerResponse.getData().isDbaInfo()) {
-                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBenificialOwnerActivity.class);
+                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBeneficialOwnerActivity.class);
                     startActivity(intent);
                 }
             }
