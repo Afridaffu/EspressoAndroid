@@ -165,9 +165,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             dialog.setMessage("Please wait...");
                             dialog.show();
                             loginViewModel.emailotpresend(etEmail.getText().toString().trim());
-                        } else {
+                        } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                            layoutEmailError.setVisibility(VISIBLE);
+                            tvEmailError.setText("Please Enter a valid Email");
+                            etEmail.clearFocus();
+                        } else {
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                            Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Field Required");
                             etEmail.clearFocus();
@@ -212,10 +219,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    boolean isEmailValid(CharSequence email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     @Override

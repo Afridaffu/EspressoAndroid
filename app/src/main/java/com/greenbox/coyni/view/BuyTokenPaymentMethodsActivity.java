@@ -749,7 +749,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             etCVV = (TextInputEditText) cvvDialog.findViewById(R.id.etCVV);
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK");
+            ctKey.setKeyAction("OK",this);
             ctKey.setScreenName("cvv");
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
@@ -979,6 +979,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
+            etCVV = (TextInputEditText) cvvDialog.findViewById(R.id.etCVV);
             if (!etCVV.getText().toString().trim().equals("")) {
                 cvvDialog.dismiss();
                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);

@@ -77,7 +77,8 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 rea.phoneErrorLL.setVisibility(VISIBLE);
-                                rea.phoneErrorTV.setText("Invalid Phone Number");
+//                                rea.phoneErrorTV.setText("Invalid Phone Number");
+                                rea.phoneErrorTV.setText("Please enter valid Phone Number");
                             } else if ((pnET.getText().length() == 0)) {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -98,7 +99,8 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 caa.phoneErrorLL.setVisibility(VISIBLE);
-                                caa.phoneErrorTV.setText("Invalid Phone Number");
+//                                caa.phoneErrorTV.setText("Invalid Phone Number");
+                                caa.phoneErrorTV.setText("Please enter valid Phone Number");
                             } else if ((pnET.getText().length() == 0)) {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -131,8 +133,6 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                     CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
                     if (charSequence.length() == 14) {
                         isPhoneError = false;
-//                        hintName.setTextColor(getResources().getColor(R.color.primary_green));
-//                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         createAccountAct.phoneErrorLL.setVisibility(GONE);
                     }
 
@@ -149,11 +149,11 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
 
-                    if ((pnET.getText().length() == 0)) {
-                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
-                        caa.phoneErrorLL.setVisibility(VISIBLE);
-                        caa.phoneErrorTV.setText("Field Required");
-                    }
+//                    if ((pnET.getText().length() == 0)) {
+//                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+//                        caa.phoneErrorLL.setVisibility(VISIBLE);
+//                        caa.phoneErrorTV.setText("Field Required");
+//                    }
                 } else if (FROM.equals("Retrieve")) {
                     RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
                     if (charSequence.length() == 14) {
