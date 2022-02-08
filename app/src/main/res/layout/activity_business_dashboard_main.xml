@@ -627,7 +627,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_11sdp"
 
@@ -638,10 +638,10 @@
                                 android:textSize="@dimen/_10sdp" />
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
                                 android:layout_weight="1"
+                                android:layout_marginStart="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/businesstoken"
                                 android:textColor="@color/dark_grey"
