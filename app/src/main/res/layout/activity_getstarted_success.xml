@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingRight="@dimen/_21sdp"
         android:paddingLeft="@dimen/_21sdp"
-        >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_success_icon"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_102sdp"
+        android:paddingRight="@dimen/_21sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_102sdp"
+            android:src="@drawable/ic_success_icon" />
 
         />
     <TextView
@@ -49,18 +49,45 @@
         android:gravity="center"
         app:cardBackgroundColor="@color/primary_color"
         app:cardCornerRadius="@dimen/_33sdp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_42sdp"
+            android:layout_marginBottom="@dimen/_21sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Your Account Has Been Created"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_13sdp"
-            android:layout_marginBottom="@dimen/_13sdp"
-            android:fontFamily="@font/opensans_bold"
+            android:text="You’re almost there! Before you can start\ntokenizing your money. Please follow the \ninstructions."
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/GetCV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_140sdp"
             android:gravity="center"
-            android:text="Get Started"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/white" />
-    </androidx.cardview.widget.CardView>
+            app:cardBackgroundColor="@color/primary_color"
+            app:cardCornerRadius="@dimen/_33sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_13sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:text="Get Started"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </LinearLayout>
