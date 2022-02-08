@@ -437,7 +437,6 @@
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
-
                 <TextView
                     android:id="@+id/spannableTV"
                     android:layout_width="wrap_content"
@@ -448,7 +447,6 @@
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp"
                     android:visibility="gone" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"

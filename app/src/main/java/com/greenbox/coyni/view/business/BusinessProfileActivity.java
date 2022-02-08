@@ -365,6 +365,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         isLoggedOut = true;
+                        myApplication.setStrRetrEmail("");
                         dropAllTables();
                         Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
