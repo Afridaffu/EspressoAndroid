@@ -49,7 +49,7 @@ public class EditAddressActivity extends AppCompatActivity {
     TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
     TextInputEditText b_address1ET, b_cityET, b_stateET, b_zipcodeET;
     TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
-    TextInputLayout b_address1TIL, b_cityTIL, b_stateTIL, b_zipcodeTIL, b_countryTIL,b_accountTIL;
+    TextInputLayout b_address1TIL, b_cityTIL, b_stateTIL, b_zipcodeTIL, b_countryTIL;
     ConstraintLayout stateCL,b_stateCL;
     MyApplication myApplicationObj;
     CardView editAddressSaveCV,b_editAddressSaveCV;
@@ -148,7 +148,6 @@ public class EditAddressActivity extends AppCompatActivity {
             b_stateTIL = findViewById(R.id.b_stateTIL);
             b_stateCL = findViewById(R.id.b_stateCL);
             b_zipcodeTIL = findViewById(R.id.b_zipcodeTIL);
-            b_accountTIL = findViewById(R.id.b_accountTIL);
 
             b_address1ET = findViewById(R.id.b_addressLineOneET);
             b_cityET = findViewById(R.id.b_cityET);
@@ -191,7 +190,6 @@ public class EditAddressActivity extends AppCompatActivity {
             b_stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
             b_zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
             b_countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            b_accountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
             editAddressSaveCV.setOnClickListener(view -> {
                 if (isSaveEnabled) {
@@ -1222,7 +1220,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
                     try {
                         address1ET.setSelection(Objects.requireNonNull(address1ET.getText()).length());
-                        address2ET.setSelection(Objects.requireNonNull(address2ET.getText()).length());
+                        address2ET.setSelection(address2ET.getText().length());
                         cityET.setSelection(Objects.requireNonNull(cityET.getText()).length());
                         zipcodeET.setSelection(Objects.requireNonNull(zipcodeET.getText()).length());
                     } catch (Exception e) {
