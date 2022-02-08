@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ApplicationCanceledActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/backLL"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_46sdp"
+            android:src="@drawable/ic_failed"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/tvMFaild"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="@string/application_canceled"
+            android:textAlignment="center"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:lineHeight="@dimen/_16ssp"
+            android:text="Thank you for your interest in merchant \nprocessing through coyni. Hope to see you again "
+            android:gravity="left"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginEnd="@dimen/_21sdp"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_11ssp" />
+
+    </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvTryAgain"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/_23sdp"
+        android:layout_marginTop="@dimen/_157sdp"
+        android:layout_marginRight="@dimen/_23sdp"
+        android:layout_marginBottom="@dimen/_47sdp"
+        android:gravity="center"
+        app:cardBackgroundColor="@color/primary_green"
+        app:cardCornerRadius="@dimen/_20sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

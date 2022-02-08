@@ -29,7 +29,7 @@ public class DashboardAddBenifitialOwnersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent i = new Intent(DashboardAddBenifitialOwnersActivity.this,AddBenifitialOwnerActivity1.class);
+                    Intent i = new Intent(DashboardAddBenifitialOwnersActivity.this,AddBeneficialOwnerActivity.class);
                     startActivity(i);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,12 +1,6 @@
 package com.greenbox.coyni.view.business;
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -30,27 +24,32 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.profile.Profile;
-import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.AccountLimitsActivity;
+import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
-import com.greenbox.coyni.view.Business_UserDetailsListenersActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
-import com.greenbox.coyni.view.CustomerProfileActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import org.jetbrains.annotations.Nullable;
+
 public class BusinessProfileActivity extends AppCompatActivity {
 
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL;
     public static SQLiteDatabase mydatabase;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -69,7 +68,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     Cursor cursor;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     boolean isLoggedOut = false;
-    private LinearLayout feesLL, teamLL, bpbackBtn,accountlimitsLL, switchOffLL, switchOnLL, paymentMethodsLL;
+//    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
     TextView tvVersion;
 
@@ -142,11 +141,48 @@ public class BusinessProfileActivity extends AppCompatActivity {
         try {
             feesLL = findViewById(R.id.feesLL);
             teamLL = findViewById(R.id.teamLL);
-            accountlimitsLL = findViewById(R.id.cpAccountLimitsLL);
             paymentMethodsLL = findViewById(R.id.paymentMethodsLL);
             bpbackBtn = findViewById(R.id.b_backBtn);
             cvLogout = findViewById(R.id.cvLogout);
             switchOnLL = findViewById(R.id.switchOn);
+
+            dbainfoLL = findViewById(R.id.DBAInformationLL);
+            dbainfoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, DBAInfoDetails.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+            companyinfoLL = findViewById(R.id.companyInformationLL);
+            companyinfoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){ try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, CompanyInfoDetails.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+            });
+
+            cpagreeementsLL = findViewById(R.id.cpAgreementsLL);
+            cpagreeementsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) { try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+            });
+
+
             switchOffLL = findViewById(R.id.switchOff);
             profileImage = findViewById(R.id.b_profileIV);
             profileText = findViewById(R.id.b_imageTextTV);
@@ -234,17 +270,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-            accountlimitsLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, AccountLimitsActivity.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+
             paymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

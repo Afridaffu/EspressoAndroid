@@ -1,14 +1,5 @@
 package com.greenbox.coyni.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +8,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.adapters.PastAgreeListAdapter;
@@ -24,11 +23,11 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class AgreementsActivity extends AppCompatActivity {
@@ -45,7 +44,7 @@ public class AgreementsActivity extends AppCompatActivity {
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     Agreements agreements;
     MyApplication objMyApplication;
-    TextView pastTV,activeTV;
+    TextView pastTV, activeTV;
     int i = 0;
 
     @Override
@@ -89,7 +88,8 @@ public class AgreementsActivity extends AppCompatActivity {
                         if (agreements.getStatus().contains("SUCCESS")) {
                             List<Item> activeItems = new ArrayList<>();
                             List<Item> pastItems = new ArrayList<>();
-                            int cPPVersion = 0, cTSVersion = 0;
+                            List<Integer> versions = new ArrayList<>();
+                            int cPPVersion = 0, cTSVersion = 0, bMAVersion = 0;
                             if (agreements.getData().getItems() != null && agreements.getData().getItems().size() > 0) {
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
                                     if (agreements.getData().getItems().get(i).getSignatureType() == 0) {
@@ -100,7 +100,8 @@ public class AgreementsActivity extends AppCompatActivity {
                                                 cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim());
                                             }
                                         }
-                                    } else {
+                                    }
+                                    if (agreements.getData().getItems().get(i).getSignatureType() == 1) {
                                         if (cPPVersion == 0) {
                                             cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim());
                                         } else {
@@ -109,13 +110,34 @@ public class AgreementsActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
+                                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                        if (agreements.getData().getItems().get(i).getSignatureType() == 5) {
+                                            if (bMAVersion == 0) {
+                                                bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim());
+                                            } else {
+                                                if (bMAVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim())) {
+                                                    bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim());
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
-                                    if (cTSVersion == Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim()) && agreements.getData().getItems().get(i).getSignatureType() == 0) {
+                                    if (agreements.getData().getItems().get(i).getDocumentVersion().contains("V")) {
+                                      versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim()));
+                                    }
+                                    if (agreements.getData().getItems().get(i).getDocumentVersion().contains("v") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                        versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim()));
+                                    }
+                                     if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 0) {
                                         activeItems.add(agreements.getData().getItems().get(i));
-                                    } else if (cPPVersion == Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim()) && agreements.getData().getItems().get(i).getSignatureType() == 1) {
+                                    } else if (cPPVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 1) {
                                         activeItems.add(agreements.getData().getItems().get(i));
-                                    } else {
+                                    }
+
+                                    else if (bMAVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 5 ) {
+                                        activeItems.add(agreements.getData().getItems().get(i));
+                                    }else {
                                         pastItems.add(agreements.getData().getItems().get(i));
                                     }
                                 }
@@ -163,20 +185,41 @@ public class AgreementsActivity extends AppCompatActivity {
         try {
 
             listener = (view, position) -> {
-                if (position == 1) {
-                    Intent inte = new Intent(Intent.ACTION_VIEW);
-                    inte.setDataAndType(
-                            Uri.parse(tosURL+"?"+System.currentTimeMillis()),
-                            "application/pdf");
-                    startActivity(inte);
+                if(objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                    if (position == 2) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
 
+                    }
+                    if (position == 1) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
+
+                    }
                 }
-                if (position == 0) {
-                    Intent inte = new Intent(Intent.ACTION_VIEW);
-                    inte.setDataAndType(
-                            Uri.parse(privacyURL+"?"+System.currentTimeMillis()),
-                            "application/pdf");
-                    startActivity(inte);
+                if(objMyApplication.getAccountType()== Utils.PERSONAL_ACCOUNT){
+                    if (position == 1) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
+
+                    }
+                    if (position == 0) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
+
+                    }
 
                 }
             };

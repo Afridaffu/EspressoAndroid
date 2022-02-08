@@ -1,20 +1,15 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -55,10 +50,12 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
         if (items.get(pos).getSignatureType() == 1) {
             holder.agreementTV.setText("Privacy Policy " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-        } else if (pos == 1) {
+        } else if (items.get(pos).getSignatureType() == 0) {
             holder.agreementTV.setText("Terms of Service " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
         }
-
+        if(items.get(pos).getSignatureType() == 5){
+            holder.agreementTV.setText("Merchant’s Agreement " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+        }
     }
 
     @Override

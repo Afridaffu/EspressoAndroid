@@ -134,7 +134,7 @@
                     android:id="@+id/b_nameErrorLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/etlName"
+                    android:layout_below="@+id/b_etlName"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
@@ -399,7 +399,17 @@
                         android:textIsSelectable="false"
                         android:textSize="@dimen/_12ssp" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:id="@+id/address1ErrorLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/b_etlCard"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/b_address1ErrorLL"
@@ -656,7 +666,7 @@
                     android:id="@+id/b_zipErrorLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/etlName"
+                    android:layout_below="@+id/b_etlName"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
@@ -745,6 +755,7 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </androidx.cardview.widget.CardView>
+            </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
