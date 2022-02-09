@@ -236,8 +236,9 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
                 if (profilesResponse != null) {
-                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
-
+                    if(profilesResponse.getData().get(0).getEntityName() != null) {
+                        accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+                    }
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
                         if (profilesResponse.getData().size() > 1) {
                             disableView.setVisibility(View.GONE);
