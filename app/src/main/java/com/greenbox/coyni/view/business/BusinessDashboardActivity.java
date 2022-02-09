@@ -1,14 +1,15 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,20 +21,25 @@ import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class BusinessDashboardActivity extends BaseActivity {
-    BusinessDashboardViewModel businessDashboardViewModel;
-    CustomerProfileViewModel customerProfileViewModel;
-    MyApplication objMyApplication;
-    private Tabs selectedTab = Tabs.DASHBOARD;
 
-    enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
+    private BusinessDashboardViewModel businessDashboardViewModel;
+    private CustomerProfileViewModel customerProfileViewModel;
+    private MyApplication objMyApplication;
+    private Tabs selectedTab = Tabs.DASHBOARD;
+    private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile;
+    private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
+    private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
+    private DashboardViewModel mDashboardViewModel;
+    private BaseFragment mCurrentFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,15 +48,27 @@ public class BusinessDashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_business_dashboard);
             initialization();
             initObserver();
-            pushFragment(new BusinessDashboardFragment());
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            mDashboardViewModel.meProfile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pushFragment(new BusinessDashboardFragment());
+    }
+
     public void onDashboardTabSelected(View view) {
         if (selectedTab != Tabs.DASHBOARD) {
             selectedTab = Tabs.DASHBOARD;
+            setSelectedTab(true, false, false, false);
             LogUtils.d(TAG, "onDashboardTabSelected");
             pushFragment(new BusinessDashboardFragment());
         }
@@ -59,6 +77,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onAccountTabSelected(View view) {
         if (selectedTab != Tabs.ACCOUNT) {
             selectedTab = Tabs.ACCOUNT;
+            setSelectedTab(false, true, false, false);
             LogUtils.d(TAG, "onAccountTabSelected");
             pushFragment(new BusinessAccountFragment());
         }
@@ -67,6 +86,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onTransactionsTabSelected(View view) {
         if (selectedTab != Tabs.TRANSACTIONS) {
             selectedTab = Tabs.TRANSACTIONS;
+            setSelectedTab(false, false, true, false);
             LogUtils.d(TAG, "onTransactionsTabSelected");
             pushFragment(new BusinessTransactionsFragment());
         }
@@ -75,6 +95,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onProfileTabSelected(View view) {
 //        if (selectedTab != Tabs.PROFILE) {
 //            selectedTab = Tabs.PROFILE;
+//            setSelectedTab(false, false, false, true);
 //            LogUtils.d(TAG, "onProfileTabSelected");
 //            pushFragment(new BusinessProfileFragment());
 //        }
@@ -86,7 +107,22 @@ public class BusinessDashboardActivity extends BaseActivity {
         LogUtils.d(TAG, "onQuickMenuTabSelected");
     }
 
+    private void setSelectedTab(boolean isDashboard, boolean isAccount, boolean isTransactions, boolean isProfile) {
+        mIvDashboard.setImageResource(isDashboard ? R.drawable.ic_dashboard_active: R.drawable.ic_dashboard_inactive);
+        mIvAccount.setImageResource(isAccount ? R.drawable.ic_account_active : R.drawable.ic_account_inactive);
+        mIvTransactions.setImageResource(isTransactions ? R.drawable.ic_transactions_active: R.drawable.ic_transactions_inactive);
+        mIvProfile.setImageResource(isProfile ? R.drawable.ic_profile_active: R.drawable.ic_profile);
+
+        int selectedTextColor = getColor(R.color.primary_green);
+        int unSelectedTextColor = getColor(R.color.dark_grey);
+        mTvDashboard.setTextColor(isDashboard ? selectedTextColor : unSelectedTextColor);
+        mTvAccount.setTextColor(isAccount ? selectedTextColor : unSelectedTextColor);
+        mTvTransactions.setTextColor(isTransactions ? selectedTextColor : unSelectedTextColor);
+        mTvProfile.setTextColor(isProfile ? selectedTextColor : unSelectedTextColor);
+    }
+
     private void pushFragment(BaseFragment fragment) {
+        mCurrentFragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fl_content_frame, fragment);
         transaction.commit();
@@ -94,9 +130,18 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     private void initialization() {
         try {
+            mIvDashboard = findViewById(R.id.iv_dashboard_icon);
+            mIvAccount = findViewById(R.id.iv_account_icon);
+            mIvTransactions = findViewById(R.id.iv_transactions_icon);
+            mIvProfile = findViewById(R.id.iv_profile_icon);
+            mTvDashboard = findViewById(R.id.tv_dashboard_text);
+            mTvAccount = findViewById(R.id.tv_account_text);
+            mTvTransactions = findViewById(R.id.tv_transactions_text);
+            mTvProfile = findViewById(R.id.tv_profile_text);
             objMyApplication = (MyApplication) getApplicationContext();
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
+            mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -140,6 +185,23 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+
+        mDashboardViewModel.getProfileMutableLiveData().
+                observe(this, new Observer<Profile>() {
+                    @Override
+                    public void onChanged(Profile profile) {
+                        try {
+                            if (profile != null) {
+                                objMyApplication.setMyProfile(profile);
+                                if(mCurrentFragment!=null) {
+                                    mCurrentFragment.updateData();
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {

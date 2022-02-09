@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
     LoginResponse loginResponse;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    boolean closeClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,32 +300,34 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-                        if (!hasFocus) {
-                            if ((etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim()))
-                                    || (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() < 6)) {
-                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                                layoutEmailError.setVisibility(VISIBLE);
-                                tvEmailError.setText("Please Enter a valid Email");
-                            } else if (etEmail.getText().toString().trim().length() == 0) {
-                                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
-                                etEmail.setHint("");
-                                etlEmail.setHint("Email");
-                                layoutEmailError.setVisibility(GONE);
-                            } else if ((etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim()))) {
-                                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
-                                etEmail.setHint("");
-                                etlEmail.setHint("Email");
-                                layoutEmailError.setVisibility(GONE);
+                        if (!closeClicked) {
+                            if (!hasFocus) {
+                                if ((etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim()))
+                                        || (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() < 6)) {
+                                    etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                                    layoutEmailError.setVisibility(VISIBLE);
+                                    tvEmailError.setText("Please Enter a valid Email");
+                                } else if (etEmail.getText().toString().trim().length() == 0) {
+                                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
+                                    etEmail.setHint("");
+                                    etlEmail.setHint("Email");
+                                    layoutEmailError.setVisibility(GONE);
+                                } else if ((etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim()))) {
+                                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
+                                    etEmail.setHint("");
+                                    etlEmail.setHint("Email");
+                                    layoutEmailError.setVisibility(GONE);
+                                }
+                            } else {
+                                if (!Utils.isKeyboardVisible)
+                                    Utils.shwForcedKeypad(LoginActivity.this);
+                                etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
+                                etEmail.setHint("Coyni@example.com");
                             }
-                        } else {
-                            if (!Utils.isKeyboardVisible)
-                                Utils.shwForcedKeypad(LoginActivity.this);
-                            etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
-                            etEmail.setHint("Coyni@example.com");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -336,36 +339,37 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     try {
-                        if (!hasFocus) {
-                            if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0) {
-                                etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
-                                layoutPwdError.setVisibility(VISIBLE);
+                        if (!closeClicked) {
+                            if (!hasFocus) {
+                                if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0) {
+                                    etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
+                                    layoutPwdError.setVisibility(VISIBLE);
 //                                tvPwdError.setText("Invalid Password");
-                                tvPwdError.setText("Please enter a valid Password");
-                            } else if (etPassword.getText().toString().trim().length() == 0) {
-                                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                                etPassword.setHint("");
-                                layoutPwdError.setVisibility(GONE);
-                            } else if (etPassword.getText().toString().trim().length() >= 8) {
-                                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                                Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
-                                layoutPwdError.setVisibility(GONE);
-                            }
-                            etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                        } else {
-                            if (!Utils.isKeyboardVisible)
-                                Utils.shwForcedKeypad(LoginActivity.this);
-                            etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
-                            etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
-                            if (etPassword.getText().toString().length() > 0)
+                                    tvPwdError.setText("Please enter a valid Password");
+                                } else if (etPassword.getText().toString().trim().length() == 0) {
+                                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+                                    etPassword.setHint("");
+                                    layoutPwdError.setVisibility(GONE);
+                                } else if (etPassword.getText().toString().trim().length() >= 8) {
+                                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
+                                    layoutPwdError.setVisibility(GONE);
+                                }
                                 etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                            else
-                                etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                            } else {
+                                if (!Utils.isKeyboardVisible)
+                                    Utils.shwForcedKeypad(LoginActivity.this);
+                                etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                                Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
+                                etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
+                                if (etPassword.getText().toString().length() > 0)
+                                    etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                                else
+                                    etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                            }
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -529,6 +533,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    closeClicked = true;
                     objMyApplication.setStrRetrEmail("");
                     onBackPressed();
                 }
