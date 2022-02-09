@@ -42,6 +42,7 @@ import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;

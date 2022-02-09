@@ -9,15 +9,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
-import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
-import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
-import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
-import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -31,104 +28,36 @@ import retrofit2.Response;
 
 public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
 
-    private MutableLiveData<IdentityImageResponse> uploadIdentityImageResponse = new MutableLiveData<>();
-    private MutableLiveData<RemoveIdentityResponse> removeIdentityImageResponse = new MutableLiveData<>();
     private MutableLiveData<BusinessTrackerResponse> getBusinessTrackerResponse = new MutableLiveData<>();
+    private MutableLiveData<CompanyInfoResp> getCompanyInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<CompanyInfoUpdateResp> updateBasicCompanyInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<CompanyInfoUpdateResp> postCompanyInfoResponse = new MutableLiveData<>();
 
-    private MutableLiveData<BusinessTrackerResponse> getCompanyInfoResponse = new MutableLiveData<>();
-    private MutableLiveData<BusinessTrackerResponse> updateBasicCompanyInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<CompanyInfoResp> getDBAInfoResponse = new MutableLiveData<>();
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
         super(application);
     }
 
 
-    public MutableLiveData<BusinessTrackerResponse> getGetCompanyInfoResponse() {
+    public MutableLiveData<CompanyInfoResp> getGetDBAInfoResponse() {
+        return getDBAInfoResponse;
+    }
+
+    public MutableLiveData<CompanyInfoUpdateResp> getPostCompanyInfoResponse() {
+        return postCompanyInfoResponse;
+    }
+
+    public MutableLiveData<CompanyInfoResp> getGetCompanyInfoResponse() {
         return getCompanyInfoResponse;
     }
 
-    public MutableLiveData<BusinessTrackerResponse> getUpdateBasicCompanyInfoResponse() {
+    public MutableLiveData<CompanyInfoUpdateResp> getUpdateBasicCompanyInfoResponse() {
         return updateBasicCompanyInfoResponse;
     }
 
     public MutableLiveData<BusinessTrackerResponse> getGetBusinessTrackerResponse() {
         return getBusinessTrackerResponse;
-    }
-
-
-    public MutableLiveData<IdentityImageResponse> getUploadIdentityImageResponse() {
-        return uploadIdentityImageResponse;
-    }
-
-    public MutableLiveData<RemoveIdentityResponse> getRemoveIdentityImageResponse() {
-        return removeIdentityImageResponse;
-    }
-
-    public void uploadIdentityImage(MultipartBody.Part idFile, RequestBody idType, RequestBody idNumber) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<IdentityImageResponse> mCall = apiService.uploadIdentityImage(idFile, idType, idNumber);
-            mCall.enqueue(new Callback<IdentityImageResponse>() {
-                @Override
-                public void onResponse(Call<IdentityImageResponse> call, Response<IdentityImageResponse> response) {
-                    if (response.isSuccessful()) {
-                        IdentityImageResponse obj = response.body();
-                        uploadIdentityImageResponse.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<IdentityImageResponse>() {
-                        }.getType();
-                        IdentityImageResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            uploadIdentityImageResponse.setValue(errorResponse);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<IdentityImageResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    uploadIdentityImageResponse.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void removeIdentityImage(String identityType) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<RemoveIdentityResponse> mCall = apiService.removeIdentityImage(identityType);
-            mCall.enqueue(new Callback<RemoveIdentityResponse>() {
-                @Override
-                public void onResponse(Call<RemoveIdentityResponse> call, Response<RemoveIdentityResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            RemoveIdentityResponse obj = response.body();
-                            removeIdentityImageResponse.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<RemoveIdentityResponse>() {
-                            }.getType();
-                            RemoveIdentityResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            removeIdentityImageResponse.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        removeIdentityImageResponse.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<RemoveIdentityResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    removeIdentityImageResponse.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void getBusinessTracker() {
@@ -166,22 +95,23 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
         }
     }
 
+    //Company info
     public void getCompanyInfo() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BusinessTrackerResponse> mCall = apiService.getCompanyInforamtion();
-            mCall.enqueue(new Callback<BusinessTrackerResponse>() {
+            Call<CompanyInfoResp> mCall = apiService.getCompanyInforamtion();
+            mCall.enqueue(new Callback<CompanyInfoResp>() {
                 @Override
-                public void onResponse(Call<BusinessTrackerResponse> call, Response<BusinessTrackerResponse> response) {
+                public void onResponse(Call<CompanyInfoResp> call, Response<CompanyInfoResp> response) {
                     try {
                         if (response.isSuccessful()) {
-                            BusinessTrackerResponse obj = response.body();
+                            CompanyInfoResp obj = response.body();
                             getCompanyInfoResponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<BusinessTrackerResponse>() {
+                            Type type = new TypeToken<CompanyInfoResp>() {
                             }.getType();
-                            BusinessTrackerResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            CompanyInfoResp errorResponse = gson.fromJson(response.errorBody().string(), type);
                             getCompanyInfoResponse.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
@@ -191,7 +121,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<BusinessTrackerResponse> call, Throwable t) {
+                public void onFailure(Call<CompanyInfoResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     getCompanyInfoResponse.setValue(null);
                 }
@@ -201,34 +131,34 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
         }
     }
 
-    public void submitBasicCompanyInfo(CompanyInfoRequest companyInfoRequest) {
+    public void patchCompanyInfo(CompanyInfoRequest companyInfoRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BusinessTrackerResponse> mCall = apiService.updateBasicCompanyInforamtion(companyInfoRequest);
-            mCall.enqueue(new Callback<BusinessTrackerResponse>() {
+            Call<CompanyInfoUpdateResp> mCall = apiService.updateCompanyInforamtion(companyInfoRequest);
+            mCall.enqueue(new Callback<CompanyInfoUpdateResp>() {
                 @Override
-                public void onResponse(Call<BusinessTrackerResponse> call, Response<BusinessTrackerResponse> response) {
+                public void onResponse(Call<CompanyInfoUpdateResp> call, Response<CompanyInfoUpdateResp> response) {
                     try {
                         if (response.isSuccessful()) {
-                            BusinessTrackerResponse obj = response.body();
-                            getBusinessTrackerResponse.setValue(obj);
+                            CompanyInfoUpdateResp obj = response.body();
+                            updateBasicCompanyInfoResponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<BusinessTrackerResponse>() {
+                            Type type = new TypeToken<CompanyInfoUpdateResp>() {
                             }.getType();
-                            BusinessTrackerResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            getBusinessTrackerResponse.setValue(errorResponse);
+                            CompanyInfoUpdateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            updateBasicCompanyInfoResponse.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        getBusinessTrackerResponse.setValue(null);
+                        updateBasicCompanyInfoResponse.setValue(null);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<BusinessTrackerResponse> call, Throwable t) {
+                public void onFailure(Call<CompanyInfoUpdateResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    getBusinessTrackerResponse.setValue(null);
+                    updateBasicCompanyInfoResponse.setValue(null);
                 }
             });
         } catch (Exception ex) {
@@ -236,4 +166,75 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
         }
     }
 
+    public void postCompanyInfo(CompanyInfoRequest companyInfoRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CompanyInfoUpdateResp> mCall = apiService.postCompanyInforamtion(companyInfoRequest);
+            mCall.enqueue(new Callback<CompanyInfoUpdateResp>() {
+                @Override
+                public void onResponse(Call<CompanyInfoUpdateResp> call, Response<CompanyInfoUpdateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            CompanyInfoUpdateResp obj = response.body();
+                            postCompanyInfoResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CompanyInfoUpdateResp>() {
+                            }.getType();
+                            CompanyInfoUpdateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            postCompanyInfoResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        postCompanyInfoResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CompanyInfoUpdateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    postCompanyInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    //DBA info
+    public void getDBAInfo() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CompanyInfoResp> mCall = apiService.getDBAInforamtion();
+            mCall.enqueue(new Callback<CompanyInfoResp>() {
+                @Override
+                public void onResponse(Call<CompanyInfoResp> call, Response<CompanyInfoResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            CompanyInfoResp obj = response.body();
+                            getDBAInfoResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CompanyInfoResp>() {
+                            }.getType();
+                            CompanyInfoResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            getDBAInfoResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getDBAInfoResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CompanyInfoResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    getDBAInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

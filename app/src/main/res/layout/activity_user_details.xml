@@ -618,10 +618,10 @@
                 android:background="@color/white"
                 android:src="@drawable/ic_down"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/b_accountTIL"
+                app:layout_constraintEnd_toEndOf="@id/b_accountTIL"
                 app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@+id/b_accountTIL"
-                app:layout_constraintTop_toTopOf="@+id/b_accountTIL"
+                app:layout_constraintStart_toStartOf="@id/b_accountTIL"
+                app:layout_constraintTop_toTopOf="@id/b_accountTIL"
                 app:layout_constraintVertical_bias="0.567"
                 app:layout_editor_absoluteX="336.24dp"
                 app:layout_editor_absoluteY="26.28dp" />

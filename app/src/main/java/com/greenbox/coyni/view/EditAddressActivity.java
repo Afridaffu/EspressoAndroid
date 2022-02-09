@@ -6,7 +6,6 @@ import static android.view.View.VISIBLE;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -43,6 +42,7 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EditAddressActivity extends AppCompatActivity {
 
@@ -1192,7 +1192,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
             UserData userData = new UserData();
             userData.setAddressLine1(b_address1ET.getText().toString().trim());
-            userData.setAddressLine2("");
+            userData.setAddressLine2(address2ET.getText().toString().trim());
             userData.setCity(b_cityET.getText().toString().trim());
             userData.setState(b_stateET.getText().toString().trim());
             userData.setZipCode(b_zipcodeET.getText().toString().trim());
@@ -1201,6 +1201,34 @@ public class EditAddressActivity extends AppCompatActivity {
             customerProfileViewModel.meUpdateAddress(userData);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+                if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                    try {
+                        b_address1ET.setSelection(Objects.requireNonNull(b_address1ET.getText()).length());
+                        b_cityET.setSelection(Objects.requireNonNull(b_cityET.getText()).length());
+                        b_zipcodeET.setSelection(Objects.requireNonNull(b_zipcodeET.getText()).length());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
+                    try {
+                        address1ET.setSelection(Objects.requireNonNull(address1ET.getText()).length());
+                        address2ET.setSelection(address2ET.getText().length());
+                        cityET.setSelection(Objects.requireNonNull(cityET.getText()).length());
+                        zipcodeET.setSelection(Objects.requireNonNull(zipcodeET.getText()).length());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

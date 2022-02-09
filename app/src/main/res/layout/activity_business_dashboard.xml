@@ -67,7 +67,7 @@
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/account"
                 android:gravity="center_horizontal"
-                android:src="@drawable/token" />
+                android:src="@drawable/ic_account_inactive" />
 
             <TextView
                 android:id="@+id/tv_account_text"
@@ -99,7 +99,9 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:onClick="onTransactionsTabSelected"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="15dp">
 
             <ImageView
                 android:id="@+id/iv_transactions_icon"
@@ -110,7 +112,7 @@
                 android:src="@drawable/ic_transactions_inactive" />
 
             <TextView
-                android:id="@+id/iv_transactions_text"
+                android:id="@+id/tv_transactions_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
