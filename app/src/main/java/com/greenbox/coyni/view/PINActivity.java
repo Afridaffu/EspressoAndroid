@@ -804,11 +804,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
             //Uncomment for stepup process
-//            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
-//                coyniViewModel.stepUpPin(request);
-//            } else {
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
+                coyniViewModel.stepUpPin(request);
+            } else {
                 coyniViewModel.validateCoyniPin(request);
-//            }
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();

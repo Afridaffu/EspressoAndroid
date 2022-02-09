@@ -70,15 +70,7 @@ public class DBAInfoAcivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
-        if (dbanameET.getId() == focusedID) {
-            dbanameET.requestFocus();
-        } else if (dbaemailET.getId() == focusedID) {
-            dbaemailET.requestFocus();
-        } else if (customerphoneNumberET.getId() == focusedID) {
-            customerphoneNumberET.requestFocus();
-        }
         dbanameET.requestFocus();
-        Log.e("ID", "" + focusedID);
     }
 
     private void chooseEntityPopup() {
