@@ -201,6 +201,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     //dialog.dismiss();
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                businessIdentityVerificationViewModel.getBusinessTracker();
+                            }
                             shakeAnimateUpDown();//new
 
                             new Handler().postDelayed(new Runnable() {
@@ -450,92 +453,84 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        try {
-            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-                @Override
-                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+            @Override
+            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
 
-                    if (businessTrackerResponse != null) {
-                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+                if (businessTrackerResponse != null) {
+                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
 
-                            Log.e("Tracker resp PIN", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
-                        }
+                        Log.e("Tracker resp PIN", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
                     }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            coyniViewModel.getStepUpResponseMutableLiveData().observe(this, new Observer<StepUpResponse>() {
-                @Override
-                public void onChanged(StepUpResponse stepUpResponse) {
-                    try {
-                        if (stepUpResponse != null) {
-                            if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
-                                Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
-                                }
-                                shakeAnimateUpDown();//new
+        coyniViewModel.getStepUpResponseMutableLiveData().observe(this, new Observer<StepUpResponse>() {
+            @Override
+            public void onChanged(StepUpResponse stepUpResponse) {
+                try {
+                    if (stepUpResponse != null) {
+                        if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
+                            Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                businessIdentityVerificationViewModel.getBusinessTracker();
+                            }
+                            shakeAnimateUpDown();//new
 
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
 
-                                            String strScreen = "";
-                                            if (getIntent().getStringExtra("screen") != null) {
-                                                strScreen = getIntent().getStringExtra("screen");
-                                            }
-                                            if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
-                                                launchDashboard();
-                                            } else {
-                                                if (!isDontRemind) {
-                                                    if (Utils.checkBiometric(PINActivity.this)) {
-                                                        if (Utils.checkAuthentication(PINActivity.this)) {
-                                                            if (Utils.isFingerPrint(PINActivity.this)) {
-                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                        .putExtra("ENABLE_TYPE", "TOUCH")
-                                                                        .putExtra("screen", strScreen));
-                                                            } else {
-                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                        .putExtra("ENABLE_TYPE", "FACE")
-                                                                        .putExtra("screen", strScreen));
-                                                            }
+                                        String strScreen = "";
+                                        if (getIntent().getStringExtra("screen") != null) {
+                                            strScreen = getIntent().getStringExtra("screen");
+                                        }
+                                        if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+                                            launchDashboard();
+                                        } else {
+                                            if (!isDontRemind) {
+                                                if (Utils.checkBiometric(PINActivity.this)) {
+                                                    if (Utils.checkAuthentication(PINActivity.this)) {
+                                                        if (Utils.isFingerPrint(PINActivity.this)) {
+                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                    .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                    .putExtra("screen", strScreen));
                                                         } else {
                                                             startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                    .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                    .putExtra("ENABLE_TYPE", "FACE")
                                                                     .putExtra("screen", strScreen));
                                                         }
                                                     } else {
                                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                .putExtra("ENABLE_TYPE", "SUCCESS")
                                                                 .putExtra("screen", strScreen));
                                                     }
                                                 } else {
-                                                    launchDashboard();
+                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                                            .putExtra("screen", strScreen));
                                                 }
+                                            } else {
+                                                launchDashboard();
                                             }
-                                        } catch (Exception ex) {
-                                            ex.printStackTrace();
                                         }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
                                     }
-                                }, Utils.duration);
-                            } else {
-                                setErrorPIN();
-                            }
+                                }
+                            }, Utils.duration);
+                        } else {
+                            setErrorPIN();
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
         businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
             @Override
@@ -807,7 +802,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 //            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
 //                coyniViewModel.stepUpPin(request);
 //            } else {
-                coyniViewModel.validateCoyniPin(request);
+            coyniViewModel.validateCoyniPin(request);
 //            }
 
         } catch (Exception ex) {
@@ -971,7 +966,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
         if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
             BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+            if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
                     && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
                 dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
             } else {
