@@ -368,6 +368,19 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertDocUploadedDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("dd/MM/yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static void displayAlert(String msg, Activity activity, String header, String fieldError) {
 
         if (!msg.equals("")) {

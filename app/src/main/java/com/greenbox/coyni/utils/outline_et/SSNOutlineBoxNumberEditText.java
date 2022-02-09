@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,7 +15,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
-import com.greenbox.coyni.view.business.DBAbasicInformationAcivity;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     private TextView ssnType;
@@ -141,4 +139,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         return ssnType.getText().toString();
     }
 
+    public String getUnmaskedText() {
+        return ssnET.getUnMasked();
+    }
 }

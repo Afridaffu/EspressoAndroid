@@ -397,6 +397,7 @@
     <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
     <string name="greenboxpos">Greenboxpos</string>
     <string name="receive_payment">Receive Payment</string>
+    <string name="first_name">First Name</string>
     <string name="email_curr">Current Email</string>
     <string name="address">Address</string>
     <string name="address_curr">Current Address</string>
