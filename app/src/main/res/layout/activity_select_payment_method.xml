@@ -12,13 +12,19 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bottomradius">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_close"
-        android:contentDescription="@string/select_payment_method"
-        android:layout_marginStart="@dimen/_21sdp"
-        android:layout_marginTop="@dimen/_45sdp"/>
+        <LinearLayout
+            android:id="@+id/backpLL"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_45sdp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                android:contentDescription="@string/select_payment_method"/>
+        </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

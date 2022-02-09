@@ -2,11 +2,16 @@ package com.greenbox.coyni.view.business;
 
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
@@ -83,7 +88,20 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
-        LogUtils.d(TAG, "onQuickMenuTabSelected");
+//        LogUtils.d(TAG, "onQuickMenuTabSelected");
+        Dialog dialog = new Dialog(BusinessDashboardActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
+        dialog.setContentView(R.layout.activity_business_quick_action);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams wl=window.getAttributes();
+        wl.gravity= Gravity.BOTTOM;
+        wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wl);
+        dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     private void pushFragment(BaseFragment fragment) {

@@ -30,40 +30,43 @@ public class FeesActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_fees);
 
-        bpbackBtn = findViewById(R.id.bpbackBtn);
-        salesOrderDollTV = findViewById(R.id.salesOrderDollTV);
-        salesOrderPerTV = findViewById(R.id.salesOrderPerTV);
-        refundDollTV = findViewById(R.id.refundDollTV);
-        refundPerTV = findViewById(R.id.refundPerTV);
-        tvEBADoll = findViewById(R.id.tvEBADoll);
-        tvEBAPer = findViewById(R.id.tvEBAPer);
-        instantPayDollTV = findViewById(R.id.instantPayDollTV);
-        instantPayPerTV = findViewById(R.id.instantPayPerTV);
-        signetAccDollTV = findViewById(R.id.signetAccDollTV);
-        signetAccPerTV = findViewById(R.id.signetAccPerTV);
-        giftCardDollTV = findViewById(R.id.giftCardDollTV);
-        giftCardPerTV = findViewById(R.id.giftCardPerTV);
-        fdwDollTV = findViewById(R.id.fdwDollTV);
-        fdwPerTV = findViewById(R.id.fdwPerTV);
-        buyTokenEBADollTV = findViewById(R.id.buyTokenEBADollTV);
-        buyTokenEBAPerTV = findViewById(R.id.buyTokenEBAPerTV);
-        buytokenSignetDollTV = findViewById(R.id.buytokenSignetDollTV);
-        buytokenSignetPerTV = findViewById(R.id.buytokenSignetPerTV);
-        monthlyFeeDollTV = findViewById(R.id.monthlyFeeDollTV);
-        monthlyFeePerTV = findViewById(R.id.monthlyFeePerTV);
-
-
-        viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
-
-        bpbackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         try {
-            viewModel.meFees(123);
-            initObserver();
+            bpbackBtn = findViewById(R.id.bpbackBtn);
+            salesOrderDollTV = findViewById(R.id.salesOrderDollTV);
+            salesOrderPerTV = findViewById(R.id.salesOrderPerTV);
+            refundDollTV = findViewById(R.id.refundDollTV);
+            refundPerTV = findViewById(R.id.refundPerTV);
+            tvEBADoll = findViewById(R.id.tvEBADoll);
+            tvEBAPer = findViewById(R.id.tvEBAPer);
+            instantPayDollTV = findViewById(R.id.instantPayDollTV);
+            instantPayPerTV = findViewById(R.id.instantPayPerTV);
+            signetAccDollTV = findViewById(R.id.signetAccDollTV);
+            signetAccPerTV = findViewById(R.id.signetAccPerTV);
+            giftCardDollTV = findViewById(R.id.giftCardDollTV);
+            giftCardPerTV = findViewById(R.id.giftCardPerTV);
+            fdwDollTV = findViewById(R.id.fdwDollTV);
+            fdwPerTV = findViewById(R.id.fdwPerTV);
+            buyTokenEBADollTV = findViewById(R.id.buyTokenEBADollTV);
+            buyTokenEBAPerTV = findViewById(R.id.buyTokenEBAPerTV);
+            buytokenSignetDollTV = findViewById(R.id.buytokenSignetDollTV);
+            buytokenSignetPerTV = findViewById(R.id.buytokenSignetPerTV);
+            monthlyFeeDollTV = findViewById(R.id.monthlyFeeDollTV);
+            monthlyFeePerTV = findViewById(R.id.monthlyFeePerTV);
+
+            viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+
+            bpbackBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            try {
+                viewModel.meFees(123);
+                initObserver();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
