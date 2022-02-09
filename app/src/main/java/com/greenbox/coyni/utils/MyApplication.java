@@ -862,4 +862,15 @@ public class MyApplication extends Application {
     public void setBusinessTrackerResponse(BusinessTrackerResponse businessTrackerResponse) {
         this.businessTrackerResponse = businessTrackerResponse;
     }
+
+    public Date getDate(String date) {
+        Date dtExpiry = null;
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+            dtExpiry = spf.parse(date);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return dtExpiry;
+    }
 }

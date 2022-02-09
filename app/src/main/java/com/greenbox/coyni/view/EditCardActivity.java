@@ -43,7 +43,10 @@ import com.greenbox.coyni.utils.outline_et.CardNumberEditText;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 
 public class EditCardActivity extends AppCompatActivity {
     PaymentsList selectedCard;
@@ -57,12 +60,13 @@ public class EditCardActivity extends AppCompatActivity {
     ConstraintLayout clStates;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack, expiryErrorLL;
     TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
-    TextInputLayout etlState, etlAddress1,etlAddress2, etlCity, etlZipCode, etlExpiry,etlName;
+    TextInputLayout etlState, etlAddress1, etlAddress2, etlCity, etlZipCode, etlExpiry, etlName;
     TextView tvCard, expiryErrorTV;
     Boolean isExpiry = false, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     Long mLastClickTime = 0L;
     public static EditCardActivity editCardActivity;
     String strScreen = "";
+    int diffMonths = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +128,8 @@ public class EditCardActivity extends AppCompatActivity {
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
             etlExpiry = findViewById(R.id.etlExpiry);
-            etlName=findViewById(R.id.etlName);
-            etlAddress2=findViewById(R.id.etlAddress2);
+            etlName = findViewById(R.id.etlName);
+            etlAddress2 = findViewById(R.id.etlAddress2);
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
@@ -137,7 +141,7 @@ public class EditCardActivity extends AppCompatActivity {
             etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            Utils.setUpperHintColor(etlAddress2,getColor(R.color.light_gray));
+            Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
 
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -376,16 +380,19 @@ public class EditCardActivity extends AppCompatActivity {
                             etExpiry.setHint("");
                             if (etExpiry.getText().toString().trim().length() > 0) {
                                 if (validateExpiry()) {
+                                    isExpiry = true;
                                     expiryErrorLL.setVisibility(GONE);
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
                                 } else {
+                                    isExpiry = false;
                                     expiryErrorLL.setVisibility(VISIBLE);
                                     expiryErrorTV.setText("Please enter valid Expiry Date");
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                 }
                             } else {
+                                isExpiry = false;
                                 expiryErrorLL.setVisibility(VISIBLE);
                                 expiryErrorTV.setText("Field Required");
                                 etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -396,6 +403,7 @@ public class EditCardActivity extends AppCompatActivity {
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                         }
+                        enableOrDisableNext();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -439,8 +447,7 @@ public class EditCardActivity extends AppCompatActivity {
                         etAddress2.setSelection(etAddress2.getText().length());
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
-                    }
-                    else {
+                    } else {
                         etAddress2.setHint("");
                         etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
@@ -644,11 +651,10 @@ public class EditCardActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (etAddress2.getText().toString().length()>0){
-                    Utils.setUpperHintColor(etlAddress2,getColor(R.color.primary_black));
-                }
-                else {
-                    Utils.setUpperHintColor(etlAddress2,getColor(R.color.light_gray));
+                if (etAddress2.getText().toString().length() > 0) {
+                    Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+                } else {
+                    Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                 }
             }
 
@@ -781,13 +787,6 @@ public class EditCardActivity extends AppCompatActivity {
     public void enableOrDisableNext() {
         try {
             if (isAddress1 && isCity && isZipcode && isState && isExpiry) {
-//                if (!selectedCard.getExpired() || (selectedCard.getExpired() && isExpiry)) {
-//                    isAddEnabled = true;
-//                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-//                } else {
-//                    isAddEnabled = false;
-//                    cvSave.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//                }
                 isAddEnabled = true;
                 cvSave.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             } else {
@@ -855,6 +854,11 @@ public class EditCardActivity extends AppCompatActivity {
         try {
             Calendar cal = Calendar.getInstance();
             int month = cal.get(Calendar.MONTH) + 1;
+            if (!etExpiry.getText().toString().equals("") && etExpiry.getText().toString().length() == 5) {
+                Year year = Year.parse(etExpiry.getText().toString().split("/")[1], DateTimeFormatter.ofPattern("yy"));
+                String strDate = "01/" + etExpiry.getText().toString().split("/")[0] + "/" + year.toString();
+                diffMonths = objMyApplication.monthsBetweenDates(new Date(), objMyApplication.getDate(strDate));
+            }
             String year = "";
             SimpleDateFormat ydf = new SimpleDateFormat("yy");
             year = ydf.format(Calendar.getInstance().getTime());
@@ -863,6 +867,8 @@ public class EditCardActivity extends AppCompatActivity {
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[0]) == 0 || Integer.parseInt(etExpiry.getText().toString().split("/")[0]) > 12) {
                 value = false;
             } else if (Integer.parseInt(etExpiry.getText().toString().split("/")[1]) <= Integer.parseInt(year) && Integer.parseInt(etExpiry.getText().toString().split("/")[0]) < month) {
+                value = false;
+            } else if (diffMonths != -1 && diffMonths > Integer.parseInt(getString(R.string.expirydate))) {
                 value = false;
             }
         } catch (Exception ex) {
