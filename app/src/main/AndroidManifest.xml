@@ -54,8 +54,7 @@
             android:exported="false" />
         <activity
             android:name=".view.business.AddtionaInfoRequired"
-            android:exported="true"/>
-
+            android:exported="false" />
         <activity
             android:name=".view.business.EditEmail"
             android:exported="false"
@@ -82,8 +81,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.DBAInfoDetails"
+            android:name=".view.business.BusinessPaymentMethodsActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.business.DBAInfoDetails"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.CompanyInfoDetails"
             android:exported="false" />
@@ -489,7 +493,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.AddBeneficialOwnerActivity"
+            android:name=".view.business.AddBenificialOwnerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
@@ -525,6 +529,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ChooseIdActivity"
+            android:name=".view.business.ChooseIdActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -538,19 +543,13 @@
         <activity
             android:name=".view.business.BusinessDashboardMainActivity"
             android:configChanges="uiMode"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.BusinessAddCardActivity"
+            android:name=".view.business.AdditionalBeneficialOwnersActivity"
             android:configChanges="uiMode"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.Business_UserDetailsListenersActivity"
-            android:configChanges="uiMode"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -565,8 +564,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
-
     </application>
 
 </manifest>

@@ -1055,6 +1055,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onClick(View view) {
                     cvvDialog.dismiss();
+                    Utils.hideKeypad(PayRequestActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -1063,6 +1064,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     try {
                         addNoteTV.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
+                        Utils.hideKeypad(PayRequestActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
