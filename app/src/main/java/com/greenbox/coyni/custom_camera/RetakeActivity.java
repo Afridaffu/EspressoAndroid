@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,11 +15,13 @@ import android.widget.LinearLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
 
 public class RetakeActivity extends AppCompatActivity {
 
     ImageView croppedIV;
-    LinearLayout retakeCloseIV,saveLL,retakeLL;
+    LinearLayout retakeCloseIV, saveLL, retakeLL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,22 +34,42 @@ public class RetakeActivity extends AppCompatActivity {
         saveLL = findViewById(R.id.saveLL);
         retakeLL = findViewById(R.id.retakeLL);
 
+        Log.e("From", getIntent().getStringExtra("FROM"));
+        String from = getIntent().getStringExtra("FROM");
         retakeCloseIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (from.equals("CI-AOI")) {
+                    CompanyInformationActivity.aoiFile = null;
+                } else if (from.equals("CI-EINLETTER")) {
+                    CompanyInformationActivity.einLetterFile = null;
+                } else if (from.equals("CI-W9")) {
+                    CompanyInformationActivity.w9FormFile = null;
+                } else if (from.equals("IDVE")) {
+                    IdentityVerificationActivity.identityFile = null;
+                    IdentityVerificationActivity.isFileSelected = false;
+                    IdentityVerificationActivity.enableNext();
+                }
                 finish();
-                IdentityVerificationActivity.identityFile = null;
-                IdentityVerificationActivity.isFileSelected = false;
-                IdentityVerificationActivity.enableNext();
             }
         });
 
         saveLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 CameraActivity.cameraActivity.finish();
                 finish();
-                IdentityVerificationActivity.enableNext();
+                if (from.equals("CI-AOI")) {
+
+                } else if (from.equals("CI-EINLETTER")) {
+
+                } else if (from.equals("CI-W9")) {
+
+                } else if (from.equals("IDVE")) {
+                    IdentityVerificationActivity.enableNext();
+                }
             }
         });
 
@@ -54,17 +77,25 @@ public class RetakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                IdentityVerificationActivity.identityFile = null;
-                IdentityVerificationActivity.isFileSelected = false;
-                IdentityVerificationActivity.enableNext();
+                if (from.equals("CI-AOI")) {
+                    CompanyInformationActivity.aoiFile = null;
+                } else if (from.equals("CI-EINLETTER")) {
+                    CompanyInformationActivity.einLetterFile = null;
+                } else if (from.equals("CI-W9")) {
+                    CompanyInformationActivity.w9FormFile = null;
+                } else if (from.equals("IDVE")) {
+                    IdentityVerificationActivity.identityFile = null;
+                    IdentityVerificationActivity.isFileSelected = false;
+                    IdentityVerificationActivity.enableNext();
+                }
             }
         });
 
-        rotatePicture(getIntent().getIntExtra("rotation",0),CameraFragment.cameraByteData,croppedIV);
+        rotatePicture(getIntent().getIntExtra("rotation", 0), CameraFragment.cameraByteData, croppedIV);
     }
 
 
-    private void rotatePicture(int rotation,  byte[] data, ImageView photoImageView) {
+    private void rotatePicture(int rotation, byte[] data, ImageView photoImageView) {
         try {
 //            Bitmap bitmap = ImageUtility.decodeSampledBitmapFromByte(this, data);
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -82,7 +113,7 @@ public class RetakeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            ImageUtility.savePicture(this, bitmap,photoImageView);
+            ImageUtility.savePicture(this, bitmap, photoImageView, getIntent().getStringExtra("FROM"));
         } catch (Exception e) {
             e.printStackTrace();
         }

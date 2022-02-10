@@ -533,6 +533,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     }
                 }
             });
+
             mailAddr2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -577,7 +578,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     }
                 }
             });
-
 
             zipcode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -979,10 +979,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    //                context.startActivity(new Intent(context, CameraActivity.class));
                     if (checkAndRequestPermissions((Activity) context)) {
                         identityType = 0;
-                        context.startActivity(new Intent(context, CameraActivity.class));
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM","IDVE"));
                     }
                 }
             });
@@ -993,7 +992,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     dialog.dismiss();
                     if (checkAndRequestPermissions((Activity) context)) {
                         identityType = 1;
-                        context.startActivity(new Intent(context, CameraActivity.class));
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM","IDVE"));
                     }
                 }
             });
@@ -1004,7 +1003,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     dialog.dismiss();
                     if (checkAndRequestPermissions((Activity) context)) {
                         identityType = 2;
-                        context.startActivity(new Intent(context, CameraActivity.class));
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM","IDVE"));
                     }
                 }
             });
@@ -1058,7 +1057,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         Utils.displayAlert("Requires Access to Your Storage.", IdentityVerificationActivity.this, "", "");
 
                     } else {
-                        startActivity(new Intent(this, CameraActivity.class));
+                        startActivity(new Intent(this, CameraActivity.class).putExtra("FROM","IDVE"));
                     }
                     break;
             }
@@ -1138,7 +1137,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         try {
             identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
@@ -1250,7 +1248,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             ex.printStackTrace();
         }
     }
-
 
     @Override
     protected void onDestroy() {

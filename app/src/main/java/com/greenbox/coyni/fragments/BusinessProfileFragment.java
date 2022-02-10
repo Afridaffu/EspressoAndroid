@@ -17,4 +17,9 @@ public class BusinessProfileFragment extends BaseFragment {
         View currentView = inflater.inflate(R.layout.fragment_business_profile, container, false);
         return currentView;
     }
+
+    @Override
+    public void updateData() {
+
+    }
 }

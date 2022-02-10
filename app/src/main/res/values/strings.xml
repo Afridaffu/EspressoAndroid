@@ -234,7 +234,7 @@
     <string name="ownership">Ownership(%)</string>
     <string name="beneficialnreach">Please add an additional beneficial owner below to\nreach 51%</string>
 
-    <string name="dba_name">Hi! [DBA Name]</string>
+    <string name="dba_name">Hi! %1$s</string>
     <string name="MerchantBalance">Merchant Balance</string>
     <string name="processing_volume">Processing Volume</string>
     <string name="lastmonth">Last Month</string>
@@ -397,6 +397,7 @@
     <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
     <string name="greenboxpos">Greenboxpos</string>
     <string name="receive_payment">Receive Payment</string>
+    <string name="first_name">First Name</string>
     <string name="email_curr">Current Email</string>
     <string name="address">Address</string>
     <string name="address_curr">Current Address</string>

@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -264,8 +265,6 @@ public class OnboardActivity extends BaseActivity {
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (loginResponse.getData().getPasswordExpired()) {
                                     Intent i = new Intent(OnboardActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
@@ -273,6 +272,13 @@ public class OnboardActivity extends BaseActivity {
                                     startActivity(i);
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                        businessIdentityVerificationViewModel.getBusinessTracker();
+                                    } else {
+                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(i);
+                                    }
                                     Intent i = null;
                                     if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
                                         i = new Intent(OnboardActivity.this, DashboardActivity.class);
@@ -311,6 +317,17 @@ public class OnboardActivity extends BaseActivity {
                     if (businessTrackerResponse != null) {
                         if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+
+                            Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
+                            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+                            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                                dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
+                            } else {
+                                dashboardIntent = new Intent(OnboardActivity.this, BusinessRegistrationTrackerActivity.class);
+                            }
+                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(dashboardIntent);
                         }
                     }
                 }
