@@ -111,7 +111,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
-//        LogUtils.d(TAG, "onQuickMenuTabSelected");
+        LogUtils.d(TAG, "onQuickMenuTabSelected");
         Dialog dialog = new Dialog(BusinessDashboardActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
