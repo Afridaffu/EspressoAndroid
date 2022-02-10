@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.signedagreements.AgreementsRequest;
+import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.network.ApiService;
@@ -26,6 +28,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
+
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
@@ -41,6 +45,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
         return businessWalletResponseMutableLiveData;
+    }
+
+    public MutableLiveData<SignedAgreementResponse> getSignedAgreementResponseMutableLiveData() {
+        return signedAgreementResponseMutableLiveData;
     }
 
     public void meBusinessPaymentMethods() {
@@ -141,6 +149,43 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 public void onFailure(Call<BusinessWalletResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     businessWalletResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void signedAgreement(AgreementsRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<SignedAgreementResponse> mCall = apiService.signedAgreement(request);
+            mCall.enqueue(new Callback<SignedAgreementResponse>() {
+                @Override
+                public void onResponse(Call<SignedAgreementResponse> call, Response<SignedAgreementResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            SignedAgreementResponse obj = response.body();
+                            signedAgreementResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SignedAgreementResponse>() {
+                            }.getType();
+                            SignedAgreementResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            signedAgreementResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        signedAgreementResponseMutableLiveData.setValue(null);
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<SignedAgreementResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    signedAgreementResponseMutableLiveData.setValue(null);
+
                 }
             });
         } catch (Exception ex) {

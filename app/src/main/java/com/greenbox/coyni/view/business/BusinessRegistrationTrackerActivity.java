@@ -13,14 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
-
-import org.w3c.dom.Text;
 
 public class BusinessRegistrationTrackerActivity extends BaseActivity {
     TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV;
@@ -30,7 +26,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     Long mLastClickTime = 0L;
     BusinessTrackerResponse businessTrackerResponse;
     MyApplication objMyApplication;
-    ImageView businessTrackerCloseIV;
+    ImageView businessTrackerCloseIV,bagIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +92,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
         aggrementsCompleteLL = findViewById(R.id.aggrementsCompleteLL);
         aggrementsIncompleteLL = findViewById(R.id.aggrementsIncompleteLL);
+
+        bagIV = findViewById(R.id.bagIV);
+        bagIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this,MerchantsAgrementActivity.class);
+                startActivity(intent);
+            }
+        });
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaStartTV.setVisibility(View.VISIBLE);
@@ -210,8 +215,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (businessTrackerResponse.getData().isIsbankAccount()) {
-                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
+//                    startActivity(intent);
                 }
             }
         });
