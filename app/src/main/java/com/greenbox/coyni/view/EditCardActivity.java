@@ -450,7 +450,7 @@ public class EditCardActivity extends AppCompatActivity {
                     } else {
                         etAddress2.setHint("");
                         etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
                     }
                 }
             });
@@ -564,8 +564,6 @@ public class EditCardActivity extends AppCompatActivity {
                         if (validateExpiry()) {
                             isExpiry = true;
                             expiryErrorLL.setVisibility(GONE);
-//                            etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                            Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.primary_green));
                         } else {
                             isExpiry = false;
                             expiryErrorLL.setVisibility(VISIBLE);
@@ -613,8 +611,6 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 101) {
                         isAddress1 = true;
                         address1ErrorLL.setVisibility(GONE);
-//                        etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
                     } else {
                         isAddress1 = false;
                     }
@@ -643,6 +639,7 @@ public class EditCardActivity extends AppCompatActivity {
                 }
             }
         });
+
         etAddress2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -660,9 +657,14 @@ public class EditCardActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                String str = etAddress2.getText().toString();
+                if (str.substring(0).equals(" ")) {
+                    etAddress2.setText("");
+                    etAddress2.setSelection(etAddress2.getText().length());
+                }
             }
         });
+
         etCity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -882,7 +884,12 @@ public class EditCardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            etExpiry.requestFocus();
+            //etExpiry.requestFocus();
+            etExpiry.clearFocus();
+            etAddress1.clearFocus();
+            etAddress2.clearFocus();
+            etCity.clearFocus();
+            etZipcode.clearFocus();
         } catch (Exception e) {
             e.printStackTrace();
         }

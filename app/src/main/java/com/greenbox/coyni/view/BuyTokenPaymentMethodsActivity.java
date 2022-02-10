@@ -68,7 +68,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
-    Boolean isBank = false, isPayments = false, isDeCredit = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     TextInputEditText etCVV;
     RecyclerView rvSelPayMethods;
     public static BuyTokenPaymentMethodsActivity buyTokenPaymentMethodsActivity;
@@ -90,24 +90,25 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit"))) {
-        if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
-            if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
-                ControlMethod("paymentMethods");
-                strCurrent = "paymentMethods";
-            } else if (strCurrent.equals("externalBank")) {
-                ControlMethod("addpayment");
-                strCurrent = "addpayment";
-            } else if (!strCurrent.equals("firstError")) {
-                super.onBackPressed();
-            }
-        } else {
-            if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                ControlMethod("addpayment");
-                strCurrent = "addpayment";
+        if (!isBankSuccess) {
+            if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
+                if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                } else if (strCurrent.equals("externalBank")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpayment";
+                } else if (!strCurrent.equals("firstError")) {
+                    super.onBackPressed();
+                }
             } else {
-                objMyApplication.setStrScreen("");
-                super.onBackPressed();
+                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpayment";
+                } else {
+                    objMyApplication.setStrScreen("");
+                    super.onBackPressed();
+                }
             }
         }
     }
@@ -719,11 +720,13 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 
     private void displaySuccess() {
         try {
+            isBankSuccess = true;
             ControlMethod("banksuccess");
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    isBankSuccess = false;
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
@@ -749,7 +752,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             etCVV = (TextInputEditText) cvvDialog.findViewById(R.id.etCVV);
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK",this);
+            ctKey.setKeyAction("OK", this);
             ctKey.setScreenName("cvv");
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
