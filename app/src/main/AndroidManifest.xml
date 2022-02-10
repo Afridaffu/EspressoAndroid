@@ -384,6 +384,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.business.SignatureActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.AccountTypeActivity"
