@@ -748,13 +748,9 @@ public class EditCardActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() > 4) {
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
-//                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
                     } else {
-//                        etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
-                        zipErrorLL.setVisibility(VISIBLE);
-                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
+//                        zipErrorLL.setVisibility(VISIBLE);
+//                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                         isZipcode = false;
                     }
                     enableOrDisableNext();

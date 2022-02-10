@@ -769,7 +769,8 @@ public class GiftCardDetails extends AppCompatActivity {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                            Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));
-                            emailTIL.setHint("Coyni@example.com");
+//                            emailTIL.setHint("Coyni@example.com");
+                            emailTIL.setHint("Email");
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Field Required");
                         } else {
@@ -779,7 +780,8 @@ public class GiftCardDetails extends AppCompatActivity {
                             emailErrorTV.setText("Please Enter a valid Email");
                         }
                     } else {
-                        emailET.setHint("Coyni@example.com");
+//                        emailET.setHint("Coyni@example.com");
+                        emailET.setHint("Email");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
