@@ -664,8 +664,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                                 getStatesUrl(login.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(login.getData().getAccountType());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
+//                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+//                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (login.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");

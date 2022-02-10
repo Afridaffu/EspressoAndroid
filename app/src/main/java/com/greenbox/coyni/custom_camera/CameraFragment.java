@@ -547,7 +547,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     public void onPictureTaken(byte[] data, Camera camera) {
         int rotation = getPhotoRotation();
         cameraByteData = data;
-        startActivity(new Intent(requireContext(), RetakeActivity.class).putExtra("rotation", rotation));
+        startActivity(new Intent(requireContext(), RetakeActivity.class)
+                .putExtra("rotation", rotation)
+                .putExtra("FROM",getArguments().getString("FROM")));
         setSafeToTakePhoto(true);
     }
 

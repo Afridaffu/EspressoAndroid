@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
-import com.greenbox.coyni.view.business.DBAbasicInformationAcivity;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
@@ -66,7 +66,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
                     }
                     if (FROM.equals("DbaInfo") && !b) {
-                        DBAbasicInformationAcivity dba = (DBAbasicInformationAcivity) mContext;
+                        DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
                         if ((phnET.getText().length() > 0 && phnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -136,7 +136,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         comAct.compphonenumberTV.setText("Field Required");
                     }
                 } else if (FROM.equals("DbaInfo")) {
-                    DBAbasicInformationAcivity dba = (DBAbasicInformationAcivity) mContext;
+                    DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
                     if (charSequence.length() == 14) {
                         isPhoneError1 = false;
                         dba.customerphonenumLL.setVisibility(GONE);

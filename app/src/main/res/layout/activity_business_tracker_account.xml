@@ -57,6 +57,7 @@
             android:textColor="@color/error_red"
             android:textSize="@dimen/_11ssp"
             android:visibility="visible" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -102,7 +103,6 @@
                             android:layout_marginRight="@dimen/_10sdp"
                             android:gravity="right"
                             android:src="@drawable/ic_company_info_business"
-
                             />
 
                         <LinearLayout
@@ -113,6 +113,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/caTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
@@ -122,6 +123,7 @@
                                 android:textSize="@dimen/_12ssp" />
 
                             <TextView
+                                android:id="@+id/caIncompleteTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -144,6 +146,7 @@
                             android:visibility="visible" />
 
                         <ImageView
+                            android:id="@+id/caInProgressIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

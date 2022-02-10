@@ -28,7 +28,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.utils.outline_et.MonthlyProcessingVolumeEditText;
 
-public class DBAbasicInformationAcivity extends AppCompatActivity {
+public class DBAInfoAcivity extends AppCompatActivity {
     TextInputLayout dbanameTIL, dbaemailTIL, typetil;
     public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, uploadLL;
     CompanyOutLineBoxPhoneNumberEditText customerphoneNumberET;
@@ -40,7 +40,7 @@ public class DBAbasicInformationAcivity extends AppCompatActivity {
     TextView uploadtext;
     ImageView businessEntity;
     Dialog entity;
-    public static DBAbasicInformationAcivity dbAbasicInformationAcivity;
+    public static DBAInfoAcivity dbAbasicInformationAcivity;
 
 
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isNextEnabled = false;
@@ -53,7 +53,7 @@ public class DBAbasicInformationAcivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbAbasicInformationAcivity = this;
-        setContentView(R.layout.activity_dbabasic_information);
+        setContentView(R.layout.activity_dba_information);
         initFields();
         focusWatchers();
         textWatchers();
@@ -83,7 +83,7 @@ public class DBAbasicInformationAcivity extends AppCompatActivity {
 
     private void chooseEntityPopup() {
         try {
-            entity = new Dialog(DBAbasicInformationAcivity.this);
+            entity = new Dialog(DBAInfoAcivity.this);
             entity.requestWindowFeature(Window.FEATURE_NO_TITLE);
             entity.setContentView(R.layout.activity_business_type_bottom_sheet);
             entity.setCancelable(true);
@@ -299,7 +299,7 @@ public class DBAbasicInformationAcivity extends AppCompatActivity {
             dbaNextCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(DBAbasicInformationAcivity.this, DBAddressActivity.class);
+                    Intent intent = new Intent(DBAInfoAcivity.this, DBAddressActivity.class);
                     startActivity(intent);
                 }
             });

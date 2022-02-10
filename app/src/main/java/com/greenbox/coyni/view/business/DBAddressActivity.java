@@ -39,7 +39,7 @@ public class DBAddressActivity extends AppCompatActivity {
         DBAcancelIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DBAddressActivity.this, DBAbasicInformationAcivity.class);
+                Intent intent = new Intent(DBAddressActivity.this, DBAInfoAcivity.class);
                 startActivity(intent);
 
             }

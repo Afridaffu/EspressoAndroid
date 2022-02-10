@@ -28,6 +28,7 @@
         >
 
         <TextView
+            android:id="@+id/libraryTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
@@ -43,6 +44,7 @@
             android:background="@color/blue_light" />
 
         <TextView
+            android:id="@+id/takePhotoTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
@@ -59,6 +61,7 @@
 
 
         <TextView
+            android:id="@+id/browseFileTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"

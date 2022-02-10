@@ -153,6 +153,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             business_defaultAccTIL=findViewById(R.id.b_accountTIL);
             business_defaultaccountET=findViewById(R.id.b_accountET);
 
+            business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
             isBiometric = Utils.getIsBiometric();
 
