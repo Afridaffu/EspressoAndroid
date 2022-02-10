@@ -225,7 +225,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             lyCDetails = findViewById(R.id.lyCDetails);
             lyBDetails = findViewById(R.id.lyBDetails);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
-            ctKey.setKeyAction("Buy\nToken",this);
+            ctKey.setKeyAction("Buy\nToken", this);
             ctKey.setScreenName("buy");
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
@@ -355,6 +355,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     }
                 }
             });
+            pDialog = Utils.showProgressDialog(this);
             calculateFee("10");
             strSignOn = objMyApplication.getStrSignOnError();
             signOnData = objMyApplication.getSignOnData();
@@ -389,16 +390,23 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
             @Override
             public void onChanged(TransferFeeResponse transferFeeResponse) {
-                if (transferFeeResponse != null) {
-                    objMyApplication.setTransferFeeResponse(transferFeeResponse);
-                    feeInAmount = transferFeeResponse.getData().getFeeInAmount();
-                    feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
-                        Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
-                        pfee = transferFeeResponse.getData().getFee();
-                        dget = pay - pfee;
-                        buyTokenPreview();
+                try {
+                    if (pDialog != null) {
+                        pDialog.dismiss();
                     }
+                    if (transferFeeResponse != null) {
+                        objMyApplication.setTransferFeeResponse(transferFeeResponse);
+                        feeInAmount = transferFeeResponse.getData().getFeeInAmount();
+                        feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
+                        if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                            Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
+                            pfee = transferFeeResponse.getData().getFee();
+                            dget = pay - pfee;
+                            buyTokenPreview();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -1077,7 +1085,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             LinearLayout cvvErrorLL = cvvDialog.findViewById(R.id.cvvErrorLL);
             CustomKeyboard ctKey;
             ctKey = cvvDialog.findViewById(R.id.ckb);
-            ctKey.setKeyAction("OK",this);
+            ctKey.setKeyAction("OK", this);
             ctKey.setScreenName("buycvv");
             InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
