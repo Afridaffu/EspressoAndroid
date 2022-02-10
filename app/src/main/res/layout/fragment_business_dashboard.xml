@@ -19,11 +19,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/mask_group_16"
+                android:orientation="horizontal"
                 android:paddingStart="@dimen/_21sdp"
                 android:paddingTop="@dimen/_46sdp"
-                android:paddingBottom="@dimen/_16sdp"
-                android:background="@drawable/mask_group_16"
-                android:orientation="horizontal">
+                android:paddingBottom="@dimen/_16sdp">
 
                 <RelativeLayout
                     android:id="@+id/rl_user_icon_layout"
@@ -36,9 +36,9 @@
                         android:id="@+id/iv_user_icon"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
-                        android:padding="2dp"
                         android:contentDescription="@string/user_details"
+                        android:padding="2dp"
+                        android:scaleType="fitXY"
                         android:src="@drawable/acct_profile"
                         android:visibility="visible" />
 
@@ -77,6 +77,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <TextView
@@ -150,6 +151,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -592,6 +594,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -635,7 +638,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_11sdp"
-
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/all_p_deposit"
@@ -645,7 +647,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
+                                android:layout_marginStart="@dimen/_3sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/businesstoken"
@@ -662,7 +664,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_11sdp"
-
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/ac"
@@ -672,7 +673,6 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/a_u_pay"
@@ -1092,7 +1092,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <LinearLayout
