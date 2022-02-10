@@ -35,7 +35,7 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
+//Business dashboard activity created
 public class BusinessDashboardActivity extends BaseActivity {
 
     private BusinessDashboardViewModel businessDashboardViewModel;

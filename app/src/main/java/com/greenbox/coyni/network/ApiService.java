@@ -5,6 +5,8 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
@@ -17,6 +19,7 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
@@ -365,16 +368,25 @@ public interface ApiService {
     Call<BusinessTrackerResponse> getBusinessTracker();
 
     @GET("api/v2/business/company-info")
-    Call<BusinessTrackerResponse> getCompanyInforamtion();
+    Call<CompanyInfoResp> getCompanyInforamtion();
 
     @PATCH("api/v2/business/company-info")
-    Call<BusinessTrackerResponse> updateBasicCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
+    Call<CompanyInfoUpdateResp> updateCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
     @GET("api/v2/business/payment-methods")
     Call<PaymentMethodsResponse> meBusinessPaymentMethods();
 
     @POST("api/v2/banks/me")
     Call<SignetResponse> saveBanks(@Body SignetRequest request);
+
+    @POST("api/v2/business/company-info")
+    Call<CompanyInfoUpdateResp> postCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
+
+    @GET("/api/v2/business/dba-info")
+    Call<CompanyInfoResp> getDBAInforamtion();
+
+    @PATCH("api/v2/coyni-pin/stepup")
+    Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
 
     @GET("api/v2/business/me/wallets")
     Call<BusinessWalletResponse> meMerchantWallet();
