@@ -34,7 +34,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     Long mLastClickTime = 0L;
     BusinessTrackerResponse businessTrackerResponse;
     MyApplication objMyApplication;
-    ImageView businessTrackerCloseIV, caInProgressIV;
+    ImageView businessTrackerCloseIV, caInProgressIV,bagIV;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
@@ -117,6 +117,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
         aggrementsCompleteLL = findViewById(R.id.aggrementsCompleteLL);
         aggrementsIncompleteLL = findViewById(R.id.aggrementsIncompleteLL);
+        bagIV = findViewById(R.id.bagIV);
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaStartTV.setVisibility(View.VISIBLE);
@@ -234,6 +235,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
                     startActivity(intent);
                 }
+            }
+        });
+
+        bagIV = findViewById(R.id.bagIV);
+        bagIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this,MerchantsAgrementActivity.class);
+                startActivity(intent);
             }
         });
 

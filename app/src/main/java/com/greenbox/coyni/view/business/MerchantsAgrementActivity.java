@@ -39,10 +39,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchants_agrement);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
-        AgreementsRequest request = new AgreementsRequest();
-        request.setAgreementType(5);
-        request.setIdentityFile("");
-        businessDashboardViewModel.signedAgreement(request);
+
         initObservers();
 
         doneCV = findViewById(R.id.AgreeDoneCv);
@@ -97,11 +94,18 @@ public class MerchantsAgrementActivity extends BaseActivity {
             String filePath = data.getStringExtra(Utils.DATA);
             File targetFile = new File(filePath);
             if (targetFile.exists()) {
+                sendSignatureRequest(filePath);
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
             }
         }
+    }
+    private void sendSignatureRequest(String filepath){
+        AgreementsRequest request = new AgreementsRequest();
+        request.setAgreementType(5);
+        request.setIdentityFile(filepath);
+        businessDashboardViewModel.signedAgreement(request);
     }
 
     private void initObservers() {
