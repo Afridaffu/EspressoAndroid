@@ -12,6 +12,7 @@ import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
@@ -391,7 +392,11 @@ public interface ApiService {
     @GET("api/v2/business/me/wallets")
     Call<BusinessWalletResponse> meMerchantWallet();
 
+    @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
+    Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
+
     @POST("api/v2/fees/{UserID}")
     Call<Fees> meFees(@Path("UserID") int UserID);
 
 }
+
