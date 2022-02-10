@@ -21,7 +21,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
     private TextView mTvUserName, mTvUserIconText;
-    RelativeLayout mRlBaseLayout;
+    private RelativeLayout mRlBaseLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
