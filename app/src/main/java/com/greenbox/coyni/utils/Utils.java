@@ -110,6 +110,7 @@ public class Utils {
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
     public static final String transFailed = "failed";
+    public static final String transCancelled = "cancelled";
     public static final String walletCategory = "1";
     public static final String addType = "2";
     public static final String withdrawType = "3";
@@ -368,11 +369,11 @@ public class Utils {
     public static void displayAlert(String msg, Activity activity, String header, String fieldError) {
 
         if (!msg.equals("")) {
-            if(msg.equals("Access token expired")){
+            if (msg.equals("Access token expired")) {
                 Intent i = new Intent(activity, LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(i);
-            }else{
+            } else {
                 displayAlertNew(msg, activity, header);
             }
         } else {
@@ -682,6 +683,7 @@ public class Utils {
         ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
         dialog.setIndeterminate(false);
         dialog.setMessage("Please wait...");
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         return dialog;
     }

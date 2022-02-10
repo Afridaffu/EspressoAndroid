@@ -7,6 +7,7 @@ import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
@@ -355,4 +356,8 @@ public interface ApiService {
     @PATCH("api/v2/user-requests")
     Call<UserRequestResponse> updateUserRequests(@Body StatusRequest request);
 
+    @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
+    Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
+
 }
+

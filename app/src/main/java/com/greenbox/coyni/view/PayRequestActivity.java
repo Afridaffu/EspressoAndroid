@@ -102,12 +102,17 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        if (start == 0 && after == 0) {
+            payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
+            tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+        }
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (s != null) {
 
+        }
     }
 
     @Override
