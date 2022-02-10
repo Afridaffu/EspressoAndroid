@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/failedIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_101sdp"
+        android:layout_marginBottom="@dimen/_35sdp"
+        android:contentDescription="@string/to_token_account"
+        android:src="@drawable/ic_failed" />
+
+    <TextView
+        android:id="@+id/tvAFailed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:fontFamily="@font/opensans_bold"
+        android:text="Authorization Failed"
+        android:layout_below="@+id/failedIV"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAFailed"
+        android:layout_marginTop="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_21sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:lineHeight="@dimen/_21ssp"
+        android:text="@string/card_authorization_failed"
+        android:textAlignment="center"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp" />
+    <TextView
+        android:id="@+id/tvMessageLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessage"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:textAlignment="center"
+        android:lineHeight="@dimen/_21sdp"
+        android:text="@string/card_authorization_failed"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp"
+        android:visibility="gone"/>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvTryAgain"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:gravity="center"
+        app:cardBackgroundColor="@color/primary_green"
+        app:cardCornerRadius="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_32sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="Try Again"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

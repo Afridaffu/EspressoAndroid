@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
+import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -393,6 +394,9 @@ public interface ApiService {
 
     @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
+
+    @POST("api/v2/fees/{UserID}")
+    Call<Fees> meFees(@Path("UserID") int UserID);
 
 }
 

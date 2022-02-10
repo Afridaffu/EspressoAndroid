@@ -135,6 +135,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
+            android:name=".view.Business_ReceivePaymentActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
             android:name=".view.PayToPersonalActivity"
             android:configChanges="uiMode"
             android:exported="false"
@@ -387,6 +392,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
+            android:name=".view.Business_UserDetailsListenersActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
             android:name=".view.CreatePasswordActivity"
             android:configChanges="uiMode"
             android:exported="true"
@@ -437,7 +448,7 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.IdentityVerificationBindingLayoutActivity"
             android:exported="false"
@@ -459,11 +470,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".view.business.DBAInfoAcivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ReviewApplicationActivity"
             android:exported="false"
@@ -516,23 +522,17 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.BusinessAddCardActivity"
+            android:name=".view.business.SelectWithdrawMethodActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.Business_UserDetailsListenersActivity"
+            android:name=".view.business.SelectPaymentMethodActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity android:name=".view.Business_ReceivePaymentActivity"
-            android:configChanges="uiMode"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
-
     </application>
 
 </manifest>

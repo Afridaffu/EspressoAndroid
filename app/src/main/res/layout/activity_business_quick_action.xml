@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/roundeddialog"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".view.business.BusinessQuickActionActivity">
 
     <View
         android:layout_width="@dimen/_43sdp"
@@ -30,14 +33,30 @@
             android:layout_marginRight="@dimen/_6sdp"
             android:src="@drawable/ic_scan" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_9sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Scan"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Scan"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/scan_to_make_a_payment"
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_9ssp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -54,7 +73,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/payRequestLL"
+        android:id="@+id/receivePaymentLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -68,16 +87,32 @@
             android:layout_width="@dimen/_23sdp"
             android:layout_height="@dimen/_23sdp"
             android:layout_marginRight="@dimen/_6sdp"
-            android:src="@drawable/ic_send_icon" />
+            android:src="@drawable/ic_receive_payments" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="9dp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Pay/Request"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/receive_payment"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/receive_payments"
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_9ssp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -94,7 +129,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/merchantbuyTokenLL"
+        android:id="@+id/buyTokenLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -110,14 +145,29 @@
             android:layout_marginRight="@dimen/_6sdp"
             android:src="@drawable/ic_buy_icon" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_6sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Buy Tokens"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Buy Tokens"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/buy_token_with"
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_9ssp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -150,14 +200,30 @@
             android:layout_marginRight="@dimen/_6sdp"
             android:src="@drawable/ic_withdraw_icon" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_6sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Withdraw to USD"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Withdraw to USD"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/withdraw_token_to_usd"
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_9ssp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -173,4 +239,5 @@
             android:layout_marginRight="@dimen/_24sdp"
             android:background="@color/blue_light" />
     </LinearLayout>
+
 </LinearLayout>
