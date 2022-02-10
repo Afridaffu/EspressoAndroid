@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
     private TextView mTvUserName, mTvUserIconText;
+    RelativeLayout mRlBaseLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initFields() {
+        mRlBaseLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
