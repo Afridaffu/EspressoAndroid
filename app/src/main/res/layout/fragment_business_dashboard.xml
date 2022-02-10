@@ -26,6 +26,7 @@
                 android:paddingBottom="@dimen/_16sdp">
 
                 <RelativeLayout
+                    android:id="@+id/rl_user_icon_layout"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_50sdp"
                     android:layout_gravity="center_vertical"
