@@ -772,22 +772,34 @@ public class BusinessProfileActivity extends AppCompatActivity {
         enableCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (type.equals("TOUCH")) {
-                    FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
-                    if (!fingerprintManager.hasEnrolledFingerprints()) {
-                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                BIOMETRIC_STRONG);
-                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                try {
+                    if (type.equals("TOUCH")) {
+                        try {
+                            FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
+                            if (!fingerprintManager.hasEnrolledFingerprints()) {
+                                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+                                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                        BIOMETRIC_STRONG);
+                                startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                            } else {
+        //                        dialog = Utils.showProgressDialog(context);
+                                BiometricRequest biometricRequest = new BiometricRequest();
+                                biometricRequest.setBiometricEnabled(true);
+                                biometricRequest.setDeviceId(Utils.getDeviceID());
+                                coyniViewModel.saveBiometric(biometricRequest);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
-//                        dialog = Utils.showProgressDialog(context);
-                        BiometricRequest biometricRequest = new BiometricRequest();
-                        biometricRequest.setBiometricEnabled(true);
-                        biometricRequest.setDeviceId(Utils.getDeviceID());
-                        coyniViewModel.saveBiometric(biometricRequest);
+                        try {
+                            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } else {
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
