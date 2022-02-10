@@ -86,6 +86,7 @@
                                 android:fontFamily="@font/opensans_regular"
                                 android:layout_marginStart="@dimen/_10sdp" />
                             <TextView
+                                android:id="@+id/salesOrderDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -96,6 +97,7 @@
                                 android:layout_weight="1"
                                 android:gravity="right"/>
                             <TextView
+                                android:id="@+id/salesOrderPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -123,6 +125,7 @@
                                 android:fontFamily="@font/opensans_regular"
                                 android:layout_marginStart="@dimen/_10sdp" />
                             <TextView
+                                android:id="@+id/refundDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -133,6 +136,7 @@
                                 android:layout_weight="1"
                                 android:gravity="right"/>
                             <TextView
+                                android:id="@+id/refundPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -202,6 +206,7 @@
                                 android:fontFamily="@font/opensans_regular"
                                 android:layout_marginStart="@dimen/_10sdp" />
                             <TextView
+                                android:id="@+id/tvEBADoll"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -212,6 +217,7 @@
                                 android:layout_weight="1"
                                 android:gravity="right"/>
                             <TextView
+                                android:id="@+id/tvEBAPer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -239,6 +245,7 @@
                                 android:fontFamily="@font/opensans_regular"
                                 android:layout_marginStart="@dimen/_10sdp" />
                             <TextView
+                                android:id="@+id/instantPayDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -249,6 +256,7 @@
                                 android:layout_weight="1"
                                 android:gravity="right"/>
                             <TextView
+                                android:id="@+id/instantPayPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -276,6 +284,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/signetAccDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -286,6 +295,7 @@
                                 android:singleLine="true"
                                 android:gravity="right"/>
                             <TextView
+                                android:id="@+id/signetAccPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -313,6 +323,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/giftCardDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -323,6 +334,7 @@
                                 android:gravity="right"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/giftCardPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -350,6 +362,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/fdwDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -360,6 +373,7 @@
                                 android:gravity="right"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/fdwPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -415,6 +429,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/buyTokenEBADollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -425,6 +440,7 @@
                                 android:gravity="right"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/buyTokenEBAPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -452,6 +468,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/buytokenSignetDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -462,6 +479,7 @@
                                 android:gravity="right"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/buytokenSignetPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"
@@ -515,6 +533,7 @@
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/monthlyFeeDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="$ 0.00"
@@ -525,6 +544,7 @@
                                 android:gravity="right"
                                 android:singleLine="true"/>
                             <TextView
+                                android:id="@+id/monthlyFeePerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0%"

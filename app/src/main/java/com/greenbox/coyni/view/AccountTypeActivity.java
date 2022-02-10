@@ -53,6 +53,7 @@ public class AccountTypeActivity extends AppCompatActivity {
             businessAccontLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
             });
