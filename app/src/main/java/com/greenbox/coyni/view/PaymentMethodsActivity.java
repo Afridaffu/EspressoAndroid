@@ -59,7 +59,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     ProgressDialog dialog, pDialog;
     SignOnData signOnData;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     CardView cvTryAgain, cvDone;
 
@@ -78,15 +78,17 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment"))
-                    && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
-                ControlMethod("paymentMethods");
-                strCurrent = "paymentMethods";
-            } else if (strCurrent.equals("externalBank")) {
-                ControlMethod("addpayment");
-                strCurrent = "addpayment";
-            } else if (!strCurrent.equals("firstError")) {
-                super.onBackPressed();
+            if (!isBankSuccess) {
+                if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment"))
+                        && (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0)) {
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                } else if (strCurrent.equals("externalBank")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpayment";
+                } else if (!strCurrent.equals("firstError")) {
+                    super.onBackPressed();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -556,11 +558,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     private void displaySuccess() {
         try {
+            isBankSuccess = true;
             ControlMethod("banksuccess");
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    isBankSuccess = false;
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";

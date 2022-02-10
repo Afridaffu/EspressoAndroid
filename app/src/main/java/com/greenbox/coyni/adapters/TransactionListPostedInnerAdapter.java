@@ -70,8 +70,6 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-
-//        holder.txnDescrip.setText(objData.getTxnDescription());
         holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
 
         if (position == transactionListItemsposted.size() - 1) {
@@ -127,9 +125,11 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case Utils.transFailed:
+            case Utils.transCancelled: {
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.error_red));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
+            }
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
