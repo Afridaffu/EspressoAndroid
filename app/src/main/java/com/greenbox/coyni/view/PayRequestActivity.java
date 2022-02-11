@@ -102,12 +102,17 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        if (start == 0 && after == 0) {
+            payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
+            tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+        }
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (s != null) {
 
+        }
     }
 
     @Override
@@ -610,7 +615,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userProfile = findViewById(R.id.imgProfile);
             userWalletAddre = findViewById(R.id.accAddress);
             requestedToUserId = userDetails.getData().getUserId();
-            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+            if (userDetails.getData().getFullName().length() > 20) {
+                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
+            } else {
+                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+            }
+//            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
             strUserName = Utils.capitalize(userDetails.getData().getFullName());
             String imageTextNew = "";
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
@@ -1223,7 +1233,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
             TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
-            userNamePayTV.setText(strUserName);
+            if (strUserName.length() > 20) {
+                userNamePayTV.setText(strUserName.substring(0, 20) + "...");
+            } else {
+                userNamePayTV.setText(strUserName);
+            }
             tvHeading.setText("Requesting");
 
             if (recipientAddress.length() > 13) {

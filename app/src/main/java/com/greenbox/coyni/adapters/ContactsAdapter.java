@@ -130,6 +130,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (objData.getWalletAddress() != null && !objData.getWalletAddress().equals("")) {
                             Intent i = new Intent(mContext, PayRequestActivity.class);
                             i.putExtra("walletId", objData.getWalletAddress());
