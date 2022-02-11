@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,10 +23,14 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class SignatureTempActivity extends BaseActivity {
 
     private ImageView mIVSignature;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +53,19 @@ public class SignatureTempActivity extends BaseActivity {
             });
 
     private void getSignature(Intent data) {
-        if(data != null) {
+        if (data != null) {
             String filePath = data.getStringExtra(Utils.DATA);
             File targetFile = new File(filePath);
             if (targetFile.exists()) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = false;
+                options.inSampleSize = 3;
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
-                LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
+                LogUtils.v(TAG, myBitmap.getHeight() + " - " + myBitmap.getWidth() + " - file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
             }
         }
     }
+
+
 }
