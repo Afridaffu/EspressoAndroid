@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.signedagreements.AgreementsRequest;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
@@ -25,6 +24,9 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 import java.io.File;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class MerchantsAgrementActivity extends BaseActivity {
     public CardView doneCV;
@@ -102,10 +104,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
         }
     }
     private void sendSignatureRequest(String filepath){
-        AgreementsRequest request = new AgreementsRequest();
-        request.setAgreementType(5);
-        request.setIdentityFile(filepath);
-        businessDashboardViewModel.signedAgreement(request);
+        MultipartBody.Part file =null;
+        RequestBody agreementType = null;
+        businessDashboardViewModel.signedAgreement(file,agreementType);
     }
 
     private void initObservers() {

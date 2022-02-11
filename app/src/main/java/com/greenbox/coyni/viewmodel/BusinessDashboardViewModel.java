@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
-import com.greenbox.coyni.model.signedagreements.AgreementsRequest;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
@@ -20,6 +19,8 @@ import com.greenbox.coyni.network.AuthApiClient;
 
 import java.lang.reflect.Type;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -156,10 +157,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void signedAgreement(AgreementsRequest request) {
+    public void signedAgreement(MultipartBody.Part file, RequestBody agreementType) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<SignedAgreementResponse> mCall = apiService.signedAgreement(request);
+            Call<SignedAgreementResponse> mCall = apiService.signedAgreement(file,agreementType);
             mCall.enqueue(new Callback<SignedAgreementResponse>() {
                 @Override
                 public void onResponse(Call<SignedAgreementResponse> call, Response<SignedAgreementResponse> response) {

@@ -84,7 +84,6 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
-import com.greenbox.coyni.model.signedagreements.AgreementsRequest;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
@@ -266,6 +265,10 @@ public interface ApiService {
     Call<IdentityImageResponse> uploadIdentityImage(@Part MultipartBody.Part filee,
                                                     @Part("identityType") RequestBody type,
                                                     @Part("identityNumber") RequestBody number);
+    @Multipart
+    @POST("api/v2/business/sign-agreement")
+    Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
+                                                  @Part("identityType") RequestBody agreementType);
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
@@ -382,9 +385,6 @@ public interface ApiService {
 
     @GET("/api/v2/business/dba-info")
     Call<CompanyInfoResp> getDBAInforamtion();
-
-    @POST("api/v2/business/sign-agreement")
-    Call<SignedAgreementResponse> signedAgreement(@Body AgreementsRequest request);
 
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
