@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
@@ -29,6 +30,7 @@ import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
+import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
@@ -268,7 +270,7 @@ public interface ApiService {
     @Multipart
     @POST("api/v2/business/sign-agreement")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
-                                                  @Part("identityType") RequestBody agreementType);
+                                                  @Part("agreementType") RequestBody agreementType);
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
@@ -379,6 +381,12 @@ public interface ApiService {
 
     @POST("api/v2/banks/me")
     Call<SignetResponse> saveBanks(@Body SignetRequest request);
+
+    @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
+    Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
+
+    @POST("api/v2/fees/{UserID}")
+    Call<Fees> meFees(@Path("UserID") int UserID);
 
     @POST("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> postCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
