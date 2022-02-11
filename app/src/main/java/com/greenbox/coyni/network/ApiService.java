@@ -86,7 +86,6 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
-import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.model.templates.TemplateRequest;
@@ -382,12 +381,6 @@ public interface ApiService {
     @POST("api/v2/banks/me")
     Call<SignetResponse> saveBanks(@Body SignetRequest request);
 
-    @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
-    Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
-
-    @POST("api/v2/fees/{UserID}")
-    Call<Fees> meFees(@Path("UserID") int UserID);
-
     @POST("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> postCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
@@ -399,6 +392,15 @@ public interface ApiService {
 
     @GET("api/v2/business/me/wallets")
     Call<BusinessWalletResponse> meMerchantWallet();
+
+    @GET("api/v2/lov/BT")
+    Call<BusinessTypeResp> getBusinessType();
+
+    @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
+    Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
+
+    @POST("api/v2/fees/{UserID}")
+    Call<Fees> meFees(@Path("UserID") int UserID);
 
 }
 

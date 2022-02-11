@@ -474,8 +474,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
-                        String str = firstNameET.getText().toString().trim();
-                        if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                        String str = firstNameET.getText().toString();
+                        if (str.length() > 0 && str.toString().trim().length() == 0) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
                         } else if (str.length() > 0 && str.contains(".")) {
@@ -522,8 +522,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 @Override
                 public void afterTextChanged(Editable editable) {
                     try {
-                        String str = lastNameET.getText().toString().trim();
-                        if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        String str = lastNameET.getText().toString();
+                        if (str.length() > 0 && str.toString().trim().length() == 0) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
                         } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
@@ -568,7 +568,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 public void afterTextChanged(Editable editable) {
                     try {
                         String str = emailET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                        if ((str.length() > 0 && str.toString().trim().length() == 0) || (str.length() > 0 && str.contains(" "))) {
                             emailET.setText(emailET.getText().toString().replaceAll(" ", ""));
                             emailET.setSelection(emailET.getText().length());
                         }
@@ -658,6 +658,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
 
                                 passwordTIL.setHint("Password");
+
+                                if (confPassErrorLL.getVisibility() == VISIBLE) {
+                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                }
                             }
                         }
                         enableOrDisableNext();
@@ -836,15 +840,22 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     if (b) {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
-                        passwordET.setHint("8-12 Characters");
+                        if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
+                            passwordET.setHint("8-12 Characters");
+//                            stregnthViewLL.setVisibility(VISIBLE);
+//                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+//                            passwordTIL.setHint("Password");
+//                            focusedID = passwordET.getId();
+                            passwordInfoTV.setVisibility(VISIBLE);
+                            passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
+                            passwordErrorLL.setVisibility(GONE);
+                        }
                         stregnthViewLL.setVisibility(VISIBLE);
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
                         passwordTIL.setHint("Password");
                         focusedID = passwordET.getId();
-                        passwordInfoTV.setVisibility(VISIBLE);
-                        passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
-                        passwordErrorLL.setVisibility(GONE);
                     } else {
                         stregnthViewLL.setVisibility(GONE);
                         if (passwordET.getText().toString().trim().length() == 0) {
