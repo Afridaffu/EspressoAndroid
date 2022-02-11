@@ -194,6 +194,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void initObserver() {
+
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override
             public void onChanged(ValidateResponse validateResponse) {
@@ -532,20 +533,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-            @Override
-            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
-
-                if (businessTrackerResponse != null) {
-                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-
-                        Log.e("Tracker resp", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
-                    }
-                }
-            }
-        });
-
     }
 
     @Override
@@ -799,11 +786,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
             //Uncomment for stepup process
-//            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
-//                coyniViewModel.stepUpPin(request);
-//            } else {
-            coyniViewModel.validateCoyniPin(request);
-//            }
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
+                coyniViewModel.stepUpPin(request);
+            } else {
+                coyniViewModel.validateCoyniPin(request);
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -979,6 +966,18 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
+        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+            if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
+            } else {
+                dashboardIntent = new Intent(PINActivity.this, BusinessRegistrationTrackerActivity.class);
+            }
+        }
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(dashboardIntent);
     }
 
     private void WithdrawMethod() {

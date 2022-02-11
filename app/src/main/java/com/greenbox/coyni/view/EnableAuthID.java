@@ -36,6 +36,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class EnableAuthID extends AppCompatActivity {
     Long mLastClickTime = 0L;
     LinearLayout layoutNotnow, layoutNotnowFace;
     MyApplication objMyApplication;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class EnableAuthID extends AppCompatActivity {
             setContentView(R.layout.activity_enable_auth_id);
 
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             enableFaceCV = findViewById(R.id.enableFaceCV);
             dontRemindFace = findViewById(R.id.dontRemindFace);
             successGetStartedCV = findViewById(R.id.successGetStartedCV);
@@ -121,6 +124,7 @@ public class EnableAuthID extends AppCompatActivity {
                 case "SUCCESS":
                     faceIDRL.setVisibility(View.GONE);
                     touchIDRL.setVisibility(View.GONE);
+                    enableType = "SUCCESS";
                     showSuccessLayout();
                     break;
             }
@@ -150,6 +154,7 @@ public class EnableAuthID extends AppCompatActivity {
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
+                        enableType = "SUCCESS";
                         showSuccessLayout();
                     }
                 } catch (Exception ex) {
@@ -167,6 +172,7 @@ public class EnableAuthID extends AppCompatActivity {
                         } else {
                             faceIDRL.setVisibility(View.GONE);
                             touchIDRL.setVisibility(View.GONE);
+                            enableType = "SUCCESS";
                             showSuccessLayout();
                         }
                     } catch (Exception ex) {
@@ -212,6 +218,7 @@ public class EnableAuthID extends AppCompatActivity {
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
+                        enableType = "SUCCESS";
                         showSuccessLayout();
                     }
                 } catch (Exception ex) {
@@ -226,6 +233,7 @@ public class EnableAuthID extends AppCompatActivity {
                     } else {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.GONE);
+                        enableType = "SUCCESS";
                         showSuccessLayout();
                     }
                 } catch (Exception ex) {
@@ -294,61 +302,81 @@ public class EnableAuthID extends AppCompatActivity {
     }
 
     public void initObserver() {
-        coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
-            @Override
-            public void onChanged(BiometricResponse biometricResponse) {
-                dialog.dismiss();
-                if (biometricResponse != null) {
-                    Log.e("bio resp", new Gson().toJson(biometricResponse));
-                    saveToken(biometricResponse.getData().getToken());
-                    Utils.generateUUID(EnableAuthID.this);
-                    if (enableType.equals("FACE")) {
-                        saveFace("true");
-                        saveThumb("false");
-                        Utils.showCustomToast(EnableAuthID.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    faceIDRL.setVisibility(View.GONE);
-                                    touchIDRL.setVisibility(View.GONE);
-                                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
-                                        launchDashboard();
-                                    } else {
-//                                        successRL.setVisibility(View.VISIBLE);
-                                        showSuccessLayout();
+        try {
+
+            coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
+                @Override
+                public void onChanged(BiometricResponse biometricResponse) {
+                    dialog.dismiss();
+                    if (biometricResponse != null) {
+                        Log.e("bio resp", new Gson().toJson(biometricResponse));
+                        saveToken(biometricResponse.getData().getToken());
+                        Utils.generateUUID(EnableAuthID.this);
+                        if (enableType.equals("FACE")) {
+                            saveFace("true");
+                            saveThumb("false");
+                            Utils.showCustomToast(EnableAuthID.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        faceIDRL.setVisibility(View.GONE);
+                                        touchIDRL.setVisibility(View.GONE);
+                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                                            launchDashboard();
+                                        } else {
+                                            //                                        successRL.setVisibility(View.VISIBLE);
+                                            enableType = "SUCCESS";
+                                            showSuccessLayout();
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
                                     }
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
                                 }
-                            }
-                        }, 2000);
-                    } else if (enableType.equals("TOUCH")) {
-                        saveFace("false");
-                        saveThumb("true");
-                        Utils.showCustomToast(EnableAuthID.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    faceIDRL.setVisibility(View.GONE);
-                                    touchIDRL.setVisibility(View.GONE);
-                                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
-                                        launchDashboard();
-                                    } else {
-//                                        successRL.setVisibility(View.VISIBLE);
-                                        showSuccessLayout();
+                            }, 2000);
+                        } else if (enableType.equals("TOUCH")) {
+                            saveFace("false");
+                            saveThumb("true");
+                            Utils.showCustomToast(EnableAuthID.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        faceIDRL.setVisibility(View.GONE);
+                                        touchIDRL.setVisibility(View.GONE);
+                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                                            launchDashboard();
+                                        } else {
+                                            //                                        successRL.setVisibility(View.VISIBLE);
+                                            enableType = "SUCCESS";
+                                            showSuccessLayout();
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
                                     }
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
                                 }
-                            }
-                        }, 2000);
+                            }, 2000);
+                        }
+                        objMyApplication.setBiometric(true);
                     }
-                    objMyApplication.setBiometric(true);
                 }
-            }
-        });
+            });
+
+            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+                @Override
+                public void onChanged(BusinessTrackerResponse btResp) {
+
+                    if (btResp != null) {
+                        if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTrackerResponse(btResp);
+                        }
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -417,13 +445,18 @@ public class EnableAuthID extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        try {
-            Intent intent = new Intent(EnableAuthID.this, OnboardActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (enableType.equals("SUCCESS") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+
+        } else {
+            try {
+                Intent intent = new Intent(EnableAuthID.this, OnboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
+
     }
 
     public void toastTimer(Dialog dialog) {
@@ -461,6 +494,7 @@ public class EnableAuthID extends AppCompatActivity {
             successRL.setVisibility(View.VISIBLE);
             businessSuccessRL.setVisibility(View.GONE);
         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            businessIdentityVerificationViewModel.getBusinessTracker();
             successRL.setVisibility(View.GONE);
             businessSuccessRL.setVisibility(View.VISIBLE);
         }

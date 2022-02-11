@@ -42,14 +42,18 @@ public class ProfilesResponse {
         this.error = error;
     }
 
-    public class Profiles{
+    public class Profiles {
         private int id;
-        private int parentId;
-        private String  entityName;
-        private String  accountType;
-        private String  countryCode;
-        private String  phoneNumber;
-        private String  email;
+        private String fullName;
+        private String accountType;
+        private String countryCode;
+        private String phoneNumber;
+        private String email;
+        private String image;
+        private String companyName;
+        private String dbaName;
+        private String accountStatus;
+        private String dbaOwner;
 
         public int getId() {
             return id;
@@ -59,20 +63,12 @@ public class ProfilesResponse {
             this.id = id;
         }
 
-        public int getParentId() {
-            return parentId;
+        public String getFullName() {
+            return fullName;
         }
 
-        public void setParentId(int parentId) {
-            this.parentId = parentId;
-        }
-
-        public String getEntityName() {
-            return entityName;
-        }
-
-        public void setEntityName(String entityName) {
-            this.entityName = entityName;
+        public void setFullName(String fullName) {
+            this.fullName = fullName;
         }
 
         public String getAccountType() {
@@ -105,6 +101,46 @@ public class ProfilesResponse {
 
         public void setEmail(String email) {
             this.email = email;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public String getDbaName() {
+            return dbaName;
+        }
+
+        public void setDbaName(String dbaName) {
+            this.dbaName = dbaName;
+        }
+
+        public String getAccountStatus() {
+            return accountStatus;
+        }
+
+        public void setAccountStatus(String accountStatus) {
+            this.accountStatus = accountStatus;
+        }
+
+        public String getDbaOwner() {
+            return dbaOwner;
+        }
+
+        public void setDbaOwner(String dbaOwner) {
+            this.dbaOwner = dbaOwner;
         }
     }
 }

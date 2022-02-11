@@ -18,7 +18,7 @@ public class CompanyInfoRequest {
     private PhNoWithCountryCode phoneNumberDto = new PhNoWithCountryCode();
     private String businessEntity = "";
     private String ssnOrEin = "";
-    private int identificationType; // Here Identification Type is SSN(11) or EIN/TIN(10)
+    private int identificationType = 0; // Here Identification Type is SSN(11) or EIN/TIN(10)
 
 
     public String getAddressLine1() {

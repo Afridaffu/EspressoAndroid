@@ -48,10 +48,14 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                 try {
                     CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
                     if (b) {
+                        if(FROM.equals("CompanyInfo")){
+                            comp.ssnErrorLL.setVisibility(GONE);
+                            comp.basicInfoSL.scrollTo(comp.basicNextCV.getLeft(), comp.basicNextCV.getBottom());
+                        }
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 9)) {
+                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 10)) {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             comp.ssnErrorLL.setVisibility(VISIBLE);
                             comp.ssnErrorTV.setText("Enter a Valid " + getSSNTypeText());
@@ -74,8 +78,13 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
 
 
         ssnET.setOnTouchListener((view, motionEvent) -> {
-            CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
-            comp.basicInfoSL.scrollTo(comp.ssnET.getLeft(), comp.ssnET.getBottom());
+            if(FROM.equals("CompanyInfo")){
+                CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
+                comp.pageOneView.setVisibility(VISIBLE);
+                comp.basicInfoSL.scrollTo(comp.timezoneTIL.getLeft(), comp.timezoneTIL.getBottom());
+                ssnET.requestFocus();
+                ssnET.setSelection(ssnET.getText().toString().length());
+            }
             return false;
         });
 
@@ -89,15 +98,16 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 CompanyInformationActivity comAct = (CompanyInformationActivity) mContext;
-                if (charSequence.length() == 9) {
+                if (charSequence.length() == 10) {
                     comAct.ssnErrorLL.setVisibility(GONE);
                     comAct.isSSN = true;
-                } else if (charSequence.length() > 0 && charSequence.length() < 9) {
+                } else if (charSequence.length() > 0 && charSequence.length() < 10) {
                     comAct.isSSN = false;
-                } else if ((ssnET.getText().length() == 0)) {
+                }
+                else if ((ssnET.getText().length() == 0)) {
                     comAct.isSSN = false;
-                    comAct.ssnErrorLL.setVisibility(VISIBLE);
-                    comAct.ssnErrorTV.setText("Field Required");
+//                    comAct.ssnErrorLL.setVisibility(VISIBLE);
+//                    comAct.ssnErrorTV.setText("Field Required");
                 }
                 comAct.enableOrDisableNext();
             }
