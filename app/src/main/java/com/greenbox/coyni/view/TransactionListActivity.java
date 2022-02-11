@@ -311,16 +311,6 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             @Override
             public void onChanged(TransactionList transactionList) {
                 try {
-//                    if (progressDialog != null)
-//                        progressDialog.dismiss();
-//                    if (searchET.hasFocus()) {
-//                        searchET.clearFocus();
-//                        Utils.hideKeypad(TransactionListActivity.this);
-//                    }
-//                    searchET.removeTextChangedListener(TransactionListActivity.this);
-//                    searchET.setText("");
-//                    searchET.addTextChangedListener(TransactionListActivity.this);
-
                     if (transactionList != null && transactionList.getData().getItems() != null) {
                         if (transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             progressBar.setVisibility(View.GONE);

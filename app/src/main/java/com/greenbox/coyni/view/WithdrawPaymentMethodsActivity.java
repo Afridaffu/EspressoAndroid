@@ -55,7 +55,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     WalletResponse walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     Dialog payDialog;
@@ -119,23 +119,25 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (strCurrent.equals("externalBank")) {
-            strCurrent = "";
-            ControlMethod("withdrawpay");
-            withdrawPaymentMethod("bank");
-            strScreen = "withdrawpay";
-        } else if (strCurrent.equals("debit")) {
-            strCurrent = "";
-            ControlMethod("withdrawpay");
-            withdrawPaymentMethod("card");
-            strScreen = "withdrawpay";
-        } else if ((strScreen.equals("withdrawpay") && !strCurrent.equals("firstError")) || strCurrent.equals("addpayment")) {
-            ControlMethod("withdrawmethod");
-            selectWithdrawMethod();
-            strScreen = "withdrawmethod";
-            strCurrent = "";
-        } else if (!strCurrent.equals("firstError")) {
-            super.onBackPressed();
+        if (!isBankSuccess) {
+            if (strCurrent.equals("externalBank")) {
+                strCurrent = "";
+                ControlMethod("withdrawpay");
+                withdrawPaymentMethod("bank");
+                strScreen = "withdrawpay";
+            } else if (strCurrent.equals("debit")) {
+                strCurrent = "";
+                ControlMethod("withdrawpay");
+                withdrawPaymentMethod("card");
+                strScreen = "withdrawpay";
+            } else if ((strScreen.equals("withdrawpay") && !strCurrent.equals("firstError")) || strCurrent.equals("addpayment")) {
+                ControlMethod("withdrawmethod");
+                selectWithdrawMethod();
+                strScreen = "withdrawmethod";
+                strCurrent = "";
+            } else if (!strCurrent.equals("firstError")) {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -1140,11 +1142,13 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     private void displaySuccess() {
         try {
+            isBankSuccess = true;
             ControlMethod("banksuccess");
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    isBankSuccess = false;
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("withdrawmethod");
                         selectWithdrawMethod();

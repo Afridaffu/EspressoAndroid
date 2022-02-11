@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.utils.MyApplication;
@@ -27,6 +28,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     String strGbxTxnIdType = "";
     int txnType, txnSubType;
     ProgressDialog progressDialog;
+    CardView cancelTxnCV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         dashboardViewModel.getTransactionDetailsMutableLiveData().observe(this, new Observer<TransactionDetails>() {
             @Override
             public void onChanged(TransactionDetails transactionDetails) {
-                progressDialog.dismiss();
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
                 if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("Success")) {
                     switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
                         case "pay / request":
@@ -148,6 +152,22 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                             }
                             break;
                     }
+                }
+            }
+        });
+
+        dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, new Observer<CancelBuyTokenResponse>() {
+            @Override
+            public void onChanged(CancelBuyTokenResponse cancelBuyTokenResponse) {
+                try {
+                    progressDialog.dismiss();
+                    if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase("Success")) {
+                        Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
+                        //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                        dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -380,12 +400,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         bankAccNumTV = findViewById(R.id.btbankaccountTV);
         bankNameTV = findViewById(R.id.btbanknameTV);
         nameOnAccTV = findViewById(R.id.btbanknameACTV);
+        cancelTxnCV = findViewById(R.id.cancelTxnCV);
         headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
 
         amount.setText(objData.getYouGet().replace("CYN", ""));
 
         status.setText(objData.getStatus());
-
+        cancelTxnCV.setVisibility(View.GONE);
         switch (objData.getStatus().toLowerCase()) {
             case "completed":
                 status.setTextColor(getResources().getColor(R.color.completed_status));
@@ -394,22 +415,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             case "in progress":
                 status.setTextColor(getResources().getColor(R.color.inprogress_status));
                 status.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                findViewById(R.id.cancelTxnCV).setVisibility(View.VISIBLE);
+                cancelTxnCV.setVisibility(View.VISIBLE);
                 break;
             case "pending":
                 status.setTextColor(getResources().getColor(R.color.pending_status));
                 status.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             case "failed":
+            case "cancelled": {
                 status.setTextColor(getResources().getColor(R.color.failed_status));
                 status.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
+            }
         }
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
-
-//        Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", ""));
-//        Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", ""));
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
         purchaseamount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
         fee.setText("$" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("USD", "").trim()));
@@ -420,8 +440,20 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         depositIDTV.setText(objData.getDepositid().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         bankNameTV.setText(objData.getBankName());
 
-
         nameOnAccTV.setText(objData.getNameOnBankAccount());
+
+        cancelTxnCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                    dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         lyPRClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -10,6 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.fee.FeeData;
+import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
@@ -17,6 +19,7 @@ import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 import okhttp3.MultipartBody;
@@ -31,6 +34,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
@@ -50,6 +54,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<SignedAgreementResponse> getSignedAgreementResponseMutableLiveData() {
         return signedAgreementResponseMutableLiveData;
+    }
+
+    public MutableLiveData<Fees> getFeesMutableLiveData() {
+        return feesMutableLiveData;
     }
 
     public void meBusinessPaymentMethods() {
@@ -191,6 +199,39 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             });
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+    public void meFees(int UserID) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<Fees> mCall = apiService.meFees(UserID);
+            mCall.enqueue(new Callback<Fees>() {
+                @Override
+                public void onResponse(Call<Fees> call, Response<Fees> response) {
+                    if (response.isSuccessful()) {
+                        Fees feeData = response.body();
+                        feesMutableLiveData.setValue(feeData);
+                    }else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<Fees>() {
+                        }.getType();
+                        Fees errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        feesMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Fees> call, Throwable t) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

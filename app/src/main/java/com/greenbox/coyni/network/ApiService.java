@@ -393,3 +393,4 @@ public interface ApiService {
     Call<BusinessWalletResponse> meMerchantWallet();
 
 }
+

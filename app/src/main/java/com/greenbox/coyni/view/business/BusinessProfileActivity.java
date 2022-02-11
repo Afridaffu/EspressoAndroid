@@ -36,6 +36,7 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
@@ -50,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,preferencesLL;
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,preferencesLL,accountlimitsLL;
     public static SQLiteDatabase mydatabase;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -140,6 +141,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private void initFields() {
         try {
+            accountlimitsLL = findViewById(R.id.cpAccountLimitsLL);
             feesLL = findViewById(R.id.feesLL);
             teamLL = findViewById(R.id.teamLL);
             paymentMethodsLL = findViewById(R.id.paymentMethodsLL);
@@ -283,7 +285,17 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-
+            accountlimitsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, AccountLimitsActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             paymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -772,22 +784,34 @@ public class BusinessProfileActivity extends AppCompatActivity {
         enableCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (type.equals("TOUCH")) {
-                    FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
-                    if (!fingerprintManager.hasEnrolledFingerprints()) {
-                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                BIOMETRIC_STRONG);
-                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                try {
+                    if (type.equals("TOUCH")) {
+                        try {
+                            FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
+                            if (!fingerprintManager.hasEnrolledFingerprints()) {
+                                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+                                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                        BIOMETRIC_STRONG);
+                                startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                            } else {
+        //                        dialog = Utils.showProgressDialog(context);
+                                BiometricRequest biometricRequest = new BiometricRequest();
+                                biometricRequest.setBiometricEnabled(true);
+                                biometricRequest.setDeviceId(Utils.getDeviceID());
+                                coyniViewModel.saveBiometric(biometricRequest);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
-//                        dialog = Utils.showProgressDialog(context);
-                        BiometricRequest biometricRequest = new BiometricRequest();
-                        biometricRequest.setBiometricEnabled(true);
-                        biometricRequest.setDeviceId(Utils.getDeviceID());
-                        coyniViewModel.saveBiometric(biometricRequest);
+                        try {
+                            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } else {
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
