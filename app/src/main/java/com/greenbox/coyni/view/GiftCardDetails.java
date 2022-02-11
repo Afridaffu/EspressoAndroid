@@ -175,13 +175,13 @@ public class GiftCardDetails extends AppCompatActivity {
             lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
-            if (amountET.requestFocus()==true){
-                amountET.setHint("Coyni@example.com");
-                amountTIL.setBoxStrokeColorStateList(getColorStateList(R.color.primary_green));
-            }
-            else {
-                amountET.setHint("");
-            }
+//            if (amountET.requestFocus()==true){
+//                amountET.setHint("Coyni@example.com");
+//                amountTIL.setBoxStrokeColorStateList(getColorStateList(R.color.primary_green));
+//            }
+//            else {
+//                amountET.setHint("");
+//            }
 
             //isBiometric = Utils.checkBiometric(GiftCardDetails.this);
             SetFaceLock();
@@ -482,8 +482,8 @@ public class GiftCardDetails extends AppCompatActivity {
                                 amountErrorLL.setVisibility(GONE);
                             }
                         } else if (amountET.getText().toString().trim().length() == 0) {
-                            amountErrorLL.setVisibility(VISIBLE);
-                            amountErrorTV.setText("Field Required");
+//                            amountErrorLL.setVisibility(VISIBLE);
+//                            amountErrorTV.setText("Field Required");
                             isAmount = false;
                         }
                         enableOrDisableNext();
@@ -528,8 +528,8 @@ public class GiftCardDetails extends AppCompatActivity {
 //                        firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_black));
                     } else if (firstNameET.getText().toString().trim().length() == 0) {
-                        firstNameErrorLL.setVisibility(VISIBLE);
-                        firstNameErrorTV.setText("Field Required");
+//                        firstNameErrorLL.setVisibility(VISIBLE);
+//                        firstNameErrorTV.setText("Field Required");
                     } else {
                         isFirstName = false;
                     }
@@ -572,8 +572,8 @@ public class GiftCardDetails extends AppCompatActivity {
 //                        lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_black));
                     } else if (lastNameET.getText().toString().trim().length() == 0) {
-                        lastNameErrorLL.setVisibility(VISIBLE);
-                        lastNameErrorTV.setText("Field Required");
+//                        lastNameErrorLL.setVisibility(VISIBLE);
+//                        lastNameErrorTV.setText("Field Required");
                     } else {
                         isLastName = false;
                     }
@@ -612,8 +612,8 @@ public class GiftCardDetails extends AppCompatActivity {
                         Utils.setUpperHintColor(emailTIL, getResources().getColor(R.color.primary_black));
 
                     } else if (emailET.getText().toString().trim().length() == 0) {
-                        emailErrorLL.setVisibility(VISIBLE);
-                        emailErrorTV.setText("Field Required");
+//                        emailErrorLL.setVisibility(VISIBLE);
+//                        emailErrorTV.setText("Field Required");
                     }
                     if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                         isEmail = true;
@@ -769,7 +769,8 @@ public class GiftCardDetails extends AppCompatActivity {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
 //                            Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));
-                            emailTIL.setHint("Coyni@example.com");
+//                            emailTIL.setHint("Coyni@example.com");
+                            emailTIL.setHint("Email");
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Field Required");
                         } else {
@@ -779,7 +780,8 @@ public class GiftCardDetails extends AppCompatActivity {
                             emailErrorTV.setText("Please Enter a valid Email");
                         }
                     } else {
-                        emailET.setHint("Coyni@example.com");
+//                        emailET.setHint("Coyni@example.com");
+                        emailET.setHint("Email");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));

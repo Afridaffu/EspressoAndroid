@@ -102,6 +102,7 @@ public class Utils {
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
     public static final String transFailed = "failed";
+    public static final String transCancelled = "cancelled";
     public static final String walletCategory = "1";
     public static final String addType = "2";
     public static final String withdrawType = "3";
@@ -689,6 +690,7 @@ public class Utils {
         ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
         dialog.setIndeterminate(false);
         dialog.setMessage("Please wait...");
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         return dialog;
     }

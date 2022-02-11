@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
 import com.greenbox.coyni.model.cards.CardEditResponse;
@@ -22,6 +23,7 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
+import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -394,4 +396,11 @@ public interface ApiService {
     @GET("api/v2/lov/BT")
     Call<BusinessTypeResp> getBusinessType();
 
+    @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
+    Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
+
+    @POST("api/v2/fees/{UserID}")
+    Call<Fees> meFees(@Path("UserID") int UserID);
+
 }
+

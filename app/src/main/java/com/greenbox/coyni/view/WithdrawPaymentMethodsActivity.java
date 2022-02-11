@@ -55,7 +55,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     WalletResponse walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     Dialog payDialog;
@@ -67,7 +67,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
-    CardView cvNext, cvTryAgain;
+    CardView cvNext, cvTryAgain, cvDone;
     public static WithdrawPaymentMethodsActivity withdrawPaymentMethodsActivity;
     TextView tvErrorHead, tvErrorMessage;
 
@@ -119,23 +119,25 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (strCurrent.equals("externalBank")) {
-            strCurrent = "";
-            ControlMethod("withdrawpay");
-            withdrawPaymentMethod("bank");
-            strScreen = "withdrawpay";
-        } else if (strCurrent.equals("debit")) {
-            strCurrent = "";
-            ControlMethod("withdrawpay");
-            withdrawPaymentMethod("card");
-            strScreen = "withdrawpay";
-        } else if ((strScreen.equals("withdrawpay") && !strCurrent.equals("firstError")) || strCurrent.equals("addpayment")) {
-            ControlMethod("withdrawmethod");
-            selectWithdrawMethod();
-            strScreen = "withdrawmethod";
-            strCurrent = "";
-        } else if (!strCurrent.equals("firstError")) {
-            super.onBackPressed();
+        if (!isBankSuccess) {
+            if (strCurrent.equals("externalBank")) {
+                strCurrent = "";
+                ControlMethod("withdrawpay");
+                withdrawPaymentMethod("bank");
+                strScreen = "withdrawpay";
+            } else if (strCurrent.equals("debit")) {
+                strCurrent = "";
+                ControlMethod("withdrawpay");
+                withdrawPaymentMethod("card");
+                strScreen = "withdrawpay";
+            } else if ((strScreen.equals("withdrawpay") && !strCurrent.equals("firstError")) || strCurrent.equals("addpayment")) {
+                ControlMethod("withdrawmethod");
+                selectWithdrawMethod();
+                strScreen = "withdrawmethod";
+                strCurrent = "";
+            } else if (!strCurrent.equals("firstError")) {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -266,6 +268,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
                             dashboardViewModel.mePaymentMethods();
+                            displaySuccess();
                         }
                     }
                 } catch (Exception ex) {
@@ -556,6 +559,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawpay).setVisibility(View.GONE);
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawnotoken": {
@@ -565,6 +569,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawpay).setVisibility(View.GONE);
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                 }
                 break;
                 case "addpayment": {
@@ -574,6 +579,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawpay).setVisibility(View.GONE);
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawpay": {
@@ -583,6 +589,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                 }
                 break;
                 case "externalBank": {
@@ -592,6 +599,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                 }
                 break;
                 case "firstError": {
@@ -600,7 +608,18 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.addpayment).setVisibility(View.GONE);
                     findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.VISIBLE);
+                }
+                break;
+                case "banksuccess": {
+                    findViewById(R.id.externalBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawpay).setVisibility(View.GONE);
+                    findViewById(R.id.addpayment).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
+                    findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.VISIBLE);
                 }
                 break;
             }
@@ -812,20 +831,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void callResolveFlow() {
-        try {
-            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
-                i.putExtra("signon", signOnData);
-                startActivityForResult(i, 1);
-            } else {
-                Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1128,6 +1133,27 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     ControlMethod("externalBank");
                     strCurrent = "externalBank";
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void displaySuccess() {
+        try {
+            isBankSuccess = true;
+            ControlMethod("banksuccess");
+            cvDone = findViewById(R.id.cvDone);
+            cvDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isBankSuccess = false;
+                    if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
+                    }
                 }
             });
         } catch (Exception ex) {

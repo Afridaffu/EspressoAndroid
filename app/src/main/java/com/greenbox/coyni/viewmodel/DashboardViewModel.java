@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 //import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
@@ -24,6 +25,8 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.templates.TemplateRequest;
+import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
@@ -67,6 +70,7 @@ public class DashboardViewModel extends AndroidViewModel {
     }
 
     private MutableLiveData<TransactionList> transactionListMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CancelBuyTokenResponse> cancelBuyTokenResponseMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
@@ -132,6 +136,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<TransactionDetails> getTransactionDetailsMutableLiveData() {
         return transactionDetailsMutableLiveData;
+    }
+
+    public MutableLiveData<CancelBuyTokenResponse> getCancelBuyTokenResponseMutableLiveData() {
+        return cancelBuyTokenResponseMutableLiveData;
     }
 
     public void meProfile() {
@@ -647,6 +655,41 @@ public class DashboardViewModel extends AndroidViewModel {
                 }
             });
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void cancelBuyToken(String gbxTxnId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CancelBuyTokenResponse> mCall = apiService.cancelBuyToken(gbxTxnId);
+            mCall.enqueue(new Callback<CancelBuyTokenResponse>() {
+                @Override
+                public void onResponse(Call<CancelBuyTokenResponse> call, Response<CancelBuyTokenResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            CancelBuyTokenResponse obj = response.body();
+                            cancelBuyTokenResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CancelBuyTokenResponse>() {
+                            }.getType();
+                            CancelBuyTokenResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            cancelBuyTokenResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        cancelBuyTokenResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CancelBuyTokenResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    cancelBuyTokenResponseMutableLiveData.setValue(null);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
