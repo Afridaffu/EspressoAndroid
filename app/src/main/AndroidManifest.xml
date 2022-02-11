@@ -45,6 +45,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.business.ManualReleasesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.ReserveFilterActivity"
+            android:exported="true" />
+        <activity
             android:name=".view.business.AddtionaInfoRequired"
             android:exported="false" />
         <activity
@@ -377,14 +383,17 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
-        <activity android:name=".view.business.SignatureActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+        <activity
+            android:name=".view.business.SignatureActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountTypeActivity"
             android:configChanges="uiMode"
