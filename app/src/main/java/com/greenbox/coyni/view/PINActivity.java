@@ -966,18 +966,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
-        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-            if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
-                dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
-            } else {
-                dashboardIntent = new Intent(PINActivity.this, BusinessRegistrationTrackerActivity.class);
-            }
-        }
-        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(dashboardIntent);
     }
 
     private void WithdrawMethod() {
