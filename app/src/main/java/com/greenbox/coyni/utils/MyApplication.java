@@ -17,6 +17,8 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
@@ -91,6 +93,8 @@ public class MyApplication extends Application {
     Double withdrawAmount;
     BusinessTrackerResponse businessTrackerResponse;
     WalletResponseData walletResponseData;
+    BusinessTypeResp businessTypeResp;
+    CompanyInfoResp companyInfoResp;
 
 
     public UserDetails getUserDetails() {
@@ -861,5 +865,21 @@ public class MyApplication extends Application {
 
     public void setBusinessTrackerResponse(BusinessTrackerResponse businessTrackerResponse) {
         this.businessTrackerResponse = businessTrackerResponse;
+    }
+
+    public BusinessTypeResp getBusinessTypeResp() {
+        return businessTypeResp;
+    }
+
+    public void setBusinessTypeResp(BusinessTypeResp businessTypeResp) {
+        this.businessTypeResp = businessTypeResp;
+    }
+
+    public CompanyInfoResp getCompanyInfoResp() {
+        return companyInfoResp;
+    }
+
+    public void setCompanyInfoResp(CompanyInfoResp companyInfoResp) {
+        this.companyInfoResp = companyInfoResp;
     }
 }

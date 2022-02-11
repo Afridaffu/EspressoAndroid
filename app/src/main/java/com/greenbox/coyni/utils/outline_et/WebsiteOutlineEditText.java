@@ -1,7 +1,10 @@
 package com.greenbox.coyni.utils.outline_et;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -11,12 +14,17 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebsiteOutlineEditText extends ConstraintLayout {
-    private TextView websitehintName;
-    private LinearLayout websitehintHolder;
+    private TextView hintName, websiteErrorTV;
+    private LinearLayout hintHolder, websiteErrorLL;
     private EditText websiteET;
-
+    private Context mContext;
     public String FROM = "";
 
     public WebsiteOutlineEditText(Context context) {
@@ -34,27 +42,78 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
 
     private void init(Context context, AttributeSet attributeSet) {
         LayoutInflater.from(context).inflate(R.layout.activity_website, this, true);
-        websitehintHolder = findViewById(R.id.websitehintdHolderLL);
+        hintHolder = findViewById(R.id.websitehintdHolderLL);
         websiteET = findViewById(R.id.websiteET);
+        hintName = findViewById(R.id.websitehintTV);
+        websiteErrorLL = findViewById(R.id.websiteErrorLL);
+        websiteErrorTV = findViewById(R.id.websiteErrorTV);
 
-        websiteET.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                try {
+        websiteET.setOnFocusChangeListener((view, b) -> {
+            try {
+                if (b) {
+                    websiteET.setHint("www.example.com");
+                    hintName.setVisibility(VISIBLE);
+                    hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                    hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                    websiteErrorLL.setVisibility(GONE);
+                } else {
+                    websiteET.setHint("Website");
+                    if (websiteET.getText().toString().length() > 0)
+                        hintName.setVisibility(VISIBLE);
+                    else
+                        hintName.setVisibility(GONE);
 
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (websiteET.getText().toString().trim().length() > 0 && !isValidUrl(websiteET.getText().toString().trim())) {
+                        hintName.setTextColor(getResources().getColor(R.color.error_red));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                        websiteErrorLL.setVisibility(VISIBLE);
+                        websiteErrorTV.setText("Please Enter a Valid Website");
+                    } else if ((websiteET.getText().length() == 0)) {
+                        hintName.setTextColor(getResources().getColor(R.color.error_red));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                        websiteErrorLL.setVisibility(VISIBLE);
+                        websiteErrorTV.setText("Field Required");
+                    } else {
+                        hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                    }
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
+        websiteET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (FROM.equals("DBA_INFO")) {
+                    DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+                    if (isValidUrl(charSequence.toString())) {
+                        dia.isWebsite = true;
+                        websiteErrorLL.setVisibility(GONE);
+                    } else {
+                        dia.isWebsite = false;
+                    }
+                    dia.enableOrDisableNext();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
-    public void setFrom(String fromm) {
+    public void setFrom(String fromm, Context context) {
         FROM = fromm;
+        mContext = context;
     }
-
 
     public void setText(String text) {
         websiteET.setText(text);
@@ -72,7 +131,10 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
         websiteET.requestFocus();
     }
 
-
-
+    private boolean isValidUrl(String url) {
+        Pattern p = Patterns.WEB_URL;
+        Matcher m = p.matcher(url.toLowerCase());
+        return m.matches();
+    }
 
 }

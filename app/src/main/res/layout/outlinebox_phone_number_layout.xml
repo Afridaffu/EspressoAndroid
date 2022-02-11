@@ -81,6 +81,7 @@
         android:textColor="@color/primary_black"
         app:layout_constraintBottom_toTopOf="@+id/hintdHolderLL"
         app:layout_constraintStart_toStartOf="@+id/hintdHolderLL"
-        app:layout_constraintTop_toTopOf="@+id/hintdHolderLL" />
+        app:layout_constraintTop_toTopOf="@+id/hintdHolderLL"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

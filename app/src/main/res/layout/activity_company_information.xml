@@ -217,7 +217,7 @@
                     android:id="@+id/CompanyphoneNumberOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_12sdp" />
+                    android:layout_marginTop="@dimen/_10sdp" />
 
                 <LinearLayout
                     android:id="@+id/CompanyphoneNumberErrorLL"
@@ -336,7 +336,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:visibility="gone">
+                    android:visibility="invisible"
+                    android:clickable="false">
 
                     <ImageButton
                         android:id="@+id/timezoneButton"
@@ -351,7 +352,8 @@
                         app:layout_constraintTop_toTopOf="@+id/timezoneTIL"
                         app:layout_constraintVertical_bias="0.507"
                         app:layout_editor_absoluteX="336.24dp"
-                        app:layout_editor_absoluteY="26.28dp" />
+                        app:layout_editor_absoluteY="26.28dp"
+                        android:clickable="false"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/timezoneTIL"
@@ -364,7 +366,8 @@
                         app:errorIconDrawable="@null"
                         app:expandedHintEnabled="false"
                         app:hintTextColor="@color/primary_green"
-                        tools:ignore="MissingConstraints">
+                        tools:ignore="MissingConstraints"
+                        android:clickable="false">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/timeZoneET"
@@ -387,7 +390,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:clickable="false"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -400,12 +404,14 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="By selecting this we will clear your batch based on\nyour time zone at 11:59:59pm."
                     android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_10ssp"
+                    android:visibility="gone"/>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/basicNextCV"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
                     android:layout_marginBottom="@dimen/_39sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_22sdp">

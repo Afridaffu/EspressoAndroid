@@ -49,31 +49,33 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
             public void onFocusChange(View view, boolean b) {
                 try {
 
-                    if (isPhoneError1) {
-                        if (b) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                    if (b) {
+                        if (FROM.equals("DbaInfo")) {
+                            DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
+                            dba.customerphonenumLL.setVisibility(GONE);
+                        }else if (FROM.equals("Company_Information")) {
+                            CompanyInformationActivity cia = (CompanyInformationActivity) mContext;
+                            cia.compphoneNumberErrorLL.setVisibility(GONE);
                         }
+                        hintName.setVisibility(VISIBLE);
+                        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
-                        if (b) {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_color));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        }
-
+                        if (phnET.getText().toString().length() > 0)
+                            hintName.setVisibility(VISIBLE);
+                        else
+                            hintName.setVisibility(GONE);
+                        hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                     }
+
                     if (FROM.equals("DbaInfo") && !b) {
                         DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
                         if ((phnET.getText().length() > 0 && phnET.getText().length() < 14)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             dba.customerphonenumLL.setVisibility(VISIBLE);
-                            dba.customernumTV.setText("Invalid Phone Number");
+                            dba.customernumTV.setText("Please Enter a Valid Phone Number");
                         } else if ((phnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -89,7 +91,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             comp.compphoneNumberErrorLL.setVisibility(VISIBLE);
-                            comp.compphonenumberTV.setText("Invalid Phone Number");
+                            comp.compphonenumberTV.setText("Please Enter a Valid Phone Number");
                         } else if ((phnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -133,10 +135,10 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         comAct.basicNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
 
-                    if ((phnET.getText().length() == 0)) {
-                        comAct.compphoneNumberErrorLL.setVisibility(VISIBLE);
-                        comAct.compphonenumberTV.setText("Field Required");
-                    }
+//                    if ((phnET.getText().length() == 0)) {
+//                        comAct.compphoneNumberErrorLL.setVisibility(VISIBLE);
+//                        comAct.compphonenumberTV.setText("Field Required");
+//                    }
                 } else if (FROM.equals("DbaInfo")) {
                     DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
                     if (charSequence.length() == 14) {
@@ -153,11 +155,10 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         dba.isNextEnabled = false;
                         dba.dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
-                    if ((phnET.getText().length() == 0)) {
-
-                        dba.customerphonenumLL.setVisibility(VISIBLE);
-                        dba.customernumTV.setText("Field Required");
-                    }
+//                    if ((phnET.getText().length() == 0)) {
+//                        dba.customerphonenumLL.setVisibility(VISIBLE);
+//                        dba.customernumTV.setText("Field Required");
+//                    }
                 }
 
             }
@@ -175,12 +176,10 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
     }
 
-
     public void setFrom(String fromm, Context context) {
         FROM = fromm;
         mContext = context;
     }
-
 
     public void setText(String text) {
         phnET.setText(text);

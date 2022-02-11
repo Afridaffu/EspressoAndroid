@@ -54,22 +54,20 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.BusinessTypeListAdapter;
 import com.greenbox.coyni.adapters.CustomerTimeZonesAdapter;
 import com.greenbox.coyni.adapters.StatesListAdapter;
+import com.greenbox.coyni.model.DBAInfo.BusinessType;
 import com.greenbox.coyni.model.States;
-import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
-import com.greenbox.coyni.view.BindingLayoutActivity;
-import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
-import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
-import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,17 +78,10 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -384,11 +375,11 @@ public class Utils {
     public static void displayAlert(String msg, Activity activity, String header, String fieldError) {
 
         if (!msg.equals("")) {
-            if(msg.equals("Access token expired")){
+            if (msg.equals("Access token expired")) {
                 Intent i = new Intent(activity, LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(i);
-            }else{
+            } else {
                 displayAlertNew(msg, activity, header);
             }
         } else {
@@ -777,13 +768,20 @@ public class Utils {
 
                         PreferencesActivity preferencesActivity = (PreferencesActivity) context;
                         preferencesActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
-                    } else {
+                    } else if (from.equals("COMPANY_INFO")) {
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         editText.setText(myApplicationObj.getTimezone());
                         CompanyInformationActivity companyInformationActivity = (CompanyInformationActivity) context;
                         companyInformationActivity.isTimeZone = true;
                         companyInformationActivity.enableOrDisableNext();
+                    } else if (from.equals("DBA_INFO")) {
+                        myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
+                        myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
+                        editText.setText(myApplicationObj.getTimezone());
+                        DBAInfoAcivity dbaInfoAcivity = (DBAInfoAcivity) context;
+                        dbaInfoAcivity.isTimeZone = true;
+                        dbaInfoAcivity.enableOrDisableNext();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1136,6 +1134,109 @@ public class Utils {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public static void populateBusinessTypes(Context context, EditText editText, MyApplication myApplicationObj) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.business_types_bottom_dialog);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            Log.e("editext", editText.getText().toString());
+            RecyclerView bTypesRV = dialog.findViewById(R.id.bTypesRV);
+            EditText searchET = dialog.findViewById(R.id.searchET);
+            TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
+            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context,editText,dialog);
+
+            List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
+
+//            for (int i = 0; i < listBT.size(); i++) {
+//                if (editText.getText().toString().toLowerCase().trim().equals(listBT.get(i).getValue().toLowerCase())) {
+//                    listBT.get(i).setSelected(true);
+//                } else {
+//                    listBT.get(i).setSelected(false);
+//                }
+//            }
+            if (listBT.size() > 0) {
+                bTypesRV.setVisibility(View.VISIBLE);
+                notFoundTV.setVisibility(View.GONE);
+                businessTypeListAdapter = new BusinessTypeListAdapter(listBT, context, editText, dialog);
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+                bTypesRV.setLayoutManager(mLayoutManager);
+                bTypesRV.setItemAnimator(new DefaultItemAnimator());
+                bTypesRV.setAdapter(businessTypeListAdapter);
+            } else {
+                bTypesRV.setVisibility(View.GONE);
+                notFoundTV.setVisibility(View.VISIBLE);
+            }
+
+            BusinessTypeListAdapter finalBTListAdapter = businessTypeListAdapter;
+            searchET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    try {
+                        String search_key = s.toString();
+                        List<BusinessType> filterList = new ArrayList<>();
+                        int sIndex = 0;
+                        if (listBT.size() > 0) {
+                            for (int i = 0; i < listBT.size(); i++) {
+                                sIndex = listBT.get(i).getValue().toLowerCase().indexOf(search_key.toLowerCase());
+                                if (sIndex == 0) {
+                                    filterList.add(listBT.get(i));
+                                }
+                            }
+                            if (filterList.size() > 0) {
+                                bTypesRV.setVisibility(View.VISIBLE);
+                                notFoundTV.setVisibility(View.GONE);
+                                for (int i = 0; i < filterList.size(); i++) {
+                                    if (editText.getText().toString().toLowerCase().trim().equals(filterList.get(i).getValue().toLowerCase())) {
+                                        filterList.get(i).setSelected(true);
+                                    } else {
+                                        filterList.get(i).setSelected(false);
+                                    }
+                                }
+                                finalBTListAdapter.updateList(filterList);
+                            } else {
+                                bTypesRV.setVisibility(View.GONE);
+                                notFoundTV.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.80));
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
