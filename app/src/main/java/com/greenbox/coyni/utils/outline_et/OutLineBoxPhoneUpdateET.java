@@ -50,17 +50,28 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                 try {
                     if (isPhoneError) {
                         if (b) {
+                            hintName.setVisibility(VISIBLE);
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
+                            if (pnET.getText().toString().length() > 0)
+                                hintName.setVisibility(VISIBLE);
+                            else
+                                hintName.setVisibility(GONE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     } else {
                         if (b) {
+                            hintName.setVisibility(VISIBLE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
+
+                            if (pnET.getText().toString().length() > 0)
+                                hintName.setVisibility(VISIBLE);
+                            else
+                                hintName.setVisibility(GONE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
@@ -102,6 +113,9 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                             }
                         }
 
+                    } else {
+                        EditPhoneActivity epa = EditPhoneActivity.editPhoneActivity;
+                        epa.newPhoneErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -134,10 +148,11 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                         epa.savePhoneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
 
-                    if ((pnET.getText().length() == 0)) {
-                        epa.currentPhoneErrorLL.setVisibility(VISIBLE);
-                        epa.currentPhoneErrorTV.setText("Field Required");
-                    } else if (pnET.getText().length() > 0) {
+//                    if ((pnET.getText().length() == 0)) {
+//                        epa.currentPhoneErrorLL.setVisibility(VISIBLE);
+//                        epa.currentPhoneErrorTV.setText("Field Required");
+//                    } else
+                    if (pnET.getText().length() > 0) {
                         epa.currentPhoneErrorLL.setVisibility(GONE);
                     }
 
@@ -154,10 +169,11 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                         epa.savePhoneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     }
 
-                    if ((pnET.getText().length() == 0)) {
-                        epa.newPhoneErrorLL.setVisibility(VISIBLE);
-                        epa.newPhoneErrorTV.setText("Field Required");
-                    } else if (pnET.getText().length() > 0) {
+//                    if ((pnET.getText().length() == 0)) {
+//                        epa.newPhoneErrorLL.setVisibility(VISIBLE);
+//                        epa.newPhoneErrorTV.setText("Field Required");
+//                    } else
+                    if (pnET.getText().length() > 0) {
                         epa.newPhoneErrorLL.setVisibility(GONE);
                     }
 

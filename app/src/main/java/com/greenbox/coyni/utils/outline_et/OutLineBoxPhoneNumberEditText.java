@@ -51,23 +51,43 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                 try {
                     if (isPhoneError) {
                         if (b) {
+                            hintName.setVisibility(VISIBLE);
                             CreateAccountActivity.focusedID = pnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
+                            if (pnET.getText().toString().length() > 0)
+                                hintName.setVisibility(VISIBLE);
+                            else
+                                hintName.setVisibility(GONE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     } else {
                         if (b) {
+                            hintName.setVisibility(VISIBLE);
                             CreateAccountActivity.focusedID = pnET.getId();
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
+                            if (pnET.getText().toString().length() > 0)
+                                hintName.setVisibility(VISIBLE);
+                            else
+                                hintName.setVisibility(GONE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
 
+                    }
+
+                    if (b) {
+                        if (FROM.equals("Retrieve")) {
+                            RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
+                            rea.phoneErrorLL.setVisibility(GONE);
+                        } else if (FROM.equals("CREATE_ACCOUNT")) {
+                            CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+                            caa.phoneErrorLL.setVisibility(GONE);
+                        }
                     }
 //                    if (FROM.equals("Retrieve") && !b) {
                     if (FROM.equals("Retrieve")) {
@@ -161,10 +181,10 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         rea.phoneErrorLL.setVisibility(GONE);
                     }
 
-                    if ((pnET.getText().length() == 0)) {
-                        rea.phoneErrorLL.setVisibility(VISIBLE);
-                        rea.phoneErrorTV.setText("Field Required");
-                    }
+//                    if ((pnET.getText().length() == 0)) {
+//                        rea.phoneErrorLL.setVisibility(VISIBLE);
+//                        rea.phoneErrorTV.setText("Field Required");
+//                    }
                 }
 
             }

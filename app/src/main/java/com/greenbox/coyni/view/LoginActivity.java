@@ -170,18 +170,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
             etEmail.setText(objMyApplication.getStrRetrEmail());
             if (isEmailValid(etEmail.getText().toString().trim())) {
-                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.light_gray));
+//                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.light_gray));
                 etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                 layoutEmailError.setVisibility(GONE);
             }
 
         }
-//        if (etEmail.getText().toString().equals("")){
-//            etEmail.requestFocus();
-//        }
-//        else {
-//            etlPassword.requestFocus();
-//        }
     }
 
     @Override

@@ -435,4 +435,5 @@
     <string name="merchant_payout">Merchant Payout</string>
     <string name="withdrawn">Withdrawn</string>
     <string name="monthly_service_fee">Monthly Service Fee</string>
+    <string name="enter_the_amount">Enter the amount</string>
 </resources>

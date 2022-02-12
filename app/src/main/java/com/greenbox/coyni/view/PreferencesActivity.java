@@ -91,7 +91,7 @@ public class PreferencesActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj,"PREFERENCES");
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj, "PREFERENCES");
                 }
             });
 
@@ -113,7 +113,7 @@ public class PreferencesActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj,"PREFERENCES");
+                    Utils.populateTimeZones(PreferencesActivity.this, timeZoneET, myApplicationObj, "PREFERENCES");
                 }
             });
 
@@ -221,7 +221,8 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
                 if (profilesResponse != null) {
-                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+//                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
 
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
                         if (profilesResponse.getData().size() > 1) {

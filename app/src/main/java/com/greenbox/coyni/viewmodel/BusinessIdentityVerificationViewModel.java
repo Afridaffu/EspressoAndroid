@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
@@ -34,11 +35,16 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<CompanyInfoUpdateResp> postCompanyInfoResponse = new MutableLiveData<>();
 
     private MutableLiveData<CompanyInfoResp> getDBAInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<BusinessTypeResp> businessTypesResponse = new MutableLiveData<>();
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
         super(application);
     }
 
+
+    public MutableLiveData<BusinessTypeResp> getBusinessTypesResponse() {
+        return businessTypesResponse;
+    }
 
     public MutableLiveData<CompanyInfoResp> getGetDBAInfoResponse() {
         return getDBAInfoResponse;
@@ -231,6 +237,41 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 public void onFailure(Call<CompanyInfoResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     getDBAInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getBusinessType() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BusinessTypeResp> mCall = apiService.getBusinessType();
+            mCall.enqueue(new Callback<BusinessTypeResp>() {
+                @Override
+                public void onResponse(Call<BusinessTypeResp> call, Response<BusinessTypeResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BusinessTypeResp obj = response.body();
+                            businessTypesResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BusinessTypeResp>() {
+                            }.getType();
+                            BusinessTypeResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            businessTypesResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        businessTypesResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BusinessTypeResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    businessTypesResponse.setValue(null);
                 }
             });
         } catch (Exception ex) {
