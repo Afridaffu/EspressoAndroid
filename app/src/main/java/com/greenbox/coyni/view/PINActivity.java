@@ -710,11 +710,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                         }
                                     }, 2000);
                                 } else {
-//                                    dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.getWindow().setGravity(Gravity.CENTER);
-//                                    dialog.show();
                                     shakeAnimateUpDown();
                                     RegisterRequest registerRequest = new RegisterRequest();
                                     registerRequest.setPin(strChoose);
@@ -791,6 +786,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             } else {
                 coyniViewModel.validateCoyniPin(request);
             }
+//            coyniViewModel.validateCoyniPin(request);
 
         } catch (Exception ex) {
             ex.printStackTrace();

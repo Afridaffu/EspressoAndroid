@@ -9,6 +9,8 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
@@ -21,6 +23,8 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
+import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
 import com.greenbox.coyni.model.fee.Fees;
@@ -401,6 +405,12 @@ public interface ApiService {
 
     @POST("api/v2/fees/{UserID}")
     Call<Fees> meFees(@Path("UserID") int UserID);
+
+    @POST("api/v2/cards/merchant/addcard")
+    Call<BusinessCardResponse> saveBusinessCards(@Body BusinessCardRequest request);
+
+    @POST("api/v2/user/biometric/token")
+    Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
 }
 

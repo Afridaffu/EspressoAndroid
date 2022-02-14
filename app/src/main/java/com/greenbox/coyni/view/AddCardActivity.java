@@ -51,6 +51,8 @@ import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardResponseData;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
+import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
 import com.greenbox.coyni.model.preauth.PreAuthData;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
@@ -86,7 +88,7 @@ public class AddCardActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
-    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry;
+    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
@@ -187,6 +189,7 @@ public class AddCardActivity extends AppCompatActivity {
             expiryErrorLL = findViewById(R.id.expiryErrorLL);
             cvvErrorLL = findViewById(R.id.cvvErrorLL);
             layoutExpiry = findViewById(R.id.layoutExpiry);
+            layoutCvv = findViewById(R.id.layoutCvv);
             etlName = findViewById(R.id.etlName);
             etlExpiry = findViewById(R.id.etlExpiry);
             etlCVV = findViewById(R.id.etlCVV);
@@ -245,11 +248,21 @@ public class AddCardActivity extends AppCompatActivity {
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
-            objMyApplication.getStates();
+            //objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
             } else {
                 tvCardHead.setText("Add New Credit Card");
+            }
+
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                layoutCvv.setVisibility(GONE);
+                isCvv = true;
+                LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                buttonLayoutParams.setMargins(0, 0, 0, 0);
+                layoutCvv.setLayoutParams(buttonLayoutParams);
+            } else {
+                layoutCvv.setVisibility(VISIBLE);
             }
 
             etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -349,12 +362,27 @@ public class AddCardActivity extends AppCompatActivity {
                             strState = etState.getText().toString().trim();
                             strZip = etZipCode.getText().toString().trim();
                             strCountry = Utils.getStrCCode();
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    prepareJson();
-                                }
-                            }, 100);
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        prepareJson();
+                                    }
+                                }, 100);
+                            } else {
+                                BusinessCardRequest request = new BusinessCardRequest();
+                                request.setAddressLine1(strAdd1);
+                                request.setAddressLine2(strAdd2);
+                                request.setCardNumber(strCardNo);
+                                request.setCity(strCity);
+                                request.setCountry(strCountry);
+                                request.setDefaultForAllWithDrawals(true);
+                                request.setExpiryDate(strExpiry);
+                                request.setName(strName);
+                                request.setState(strState);
+                                request.setZipCode(strZip);
+                                paymentMethodsViewModel.saveBusinessCards(request);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -570,6 +598,18 @@ public class AddCardActivity extends AppCompatActivity {
                 }
             }
         });
+
+        paymentMethodsViewModel.getBusinessCardResponseMutableLiveData().observe(this, new Observer<BusinessCardResponse>() {
+            @Override
+            public void onChanged(BusinessCardResponse businessCardResponse) {
+                progressDialog.dismiss();
+                if (businessCardResponse != null && businessCardResponse.getStatus().toString().toLowerCase().equals("success")) {
+                    displayPreAuthSuccess();
+                } else {
+                    displayCardFail(businessCardResponse);
+                }
+            }
+        });
     }
 
     private Boolean validation() {
@@ -595,7 +635,7 @@ public class AddCardActivity extends AppCompatActivity {
                 etExpiry.requestFocus();
                 Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
-            } else if (etCVV.getText().toString().equals("")) {
+            } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && etCVV.getText().toString().equals("")) {
                 etCVV.requestFocus();
                 Utils.displayAlert("CVV is required", AddCardActivity.this, "", "");
                 return value = false;
@@ -1458,7 +1498,9 @@ public class AddCardActivity extends AppCompatActivity {
     private void displayPreAuthSuccess() {
         try {
             CardView cvDone;
-            preAuthDialog.dismiss();
+            if (preAuthDialog != null) {
+                preAuthDialog.dismiss();
+            }
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
@@ -1567,6 +1609,50 @@ public class AddCardActivity extends AppCompatActivity {
             preDialog.show();
             cpProgress = preDialog.findViewById(R.id.cpProgress);
             cpProgress.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void displayCardFail(BusinessCardResponse businessCardResponse) {
+        try {
+            CardView cvTryAgain;
+            TextView tvMessage;
+            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
+            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            preDialog.setContentView(R.layout.authorization_failed);
+            Window window = preDialog.getWindow();
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            window.setGravity(Gravity.CENTER);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.dimAmount = 0.7f;
+            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            preDialog.getWindow().setAttributes(lp);
+            preDialog.setCancelable(false);
+            preDialog.show();
+            cvTryAgain = preDialog.findViewById(R.id.cvTryAgain);
+            tvMessage = preDialog.findViewById(R.id.tvMessage);
+            tvMessage.setText("The card authorization failed due to error \ncode: " + businessCardResponse.getError().getErrorCode() + " - " + businessCardResponse.getError().getErrorDescription() + ". Please try again.");
+
+            cvTryAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                    finish();
+                }
+            });
+            preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
