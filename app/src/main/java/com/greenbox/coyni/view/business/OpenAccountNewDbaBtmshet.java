@@ -11,5 +11,6 @@ public class OpenAccountNewDbaBtmshet extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_account_new_dba_btmshet);
+
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,126 +8,36 @@
 
     <View
         android:layout_width="@dimen/_65sdp"
-        android:layout_height="@dimen/_3sdp"
+        android:layout_height="@dimen/_2sdp"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_32sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_28sdp"
         android:background="@drawable/shape_green_round_rect" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select the Company you wish to add the \nnew DBA below. \nYou will need to complete a new Merchant\nApplication for each DBA you add."
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/opensans_regular"
         android:textColor="@color/primary_black"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
         android:layout_marginBottom="@dimen/_12sdp"
      />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
-        >
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/_18sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/b_userProfileIV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@color/white"
-                android:visibility="visible" />
-        </androidx.cardview.widget.CardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Greenboxpos"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/black"
-            />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:background="@color/blue_light"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
-        />
     <LinearLayout
+        android:id="@+id/bbqLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
         >
         <androidx.cardview.widget.CardView
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_35sdp"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="@dimen/_18sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@color/white"
-                android:visibility="visible" />
-        </androidx.cardview.widget.CardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Starbucks"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/black"
-            />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:background="@color/blue_light"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
-        >
-        <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_20sdp"
@@ -150,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Fire BBQ"
+            android:text="@string/fire_bbq"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_20sdp"
             android:fontFamily="@font/opensans_semibold"
@@ -158,10 +67,10 @@
             android:textColor="@color/black"
             />
         <ImageView
+            android:id="@+id/bluetickIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_x"
+            android:src="@drawable/ic_blue_tick"
             android:layout_gravity="center"
 
             />
@@ -170,16 +79,37 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
         android:background="@color/blue_light"
+        android:layout_marginBottom="@dimen/_2sdp"
         android:layout_marginStart="@dimen/_22sdp"
-        android:layout_marginEnd="@dimen/_22sdp"
-        />
+        android:layout_marginEnd="@dimen/_22sdp" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/dbaNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginEnd="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        app:cardCornerRadius="@dimen/_10sdp">
+
+        <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
+            android:id="@+id/transactionListPendingRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:divider="@color/white"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/dbanext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_110sdp"
-        android:layout_marginBottom="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_26sdp"
         android:layout_marginStart="@dimen/_22sdp"
         android:layout_marginEnd="@dimen/_22sdp"
         app:cardBackgroundColor="@color/inactive_color"
@@ -192,7 +122,7 @@
             android:gravity="center"
             android:paddingTop="@dimen/_13sdp"
             android:paddingBottom="@dimen/_13sdp"
-            android:text="Add DBA"
+            android:text="@string/add_dba"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />
     </androidx.cardview.widget.CardView>

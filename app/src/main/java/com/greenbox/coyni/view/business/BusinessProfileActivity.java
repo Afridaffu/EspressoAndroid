@@ -51,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,accountlimitsLL;
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,preferencesLL,accountlimitsLL;
     public static SQLiteDatabase mydatabase;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -178,6 +178,18 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) { try {
                     Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                }
+            });
+
+            preferencesLL = findViewById(R.id.PreferencesLL);
+            preferencesLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){ try {
+                    Intent intent = new Intent(BusinessProfileActivity.this, PreferencesActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

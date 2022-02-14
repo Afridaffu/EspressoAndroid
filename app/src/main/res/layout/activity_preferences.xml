@@ -101,13 +101,26 @@
                         android:autofillHints="creditCardSecurityCode"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
+
             </RelativeLayout>
+            <TextView
+                android:id="@+id/timezoneTextTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:text="Your merchant batch automatically pays out at\n11:59:59pm in your selected time zone."
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/dark_grey"
+                android:fontFamily="@font/opensans_regular"
+                android:visibility="gone"
+                />
 
             <RelativeLayout
                 android:id="@+id/currencyRL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginBottom="@dimen/_35sdp">
 
 
@@ -156,6 +169,12 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:id="@+id/defaultaccLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
 
     <TextView
         android:layout_width="wrap_content"
@@ -252,5 +271,6 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
 </LinearLayout>
