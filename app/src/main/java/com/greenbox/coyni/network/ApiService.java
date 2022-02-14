@@ -9,6 +9,10 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.biometric.BiometricRequest;
+import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
@@ -21,9 +25,18 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
+import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
+import com.greenbox.coyni.model.coynipin.ValidateRequest;
+import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
 import com.greenbox.coyni.model.fee.Fees;
+import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
+import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
+import com.greenbox.coyni.model.forgotpassword.SetPassword;
+import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
@@ -31,44 +44,31 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.login.BiometricLoginRequest;
+import com.greenbox.coyni.model.login.LoginRequest;
+import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
-import com.greenbox.coyni.model.profile.TrackerResponse;
-import com.greenbox.coyni.model.publickey.PublicKeyResponse;
-import com.greenbox.coyni.model.bank.SignOn;
-import com.greenbox.coyni.model.bank.SyncAccount;
-import com.greenbox.coyni.model.biometric.BiometricRequest;
-import com.greenbox.coyni.model.biometric.BiometricResponse;
-import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
-import com.greenbox.coyni.model.coynipin.RegisterRequest;
-import com.greenbox.coyni.model.coynipin.ValidateRequest;
-import com.greenbox.coyni.model.coynipin.ValidateResponse;
-import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
-import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
-import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
-import com.greenbox.coyni.model.forgotpassword.SetPassword;
-import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
-import com.greenbox.coyni.model.login.BiometricLoginRequest;
-import com.greenbox.coyni.model.login.LoginRequest;
-import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
-import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailValidateRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneValidateRequest;
+import com.greenbox.coyni.model.publickey.PublicKeyResponse;
 import com.greenbox.coyni.model.recentusers.RecentUsers;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
@@ -87,6 +87,7 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.model.templates.TemplateRequest;
@@ -112,11 +113,9 @@ import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -127,7 +126,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 
 public interface ApiService {
 
@@ -270,6 +268,10 @@ public interface ApiService {
     Call<IdentityImageResponse> uploadIdentityImage(@Part MultipartBody.Part filee,
                                                     @Part("identityType") RequestBody type,
                                                     @Part("identityNumber") RequestBody number);
+    @Multipart
+    @POST("api/v2/business/sign-agreement")
+    Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
+                                                  @Part("agreementType") RequestBody agreementType);
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);

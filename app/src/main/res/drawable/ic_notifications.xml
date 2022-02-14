@@ -4,12 +4,7 @@
     android:viewportWidth="32"
     android:viewportHeight="32">
   <path
-      android:pathData="M16,16m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0"
-      android:strokeAlpha="0"
-      android:fillColor="#efefef"
-      android:fillAlpha="0"/>
-  <path
-      android:pathData="M16,25.601C11.271,25.601 6.4,20.801 6.4,20.801c1.367,0 3.6,-2.4 3.6,-4.8 0,-3.6 1.079,-7.2 6,-7.2s6,3.6 6,7.2c0,2.4 2.232,4.8 3.6,4.8C25.6,20.801 20.729,25.601 16,25.601Z"
+      android:pathData="M16,25.601C11.271,25.601 6.4,20.801 6.4,20.801c1.367,0 3.6,-2.4 3.6,-4.8 0,-3.6 1.079,-7.2 6,-7.2s6,3.6 6,7.2c0,2.4 2.232,4.8 3.6,4.8 0,0 -4.871,4.8 -9.6,4.8z"
       android:strokeLineJoin="round"
       android:strokeWidth="2"
       android:fillColor="#00000000"

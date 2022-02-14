@@ -6,18 +6,14 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Item;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +23,7 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
     Context mContext;
     String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
+    MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView listagreementsTV;
@@ -56,31 +53,56 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
             Item objData = items.get(position);
             if (objData.getSignatureType() == 1) {
                 holder.listagreementsTV.setText("Privacy Policy " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-            } else {
+            } else if(objData.getSignatureType() == 0){
                 holder.listagreementsTV.setText("Terms of Service " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+            }
+            if(objData.getSignatureType() == 5){
+                holder.listagreementsTV.setText("Merchant’s Agreement " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (objData.getSignatureType() == 0) {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(tosURL+"?"+System.currentTimeMillis()),
-                                "application/pdf");
-                        mContext.startActivity(inte);
-                    } else {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(privacyURL+"?"+System.currentTimeMillis()),
-                                "application/pdf");
-                        mContext.startActivity(inte);
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        if (objData.getSignatureType() == 0) {
+                            Intent inte = new Intent(Intent.ACTION_VIEW);
+                            inte.setDataAndType(
+                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+                                    "application/pdf");
+                            mContext.startActivity(inte);
+                        } else {
+                            Intent inte = new Intent(Intent.ACTION_VIEW);
+                            inte.setDataAndType(
+                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                    "application/pdf");
+                            mContext.startActivity(inte);
+                        }
                     }
+                 if(objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT) {
+                     if (position == 2) {
+                         Intent inte = new Intent(Intent.ACTION_VIEW);
+                         inte.setDataAndType(
+                                 Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+                                 "application/pdf");
+                         mContext.startActivity(inte);
+
+                     }
+                     if (position == 1) {
+                         Intent inte = new Intent(Intent.ACTION_VIEW);
+                         inte.setDataAndType(
+                                 Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                 "application/pdf");
+                         mContext.startActivity(inte);
+
+                     }
+                 }
                 }
             });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
     @Override
     public int getItemCount() {
