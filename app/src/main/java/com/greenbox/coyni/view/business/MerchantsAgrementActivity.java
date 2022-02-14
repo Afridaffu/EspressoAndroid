@@ -52,10 +52,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
         agreeCb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(agreeCb.isEnabled()){
+                if (agreeCb.isEnabled()) {
                     doneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                }
-                else {
+                } else {
                     doneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 }
             }
@@ -78,6 +77,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         });
 
     }
+
     private void launchsignature() {
         Intent inSignature = new Intent(MerchantsAgrementActivity.this, SignatureActivity.class);
         activityResultLauncher.launch(inSignature);
@@ -103,10 +103,11 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         }
     }
-    private void sendSignatureRequest(String filepath){
-        MultipartBody.Part file =null;
+
+    private void sendSignatureRequest(String filepath) {
+        MultipartBody.Part file = null;
         RequestBody agreementType = null;
-        businessDashboardViewModel.signedAgreement(file,agreementType);
+        businessDashboardViewModel.signedAgreement(file, agreementType);
     }
 
     private void initObservers() {
@@ -117,15 +118,15 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     if (signedAgreementResponse != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
 
-                                Intent intent = new Intent(MerchantsAgrementActivity.this, GetstartedSuccessAcivity.class);
-                                activityResultLauncher.launch(intent);
+                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
+                        activityResultLauncher.launch(intent);
 
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-            });
-        }
+        });
+    }
 }
 

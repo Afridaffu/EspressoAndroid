@@ -236,10 +236,10 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
                 if (profilesResponse != null) {
-                    if(profilesResponse.getData().get(0).getEntityName() != null) {
-                        accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
-                    }
-//                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+//                    if(profilesResponse.getData().get(0).getEntityName() != null) {
+//                        accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+//                    }
+////                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
                     accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
 
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
