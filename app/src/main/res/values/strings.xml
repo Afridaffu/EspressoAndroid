@@ -441,4 +441,15 @@
     <string name="monthly_service_fee">Monthly Service Fee</string>
     <string name="enter_the_amount">Enter the amount</string>
     <string name="additional_action_required">Additional Action Required</string>
+    <string name="sale_order_tokens">Sale Order - Token</string>
+    <string name="date">Date</string>
+    <string name="to">To</string>
+    <string name="transaction_amount">Transaction Amount</string>
+    <string name="partial_refund">Partial Refund</string>
+    <string name="business_payout">Business Payout</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="transaction_subtype">Transaction SubType</string>
+    <string name="pending">Pending</string>
+    <string name="failed">Failed</string>
+    <string name="in_progress">In progress</string>
 </resources>
