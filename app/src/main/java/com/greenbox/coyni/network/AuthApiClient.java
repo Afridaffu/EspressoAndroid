@@ -1,5 +1,8 @@
 package com.greenbox.coyni.network;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
@@ -95,6 +98,7 @@ public class AuthApiClient {
                 ex.printStackTrace();
                 throw new ApiClient.ConnectionInterruptedException(TYPE_SOMETHING_WENT_WRONG);
             }
+            Log.e("resp auth",new Gson().toJson(response.code()));
             return response;
         }
     }

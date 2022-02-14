@@ -1,5 +1,6 @@
 package com.greenbox.coyni.adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     List<TimeZoneModel> listCountries;
     Context mContext;
     MyApplication objMyApplication;
+    String from;
+    Dialog dialog;
+    EditText editText;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //        public TextInputEditText etCurrencyPST;
@@ -40,9 +45,12 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     }
 
 
-    public CustomerTimeZonesAdapter(List<TimeZoneModel> list, Context context) {
+    public CustomerTimeZonesAdapter(List<TimeZoneModel> list, Context context, String from, Dialog dialog, EditText editText) {
         this.mContext = context;
         this.listCountries = list;
+        this.from = from;
+        this.dialog = dialog;
+        this.editText = editText;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -69,16 +77,22 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
                     objMyApplication.setTempTimezoneID(listCountries.get(position).getTimezoneID());
                     objMyApplication.setTempTimezone(listCountries.get(position).getTimezone());
 
-                    for (int i = 0; i < listCountries.size(); i++) {
-                        Log.e("Pos, i", position + " " + i);
-                        if (position == i) {
-                            listCountries.get(i).setSelected(true);
-                        } else {
-                            listCountries.get(i).setSelected(false);
+                    if (from.equals("DBA_INFO")) {
+                        objMyApplication.setTimezone(objMyApplication.getTempTimezone());
+                        objMyApplication.setTimezoneID(objMyApplication.getTempTimezoneID());
+                        editText.setText(objMyApplication.getTimezone());
+                        DBAInfoAcivity dbaInfoAcivity = (DBAInfoAcivity) mContext;
+                        dbaInfoAcivity.isTimeZone = true;
+                        dbaInfoAcivity.enableOrDisableNext();
+                        dialog.dismiss();
+                    } else {
+                        for (int i = 0; i < listCountries.size(); i++) {
+                            Log.e("Pos, i", position + " " + i);
+                            listCountries.get(i).setSelected(position == i);
                         }
-                    }
 
-                    notifyDataSetChanged();
+                        notifyDataSetChanged();
+                    }
                 }
             });
 
