@@ -74,6 +74,7 @@ public class ApiClient {
                     .addHeader("Content-Type", "application/json")
                     .addHeader("User-Agent", "Coyni")
                     .addHeader("App-version", Utils.getAppVersion())
+                    .addHeader("SkipDecryption", Utils.getStrDesc())
                     .addHeader("Accept-Language", Utils.getStrLang())
                     .addHeader("X-REQUESTID", Utils.getStrCode());
 

@@ -79,6 +79,7 @@ public class AuthApiClient {
                     .addHeader("Accept-Language", Utils.getStrLang())
                     .addHeader("User-Agent", "Coyni")
                     .addHeader("App-version", Utils.getAppVersion())
+                    .addHeader("SkipDecryption", Utils.getStrDesc())
                     .addHeader("X-REQUESTID", Utils.getStrCode())
                     .addHeader("Authorization", "Bearer " + Utils.getStrAuth());
 
