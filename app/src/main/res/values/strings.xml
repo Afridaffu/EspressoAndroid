@@ -70,6 +70,8 @@
     <string name="identityInstruction">Enter your mailing address of your primary residence. Please do not use a PO Box.</string>
     <string name="submitbtn">Submit</string>
     <string name="exitbtn">Exit</string>
+    <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.You will need to complete a new Merchant Application for each DBA you add.</string>
+    <string name="addDBAButton">Add DBA</string>
 
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailling Address</string>

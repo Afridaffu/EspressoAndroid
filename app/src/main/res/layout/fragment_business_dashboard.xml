@@ -18,6 +18,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/ll_profile_header"
                 android:layout_height="wrap_content"
                 android:background="@drawable/mask_group_16"
                 android:orientation="horizontal"

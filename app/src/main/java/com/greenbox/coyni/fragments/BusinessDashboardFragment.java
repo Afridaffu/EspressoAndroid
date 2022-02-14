@@ -1,5 +1,6 @@
 package com.greenbox.coyni.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 
 public class BusinessDashboardFragment extends BaseFragment {
 
@@ -27,7 +29,16 @@ public class BusinessDashboardFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
+
         showUserData();
+
+        mRlBaseLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), BusinessCreateAccountsActivity.class));
+
+            }
+        });
         return mCurrentView;
     }
 

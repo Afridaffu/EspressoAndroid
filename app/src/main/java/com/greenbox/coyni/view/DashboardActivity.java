@@ -132,6 +132,7 @@ public class DashboardActivity extends AppCompatActivity {
             imgProfileSmall = findViewById(R.id.imgProfileSmall);
             imgProfile = findViewById(R.id.imgProfile);
 
+
             newUserGetStartedCV = findViewById(R.id.newUserGetStartedCV);
 
             welcomeCoyniCV = findViewById(R.id.welcomeCoyniCV);
