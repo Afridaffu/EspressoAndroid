@@ -135,11 +135,12 @@ public class PreferencesActivity extends AppCompatActivity {
 
             dashboardViewModel.getProfiles();
 
+
             // Business Preferences
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT){
                 timezonetext.setVisibility(View.VISIBLE);
-                defaultaccLL.setVisibility(View.GONE);
-            }
+                defaultaccLL.setVisibility(View.GONE); }
+
             if(myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT){
                 timezonetext.setVisibility(View.GONE);
                 defaultaccLL.setVisibility(View.VISIBLE);
