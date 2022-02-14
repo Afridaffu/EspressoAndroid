@@ -90,6 +90,7 @@ public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String strLang = "en-US";
     public static String strCode = "12345";
+    public static String strDesc = "abcd";
     public static String strCCode = "";
     public static String strAuth;
     public static String appVersion;
@@ -190,6 +191,10 @@ public class Utils {
 
     public static String getStrCode() {
         return strCode;
+    }
+
+    public static String getStrDesc() {
+        return strDesc;
     }
 
     public static String getAppVersion() {
