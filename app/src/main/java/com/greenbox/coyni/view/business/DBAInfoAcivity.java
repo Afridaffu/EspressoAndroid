@@ -3,9 +3,6 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
@@ -15,18 +12,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
@@ -42,7 +36,6 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
-import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
@@ -241,17 +234,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             });
 
-            dbanameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            dbaemailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            businessTypeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            timezoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            dbanameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            dbaemailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            businessTypeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            timezoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
             if (type.equalsIgnoreCase("SAME")) {
                 isCopyCompanyInfo = true;
@@ -433,18 +426,18 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         dbanameET.setHint("");
                         if (dbanameET.getText().toString().trim().length() > 1) {
                             dbanameLL.setVisibility(GONE);
-                            dbanameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            dbanameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             dbanameET.setHintTextColor(getColor(R.color.light_gray));
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.primary_black));
 
                         } else if (dbanameET.getText().toString().trim().length() == 1) {
-                            dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.error_red));
                             dbanameET.setHintTextColor(getColor(R.color.light_gray));
                             dbanameLL.setVisibility(VISIBLE);
                             dbanameTV.setText("Minimum 2 Characters Required");
                         } else {
-                            dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             dbanameLL.setVisibility(VISIBLE);
                             dbanameTV.setText("Field Required");
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.light_gray));
@@ -465,7 +458,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     if (!hasFocus) {
                         dbaemailET.setHint("");
                         if (dbaemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(dbaemailET.getText().toString().trim())) {
-                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             dbaemailLL.setVisibility(VISIBLE);
                             dbaemailET.setHintTextColor(getColor(R.color.error_red));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.error_red));
@@ -473,17 +466,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                         } else if (dbaemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(dbaemailET.getText().toString().trim())) {
                             dbaemailLL.setVisibility(GONE);
-                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             dbaemailET.setHintTextColor(getColor(R.color.primary_black));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.primary_black));
 
                         } else if (dbaemailET.getText().toString().trim().length() > 0 && dbaemailET.getText().toString().trim().length() <= 5) {
-                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.light_gray));
                             dbaemailLL.setVisibility(VISIBLE);
                             dbaemailTV.setText("Please Enter a Valid Email");
                         } else {
-                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.light_gray));
                             dbaemailLL.setVisibility(VISIBLE);
                             dbaemailTV.setText("Field Required");
@@ -516,11 +509,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         companyaddressET.setHint("");
                         if (companyaddressET.getText().toString().trim().length() > 0) {
                             address1ErrorLL.setVisibility(GONE);
-                            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(companyaddresstil, getColor(R.color.primary_black));
 
                         } else {
-                            companyaddresstil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companyaddresstil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(companyaddresstil, getColor(R.color.light_gray));
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
@@ -541,10 +534,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         companyaddress2ET.setHint("");
                         if (companyaddress2ET.getText().toString().trim().length() > 0) {
                             Utils.setUpperHintColor(companyaddress2til, getColor(R.color.primary_black));
-                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         } else {
                             Utils.setUpperHintColor(companyaddress2til, getColor(R.color.light_gray));
-                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
                         }
                     } else {
@@ -563,11 +556,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         cityET.setHint("");
                         if (cityET.getText().toString().trim().length() > 0) {
                             cityErrorLL.setVisibility(GONE);
-                            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(citytil, getColor(R.color.primary_black));
 
                         } else {
-                            citytil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            citytil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(citytil, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
@@ -588,17 +581,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         zipcodeET.setHint("");
                         if (zipcodeET.getText().toString().trim().length() == 5) {
                             zipcodeErrorLL.setVisibility(GONE);
-                            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.primary_black));
 
                         } else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
-                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.error_red));
                             zipcodeErrorLL.setVisibility(VISIBLE);
                             zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                         } else {
-                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.light_gray));
                             zipcodeErrorLL.setVisibility(VISIBLE);
                             zipcodeErrorTV.setText("Field Required");
