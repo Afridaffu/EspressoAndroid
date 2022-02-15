@@ -45,7 +45,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
     TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
     ImageView backActionIV, imgBack;
-    String passcode = "", strChoose = "", strConfirm = "", TYPE;
+    String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
@@ -84,7 +84,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
                     break;
             }
-            String strScreen = getIntent().getStringExtra("screen");
+            strScreen = getIntent().getStringExtra("screen");
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             SetDontRemind();
             initObserver();
@@ -96,12 +96,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-//        try {
-//            clearControls();
-//            passcode = "";
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     @Override
@@ -202,6 +196,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     //dialog.dismiss();
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                            if (validateResponse.getData().getRequestToken() != null && !validateResponse.getData().getRequestToken().equals("")) {
+                                Utils.setStrToken(validateResponse.getData().getRequestToken());
+                            }
                             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 businessIdentityVerificationViewModel.getBusinessTracker();
                             }
@@ -780,6 +777,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
+            if (strScreen.toLowerCase().equals("changepassword")) {
+                request.setActionType(Utils.changeActionType);
+            }
             //Uncomment for stepup process
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
                 coyniViewModel.stepUpPin(request);

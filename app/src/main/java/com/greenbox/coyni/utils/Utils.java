@@ -93,6 +93,7 @@ public class Utils {
     public static String strDesc = "abcd";
     public static String strCCode = "";
     public static String strAuth;
+    public static String strToken = "";
     public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
@@ -184,6 +185,7 @@ public class Utils {
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public static final String ACCOUNT_TYPE = "account_type";
+    public static final String changeActionType = "CHANGE";
 
 
     public static String getStrLang() {
@@ -212,6 +214,14 @@ public class Utils {
 
     public static void setStrAuth(String strAuth) {
         Utils.strAuth = strAuth;
+    }
+
+    public static String getStrToken() {
+        return strToken;
+    }
+
+    public static void setStrToken(String strToken) {
+        Utils.strToken = strToken;
     }
 
     public static String getStrReferer() {
@@ -1158,7 +1168,7 @@ public class Utils {
             RecyclerView bTypesRV = dialog.findViewById(R.id.bTypesRV);
             EditText searchET = dialog.findViewById(R.id.searchET);
             TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
-            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context,editText,dialog);
+            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog);
 
             List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
 

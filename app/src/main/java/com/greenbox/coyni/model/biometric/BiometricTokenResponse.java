@@ -41,7 +41,7 @@ public class BiometricTokenResponse {
     }
 
     public class Data {
-        public String requestToken;
+        private String requestToken;
 
         public String getRequestToken() {
             return requestToken;

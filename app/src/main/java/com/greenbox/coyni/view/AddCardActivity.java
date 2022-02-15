@@ -247,7 +247,7 @@ public class AddCardActivity extends AppCompatActivity {
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
+            //paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
             //objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
@@ -363,12 +363,13 @@ public class AddCardActivity extends AppCompatActivity {
                             strZip = etZipCode.getText().toString().trim();
                             strCountry = Utils.getStrCCode();
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        prepareJson();
-                                    }
-                                }, 100);
+//                                new Handler().postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        prepareJson();
+//                                    }
+//                                }, 100);
+                                prepareCareRequest();
                             } else {
                                 BusinessCardRequest request = new BusinessCardRequest();
                                 request.setAddressLine1(strAdd1);
@@ -1340,13 +1341,34 @@ public class AddCardActivity extends AppCompatActivity {
             String strUUID = UUID.randomUUID().toString();
             EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
             if (encrypt != null) {
-                CardRequest request = new CardRequest();
-                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
-                request.setPayload(encrypt.getEncryptData());
-                paymentMethodsViewModel.saveCards(request);
+//                CardRequest request = new CardRequest();
+//                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+//                request.setPayload(encrypt.getEncryptData());
+//                paymentMethodsViewModel.saveCards(request);
             } else {
                 progressDialog.dismiss();
             }
+        } catch (Exception ex) {
+            progressDialog.dismiss();
+            ex.printStackTrace();
+        }
+    }
+
+    private void prepareCareRequest() {
+        try {
+            CardRequest request = new CardRequest();
+            request.setAddressLine1(strAdd1);
+            request.setAddressLine2(strAdd2);
+            request.setCardNumber(strCardNo);
+            request.setCity(strCity);
+            request.setCountry(strCountry);
+            request.setCvc(strCvv);
+            request.setDefaultForAllWithDrawals(true);
+            request.setExpiryDate(strExpiry);
+            request.setName(strName);
+            request.setState(strState);
+            request.setZipCode(strZip);
+            paymentMethodsViewModel.saveCards(request);
         } catch (Exception ex) {
             progressDialog.dismiss();
             ex.printStackTrace();

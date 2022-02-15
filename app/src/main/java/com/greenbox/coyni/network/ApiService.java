@@ -174,8 +174,11 @@ public interface ApiService {
     @GET("api/v2/profile/me/signedagreements")
     Call<Agreements> meAgreementsByType();
 
-    @PATCH("/api/v2/user/change-password")
-    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
+//    @PATCH("api/v2/user/change-password")
+//    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
+
+    @PATCH("api/v2/user/change-password/{requestToken}")
+    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request, @Path("requestToken") String requestToken);
 
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
@@ -284,7 +287,10 @@ public interface ApiService {
     @POST("api/v2/profile/me/tracker")
     Call<TrackerResponse> statusTracker();
 
-    @POST("api/v2/cards/encrypt/me")
+//    @POST("api/v2/cards/encrypt/me")
+//    Call<CardResponse> saveCards(@Body CardRequest request);
+
+    @POST("api/v2/cards/me")
     Call<CardResponse> saveCards(@Body CardRequest request);
 
     @POST("api/v2/cards/me/encrypt/preauth-verify")

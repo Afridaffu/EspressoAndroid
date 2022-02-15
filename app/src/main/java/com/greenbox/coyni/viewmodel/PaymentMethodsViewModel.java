@@ -99,17 +99,21 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<PublicKeyResponse>() {
                 @Override
                 public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
-                    if (response.isSuccessful()) {
-                        PublicKeyResponse obj = response.body();
-                        publicKeyResponseMutableLiveData.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
-                        }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                    try {
+                        if (response.isSuccessful()) {
+                            PublicKeyResponse obj = response.body();
+                            publicKeyResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<PublicKeyResponse>() {
+                            }.getType();
+                            PublicKeyResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                publicKeyResponseMutableLiveData.setValue(errorResponse);
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
