@@ -335,7 +335,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:visibility="invisible"
+                    android:visibility="gone"
                     android:clickable="false">
 
                     <ImageButton
@@ -427,11 +427,11 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <View
-                    android:id="@+id/pageOneView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_200sdp"
-                    android:visibility="gone"/>
+<!--                <View-->
+<!--                    android:id="@+id/pageOneView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_200sdp"-->
+<!--                    android:visibility="gone"/>-->
             </LinearLayout>
 
         </ScrollView>
@@ -849,11 +849,11 @@
                         android:textSize="@dimen/_12ssp" />
                 </androidx.cardview.widget.CardView>
 
-                <View
-                    android:id="@+id/pageTwoView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_200sdp"
-                    android:visibility="gone"/>
+<!--                <View-->
+<!--                    android:id="@+id/pageTwoView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_200sdp"-->
+<!--                    android:visibility="gone"/>-->
             </LinearLayout>
 
         </ScrollView>

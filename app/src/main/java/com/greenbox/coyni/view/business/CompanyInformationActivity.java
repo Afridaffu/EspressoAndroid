@@ -121,7 +121,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public int docTypeID = 0;
     IdentityVerificationViewModel identityVerificationViewModel;
     String selectedDocType = "";
-
+    CompanyInformationActivity myActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +141,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
     public void initFields() {
         try {
-            companyInformationActivity = this;
+            companyInformationActivity = myActivity = this;
             objMyApplication = (MyApplication) getApplicationContext();
             setKeyboardVisibilityListener(CompanyInformationActivity.this);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
@@ -153,8 +153,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             divider0 = findViewById(R.id.divider0);
             divider1 = findViewById(R.id.divider1);
             divider2 = findViewById(R.id.divider2);
-            pageOneView = findViewById(R.id.pageOneView);
-            pageTwoView = findViewById(R.id.pageTwoView);
+//            pageOneView = findViewById(R.id.pageOneView);
+//            pageTwoView = findViewById(R.id.pageTwoView);
 
             //Documents
             aoiLL = findViewById(R.id.aoiLL);
@@ -286,17 +286,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
             });
 
-            companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            businessTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            timezoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            businessTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            timezoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
 
-            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
 
 
             divider0.setOnClickListener(view -> {
@@ -743,18 +743,18 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         companynameET.setHint("");
                         if (companynameET.getText().toString().trim().length() > 1) {
                             companynameErrorLL.setVisibility(GONE);
-                            companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             companynameET.setHintTextColor(getColor(R.color.light_gray));
                             Utils.setUpperHintColor(companynametil, getColor(R.color.primary_black));
 
                         } else if (companynameET.getText().toString().trim().length() == 1) {
-                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
                             companynameErrorLL.setVisibility(VISIBLE);
                             companynameerrorTV.setText("Minimum 2 Characters Required");
                         } else {
                             Utils.setUpperHintColor(companynametil, getColor(R.color.light_gray));
-                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             companynameErrorLL.setVisibility(VISIBLE);
                             companynameerrorTV.setText("Field Required");
 
@@ -775,16 +775,16 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (!b) {
                         companyemailET.setHint("");
                         if (companyemailET.getText().toString().trim().length() > 2 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) {
-                            companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
                             companyemailErrorLL.setVisibility(VISIBLE);
                             companyemailerrorTV.setText("Invalid Email");
                         } else if (companyemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(companyemailET.getText().toString().trim())) {
-                            companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_black));
                             companyemailErrorLL.setVisibility(GONE);
                         } else {
-                            companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.light_gray));
                             companyemailErrorLL.setVisibility(VISIBLE);
                             companyemailerrorTV.setText("Field Required");
@@ -807,11 +807,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         companyaddressET.setHint("");
                         if (companyaddressET.getText().toString().trim().length() > 0) {
                             address1ErrorLL.setVisibility(GONE);
-                            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyaddresstil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(companyaddresstil, getColor(R.color.primary_black));
 
                         } else {
-                            companyaddresstil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            companyaddresstil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyaddresstil, getColor(R.color.light_gray));
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
@@ -832,10 +832,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         companyaddress2ET.setHint("");
                         if (companyaddress2ET.getText().toString().trim().length() > 0) {
                             Utils.setUpperHintColor(companyaddress2til, getColor(R.color.primary_black));
-                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         } else {
                             Utils.setUpperHintColor(companyaddress2til, getColor(R.color.light_gray));
-                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
 
                         }
                     } else {
@@ -854,11 +854,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         cityET.setHint("");
                         if (cityET.getText().toString().trim().length() > 0) {
                             cityErrorLL.setVisibility(GONE);
-                            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            citytil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(citytil, getColor(R.color.primary_black));
 
                         } else {
-                            citytil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            citytil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(citytil, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
@@ -879,17 +879,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         zipcodeET.setHint("");
                         if (zipcodeET.getText().toString().trim().length() == 5) {
                             zipcodeErrorLL.setVisibility(GONE);
-                            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.primary_black));
 
                         } else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
-                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.error_red));
                             zipcodeErrorLL.setVisibility(VISIBLE);
                             zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                         } else {
-                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.light_gray));
                             zipcodeErrorLL.setVisibility(VISIBLE);
                             zipcodeErrorTV.setText("Field Required");
@@ -903,13 +903,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
             });
 
-            zipcodeET.setOnTouchListener((view, motionEvent) -> {
-                pageTwoView.setVisibility(VISIBLE);
-                zipcodeET.requestFocus();
-                zipcodeET.setSelection(zipcodeET.getText().toString().length());
-                addressSL.scrollTo(countryTIL.getLeft(), countryTIL.getBottom());
-                return false;
-            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1158,7 +1151,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     try {
                         if (charSequence.length() > 0) {
                             Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
-//                            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             isState = true;
                         } else {
                             isState = false;
