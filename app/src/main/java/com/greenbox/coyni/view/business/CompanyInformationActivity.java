@@ -33,10 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -60,6 +56,7 @@ import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
@@ -514,11 +511,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                 if (cir.getEmail() != null && !cir.getEmail().equals("")) {
                                     companyemailET.setText(cir.getEmail());
                                     iscompanyEmail = true;
+                                    companyemailET.setSelection(cir.getEmail().length());
                                 }
 
                                 if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
                                     compphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());
                                     iscompPhoneNumber = true;
+                                    compphoneNumberET.setSelection();
                                 }
 
                                 if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
@@ -540,6 +539,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     ssnET.setText(cir.getSsnOrEin());
                                     ssnET.setVisibility(VISIBLE);
                                     isSSN = true;
+                                    ssnET.setSelection();
                                 }
 
                                 if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
@@ -550,21 +550,25 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                                 if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
                                     companyaddress2ET.setText(cir.getAddressLine2());
+                                    companyaddress2ET.setSelection(cir.getAddressLine2().length());
                                 }
 
                                 if (cir.getCity() != null && !cir.getCity().equals("")) {
                                     cityET.setText(cir.getCity());
                                     isCity = true;
+                                    cityET.setSelection(cir.getCity().length());
                                 }
 
                                 if (cir.getState() != null && !cir.getState().equals("")) {
                                     stateET.setText(cir.getState());
                                     isState = true;
+                                    stateET.setSelection(cir.getState().length());
                                 }
 
                                 if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
                                     zipcodeET.setText(cir.getZipCode());
                                     isZipcode = true;
+                                    zipcodeET.setSelection(cir.getZipCode().length());
                                 }
 
                                 if (cir.getRequiredDocumets().size() > 0) {
@@ -629,6 +633,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                 divider1.setBackgroundResource(R.drawable.button_background1);
                                 divider2.setBackgroundResource(R.drawable.button_background);
                             }
+                        } else {
+                            Utils.displayAlert(companyInfoResponse.getError().getErrorDescription(),
+                                    CompanyInformationActivity.this, "", companyInfoResponse.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -1403,11 +1410,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public void onVisibilityChanged(boolean visible) {
         if (visible) {
             Utils.isKeyboardVisible = true;
-            pageOneView.setVisibility(VISIBLE);
-            pageTwoView.setVisibility(VISIBLE);
+//            pageOneView.setVisibility(VISIBLE);
+//            pageTwoView.setVisibility(VISIBLE);
         } else {
-            pageOneView.setVisibility(GONE);
-            pageTwoView.setVisibility(GONE);
+//            pageOneView.setVisibility(GONE);
+//            pageTwoView.setVisibility(GONE);
             Utils.isKeyboardVisible = false;
         }
     }
@@ -1591,30 +1598,16 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
             browseFileTV.setOnClickListener(view -> {
                 chooseFile.dismiss();
-//                Intent chooseAFile;
-//                Intent intent;
-//                chooseAFile = new Intent(Intent.ACTION_GET_CONTENT);
-//                chooseAFile.setType("file/*");
-//                intent = Intent.createChooser(chooseAFile, "Choose From Library");
-//                startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
-
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                intent.putExtra("return-data", true);
-//                Intent newIntent = Intent.createChooser(intent, "Select Picture");
-//                browseFilesResultLauncher.launch(newIntent);
 
                 Intent pickIntent = new Intent();
-                pickIntent.setType("image/*");
+                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                pickIntent.setType("*/*");
+                String[] extraMimeTypes = {"application/pdf", "image/*"};
+                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                 pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
-                        new Intent[]{});
-
-                startActivityForResult(chooserIntent,
-                        ACTIVITY_CHOOSE_FILE);
+                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
 
             });
 
@@ -1624,30 +1617,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             ex.printStackTrace();
         }
     }
-
-    ActivityResultLauncher<String> launcher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-        @Override
-        public void onActivityResult(Uri result) {
-            Log.e("URI", result.toString());
-            uploadDocumentFromLibrary(result, ACTIVITY_CHOOSE_FILE);
-        }
-    });
-
-    ActivityResultLauncher<Intent> browseFilesResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Here, no request code
-                        Intent data = result.getData();
-//                        String FilePath = getFilePath(CompanyInformationActivity.this,data.getData());
-//                        File mediaFile = new File(FilePath);
-                        uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
-                        Log.e("path", data.getData().getPath());
-                    }
-                }
-            });
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1674,41 +1643,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         return cursor.getString(column_index);
     }
 
-    public static String getFilePath(Context context, Uri uri) {
-
-        Cursor cursor = null;
-        final String[] projection = {
-                MediaStore.MediaColumns.DISPLAY_NAME
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, null, null,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-//    private File getFileFromUri(ContentResolver contentResolver,  Uri uri,  File directory) {
-//        File file = new File().createTempFile("suffix", "prefix", directory);
-//        file.outputStream().use {
-//            contentResolver.openInputStream(uri)?.copyTo(it)
-//        }
-//
-//        return file
-//    }
-
     public void uploadDocumentFromLibrary(Uri uri, int reqType) {
         try {
             String FilePath = "";
             if (reqType == ACTIVITY_CHOOSE_FILE) {
-                FilePath = getRealPathFromURI(uri);
+                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
             } else {
                 FilePath = getRealPathFromURI(uri);
             }
@@ -1727,4 +1666,5 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             e.printStackTrace();
         }
     }
+
 }

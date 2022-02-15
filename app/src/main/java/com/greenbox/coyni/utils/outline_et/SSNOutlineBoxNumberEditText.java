@@ -77,16 +77,16 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         });
 
 
-        ssnET.setOnTouchListener((view, motionEvent) -> {
-            if(FROM.equals("CompanyInfo")){
-                CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
-                comp.pageOneView.setVisibility(VISIBLE);
-                comp.basicInfoSL.scrollTo(comp.timezoneTIL.getLeft(), comp.timezoneTIL.getBottom());
-                ssnET.requestFocus();
-                ssnET.setSelection(ssnET.getText().toString().length());
-            }
-            return false;
-        });
+//        ssnET.setOnTouchListener((view, motionEvent) -> {
+//            if(FROM.equals("CompanyInfo")){
+//                CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
+////                comp.pageOneView.setVisibility(VISIBLE);
+//                comp.basicInfoSL.scrollTo(comp.timezoneTIL.getLeft(), comp.timezoneTIL.getBottom());
+//                ssnET.requestFocus();
+//                ssnET.setSelection(ssnET.getText().toString().length());
+//            }
+//            return false;
+//        });
 
         ssnET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -118,6 +118,11 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
             }
         });
 
+
+    }
+
+    public void setSelection() {
+        ssnET.setSelection(ssnET.getText().toString().length());
     }
 
     public void setFrom(String fromm, Context context) {

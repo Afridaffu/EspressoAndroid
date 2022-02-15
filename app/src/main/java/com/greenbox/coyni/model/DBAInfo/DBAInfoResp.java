@@ -59,7 +59,7 @@ public class DBAInfoResp {
         private String website;
         private String monthlyProcessingVolume;
         private String highTicket;
-        private String avarageTicket;
+        private String averageTicket;
         private int timeZone;
         private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
 
@@ -184,12 +184,12 @@ public class DBAInfoResp {
             this.highTicket = highTicket;
         }
 
-        public String getAvarageTicket() {
-            return avarageTicket;
+        public String getAverageTicket() {
+            return averageTicket;
         }
 
-        public void setAvarageTicket(String avarageTicket) {
-            this.avarageTicket = avarageTicket;
+        public void setAverageTicket(String avarageTicket) {
+            this.averageTicket = avarageTicket;
         }
 
         public int getTimeZone() {

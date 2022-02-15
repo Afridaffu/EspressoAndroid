@@ -24,6 +24,7 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
     MyApplication objMyApplication;
     EditText mET;
     Dialog dialog;
+    String from;
     DBAInfoAcivity dbaInfoAcivity;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,12 +41,12 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
     }
 
 
-    public BusinessTypeListAdapter(List<BusinessType> list, Context context, EditText editText, Dialog dialog) {
+    public BusinessTypeListAdapter(List<BusinessType> list, Context context, EditText editText, Dialog dialog,String from) {
         this.mContext = context;
         this.listBT = list;
         this.mET = editText;
         this.dialog = dialog;
-        this.dbaInfoAcivity = (DBAInfoAcivity) context;
+        this.from = from;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -60,7 +61,7 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             BusinessType objData = listBT.get(position);
-            holder.tvBT.setText(objData.getKey());
+            holder.tvBT.setText(objData.getValue());
             if (listBT.get(position).isSelected()) {
                 holder.tickIcon.setVisibility(View.VISIBLE);
             } else {
@@ -70,16 +71,12 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
                 @Override
                 public void onClick(View v) {
                     try {
-//                        for (int i = 0; i < listBT.size(); i++) {
-//                            if (position == i) {
-//                                listBT.get(i).setSelected(true);
-//                            } else {
-//                                listBT.get(i).setSelected(false);
-//                            }
-//                        }
-//                        notifyDataSetChanged();
+                        mET.setText(objData.getValue());
+                        if(from.equals("DBA_INFO")) {
+                            dbaInfoAcivity = (DBAInfoAcivity) mContext;
+                            dbaInfoAcivity.selectedBTKey = objData.getKey();
+                        }
 
-                        mET.setText(objData.getKey());
                         dialog.dismiss();
 
                     } catch (Exception ex) {
