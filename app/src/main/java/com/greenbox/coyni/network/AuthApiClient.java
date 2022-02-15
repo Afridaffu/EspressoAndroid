@@ -1,5 +1,8 @@
 package com.greenbox.coyni.network;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.utils.Utils;
 
@@ -82,7 +85,7 @@ public class AuthApiClient {
                     .addHeader("App-version", Utils.getAppVersion())
                     .addHeader("Authorization", "Bearer " + Utils.getStrAuth());
 
-            if(BuildConfig.SKIP_ENCRYPTION) {
+            if (BuildConfig.SKIP_ENCRYPTION) {
                 requestBuild.addHeader("SkipDecryption", "true");
             }
             initialRequest = requestBuild.build();
@@ -98,6 +101,7 @@ public class AuthApiClient {
                 ex.printStackTrace();
                 throw new ApiClient.ConnectionInterruptedException(TYPE_SOMETHING_WENT_WRONG);
             }
+            Log.e("resp auth", new Gson().toJson(response.code()));
             return response;
         }
     }

@@ -271,10 +271,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Business Entity"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
-                        app:expandedHintEnabled="false"
                         app:hintTextColor="@color/primary_green"
                         tools:ignore="MissingConstraints">
 
@@ -286,7 +285,6 @@
                             android:editable="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint="Choose from the list"
                             android:longClickable="false"
                             android:maxLength="30"
                             android:maxLines="1"
@@ -305,7 +303,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
 
                 <LinearLayout
                     android:id="@+id/ssnErrorLL"

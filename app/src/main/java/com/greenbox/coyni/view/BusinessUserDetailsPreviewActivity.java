@@ -16,7 +16,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class Business_UserDetailsListenersActivity extends AppCompatActivity {
+public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
 
     String authenticateType = "", phoneFormat = "";
     TextView heading, title, value;
@@ -30,7 +30,7 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_user_details_listeners);
+        setContentView(R.layout.activity_business_user_details_preview);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         heading = findViewById(R.id.intentName);
         title = findViewById(R.id.titleTV);
@@ -61,16 +61,16 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 try {
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
-                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BusinessUserDetailsPreviewActivity.this)) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(BusinessUserDetailsPreviewActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(BusinessUserDetailsPreviewActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
-                            startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                            startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "EditEmail"));
                         }
                     } else {
-                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("screen", "EditEmail"));
                     }
@@ -98,16 +98,16 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
 
                 try {
 
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
-                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BusinessUserDetailsPreviewActivity.this)) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(BusinessUserDetailsPreviewActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(BusinessUserDetailsPreviewActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
-                            startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                            startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "EditAddress"));
                         }
                     } else {
-                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("screen", "EditAddress"));
                     }
@@ -134,17 +134,17 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 try {
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(Business_UserDetailsListenersActivity.this)) {
-                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(Business_UserDetailsListenersActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(Business_UserDetailsListenersActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BusinessUserDetailsPreviewActivity.this)) {
+                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(BusinessUserDetailsPreviewActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(BusinessUserDetailsPreviewActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                         } else {
-                            startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                            startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("OLD_PHONE", phoneFormat)
                                     .putExtra("screen", "EditPhone"));
                         }
                     } else {
-                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("OLD_PHONE", phoneFormat)
                                 .putExtra("screen", "EditPhone"));
@@ -160,7 +160,7 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void initObservers() {
-        dashboardViewModel.getProfileMutableLiveData().observe(Business_UserDetailsListenersActivity.this, profile -> {
+        dashboardViewModel.getProfileMutableLiveData().observe(BusinessUserDetailsPreviewActivity.this, profile -> {
             myApplicationObj.setMyProfile(profile);
             if (getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
                 String addressFormatted = "";
@@ -204,15 +204,15 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 switch (authenticateType) {
                     case "EMAIL":
-                        Intent ee = new Intent(Business_UserDetailsListenersActivity.this, EditEmailActivity.class);
+                        Intent ee = new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class);
                         startActivity(ee);
                         break;
                     case "ADDRESS":
-                        Intent ea = new Intent(Business_UserDetailsListenersActivity.this, EditAddressActivity.class);
+                        Intent ea = new Intent(BusinessUserDetailsPreviewActivity.this, EditAddressActivity.class);
                         startActivity(ea);
                         break;
                     case "PHONE":
-                        Intent ep = new Intent(Business_UserDetailsListenersActivity.this, EditPhoneActivity.class);
+                        Intent ep = new Intent(BusinessUserDetailsPreviewActivity.this, EditPhoneActivity.class);
                         ep.putExtra("OLD_PHONE", phoneFormat);
                         startActivity(ep);
 
@@ -221,17 +221,17 @@ public class Business_UserDetailsListenersActivity extends AppCompatActivity {
             } else {
                 switch (authenticateType) {
                     case "EMAIL":
-                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("screen", "EditEmail"));
                         break;
                     case "ADDRESS":
-                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("screen", "EditAddress"));
                         break;
                     case "PHONE":
-                        startActivity(new Intent(Business_UserDetailsListenersActivity.this, PINActivity.class)
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, PINActivity.class)
                                 .putExtra("TYPE", "ENTER")
                                 .putExtra("OLD_PHONE", phoneFormat)
                                 .putExtra("screen", "EditPhone"));

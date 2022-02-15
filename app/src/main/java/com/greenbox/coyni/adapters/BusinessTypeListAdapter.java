@@ -60,7 +60,7 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             BusinessType objData = listBT.get(position);
-            holder.tvBT.setText(objData.getValue());
+            holder.tvBT.setText(objData.getKey());
             if (listBT.get(position).isSelected()) {
                 holder.tickIcon.setVisibility(View.VISIBLE);
             } else {
@@ -79,7 +79,7 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
 //                        }
 //                        notifyDataSetChanged();
 
-                        mET.setText(objData.getValue());
+                        mET.setText(objData.getKey());
                         dialog.dismiss();
 
                     } catch (Exception ex) {

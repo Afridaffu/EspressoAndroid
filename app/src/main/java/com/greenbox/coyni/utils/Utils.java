@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,6 +94,7 @@ public class Utils {
     public static String strDesc = "abcd";
     public static String strCCode = "";
     public static String strAuth;
+    public static String strToken = "";
     public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
@@ -184,6 +186,7 @@ public class Utils {
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public static final String ACCOUNT_TYPE = "account_type";
+    public static final String changeActionType = "CHANGE";
 
 
     public static String getStrLang() {
@@ -212,6 +215,14 @@ public class Utils {
 
     public static void setStrAuth(String strAuth) {
         Utils.strAuth = strAuth;
+    }
+
+    public static String getStrToken() {
+        return strToken;
+    }
+
+    public static void setStrToken(String strToken) {
+        Utils.strToken = strToken;
     }
 
     public static String getStrReferer() {
@@ -547,6 +558,24 @@ public class Utils {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 
+    public static ColorStateList getErrorColorState(Context context) {
+        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        errorColor = new int[]{ContextCompat.getColor(context, R.color.error_red), ContextCompat.getColor(context, R.color.error_red)};
+        errorColorState = new ColorStateList(errorState, errorColor);
+        return errorColorState;
+    }
+
+    public static ColorStateList getNormalColorState(Context context) {
+        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        color = new int[]{ContextCompat.getColor(context, R.color.light_gray), ContextCompat.getColor(context, R.color.light_gray)};
+        colorState = new ColorStateList(state, color);
+        return colorState;
+    }
+
+    /**
+     * @deprecated use {@link #getErrorColorState(Context)} instead.
+     */
+    @Deprecated
     public static ColorStateList getErrorColorState() {
         errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
         errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
@@ -555,6 +584,10 @@ public class Utils {
         return errorColorState;
     }
 
+    /**
+     * @deprecated use {@link #getNormalColorState(Context)} instead.
+     */
+    @Deprecated
     public static ColorStateList getNormalColorState() {
         state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
         color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray), OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
@@ -715,6 +748,9 @@ public class Utils {
         TextView actionText = dialog.findViewById(R.id.tvAction);
         RecyclerView timezonesRV = dialog.findViewById(R.id.timezonesRV);
 
+
+        if (from.equals("DBA_INFO"))
+            actionCV.setVisibility(View.GONE);
         try {
             ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
             TimeZoneModel tzm = new TimeZoneModel();
@@ -747,13 +783,15 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size(); i++) {
-                if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
-                    arrZonesList.get(i).setSelected(true);
+            if ((from.equals("DBA_INFO") && editText.getText().toString().length() > 0) || from.equals("PREFERENCES")) {
+                for (int i = 0; i < arrZonesList.size(); i++) {
+                    if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
+                        arrZonesList.get(i).setSelected(true);
+                    }
                 }
             }
 
-            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context);
+            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context, from, dialog, editText);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
             timezonesRV.setLayoutManager(mLayoutManager);
             timezonesRV.setItemAnimator(new DefaultItemAnimator());
@@ -1158,7 +1196,7 @@ public class Utils {
             RecyclerView bTypesRV = dialog.findViewById(R.id.bTypesRV);
             EditText searchET = dialog.findViewById(R.id.searchET);
             TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
-            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context,editText,dialog);
+            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog);
 
             List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
 

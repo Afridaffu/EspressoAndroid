@@ -1,5 +1,7 @@
 package com.greenbox.coyni.network;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greenbox.coyni.BuildConfig;
@@ -98,6 +100,7 @@ public class ApiClient {
                 ex.printStackTrace();
                 throw new ConnectionInterruptedException(TYPE_SOMETHING_WENT_WRONG);
             }
+            Log.e("resp auth",new Gson().toJson(response.code()));
             return response;
         }
     }

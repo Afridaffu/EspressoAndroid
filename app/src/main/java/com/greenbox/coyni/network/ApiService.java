@@ -8,11 +8,16 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
@@ -25,6 +30,8 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
+import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -168,8 +175,11 @@ public interface ApiService {
     @GET("api/v2/profile/me/signedagreements")
     Call<Agreements> meAgreementsByType();
 
-    @PATCH("/api/v2/user/change-password")
-    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
+//    @PATCH("api/v2/user/change-password")
+//    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
+
+    @PATCH("api/v2/user/change-password/{requestToken}")
+    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request, @Path("requestToken") String requestToken);
 
     @POST("api/v2/coyni-pin/register")
     Call<PINRegisterResponse> coyniPINRegister(@Body RegisterRequest request);
@@ -282,7 +292,10 @@ public interface ApiService {
     @POST("api/v2/profile/me/tracker")
     Call<TrackerResponse> statusTracker();
 
-    @POST("api/v2/cards/encrypt/me")
+//    @POST("api/v2/cards/encrypt/me")
+//    Call<CardResponse> saveCards(@Body CardRequest request);
+
+    @POST("api/v2/cards/me")
     Call<CardResponse> saveCards(@Body CardRequest request);
 
     @POST("api/v2/cards/me/encrypt/preauth-verify")
@@ -377,6 +390,13 @@ public interface ApiService {
     @PATCH("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> updateCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
+    @PATCH("api/v2/business/dba-info")
+    Call<DBAInfoUpdateResp> updateDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
+
+    @POST("api/v2/business/dba-info")
+    Call<DBAInfoUpdateResp> postDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
+
+
     @GET("api/v2/business/payment-methods")
     Call<PaymentMethodsResponse> meBusinessPaymentMethods();
 
@@ -387,7 +407,7 @@ public interface ApiService {
     Call<CompanyInfoUpdateResp> postCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
     @GET("/api/v2/business/dba-info")
-    Call<CompanyInfoResp> getDBAInforamtion();
+    Call<DBAInfoResp> getDBAInforamtion();
 
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
@@ -403,6 +423,12 @@ public interface ApiService {
 
     @POST("api/v2/fees/{UserID}")
     Call<Fees> meFees(@Path("UserID") int UserID);
+
+    @POST("api/v2/cards/merchant/addcard")
+    Call<BusinessCardResponse> saveBusinessCards(@Body BusinessCardRequest request);
+
+    @POST("api/v2/user/biometric/token")
+    Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
 }
 

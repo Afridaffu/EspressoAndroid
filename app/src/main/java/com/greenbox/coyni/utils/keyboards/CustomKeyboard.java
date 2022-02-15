@@ -1,6 +1,5 @@
 package com.greenbox.coyni.utils.keyboards;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -10,16 +9,13 @@ import android.view.View;
 import android.view.inputmethod.InputConnection;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
-import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
+import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
-import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
 
 public class CustomKeyboard extends LinearLayout implements View.OnClickListener {
@@ -170,8 +166,8 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                         case "setAmount":
                             ScanActivity.scanActivity.setAmountClick();
                             break;
-                        case "receivepayments":
-                            Business_ReceivePaymentActivity.business_receivePaymentActivity.setAmountClick();
+                        case "receivables":
+                            BusinessReceivePaymentActivity.businessreceivePaymentActivity.setAmountClick();
                             break;
                     }
 
