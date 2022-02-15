@@ -429,4 +429,11 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
+    <string name="paying_dba_name">Paying [DBA name]</string>
+    <string name="paying_method">Paying Method</string>
+    <string name="recipient_s_address">Recipient’s Address</string>
+    <string name="zara">Zara</string>
+    <string name="slide_to_confirm">Slide to Confirm</string>
+    <string name="retail">(Retail)</string>
+    <string name="account_address_hsdj89378">Account Address hsdj89378…</string>
 </resources>
