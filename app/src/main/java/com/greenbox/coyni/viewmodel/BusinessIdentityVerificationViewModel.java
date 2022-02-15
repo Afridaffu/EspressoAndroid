@@ -13,11 +13,15 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 import java.lang.reflect.Type;
 
@@ -32,9 +36,11 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<BusinessTrackerResponse> getBusinessTrackerResponse = new MutableLiveData<>();
     private MutableLiveData<CompanyInfoResp> getCompanyInfoResponse = new MutableLiveData<>();
     private MutableLiveData<CompanyInfoUpdateResp> updateBasicCompanyInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<DBAInfoUpdateResp> updateBasicDBAInfoResponse = new MutableLiveData<>();
     private MutableLiveData<CompanyInfoUpdateResp> postCompanyInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<DBAInfoUpdateResp> postDBAInfoResponse = new MutableLiveData<>();
 
-    private MutableLiveData<CompanyInfoResp> getDBAInfoResponse = new MutableLiveData<>();
+    private MutableLiveData<DBAInfoResp> getDBAInfoResponse = new MutableLiveData<>();
     private MutableLiveData<BusinessTypeResp> businessTypesResponse = new MutableLiveData<>();
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
@@ -42,11 +48,19 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     }
 
 
+    public MutableLiveData<DBAInfoUpdateResp> getPostDBAInfoResponse() {
+        return postDBAInfoResponse;
+    }
+
+    public MutableLiveData<DBAInfoUpdateResp> getUpdateBasicDBAInfoResponse() {
+        return updateBasicDBAInfoResponse;
+    }
+
     public MutableLiveData<BusinessTypeResp> getBusinessTypesResponse() {
         return businessTypesResponse;
     }
 
-    public MutableLiveData<CompanyInfoResp> getGetDBAInfoResponse() {
+    public MutableLiveData<DBAInfoResp> getGetDBAInfoResponse() {
         return getDBAInfoResponse;
     }
 
@@ -212,19 +226,19 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     public void getDBAInfo() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<CompanyInfoResp> mCall = apiService.getDBAInforamtion();
-            mCall.enqueue(new Callback<CompanyInfoResp>() {
+            Call<DBAInfoResp> mCall = apiService.getDBAInforamtion();
+            mCall.enqueue(new Callback<DBAInfoResp>() {
                 @Override
-                public void onResponse(Call<CompanyInfoResp> call, Response<CompanyInfoResp> response) {
+                public void onResponse(Call<DBAInfoResp> call, Response<DBAInfoResp> response) {
                     try {
                         if (response.isSuccessful()) {
-                            CompanyInfoResp obj = response.body();
+                            DBAInfoResp obj = response.body();
                             getDBAInfoResponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<CompanyInfoResp>() {
+                            Type type = new TypeToken<DBAInfoResp>() {
                             }.getType();
-                            CompanyInfoResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            DBAInfoResp errorResponse = gson.fromJson(response.errorBody().string(), type);
                             getDBAInfoResponse.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
@@ -234,7 +248,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<CompanyInfoResp> call, Throwable t) {
+                public void onFailure(Call<DBAInfoResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     getDBAInfoResponse.setValue(null);
                 }
@@ -278,4 +292,75 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void patchDBAInfo(DBAInfoRequest dbaInfoRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DBAInfoUpdateResp> mCall = apiService.updateDBAInforamtion(dbaInfoRequest);
+            mCall.enqueue(new Callback<DBAInfoUpdateResp>() {
+                @Override
+                public void onResponse(Call<DBAInfoUpdateResp> call, Response<DBAInfoUpdateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DBAInfoUpdateResp obj = response.body();
+                            updateBasicDBAInfoResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DBAInfoUpdateResp>() {
+                            }.getType();
+                            DBAInfoUpdateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            updateBasicDBAInfoResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        updateBasicDBAInfoResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DBAInfoUpdateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    updateBasicDBAInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void postDBAInfo(DBAInfoRequest dbaInfoRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DBAInfoUpdateResp> mCall = apiService.postDBAInforamtion(dbaInfoRequest);
+            mCall.enqueue(new Callback<DBAInfoUpdateResp>() {
+                @Override
+                public void onResponse(Call<DBAInfoUpdateResp> call, Response<DBAInfoUpdateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DBAInfoUpdateResp obj = response.body();
+                            postDBAInfoResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DBAInfoUpdateResp>() {
+                            }.getType();
+                            DBAInfoUpdateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            postDBAInfoResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        postDBAInfoResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DBAInfoUpdateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    postDBAInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

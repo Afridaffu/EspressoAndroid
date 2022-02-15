@@ -1,31 +1,11 @@
-package com.greenbox.coyni.model.cards;
+package com.greenbox.coyni.model.cards.business;
 
-public class CardRequest {
-//    private String key;
-//    private String payload;
-//
-//    public String getKey() {
-//        return key;
-//    }
-//
-//    public void setKey(String key) {
-//        this.key = key;
-//    }
-//
-//    public String getPayload() {
-//        return payload;
-//    }
-//
-//    public void setPayload(String payload) {
-//        this.payload = payload;
-//    }
-
+public class BusinessCardRequest {
     private String addressLine1;
     private String addressLine2;
     private String cardNumber;
     private String city;
     private String country;
-    private String cvc;
     private Boolean defaultForAllWithDrawals;
     private String expiryDate;
     private String name;
@@ -70,14 +50,6 @@ public class CardRequest {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public String getCvc() {
-        return cvc;
-    }
-
-    public void setCvc(String cvc) {
-        this.cvc = cvc;
     }
 
     public Boolean getDefaultForAllWithDrawals() {

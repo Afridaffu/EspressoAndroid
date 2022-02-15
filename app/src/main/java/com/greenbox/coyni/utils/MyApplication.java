@@ -19,6 +19,7 @@ import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
@@ -95,6 +96,7 @@ public class MyApplication extends Application {
     WalletResponseData walletResponseData;
     BusinessTypeResp businessTypeResp;
     CompanyInfoResp companyInfoResp;
+    DBAInfoResp dbaInfoResp;
 
 
     public UserDetails getUserDetails() {
@@ -881,6 +883,14 @@ public class MyApplication extends Application {
 
     public void setCompanyInfoResp(CompanyInfoResp companyInfoResp) {
         this.companyInfoResp = companyInfoResp;
+    }
+
+    public DBAInfoResp getDbaInfoResp() {
+        return dbaInfoResp;
+    }
+
+    public void setDbaInfoResp(DBAInfoResp dbaInfoResp) {
+        this.dbaInfoResp = dbaInfoResp;
     }
 
     public Date getDate(String date) {

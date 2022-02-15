@@ -33,6 +33,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -334,7 +338,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                chooseBusinessEntityPopup(CompanyInformationActivity.this,businessET);
+                chooseBusinessEntityPopup(CompanyInformationActivity.this, businessET);
             });
 
             businessET.setOnClickListener(v -> {
@@ -342,7 +346,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                chooseBusinessEntityPopup(CompanyInformationActivity.this,businessET);
+                chooseBusinessEntityPopup(CompanyInformationActivity.this, businessET);
             });
 
             close.setOnClickListener(v -> finish());
@@ -363,22 +367,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     divider1.setBackgroundResource(R.drawable.button_background);
                     divider2.setBackgroundResource(R.drawable.button_background1);
                 }
-            });
-
-            timeZoneET.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                Utils.populateTimeZones(CompanyInformationActivity.this, timeZoneET, objMyApplication, "COMPANY_INFO");
-            });
-
-            timeZoneCL.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                Utils.populateTimeZones(CompanyInformationActivity.this, timeZoneET, objMyApplication, "COMPANY_INFO");
             });
 
             basicNextCV.setOnClickListener(v -> {
@@ -553,12 +541,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     ssnET.setVisibility(VISIBLE);
                                     isSSN = true;
                                 }
-
-                                //For time zone
-//                            if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
-//                                ssnET.setText(cir.getSsnOrEin());
-//                                isSSN = true;
-//                            }
 
                                 if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
                                     companyaddressET.setText(cir.getAddressLine1());
@@ -914,12 +896,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
             });
 
-//            zipcodeET.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    addressSL.scrollTo(addressNextCV.getLeft(), addressNextCV.getBottom());
-//                }
-//            });
             zipcodeET.setOnTouchListener((view, motionEvent) -> {
                 pageTwoView.setVisibility(VISIBLE);
                 zipcodeET.requestFocus();
@@ -997,6 +973,33 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            businessET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    try {
+                        if (charSequence.length() > 0) {
+                            Utils.setUpperHintColor(businessTIL, getResources().getColor(R.color.primary_black));
+                            isBusinessEntity = true;
+                        } else {
+                            isBusinessEntity = false;
+                        }
+                        enableOrDisableAddressNext();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
                 }
             });
 
@@ -1595,10 +1598,23 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 //                intent = Intent.createChooser(chooseAFile, "Choose From Library");
 //                startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
 
-                Intent intent = new Intent();
-                intent.setType("*/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), ACTIVITY_CHOOSE_FILE);
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                intent.putExtra("return-data", true);
+//                Intent newIntent = Intent.createChooser(intent, "Select Picture");
+//                browseFilesResultLauncher.launch(newIntent);
+
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        new Intent[]{});
+
+                startActivityForResult(chooserIntent,
+                        ACTIVITY_CHOOSE_FILE);
 
             });
 
@@ -1609,6 +1625,30 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         }
     }
 
+    ActivityResultLauncher<String> launcher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+        @Override
+        public void onActivityResult(Uri result) {
+            Log.e("URI", result.toString());
+            uploadDocumentFromLibrary(result, ACTIVITY_CHOOSE_FILE);
+        }
+    });
+
+    ActivityResultLauncher<Intent> browseFilesResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // Here, no request code
+                        Intent data = result.getData();
+//                        String FilePath = getFilePath(CompanyInformationActivity.this,data.getData());
+//                        File mediaFile = new File(FilePath);
+                        uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
+                        Log.e("path", data.getData().getPath());
+                    }
+                }
+            });
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
@@ -1616,9 +1656,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             if (resultCode != RESULT_OK) return;
             String path = "";
             if (requestCode == ACTIVITY_CHOOSE_FILE) {
-                uploadDocumentFromLibrary(data.getData());
+                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
             } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-                uploadDocumentFromLibrary(data.getData());
+                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1634,9 +1674,44 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         return cursor.getString(column_index);
     }
 
-    public void uploadDocumentFromLibrary(Uri uri) {
+    public static String getFilePath(Context context, Uri uri) {
+
+        Cursor cursor = null;
+        final String[] projection = {
+                MediaStore.MediaColumns.DISPLAY_NAME
+        };
+
         try {
-            String FilePath = getRealPathFromURI(uri);
+            cursor = context.getContentResolver().query(uri, projection, null, null,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+//    private File getFileFromUri(ContentResolver contentResolver,  Uri uri,  File directory) {
+//        File file = new File().createTempFile("suffix", "prefix", directory);
+//        file.outputStream().use {
+//            contentResolver.openInputStream(uri)?.copyTo(it)
+//        }
+//
+//        return file
+//    }
+
+    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+        try {
+            String FilePath = "";
+            if (reqType == ACTIVITY_CHOOSE_FILE) {
+                FilePath = getRealPathFromURI(uri);
+            } else {
+                FilePath = getRealPathFromURI(uri);
+            }
             File mediaFile = new File(FilePath);
             if (selectedDocType.equals("CI-AOI")) {
                 aoiFile = mediaFile;

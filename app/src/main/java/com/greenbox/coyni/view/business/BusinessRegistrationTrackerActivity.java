@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
@@ -36,7 +37,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     MyApplication objMyApplication;
     ImageView businessTrackerCloseIV, caInProgressIV,bagIV;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    CompanyInfoResp dbaInfoResponse;
+    DBAInfoResp dbaInfoResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -365,20 +366,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         }
 
         try {
-            businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
+            businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
                 @Override
-                public void onChanged(CompanyInfoResp companyInfoResp) {
-                    if (companyInfoResp != null) {
-                        if (companyInfoResp.getStatus().toLowerCase().toString().equals("success")) {
-                            try {
-                                CompanyInfoResp.Data cir = companyInfoResp.getData();
-                                dbaInfoResponse = companyInfoResp;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            dbaInfoResponse = companyInfoResp;
-                        }
+                public void onChanged(DBAInfoResp dbaInfoResp) {
+                    if (dbaInfoResp != null) {
+                        dbaInfoResponse = dbaInfoResp;
+                        objMyApplication.setDbaInfoResp(dbaInfoResp);
                     }
                 }
             });

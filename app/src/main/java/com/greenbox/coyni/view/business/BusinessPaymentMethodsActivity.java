@@ -162,7 +162,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             } else {
                 Utils.displayAlert(getString(R.string.internet), BusinessPaymentMethodsActivity.this, "", "");
             }
-            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+            if (paymentMethodsResponse.getData() != null && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
             } else {

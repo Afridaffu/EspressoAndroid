@@ -3,6 +3,10 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -34,8 +39,14 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
@@ -43,6 +54,15 @@ import com.greenbox.coyni.utils.outline_et.VolumeEditText;
 import com.greenbox.coyni.utils.outline_et.WebsiteOutlineEditText;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibilityListener {
     TextInputLayout dbanameTIL, dbaemailTIL, businessTypeTIL, timezoneTIL;
@@ -55,7 +75,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, dbaFillingUpdatedOnTV;
     public CardView dbaNextCV, addressNextCV;
     public DBAInfoAcivity dbaInfoAcivity;
-    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isRB = false,
+    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
             isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false;
     ConstraintLayout businessTypeCL, timeZoneCL;
     View viewBarLeft, viewBarRight;
@@ -77,6 +97,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     BusinessTypeResp btResponse;
     String type = "";
+    Dialog timezoneDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +110,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             initObservers();
             focusWatchers();
             textWatchers();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,6 +140,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             setKeyboardVisibilityListener(DBAInfoAcivity.this);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             type = getIntent().getStringExtra("TYPE");
+            businessIdentityVerificationViewModel.getDBAInfo();
 
             //Screen 1
             dbanameTIL = findViewById(R.id.DBAnameTIL);
@@ -146,19 +169,20 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             retailIV = findViewById(R.id.retailIV);
 
             websiteOET = findViewById(R.id.websiteOET);
+            websiteOET.setHint("Website");
             websiteOET.setFrom("DBA_INFO", this);
 
             mpvOET = findViewById(R.id.mpvOET);
             mpvOET.setHint("Monthly Processing Volume");
-            mpvOET.setFrom("DBA_INFO",this,"MPV");
+            mpvOET.setFrom("DBA_INFO", this, "MPV");
 
             highTicketOET = findViewById(R.id.highTicketOET);
             highTicketOET.setHint("High Ticket");
-            highTicketOET.setFrom("DBA_INFO",this,"HT");
+            highTicketOET.setFrom("DBA_INFO", this, "HT");
 
             avgTicketOET = findViewById(R.id.avgTicketOET);
             avgTicketOET.setHint("Average Ticket");
-            avgTicketOET.setFrom("DBA_INFO",this,"AT");
+            avgTicketOET.setFrom("DBA_INFO", this, "AT");
 
             timezoneTIL = findViewById(R.id.timeZoneTIL);
             timeZoneET = findViewById(R.id.timeZoneET);
@@ -246,58 +270,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             zipcodetil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-            if (type.equalsIgnoreCase("SAME")) {
-                isCopyCompanyInfo = true;
-                if (objMyApplication.getCompanyInfoResp() != null) {
-                    CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
-                    if (cir.getName() != null && !cir.getName().equals("")) {
-                        dbanameET.setText(cir.getName());
-                        dbanameET.setSelection(cir.getName().length());
-                        isdbaName = true;
-                    }
-
-                    if (cir.getEmail() != null && !cir.getEmail().equals("")) {
-                        dbaemailET.setText(cir.getEmail());
-                        isdbaEmail = true;
-                    }
-
-                    if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
-                        customerphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());
-                        iscustPhoneNumber = true;
-                    }
-
-                    if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
-                        companyaddressET.setText(cir.getAddressLine1());
-                        isCompanyAdress1 = true;
-                    }
-
-                    if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
-                        companyaddress2ET.setText(cir.getAddressLine2());
-                    }
-
-                    if (cir.getCity() != null && !cir.getCity().equals("")) {
-                        cityET.setText(cir.getCity());
-                        isCity = true;
-                    }
-
-                    if (cir.getState() != null && !cir.getState().equals("")) {
-                        stateET.setText(cir.getState());
-                        isState = true;
-                    }
-
-                    if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
-                        zipcodeET.setText(cir.getZipCode());
-                        isZipcode = true;
-                    }
-                    enableOrDisableNext();
-                    enableOrDisableAddressNext();
-                }
-            } else if (type.equalsIgnoreCase("DIFF")) {
-                isCopyCompanyInfo = false;
-            } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
-                isCopyCompanyInfo = true;
-            }
-
             viewBarLeft.setOnClickListener(view -> {
                 closeIV.setVisibility(VISIBLE);
                 backIV.setVisibility(GONE);
@@ -367,7 +339,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             });
 
             eCommerceLL.setOnClickListener(view -> {
-                isRB = true;
+                websiteOET.setHint("Website");
+                isECommerce = true;
+                isRetail = false;
                 identificationType = 9;
                 dbaFillingLL.setVisibility(GONE);
                 if (eCommerceIV.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.ic_rb_unselected).getConstantState()) {
@@ -378,7 +352,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             });
 
             retailLL.setOnClickListener(view -> {
-                isRB = true;
+                websiteOET.setHint("Website(Optional)");
+                isECommerce = false;
+                isRetail = true;
                 identificationType = 8;
                 dbaFillingLL.setVisibility(VISIBLE);
                 if (retailIV.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.ic_rb_unselected).getConstantState()) {
@@ -387,6 +363,34 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
                 enableOrDisableNext();
             });
+
+            dbaNextCV.setOnClickListener(v -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                if (isNextEnabled) {
+                    dbaInfoAPICall(prepareRequest());
+                }
+            });
+
+            addressNextCV.setOnClickListener(v -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                if (isAddressNextEnabled) {
+                    businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
+                }
+            });
+
+//            new Timer().schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    loadCompanyInfo();
+//                }
+//            }, 3000);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -413,6 +417,177 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             e.printStackTrace();
         }
 
+        try {
+            businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
+                @Override
+                public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
+
+                    if (dialog != null)
+                        dismissDialog();
+
+                    if (dbaInfoUpdateResp != null) {
+                        if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
+                            closeIV.setVisibility(GONE);
+                            backIV.setVisibility(VISIBLE);
+
+                            if (selectedPage == 0) {
+                                viewPager.setCurrentItem(1);
+                                closeIV.setVisibility(GONE);
+                                backIV.setVisibility(VISIBLE);
+                                viewBarLeft.setBackgroundResource(R.drawable.button_background1);
+                                viewBarRight.setBackgroundResource(R.drawable.button_background);
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        try {
+//            identityVerificationViewModel.getUploadIdentityImageResponse().observe(this, new Observer<IdentityImageResponse>() {
+//                @Override
+//                public void onChanged(IdentityImageResponse identityImageResponse) {
+//                    if (dialog != null) {
+//                        dialog.dismiss();
+//                    }
+//                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+//                        if (docTypeID == 5) {
+//                            aoiUploadTV.setVisibility(GONE);
+//                            aoiUploadedLL.setVisibility(VISIBLE);
+//                            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
+//                            aoiUpdatedOnTV.setText(dateString);
+//                            isAOIUploaded = true;
+//                        } else if (docTypeID == 6) {
+//                            einLetterUploadTV.setVisibility(GONE);
+//                            einLetterUploadedLL.setVisibility(VISIBLE);
+//                            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
+//                            einLetterUpdatedOnTV.setText(dateString);
+//                            isEINLetterUploaded = true;
+//                        } else if (docTypeID == 7) {
+//                            w9FormUploadTV.setVisibility(GONE);
+//                            w9FormUploadedLL.setVisibility(VISIBLE);
+//                            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
+//                            w9FormUpdatedOnTV.setText(dateString);
+//                            isW9FormUploaded = true;
+//                        }
+//
+//                        enableOrDisableDocsDone();
+//                    } else {
+//                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), CompanyInformationActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
+//                @Override
+//                public void onChanged(RemoveIdentityResponse imageResponse) {
+//                    if (imageResponse != null) {
+//                        RequestBody requestBody = null;
+//                        MultipartBody.Part idFile = null;
+//                        if (docTypeID == 5) {
+//                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), aoiFile);
+//                            idFile = MultipartBody.Part.createFormData("identityFile", aoiFile.getName(), requestBody);
+//                        } else if (docTypeID == 6) {
+//                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), einLetterFile);
+//                            idFile = MultipartBody.Part.createFormData("identityFile", einLetterFile.getName(), requestBody);
+//                        } else if (docTypeID == 7) {
+//                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), w9FormFile);
+//                            idFile = MultipartBody.Part.createFormData("identityFile", w9FormFile.getName(), requestBody);
+//                        }
+//                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), docTypeID + "");
+//                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getUnmaskedText());
+//                        identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+            businessIdentityVerificationViewModel.getPostDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
+                @Override
+                public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
+
+                    if (dialog != null)
+                        dismissDialog();
+                    if (dbaInfoUpdateResp != null) {
+                        if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
+                            finish();
+                        } else {
+                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(),
+                                    DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
+                @Override
+                public void onChanged(DBAInfoResp dbaInfoResp) {
+                    if (dbaInfoResp != null) {
+                        objMyApplication.setDbaInfoResp(dbaInfoResp);
+                        if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            customerphoneNumberET.setText("");
+                            DBAInfoResp.Data cir = objMyApplication.getDbaInfoResp().getData();
+                            if (cir.getName() != null && !cir.getName().equals("")) {
+                                dbanameET.setText(cir.getName());
+                                dbanameET.setSelection(cir.getName().length());
+                                isdbaName = true;
+                            }
+
+                            if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+                                dbaemailET.setText(cir.getEmail());
+                                isdbaEmail = true;
+                            }
+
+                            if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
+                                customerphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());
+                                iscustPhoneNumber = true;
+                            }
+
+                            if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+                                companyaddressET.setText(cir.getAddressLine1());
+                                isCompanyAdress1 = true;
+                            }
+
+                            if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                companyaddress2ET.setText(cir.getAddressLine2());
+                            }
+
+                            if (cir.getCity() != null && !cir.getCity().equals("")) {
+                                cityET.setText(cir.getCity());
+                                isCity = true;
+                            }
+
+                            if (cir.getState() != null && !cir.getState().equals("")) {
+                                stateET.setText(cir.getState());
+                                isState = true;
+                            }
+
+                            if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                                zipcodeET.setText(cir.getZipCode());
+                                isZipcode = true;
+                            }
+                            enableOrDisableNext();
+                            enableOrDisableAddressNext();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void focusWatchers() {
@@ -652,7 +827,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         dbaemailLL.setVisibility(GONE);
                         isdbaEmail = true;
-                        Utils.setUpperHintColor(dbaemailTIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.primary_black));
                     } else if (dbaemailET.getText().toString().trim().length() == 0) {
                         isdbaEmail = false;
                     }
@@ -935,23 +1110,27 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public void enableOrDisableNext() {
 
         try {
-            if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("SAME")) {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isRB && isWebsite && isMPV
+            if (isECommerce) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
                         && isHighTkt && isAvgTkt && isTimeZone) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                    viewPager.setPagingEnabled(true);
                 } else {
                     isNextEnabled = false;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    viewPager.setPagingEnabled(false);
                 }
-            } else {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isRB && isWebsite && isMPV
+            } else if (isRetail) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isMPV
                         && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                    viewPager.setPagingEnabled(true);
                 } else {
                     isNextEnabled = false;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    viewPager.setPagingEnabled(false);
                 }
             }
         } catch (Resources.NotFoundException e) {
@@ -966,9 +1145,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             if (isCompanyAdress1 && isCity && isState && isZipcode) {
                 isAddressNextEnabled = true;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                viewPager.setPagingEnabled(true);
             } else {
                 isAddressNextEnabled = false;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                viewPager.setPagingEnabled(false);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1049,4 +1230,150 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             // No super
         }
     }
+
+    private void loadCompanyInfo() {
+        if (type.equalsIgnoreCase("SAME")) {
+            isCopyCompanyInfo = true;
+            if (objMyApplication.getCompanyInfoResp() != null) {
+                CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
+                if (cir.getName() != null && !cir.getName().equals("")) {
+                    dbanameET.setText(cir.getName());
+                    dbanameET.setSelection(cir.getName().length());
+                    isdbaName = true;
+                }
+
+                if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+                    dbaemailET.setText(cir.getEmail());
+                    isdbaEmail = true;
+                }
+
+                if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
+                    customerphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());
+                    iscustPhoneNumber = true;
+                }
+
+                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+                    companyaddressET.setText(cir.getAddressLine1());
+                    isCompanyAdress1 = true;
+                }
+
+                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                    companyaddress2ET.setText(cir.getAddressLine2());
+                }
+
+                if (cir.getCity() != null && !cir.getCity().equals("")) {
+                    cityET.setText(cir.getCity());
+                    isCity = true;
+                }
+
+                if (cir.getState() != null && !cir.getState().equals("")) {
+                    stateET.setText(cir.getState());
+                    isState = true;
+                }
+
+                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                    zipcodeET.setText(cir.getZipCode());
+                    isZipcode = true;
+                }
+                enableOrDisableNext();
+                enableOrDisableAddressNext();
+            }
+        } else if (type.equalsIgnoreCase("DIFF")) {
+            isCopyCompanyInfo = false;
+        }
+//        else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
+//            isCopyCompanyInfo = true;
+//
+//            if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getStatus().equalsIgnoreCase("SUCCESS")) {
+//                customerphoneNumberET.setText("");
+//                DBAInfoResp.Data cir = objMyApplication.getDbaInfoResp().getData();
+//                if (cir.getName() != null && !cir.getName().equals("")) {
+//                    dbanameET.setText(cir.getName());
+//                    dbanameET.setSelection(cir.getName().length());
+//                    isdbaName = true;
+//                }
+//
+//                if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+//                    dbaemailET.setText(cir.getEmail());
+//                    isdbaEmail = true;
+//                }
+//
+//                if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
+//                    customerphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());
+//                    iscustPhoneNumber = true;
+//                }
+//
+//                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+//                    companyaddressET.setText(cir.getAddressLine1());
+//                    isCompanyAdress1 = true;
+//                }
+//
+//                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+//                    companyaddress2ET.setText(cir.getAddressLine2());
+//                }
+//
+//                if (cir.getCity() != null && !cir.getCity().equals("")) {
+//                    cityET.setText(cir.getCity());
+//                    isCity = true;
+//                }
+//
+//                if (cir.getState() != null && !cir.getState().equals("")) {
+//                    stateET.setText(cir.getState());
+//                    isState = true;
+//                }
+//
+//                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+//                    zipcodeET.setText(cir.getZipCode());
+//                    isZipcode = true;
+//                }
+//                enableOrDisableNext();
+//                enableOrDisableAddressNext();
+//            }
+//        }
+
+    }
+
+    public void dbaInfoAPICall(DBAInfoRequest dbaInfoRequest) {
+        businessIdentityVerificationViewModel.patchDBAInfo(dbaInfoRequest);
+    }
+
+    public DBAInfoRequest prepareRequest() {
+        DBAInfoRequest dbaInfoRequest = new DBAInfoRequest();
+        try {
+            //Basic
+            if (isNextEnabled) {
+                PhNoWithCountryCode phone = new PhNoWithCountryCode();
+                phone.setCountryCode(Utils.strCCode);
+                phone.setPhoneNumber(customerphoneNumberET.getUnmaskedText());
+                dbaInfoRequest.setName(dbanameET.getText().toString().trim());
+                dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
+                dbaInfoRequest.setPhoneNumberDto(phone);
+                dbaInfoRequest.setBusinessType(businessTypeET.getText().toString().trim());
+                if (identificationType != 0) {
+                    dbaInfoRequest.setIdentificationType(identificationType);
+                }
+                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
+                dbaInfoRequest.setTimezone(objMyApplication.getTimezoneID() + "");
+                dbaInfoRequest.setWebsite(websiteOET.getText().trim());
+            }
+
+            //Address
+            if (isAddressNextEnabled) {
+                dbaInfoRequest.setAddressLine1(companyaddressET.getText().toString());
+                dbaInfoRequest.setAddressLine2(companyaddress2ET.getText().toString());
+                dbaInfoRequest.setCity(cityET.getText().toString());
+                dbaInfoRequest.setState(stateET.getText().toString());
+                dbaInfoRequest.setZipCode(zipcodeET.getText().toString());
+                dbaInfoRequest.setCountry("us");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dbaInfoRequest;
+    }
+
 }
