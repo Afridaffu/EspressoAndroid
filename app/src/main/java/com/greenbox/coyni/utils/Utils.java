@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -557,6 +558,24 @@ public class Utils {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 
+    public static ColorStateList getErrorColorState(Context context) {
+        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        errorColor = new int[]{ContextCompat.getColor(context, R.color.error_red), ContextCompat.getColor(context, R.color.error_red)};
+        errorColorState = new ColorStateList(errorState, errorColor);
+        return errorColorState;
+    }
+
+    public static ColorStateList getNormalColorState(Context context) {
+        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        color = new int[]{ContextCompat.getColor(context, R.color.light_gray), ContextCompat.getColor(context, R.color.light_gray)};
+        colorState = new ColorStateList(state, color);
+        return colorState;
+    }
+
+    /**
+     * @deprecated use {@link #getErrorColorState(Context)} instead.
+     */
+    @Deprecated
     public static ColorStateList getErrorColorState() {
         errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
         errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
@@ -565,6 +584,10 @@ public class Utils {
         return errorColorState;
     }
 
+    /**
+     * @deprecated use {@link #getNormalColorState(Context)} instead.
+     */
+    @Deprecated
     public static ColorStateList getNormalColorState() {
         state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
         color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray), OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
