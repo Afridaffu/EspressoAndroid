@@ -3,6 +3,9 @@ package com.greenbox.coyni.view;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import com.bumptech.glide.Glide;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
+import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 
@@ -730,18 +733,19 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 enablePopup.dismiss();
             }
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-//                dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
-//                dialog.setIndeterminate(false);
-//                dialog.setMessage("Please wait...");
-//                dialog.show();
                 BiometricRequest biometricRequest = new BiometricRequest();
                 biometricRequest.setBiometricEnabled(true);
                 biometricRequest.setDeviceId(Utils.getDeviceID());
                 coyniViewModel.saveBiometric(biometricRequest);
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
-                    Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
-                    startActivity(cp);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+                    request.setMobileToken(strToken);
+                    request.setActionType(Utils.changeActionType);
+                    coyniViewModel.biometricToken(request);
+//                    Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
+//                    startActivity(cp);
                 } else {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
@@ -860,30 +864,40 @@ public class CustomerProfileActivity extends AppCompatActivity {
             }
         });
 
-        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
+                }
+            }
+        });
 
-                observe(this, new Observer<PaymentMethodsResponse>() {
-                    @Override
-                    public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
-                        if (paymentMethodsResponse != null) {
-//                            objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
-                            PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
-                            objMyApplication.setPaymentMethodsResponse(objResponse);
+        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                if (profile != null) {
+                    objMyApplication.setMyProfile(profile);
+                    bindImage(objMyApplication.getMyProfile().getData().getImage());
+                }
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
+                        Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
+                        startActivity(cp);
                     }
-                });
-
-        dashboardViewModel.getProfileMutableLiveData().
-
-                observe(this, new Observer<Profile>() {
-                    @Override
-                    public void onChanged(Profile profile) {
-                        if (profile != null) {
-                            objMyApplication.setMyProfile(profile);
-                            bindImage(objMyApplication.getMyProfile().getData().getImage());
-                        }
-                    }
-                });
+                }
+            }
+        });
     }
 
     private boolean getLocalBiometricEnabled() {

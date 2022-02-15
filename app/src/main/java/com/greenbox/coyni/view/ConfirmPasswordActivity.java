@@ -129,14 +129,8 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                         dialog = Utils.showProgressDialog(ConfirmPasswordActivity.this);
                         PasswordRequest passwordRequest = new PasswordRequest();
                         passwordRequest.setUsername(objMyApplication.getStrEmail());
-                        passwordRequest.setPassword(currentPassET.getText().toString());
+                        passwordRequest.setPassword(currentPassET.getText().toString().trim());
                         loginViewModel.authenticatePassword(passwordRequest);
-//                        startActivity(new Intent(ConfirmPasswordActivity.this, CreatePasswordActivity.class)
-//                                .putExtra("screen", "ConfirmPassword")
-//                                .putExtra("oldpassword", oldPassword)
-//                        );
-//                        clearField();
-//                        Log.e("oldPass", "" + oldPassword);
                     }
 
                 }

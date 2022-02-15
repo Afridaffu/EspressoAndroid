@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -37,7 +38,8 @@ public class PreferencesActivity extends AppCompatActivity {
     TextInputLayout timeZoneTIL, accountTIL, currencyTIL;
     TextInputEditText timeZoneET, accountET, currencyET;
     RelativeLayout timeZoneRL;
-    LinearLayout preferencesCloseLL;
+    LinearLayout preferencesCloseLL,defaultaccLL;
+    TextView timezonetext;
     ImageView accountDDIV;
     View disableView;
     public static CustomerProfileViewModel customerProfileViewModel;
@@ -77,6 +79,9 @@ public class PreferencesActivity extends AppCompatActivity {
             accountDDIV = findViewById(R.id.accountDDICon);
             disableView = findViewById(R.id.disableView);
             preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
+            timezonetext = findViewById(R.id.timezoneTextTV);
+            defaultaccLL = findViewById(R.id.defaultaccLL);
+
 
             currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
             Utils.setUpperHintColor(currencyTIL, getColor(R.color.xdark_gray));
@@ -129,6 +134,17 @@ public class PreferencesActivity extends AppCompatActivity {
             dashboardViewModel.mePreferences();
 
             dashboardViewModel.getProfiles();
+
+
+            // Business Preferences
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT){
+                timezonetext.setVisibility(View.VISIBLE);
+                defaultaccLL.setVisibility(View.GONE); }
+
+            if(myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT){
+                timezonetext.setVisibility(View.GONE);
+                defaultaccLL.setVisibility(View.VISIBLE);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -221,7 +237,10 @@ public class PreferencesActivity extends AppCompatActivity {
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
                 if (profilesResponse != null) {
-//                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+//                    if(profilesResponse.getData().get(0).getEntityName() != null) {
+//                        accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
+//                    }
+////                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
                     accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
 
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
@@ -241,7 +260,6 @@ public class PreferencesActivity extends AppCompatActivity {
                             Log.e("else", "else");
                             Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
                         }
-
 
                     }
                 }

@@ -35,6 +35,7 @@ import com.greenbox.coyni.model.wallet.UserDetailsData;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -400,12 +401,12 @@ public class DashboardViewModel extends AndroidViewModel {
     public void meChangePassword(ChangePasswordRequest changePasswordRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest);
+//            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest);
+            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest, Utils.getStrToken());
             mcall.enqueue(new Callback<ChangePassword>() {
                 @Override
                 public void onResponse(Call<ChangePassword> call, Response<ChangePassword> response) {
                     try {
-
                         if (response.isSuccessful()) {
                             ChangePassword obj = response.body();
                             changePasswordMutableLiveData.setValue(obj);

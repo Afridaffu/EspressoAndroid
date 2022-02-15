@@ -1,7 +1,16 @@
 package com.greenbox.coyni.model.coynipin;
 
 public class ValidateRequest {
+    private String actionType;
     private String pin;
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
+    }
 
     public String getPin() {
         return pin;
