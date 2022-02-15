@@ -725,6 +725,9 @@ public class Utils {
         TextView actionText = dialog.findViewById(R.id.tvAction);
         RecyclerView timezonesRV = dialog.findViewById(R.id.timezonesRV);
 
+
+        if (from.equals("DBA_INFO"))
+            actionCV.setVisibility(View.GONE);
         try {
             ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
             TimeZoneModel tzm = new TimeZoneModel();
@@ -757,13 +760,15 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            for (int i = 0; i < arrZonesList.size(); i++) {
-                if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
-                    arrZonesList.get(i).setSelected(true);
+            if ((from.equals("DBA_INFO") && editText.getText().toString().length() > 0) || from.equals("PREFERENCES")) {
+                for (int i = 0; i < arrZonesList.size(); i++) {
+                    if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
+                        arrZonesList.get(i).setSelected(true);
+                    }
                 }
             }
 
-            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context);
+            CustomerTimeZonesAdapter customerTimeZonesAdapter = new CustomerTimeZonesAdapter(arrZonesList, context, from, dialog, editText);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
             timezonesRV.setLayoutManager(mLayoutManager);
             timezonesRV.setItemAnimator(new DefaultItemAnimator());

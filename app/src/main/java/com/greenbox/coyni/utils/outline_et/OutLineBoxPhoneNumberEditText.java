@@ -221,6 +221,9 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
     public String getText() {
         return pnET.getText().toString().trim();
     }
+    public String getUnmaskedText() {
+        return pnET.getUnMasked();
+    }
 
     public int getETID() {
         return pnET.getId();

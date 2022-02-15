@@ -8,6 +8,9 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
@@ -385,6 +388,13 @@ public interface ApiService {
     @PATCH("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> updateCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
+    @PATCH("api/v2/business/dba-info")
+    Call<DBAInfoUpdateResp> updateDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
+
+    @POST("api/v2/business/dba-info")
+    Call<DBAInfoUpdateResp> postDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
+
+
     @GET("api/v2/business/payment-methods")
     Call<PaymentMethodsResponse> meBusinessPaymentMethods();
 
@@ -395,7 +405,7 @@ public interface ApiService {
     Call<CompanyInfoUpdateResp> postCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
     @GET("/api/v2/business/dba-info")
-    Call<CompanyInfoResp> getDBAInforamtion();
+    Call<DBAInfoResp> getDBAInforamtion();
 
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);

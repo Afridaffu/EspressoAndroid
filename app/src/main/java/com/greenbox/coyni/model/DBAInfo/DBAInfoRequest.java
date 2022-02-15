@@ -1,8 +1,8 @@
-package com.greenbox.coyni.model.CompanyInfo;
+package com.greenbox.coyni.model.DBAInfo;
 
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 
-public class CompanyInfoRequest {
+public class DBAInfoRequest {
 
     //Address Info
     private String addressLine1 = "";
@@ -16,9 +16,14 @@ public class CompanyInfoRequest {
     private String name = "";
     private String email = "";
     private PhNoWithCountryCode phoneNumberDto = new PhNoWithCountryCode();
-    private String businessEntity = "";
-    private String ssnOrEin = "";
-    private int identificationType = 0; // Here Identification Type is SSN(11) or EIN/TIN(10)
+    private String businessType = "";
+    private int identificationType = 0; // Here Identification Type is ECOMMERCE (9) or RETAIL(8)
+    private int averageTicket ;
+    private int highTicket ;
+    private int monthlyProcessingVolume ;
+    private boolean copyCompanyInfo = false;
+    private String timezone = "";
+    private String website = "";
 
 
     public String getAddressLine1() {
@@ -101,19 +106,59 @@ public class CompanyInfoRequest {
         this.phoneNumberDto = phoneNumberDto;
     }
 
-    public String getBusinessEntity() {
-        return businessEntity;
+    public int getAverageTicket() {
+        return averageTicket;
     }
 
-    public void setBusinessEntity(String businessEntity) {
-        this.businessEntity = businessEntity;
+    public void setAverageTicket(int averageTicket) {
+        this.averageTicket = averageTicket;
     }
 
-    public String getSsnOrEin() {
-        return ssnOrEin;
+    public int getHighTicket() {
+        return highTicket;
     }
 
-    public void setSsnOrEin(String ssnOrEin) {
-        this.ssnOrEin = ssnOrEin;
+    public void setHighTicket(int highTicket) {
+        this.highTicket = highTicket;
+    }
+
+    public int getMonthlyProcessingVolume() {
+        return monthlyProcessingVolume;
+    }
+
+    public void setMonthlyProcessingVolume(int monthlyProcessingVolume) {
+        this.monthlyProcessingVolume = monthlyProcessingVolume;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public boolean isCopyCompanyInfo() {
+        return copyCompanyInfo;
+    }
+
+    public void setCopyCompanyInfo(boolean copyCompanyInfo) {
+        this.copyCompanyInfo = copyCompanyInfo;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }

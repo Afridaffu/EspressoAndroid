@@ -263,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_14sdp"
                         android:hint="Business Type"
-                        android:textColorHint="@color/black"
+                        android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
                         app:hintTextColor="@color/primary_green"
@@ -970,7 +970,7 @@
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center"
-                        android:text="Next"
+                        android:text="Done"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </androidx.cardview.widget.CardView>
