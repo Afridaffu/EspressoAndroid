@@ -1,5 +1,6 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
@@ -28,13 +29,14 @@ public class AuthApiClient {
 //    private static final String Referer = "https://members.coyni.com"; //SAT && //UAT
     private final int TIME_OUT = 120;
 
-
     private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private AuthApiClient.TokenInterceptor tokenInterceptor = new AuthApiClient.TokenInterceptor();
+    private EncryptionInterceptor encryptionInterceptor = new EncryptionInterceptor();
 
     private OkHttpClient client = new OkHttpClient.Builder().
             connectTimeout(TIME_OUT, TimeUnit.SECONDS).
             readTimeout(TIME_OUT, TimeUnit.SECONDS).
+            addInterceptor(encryptionInterceptor).
             addInterceptor(tokenInterceptor).
             addInterceptor(interceptor).
             build();
@@ -75,14 +77,14 @@ public class AuthApiClient {
                     .addHeader(KEY_CLIENT, CLIENT)
                     .addHeader("Referer", Utils.getStrReferer())
                     .addHeader("Accept", "application/json")
-                    .addHeader("Content-Type", "application/json")
                     .addHeader("Accept-Language", Utils.getStrLang())
                     .addHeader("User-Agent", "Coyni")
                     .addHeader("App-version", Utils.getAppVersion())
-                    .addHeader("SkipDecryption", Utils.getStrDesc())
-                    .addHeader("X-REQUESTID", Utils.getStrCode())
                     .addHeader("Authorization", "Bearer " + Utils.getStrAuth());
 
+            if(BuildConfig.SKIP_ENCRYPTION) {
+                requestBuild.addHeader("SkipDecryption", "true");
+            }
             initialRequest = requestBuild.build();
 
             Response response = null;

@@ -2,6 +2,7 @@ package com.greenbox.coyni.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
@@ -26,14 +27,14 @@ public class ApiClient {
     private static final String TYPE_SOMETHING_WENT_WRONG = "WENT_WRONG";
     private final int TIME_OUT = 120;
 
-
     private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private TokenInterceptor tokenInterceptor = new TokenInterceptor();
+    private EncryptionInterceptor encryptionInterceptor = new EncryptionInterceptor();
 
     private OkHttpClient client = new OkHttpClient.Builder().
             connectTimeout(TIME_OUT, TimeUnit.SECONDS).
             readTimeout(TIME_OUT, TimeUnit.SECONDS).
-            addInterceptor(new EncryptionInterceptor()).
+            addInterceptor(encryptionInterceptor).
             addInterceptor(tokenInterceptor).
             addInterceptor(interceptor).
             build();
@@ -77,12 +78,13 @@ public class ApiClient {
                     .addHeader(KEY_CLIENT, CLIENT)
                     .addHeader("Referer", Utils.getStrReferer())
                     .addHeader("Accept", "application/json")
-                    //.addHeader("Content-Type", "application/json")
                     .addHeader("User-Agent", "Coyni")
                     .addHeader("App-version", Utils.getAppVersion())
-                    .addHeader("SkipDecryption", Utils.getStrDesc())
                     .addHeader("Accept-Language", Utils.getStrLang());
 
+            if (BuildConfig.SKIP_ENCRYPTION) {
+                requestBuild.addHeader("SkipDecryption", "true");
+            }
             initialRequest = requestBuild.build();
 
             Response response = null;
