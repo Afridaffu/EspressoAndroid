@@ -136,11 +136,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.Business_ReceivePaymentActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
             android:name=".view.PayToPersonalActivity"
             android:configChanges="uiMode"
             android:exported="false"
@@ -531,7 +526,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.SelectPaymentMethodActivity"
+            android:name=".view.BusinessUserDetailsPreviewActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity android:name=".view.BusinessReceivePaymentActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"

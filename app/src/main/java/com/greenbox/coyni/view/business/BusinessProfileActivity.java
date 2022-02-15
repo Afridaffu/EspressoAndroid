@@ -38,11 +38,11 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
-import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
+import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
+import com.greenbox.coyni.view.CustomerProfileActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
-import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -51,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,accountlimitsLL;
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,accountlimitsLL,businessResetPin;
     public static SQLiteDatabase mydatabase;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -148,6 +148,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             bpbackBtn = findViewById(R.id.b_backBtn);
             cvLogout = findViewById(R.id.cvLogout);
             switchOnLL = findViewById(R.id.switchOn);
+            businessResetPin = findViewById(R.id.businessResetPin);
 
             dbainfoLL = findViewById(R.id.DBAInformationLL);
             dbainfoLL.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +184,16 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 }
+            });
+
+            businessResetPin.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(BusinessProfileActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("screen", "ResetPIN"));
             });
 
 
@@ -348,7 +359,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
 
-                        startActivity(new Intent(BusinessProfileActivity.this, Business_ReceivePaymentActivity.class));
+                        startActivity(new Intent(BusinessProfileActivity.this, BusinessReceivePaymentActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
