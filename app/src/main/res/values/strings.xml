@@ -429,4 +429,13 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
+
+
+    <string name="today_current_batch">Today(Current batch)</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="month_to_date">Month to Date(MTD)</string>
+    <string name="custom_date_range">Custom Date Range</string>
+    <string name="view_edit">View/Edit</string>
+    <string name="delete">Delete</string>
+
 </resources>

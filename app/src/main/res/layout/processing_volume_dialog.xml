@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/roundeddialog"
@@ -31,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Today(Current batch)"
+            android:text="@string/today_current_batch"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
@@ -45,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Yesterday"
+            android:text="@string/yesterday"
             android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
@@ -59,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Month to Date(MTD)"
+            android:text="@string/month_to_date"
             android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
@@ -73,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Last Month"
+            android:text="@string/lastmonth"
             android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
@@ -87,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Custom Date Range"
+            android:text="@string/custom_date_range"
             android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />

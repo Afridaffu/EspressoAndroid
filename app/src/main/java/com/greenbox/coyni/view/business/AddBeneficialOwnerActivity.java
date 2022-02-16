@@ -675,8 +675,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green))
                     zipcodeErrorTV.setText("Minimum 5 Characters Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
