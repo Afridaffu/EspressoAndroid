@@ -44,7 +44,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".view.business.QuickActionPayorReqActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.business.PayingDBAFilterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ManualReleasesActivity"
             android:exported="false" />
@@ -83,7 +89,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BusinessPaymentMethodsActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".view.business.DBAInfoDetails"
             android:exported="false"
@@ -381,6 +387,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -397,7 +404,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
         <activity
             android:name=".view.CreatePasswordActivity"
             android:configChanges="uiMode"
@@ -540,15 +546,13 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ReserveReleasesActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.OpenNewAccount"
             android:configChanges="uiMode"
@@ -567,7 +571,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
     </application>
 
 </manifest>
