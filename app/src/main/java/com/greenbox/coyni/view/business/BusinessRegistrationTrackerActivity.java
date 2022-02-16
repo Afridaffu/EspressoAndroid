@@ -182,13 +182,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()
-                            && dbaInfoResponse != null && dbaInfoResponse.getData().getId() != -1) {
-                        dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                    } else {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-                        intent.putExtra("TYPE", "EXIST");
-                        startActivity(intent);
+                    if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
+                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != -1) {
+                            dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+                        } else {
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                            intent.putExtra("TYPE", "EXIST");
+                            startActivity(intent);
+                        }
                     }
                 }
             });
@@ -364,9 +365,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
             dbaStartTV.setVisibility(View.VISIBLE);
+            dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             caCompleteLL.setVisibility(View.VISIBLE);
             caIncompleteLL.setVisibility(View.GONE);
         } else {
+            dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
             dbaStartTV.setVisibility(View.GONE);
             caCompleteLL.setVisibility(View.GONE);
             caIncompleteLL.setVisibility(View.VISIBLE);
@@ -375,10 +378,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         if (businessTrackerResponse.getData().isDbaInfo()) {
             boInProgressIV.setVisibility(GONE);
             boStartTV.setVisibility(View.VISIBLE);
+            boIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             dbaCompleteLL.setVisibility(View.VISIBLE);
             dbaIncompleteLL.setVisibility(View.GONE);
         } else {
             boStartTV.setVisibility(View.GONE);
+            boIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
             dbaCompleteLL.setVisibility(View.GONE);
             dbaIncompleteLL.setVisibility(View.VISIBLE);
         }
@@ -386,10 +391,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         if (businessTrackerResponse.getData().isBeneficialOwners()) {
             addBankInProgressIV.setVisibility(GONE);
             addBankStartTV.setVisibility(View.VISIBLE);
+            addBankIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             boCompleteLL.setVisibility(View.VISIBLE);
             boIncompleteLL.setVisibility(View.GONE);
         } else {
             addBankStartTV.setVisibility(View.GONE);
+            addBankIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
             boCompleteLL.setVisibility(View.GONE);
             boIncompleteLL.setVisibility(View.VISIBLE);
         }
@@ -397,10 +404,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         if (businessTrackerResponse.getData().isIsbankAccount()) {
             aggrementsInProgressIV.setVisibility(GONE);
             aggrementsStartTV.setVisibility(View.VISIBLE);
+            aggrementsIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             addBankCompleteLL.setVisibility(View.VISIBLE);
             addBankIncompleteLL.setVisibility(View.GONE);
         } else {
             aggrementsStartTV.setVisibility(View.GONE);
+            aggrementsIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
             addBankCompleteLL.setVisibility(View.GONE);
             addBankIncompleteLL.setVisibility(View.VISIBLE);
         }
