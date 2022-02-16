@@ -31,9 +31,8 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
+import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -148,7 +147,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         receivePaymentLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, Business_ReceivePaymentActivity.class));
+                startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
             }
         });
         llScan.setOnClickListener(new View.OnClickListener() {
