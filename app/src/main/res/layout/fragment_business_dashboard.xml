@@ -1548,6 +1548,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_17sdp"
+                            android:background="@color/white"
                             android:gravity="center"
                             android:orientation="vertical">
 
