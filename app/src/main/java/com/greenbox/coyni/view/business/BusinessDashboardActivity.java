@@ -33,7 +33,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
+import com.greenbox.coyni.view.Business_ReceivePaymentActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -128,10 +128,10 @@ public class BusinessDashboardActivity extends BaseActivity {
         dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
-        LinearLayout buyTokenLL = dialog.findViewById(R.id.buyTokenLL);
-        LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawLL);
-        LinearLayout receivePaymentLL = dialog.findViewById(R.id.receivePaymentLL);
-        LinearLayout llScan = dialog.findViewById(R.id.scanLL);
+        LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
+        LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
+        LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
+        LinearLayout llScan = dialog.findViewById(R.id.llScan);
 
         buyTokenLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +148,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         receivePaymentLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
+                startActivity(new Intent(BusinessDashboardActivity.this, Business_ReceivePaymentActivity.class));
             }
         });
         llScan.setOnClickListener(new View.OnClickListener() {

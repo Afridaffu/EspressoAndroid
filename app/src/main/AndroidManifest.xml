@@ -45,8 +45,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.business.RefundTransactionActivity"
+            android:name=".view.business.QuickActionPayorReqActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.business.PayingDBAFilterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.ManualReleasesActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.business.ReserveFilterActivity"
+            android:exported="true" />
         <activity
             android:name=".view.business.AddtionaInfoRequired"
             android:exported="false"
@@ -79,7 +89,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BusinessPaymentMethodsActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".view.business.DBAInfoDetails"
             android:exported="false"
@@ -377,6 +387,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -449,7 +460,7 @@
             android:name=".view.IdentityVerificationBindingLayoutActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- //Business -->
         <activity
             android:name=".view.business.GetstartedSuccessAcivity"
             android:exported="false"
@@ -538,12 +549,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ReserveReleasesActivity"
-            android:configChanges="uiMode"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.BusinessReceivePaymentActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"

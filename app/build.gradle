@@ -56,11 +56,13 @@ android {
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api.coyni.com/\"'
             buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'true'
         }
         sat {
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-stg.coyni.com/\"'
             buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'true'
         }
         qa {
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-qa.coyni.com/\"'
@@ -69,6 +71,7 @@ android {
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         dev {
             buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com:80/\"'
@@ -76,6 +79,7 @@ android {
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
     }
     lintOptions {
