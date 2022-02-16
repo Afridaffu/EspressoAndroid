@@ -88,7 +88,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
             isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false;
-    ConstraintLayout businessTypeCL, timeZoneCL;
+    ConstraintLayout businessTypeCL, timeZoneCL,stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L;
     MyApplication objMyApplication;
@@ -252,6 +252,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             companyaddress2ET = findViewById(R.id.companyaddress2ET);
             cityET = findViewById(R.id.cityET);
             stateET = findViewById(R.id.stateET);
+            stateCL = findViewById(R.id.stateCL);
             zipcodeET = findViewById(R.id.zipcodeET);
 
             address1ErrorLL = findViewById(R.id.address1ErrorLL);
@@ -435,6 +436,26 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             });
 
+            stateET.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
+                Utils.populateStates(this, stateET, objMyApplication);
+            });
+
+            stateCL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
+                Utils.populateStates(this, stateET, objMyApplication);
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -616,7 +637,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                         } else if (dbaemailET.getText().toString().trim().length() > 0 && dbaemailET.getText().toString().trim().length() <= 5) {
                             dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                            Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.light_gray));
+                            Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.error_red));
                             dbaemailLL.setVisibility(VISIBLE);
                             dbaemailTV.setText("Please Enter a Valid Email");
                         } else {

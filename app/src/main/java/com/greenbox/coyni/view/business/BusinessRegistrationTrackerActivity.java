@@ -183,7 +183,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()
-                            && dbaInfoResponse != null && dbaInfoResponse.getStatus().equalsIgnoreCase("ERROR")) {
+                            && dbaInfoResponse != null && dbaInfoResponse.getData().getId() != -1) {
                         dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
                     } else {
                         Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);

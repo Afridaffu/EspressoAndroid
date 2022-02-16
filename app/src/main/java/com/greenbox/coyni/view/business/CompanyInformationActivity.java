@@ -778,7 +778,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
                             companyemailErrorLL.setVisibility(VISIBLE);
-                            companyemailerrorTV.setText("Invalid Email");
+                            companyemailerrorTV.setText("Please Enter a Valid Email");
                         } else if (companyemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(companyemailET.getText().toString().trim())) {
                             companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_black));
