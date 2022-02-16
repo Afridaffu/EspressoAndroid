@@ -52,6 +52,12 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
+            android:name=".view.business.ManualReleasesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.business.ReserveFilterActivity"
+            android:exported="true" />
+        <activity
             android:name=".view.business.AddtionaInfoRequired"
             android:exported="false"
             android:screenOrientation="portrait"
