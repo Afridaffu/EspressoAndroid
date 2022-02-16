@@ -43,6 +43,7 @@ import com.greenbox.coyni.view.ConfirmPasswordActivity;
 import com.greenbox.coyni.view.CustomerProfileActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -51,7 +52,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BusinessProfileActivity extends AppCompatActivity {
 
-    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL,cpagreeementsLL,companyinfoLL,dbainfoLL,accountlimitsLL,businessResetPin;
+    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL, businessResetPin, preferencesLL;
     public static SQLiteDatabase mydatabase;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -70,7 +71,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     Cursor cursor;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     boolean isLoggedOut = false;
-//    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
+    //    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
     TextView tvVersion;
 
@@ -153,36 +154,52 @@ public class BusinessProfileActivity extends AppCompatActivity {
             dbainfoLL = findViewById(R.id.DBAInformationLL);
             dbainfoLL.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){try {
-                    Intent intent = new Intent(BusinessProfileActivity.this, DBAInfoDetails.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, DBAInfoDetails.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
 
             companyinfoLL = findViewById(R.id.companyInformationLL);
             companyinfoLL.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){ try {
-                    Intent intent = new Intent(BusinessProfileActivity.this, CompanyInfoDetails.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, CompanyInfoDetails.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
             cpagreeementsLL = findViewById(R.id.cpAgreementsLL);
             cpagreeementsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) { try {
-                    Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+            });
+
+            preferencesLL = findViewById(R.id.PreferencesLL);
+            preferencesLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, PreferencesActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -793,7 +810,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                                         BIOMETRIC_STRONG);
                                 startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                             } else {
-        //                        dialog = Utils.showProgressDialog(context);
+                                //                        dialog = Utils.showProgressDialog(context);
                                 BiometricRequest biometricRequest = new BiometricRequest();
                                 biometricRequest.setBiometricEnabled(true);
                                 biometricRequest.setDeviceId(Utils.getDeviceID());

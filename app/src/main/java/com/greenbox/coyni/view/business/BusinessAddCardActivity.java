@@ -1239,10 +1239,10 @@ public class BusinessAddCardActivity extends AppCompatActivity {
             String strUUID = UUID.randomUUID().toString();
             EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
             if (encrypt != null) {
-                CardRequest request = new CardRequest();
-                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
-                request.setPayload(encrypt.getEncryptData());
-                paymentMethodsViewModel.saveCards(request);
+//                CardRequest request = new CardRequest();
+//                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+//                request.setPayload(encrypt.getEncryptData());
+//                paymentMethodsViewModel.saveCards(request);
             } else {
                 progressDialog.dismiss();
             }

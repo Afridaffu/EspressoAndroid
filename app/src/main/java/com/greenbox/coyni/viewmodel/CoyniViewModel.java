@@ -13,6 +13,8 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -38,6 +40,7 @@ public class CoyniViewModel extends AndroidViewModel {
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PINRegisterResponse> registerPINResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BiometricResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BiometricTokenResponse> biometricTokenResponseMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<StepUpResponse> getStepUpResponseMutableLiveData() {
@@ -62,6 +65,10 @@ public class CoyniViewModel extends AndroidViewModel {
 
     public MutableLiveData<APIError> getApiErrorMutableLiveData() {
         return apiErrorMutableLiveData;
+    }
+
+    public MutableLiveData<BiometricTokenResponse> getBiometricTokenResponseMutableLiveData() {
+        return biometricTokenResponseMutableLiveData;
     }
 
     public void validateCoyniPin(ValidateRequest request) {
@@ -189,6 +196,40 @@ public class CoyniViewModel extends AndroidViewModel {
                 public void onFailure(Call<BiometricResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void biometricToken(BiometricTokenRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BiometricTokenResponse> mCall = apiService.biometricToken(request);
+            mCall.enqueue(new Callback<BiometricTokenResponse>() {
+                @Override
+                public void onResponse(Call<BiometricTokenResponse> call, Response<BiometricTokenResponse> response) {
+                    if (response.isSuccessful()) {
+                        BiometricTokenResponse obj = response.body();
+                        biometricTokenResponseMutableLiveData.setValue(obj);
+                        Log.e("Bio Success", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BiometricTokenResponse>() {
+                        }.getType();
+                        BiometricTokenResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            biometricTokenResponseMutableLiveData.setValue(errorResponse);
+                            Log.e("Biometric Error", new Gson().toJson(errorResponse));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BiometricTokenResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    biometricTokenResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

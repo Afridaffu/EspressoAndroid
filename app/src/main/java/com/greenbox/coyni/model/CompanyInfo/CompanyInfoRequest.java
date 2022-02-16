@@ -12,7 +12,7 @@ public class CompanyInfoRequest {
     private String state = "";
     private String zipCode = "";
 
-    //Basin Info
+    //Basic Info
     private String name = "";
     private String email = "";
     private PhNoWithCountryCode phoneNumberDto = new PhNoWithCountryCode();
