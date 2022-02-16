@@ -1,20 +1,15 @@
 package com.greenbox.coyni.view.business;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.greenbox.coyni.R;
 
-public class BusinessQuickActionActivity extends AppCompatActivity {
+public class ReserveFilterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_quick_action);
-
+        setContentView(R.layout.activity_reserve_filter);
     }
 }

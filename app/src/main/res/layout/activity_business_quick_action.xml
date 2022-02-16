@@ -17,7 +17,7 @@
         android:background="@drawable/bg_core_colorfill" />
 
     <LinearLayout
-        android:id="@+id/scanLL"
+        android:id="@+id/llScan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -73,7 +73,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/receivePaymentLL"
+        android:id="@+id/receive_PaymentLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -129,7 +129,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/buyTokenLL"
+        android:id="@+id/buy_TokenLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -184,7 +184,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/widthdrawLL"
+        android:id="@+id/widthdrawtoLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"

@@ -1198,7 +1198,10 @@ public class Utils {
             TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
             BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog,from);
 
-            List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
+            List<BusinessType> listBT = new ArrayList<>();
+            if(myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
+                myApplicationObj.getBusinessTypeResp().getData();
+            }
 
 //            for (int i = 0; i < listBT.size(); i++) {
 //                if (editText.getText().toString().toLowerCase().trim().equals(listBT.get(i).getValue().toLowerCase())) {
