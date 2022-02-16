@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".view.business.ClearBatchPromptActivity"
+    tools:context=".view.business.PayingDBAFilterActivity"
     android:orientation="vertical"
     android:background="@drawable/top_rounded_bg">
     <LinearLayout
@@ -21,17 +21,16 @@
                 android:background="@drawable/bg_core_colorfill"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_28sdp"/>
+                android:layout_marginBottom="@dimen/_36sdp"/>
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/closing_batch"
+            android:text="@string/paying_dba_name"
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/black"
             android:textAlignment="center"
             android:fontFamily="@font/opensans_semibold"
-            android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_12sdp"/>
         <LinearLayout
@@ -43,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6,890.43"
+                android:text="160.00"
                 android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_35ssp"/>
@@ -52,9 +51,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cyn"
                 android:textSize="@dimen/_11ssp"
-                android:textColor="@color/primary_green"
+                android:textColor="@color/cyn_color"
                 android:fontFamily="@font/opensans_bold"
-                android:layout_marginStart="@dimen/_5sdp"/>
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_7sdp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,9 +66,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/send_to"
+                android:text="@string/paying_method"
                 android:textSize="@dimen/_11ssp"
-                android:textColor="#505050"
+                android:textColor="@color/dark_grey"
                 android:singleLine="true"
                 android:fontFamily="@font/opensans_regular"
                 android:layout_marginStart="@dimen/_11sdp"
@@ -79,20 +79,56 @@
                 android:orientation="vertical"
                 android:gravity="end"
                 android:layout_marginEnd="@dimen/_11sdp">
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/business_token_account"
-                    android:textSize="@dimen/_11ssp"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:textColor="@color/primary_black"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/available_balance"
-                    android:textSize="@dimen/_9ssp"
-                    android:fontFamily="@font/opensans_semibold"/>
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/business_token_account"
+                        android:textSize="@dimen/_11ssp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textColor="@color/primary_black"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/available_balance"
+                        android:textSize="@dimen/_9ssp"
+                        android:textColor="@color/dark_grey"
+                        android:fontFamily="@font/opensans_semibold"/>
+                </LinearLayout>
             </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginHorizontal="@dimen/_21sdp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recipient_s_address"
+                android:textSize="@dimen/_11ssp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/dark_grey"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hgj34239274"
+                android:textSize="@dimen/_9ssp"
+                android:textColor="@color/primary_black"
+                android:fontFamily="@font/opensans_semibold"/>
+            <ImageView
+                android:layout_width="@dimen/_9sdp"
+                android:layout_height="@dimen/_11sdp"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:contentDescription="@string/cyn"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:src="@drawable/ic_copy"/>
+
         </LinearLayout>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
@@ -100,9 +136,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
             android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_55sdp"
+            android:layout_marginTop="@dimen/_37sdp"
             android:layout_marginEnd="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_25sdp"
+            android:layout_marginBottom="@dimen/_21sdp"
             android:background="@drawable/shape_round_rectable"
             android:elevation="@dimen/_2sdp"
             app:layoutDescription="@xml/activity_swipe_unloack_scene"
@@ -126,6 +162,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/im_lock"
                 app:layout_constraintStart_toEndOf="@+id/im_lock"
                 app:layout_constraintTop_toTopOf="@+id/im_lock" />
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/im_lock"
