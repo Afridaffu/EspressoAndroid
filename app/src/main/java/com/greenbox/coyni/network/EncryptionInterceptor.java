@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -30,7 +31,11 @@ public class EncryptionInterceptor implements Interceptor {
         String method = request.method();
         String randomReqId = getRandomRequestID();
 
-        if(!BuildConfig.SKIP_ENCRYPTION && ArrayUtils.contains(methodsAllowed, method) && oldBody != null) {
+        /*Encryption should be skipped when SKIP_ENCRYPTION is set to true and for GET requests.
+          As per the requirement while developing this feature, encryption should not be done for
+          Multipart requests. Changes needs to done for Multipart requests based on Backend changes*/
+        if(!BuildConfig.SKIP_ENCRYPTION && ArrayUtils.contains(methodsAllowed, method)
+                && oldBody != null && !(oldBody instanceof MultipartBody)) {
             oldBody = getEncryptedRequestBody(randomReqId, oldBody);
         }
 
