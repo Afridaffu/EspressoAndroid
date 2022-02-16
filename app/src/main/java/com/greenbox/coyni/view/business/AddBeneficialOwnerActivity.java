@@ -343,7 +343,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
 
     private void textWatchers() {
-
+// AddBeneficialOwners Basic Info
         fnameET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -505,7 +505,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 }
             }
         });
-
+// AddBeneficialOwners Address
         address1ET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -517,8 +517,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 if (charSequence.length() > 0) {
                     isAddress1 = true;
                     address1ErrorLL.setVisibility(GONE);
-//                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
+                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
                 } else {
                     address1ErrorLL.setVisibility(VISIBLE);
                     address1ErrorTV.setText("Field Required");
@@ -599,9 +599,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     isCity = true;
+                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
                     cityErrorLL.setVisibility(GONE);
-//                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
                 } else {
                     cityErrorLL.setVisibility(VISIBLE);
                     cityErrorTV.setText("Field Required");
@@ -670,13 +670,13 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 if (charSequence.length() == 5) {
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green))
                     zipcodeErrorTV.setText("Minimum 5 Characters Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
@@ -702,16 +702,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     fnameET.setHint("");
                     if (fnameET.getText().toString().trim().length() > 1 ) {
                         fnameLL.setVisibility(GONE);
-                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(fnametil, getColor(R.color.primary_black));
                     } else if (fnameET.getText().toString().trim().length() == 1) {
-                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(fnametil, getColor(R.color.light_gray));
                         fnameLL.setVisibility(VISIBLE);
                         fnameTV.setText("Field Required Mininmum 2 characters");
 
                     } else {
-                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(fnametil, getColor(R.color.light_gray));
                         fnameLL.setVisibility(VISIBLE);
                         fnameTV.setText("Field Required");
@@ -719,7 +719,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 } else {
                     focusedID = fnameET.getId();
                     fnameET.setHint("First Name");
-                    fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(fnametil, getColor(R.color.primary_green));
                     fnameLL.setVisibility(GONE);
                 }
@@ -732,15 +732,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     lnameET.setHint("");
                     if (lnameET.getText().toString().trim().length() > 1) {
                         lnameLL.setVisibility(GONE);
-                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.primary_black));
                     }else if (lnameET.getText().toString().trim().length() == 1) {
-                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
                         lnameTV.setText("Field Required Mininmum 2 characters");
                     }else {
-                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
                         lnameTV.setText("Field Required");
@@ -748,7 +748,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 } else {
                     focusedID = lnameET.getId();
                     lnameET.setHint("LastName");
-                    lnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(lnametil, getColor(R.color.primary_green));
                     lnameLL.setVisibility(GONE);
                 }
@@ -768,18 +768,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     ssnET.setHint("");
                     if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() <= 8) {
                         ssnLL.setVisibility(GONE);
-                        ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(ssntil, getColor(R.color.primary_black));
 
                     } else {
-                        ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(ssntil, getColor(R.color.light_gray));
                         ssnLL.setVisibility(VISIBLE);
                         ssnTV.setText("Field Required");
                     }
                 } else {
                     ssnET.setHint("•••-••-••••");
-                    ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    ssntil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(ssntil, getColor(R.color.primary_green));
                     ssnLL.setVisibility(GONE);
                 }
@@ -792,18 +792,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     ownershipET.setHint("");
                     if (ownershipET.getText().toString().trim().length() == 2) {
                         ownershipLL.setVisibility(GONE);
-                        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
 
                     } else {
-                        ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
                         ownershipLL.setVisibility(VISIBLE);
                         ownershipTV.setText("Field Required");
                     }
                 } else {
                     ownershipET.setHint("Ownership %");
-                    ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_green));
                     ownershipLL.setVisibility(GONE);
                 }
@@ -817,11 +817,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     address1ET.setHint("");
                     if (address1ET.getText().toString().trim().length() > 0) {
                         address1ErrorLL.setVisibility(GONE);
-                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_black));
 
                     } else {
-                        address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.light_gray));
                         address1ErrorLL.setVisibility(VISIBLE);
                         address1ErrorTV.setText("Field Required");
@@ -840,10 +840,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 if (!b) {
                     address2ET.setHint("");
                     if (address2ET.getText().toString().length() > 0) {
-//                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 //                        Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_black));
                     } else {
-//                        address2TIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                        address2TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                        Utils.setUpperHintColor(address2TIL, getColor(R.color.light_gray));
                     }
                 } else {
@@ -860,11 +860,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     cityET.setHint("");
                     if (cityET.getText().toString().trim().length() > 0) {
                         cityErrorLL.setVisibility(GONE);
-                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
 
                     } else {
-                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                         cityErrorLL.setVisibility(VISIBLE);
                         cityErrorTV.setText("Field Required");
@@ -884,16 +884,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     zipcodeET.setHint("");
                     if (zipcodeET.getText().toString().trim().length() == 5) {
                         zipcodeErrorLL.setVisibility(GONE);
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
                     } else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                     } else {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Field Required");

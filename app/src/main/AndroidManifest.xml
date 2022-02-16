@@ -448,7 +448,7 @@
             android:name=".view.IdentityVerificationBindingLayoutActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- //Business -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.GetstartedSuccessAcivity"
             android:exported="false"
