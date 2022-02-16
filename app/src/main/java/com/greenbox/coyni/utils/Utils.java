@@ -187,6 +187,10 @@ public class Utils {
 
     public static final String ACCOUNT_TYPE = "account_type";
     public static final String changeActionType = "CHANGE";
+    public static final String withdrawActionType = "WITHDRAW";
+    public static final String buyActionType = "BUY";
+    public static final String sendActionType = "SEND";
+    public static final String pinActionType = "COYNIPIN";
 
 
     public static String getStrLang() {

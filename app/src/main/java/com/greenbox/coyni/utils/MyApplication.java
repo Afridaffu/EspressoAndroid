@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -97,6 +98,7 @@ public class MyApplication extends Application {
     BusinessTypeResp businessTypeResp;
     CompanyInfoResp companyInfoResp;
     DBAInfoResp dbaInfoResp;
+    BuyTokenRequest buyRequest;
 
 
     public UserDetails getUserDetails() {
@@ -606,6 +608,14 @@ public class MyApplication extends Application {
 
     public void setWithdrawRequest(WithdrawRequest gcWithdrawRequest) {
         this.withdrawRequest = gcWithdrawRequest;
+    }
+
+    public BuyTokenRequest getBuyRequest() {
+        return buyRequest;
+    }
+
+    public void setBuyRequest(BuyTokenRequest buyRequest) {
+        this.buyRequest = buyRequest;
     }
 
     public WithdrawResponse getWithdrawResponse() {

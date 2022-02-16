@@ -146,6 +146,7 @@
             android:src="@drawable/ic_buy_icon" />
 
         <LinearLayout
+            android:id="@+id/merchantbuyTokenLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_6sdp"
