@@ -32,7 +32,9 @@ public class AuthApiClient {
 //    private static final String Referer = "https://members.coyni.com"; //SAT && //UAT
     private final int TIME_OUT = 120;
 
-    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(
+            BuildConfig.LOGGING_ENABLED ? HttpLoggingInterceptor.Level.BODY
+                    : HttpLoggingInterceptor.Level.NONE);
     private AuthApiClient.TokenInterceptor tokenInterceptor = new AuthApiClient.TokenInterceptor();
     private EncryptionInterceptor encryptionInterceptor = new EncryptionInterceptor();
 
