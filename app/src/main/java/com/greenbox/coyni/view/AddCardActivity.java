@@ -1457,60 +1457,61 @@ public class AddCardActivity extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 displayAuthorization();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("amount", etPreAmount.getText().toString().trim());
-                            jsonObject.put("transactionId", cardResponseData.getTransactionId());
-                            jsonObject.put("name", strName);
-                            jsonObject.put("state", strState);
-                            jsonObject.put("zipCode", strZip);
-                            jsonObject.put("city", strCity);
-                            jsonObject.put("country", strCountry);
-                            jsonObject.put("addressLine1", strAdd1);
-                            jsonObject.put("addressLine2", strAdd2);
-                            jsonObject.put("cardNumber", strCardNo);
-                            String strUUID = UUID.randomUUID().toString();
-                            EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
-                            if (encrypt != null) {
-                                PreAuthRequest request = new PreAuthRequest();
-                                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
-                                request.setPayload(encrypt.getEncryptData());
-                                paymentMethodsViewModel.preAuthVerify(request);
-                            } else {
-                                preDialog.dismiss();
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                }, 100);
-//                JSONObject jsonObject = new JSONObject();
-//                jsonObject.put("amount", etPreAmount.getText().toString().trim());
-//                jsonObject.put("transactionId", cardResponseData.getTransactionId());
-//                jsonObject.put("name", strName);
-//                jsonObject.put("state", strState);
-//                jsonObject.put("zipCode", strZip);
-//                jsonObject.put("city", strCity);
-//                jsonObject.put("country", strCountry);
-//                jsonObject.put("addressLine1", strAdd1);
-//                jsonObject.put("addressLine2", strAdd2);
-//                jsonObject.put("cardNumber", strCardNo);
-//                String strUUID = UUID.randomUUID().toString();
-//                EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
-//                if (encrypt != null) {
-//                    PreAuthRequest request = new PreAuthRequest();
-//                    request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
-//                    request.setPayload(encrypt.getEncryptData());
-//                    paymentMethodsViewModel.preAuthVerify(request);
-//                } else {
-//                    preDialog.dismiss();
-//                }
+                preparePreAuth();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            JSONObject jsonObject = new JSONObject();
+//                            jsonObject.put("amount", etPreAmount.getText().toString().trim());
+//                            jsonObject.put("transactionId", cardResponseData.getTransactionId());
+//                            jsonObject.put("name", strName);
+//                            jsonObject.put("state", strState);
+//                            jsonObject.put("zipCode", strZip);
+//                            jsonObject.put("city", strCity);
+//                            jsonObject.put("country", strCountry);
+//                            jsonObject.put("addressLine1", strAdd1);
+//                            jsonObject.put("addressLine2", strAdd2);
+//                            jsonObject.put("cardNumber", strCardNo);
+//                            String strUUID = UUID.randomUUID().toString();
+//                            EncryptRequest encrypt = AESEncrypt.encryptPayload(strUUID, jsonObject.toString(), strPublicKey);
+//                            if (encrypt != null) {
+////                                PreAuthRequest request = new PreAuthRequest();
+////                                request.setKey(Base64.getEncoder().encodeToString(encrypt.getEncryptKey()));
+////                                request.setPayload(encrypt.getEncryptData());
+////                                paymentMethodsViewModel.preAuthVerify(request);
+//                            } else {
+//                                preDialog.dismiss();
+//                            }
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        }
+//                    }
+//                }, 100);
+
             } else {
                 Utils.displayAlert("Please enter Amount", AddCardActivity.this, "", "");
             }
+        } catch (Exception ex) {
+            preDialog.dismiss();
+            ex.printStackTrace();
+        }
+    }
+
+    private void preparePreAuth() {
+        try {
+            PreAuthRequest request = new PreAuthRequest();
+            request.setAmount(etPreAmount.getText().toString().trim());
+            request.setTransactionId(cardResponseData.getTransactionId());
+            request.setName(strName);
+            request.setState(strState);
+            request.setZipCode(strZip);
+            request.setCity(strCity);
+            request.setCountry(strCountry);
+            request.setAddressLine1(strAdd1);
+            request.setAddressLine2(strAdd2);
+            request.setCardNumber(strCardNo);
+            paymentMethodsViewModel.preAuthVerify(request);
         } catch (Exception ex) {
             preDialog.dismiss();
             ex.printStackTrace();

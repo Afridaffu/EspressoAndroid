@@ -29,7 +29,9 @@ public class ApiClient {
     private static final String TYPE_SOMETHING_WENT_WRONG = "WENT_WRONG";
     private final int TIME_OUT = 120;
 
-    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(
+            BuildConfig.LOGGING_ENABLED ? HttpLoggingInterceptor.Level.BODY
+                    : HttpLoggingInterceptor.Level.NONE);
     private TokenInterceptor tokenInterceptor = new TokenInterceptor();
     private EncryptionInterceptor encryptionInterceptor = new EncryptionInterceptor();
 

@@ -48,7 +48,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
-    ProgressDialog dialog;
+    ProgressDialog pDialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     SQLiteDatabase mydatabase;
@@ -163,7 +163,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
                     || getIntent().getStringExtra("screen").equals("Withdraw")
                     || getIntent().getStringExtra("screen").equals("Pay"))
-                    || getIntent().getStringExtra("screen").equals("Notifications")) {
+                    || getIntent().getStringExtra("screen").equals("Notifications")
+                    || getIntent().getStringExtra("screen").equals("Buy")) {
 
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
@@ -289,7 +290,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 startActivity(cp);
                                                 finish();
                                                 break;
-
+                                            case "Buy":
+                                                break;
                                             case "Withdraw":
                                                 WithdrawMethod();
                                                 break;
@@ -430,6 +432,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
+                        Utils.setStrToken("");
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
@@ -610,7 +613,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("EditAddress")
                         || getIntent().getStringExtra("screen").equals("Withdraw")
                         || getIntent().getStringExtra("screen").equals("Pay")
-                        || getIntent().getStringExtra("screen").equals("Notifications"))) {
+                        || getIntent().getStringExtra("screen").equals("Notifications")
+                        || getIntent().getStringExtra("screen").equals("Buy"))) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
@@ -777,9 +781,26 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
-            if (strScreen.toLowerCase().equals("changepassword")) {
-                request.setActionType(Utils.changeActionType);
+            switch (strScreen.toLowerCase()) {
+                case "changepassword":
+                    request.setActionType(Utils.changeActionType);
+                    break;
+                case "withdraw":
+                    request.setActionType(Utils.withdrawActionType);
+                    break;
+                case "pay":
+                    request.setActionType(Utils.sendActionType);
+                    break;
+                case "resetpin":
+                    request.setActionType(Utils.pinActionType);
+                    break;
+                case "buy":
+                    request.setActionType(Utils.buyActionType);
+                    break;
             }
+//            if (strScreen.toLowerCase().equals("changepassword")) {
+//                request.setActionType(Utils.changeActionType);
+//            }
             //Uncomment for stepup process
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
                 coyniViewModel.stepUpPin(request);
@@ -973,6 +994,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void BuyTokenMethod(){
+
     }
 
     private void payTransaction() {
