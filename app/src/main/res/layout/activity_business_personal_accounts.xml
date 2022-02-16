@@ -106,15 +106,15 @@
                             android:textSize="@dimen/_12ssp"
                             tools:text="19.999" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="CYN"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_10ssp"
-                            tools:text="CYN" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="@dimen/_5sdp"-->
+<!--                            android:fontFamily="@font/opensans_semibold"-->
+<!--                            android:text="CYN"-->
+<!--                            android:textColor="@color/primary_black"-->
+<!--                            android:textSize="@dimen/_10ssp"-->
+<!--                            tools:text="CYN" />-->
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

@@ -38,8 +38,6 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.business_add_new_business_account);
 
-
-
         llNewComapny = findViewById(R.id.ll_new_company);
         llNewDba = findViewById(R.id.ll_new_dba);
         imageViewClose = findViewById(R.id.imv_close);

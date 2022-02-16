@@ -67,8 +67,12 @@ public class BindingLayoutActivity extends AppCompatActivity {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
-            txvVerifyName.setText("Add Personal Account");
-            txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
+            Log.d("eeeee","eeeee"+objMyApplication.getAccountType());
+
+            if(objMyApplication.getAccountType() == 2) {
+                txvVerifyName.setText("Add Personal Account");
+                txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
+           }
 
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
