@@ -301,7 +301,6 @@
                             android:layout_marginStart="@dimen/_32sdp"
                             android:layout_marginBottom="@dimen/_16sdp"
                             android:orientation="horizontal"
-
                             >
 
                             <TextView
@@ -392,7 +391,7 @@
                                     android:gravity="center"
                                     android:text="Accept"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/_11ssp" />
+                                    android:textSize="@dimen/_10ssp" />
                             </LinearLayout>
 
 

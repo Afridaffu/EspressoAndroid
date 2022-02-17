@@ -6,6 +6,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -36,6 +37,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -55,6 +58,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
@@ -65,10 +69,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     EditText payRequestET, addNoteET;
     Dialog cvvDialog, prevDialog;
     SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID;
+    Cursor dsFacePin, dsTouchID, dsPermanentToken;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
+    CoyniViewModel coyniViewModel;
     LinearLayout lyPayClose, lyBalance, payRequestLL, addNoteClickLL;
     ImageView imgProfile, imgConvert;
     TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
@@ -76,7 +81,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     float fontSize, dollarFont;
     WalletInfo cynWallet;
     Boolean isFaceLock = false, isTouchId = false;
-    String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "";
+    String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "", strToken = "";
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     Long mLastClickTime = 0L;
@@ -168,7 +173,17 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         switch (resultCode) {
             case RESULT_OK:
             case 235: {
-                payTransaction();
+                try {
+                    //payTransaction();
+                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+                    request.setMobileToken(strToken);
+                    request.setActionType(Utils.sendActionType);
+                    coyniViewModel.biometricToken(request);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             break;
             case 0:
@@ -356,6 +371,19 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    public void SetToken() {
+        try {
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+            dsPermanentToken.moveToFirst();
+            if (dsPermanentToken.getCount() > 0) {
+                strToken = dsPermanentToken.getString(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -378,6 +406,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             fontSize = payRequestET.getTextSize();
             dollarFont = tvCurrency.getTextSize();
             availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
@@ -478,6 +507,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     }
                 }
             });
+            SetToken();
             SetFaceLock();
             SetTouchId();
 //            enableButtons();
@@ -542,6 +572,10 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
+                        if (pDialog != null) {
+                            pDialog.dismiss();
+                        }
+                        Utils.setStrToken("");
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
@@ -601,6 +635,20 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
                             .putExtra("status", "failed")
                             .putExtra("subtype", "request"));
+                }
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        payTransaction();
+                    }
                 }
             }
         });

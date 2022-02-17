@@ -32,6 +32,8 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
+import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -126,6 +128,35 @@ public class BusinessDashboardActivity extends BaseActivity {
         dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+        LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
+        LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
+        LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
+        LinearLayout llScan = dialog.findViewById(R.id.llScan);
+
+        buyTokenLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class));
+            }
+        });
+        widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BusinessDashboardActivity.this, SelectWithdrawMethodActivity.class));
+            }
+        });
+        receivePaymentLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
+            }
+        });
+        llScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+            }
+        });
     }
 
     private void setSelectedTab(boolean isDashboard, boolean isAccount, boolean isTransactions, boolean isProfile) {

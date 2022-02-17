@@ -46,12 +46,12 @@
                 android:text="6,890.43"
                 android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/primary_green"
-                android:textSize="@dimen/_35sdp"/>
+                android:textSize="@dimen/_35ssp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CYN"
-                android:textSize="@dimen/_11sdp"
+                android:text="@string/cyn"
+                android:textSize="@dimen/_11ssp"
                 android:textColor="@color/primary_green"
                 android:fontFamily="@font/opensans_bold"
                 android:layout_marginStart="@dimen/_5sdp"/>
@@ -77,12 +77,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="right"
+                android:gravity="end"
                 android:layout_marginEnd="@dimen/_11sdp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,10 +92,7 @@
                     android:text="@string/available_balance"
                     android:textSize="@dimen/_9ssp"
                     android:fontFamily="@font/opensans_semibold"/>
-
-                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
@@ -126,15 +119,13 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:paddingEnd="16dp"
-                android:paddingRight="16dp"
-                android:text="Slide to Confirm"
+                android:text="@string/slide_to_confirm"
                 android:textColor="@color/primary_color"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/im_lock"
                 app:layout_constraintStart_toEndOf="@+id/im_lock"
                 app:layout_constraintTop_toTopOf="@+id/im_lock" />
-
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/im_lock"
@@ -156,7 +147,6 @@
                     android:src="@drawable/ic_double_left" />
 
             </androidx.cardview.widget.CardView>
-
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/im_lock_"
