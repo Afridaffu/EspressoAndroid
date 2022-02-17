@@ -105,6 +105,10 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                             if (accountLimits.getData().getPayRequestTokenType()==4){
                                 payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Transaction");
                             }
+                            else
+                            if (accountLimits.getData().getPayRequestTokenType()==5){
+                                payRequestTranLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getPayRequestTokenTxnLimit()))) + "/Month");
+                            }
 
 
                         // Buy Token Bank Limit
@@ -130,6 +134,12 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                             b_buyBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
 
                         }
+                        else
+                        if (accountLimits.getData().getBuyTokenBankAccountType()==5){
+                            buyTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Month");
+                            b_buyBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Month");
+
+                        }
 
              // Buytoken Signet Account
 
@@ -150,6 +160,10 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                         if (accountLimits.getData().getBuyTokenSignetType()==4){
                             b_buySignetAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
                         }
+                        else
+                        if (accountLimits.getData().getBuyTokenSignetType()==5){
+                            b_buySignetAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Month");
+                        }
 
                         // Buy Token Debit Limit
                         if (accountLimits.getData().getBuyTokenCardType()==1){
@@ -166,6 +180,10 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                         else
                         if (accountLimits.getData().getBuyTokenCardType()==4){
                             buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Transaction");
+                        }
+                        else
+                        if (accountLimits.getData().getBuyTokenCardType()==5){
+                            buyTokenDebitcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Month");
                         }
 
                     }
@@ -186,6 +204,10 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                     else
                     if (accountLimits.getData().getBuyTokenCardType()==4){
                         buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Transaction");
+                    }
+                    else
+                    if (accountLimits.getData().getBuyTokenCardType()==5){
+                        buyTokenCreditcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenCardTxnLimit()))) + "/Month");
                     }
 
                     // Withdraw Token Bank Limit
@@ -212,6 +234,12 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                         b_withdrawBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Transaction");
 
                     }
+                    else
+                    if (accountLimits.getData().getWithdrawsBankAccountType()==5){
+                        withdrawTokenBankLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Month");
+                        b_withdrawBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsBankAccountTxnLimit()))) + "/Month");
+
+                    }
 
                     // Withdraw Token Instant Limit
                     if (accountLimits.getData().getWithdrawsInstantPayType()==1){
@@ -235,12 +263,16 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                         withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Transaction");
                         b_withDrawinstantPay.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Transaction");
                     }
+                    else
+                    if (accountLimits.getData().getWithdrawsInstantPayType()==5){
+                        withdrawTokenInstantLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Month");
+                        b_withDrawinstantPay.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsInstantPayTxnLimit()))) + "/Month");
+                    }
 
                     // Withdraw Token GiftCard Limit
                     if (accountLimits.getData().getWithdrawsGiftCardType()==1){
                         withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Day");
                         b_withDrawgiftCard.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Day");
-
                     }
                     else
                     if (accountLimits.getData().getWithdrawsGiftCardType()==2){
@@ -257,6 +289,12 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                         withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Transaction");
                         b_withDrawgiftCard.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Transaction");
                     }
+                    else
+                    if (accountLimits.getData().getWithdrawsGiftCardType()==5){
+                        withdrawTokenGiftcardLimit.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Month");
+                        b_withDrawgiftCard.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getWithdrawsGiftCardTxnLimit()))) + "/Month");
+                    }
+
 
                     // Withdraw Signet Account......
                     if (accountLimits.getData().getWithdrawsSignetType()==1){
@@ -275,6 +313,10 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
                     else
                     if (accountLimits.getData().getWithdrawsSignetType()==4){
                         b_withdrawSignetAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
+                    }
+                    else
+                    if (accountLimits.getData().getWithdrawsSignetType()==5){
+                        b_withdrawSignetAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + accountLimits.getData().getBuyTokenBankAccountTxnLimit()))) + "/Month");
                     }
 
 //

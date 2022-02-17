@@ -55,6 +55,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_business_dashboard);
             initialization();
             initObserver();
+            pushFragment(new BusinessDashboardFragment());
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -69,7 +70,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        pushFragment(new BusinessDashboardFragment());
+//        pushFragment(new BusinessDashboardFragment());
     }
 
     public void onDashboardTabSelected(View view) {
