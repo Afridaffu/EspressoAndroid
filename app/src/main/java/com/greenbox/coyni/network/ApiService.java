@@ -278,6 +278,7 @@ public interface ApiService {
     Call<IdentityImageResponse> uploadIdentityImage(@Part MultipartBody.Part filee,
                                                     @Part("identityType") RequestBody type,
                                                     @Part("identityNumber") RequestBody number);
+
     @Multipart
     @POST("api/v2/business/sign-agreement")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
@@ -298,7 +299,10 @@ public interface ApiService {
     @POST("api/v2/cards/me")
     Call<CardResponse> saveCards(@Body CardRequest request);
 
-    @POST("api/v2/cards/me/encrypt/preauth-verify")
+//    @POST("api/v2/cards/me/encrypt/preauth-verify")
+//    Call<PreAuthResponse> preAuthVerify(@Body PreAuthRequest request);
+
+    @POST("api/v2/cards/me/preauth-verify")
     Call<PreAuthResponse> preAuthVerify(@Body PreAuthRequest request);
 
     @POST("api/v2/neutrino/bin-lookup")
@@ -363,8 +367,11 @@ public interface ApiService {
     @POST("api/v2/comm-temp/invite/{templateId}/view")
     Call<TemplateResponse> getTemplate(@Path("templateId") int templateId, @Body TemplateRequest request);
 
-    @POST("api/v2/node/sendTokens")
-    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
+//    @POST("api/v2/node/sendTokens")
+//    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
+
+    @POST("api/v2/node/sendTokens/{requestToken}")
+    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request, @Path("requestToken") String requestToken);
 
     @POST("api/v2/notifications/me/mark-read")
     Call<UnReadDelResponse> notificationsMarkRead(@Body List<Integer> list);

@@ -39,7 +39,7 @@ android {
     buildTypes {
         release {
             buildConfigField 'boolean', 'LOGGING_ENABLED', 'false'
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 //            signingConfig signingConfigs.releaseSigningConfig
             signingConfig signingConfigs.config

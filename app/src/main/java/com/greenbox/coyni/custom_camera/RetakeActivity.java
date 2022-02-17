@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 public class RetakeActivity extends AppCompatActivity {
 
@@ -46,6 +47,8 @@ public class RetakeActivity extends AppCompatActivity {
                     CompanyInformationActivity.einLetterFile = null;
                 } else if (from.equals("CI-W9")) {
                     CompanyInformationActivity.w9FormFile = null;
+                } else if (from.equals("DBA_INFO")) {
+                    DBAInfoAcivity.dbaFile = null;
                 } else if (from.equals("IDVE")) {
                     IdentityVerificationActivity.identityFile = null;
                     IdentityVerificationActivity.isFileSelected = false;
@@ -61,13 +64,16 @@ public class RetakeActivity extends AppCompatActivity {
 
                 CameraActivity.cameraActivity.finish();
                 finish();
+
                 if (from.equals("CI-AOI")) {
-
+                    CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(5);
                 } else if (from.equals("CI-EINLETTER")) {
-
+                    CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(6);
                 } else if (from.equals("CI-W9")) {
-
-                } else if (from.equals("IDVE")) {
+                    CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
+                } else if (from.equals("DBA_INFO")) {
+                    DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
+                }else if (from.equals("IDVE")) {
                     IdentityVerificationActivity.enableNext();
                 }
             }
@@ -83,6 +89,8 @@ public class RetakeActivity extends AppCompatActivity {
                     CompanyInformationActivity.einLetterFile = null;
                 } else if (from.equals("CI-W9")) {
                     CompanyInformationActivity.w9FormFile = null;
+                } else if (from.equals("DBA_INFO")) {
+                    DBAInfoAcivity.dbaFile = null;
                 } else if (from.equals("IDVE")) {
                     IdentityVerificationActivity.identityFile = null;
                     IdentityVerificationActivity.isFileSelected = false;

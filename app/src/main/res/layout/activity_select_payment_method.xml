@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/boxbackgroundgray"
     tools:context=".view.business.SelectPaymentMethodActivity"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
     android:orientation="vertical">
     <LinearLayout
     android:layout_width="match_parent"
