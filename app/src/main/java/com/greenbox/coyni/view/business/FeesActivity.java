@@ -1,12 +1,11 @@
 package com.greenbox.coyni.view.business;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -19,7 +18,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 public class FeesActivity extends AppCompatActivity {
     private LinearLayout bpbackBtn;
-    private TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
+    TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
     BusinessDashboardViewModel viewModel;
 
@@ -74,12 +73,40 @@ public class FeesActivity extends AppCompatActivity {
 
     private void initObserver() {
         viewModel.getFeesMutableLiveData().observe(this, new Observer<Fees>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(Fees fees) {
                 if (fees.getStatus().equalsIgnoreCase("SUCCESS")){
 
                     try {
-                        salesOrderDollTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("$" + fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+                        //withdrawal
+                        tvEBADoll.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalBankFeeInDollar()))));
+                        tvEBAPer.setText( fees.getData().getWithdrawalBankFeeInPercent().split("\\.")[0]+"%");
+                        instantPayDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalInstantFeeInDollar()))));
+                        instantPayPerTV.setText( fees.getData().getWithdrawalInstantFeeInPercent().split("\\.")[0]+"%");
+                        signetAccDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInDollar()))));
+                        signetAccPerTV.setText( fees.getData().getWithdrawalSignetFeeInPercent().split("\\.")[0]+"%");
+                        giftCardDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalGiftcardFeeInDollar()))));
+                        giftCardPerTV.setText( fees.getData().getWithdrawalGiftcardFeeInPercent().split("\\.")[0]+"%");
+                        fdwDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalFailedBankFeeInDollar()))));
+                        fdwPerTV.setText( fees.getData().getWithdrawalFailedBankFeeInPercent().split("\\.")[0]+"%");
+
+                        //buy token
+                        buyTokenEBADollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenBankFeeInDollar()))));
+                        buyTokenEBAPerTV.setText( fees.getData().getBuyTokenBankFeeInPercent().split("\\.")[0]+"%");
+                        buytokenSignetDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInDollar()))));
+                        buytokenSignetPerTV.setText( fees.getData().getBuyTokenSignetFeeInPercent().split("\\.")[0]+"%");
+
+                        //other fees
+                        monthlyFeeDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getMonthlyServiceFeeInDollar()))));
+                        monthlyFeePerTV.setText( fees.getData().getMonthlyServiceFeeInPercent().split("\\.")[0]+"%");
+
+                        //transactions
+                        salesOrderDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+                        salesOrderPerTV.setText( fees.getData().getTransactionSaleOrderTokenFeeInPercent().split("\\.")[0]+"%");
+                        refundDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getTransactionRefundFeeInDollar()))));
+                        refundPerTV.setText( fees.getData().getTransactionRefundFeeInPercent().split("\\.")[0]+"%");
+
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }

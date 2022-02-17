@@ -79,11 +79,11 @@
                         android:layout_marginTop="@dimen/_6sdp"
                         android:layout_marginRight="@dimen/_11sdp"
                         android:layout_marginBottom="@dimen/_6sdp"
-                        android:layout_toLeftOf="@id/filterIconIV"
+                        android:layout_toLeftOf="@id/ivFilterIcon"
                         android:background="@color/dark_color_bg" />
 
                     <ImageView
-                        android:id="@+id/filterIconIV"
+                        android:id="@+id/ivFilterIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -93,7 +93,6 @@
                 </RelativeLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
 
     </LinearLayout>
 
