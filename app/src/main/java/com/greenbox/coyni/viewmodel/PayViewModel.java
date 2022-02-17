@@ -21,6 +21,7 @@ import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.Utils;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -208,7 +209,7 @@ public class PayViewModel extends AndroidViewModel {
     public void sendTokens(TransferPayRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<PayRequestResponse> mCall = apiService.sendTokens(request);
+            Call<PayRequestResponse> mCall = apiService.sendTokens(request, Utils.getStrToken());
             mCall.enqueue(new Callback<PayRequestResponse>() {
                 @Override
                 public void onResponse(Call<PayRequestResponse> call, Response<PayRequestResponse> response) {
@@ -232,6 +233,7 @@ public class PayViewModel extends AndroidViewModel {
                 public void onFailure(Call<PayRequestResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     payRequestResponseMutableLiveData.setValue(null);
+                    Utils.setStrToken("");
                 }
             });
         } catch (Exception ex) {

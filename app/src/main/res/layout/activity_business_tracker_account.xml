@@ -100,13 +100,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_2sdp"
-                            android:layout_marginRight="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:gravity="right"
                             android:src="@drawable/ic_company_info_business"
                             />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="1"
@@ -150,7 +150,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="2"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:src="@drawable/ic_chevron_right_primary_color"
                             android:visibility="gone" />
 
@@ -248,13 +248,14 @@
                             />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/dbaTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
@@ -264,6 +265,7 @@
                                 android:textSize="@dimen/_12ssp" />
 
                             <TextView
+                                android:id="@+id/dbaIncompleteTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -287,10 +289,11 @@
                             android:visibility="gone" />
 
                         <ImageView
+                            android:id="@+id/dbaInProgressIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:src="@drawable/ic_chevron_right_primary_color"
                             android:visibility="gone" />
                     </LinearLayout>
@@ -315,7 +318,7 @@
                             android:src="@drawable/ic_complete" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="1"
@@ -385,13 +388,14 @@
                             android:src="@drawable/ic_bo" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/boTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
@@ -401,6 +405,7 @@
                                 android:textSize="@dimen/_12ssp" />
 
                             <TextView
+                                android:id="@+id/boIncompleteTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -423,10 +428,11 @@
                             android:visibility="gone" />
 
                         <ImageView
+                            android:id="@+id/boInProgressIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_marginRight="@dimen/_10sdp"
                             android:src="@drawable/ic_chevron_right_primary_color"
                             android:visibility="gone" />
 
@@ -525,13 +531,14 @@
                             />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/addBankTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
@@ -541,6 +548,7 @@
                                 android:textSize="@dimen/_12ssp" />
 
                             <TextView
+                                android:id="@+id/addBankIncompleteTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -563,10 +571,11 @@
                             android:visibility="gone" />
 
                         <ImageView
+                            android:id="@+id/addBankInProgressIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:src="@drawable/ic_chevron_right_primary_color"
                             android:visibility="gone" />
 
@@ -664,13 +673,14 @@
                             />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/aggrementsTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
@@ -680,6 +690,7 @@
                                 android:textSize="@dimen/_12ssp" />
 
                             <TextView
+                                android:id="@+id/aggrementsIncompleteTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -702,10 +713,11 @@
                             android:visibility="gone" />
 
                         <ImageView
+                            android:id="@+id/aggrementsInProgressIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="2"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:src="@drawable/ic_chevron_right_primary_color"
                             android:visibility="gone" />
                     </LinearLayout>

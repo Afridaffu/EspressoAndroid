@@ -22,11 +22,11 @@ public class DBAInfoRequest {
     private int highTicket ;
     private int monthlyProcessingVolume ;
     private boolean copyCompanyInfo = false;
-    private String timezone = "";
+    private int timeZone = 0;
     private String website = "";
 
 
-    public String getAddressLine1() {
+    public String getAddrexssLine1() {
         return addressLine1;
     }
 
@@ -146,19 +146,23 @@ public class DBAInfoRequest {
         this.copyCompanyInfo = copyCompanyInfo;
     }
 
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
-    }
-
     public String getWebsite() {
         return website;
     }
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public int getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(int timeZone) {
+        this.timeZone = timeZone;
     }
 }

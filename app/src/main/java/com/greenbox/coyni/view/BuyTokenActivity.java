@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -84,11 +86,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;
     SignOnData signOnData;
     float fontSize, dollarFont;
-    Boolean isUSD = false, isCYN = false, isBank = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
     boolean isBuyTokenAPICalled = false;
+    SQLiteDatabase mydatabase;
+    Cursor dsFacePin, dsTouchID;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,15 +187,40 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
-            if (requestCode == 1 && data == null) {
-                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
-                } else {
-                    pDialog = Utils.showProgressDialog(this);
-                    customerProfileViewModel.meSyncAccount();
+//            if (requestCode == 1 && data == null) {
+//                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+//                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+//                } else {
+//                    pDialog = Utils.showProgressDialog(this);
+//                    customerProfileViewModel.meSyncAccount();
+//                }
+//            } else {
+//                super.onActivityResult(requestCode, resultCode, data);
+//            }
+
+            super.onActivityResult(requestCode, resultCode, data);
+            switch (resultCode) {
+                case 1:
+                    if (data == null) {
+                        if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                            Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+                        } else {
+                            pDialog = Utils.showProgressDialog(this);
+                            customerProfileViewModel.meSyncAccount();
+                        }
+                    }
+                    break;
+                case RESULT_OK:
+                case 235: {
+                    buyToken();
                 }
-            } else {
-                super.onActivityResult(requestCode, resultCode, data);
+                break;
+                case 0:
+                    startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                            .putExtra("screen", "Buy"));
+                    break;
             }
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -238,6 +268,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
+            SetFaceLock();
+            SetTouchId();
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -434,6 +466,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 if (prevDialog != null) {
                     prevDialog.dismiss();
                 }
+                pDialog.dismiss();
                 if (buyTokenResponse != null) {
                     if (buyTokenResponse.getStatus().trim().toLowerCase().equals("success")) {
                         buyTokenInProgress(buyTokenResponse.getData());
@@ -514,6 +547,48 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
         });
+    }
+
+    public void SetFaceLock() {
+        try {
+            isFaceLock = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+            dsFacePin.moveToFirst();
+            if (dsFacePin.getCount() > 0) {
+                String value = dsFacePin.getString(1);
+                if (value.equals("true")) {
+                    isFaceLock = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isFaceLock = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetTouchId() {
+        try {
+            isTouchId = false;
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+            dsTouchID.moveToFirst();
+            if (dsTouchID.getCount() > 0) {
+                String value = dsTouchID.getString(1);
+                if (value.equals("true")) {
+                    isTouchId = true;
+                    objMyApplication.setLocalBiometric(true);
+                } else {
+                    isTouchId = false;
+                    objMyApplication.setLocalBiometric(false);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void bindPayMethod(PaymentsList objData) {
@@ -829,18 +904,32 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
                         tv_lable.setText("Verifying");
-                        if (!isBuyTokenAPICalled)
-                            buyToken();
+                        if (!isBuyTokenAPICalled) {
+                            //buyToken();
+                            isBuyTokenAPICalled = true;
+                            prevDialog.dismiss();
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BuyTokenActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(BuyTokenActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(BuyTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                                            .putExtra("screen", "Buy"));
+                                }
+                            } else {
+                                startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                                        .putExtra("screen", "Buy"));
+                            }
+                        }
                     }
                 }
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-//                    if (currentId == motionLayout.getEndState()) {
-//                        slideToConfirm.setInteractionEnabled(false);
-//                        tv_lable.setText("Verifying");
-//                        buyToken();
-//                    }
+
                 }
 
                 @Override
@@ -962,17 +1051,32 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void buyToken() {
+    private void prepareBuyRequest() {
         try {
-            isBuyTokenAPICalled = true;
             BuyTokenRequest request = new BuyTokenRequest();
             request.setBankId(strBankId);
             request.setCardId(strCardId);
             request.setCvc(strCvv);
             request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
             request.setTxnSubType(strSubType);
+            objMyApplication.setBuyRequest(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void buyToken() {
+        try {
+//            isBuyTokenAPICalled = true;
+//            BuyTokenRequest request = new BuyTokenRequest();
+//            request.setBankId(strBankId);
+//            request.setCardId(strCardId);
+//            request.setCvc(strCvv);
+//            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
+//            request.setTxnSubType(strSubType);
+            pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.buyTokens(request);
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

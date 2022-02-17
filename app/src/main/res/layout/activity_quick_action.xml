@@ -94,7 +94,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/merchantbuyTokenLL"
+        android:id="@+id/buyTokenLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"

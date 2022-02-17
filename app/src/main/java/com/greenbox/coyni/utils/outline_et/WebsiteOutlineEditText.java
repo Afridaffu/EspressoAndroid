@@ -124,11 +124,26 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
             public void afterTextChanged(Editable editable) {
             }
         });
+
+//        websiteET.setOnTouchListener((view, motionEvent) -> {
+//            if(FROM.equals("DBA_INFO")){
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+//                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.websiteOET.getLeft(), dia.websiteOET.getBottom());
+//                websiteET.requestFocus();
+//                websiteET.setSelection(websiteET.getText().toString().length());
+//            }
+//            return false;
+//        });
     }
 
     public void setFrom(String fromm, Context context) {
         FROM = fromm;
         mContext = context;
+    }
+
+    public void setSelection() {
+        websiteET.setSelection(websiteET.getText().toString().length());
     }
 
     public void setHint(String text) {
