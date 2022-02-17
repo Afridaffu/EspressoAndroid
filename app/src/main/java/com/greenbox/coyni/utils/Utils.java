@@ -187,6 +187,10 @@ public class Utils {
 
     public static final String ACCOUNT_TYPE = "account_type";
     public static final String changeActionType = "CHANGE";
+    public static final String withdrawActionType = "WITHDRAW";
+    public static final String buyActionType = "BUY";
+    public static final String sendActionType = "SEND";
+    public static final String pinActionType = "COYNIPIN";
 
 
     public static String getStrLang() {
@@ -783,7 +787,7 @@ public class Utils {
             tzm.setTimezoneID(4);
             arrZonesList.add(tzm);
 
-            if ((from.equals("DBA_INFO") && editText.getText().toString().length() > 0) || from.equals("PREFERENCES")) {
+            if (from.equals("PREFERENCES")) {
                 for (int i = 0; i < arrZonesList.size(); i++) {
                     if (myApplicationObj.getTimezoneID() == arrZonesList.get(i).getTimezoneID()) {
                         arrZonesList.get(i).setSelected(true);
@@ -1182,7 +1186,7 @@ public class Utils {
         dialog.show();
     }
 
-    public static void populateBusinessTypes(Context context, EditText editText, MyApplication myApplicationObj) {
+    public static void populateBusinessTypes(Context context, EditText editText, MyApplication myApplicationObj, String from) {
         try {
             final Dialog dialog = new Dialog(context);
             dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1196,7 +1200,7 @@ public class Utils {
             RecyclerView bTypesRV = dialog.findViewById(R.id.bTypesRV);
             EditText searchET = dialog.findViewById(R.id.searchET);
             TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
-            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog);
+            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog,from);
 
             List<BusinessType> listBT = new ArrayList<>();
             if(myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
@@ -1213,7 +1217,7 @@ public class Utils {
             if (listBT.size() > 0) {
                 bTypesRV.setVisibility(View.VISIBLE);
                 notFoundTV.setVisibility(View.GONE);
-                businessTypeListAdapter = new BusinessTypeListAdapter(listBT, context, editText, dialog);
+                businessTypeListAdapter = new BusinessTypeListAdapter(listBT, context, editText, dialog,from);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
                 bTypesRV.setLayoutManager(mLayoutManager);
                 bTypesRV.setItemAnimator(new DefaultItemAnimator());
@@ -1268,7 +1272,6 @@ public class Utils {
                 public void afterTextChanged(Editable s) {
                 }
             });
-
 
             Window window = dialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.80));

@@ -174,5 +174,9 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
         return phnET.getUnMasked();
     }
 
+    public void setSelection() {
+        phnET.setSelection(phnET.getText().toString().length());
+    }
+
 
 }

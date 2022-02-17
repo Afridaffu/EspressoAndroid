@@ -135,6 +135,28 @@ public class VolumeEditText extends ConstraintLayout {
 
         });
 
+//        volumeET.setOnTouchListener((view, motionEvent) -> {
+//            if (FROM.equals("DBA_INFO") && mType.equals("MPV")) {
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+////                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.highTicketOET.getLeft(), dia.highTicketOET.getBottom());
+//                volumeET.requestFocus();
+//                volumeET.setSelection(volumeET.getText().toString().length());
+//            } else if (FROM.equals("DBA_INFO") && mType.equals("HT")) {
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+////                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.avgTicketOET.getLeft(), dia.avgTicketOET.getBottom());
+//                volumeET.requestFocus();
+//                volumeET.setSelection(volumeET.getText().toString().length());
+//             } else if (FROM.equals("DBA_INFO") && mType.equals("AT")) {
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+////                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.timezoneTIL.getLeft(), dia.timezoneTIL.getBottom());
+//                volumeET.requestFocus();
+//                volumeET.setSelection(volumeET.getText().toString().length());
+//            }
+//            return false;
+//        });
     }
 
     public void setFrom(String fromm, Context context, String type) {
@@ -166,6 +188,9 @@ public class VolumeEditText extends ConstraintLayout {
         volumeET.requestFocus();
     }
 
+    public void setSelection() {
+        volumeET.setSelection(volumeET.getText().toString().length());
+    }
 
     private void USFormat(EditText etAmount, String mode) {
         try {
@@ -174,14 +199,6 @@ public class VolumeEditText extends ConstraintLayout {
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
 
-//            if (FROM.equals("DBA_INFO")) {
-//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
-//                if (mType.equals("MPV")) {
-//                } else if (mType.equals("HT")) {
-//                } else if (mType.equals("AT")) {
-//                }
-//                Log.e("Amount", Utils.USNumberFormat(Double.parseDouble(strAmount)));
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
