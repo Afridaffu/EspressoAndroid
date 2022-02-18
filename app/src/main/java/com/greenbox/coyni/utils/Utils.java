@@ -1204,7 +1204,7 @@ public class Utils {
 
             List<BusinessType> listBT = new ArrayList<>();
             if(myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
-                myApplicationObj.getBusinessTypeResp().getData();
+                listBT = myApplicationObj.getBusinessTypeResp().getData();
             }
 
 //            for (int i = 0; i < listBT.size(); i++) {
@@ -1228,6 +1228,7 @@ public class Utils {
             }
 
             BusinessTypeListAdapter finalBTListAdapter = businessTypeListAdapter;
+            List<BusinessType> finalListBT = listBT;
             searchET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1240,11 +1241,11 @@ public class Utils {
                         String search_key = s.toString();
                         List<BusinessType> filterList = new ArrayList<>();
                         int sIndex = 0;
-                        if (listBT.size() > 0) {
-                            for (int i = 0; i < listBT.size(); i++) {
-                                sIndex = listBT.get(i).getValue().toLowerCase().indexOf(search_key.toLowerCase());
+                        if (finalListBT.size() > 0) {
+                            for (int i = 0; i < finalListBT.size(); i++) {
+                                sIndex = finalListBT.get(i).getValue().toLowerCase().indexOf(search_key.toLowerCase());
                                 if (sIndex == 0) {
-                                    filterList.add(listBT.get(i));
+                                    filterList.add(finalListBT.get(i));
                                 }
                             }
                             if (filterList.size() > 0) {

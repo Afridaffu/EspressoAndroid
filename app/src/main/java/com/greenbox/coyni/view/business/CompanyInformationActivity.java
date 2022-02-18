@@ -122,6 +122,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     IdentityVerificationViewModel identityVerificationViewModel;
     String selectedDocType = "";
     CompanyInformationActivity myActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -336,7 +337,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 chooseBusinessEntityPopup(CompanyInformationActivity.this, businessET);
+
             });
 
             businessET.setOnClickListener(v -> {
@@ -344,7 +348,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 chooseBusinessEntityPopup(CompanyInformationActivity.this, businessET);
+
             });
 
             close.setOnClickListener(v -> finish());
@@ -414,8 +421,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     selectedDocType = "CI-AOI";
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(this);
                     chooseFilePopup(this, selectedDocType);
-//                    startActivity(new Intent(CompanyInformationActivity.this, CameraActivity.class).putExtra("FROM", "CI-AOI"));
                 }
 
             });
@@ -428,16 +436,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     selectedDocType = "CI-EINLETTER";
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(this);
                     chooseFilePopup(this, selectedDocType);
                 }
 
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                    return;
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
-//                if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
-//                    startActivity(new Intent(CompanyInformationActivity.this, CameraActivity.class).putExtra("FROM", "CI-EINLETTER"));
-//                }
             });
 
             w9FormLL.setOnClickListener(view -> {
@@ -447,15 +450,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     selectedDocType = "CI-W9";
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(this);
                     chooseFilePopup(this, selectedDocType);
                 }
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                    return;
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
-//                if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
-//                    startActivity(new Intent(CompanyInformationActivity.this, CameraActivity.class).putExtra("FROM", "CI-W9"));
-//                }
+
             });
 
             doneCV.setOnClickListener(new View.OnClickListener() {
@@ -514,6 +513,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     iscompanyEmail = true;
                                     companyemailET.setSelection(cir.getEmail().length());
                                 }
+
 
                                 if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
                                     compphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());

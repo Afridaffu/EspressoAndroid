@@ -15,46 +15,45 @@
         android:background="@drawable/bg_core_colorfill" />
 
     <LinearLayout
-        android:id="@+id/scanLL"
+        android:id="@+id/viewEditLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
         android:layout_marginRight="@dimen/_20sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_10sdp">
+        android:paddingTop="@dimen/_12sdp">
 
         <ImageView
-            android:layout_width="@dimen/_23sdp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_6sdp"
             android:contentDescription="@string/view_edit"
             android:src="@drawable/ic_edit" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_9sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="@string/view_edit"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_9sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/view_edit"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
 
     </LinearLayout>
 
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:layout_marginLeft="@dimen/_24sdp"
-            android:layout_marginRight="@dimen/_24sdp"
-            android:background="@color/viewcolor" />
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_marginRight="@dimen/_24sdp"
+        android:background="@color/viewcolor" />
 
 
     <LinearLayout
-        android:id="@+id/receivePaymentLL"
+        android:id="@+id/deleteLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -65,31 +64,32 @@
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
-            android:layout_width="@dimen/_23sdp"
-            android:layout_height="@dimen/_23sdp"
-            android:contentDescription="@string/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_6sdp"
+            android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
             android:fontFamily="@font/opensans_semibold"
             android:text="@string/delete"
-            android:layout_marginStart="9dp"
             android:textColor="@color/error"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/_52sdp"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:layout_marginLeft="@dimen/_24sdp"
-            android:layout_marginRight="@dimen/_24sdp"
-            android:background="@color/viewcolor" />
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_marginRight="@dimen/_24sdp"
+        android:layout_marginBottom="@dimen/_52sdp"
+        android:background="@color/viewcolor" />
 
 
-    </LinearLayout>
+</LinearLayout>
 

@@ -9,6 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
@@ -39,14 +42,28 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<DBAInfoUpdateResp> updateBasicDBAInfoResponse = new MutableLiveData<>();
     private MutableLiveData<CompanyInfoUpdateResp> postCompanyInfoResponse = new MutableLiveData<>();
     private MutableLiveData<DBAInfoUpdateResp> postDBAInfoResponse = new MutableLiveData<>();
-
     private MutableLiveData<DBAInfoResp> getDBAInfoResponse = new MutableLiveData<>();
     private MutableLiveData<BusinessTypeResp> businessTypesResponse = new MutableLiveData<>();
+
+    private MutableLiveData<BOResp> beneficialOwnersResponse = new MutableLiveData<>();
+    private MutableLiveData<BOIdResp> beneficialOwnersIDResponse = new MutableLiveData<>();
+    private MutableLiveData<DeleteBOResp> deleteBOesponse = new MutableLiveData<>();
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
         super(application);
     }
 
+    public MutableLiveData<DeleteBOResp> getDeleteBOesponse() {
+        return deleteBOesponse;
+    }
+
+    public MutableLiveData<BOIdResp> getBeneficialOwnersIDResponse() {
+        return beneficialOwnersIDResponse;
+    }
+
+    public MutableLiveData<BOResp> getBeneficialOwnersResponse() {
+        return beneficialOwnersResponse;
+    }
 
     public MutableLiveData<DBAInfoUpdateResp> getPostDBAInfoResponse() {
         return postDBAInfoResponse;
@@ -80,6 +97,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
         return getBusinessTrackerResponse;
     }
 
+    //ID Verification Tracker
     public void getBusinessTracker() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -114,6 +132,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
 
     //Company info
     public void getCompanyInfo() {
@@ -356,6 +375,113 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 public void onFailure(Call<DBAInfoUpdateResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     postDBAInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    //Beneficial Owners
+    public void getBeneficialOwners() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BOResp> mCall = apiService.getBeneficailOwners();
+            mCall.enqueue(new Callback<BOResp>() {
+                @Override
+                public void onResponse(Call<BOResp> call, Response<BOResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BOResp obj = response.body();
+                            beneficialOwnersResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BOResp>() {
+                            }.getType();
+                            BOResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            beneficialOwnersResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        beneficialOwnersResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BOResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    beneficialOwnersResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void postBeneficialOwnersID() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BOIdResp> mCall = apiService.postBeneficailOwnersID();
+            mCall.enqueue(new Callback<BOIdResp>() {
+                @Override
+                public void onResponse(Call<BOIdResp> call, Response<BOIdResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BOIdResp obj = response.body();
+                            beneficialOwnersIDResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BOIdResp>() {
+                            }.getType();
+                            BOIdResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            beneficialOwnersIDResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        beneficialOwnersIDResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BOIdResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    beneficialOwnersIDResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteBeneficialOwner(int id) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DeleteBOResp> mCall = apiService.deleteBeneficialOwner(id);
+            mCall.enqueue(new Callback<DeleteBOResp>() {
+                @Override
+                public void onResponse(Call<DeleteBOResp> call, Response<DeleteBOResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DeleteBOResp obj = response.body();
+                            deleteBOesponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DeleteBOResp>() {
+                            }.getType();
+                            DeleteBOResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            deleteBOesponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        deleteBOesponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DeleteBOResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    deleteBOesponse.setValue(null);
                 }
             });
         } catch (Exception ex) {

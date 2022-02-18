@@ -88,7 +88,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
             isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false;
-    ConstraintLayout businessTypeCL, timeZoneCL,stateCL;
+    ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L;
     MyApplication objMyApplication;
@@ -114,6 +114,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     private static final int PICK_IMAGE_REQUEST = 4;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     DBAInfoAcivity myActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -348,6 +349,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateTimeZones(DBAInfoAcivity.this, timeZoneET, objMyApplication, "DBA_INFO");
             });
 
@@ -356,7 +359,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateTimeZones(DBAInfoAcivity.this, timeZoneET, objMyApplication, "DBA_INFO");
+
             });
 
             businessTypeCL.setOnClickListener(view -> {
@@ -364,7 +370,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
+
+
             });
 
             businessTypeET.setOnClickListener(view -> {
@@ -372,7 +382,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
+
             });
 
             eCommerceLL.setOnClickListener(view -> {
@@ -423,17 +436,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             });
 
-            dbaFillingLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        chooseFilePopup(DBAInfoAcivity.this);
+            dbaFillingLL.setOnClickListener(v -> {
+                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
                     }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(this);
+                    chooseFilePopup(DBAInfoAcivity.this);
                 }
+
             });
 
             stateET.setOnClickListener(view -> {

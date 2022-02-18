@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -99,6 +100,7 @@ public class MyApplication extends Application {
     CompanyInfoResp companyInfoResp;
     DBAInfoResp dbaInfoResp;
     BuyTokenRequest buyRequest;
+    BOResp beneficialOwnersResponse;
 
 
     public UserDetails getUserDetails() {
@@ -901,6 +903,14 @@ public class MyApplication extends Application {
 
     public void setDbaInfoResp(DBAInfoResp dbaInfoResp) {
         this.dbaInfoResp = dbaInfoResp;
+    }
+
+    public BOResp getBeneficialOwnersResponse() {
+        return beneficialOwnersResponse;
+    }
+
+    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
+        this.beneficialOwnersResponse = beneficialOwnersResponse;
     }
 
     public Date getDate(String date) {
