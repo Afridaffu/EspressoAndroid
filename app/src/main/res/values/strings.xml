@@ -206,6 +206,7 @@
     <string name="scan">Scan</string>
     <string name="pay_request">Pay/Request</string>
     <string name="buy_tokens">Buy Tokens</string>
+    <string name="buy">Buy Token</string>
     <string name="select_payment_method">Select Payment Method</string>
     <string name="bank_of_america">Bank of America</string>
     <string name="_5359">••••5359</string>
@@ -472,4 +473,17 @@
     <string name="pending">Pending</string>
     <string name="failed">Failed</string>
     <string name="in_progress">In progress</string>
+    <string name="insufficient_funds">Insufficient Funds</string>
+    <string name="merchant_insufficient_funds">Insufficient funds in your Merchant\n Balance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>
+    <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for\n this refund</string>
+    <string name="refund_preview">Refund Preview </string>
+    <string name="total">Total </string>
+    <string name="reason_for_refund">Reason for Refund </string>
+    <string name="request_by_customer">Request by customer</string>
+    <string name="refund_transaction">Refund Transaction</string>
+    <string name="transactionamount">Transaction Amount:</string>
+    <string name="full_amount">Full Amount</string>
+    <string name="amount">1/2 Amount</string>
+    <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
+
 </resources>
