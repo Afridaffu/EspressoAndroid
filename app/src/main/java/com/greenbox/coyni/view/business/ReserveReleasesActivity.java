@@ -19,7 +19,7 @@ public class ReserveReleasesActivity extends AppCompatActivity {
 
     ImageView ivFilterIcon;
     LinearLayout closeBtnIV, rollingLL;
-    boolean isFilter = false  ;
+    boolean isFilter = false ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
