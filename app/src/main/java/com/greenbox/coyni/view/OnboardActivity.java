@@ -21,8 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -33,12 +31,12 @@ import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AutoScrollPagerAdapter;
 import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
-import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
@@ -59,6 +57,7 @@ public class OnboardActivity extends BaseActivity {
     LinearLayout getStarted, layoutLogin;
     Long mLastClickTime = 0L;
     SQLiteDatabase mydatabase;
+    private DatabaseHandler dbHandler;
     Cursor dsPermanentToken, dsFacePin, dsTouchID, dsUserDetails;
     String strToken = "", strDeviceID = "", strFirstUser = "";
     Boolean isFaceLock = false, isTouchId = false;
@@ -80,6 +79,9 @@ public class OnboardActivity extends BaseActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
             onboardActivity = this;
+            dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
+            //Temporary fix to handle table creation
+            dbHandler.initializeDB();
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
