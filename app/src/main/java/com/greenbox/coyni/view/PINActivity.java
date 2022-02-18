@@ -45,10 +45,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
     TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
     ImageView backActionIV, imgBack;
-    String passcode = "", strChoose = "", strConfirm = "", TYPE;
+    String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
-    ProgressDialog dialog;
+    ProgressDialog pDialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     SQLiteDatabase mydatabase;
@@ -84,7 +84,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     tvForgot.setText(Html.fromHtml("<u>Forgot PIN</u>"));
                     break;
             }
-            String strScreen = getIntent().getStringExtra("screen");
+            strScreen = getIntent().getStringExtra("screen");
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             SetDontRemind();
             initObserver();
@@ -96,12 +96,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-//        try {
-//            clearControls();
-//            passcode = "";
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     @Override
@@ -169,7 +163,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
                     || getIntent().getStringExtra("screen").equals("Withdraw")
                     || getIntent().getStringExtra("screen").equals("Pay"))
-                    || getIntent().getStringExtra("screen").equals("Notifications")) {
+                    || getIntent().getStringExtra("screen").equals("Notifications")
+                    || getIntent().getStringExtra("screen").equals("Buy")) {
 
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
@@ -202,6 +197,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     //dialog.dismiss();
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
+                            if (validateResponse.getData().getRequestToken() != null && !validateResponse.getData().getRequestToken().equals("")) {
+                                Utils.setStrToken(validateResponse.getData().getRequestToken());
+                            }
                             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 businessIdentityVerificationViewModel.getBusinessTracker();
                             }
@@ -292,7 +290,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 startActivity(cp);
                                                 finish();
                                                 break;
-
+                                            case "Buy":
+                                                break;
                                             case "Withdraw":
                                                 WithdrawMethod();
                                                 break;
@@ -433,6 +432,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
+                        Utils.setStrToken("");
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
@@ -613,7 +613,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("EditAddress")
                         || getIntent().getStringExtra("screen").equals("Withdraw")
                         || getIntent().getStringExtra("screen").equals("Pay")
-                        || getIntent().getStringExtra("screen").equals("Notifications"))) {
+                        || getIntent().getStringExtra("screen").equals("Notifications")
+                        || getIntent().getStringExtra("screen").equals("Buy"))) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
@@ -710,11 +711,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                         }
                                     }, 2000);
                                 } else {
-//                                    dialog = new ProgressDialog(PINActivity.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.getWindow().setGravity(Gravity.CENTER);
-//                                    dialog.show();
                                     shakeAnimateUpDown();
                                     RegisterRequest registerRequest = new RegisterRequest();
                                     registerRequest.setPin(strChoose);
@@ -785,12 +781,33 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             ValidateRequest request = new ValidateRequest();
             request.setPin(passcode);
+            switch (strScreen.toLowerCase()) {
+                case "changepassword":
+                    request.setActionType(Utils.changeActionType);
+                    break;
+                case "withdraw":
+                    request.setActionType(Utils.withdrawActionType);
+                    break;
+                case "pay":
+                    request.setActionType(Utils.sendActionType);
+                    break;
+                case "resetpin":
+                    request.setActionType(Utils.pinActionType);
+                    break;
+                case "buy":
+                    request.setActionType(Utils.buyActionType);
+                    break;
+            }
+//            if (strScreen.toLowerCase().equals("changepassword")) {
+//                request.setActionType(Utils.changeActionType);
+//            }
             //Uncomment for stepup process
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
                 coyniViewModel.stepUpPin(request);
             } else {
                 coyniViewModel.validateCoyniPin(request);
             }
+//            coyniViewModel.validateCoyniPin(request);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -977,6 +994,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void BuyTokenMethod(){
+
     }
 
     private void payTransaction() {

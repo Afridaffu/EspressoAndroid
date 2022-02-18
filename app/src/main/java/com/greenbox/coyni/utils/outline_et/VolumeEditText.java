@@ -69,7 +69,7 @@ public class VolumeEditText extends ConstraintLayout {
                     else
                         hintName.setVisibility(GONE);
 
-                    if (volumeET.getText().toString().length() > 0 && Integer.parseInt(volumeET.getText().toString()) == 0) {
+                    if (volumeET.getText().toString().length() > 0 && volumeET.getText().toString().equals("0.00")) {
                         hintName.setTextColor(getResources().getColor(R.color.error_red));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         volumeErrorLL.setVisibility(VISIBLE);
@@ -98,9 +98,12 @@ public class VolumeEditText extends ConstraintLayout {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                if (charSequence.toString().length() > 0)
+                    hintName.setVisibility(VISIBLE);
+
                 if (FROM.equals("DBA_INFO")) {
                     DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
-                    if (Integer.parseInt(charSequence.toString()) > 0) {
+                    if (!charSequence.toString().equals("") && !volumeET.getText().toString().equals("0.00")) {
                         if (mType.equals("MPV")) {
                             dia.isMPV = true;
                         } else if (mType.equals("HT")) {
@@ -132,7 +135,28 @@ public class VolumeEditText extends ConstraintLayout {
 
         });
 
-
+//        volumeET.setOnTouchListener((view, motionEvent) -> {
+//            if (FROM.equals("DBA_INFO") && mType.equals("MPV")) {
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+////                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.highTicketOET.getLeft(), dia.highTicketOET.getBottom());
+//                volumeET.requestFocus();
+//                volumeET.setSelection(volumeET.getText().toString().length());
+//            } else if (FROM.equals("DBA_INFO") && mType.equals("HT")) {
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+////                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.avgTicketOET.getLeft(), dia.avgTicketOET.getBottom());
+//                volumeET.requestFocus();
+//                volumeET.setSelection(volumeET.getText().toString().length());
+//             } else if (FROM.equals("DBA_INFO") && mType.equals("AT")) {
+//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
+////                dia.pageOneView.setVisibility(VISIBLE);
+//                dia.dbaBasicSL.scrollTo(dia.timezoneTIL.getLeft(), dia.timezoneTIL.getBottom());
+//                volumeET.requestFocus();
+//                volumeET.setSelection(volumeET.getText().toString().length());
+//            }
+//            return false;
+//        });
     }
 
     public void setFrom(String fromm, Context context, String type) {
@@ -164,6 +188,9 @@ public class VolumeEditText extends ConstraintLayout {
         volumeET.requestFocus();
     }
 
+    public void setSelection() {
+        volumeET.setSelection(volumeET.getText().toString().length());
+    }
 
     private void USFormat(EditText etAmount, String mode) {
         try {
@@ -172,14 +199,6 @@ public class VolumeEditText extends ConstraintLayout {
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
 
-//            if (FROM.equals("DBA_INFO")) {
-//                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
-//                if (mType.equals("MPV")) {
-//                } else if (mType.equals("HT")) {
-//                } else if (mType.equals("AT")) {
-//                }
-//                Log.e("Amount", Utils.USNumberFormat(Double.parseDouble(strAmount)));
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

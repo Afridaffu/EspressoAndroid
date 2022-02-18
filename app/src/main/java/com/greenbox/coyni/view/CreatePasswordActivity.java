@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.icu.util.UniversalTimeScale;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.Editable;
@@ -477,7 +478,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));
                             request.setNewPassword(confirmPasswordET.getText().toString().trim());
                             dashboardViewModel.meChangePassword(request);
-
                         } else {
                             SetPassword setPassword = new SetPassword();
                             setPassword.setCode(strCode);
@@ -531,24 +531,21 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 }
             }
         });
+
         dashboardViewModel.getChangePasswordMutableLiveData().observe(this, new Observer<ChangePassword>() {
             @Override
             public void onChanged(ChangePassword changePassword) {
                 dialog.dismiss();
                 if (changePassword != null) {
                     if (changePassword.getStatus().equals("SUCCESS")) {
-
+                        Utils.setStrToken("");
                         startActivity(new Intent(CreatePasswordActivity.this, BindingLayoutActivity.class)
                                 .putExtra("screen", "ChangePassword")
                         );
-
-
                     } else {
                         Utils.displayAlert(changePassword.getError().getErrorDescription(), CreatePasswordActivity.this, "", changePassword.getError().getFieldErrors().get(0));
                     }
                 }
-
-
             }
         });
 

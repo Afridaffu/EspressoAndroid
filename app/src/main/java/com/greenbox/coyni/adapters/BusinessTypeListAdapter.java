@@ -24,6 +24,7 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
     MyApplication objMyApplication;
     EditText mET;
     Dialog dialog;
+    String from;
     DBAInfoAcivity dbaInfoAcivity;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,12 +41,12 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
     }
 
 
-    public BusinessTypeListAdapter(List<BusinessType> list, Context context, EditText editText, Dialog dialog) {
+    public BusinessTypeListAdapter(List<BusinessType> list, Context context, EditText editText, Dialog dialog,String from) {
         this.mContext = context;
         this.listBT = list;
         this.mET = editText;
         this.dialog = dialog;
-        this.dbaInfoAcivity = (DBAInfoAcivity) context;
+        this.from = from;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
     }
 
@@ -70,16 +71,12 @@ public class BusinessTypeListAdapter extends RecyclerView.Adapter<BusinessTypeLi
                 @Override
                 public void onClick(View v) {
                     try {
-//                        for (int i = 0; i < listBT.size(); i++) {
-//                            if (position == i) {
-//                                listBT.get(i).setSelected(true);
-//                            } else {
-//                                listBT.get(i).setSelected(false);
-//                            }
-//                        }
-//                        notifyDataSetChanged();
-
                         mET.setText(objData.getValue());
+                        if(from.equals("DBA_INFO")) {
+                            dbaInfoAcivity = (DBAInfoAcivity) mContext;
+                            dbaInfoAcivity.selectedBTKey = objData.getKey();
+                        }
+
                         dialog.dismiss();
 
                     } catch (Exception ex) {

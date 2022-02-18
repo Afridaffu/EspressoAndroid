@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -98,13 +99,16 @@ public class ImageUtility {
                 IdentityVerificationActivity.isFileSelected = true;
             } else if (from.equals("CI-AOI")) {
                 CompanyInformationActivity.aoiFile = mediaFile;
-                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(5);
+//                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(5);
             } else if (from.equals("CI-EINLETTER")) {
                 CompanyInformationActivity.einLetterFile = mediaFile;
-                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(6);
+//                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(6);
             } else if (from.equals("CI-W9")) {
                 CompanyInformationActivity.w9FormFile = mediaFile;
-                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
+//                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
+            } else if (from.equals("DBA_INFO")) {
+                DBAInfoAcivity.dbaFile = mediaFile;
+//                DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
             }
         } catch (Exception e) {
             e.printStackTrace();

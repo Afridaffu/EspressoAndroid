@@ -140,14 +140,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
         userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
 
-//        brandsGV.setExpanded(true);
-//        GridLayoutManager layoutManager = new GridLayoutManager(BusinessCreateAccountsActivity.this, 2);
-//
-//        giftCardsAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, filterList);
-//        brandsGV.setLayoutManager(layoutManager);
-//        brandsGV.setAdapter(giftCardsAdapter);
-//        Log.e("eeee","eeee"+filterList);
-
     }
 
     public void initObservers() {
@@ -155,11 +147,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
-                //dialog.dismiss();
-                Log.e("profilesResponse", "beforeee" + profilesResponse);
-
                 if (profilesResponse != null) {
-                    Log.e("profilesResponse", "eeee" + profilesResponse);
                     filterList = profilesResponse.getData();
 //                    for(int i=0;i<=filterList.size();i++){
 //                         if(filterList.get(i).getAccountType().equals(Utils.BUSINESS_ACCOUNT)){

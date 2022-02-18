@@ -19,10 +19,12 @@ import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -95,6 +97,8 @@ public class MyApplication extends Application {
     WalletResponseData walletResponseData;
     BusinessTypeResp businessTypeResp;
     CompanyInfoResp companyInfoResp;
+    DBAInfoResp dbaInfoResp;
+    BuyTokenRequest buyRequest;
 
 
     public UserDetails getUserDetails() {
@@ -606,6 +610,14 @@ public class MyApplication extends Application {
         this.withdrawRequest = gcWithdrawRequest;
     }
 
+    public BuyTokenRequest getBuyRequest() {
+        return buyRequest;
+    }
+
+    public void setBuyRequest(BuyTokenRequest buyRequest) {
+        this.buyRequest = buyRequest;
+    }
+
     public WithdrawResponse getWithdrawResponse() {
         return withdrawResponse;
     }
@@ -881,6 +893,14 @@ public class MyApplication extends Application {
 
     public void setCompanyInfoResp(CompanyInfoResp companyInfoResp) {
         this.companyInfoResp = companyInfoResp;
+    }
+
+    public DBAInfoResp getDbaInfoResp() {
+        return dbaInfoResp;
+    }
+
+    public void setDbaInfoResp(DBAInfoResp dbaInfoResp) {
+        this.dbaInfoResp = dbaInfoResp;
     }
 
     public Date getDate(String date) {

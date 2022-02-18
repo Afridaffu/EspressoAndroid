@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.greenbox.coyni.R;
 
-public class BusinessSalesOrderReserveActivity extends AppCompatActivity {
+public class RefundTransactionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_sales_order_reserve);
+        setContentView(R.layout.activity_refund_transaction);
     }
 }

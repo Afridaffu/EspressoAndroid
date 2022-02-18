@@ -18,6 +18,8 @@ import com.greenbox.coyni.model.cards.CardRequest;
 import com.greenbox.coyni.model.cards.CardResponse;
 import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
+import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
+import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
 import com.greenbox.coyni.model.preauth.PreAuthRequest;
 import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.publickey.PublicKeyResponse;
@@ -44,6 +46,7 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
     private MutableLiveData<CardTypeResponse> cardTypeResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CardEditResponse> cardEditResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CardDeleteResponse> cardDeleteResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BusinessCardResponse> businessCardResponseMutableLiveData = new MutableLiveData<>();
 
     public PaymentMethodsViewModel(@NonNull Application application) {
         super(application);
@@ -85,6 +88,10 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
         return cardDeleteResponseMutableLiveData;
     }
 
+    public MutableLiveData<BusinessCardResponse> getBusinessCardResponseMutableLiveData() {
+        return businessCardResponseMutableLiveData;
+    }
+
     public void getPublicKey(int userId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -92,17 +99,21 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<PublicKeyResponse>() {
                 @Override
                 public void onResponse(Call<PublicKeyResponse> call, Response<PublicKeyResponse> response) {
-                    if (response.isSuccessful()) {
-                        PublicKeyResponse obj = response.body();
-                        publicKeyResponseMutableLiveData.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<APIError>() {
-                        }.getType();
-                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                    try {
+                        if (response.isSuccessful()) {
+                            PublicKeyResponse obj = response.body();
+                            publicKeyResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<PublicKeyResponse>() {
+                            }.getType();
+                            PublicKeyResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                publicKeyResponseMutableLiveData.setValue(errorResponse);
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
@@ -163,13 +174,6 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
                         CardResponse obj = response.body();
                         cardResponseMutableLiveData.setValue(obj);
                     } else {
-//                        Gson gson = new Gson();
-//                        Type type = new TypeToken<APIError>() {
-//                        }.getType();
-//                        APIError errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-//                        if (errorResponse != null) {
-//                            apiErrorMutableLiveData.setValue(errorResponse);
-//                        }
                         Gson gson = new Gson();
                         Type type = new TypeToken<CardResponse>() {
                         }.getType();
@@ -320,6 +324,38 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
                 public void onFailure(Call<CardDeleteResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void saveBusinessCards(BusinessCardRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BusinessCardResponse> mCall = apiService.saveBusinessCards(request);
+            mCall.enqueue(new Callback<BusinessCardResponse>() {
+                @Override
+                public void onResponse(Call<BusinessCardResponse> call, Response<BusinessCardResponse> response) {
+                    if (response.isSuccessful()) {
+                        BusinessCardResponse obj = response.body();
+                        businessCardResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BusinessCardResponse>() {
+                        }.getType();
+                        BusinessCardResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            businessCardResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BusinessCardResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    businessCardResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,9 +19,9 @@
 
             <LinearLayout
                 android:id="@+id/layoutClose"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:orientation="horizontal">
 
@@ -30,82 +29,92 @@
                     android:id="@+id/imgClose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/close"
+                    android:padding="@dimen/_5sdp"
                     android:src="@drawable/ic_close" />
             </LinearLayout>
 
             <ImageView
-                android:layout_width="match_parent"
+                android:id="@+id/iv_account_type_bg"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/coyni_account"
                 android:src="@drawable/bg_account_type" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_account_type_bg"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/coyni_account"
+                android:src="@drawable/coyni_logo_full" />
+
         </RelativeLayout>
 
-        <ImageView
-            android:layout_width="@dimen/_116sdp"
-            android:layout_height="@dimen/_47sdp"
-            android:layout_gravity="center"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="43dp"
-            android:src="@drawable/ic_coyni_logo" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_24sdp"
-        android:layout_weight="1">
-
         <LinearLayout
-            android:id="@+id/personalAccontLL"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:background="@drawable/account_type_bg"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_24sdp"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="@dimen/_54sdp"
-                android:layout_height="@dimen/_54sdp"
-                android:src="@drawable/ic_user" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/personalAccontLL"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="Personal"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
-        </LinearLayout>
+                android:layout_weight="1"
+                android:background="@drawable/account_type_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/_18sdp">
 
-        <LinearLayout
-            android:id="@+id/businessAccontLL"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_weight="1"
-            android:background="@drawable/account_type_bg"
-            android:gravity="center"
-            android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/user"
+                    android:src="@drawable/ic_user" />
 
-            <ImageView
-                android:layout_width="@dimen/_54sdp"
-                android:layout_height="@dimen/_54sdp"
-                android:src="@drawable/ic_case" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/personal"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="1dp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:id="@+id/businessAccontLL"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="Business"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
-        </LinearLayout>
+                android:layout_weight="1"
+                android:background="@drawable/account_type_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/_18sdp">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/user"
+                    android:src="@drawable/ic_case" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/business"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
