@@ -71,6 +71,7 @@ android {
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+//            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'true'
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         dev {

@@ -423,6 +423,7 @@ public class EnableAuthID extends AppCompatActivity {
 
     private void saveToken(String value) {
         try {
+            objMyApplication.setStrMobileToken(value);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
             mydatabase.execSQL("Delete from tblPermanentToken");

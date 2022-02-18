@@ -140,7 +140,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
 //            isBiometric = Utils.checkBiometric(CustomerProfileActivity.this);
             isBiometric = Utils.getIsBiometric();
-            SetToken(objMyApplication, this);
+            //SetToken(objMyApplication, this);
             SetFaceLock(objMyApplication, this);
             SetTouchId(objMyApplication, this);
 
@@ -741,7 +741,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     BiometricTokenRequest request = new BiometricTokenRequest();
                     request.setDeviceId(Utils.getDeviceID());
-                    request.setMobileToken(strToken);
+//                    request.setMobileToken(strToken);
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
                     request.setActionType(Utils.changeActionType);
                     coyniViewModel.biometricToken(request);
 //                    Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
@@ -792,6 +793,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void saveToken(String value) {
         try {
+            objMyApplication.setStrMobileToken(value);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
             mydatabase.execSQL("Delete from tblPermanentToken");
@@ -1146,18 +1148,18 @@ public class CustomerProfileActivity extends AppCompatActivity {
     }
 
 
-    public static void SetToken(MyApplication objMyApplication, Activity activity) {
-        try {
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public static void SetToken(MyApplication objMyApplication, Activity activity) {
+//        try {
+//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+//            dsPermanentToken.moveToFirst();
+//            if (dsPermanentToken.getCount() > 0) {
+//                strToken = dsPermanentToken.getString(1);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
         try {

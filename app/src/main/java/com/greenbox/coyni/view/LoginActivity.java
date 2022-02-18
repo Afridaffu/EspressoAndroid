@@ -567,6 +567,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             dsPermanentToken.moveToFirst();
             if (dsPermanentToken.getCount() > 0) {
                 strToken = dsPermanentToken.getString(1);
+                objMyApplication.setStrMobileToken(strToken);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
