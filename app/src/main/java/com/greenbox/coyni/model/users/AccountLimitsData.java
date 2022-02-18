@@ -15,79 +15,84 @@ public class AccountLimitsData{
     private String startDate;
     @SerializedName("payRequestTokenMinLimit")
     @Expose
-    private int payRequestTokenMinLimit;
+    private String payRequestTokenMinLimit;
     @SerializedName("payRequestTokenType")
     @Expose
     private int payRequestTokenType;
     @SerializedName("payRequestTokenTxnLimit")
     @Expose
-    private int payRequestTokenTxnLimit;
+    private String payRequestTokenTxnLimit;
     @SerializedName("withdrawsBankAccountMinLimit")
     @Expose
-    private int withdrawsBankAccountMinLimit;
+    private String withdrawsBankAccountMinLimit;
     @SerializedName("withdrawsBankAccountType")
     @Expose
     private int withdrawsBankAccountType;
     @SerializedName("withdrawsBankAccountTxnLimit")
     @Expose
-    private int withdrawsBankAccountTxnLimit;
+    private String withdrawsBankAccountTxnLimit;
     @SerializedName("withdrawsInstantPayMinLimit")
     @Expose
-    private int withdrawsInstantPayMinLimit;
+    private String withdrawsInstantPayMinLimit;
     @SerializedName("withdrawsInstantPayType")
     @Expose
     private int withdrawsInstantPayType;
     @SerializedName("withdrawsInstantPayTxnLimit")
     @Expose
-    private int withdrawsInstantPayTxnLimit;
+    private String withdrawsInstantPayTxnLimit;
     @SerializedName("withdrawsSignetMinLimit")
     @Expose
-    private int withdrawsSignetMinLimit;
+    private String withdrawsSignetMinLimit;
     @SerializedName("withdrawsSignetType")
     @Expose
     private int withdrawsSignetType;
     @SerializedName("withdrawsSignetTxnLimit")
     @Expose
-    private int withdrawsSignetTxnLimit;
+    private String withdrawsSignetTxnLimit;
     @SerializedName("withdrawsGiftCardMinLimit")
     @Expose
-    private int withdrawsGiftCardMinLimit;
+    private String withdrawsGiftCardMinLimit;
     @SerializedName("withdrawsGiftCardType")
     @Expose
     private int withdrawsGiftCardType;
     @SerializedName("withdrawsGiftCardTxnLimit")
     @Expose
-    private int withdrawsGiftCardTxnLimit;
+    private String withdrawsGiftCardTxnLimit;
     @SerializedName("buyTokenBankAccountMinLimit")
     @Expose
-    private int buyTokenBankAccountMinLimit;
+    private String buyTokenBankAccountMinLimit;
     @SerializedName("buyTokenBankAccountType")
     @Expose
     private int buyTokenBankAccountType;
     @SerializedName("buyTokenBankAccountTxnLimit")
     @Expose
-    private int buyTokenBankAccountTxnLimit;
+    private String buyTokenBankAccountTxnLimit;
     @SerializedName("buyTokenCardMinLimit")
     @Expose
-    private int buyTokenCardMinLimit;
+    private String buyTokenCardMinLimit;
     @SerializedName("buyTokenCardType")
     @Expose
     private int buyTokenCardType;
     @SerializedName("buyTokenCardTxnLimit")
     @Expose
-    private int buyTokenCardTxnLimit;
+    private String buyTokenCardTxnLimit;
     @SerializedName("buyTokenSignetMinLimit")
     @Expose
-    private int buyTokenSignetMinLimit;
+    private String buyTokenSignetMinLimit;
     @SerializedName("buyTokenSignetType")
     @Expose
     private int buyTokenSignetType;
     @SerializedName("buyTokenSignetTxnLimit")
     @Expose
-    private int buyTokenSignetTxnLimit;
+    private String buyTokenSignetTxnLimit;
     @SerializedName("status")
     @Expose
-    private int status;
+    private String status;
+
+    private String transactionHighTicketMinLimit;
+
+    public AccountLimitsData() {
+    }
 
     public int getUserType() {
         return userType;
@@ -97,7 +102,7 @@ public class AccountLimitsData{
         return startDate;
     }
 
-    public int getPayRequestTokenMinLimit() {
+    public String getPayRequestTokenMinLimit() {
         return payRequestTokenMinLimit;
     }
 
@@ -105,11 +110,11 @@ public class AccountLimitsData{
         return payRequestTokenType;
     }
 
-    public int getPayRequestTokenTxnLimit() {
+    public String getPayRequestTokenTxnLimit() {
         return payRequestTokenTxnLimit;
     }
 
-    public int getWithdrawsBankAccountMinLimit() {
+    public String getWithdrawsBankAccountMinLimit() {
         return withdrawsBankAccountMinLimit;
     }
 
@@ -117,11 +122,11 @@ public class AccountLimitsData{
         return withdrawsBankAccountType;
     }
 
-    public int getWithdrawsBankAccountTxnLimit() {
+    public String getWithdrawsBankAccountTxnLimit() {
         return withdrawsBankAccountTxnLimit;
     }
 
-    public int getWithdrawsInstantPayMinLimit() {
+    public String getWithdrawsInstantPayMinLimit() {
         return withdrawsInstantPayMinLimit;
     }
 
@@ -129,11 +134,11 @@ public class AccountLimitsData{
         return withdrawsInstantPayType;
     }
 
-    public int getWithdrawsInstantPayTxnLimit() {
+    public String getWithdrawsInstantPayTxnLimit() {
         return withdrawsInstantPayTxnLimit;
     }
 
-    public int getWithdrawsSignetMinLimit() {
+    public String getWithdrawsSignetMinLimit() {
         return withdrawsSignetMinLimit;
     }
 
@@ -141,11 +146,11 @@ public class AccountLimitsData{
         return withdrawsSignetType;
     }
 
-    public int getWithdrawsSignetTxnLimit() {
+    public String getWithdrawsSignetTxnLimit() {
         return withdrawsSignetTxnLimit;
     }
 
-    public int getWithdrawsGiftCardMinLimit() {
+    public String getWithdrawsGiftCardMinLimit() {
         return withdrawsGiftCardMinLimit;
     }
 
@@ -153,11 +158,11 @@ public class AccountLimitsData{
         return withdrawsGiftCardType;
     }
 
-    public int getWithdrawsGiftCardTxnLimit() {
+    public String getWithdrawsGiftCardTxnLimit() {
         return withdrawsGiftCardTxnLimit;
     }
 
-    public int getBuyTokenBankAccountMinLimit() {
+    public String getBuyTokenBankAccountMinLimit() {
         return buyTokenBankAccountMinLimit;
     }
 
@@ -165,11 +170,11 @@ public class AccountLimitsData{
         return buyTokenBankAccountType;
     }
 
-    public int getBuyTokenBankAccountTxnLimit() {
+    public String getBuyTokenBankAccountTxnLimit() {
         return buyTokenBankAccountTxnLimit;
     }
 
-    public int getBuyTokenCardMinLimit() {
+    public String getBuyTokenCardMinLimit() {
         return buyTokenCardMinLimit;
     }
 
@@ -177,11 +182,11 @@ public class AccountLimitsData{
         return buyTokenCardType;
     }
 
-    public int getBuyTokenCardTxnLimit() {
+    public String getBuyTokenCardTxnLimit() {
         return buyTokenCardTxnLimit;
     }
 
-    public int getBuyTokenSignetMinLimit() {
+    public String getBuyTokenSignetMinLimit() {
         return buyTokenSignetMinLimit;
     }
 
@@ -189,11 +194,11 @@ public class AccountLimitsData{
         return buyTokenSignetType;
     }
 
-    public int getBuyTokenSignetTxnLimit() {
+    public String getBuyTokenSignetTxnLimit() {
         return buyTokenSignetTxnLimit;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 }

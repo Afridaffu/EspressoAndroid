@@ -1,100 +1,40 @@
 package com.greenbox.coyni.model.fee;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class FeeData {
 
-    @SerializedName("id")
-    @Expose
+
     public int id;
-    @SerializedName("feeStructureCategoryId")
-    @Expose
-    public int feeStructureCategoryId;
-    @SerializedName("feeStructureCategoryName")
-    @Expose
-    public String feeStructureCategoryName;
-    @SerializedName("startDate")
-    @Expose
-    public String startDate;
-    @SerializedName("withdrawalGiftcardFeeInDollar")
-    @Expose
-    public String withdrawalGiftcardFeeInDollar;
-    @SerializedName("withdrawalGiftcardFeeInPercent")
-    @Expose
-    public String withdrawalGiftcardFeeInPercent;
-    @SerializedName("withdrawalInstantFeeInDollar")
-    @Expose
-    public String withdrawalInstantFeeInDollar;
-    @SerializedName("withdrawalInstantFeeInPercent")
-    @Expose
-    public String withdrawalInstantFeeInPercent;
-    @SerializedName("withdrawalBankFeeInDollar")
-    @Expose
-    public String withdrawalBankFeeInDollar;
-    @SerializedName("withdrawalBankFeeInPercent")
-    @Expose
-    public String withdrawalBankFeeInPercent;
-    @SerializedName("withdrawalFailedBankFeeInDollar")
-    @Expose
-    public String withdrawalFailedBankFeeInDollar;
-    @SerializedName("withdrawalFailedBankFeeInPercent")
-    @Expose
-    public String withdrawalFailedBankFeeInPercent;
-    @SerializedName("sendTokenFeeInDollar")
-    @Expose
-    public String sendTokenFeeInDollar;
-    @SerializedName("sendTokenFeeInPercent")
-    @Expose
-    public String sendTokenFeeInPercent;
-    @SerializedName("buyTokenCardFeeInDollar")
-    @Expose
-    public String buyTokenCardFeeInDollar;
-    @SerializedName("buyTokenCardFeeInPercent")
-    @Expose
-    public String buyTokenCardFeeInPercent;
-    @SerializedName("buyTokenBankFeeInDollar")
-    @Expose
-    public String buyTokenBankFeeInDollar;
-    @SerializedName("buyTokenBankFeeInPercent")
-    @Expose
-    public String buyTokenBankFeeInPercent;
-    @SerializedName("withdrawalSignetFeeInDollar")
-    @Expose
-    public String withdrawalSignetFeeInDollar;
-    @SerializedName("withdrawalSignetFeeInPercent")
-    @Expose
-    public String withdrawalSignetFeeInPercent;
-    @SerializedName("buyTokenSignetFeeInDollar")
-    @Expose
-    public String buyTokenSignetFeeInDollar;
-    @SerializedName("buyTokenSignetFeeInPercent")
-    @Expose
-    public String buyTokenSignetFeeInPercent;
-    @SerializedName("monthlyServiceFeeInDollar")
-    @Expose
-    public String monthlyServiceFeeInDollar;
-    @SerializedName("monthlyServiceFeeInPercent")
-    @Expose
-    public String monthlyServiceFeeInPercent;
-    @SerializedName("transactionSaleOrderTokenFeeInDollar")
-    @Expose
-    public String transactionSaleOrderTokenFeeInDollar;
-    @SerializedName("transactionSaleOrderTokenFeeInPercent")
-    @Expose
-    public String transactionSaleOrderTokenFeeInPercent;
-    @SerializedName("transactionRefundFeeInDollar")
-    @Expose
-    public String transactionRefundFeeInDollar;
-    @SerializedName("transactionRefundFeeInPercent")
-    @Expose
-    public String transactionRefundFeeInPercent;
-    @SerializedName("disputeChargebackFeeInDollar")
-    @Expose
-    public String disputeChargebackFeeInDollar;
-    @SerializedName("disputeChargebackFeeInPercent")
-    @Expose
-    public String disputeChargebackFeeInPercent;
+    private int feeStructureCategoryId;
+    private String feeStructureCategoryName;
+    private String startDate;
+    private String withdrawalGiftcardFeeInDollar;
+    private String withdrawalGiftcardFeeInPercent;
+    private String withdrawalInstantFeeInDollar;
+
+    private String withdrawalInstantFeeInPercent;
+    private String withdrawalBankFeeInDollar;
+    private String withdrawalBankFeeInPercent;
+    private String withdrawalFailedBankFeeInDollar;
+    private String withdrawalFailedBankFeeInPercent;
+    private String sendTokenFeeInDollar;
+    private String sendTokenFeeInPercent;
+    private String buyTokenCardFeeInDollar;
+    private String buyTokenCardFeeInPercent;
+    private String buyTokenBankFeeInDollar;
+    private String buyTokenBankFeeInPercent;
+    private String withdrawalSignetFeeInDollar;
+    private String withdrawalSignetFeeInPercent;
+    private String buyTokenSignetFeeInDollar;
+    private String buyTokenSignetFeeInPercent;
+    private String monthlyServiceFeeInDollar;
+    private String monthlyServiceFeeInPercent;
+    private String transactionSaleOrderTokenFeeInDollar;
+    private String transactionSaleOrderTokenFeeInPercent;
+    private String transactionRefundFeeInDollar;
+    private String transactionRefundFeeInPercent;
+    private String disputeChargebackFeeInDollar;
+    private String disputeChargebackFeeInPercent;
 
     public int getId() {
         return id;
