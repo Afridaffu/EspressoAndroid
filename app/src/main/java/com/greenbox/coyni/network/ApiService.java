@@ -428,7 +428,7 @@ public interface ApiService {
     @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
 
-    @POST("api/v2/fees/{UserID}")
+    @GET("api/v2/fees/{UserID}")
     Call<Fees> meFees(@Path("UserID") int UserID);
 
     @POST("api/v2/cards/merchant/addcard")

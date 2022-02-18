@@ -465,6 +465,12 @@
     <string name="sale_order_tokens">Sale Order - Token</string>
     <string name="date">Date</string>
     <string name="to">To</string>
+    <string name="reserve_releases">Reserve Releases</string>
+    <string name="rolling_releases">Rolling Releases</string>
+    <string name="search_by_reserve_id">Search By Reserve ID</string>
+    <string name="manual_releases">Manual Releases</string>
+    <string name="reason_field">Reason field on the manual \nrelease flow. Limited to 120char \nand this is exactly 121 characters \nhere including the spaces.</string>
+    <string name="reason_field_on_the_manual_release_flow">Reason field on the manual \nrelease flow.</string>
     <string name="transaction_amount">Transaction Amount</string>
     <string name="partial_refund">Partial Refund</string>
     <string name="business_payout">Business Payout</string>

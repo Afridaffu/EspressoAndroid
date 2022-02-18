@@ -24,13 +24,14 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/fees"
                 android:src="@drawable/ic_back" />
 
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fees"
+            android:text="@string/fees"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp"
@@ -89,24 +90,22 @@
                                 android:id="@+id/salesOrderDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:singleLine="true"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"/>
+                                android:gravity="end"/>
                             <TextView
                                 android:id="@+id/salesOrderPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:singleLine="true"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
                         <LinearLayout
@@ -128,23 +127,21 @@
                                 android:id="@+id/refundDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:singleLine="true"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"/>
+                                android:gravity="end"/>
                             <TextView
                                 android:id="@+id/refundPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -209,24 +206,22 @@
                                 android:id="@+id/tvEBADoll"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:singleLine="true"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"/>
+                                android:gravity="end"/>
                             <TextView
                                 android:id="@+id/tvEBAPer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:singleLine="true"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
                         <LinearLayout
@@ -248,23 +243,21 @@
                                 android:id="@+id/instantPayDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:singleLine="true"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"/>
+                                android:gravity="end"/>
                             <TextView
                                 android:id="@+id/instantPayPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:layout_marginStart="@dimen/_30sdp"
                                 android:singleLine="true"/>
                         </LinearLayout>
@@ -287,23 +280,21 @@
                                 android:id="@+id/signetAccDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
                                 android:singleLine="true"
-                                android:gravity="right"/>
+                                android:gravity="end"/>
                             <TextView
                                 android:id="@+id/signetAccPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -326,23 +317,21 @@
                                 android:id="@+id/giftCardDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"/>
                             <TextView
                                 android:id="@+id/giftCardPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -365,23 +354,21 @@
                                 android:id="@+id/fdwDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"/>
                             <TextView
                                 android:id="@+id/fdwPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -422,7 +409,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="External Bank Account"
+                                android:text="@string/external_bank_account"
                                 android:textColor="@color/xdark_gray"
                                 android:textSize="@dimen/_11ssp"
                                 android:fontFamily="@font/opensans_regular"
@@ -432,23 +419,21 @@
                                 android:id="@+id/buyTokenEBADollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"/>
                             <TextView
                                 android:id="@+id/buyTokenEBAPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -471,23 +456,21 @@
                                 android:id="@+id/buytokenSignetDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"/>
                             <TextView
                                 android:id="@+id/buytokenSignetPerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -536,23 +519,21 @@
                                 android:id="@+id/monthlyFeeDollTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$ 0.00"
                                 android:textSize="@dimen/_11ssp"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:layout_weight="1"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"/>
                             <TextView
                                 android:id="@+id/monthlyFeePerTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textSize="@dimen/_11ssp"
                                 android:layout_marginEnd="@dimen/_23sdp"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:singleLine="true"
                                 android:layout_marginStart="@dimen/_30sdp"/>
                         </LinearLayout>
@@ -560,7 +541,6 @@
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
-
 
             </LinearLayout>
         </LinearLayout>
