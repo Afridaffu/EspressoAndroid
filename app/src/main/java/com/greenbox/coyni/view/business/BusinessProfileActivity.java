@@ -55,7 +55,6 @@ public class BusinessProfileActivity extends AppCompatActivity {
             businessResetPin, preferencesLL;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    static Cursor dsPermanentToken, dsFacePin, dsTouchID;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isTogleBtn = false;
     CardView business_userProfileCV, statusDot;
@@ -707,6 +706,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     }
 
     private void saveToken(String value) {
+        myApplication.setStrMobileToken(value);
         dbHandler.clearPermanentTokenTable();
         dbHandler.insertPermanentToken(value);
     }
@@ -802,7 +802,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
         boolean isBiometric = false;
 
         String faceValue = dbHandler.getFacePinLock();
-        if (faceValue!= null && faceValue.equals("true")) {
+        if (faceValue != null && faceValue.equals("true")) {
             isFace = true;
             myApplication.setLocalBiometric(true);
         } else {

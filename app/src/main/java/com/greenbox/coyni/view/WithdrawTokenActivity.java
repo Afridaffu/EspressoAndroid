@@ -56,6 +56,8 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
@@ -70,6 +72,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -91,6 +94,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     PaymentMethodsViewModel paymentMethodsViewModel;
     BuyTokenViewModel buyTokenViewModel;
     DashboardViewModel dashboardViewModel;
+    CoyniViewModel coyniViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
@@ -161,7 +165,17 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 break;
             case RESULT_OK:
             case 235: {
-                withdrawToken();
+                try {
+                    //withdrawToken();
+                    pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
+                    request.setActionType(Utils.withdrawActionType);
+                    coyniViewModel.biometricToken(request);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             break;
             case 0:
@@ -244,6 +258,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -264,7 +279,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             lyBalance = findViewById(R.id.lyBalance);
             tvAvailableBal = findViewById(R.id.tvAvailableBal);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
-            ctKey.setKeyAction("Withdraw",this);
+            ctKey.setKeyAction("Withdraw", this);
             ctKey.setScreenName("withdraw");
             InputConnection ic = etAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
@@ -419,6 +434,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     prevDialog.dismiss();
                 }
                 pDialog.dismiss();
+                Utils.setStrToken("");
                 if (withdrawResponse != null) {
                     objMyApplication.setWithdrawResponse(withdrawResponse);
                     if (withdrawResponse.getStatus().trim().toLowerCase().equals("success")) {
@@ -441,6 +457,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         buyTokenViewModel.getWithdrawFailureResponseMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError withdrawResponse) {
+                Utils.setStrToken("");
                 if (withdrawResponse != null) {
 //                    withdrawTokenFailure(withdrawResponse);
                     startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
@@ -510,6 +527,20 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     if (objMyApplication.getSelectedCard() != null) {
                         selectedCard = objMyApplication.getSelectedCard();
                         bindPayMethod(selectedCard);
+                    }
+                }
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        withdrawToken();
                     }
                 }
             }
@@ -741,7 +772,12 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
             tvLimit.setLayoutParams(params);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                } else {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                }
             } else {
                 Utils.displayAlert(getString(R.string.internet), WithdrawTokenActivity.this, "", "");
             }

@@ -189,6 +189,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             compphonenumberTV = findViewById(R.id.CompanyphoneNumberErrorTV);
             compphoneNumberET = findViewById(R.id.CompanyphoneNumberOET);
             compphoneNumberET.setFrom("Company_Information", this);
+            compphoneNumberET.setHintText("Company Phone Number");
             compphoneNumberErrorLL = findViewById(R.id.CompanyphoneNumberErrorLL);
             ssnErrorLL = findViewById(R.id.ssnErrorLL);
             ssnErrorTV = findViewById(R.id.ssnErrorTV);
