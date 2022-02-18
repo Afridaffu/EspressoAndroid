@@ -19,9 +19,9 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.AccountLimitsViewModel;
 
 public class AccountLimitsActivity extends AppCompatActivity {
-    TextView withdrawTokenBankLimit,withdrawTokenInstantLimit,withdrawTokenGiftcardLimit,buyTokenBankLimit,buyTokenDebitcardLimit,buyTokenCreditcardLimit,payRequestTranLimit,
-    b_monthlyProcessingVolume, b_highTicketLimit,b_buyBankAccount,b_buySignetAccount,b_withdrawBankAccount,b_withDrawinstantPay,b_withDrawgiftCard,b_withdrawSignetAccount;
-ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
+    TextView withdrawTokenBankLimit, withdrawTokenInstantLimit, withdrawTokenGiftcardLimit, buyTokenBankLimit, buyTokenDebitcardLimit, buyTokenCreditcardLimit, payRequestTranLimit,
+            b_monthlyProcessingVolume, b_highTicketLimit, b_buyBankAccount, b_buySignetAccount, b_withdrawBankAccount, b_withDrawinstantPay, b_withDrawgiftCard, b_withdrawSignetAccount;
+    ScrollView personalAccountLimitsSv, businessAccountLimitsSv;
     LinearLayout backBtn;
     AccountLimitsViewModel accountLimitsViewModel;
     MyApplication objMyApplication;
@@ -33,44 +33,48 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_limits);
-        backBtn=findViewById(R.id.alBackbtn);
+        backBtn = findViewById(R.id.alBackbtn);
         accountLimitsViewModel = new ViewModelProvider(this).get(AccountLimitsViewModel.class);
-       objMyApplication=(MyApplication)getApplicationContext();
+        objMyApplication = (MyApplication) getApplicationContext();
 
 
-       //Bersonal Account Limits....
-        personalAccountLimitsSv=(ScrollView) findViewById(R.id.Personal_AccountLimitsSV);
-        withdrawTokenBankLimit=(TextView)findViewById(R.id.tvWithTokenBankLimit);
-        withdrawTokenInstantLimit=(TextView)findViewById(R.id.tvWithTokenInstantLimit);
-        withdrawTokenGiftcardLimit=findViewById(R.id.tvWithdrawTokenGiftCardLimit);
-        buyTokenBankLimit=findViewById(R.id.tvBuyTokenBankLimit);
-        buyTokenCreditcardLimit=findViewById(R.id.tvBuyTokenCreditLimit);
-        buyTokenDebitcardLimit=findViewById(R.id.tvBuyTokenDebitLimit);
-        payRequestTranLimit=findViewById(R.id.tvPayRequestTransactionLimit);
+        //Bersonal Account Limits....
+        personalAccountLimitsSv = (ScrollView) findViewById(R.id.Personal_AccountLimitsSV);
+        withdrawTokenBankLimit = (TextView) findViewById(R.id.tvWithTokenBankLimit);
+        withdrawTokenInstantLimit = (TextView) findViewById(R.id.tvWithTokenInstantLimit);
+        withdrawTokenGiftcardLimit = findViewById(R.id.tvWithdrawTokenGiftCardLimit);
+        buyTokenBankLimit = findViewById(R.id.tvBuyTokenBankLimit);
+        buyTokenCreditcardLimit = findViewById(R.id.tvBuyTokenCreditLimit);
+        buyTokenDebitcardLimit = findViewById(R.id.tvBuyTokenDebitLimit);
+        payRequestTranLimit = findViewById(R.id.tvPayRequestTransactionLimit);
 
 
         //Business Account Limits....
-        businessAccountLimitsSv= (ScrollView) findViewById(R.id.Business_AccountLimitsSV);
-        b_monthlyProcessingVolume=(TextView)findViewById(R.id.TvMonthlyProcessingVolume);
-        b_highTicketLimit=(TextView)findViewById(R.id.TVHighTicketLimit);
-        b_buyBankAccount=findViewById(R.id.TV_B_BUYBankAccount);
-        b_buySignetAccount=findViewById(R.id.TV_B_BuySignetAccount);
-        b_withdrawBankAccount=findViewById(R.id.TV_B_WithdrawBankAccount);
-        b_withDrawinstantPay=findViewById(R.id.Tv_B_InstantPay);
-        b_withDrawgiftCard=findViewById(R.id.TV_B_GiftCard);
-        b_withdrawSignetAccount=findViewById(R.id.TV_B_WithdrawSignetAccount);
+        businessAccountLimitsSv = (ScrollView) findViewById(R.id.Business_AccountLimitsSV);
+        b_monthlyProcessingVolume = (TextView) findViewById(R.id.TvMonthlyProcessingVolume);
+        b_highTicketLimit = (TextView) findViewById(R.id.TVHighTicketLimit);
+        b_buyBankAccount = findViewById(R.id.TV_B_BUYBankAccount);
+        b_buySignetAccount = findViewById(R.id.TV_B_BuySignetAccount);
+        b_withdrawBankAccount = findViewById(R.id.TV_B_WithdrawBankAccount);
+        b_withDrawinstantPay = findViewById(R.id.Tv_B_InstantPay);
+        b_withDrawgiftCard = findViewById(R.id.TV_B_GiftCard);
+        b_withdrawSignetAccount = findViewById(R.id.TV_B_WithdrawSignetAccount);
 
 
         initObserver();
-        if (objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT){
+        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             personalAccountLimitsSv.setVisibility(View.VISIBLE);
             businessAccountLimitsSv.setVisibility(View.GONE);
-        accountLimitsViewModel.meAccountLimits(userType);}
+//            accountLimitsViewModel.meAccountLimits(userType);
+            accountLimitsViewModel.meAccountLimits(Utils.userTypeCust);
+        }
 
-        if (objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT){
+        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
             businessAccountLimitsSv.setVisibility(View.VISIBLE);
             personalAccountLimitsSv.setVisibility(View.GONE);
-            accountLimitsViewModel.meAccountLimits(b_userType);}
+//            accountLimitsViewModel.meAccountLimits(b_userType);
+            accountLimitsViewModel.meAccountLimits(Utils.userTypeBusiness);
+        }
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,14 +84,14 @@ ScrollView personalAccountLimitsSv,businessAccountLimitsSv;
         });
     }
 
-    public void initObserver(){
+    public void initObserver() {
 
         try {
             accountLimitsViewModel.getUserAccountLimitsMutableLiveData().observe(this, new Observer<AccountLimits>() {
                 @Override
                 public void onChanged(AccountLimits accountLimits) {
 
-                    if (accountLimits.getStatus().equalsIgnoreCase("SUCCESS")){
+                    if (accountLimits.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                          //Pay Request Limits
                             if (accountLimits.getData().getPayRequestTokenType()==1){

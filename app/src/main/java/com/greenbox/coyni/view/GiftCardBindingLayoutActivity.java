@@ -46,6 +46,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
@@ -65,6 +66,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     CoyniViewModel coyniViewModel;
     SQLiteDatabase mydatabase;
+    Double cynValue = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,9 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             initObserver();
             if (getIntent().getStringExtra("status") != null && !getIntent().getStringExtra("status").equals("")) {
                 strScreen = getIntent().getStringExtra("status");
+                if (getIntent().getStringExtra("cynValue") != null && !getIntent().getStringExtra("cynValue").equals("")) {
+                    cynValue = Double.parseDouble(getIntent().getStringExtra("cynValue"));
+                }
                 ControlMethod(strScreen, getIntent().getStringExtra("subtype"));
             }
 
@@ -107,6 +112,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
     private void saveToken(String value) {
         try {
+            objMyApplication.setStrMobileToken(value);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
             mydatabase.execSQL("Delete from tblPermanentToken");
@@ -130,8 +136,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             tvMessage = findViewById(R.id.tvMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -194,6 +198,12 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         findViewById(R.id.failedContainer).setVisibility(View.GONE);
                         findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
                         giftCardInProgress();
+                    } else if (type.equals("buy")) {
+                        findViewById(R.id.inProgressContainer).setVisibility(View.GONE);
+                        findViewById(R.id.failedContainer).setVisibility(View.GONE);
+                        findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
+                        findViewById(R.id.buyInProgressContainer).setVisibility(View.VISIBLE);
+                        buyInProgress(objMyApplication.getBuyTokenResponse().getData());
                     } else {
                         findViewById(R.id.inProgressContainer).setVisibility(View.GONE);
                         findViewById(R.id.failedContainer).setVisibility(View.GONE);
@@ -220,6 +230,74 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     }
                     break;
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void buyInProgress(BuyTokenResponseData objData) {
+        try {
+            TextView tvAmount = findViewById(R.id.tvBAmount);
+            TextView tvMessage = findViewById(R.id.tvBMessage);
+            TextView tvReferenceID = findViewById(R.id.tvBReferenceID);
+            TextView tvBalance = findViewById(R.id.tvBBalance);
+            TextView tvLearnMore = findViewById(R.id.tvBLearnMore);
+            TextView tvHeading = findViewById(R.id.tvBHeading);
+            LinearLayout layoutReference = findViewById(R.id.layoutBReference);
+            ImageView imgLogo = findViewById(R.id.imgBLogo);
+            ImageView imgRefCopy = findViewById(R.id.imgBRefCopy);
+            CardView cvDone = findViewById(R.id.cvBDone);
+            if (objData.getGbxTransactionId().length() > 10) {
+                tvReferenceID.setText(objData.getGbxTransactionId().substring(0, 10) + "...");
+            } else {
+                tvReferenceID.setText(objData.getGbxTransactionId());
+            }
+            if (objData.getType().toLowerCase().contains("bank")) {
+                tvHeading.setText("Transaction Pending");
+                imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
+            } else {
+                tvHeading.setText("Transaction In Progress");
+                imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
+            }
+            Double bal = cynValue + objMyApplication.getGBTBalance();
+            String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+            tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
+            tvAmount.setText(Utils.USNumberFormat(cynValue));
+            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+
+            cvDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+            });
+
+            tvReferenceID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+                }
+            });
+
+            imgRefCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+                }
+            });
+
+            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateLearnMore(GiftCardBindingLayoutActivity.this);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -431,6 +509,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                             if (type.equals("giftcard")) {
                                 GiftCardDetails.giftCardDetails.finish();
                                 GiftCardActivity.giftCardActivity.finish();
+                            } else if (type.equals("buy")) {
+                                onBackPressed();
                             } else {
                                 Intent i = new Intent(GiftCardBindingLayoutActivity.this, WithdrawPaymentMethodsActivity.class);
                                 startActivity(i);

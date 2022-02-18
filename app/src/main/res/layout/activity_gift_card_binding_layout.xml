@@ -23,4 +23,9 @@
         layout="@layout/withdraw_token_trans_inprogress"
         android:visibility="gone" />
 
+    <include
+        android:id="@+id/buyInProgressContainer"
+        layout="@layout/buy_token_transaction_in_progress"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

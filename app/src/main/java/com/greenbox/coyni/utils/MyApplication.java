@@ -25,6 +25,8 @@ import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
@@ -82,7 +84,7 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
     WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "";
+    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "";
     int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
     PaymentsList selectedCard;
@@ -90,6 +92,7 @@ public class MyApplication extends Application {
     BrandsResponse selectedBrandResponse;
     WithdrawRequest withdrawRequest;
     WithdrawResponse withdrawResponse;
+    BuyTokenResponse buyTokenResponse;
     PayRequestResponse payRequestResponse;
     TransferPayRequest transferPayRequest;
     List<Contacts> listContacts = new ArrayList<>();
@@ -910,6 +913,22 @@ public class MyApplication extends Application {
 
     public void setDbaInfoResp(DBAInfoResp dbaInfoResp) {
         this.dbaInfoResp = dbaInfoResp;
+    }
+
+    public String getStrMobileToken() {
+        return strMobileToken;
+    }
+
+    public void setStrMobileToken(String strMobileToken) {
+        this.strMobileToken = strMobileToken;
+    }
+
+    public BuyTokenResponse getBuyTokenResponse() {
+        return buyTokenResponse;
+    }
+
+    public void setBuyTokenResponse(BuyTokenResponse buyTokenResponse) {
+        this.buyTokenResponse = buyTokenResponse;
     }
 
     public Date getDate(String date) {

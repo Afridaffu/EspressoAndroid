@@ -334,14 +334,20 @@ public interface ApiService {
     @POST("api/v2/corda/fee")
     Call<TransferFeeResponse> transferFee(@Body TransferFeeRequest request);
 
-    @POST("api/v2/node/buyTokens")
-    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
+//    @POST("api/v2/node/buyTokens")
+//    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
+
+    @POST("api/v2/node/buyTokens/{requestToken}")
+    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request, @Path("requestToken") String requestToken);
 
     @GET("api/v2/giftcard/giftCardBrands")
     Call<BrandsResponse> getGiftCards();
 
-    @POST("api/v2/node/withdrawTokens")
-    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request);
+//    @POST("api/v2/node/withdrawTokens")
+//    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request);
+
+    @POST("api/v2/node/withdrawTokens/{requestToken}")
+    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request, @Path("requestToken") String requestToken);
 
     @GET("api/v2/giftcard/giftCardBrandItems")
     Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
@@ -428,7 +434,7 @@ public interface ApiService {
     @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
 
-    @POST("api/v2/fees/{UserID}")
+    @GET("api/v2/fees/{UserID}")
     Call<Fees> meFees(@Path("UserID") int UserID);
 
     @POST("api/v2/cards/merchant/addcard")

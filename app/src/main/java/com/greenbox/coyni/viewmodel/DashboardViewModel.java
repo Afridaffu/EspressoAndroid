@@ -696,5 +696,4 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-
 }

@@ -3,7 +3,7 @@ package com.greenbox.coyni.model.buytoken;
 public class BuyTokenRequest {
     private String bankId;
     private String cardId;
-    private String description;
+//    private String description;
     private String tokens;
     private String cvc;
     private String txnSubType;
@@ -24,13 +24,13 @@ public class BuyTokenRequest {
         this.cardId = cardId;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 
     public String getTokens() {
         return tokens;

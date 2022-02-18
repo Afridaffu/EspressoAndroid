@@ -552,13 +552,13 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
         <activity
             android:name=".view.business.ReserveReleasesActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
         <activity
             android:name=".view.business.OpenNewAccount"
             android:configChanges="uiMode"
@@ -597,6 +597,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
     </application>
 
 </manifest>

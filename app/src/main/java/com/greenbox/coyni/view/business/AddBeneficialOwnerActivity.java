@@ -31,6 +31,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.custom_camera.CameraFragment;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.utils.Utils;
@@ -44,8 +45,8 @@ import java.util.Date;
 
 public class AddBeneficialOwnerActivity extends BaseActivity {
 
-    TextInputLayout fnametil, lnametil, dobtil, ssntil, ownershiptil,address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
-    TextInputEditText fnameET, lnameET, dobET, ssnET, ownershipET,address1ET, address2ET, cityET, stateET, zipcodeET;
+    TextInputLayout fnametil, lnametil, dobtil, ssntil, ownershiptil, address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
+    TextInputEditText fnameET, lnameET, dobET, ssnET, ownershipET, address1ET, address2ET, cityET, stateET, zipcodeET;
     LinearLayout fnameLL, lnameLL, dobLL, ssnLL, ownershipLL, uploadLL, address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
     ConstraintLayout stateCL;
     TextView uploadTV, fnameTV, lnameTV, dobTV, ssnTV, ownershipTV, address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
@@ -62,7 +63,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     static AutoScrollViewPager viewPager;
     int pagerPosition = 0, diffMonths = -1;
     public static int focusedID = 0;
-    RelativeLayout layoutUpload,layoutMailingAddress;
+    RelativeLayout layoutUpload, layoutMailingAddress;
 
 
     @Override
@@ -73,33 +74,33 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         setContentView(R.layout.activity_add_benificial_owner);
 
         identityPagerAdapter = new IdentityPagerAdapter();
-            viewPager = findViewById(R.id.view_pager);
-            viewPager.setAdapter(identityPagerAdapter);
-            viewPager.setPagingEnabled(false);
-            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    Log.e("onPageScrolled", "onPageScrolled " + position);
+        viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(identityPagerAdapter);
+        viewPager.setPagingEnabled(false);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.e("onPageScrolled", "onPageScrolled " + position);
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                pagerPosition = position;
+                if (position == 0) {
+                    divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                    divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                } else if (position == 1) {
+                    divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                    divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
                 }
+            }
 
-                @Override
-                public void onPageSelected(int position) {
-                    pagerPosition = position;
-                    if (position == 0) {
-                        divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
-                        divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                    } else if (position == 1) {
-                        divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                        divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
-                    }
-                }
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
+            }
+        });
         stateimg = findViewById(R.id.Stateimg);
         stateimg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +150,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         try {
-                            startActivity(new Intent(AddBeneficialOwnerActivity.this, CameraFragment.class));
+                            startActivity(new Intent(AddBeneficialOwnerActivity.this, CameraActivity.class));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -175,8 +176,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         super.onResume();
         if (fnameET.getId() == focusedID) {
             fnameET.requestFocus();
-        }
-        else if(address1ET.getId()==focusedID){
+        } else if (address1ET.getId() == focusedID) {
             address1ET.requestFocus();
         }
     }
@@ -184,8 +184,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     private void initFields() {
         divider1 = findViewById(R.id.divider1);
         divider2 = findViewById(R.id.divider2);
-        layoutUpload=findViewById(R.id.layoutUpload);
-        layoutMailingAddress=findViewById(R.id.layoutMailingAddress);
+        layoutUpload = findViewById(R.id.layoutUpload);
+        layoutMailingAddress = findViewById(R.id.layoutMailingAddress);
         closeIV = findViewById(R.id.addbenifitialownerCloseIV);
         uploadLL = findViewById(R.id.UploadLL);
         fnametil = findViewById(R.id.FirstNameTIL);
@@ -340,7 +340,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             ex.printStackTrace();
         }
     }
-
 
     private void textWatchers() {
 // AddBeneficialOwners Basic Info
@@ -497,7 +496,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    if(s.length()==2){
+                    if (s.length() == 2) {
                         s.append("%");
                     }
                 } catch (Exception ex) {
@@ -698,7 +697,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     fnameET.setHint("");
-                    if (fnameET.getText().toString().trim().length() > 1 ) {
+                    if (fnameET.getText().toString().trim().length() > 1) {
                         fnameLL.setVisibility(GONE);
                         fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(fnametil, getColor(R.color.primary_black));
@@ -732,12 +731,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                         lnameLL.setVisibility(GONE);
                         fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.primary_black));
-                    }else if (lnameET.getText().toString().trim().length() == 1) {
+                    } else if (lnameET.getText().toString().trim().length() == 1) {
                         lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
                         lnameTV.setText("Field Required Mininmum 2 characters");
-                    }else {
+                    } else {
                         lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
@@ -936,6 +935,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             nextcv.setClickable(false);
         }
     }
+
     public void enableOrDisableSave() {
         try {
             if (isAddress1 && isCity && isZipcode) {
@@ -956,8 +956,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     startActivity(intent);
                 }
             });
-        }
-        else {
+        } else {
             Addbenifitialowner2CloseCV.setClickable(false);
         }
     }
