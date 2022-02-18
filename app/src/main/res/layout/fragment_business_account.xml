@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#f2f4f5">
 
+
+    <TextView
+        android:id="@+id/buyTokenAccountTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_17sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:fontFamily="@font/opensans_bold"
+        android:text="@string/business_token_account"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_11ssp" />
 
     <LinearLayout
         android:id="@+id/cvHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_corner"
+        android:layout_below="@id/buyTokenAccountTV"
         android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
+        android:background="@drawable/round_corner"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -44,8 +56,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:gravity="bottom"
                     android:layout_marginBottom="@dimen/_21sdp"
+                    android:gravity="bottom"
                     android:orientation="horizontal">
 
                     <TextView
@@ -54,7 +66,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_11sdp"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="0.00"
                         android:textColor="@color/price"
                         android:textSize="@dimen/_30ssp" />
 
@@ -70,7 +81,6 @@
 
                         />
                 </LinearLayout>
-
 
 
             </LinearLayout>
@@ -103,7 +113,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible">
-
 
 
                 <LinearLayout

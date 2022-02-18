@@ -27,6 +27,7 @@ import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
@@ -76,6 +77,7 @@ public class MyApplication extends Application {
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
+    LatestTxnResponse listLatestTxn;
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
@@ -100,6 +102,13 @@ public class MyApplication extends Application {
     DBAInfoResp dbaInfoResp;
     BuyTokenRequest buyRequest;
 
+    public LatestTxnResponse getListLatestTxn() {
+        return listLatestTxn;
+    }
+
+    public void setListLatestTxn(LatestTxnResponse listLatestTxn) {
+        this.listLatestTxn = listLatestTxn;
+    }
 
     public UserDetails getUserDetails() {
         return userDetails;
