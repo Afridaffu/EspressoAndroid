@@ -585,8 +585,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" >
-        </activity>
         <activity
             android:name=".view.business.BusinessCreateAccountsActivity"
             android:configChanges="uiMode"
