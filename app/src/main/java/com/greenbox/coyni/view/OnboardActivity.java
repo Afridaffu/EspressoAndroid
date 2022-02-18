@@ -361,6 +361,7 @@ public class OnboardActivity extends BaseActivity {
             dsPermanentToken.moveToFirst();
             if (dsPermanentToken.getCount() > 0) {
                 strToken = dsPermanentToken.getString(1);
+                objMyApplication.setStrMobileToken(strToken);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -419,7 +420,8 @@ public class OnboardActivity extends BaseActivity {
             BiometricLoginRequest request = new BiometricLoginRequest();
             request.setDeviceId(strDeviceID);
             request.setEnableBiometic(true);
-            request.setMobileToken(strToken);
+//            request.setMobileToken(strToken);
+            request.setMobileToken(objMyApplication.getStrMobileToken());
             loginViewModel.biometricLogin(request);
         } catch (Exception ex) {
             ex.printStackTrace();

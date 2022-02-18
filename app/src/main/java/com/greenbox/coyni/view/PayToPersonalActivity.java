@@ -28,6 +28,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
@@ -40,6 +42,7 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
@@ -49,6 +52,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
     DashboardViewModel dashboardViewModel;
+    CoyniViewModel coyniViewModel;
     ProgressDialog pDialog;
     Dialog prevDialog;
     SQLiteDatabase mydatabase;
@@ -82,7 +86,17 @@ public class PayToPersonalActivity extends AppCompatActivity {
         switch (resultCode) {
             case RESULT_OK:
             case 235: {
-                payTransaction();
+                try {
+//                    payTransaction();
+                    pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
+                    request.setActionType(Utils.sendActionType);
+                    coyniViewModel.biometricToken(request);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             break;
             case 0:
@@ -149,6 +163,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             lyPayClose = findViewById(R.id.lyPayClose);
             tvCurrency = findViewById(R.id.tvCurrency);
             tvAmount = findViewById(R.id.tvAmount);
@@ -283,6 +298,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
+                        Utils.setStrToken("");
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PayToPersonalActivity.this, GiftCardBindingLayoutActivity.class)
@@ -299,6 +315,20 @@ public class PayToPersonalActivity extends AppCompatActivity {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        payTransaction();
+                    }
                 }
             }
         });

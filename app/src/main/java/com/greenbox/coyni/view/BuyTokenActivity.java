@@ -45,6 +45,8 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
@@ -59,6 +61,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -78,21 +81,21 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     PaymentMethodsViewModel paymentMethodsViewModel;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
+    CoyniViewModel coyniViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "", strToken = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;
     SignOnData signOnData;
     float fontSize, dollarFont;
-    Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
-    boolean isBuyTokenAPICalled = false;
     SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID;
+    Cursor dsFacePin, dsTouchID, dsPermanentToken;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
 
     @Override
@@ -212,14 +215,25 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     break;
                 case RESULT_OK:
                 case 235: {
-                    buyToken();
+                    try {
+                        //buyToken();
+                        pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
+                        BiometricTokenRequest request = new BiometricTokenRequest();
+                        request.setDeviceId(Utils.getDeviceID());
+//                        request.setMobileToken(strToken);
+                        request.setMobileToken(objMyApplication.getStrMobileToken());
+                        request.setActionType(Utils.buyActionType);
+                        coyniViewModel.biometricToken(request);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 break;
                 case 0:
                     startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
-                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
-                            .putExtra("screen", "Buy"));
+                            .putExtra("screen", "buy")
+                            .putExtra("cynValue", String.valueOf(cynValue)));
                     break;
             }
         } catch (Exception ex) {
@@ -237,6 +251,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -268,6 +283,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
+//            SetToken();
             SetFaceLock();
             SetTouchId();
             etAmount.addTextChangedListener(this);
@@ -447,6 +463,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onChanged(APIError apiError) {
                 try {
+                    if (pDialog != null) {
+                        pDialog.dismiss();
+                    }
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -470,6 +489,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 if (buyTokenResponse != null) {
                     if (buyTokenResponse.getStatus().trim().toLowerCase().equals("success")) {
                         buyTokenInProgress(buyTokenResponse.getData());
+                    } else {
+                        if (!buyTokenResponse.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(buyTokenResponse.getError().getErrorDescription(), BuyTokenActivity.this, "", buyTokenResponse.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(buyTokenResponse.getError().getFieldErrors().get(0), BuyTokenActivity.this, "", "");
+                        }
                     }
                 }
             }
@@ -547,6 +572,20 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
         });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        buyToken();
+                    }
+                }
+            }
+        });
     }
 
     public void SetFaceLock() {
@@ -590,6 +629,19 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             ex.printStackTrace();
         }
     }
+
+//    private void SetToken() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+//            dsPermanentToken.moveToFirst();
+//            if (dsPermanentToken.getCount() > 0) {
+//                strToken = dsPermanentToken.getString(1);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void bindPayMethod(PaymentsList objData) {
         try {
@@ -658,7 +710,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
             tvLimit.setLayoutParams(params);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                //buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                } else {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                }
             } else {
                 Utils.displayAlert(getString(R.string.internet), BuyTokenActivity.this, "", "");
             }
@@ -861,6 +918,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " USD");
             total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " USD");
+            prepareBuyRequest();
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
@@ -914,14 +972,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 } else {
                                     startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
-                                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
-                                            .putExtra("screen", "Buy"));
+                                            .putExtra("cynValue", String.valueOf(cynValue))
+                                            .putExtra("screen", "buy"));
                                 }
                             } else {
                                 startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
-                                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
-                                        .putExtra("screen", "Buy"));
+                                        .putExtra("cynValue", String.valueOf(cynValue))
+                                        .putExtra("screen", "buy"));
                             }
                         }
                     }
@@ -1074,7 +1132,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            request.setCvc(strCvv);
 //            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
 //            request.setTxnSubType(strSubType);
-            pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
                 buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
             }
@@ -1093,16 +1150,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            TextView tvAmount = prevDialog.findViewById(R.id.tvAmount);
-            TextView tvMessage = prevDialog.findViewById(R.id.tvMessage);
-            TextView tvReferenceID = prevDialog.findViewById(R.id.tvReferenceID);
-            TextView tvBalance = prevDialog.findViewById(R.id.tvBalance);
-            TextView tvLearnMore = prevDialog.findViewById(R.id.tvLearnMore);
-            TextView tvHeading = prevDialog.findViewById(R.id.tvHeading);
-            LinearLayout layoutReference = prevDialog.findViewById(R.id.layoutReference);
-            ImageView imgLogo = prevDialog.findViewById(R.id.imgLogo);
-            ImageView imgRefCopy = prevDialog.findViewById(R.id.imgRefCopy);
-            CardView cvDone = prevDialog.findViewById(R.id.cvDone);
+            TextView tvAmount = prevDialog.findViewById(R.id.tvBAmount);
+            TextView tvMessage = prevDialog.findViewById(R.id.tvBMessage);
+            TextView tvReferenceID = prevDialog.findViewById(R.id.tvBReferenceID);
+            TextView tvBalance = prevDialog.findViewById(R.id.tvBBalance);
+            TextView tvLearnMore = prevDialog.findViewById(R.id.tvBLearnMore);
+            TextView tvHeading = prevDialog.findViewById(R.id.tvBHeading);
+            LinearLayout layoutReference = prevDialog.findViewById(R.id.layoutBReference);
+            ImageView imgLogo = prevDialog.findViewById(R.id.imgBLogo);
+            ImageView imgRefCopy = prevDialog.findViewById(R.id.imgBRefCopy);
+            CardView cvDone = prevDialog.findViewById(R.id.cvBDone);
             if (objData.getGbxTransactionId().length() > 10) {
                 tvReferenceID.setText(objData.getGbxTransactionId().substring(0, 10) + "...");
             } else {
@@ -1142,18 +1199,21 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     startActivity(i);
                 }
             });
+
             tvReferenceID.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(objData.getGbxTransactionId(), BuyTokenActivity.this);
                 }
             });
+
             imgRefCopy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(objData.getGbxTransactionId(), BuyTokenActivity.this);
                 }
             });
+
             tvLearnMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

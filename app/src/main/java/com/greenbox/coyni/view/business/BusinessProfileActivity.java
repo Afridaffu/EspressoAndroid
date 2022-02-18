@@ -75,33 +75,33 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private Long mLastClickTime = 0L;
     TextView tvVersion;
 
-    public static void SetToken(MyApplication objMyApplication, Activity activity) {
-        try {
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public static void SetToken(MyApplication objMyApplication, Activity activity) {
+//        try {
+//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+//            dsPermanentToken.moveToFirst();
+//            if (dsPermanentToken.getCount() > 0) {
+//                strToken = dsPermanentToken.getString(1);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
-    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
+    private void SetFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
             dsFacePin.moveToFirst();
             if (dsFacePin.getCount() > 0) {
                 String value = dsFacePin.getString(1);
                 if (value.equals("true")) {
                     isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
+                    myApplication.setLocalBiometric(true);
                 } else {
                     isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
+                    myApplication.setLocalBiometric(false);
                 }
             }
         } catch (Exception ex) {
@@ -109,20 +109,20 @@ public class BusinessProfileActivity extends AppCompatActivity {
         }
     }
 
-    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
+    private void SetTouchId() {
         try {
             isTouchId = false;
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
             dsTouchID.moveToFirst();
             if (dsTouchID.getCount() > 0) {
                 String value = dsTouchID.getString(1);
                 if (value.equals("true")) {
                     isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
+                    myApplication.setLocalBiometric(true);
                 } else {
                     isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
+                    myApplication.setLocalBiometric(false);
                 }
             }
         } catch (Exception ex) {
@@ -230,9 +230,9 @@ public class BusinessProfileActivity extends AppCompatActivity {
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
             isBiometric = Utils.getIsBiometric();
-            SetToken(myApplication, this);
-            SetFaceLock(myApplication, this);
-            SetTouchId(myApplication, this);
+//            SetToken(myApplication, this);
+            SetFaceLock();
+            SetTouchId();
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -755,6 +755,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private void saveToken(String value) {
         try {
+            myApplication.setStrMobileToken(value);
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
             mydatabase.execSQL("Delete from tblPermanentToken");

@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,6 +30,8 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.NotificationsAdapter;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.model.notification.StatusRequest;
@@ -41,6 +45,7 @@ import com.greenbox.coyni.model.withdraw.RecipientDetail;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -62,8 +67,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class NotificationsActivity extends AppCompatActivity {
-
     public NotificationsViewModel notificationsViewModel;
+    CoyniViewModel coyniViewModel;
     public List<NotificationsDataItems> globalNotifications = new ArrayList<>();
     public List<NotificationsDataItems> globalSentNotifications = new ArrayList<>();
     public List<NotificationsDataItems> globalReceivedNotifications = new ArrayList<>();
@@ -88,6 +93,7 @@ public class NotificationsActivity extends AppCompatActivity {
     boolean isAuthenticationCalled = false;
     public TransferPayRequest userPayRequest = new TransferPayRequest();
     PayViewModel payViewModel;
+    StatusRequest statusRequest = new StatusRequest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +116,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
         payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
-
+        coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         try {
             progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
             progressDialog.setIndeterminate(false);
@@ -199,55 +205,69 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     public void initObservers() {
-
-        try {
-            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
+        notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
 //
-                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        globalNotifications.clear();
-                        globalNotifications = notifications.getData().getItems();
+                if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                    globalNotifications.clear();
+                    globalNotifications = notifications.getData().getItems();
 
-                        for (int i = 0; i < globalNotifications.size(); i++) {
-                            globalNotifications.get(i).setType("Notification");
-                            globalNotifications.get(i).setTimeAgo(convertNotificationTime(globalNotifications.get(i).getCreatedAt(),
-                                    i, "Notification"));
-                        }
-                        notificationsViewModel.getReceivedNotifications();
+                    for (int i = 0; i < globalNotifications.size(); i++) {
+                        globalNotifications.get(i).setType("Notification");
+                        globalNotifications.get(i).setTimeAgo(convertNotificationTime(globalNotifications.get(i).getCreatedAt(),
+                                i, "Notification"));
                     }
+                    notificationsViewModel.getReceivedNotifications();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    if (notifications != null) {
-                        if (notifications.getStatus().equalsIgnoreCase("success")) {
-                            globalReceivedNotifications.clear();
+        notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if (notifications != null) {
+                    if (notifications.getStatus().equalsIgnoreCase("success")) {
+                        globalReceivedNotifications.clear();
 
-                            List<NotificationsDataItems> localData = notifications.getData().getItems();
-                            for (int i = 0; i < localData.size(); i++) {
-                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
-                                    globalReceivedNotifications.add(localData.get(i));
-                                }
+                        List<NotificationsDataItems> localData = notifications.getData().getItems();
+                        for (int i = 0; i < localData.size(); i++) {
+                            if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                    localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                globalReceivedNotifications.add(localData.get(i));
                             }
+                        }
 
-                            for (int i = 0; i < globalReceivedNotifications.size(); i++) {
-                                globalReceivedNotifications.get(i).setType("Received");
-                                globalReceivedNotifications.get(i).setTimeAgo(convertNotificationTime(globalReceivedNotifications.get(i).getRequestedDate(), i,
-                                        "Receive"));
-                            }
-                            globalNotifications.addAll(globalReceivedNotifications);
+                        for (int i = 0; i < globalReceivedNotifications.size(); i++) {
+                            globalReceivedNotifications.get(i).setType("Received");
+                            globalReceivedNotifications.get(i).setTimeAgo(convertNotificationTime(globalReceivedNotifications.get(i).getRequestedDate(), i,
+                                    "Receive"));
+                        }
+                        globalNotifications.addAll(globalReceivedNotifications);
 
+                        if (globalNotifications.size() > 0) {
+                            notificationsRV.setVisibility(View.VISIBLE);
+                            noDataTV.setVisibility(View.GONE);
+
+                            Collections.sort(globalNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
+                                    .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
+
+                            LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                            notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
+                            notificationsRV.setLayoutManager(nLayoutManager);
+                            notificationsRV.setItemAnimator(new DefaultItemAnimator());
+                            notificationsRV.setAdapter(notificationsAdapter);
+                        } else {
+                            notificationsRV.setVisibility(View.GONE);
+                            noDataTV.setVisibility(View.VISIBLE);
+                            noDataTV.setText("You have no notifications");
+                        }
+                    } else {
+
+                        if (!notifications.getError().getErrorDescription().equals("") && notifications.getError().getErrorDescription().equals("User request data not found.")) {
                             if (globalNotifications.size() > 0) {
                                 notificationsRV.setVisibility(View.VISIBLE);
                                 noDataTV.setVisibility(View.GONE);
@@ -266,147 +286,108 @@ public class NotificationsActivity extends AppCompatActivity {
                                 noDataTV.setText("You have no notifications");
                             }
                         } else {
-
-                            if (!notifications.getError().getErrorDescription().equals("") && notifications.getError().getErrorDescription().equals("User request data not found.")) {
-                                if (globalNotifications.size() > 0) {
-                                    notificationsRV.setVisibility(View.VISIBLE);
-                                    noDataTV.setVisibility(View.GONE);
-
-                                    Collections.sort(globalNotifications, Comparator.comparing(NotificationsDataItems::getIsToday, Comparator.reverseOrder())
-                                            .thenComparing(NotificationsDataItems::getLongTime, Comparator.reverseOrder()));
-
-                                    LinearLayoutManager nLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                                    notificationsAdapter = new NotificationsAdapter(globalNotifications, NotificationsActivity.this);
-                                    notificationsRV.setLayoutManager(nLayoutManager);
-                                    notificationsRV.setItemAnimator(new DefaultItemAnimator());
-                                    notificationsRV.setAdapter(notificationsAdapter);
-                                } else {
-                                    notificationsRV.setVisibility(View.GONE);
-                                    noDataTV.setVisibility(View.VISIBLE);
-                                    noDataTV.setText("You have no notifications");
-                                }
-                            } else {
-                                Utils.displayAlert(notifications.getError().getErrorDescription(), NotificationsActivity.this, "",
-                                        notifications.getError().getFieldErrors().get(0));
-                            }
+                            Utils.displayAlert(notifications.getError().getErrorDescription(), NotificationsActivity.this, "",
+                                    notifications.getError().getFieldErrors().get(0));
                         }
                     }
-
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try {
-            notificationsViewModel.getSentNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
-                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+            }
+        });
+
+        notificationsViewModel.getSentNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
+                if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
 //                        globalSentNotifications.addAll(notifications.getData().getItems());
 
-                        List<NotificationsDataItems> localData = notifications.getData().getItems();
-                        for (int i = 0; i < localData.size(); i++) {
-                            if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                    localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
-                                globalSentNotifications.add(localData.get(i));
-                            }
+                    List<NotificationsDataItems> localData = notifications.getData().getItems();
+                    for (int i = 0; i < localData.size(); i++) {
+                        if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                            globalSentNotifications.add(localData.get(i));
                         }
+                    }
 
-                        for (int i = 0; i < globalSentNotifications.size(); i++) {
-                            globalSentNotifications.get(i).setType("Sent");
-                            globalSentNotifications.get(i).setTimeAgo(convertNotificationTime(globalSentNotifications.get(i).getRequestedDate(), i,
-                                    "Sent"));
-                        }
+                    for (int i = 0; i < globalSentNotifications.size(); i++) {
+                        globalSentNotifications.get(i).setType("Sent");
+                        globalSentNotifications.get(i).setTimeAgo(convertNotificationTime(globalSentNotifications.get(i).getRequestedDate(), i,
+                                "Sent"));
                     }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            notificationsViewModel.getMarkReadResponse().observe(this, new Observer<UnReadDelResponse>() {
-                @Override
-                public void onChanged(UnReadDelResponse unReadDelResponse) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
-                        globalNotifications.get(Integer.parseInt(selectedRow)).setRead(true);
-                        if (globalNotifications.size() > 0) {
-                            notificationsRV.setVisibility(View.VISIBLE);
-                            noDataTV.setVisibility(View.GONE);
-                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
-                        } else {
-                            notificationsRV.setVisibility(View.GONE);
-                            noDataTV.setVisibility(View.VISIBLE);
-                        }
+        notificationsViewModel.getMarkReadResponse().observe(this, new Observer<UnReadDelResponse>() {
+            @Override
+            public void onChanged(UnReadDelResponse unReadDelResponse) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
+                    globalNotifications.get(Integer.parseInt(selectedRow)).setRead(true);
+                    if (globalNotifications.size() > 0) {
+                        notificationsRV.setVisibility(View.VISIBLE);
+                        noDataTV.setVisibility(View.GONE);
+                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                     } else {
-                        Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
+                        notificationsRV.setVisibility(View.GONE);
+                        noDataTV.setVisibility(View.VISIBLE);
                     }
+                } else {
+                    Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            notificationsViewModel.getMarkUnReadResponse().observe(this, new Observer<UnReadDelResponse>() {
-                @Override
-                public void onChanged(UnReadDelResponse unReadDelResponse) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
-                        globalNotifications.get(Integer.parseInt(selectedRow)).setRead(false);
-                        if (globalNotifications.size() > 0) {
-                            notificationsRV.setVisibility(View.VISIBLE);
-                            noDataTV.setVisibility(View.GONE);
-                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
-                        } else {
-                            notificationsRV.setVisibility(View.GONE);
-                            noDataTV.setVisibility(View.VISIBLE);
-                        }
+        notificationsViewModel.getMarkUnReadResponse().observe(this, new Observer<UnReadDelResponse>() {
+            @Override
+            public void onChanged(UnReadDelResponse unReadDelResponse) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
+                    globalNotifications.get(Integer.parseInt(selectedRow)).setRead(false);
+                    if (globalNotifications.size() > 0) {
+                        notificationsRV.setVisibility(View.VISIBLE);
+                        noDataTV.setVisibility(View.GONE);
+                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                     } else {
-                        Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
+                        notificationsRV.setVisibility(View.GONE);
+                        noDataTV.setVisibility(View.VISIBLE);
                     }
+                } else {
+                    Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            notificationsViewModel.getDeleteNotifResponse().observe(this, new Observer<UnReadDelResponse>() {
-                @Override
-                public void onChanged(UnReadDelResponse unReadDelResponse) {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
-                        globalNotifications.remove(Integer.parseInt(selectedRow));
-                        if (globalNotifications.size() > 0) {
-                            notificationsRV.setVisibility(View.VISIBLE);
-                            noDataTV.setVisibility(View.GONE);
-                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
-                        } else {
-                            notificationsRV.setVisibility(View.GONE);
-                            noDataTV.setVisibility(View.VISIBLE);
-                        }
+        notificationsViewModel.getDeleteNotifResponse().observe(this, new Observer<UnReadDelResponse>() {
+            @Override
+            public void onChanged(UnReadDelResponse unReadDelResponse) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                if (unReadDelResponse != null && unReadDelResponse.getStatus().equalsIgnoreCase("success")) {
+                    globalNotifications.remove(Integer.parseInt(selectedRow));
+                    if (globalNotifications.size() > 0) {
+                        notificationsRV.setVisibility(View.VISIBLE);
+                        noDataTV.setVisibility(View.GONE);
+                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
                     } else {
-                        Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
+                        notificationsRV.setVisibility(View.GONE);
+                        noDataTV.setVisibility(View.VISIBLE);
                     }
+                } else {
+                    Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            notificationsViewModel.getNotificationStatusUpdateResponse().observe(this, new Observer<UserRequestResponse>() {
-                @Override
-                public void onChanged(UserRequestResponse userRequestResponse) {
+        notificationsViewModel.getNotificationStatusUpdateResponse().observe(this, new Observer<UserRequestResponse>() {
+            @Override
+            public void onChanged(UserRequestResponse userRequestResponse) {
+                try {
                     if (progressDialog != null) {
                         progressDialog.dismiss();
                     }
@@ -457,27 +438,26 @@ public class NotificationsActivity extends AppCompatActivity {
                             Utils.displayAlert(userRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", userRequestResponse.getError().getFieldErrors().get(0));
                         }
                     }
-
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
-                @Override
-                public void onChanged(PayRequestResponse payRequestResponse) {
+        payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
+            @Override
+            public void onChanged(PayRequestResponse payRequestResponse) {
+                try {
                     if (progressDialog != null) {
                         progressDialog.dismiss();
                     }
                     if (payRequestResponse != null) {
+                        Utils.setStrToken("");
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             Utils.showCustomToast(NotificationsActivity.this, "Payment has successfully sent", R.drawable.ic_payment_successful, "");
 
-                            StatusRequest statusRequest = new StatusRequest();
-
+//                            StatusRequest statusRequest = new StatusRequest();
                             if (selectedTab.equals("NOTIFICATIONS")) {
                                 for (int i = 0; i < globalReceivedNotifications.size(); i++) {
                                     if (globalReceivedNotifications.get(i).getId() == globalNotifications.get(Integer.parseInt(selectedRow)).getId()) {
@@ -534,7 +514,8 @@ public class NotificationsActivity extends AppCompatActivity {
                             statusRequest.setStatus("Completed");
                             statusRequest.setRemarks("");
                             updatedStatus = "Completed";
-                            userRequestStatusUpdateCall(statusRequest);
+                            //userRequestStatusUpdateCall(statusRequest);
+                            new FetchData(NotificationsActivity.this).execute();
 
                         } else {
                             Utils.displayAlert(payRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", payRequestResponse.getError().getFieldErrors().get(0));
@@ -542,11 +523,29 @@ public class NotificationsActivity extends AppCompatActivity {
                     } else {
                         Utils.displayAlert(getString(R.string.something_went_wrong), NotificationsActivity.this, "", "");
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                try {
+                    if (biometricTokenResponse != null) {
+                        if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                            if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                                Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            }
+                            notificationPayCall();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     public String convertNotificationTime(String date, int position, String type) {
@@ -793,7 +792,8 @@ public class NotificationsActivity extends AppCompatActivity {
         switch (requestCode) {
             case 251:
                 if (resultCode == RESULT_OK) {
-                    notificationPayCall();
+//                    notificationPayCall();
+                    payRequestToken();
                 } else if (resultCode == RESULT_CANCELED) {
                     if (progressDialog != null)
                         progressDialog.dismiss();
@@ -806,11 +806,25 @@ public class NotificationsActivity extends AppCompatActivity {
             case 235:
                 if (resultCode == 235) {
                     notificationPayCall();
+//                    payRequestToken();
                 } else if (resultCode == RESULT_CANCELED) {
                     if (progressDialog != null)
                         progressDialog.dismiss();
                 }
                 break;
+        }
+    }
+
+    private void payRequestToken() {
+        try {
+            progressDialog = Utils.showProgressDialog(NotificationsActivity.this);
+            BiometricTokenRequest request = new BiometricTokenRequest();
+            request.setDeviceId(Utils.getDeviceID());
+            request.setMobileToken(objMyApplication.getStrMobileToken());
+            request.setActionType(Utils.sendActionType);
+            coyniViewModel.biometricToken(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -884,6 +898,28 @@ public class NotificationsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return value;
+    }
+
+    public class FetchData extends AsyncTask<Void, Void, Boolean> {
+
+        public FetchData(Context context) {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                userRequestStatusUpdateCall(statusRequest);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean list) {
+            super.onPostExecute(list);
+
+        }
     }
 
 }
