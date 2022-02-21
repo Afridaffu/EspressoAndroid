@@ -14,7 +14,7 @@
         android:background="@drawable/bg_core_colorfill" />
 
     <LinearLayout
-        android:id="@+id/rollingLL"
+        android:id="@+id/llRolling"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_21sdp"
@@ -36,6 +36,7 @@
         <ImageView
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_13sdp"
+            android:contentDescription="@string/rolling"
             android:src="@drawable/check_primary_green" />
     </LinearLayout>
 
@@ -47,7 +48,7 @@
         android:background="@color/blue_light" />
 
     <LinearLayout
-        android:id="@+id/manualLL"
+        android:id="@+id/llManual"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_21sdp"
@@ -68,6 +69,7 @@
         <ImageView
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_13sdp"
+            android:contentDescription="@string/rolling"
             android:src="@drawable/check_primary_green"
             android:visibility="gone"/>
 

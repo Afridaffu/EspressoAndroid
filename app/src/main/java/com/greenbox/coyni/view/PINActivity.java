@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -290,7 +291,8 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 startActivity(cp);
                                                 finish();
                                                 break;
-                                            case "Buy":
+                                            case "buy":
+                                                buyToken();
                                                 break;
                                             case "Withdraw":
                                                 WithdrawMethod();
@@ -394,6 +396,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             public void onChanged(WithdrawResponse withdrawResponse) {
                 try {
                     if (withdrawResponse != null) {
+                        Utils.setStrToken("");
                         objMyApplication.setWithdrawResponse(withdrawResponse);
                         if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
                             if (getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("giftcard")) {
@@ -533,6 +536,32 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+        buyTokenViewModel.getBuyTokResponseMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+            @Override
+            public void onChanged(BuyTokenResponse buyTokenResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
+                if (buyTokenResponse != null) {
+                    Utils.setStrToken("");
+                    objMyApplication.setBuyTokenResponse(buyTokenResponse);
+                    if (buyTokenResponse.getStatus().equalsIgnoreCase("success")) {
+                        startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "inprogress")
+                                .putExtra("subtype", getIntent().getStringExtra("screen"))
+                                .putExtra("cynValue", getIntent().getStringExtra("cynValue")));
+                        finish();
+                    } else {
+                        startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "failed")
+                                .putExtra("subtype", getIntent().getStringExtra("screen"))
+                                .putExtra("cynValue", getIntent().getStringExtra("cynValue")));
+                        finish();
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -614,7 +643,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         || getIntent().getStringExtra("screen").equals("Withdraw")
                         || getIntent().getStringExtra("screen").equals("Pay")
                         || getIntent().getStringExtra("screen").equals("Notifications")
-                        || getIntent().getStringExtra("screen").equals("Buy"))) {
+                        || getIntent().getStringExtra("screen").equals("buy"))) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
@@ -789,8 +818,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     request.setActionType(Utils.withdrawActionType);
                     break;
                 case "pay":
+                case "notifications": {
                     request.setActionType(Utils.sendActionType);
-                    break;
+                }
+                break;
                 case "resetpin":
                     request.setActionType(Utils.pinActionType);
                     break;
@@ -996,7 +1027,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void BuyTokenMethod(){
+    private void BuyTokenMethod() {
 
     }
 
@@ -1004,6 +1035,16 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             if (Utils.checkInternet(PINActivity.this)) {
                 payViewModel.sendTokens(objMyApplication.getTransferPayRequest());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void buyToken() {
+        try {
+            if (Utils.checkInternet(PINActivity.this)) {
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

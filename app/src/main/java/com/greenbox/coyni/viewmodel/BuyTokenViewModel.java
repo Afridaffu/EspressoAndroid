@@ -21,6 +21,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.Utils;
 
 import java.lang.reflect.Type;
 
@@ -82,10 +83,10 @@ public class BuyTokenViewModel extends AndroidViewModel {
                             transactionLimitResponseMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<TransactionLimitResponse>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            TransactionLimitResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            transactionLimitResponseMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -142,7 +143,7 @@ public class BuyTokenViewModel extends AndroidViewModel {
     public void buyTokens(BuyTokenRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BuyTokenResponse> mCall = apiService.buyTokens(request);
+            Call<BuyTokenResponse> mCall = apiService.buyTokens(request, Utils.getStrToken());
             mCall.enqueue(new Callback<BuyTokenResponse>() {
                 @Override
                 public void onResponse(Call<BuyTokenResponse> call, Response<BuyTokenResponse> response) {
@@ -166,14 +167,14 @@ public class BuyTokenViewModel extends AndroidViewModel {
                         } else {
                             strResponse = response.errorBody().string().replaceAll("\"", "'");
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<BuyTokenResponse>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            BuyTokenResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
                             if (errorResponse != null) {
-                                apiErrorMutableLiveData.setValue(errorResponse);
+                                buyTokResponseMutableLiveData.setValue(errorResponse);
                             } else {
-                                APIError errorResponse1 = gson.fromJson(strResponse, type);
-                                apiErrorMutableLiveData.setValue(errorResponse1);
+                                BuyTokenResponse errorResponse1 = gson.fromJson(strResponse, type);
+                                buyTokResponseMutableLiveData.setValue(errorResponse1);
                             }
                         }
                     } catch (Exception ex) {
@@ -196,7 +197,7 @@ public class BuyTokenViewModel extends AndroidViewModel {
     public void withdrawTokens(WithdrawRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<WithdrawResponse> mCall = apiService.withdrawTokens(request);
+            Call<WithdrawResponse> mCall = apiService.withdrawTokens(request,Utils.getStrToken());
             mCall.enqueue(new Callback<WithdrawResponse>() {
                 @Override
                 public void onResponse(Call<WithdrawResponse> call, Response<WithdrawResponse> response) {

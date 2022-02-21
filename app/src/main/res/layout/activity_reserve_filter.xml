@@ -40,7 +40,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/_4sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:gravity="right"
+            android:gravity="end"
             android:text="@string/reset_all_filters"
             android:textColor="#00a6a2"
             android:textSize="@dimen/_11ssp" />
@@ -73,7 +73,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/open"
@@ -110,7 +110,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/on_hold"
@@ -121,7 +121,7 @@
                 app:chipMinHeight="@dimen/_32sdp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/transTypeRefund"
+                android:id="@+id/canceledC"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
             android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_7sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="@string/release_date"
+            android:text="@string/date"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
 
@@ -155,17 +155,17 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/datePickET"
+                android:id="@+id/dateRangeET"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_square_withoutcolor_corners"
                 android:clickable="true"
-                android:editable="false"
                 android:focusable="false"
                 android:fontFamily="@font/opensans_semibold"
                 android:hint="@string/date_range"
+                android:inputType="date"
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/light_gray"
                 android:textCursorDrawable="@drawable/cursor_color_text"
@@ -177,7 +177,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:src="@drawable/ic_calendar_icon"
-
+                android:contentDescription="@string/date_range"
                 />
         </LinearLayout>
     </LinearLayout>

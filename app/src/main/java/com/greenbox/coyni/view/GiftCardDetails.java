@@ -55,6 +55,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.GiftCardFixedAmountsAdapter;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.giftcard.Brand;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
@@ -71,6 +73,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.GiftCardsViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -88,6 +91,7 @@ public class GiftCardDetails extends AppCompatActivity {
     boolean isView = false;
     GiftCardsViewModel giftCardsViewModel;
     BuyTokenViewModel buyTokenViewModel;
+    CoyniViewModel coyniViewModel;
     BrandsResponse brandsResponseObj;
     Brand objBrand;
     ProgressDialog pDialog;
@@ -162,6 +166,7 @@ public class GiftCardDetails extends AppCompatActivity {
 
             giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
             emailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
             firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
@@ -232,7 +237,12 @@ public class GiftCardDetails extends AppCompatActivity {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
                 obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
                 obj.setTransactionSubType(Integer.parseInt(Utils.giftcardType));
-                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                } else {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                }
             } else {
                 Utils.displayAlert(getString(R.string.internet), GiftCardDetails.this, "", "");
             }
@@ -317,8 +327,8 @@ public class GiftCardDetails extends AppCompatActivity {
 //                            } else {
 //                                brandDescTV.setText(Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim()));
 //                            }
-                            strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "),Html.FROM_HTML_MODE_COMPACT).toString().trim());
-                            brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "),Html.FROM_HTML_MODE_COMPACT).toString().trim()));
+                            strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim());
+                            brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim()));
                             Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
                             if (objBrand.getItems() != null && objBrand.getItems().size() > 0) {
@@ -391,6 +401,7 @@ public class GiftCardDetails extends AppCompatActivity {
                     if (pDialog != null) {
                         pDialog.dismiss();
                     }
+                    Utils.setStrToken("");
                     if (withdrawResponse != null) {
                         objMyApplication.setWithdrawResponse(withdrawResponse);
                         if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
@@ -407,6 +418,20 @@ public class GiftCardDetails extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        withdrawGiftCard();
+                    }
                 }
             }
         });
@@ -432,7 +457,9 @@ public class GiftCardDetails extends AppCompatActivity {
                             Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
                             Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
                             Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
-                            minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
+                            if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
+                                minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
+                            }
                             if (minValue < min) {
                                 minValue = min;
                             }
@@ -1168,7 +1195,17 @@ public class GiftCardDetails extends AppCompatActivity {
         switch (resultCode) {
             case RESULT_OK:
             case 235: {
-                withdrawGiftCard();
+                try {
+                    //withdrawGiftCard();
+                    pDialog = Utils.showProgressDialog(GiftCardDetails.this);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
+                    request.setActionType(Utils.withdrawActionType);
+                    coyniViewModel.biometricToken(request);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             break;
             case 0:

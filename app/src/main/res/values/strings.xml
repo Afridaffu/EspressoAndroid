@@ -23,7 +23,9 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
-
+    <string name="user">User</string>
+    <string name="personal">Personal</string>
+    <string name="business">Business</string>
     <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. Please enter the\n information below.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
@@ -204,6 +206,7 @@
     <string name="scan">Scan</string>
     <string name="pay_request">Pay/Request</string>
     <string name="buy_tokens">Buy Tokens</string>
+    <string name="buy">Buy Token</string>
     <string name="select_payment_method">Select Payment Method</string>
     <string name="bank_of_america">Bank of America</string>
     <string name="_5359">••••5359</string>
@@ -462,6 +465,12 @@
     <string name="sale_order_tokens">Sale Order - Token</string>
     <string name="date">Date</string>
     <string name="to">To</string>
+    <string name="reserve_releases">Reserve Releases</string>
+    <string name="rolling_releases">Rolling Releases</string>
+    <string name="search_by_reserve_id">Search By Reserve ID</string>
+    <string name="manual_releases">Manual Releases</string>
+    <string name="reason_field">Reason field on the manual \nrelease flow. Limited to 120char \nand this is exactly 121 characters \nhere including the spaces.</string>
+    <string name="reason_field_on_the_manual_release_flow">Reason field on the manual \nrelease flow.</string>
     <string name="transaction_amount">Transaction Amount</string>
     <string name="partial_refund">Partial Refund</string>
     <string name="business_payout">Business Payout</string>
@@ -470,4 +479,17 @@
     <string name="pending">Pending</string>
     <string name="failed">Failed</string>
     <string name="in_progress">In progress</string>
+    <string name="insufficient_funds">Insufficient Funds</string>
+    <string name="merchant_insufficient_funds">Insufficient funds in your Merchant\n Balance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>
+    <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for\n this refund</string>
+    <string name="refund_preview">Refund Preview </string>
+    <string name="total">Total </string>
+    <string name="reason_for_refund">Reason for Refund </string>
+    <string name="request_by_customer">Request by customer</string>
+    <string name="refund_transaction">Refund Transaction</string>
+    <string name="transactionamount">Transaction Amount:</string>
+    <string name="full_amount">Full Amount</string>
+    <string name="amount">1/2 Amount</string>
+    <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
+
 </resources>

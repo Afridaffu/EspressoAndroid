@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
@@ -156,6 +158,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
     public void setHintText(String text) {
         hintName.setText(text);
+        phnET.setHint(text);
     }
 
     public String getText() {
