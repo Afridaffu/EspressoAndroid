@@ -87,7 +87,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
 //                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
-            Log.d("userdata","user"+objMyApplication.getObjRetUsers().getData());
             btnChangePassCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

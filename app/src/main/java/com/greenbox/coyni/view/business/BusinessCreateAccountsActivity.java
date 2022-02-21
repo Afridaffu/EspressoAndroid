@@ -38,20 +38,13 @@ import java.util.List;
 
 public class BusinessCreateAccountsActivity extends BaseActivity {
 
-    TextView userShortInfoTV, userNameTV, userBalanceTV;
-    ImageView imgProfile, accountsCloseIV;
-    LinearLayout llOpenAccount;
-    MyApplication objMyApplication;
+    private TextView userShortInfoTV, userNameTV, userBalanceTV;
+    private ImageView imgProfile, accountsCloseIV;
+    private LinearLayout llOpenAccount;
     private MyApplication myApplication;
-    DashboardViewModel dashboardViewModel;
-    private int lastExpandedPosition = -1;// last index selected
-
-    ExpandableListView brandsGV;
-
-    List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
-    List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
-    private BusinessProfileRecyclerAdapter giftCardsAdapter;
+    private DashboardViewModel dashboardViewModel;
+    private ExpandableListView brandsGV;
+    private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
 
 
     @Override
@@ -64,9 +57,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             initFields();
             showUserData();
-
             initObservers();
-
 
             accountsCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
