@@ -103,11 +103,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/companyNameTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Fire BBQ"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -129,11 +130,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/businesEntityTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Sole Proprietorship"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -155,11 +157,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/timeZoneTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="PST"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -186,12 +189,13 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/einTx"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_7sdp"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="•• - •••••65"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
 
@@ -222,11 +226,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/emailTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Jonathanjostar@gmail.com"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -246,11 +251,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/phoneNumberTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="123-456-7890"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -270,11 +276,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/addressTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="3131 Camino Del Rio, San Diego,\nCA, 92108"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -316,6 +323,7 @@
                                 android:textSize="@dimen/_10ssp" />
 
                             <TextView
+                                android:id="@+id/uploaded_articles_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -332,6 +340,7 @@
                             android:background="@color/viewcolor" />
 
                         <TextView
+                            android:id="@+id/view_article"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -375,6 +384,7 @@
                                 android:textSize="@dimen/_10ssp" />
 
                             <TextView
+                                android:id="@+id/uploaded_ein_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -391,6 +401,7 @@
                             android:background="@color/viewcolor" />
 
                         <TextView
+                            android:id="@+id/view_ein"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -434,6 +445,7 @@
                                 android:textSize="@dimen/_10ssp" />
 
                             <TextView
+                                android:id="@+id/uploaded_w9_form_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -450,6 +462,7 @@
                             android:background="@color/viewcolor" />
 
                         <TextView
+                            android:id="@+id/view_w9"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -517,11 +530,12 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/db_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Fire BBQ"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -543,6 +557,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/business_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -567,6 +582,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/website"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -593,6 +609,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/monthly_process_volume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -619,6 +636,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/high_ticket"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -645,6 +663,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/average_ticket"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -671,6 +690,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/customer_service_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -697,6 +717,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/customer_service_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -723,6 +744,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/db_address_line"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -771,6 +793,7 @@
                                 android:textSize="@dimen/_10ssp" />
 
                             <TextView
+                                android:id="@+id/db_filling_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
@@ -1292,7 +1315,7 @@
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
@@ -1300,85 +1323,30 @@
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
+                    android:id="@+id/banksLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="@dimen/_11sdp">
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/banksRecycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/_11sdp"
-                        android:paddingBottom="@dimen/_11sdp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:src="@drawable/ic__01_bank" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Bank of America"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="••••5359"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:background="@color/vlight_gray" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/_11sdp"
-                        android:paddingBottom="@dimen/_11sdp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:src="@drawable/ic__01_bank" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="Wells Fargo"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="••••8429"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:background="@color/vlight_gray" />
+                        />
 
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/noBanksTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center"
+                    android:layout_margin="@dimen/_20sdp"
+                    android:text="No Bank Accounts Found"
+                    android:textColor="@color/light_gray"
+                    android:textSize="@dimen/_10ssp"
+                    android:visibility="gone" />
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
@@ -1428,6 +1396,7 @@
                             android:textSize="@dimen/_12ssp" />
 
                         <TextView
+                            android:id="@+id/privacy_policy"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1466,6 +1435,7 @@
                             android:textSize="@dimen/_12ssp" />
 
                         <TextView
+                            android:id="@+id/terms_of_service"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1503,6 +1473,7 @@
                             android:textSize="@dimen/_12ssp" />
 
                         <TextView
+                            android:id="@+id/merchant_agreements"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1529,7 +1500,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_50sdp"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_21sdp"

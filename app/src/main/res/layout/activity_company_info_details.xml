@@ -111,6 +111,7 @@
             android:paddingRight="@dimen/_11sdp">
 
             <LinearLayout
+                android:id="@+id/emailLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_7sdp"
@@ -133,6 +134,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/emailTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -162,6 +164,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/phoneLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -177,6 +180,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/phoneNumberTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
@@ -221,6 +225,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <TextView
+                        android:id="@+id/addressTx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
