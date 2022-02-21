@@ -293,6 +293,9 @@ public interface ApiService {
     @POST("api/v2/profile/me/tracker")
     Call<TrackerResponse> statusTracker();
 
+    @POST("api/v2/register/add-customer")
+    Call<TrackerResponse> registerAddCustomer();
+
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);
 
