@@ -122,7 +122,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     IdentityVerificationViewModel identityVerificationViewModel;
     String selectedDocType = "";
     CompanyInformationActivity myActivity;
-
+    View globalView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -414,48 +414,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 Utils.populateStates(this, stateET, objMyApplication);
             });
 
-            aoiLL.setOnClickListener(view -> {
-                if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    selectedDocType = "CI-AOI";
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(this);
-                    chooseFilePopup(this, selectedDocType);
-                }
-
-            });
-
-            einLetterLL.setOnClickListener(view -> {
-
-                if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    selectedDocType = "CI-EINLETTER";
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(this);
-                    chooseFilePopup(this, selectedDocType);
-                }
-
-            });
-
-            w9FormLL.setOnClickListener(view -> {
-                if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    selectedDocType = "CI-W9";
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(this);
-                    chooseFilePopup(this, selectedDocType);
-                }
-
-            });
+//            aoiLL.setOnClickListener(view -> {
+//                aoiClick();
+//            });
+//
+//            einLetterLL.setOnClickListener(view -> {
+//               einLetterClick();
+//            });
+//
+//            w9FormLL.setOnClickListener(view -> {
+//                w9FormClick();
+//            });
 
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -515,7 +484,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                 }
 
 
-                                if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
+                                if (cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
                                     compphoneNumberET.setText(cir.getPhoneNumberDto().getPhoneNumber());
                                     iscompPhoneNumber = true;
                                     compphoneNumberET.setSelection();
@@ -775,7 +744,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         companyemailET.setHint("");
-                        if (companyemailET.getText().toString().trim().length() > 2 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) {
+                        if (companyemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) {
                             companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
                             companyemailErrorLL.setVisibility(VISIBLE);
@@ -1417,31 +1386,45 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         CompanyInfoRequest companyInfoRequest = new CompanyInfoRequest();
 
         try {
-//            showProgressDialog();
             //Basic
-            if (isBasicNextEnabled) {
-                PhNoWithCountryCode phone = new PhNoWithCountryCode();
-                phone.setCountryCode(Utils.strCCode);
-                phone.setPhoneNumber(compphoneNumberET.getUnmaskedText());
-                companyInfoRequest.setName(companynameET.getText().toString());
-                companyInfoRequest.setEmail(companyemailET.getText().toString());
+//            if (isBasicNextEnabled) {
+
+            //Phone
+            PhNoWithCountryCode phone = new PhNoWithCountryCode();
+            phone.setCountryCode(Utils.strCCode);
+            phone.setPhoneNumber(compphoneNumberET.getUnmaskedText().trim());
+            if (phone.getCountryCode() != null && phone.getPhoneNumber().length() == 10)
                 companyInfoRequest.setPhoneNumberDto(phone);
+            //name
+            if (companynameET.getText().toString().trim().length() > 1)
+                companyInfoRequest.setName(companynameET.getText().toString().trim());
+            //Email
+            if (Utils.isValidEmail(companyemailET.getText().toString().trim()))
+                companyInfoRequest.setEmail(companyemailET.getText().toString().trim());
+            //Business Entity
+            if (businessET.getText().toString().trim().length() > 1)
                 companyInfoRequest.setBusinessEntity(businessET.getText().toString().trim());
-                if (identificationType != 0) {
-                    companyInfoRequest.setIdentificationType(identificationType);
-                    companyInfoRequest.setSsnOrEin(ssnET.getUnmaskedText());
-                }
+            //Identfication ID and SSN
+            if (identificationType != 0) {
+                companyInfoRequest.setIdentificationType(identificationType);
+                companyInfoRequest.setSsnOrEin(ssnET.getUnmaskedText().trim());
             }
+//            }
 
             //Address
-            if (isAddressNextEnabled) {
-                companyInfoRequest.setAddressLine1(companyaddressET.getText().toString());
-                companyInfoRequest.setAddressLine2(companyaddress2ET.getText().toString());
-                companyInfoRequest.setCity(cityET.getText().toString());
-                companyInfoRequest.setState(stateET.getText().toString());
-                companyInfoRequest.setZipCode(zipcodeET.getText().toString());
-                companyInfoRequest.setCountry("us");
-            }
+//            if (isAddressNextEnabled) {
+            if (companyaddressET.getText().toString().trim().length() > 0)
+                companyInfoRequest.setAddressLine1(companyaddressET.getText().toString().trim());
+            if (companyaddress2ET.getText().toString().trim().length() > 0)
+                companyInfoRequest.setAddressLine2(companyaddress2ET.getText().toString().trim());
+            if (cityET.getText().toString().trim().length() > 0)
+                companyInfoRequest.setCity(cityET.getText().toString().trim());
+            if (stateET.getText().toString().trim().length() > 0)
+                companyInfoRequest.setState(stateET.getText().toString().trim());
+            if (zipcodeET.getText().toString().trim().length() >= 5)
+                companyInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
+            companyInfoRequest.setCountry("us");
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1543,7 +1526,15 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     } else {
 //                        startActivity(new Intent(this, CameraActivity.class));
-                        chooseFilePopup(this, selectedDocType);
+//                        chooseFilePopup(this, selectedDocType);
+
+                        if (selectedDocType.equals("CI-AOI")) {
+                            aoiClick(findViewById(R.id.aoiLL).getRootView());
+                        } else if (selectedDocType.equals("CI-EINLETTER")) {
+                            einLetterClick(findViewById(R.id.einLetterLL).getRootView());
+                        } else if (selectedDocType.equals("CI-W9")) {
+                            w9FormClick(findViewById(R.id.w9FormLL).getRootView());
+                        }
                     }
                     break;
             }
@@ -1661,4 +1652,42 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         }
     }
 
+    public void aoiClick(View view) {
+        if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            selectedDocType = "CI-AOI";
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            chooseFilePopup(this, selectedDocType);
+        }
+    }
+
+    public void einLetterClick(View view) {
+        if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            selectedDocType = "CI-EINLETTER";
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            chooseFilePopup(this, selectedDocType);
+        }
+    }
+
+    public void w9FormClick(View view) {
+        if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            selectedDocType = "CI-W9";
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            chooseFilePopup(this, selectedDocType);
+        }
+    }
 }
