@@ -75,6 +75,11 @@
     <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.You will need to complete a new Merchant Application for each DBA you add.</string>
     <string name="addDBAButton">Add DBA</string>
 
+    <string name="businessProfileAccountItemChildImage">Business Profile account Sub Profile Image</string>
+    <string name="businessProfileAccountItemImage">Business Profile account Profile Image</string>
+    <string name="businessProfileAccountExpandDownArrow">Business Profile account Profile Expand Down Arrow</string>
+
+
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailling Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
