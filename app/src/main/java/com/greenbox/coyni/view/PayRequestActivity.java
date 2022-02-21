@@ -178,7 +178,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     pDialog = Utils.showProgressDialog(PayRequestActivity.this);
                     BiometricTokenRequest request = new BiometricTokenRequest();
                     request.setDeviceId(Utils.getDeviceID());
-                    request.setMobileToken(strToken);
+//                    request.setMobileToken(strToken);
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
                     request.setActionType(Utils.sendActionType);
                     coyniViewModel.biometricToken(request);
                 } catch (Exception ex) {
@@ -371,18 +372,18 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void SetToken() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void SetToken() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
+//            dsPermanentToken.moveToFirst();
+//            if (dsPermanentToken.getCount() > 0) {
+//                strToken = dsPermanentToken.getString(1);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void initialization() {
         try {
@@ -507,7 +508,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     }
                 }
             });
-            SetToken();
+//            SetToken();
             SetFaceLock();
             SetTouchId();
 //            enableButtons();
@@ -516,7 +517,12 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 TransactionLimitRequest obj = new TransactionLimitRequest();
                 obj.setTransactionType(Integer.parseInt(Utils.payType));
                 obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
-                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                } else {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

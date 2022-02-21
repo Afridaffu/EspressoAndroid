@@ -20,7 +20,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imgLogo"
+                android:id="@+id/imgBLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -29,7 +29,7 @@
                 android:src="@drawable/ic_in_progress_icon" />
 
             <TextView
-                android:id="@+id/tvHeading"
+                android:id="@+id/tvBHeading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -47,7 +47,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvAmount"
+                    android:id="@+id/tvBAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_bold"
@@ -65,7 +65,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tvMessage"
+                android:id="@+id/tvBMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
@@ -92,7 +92,7 @@
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
-                    android:id="@+id/layoutReference"
+                    android:id="@+id/layoutBReference"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -100,7 +100,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvReferenceID"
+                        android:id="@+id/tvBReferenceID"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
@@ -110,7 +110,7 @@
                         android:textSize="@dimen/_11ssp" />
 
                     <ImageView
-                        android:id="@+id/imgRefCopy"
+                        android:id="@+id/imgBRefCopy"
                         android:layout_width="@dimen/_11sdp"
                         android:layout_height="@dimen/_11sdp"
                         android:layout_gravity="center"
@@ -136,7 +136,7 @@
                     android:textSize="@dimen/_11ssp" />
 
                 <TextView
-                    android:id="@+id/tvBalance"
+                    android:id="@+id/tvBBalance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -172,7 +172,7 @@
                     android:textSize="@dimen/_10sdp" />
 
                 <TextView
-                    android:id="@+id/tvLearnMore"
+                    android:id="@+id/tvBLearnMore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
@@ -185,7 +185,7 @@
     </ScrollView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cvDone"
+        android:id="@+id/cvBDone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
