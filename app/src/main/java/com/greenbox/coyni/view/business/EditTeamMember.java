@@ -73,16 +73,16 @@ public class EditTeamMember extends AppCompatActivity {
                         editfnameET.setHint("");
                         if (editfnameET.getText().toString().trim().length() > 1) {
                             editfnameLL.setVisibility(GONE);
-                            editfnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            editfnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editfnametil, getColor(R.color.primary_black));
 
                         } else if (editfnameET.getText().toString().trim().length() == 1) {
-                            editfnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editfnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editfnametil, getColor(R.color.error_red));
                             editfnameLL.setVisibility(VISIBLE);
                             editfnameTV.setText("Minimum 2 Characters Required");
                         } else {
-                            editfnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editfnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editfnametil, getColor(R.color.light_gray));
                             editfnameLL.setVisibility(VISIBLE);
                             editfnameTV.setText("Field Required");
@@ -105,16 +105,16 @@ public class EditTeamMember extends AppCompatActivity {
                         editlnameET.setHint("");
                         if (editlnameET.getText().toString().trim().length() > 1) {
                             editlnameLL.setVisibility(GONE);
-                            editlnametil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            editlnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editlnametil, getColor(R.color.primary_black));
 
                         } else if (editlnameET.getText().toString().trim().length() == 1) {
-                            editlnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editlnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editlnametil, getColor(R.color.error_red));
                             editlnameLL.setVisibility(VISIBLE);
                             editlnameTV.setText("Minimum 2 Characters Required");
                         } else {
-                            editlnametil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editlnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editlnametil, getColor(R.color.light_gray));
                             editlnameLL.setVisibility(VISIBLE);
                             editlnameTV.setText("Field Required");
@@ -136,21 +136,21 @@ public class EditTeamMember extends AppCompatActivity {
                     if (!b) {
                         editemailET.setHint("");
                         if (editemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(editemailET.getText().toString().trim())) {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editemailtil, getColor(R.color.error_red));
                             editemailLL.setVisibility(VISIBLE);
                             editemailTV.setText("Please Enter a valid Email");
                         } else if (editemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(editemailET.getText().toString().trim())) {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            editemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editemailtil, getColor(R.color.primary_black));
                             editemailLL.setVisibility(GONE);
                         } else if (editemailET.getText().toString().trim().length() > 0 && editemailET.getText().toString().trim().length() <= 5) {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editemailtil, getColor(R.color.error_red));
                             editemailLL.setVisibility(VISIBLE);
                             editemailTV.setText("Field Required");
                         } else {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editemailtil, getColor(R.color.light_gray));
                             editemailLL.setVisibility(VISIBLE);
                             editemailTV.setText("Field Required");
