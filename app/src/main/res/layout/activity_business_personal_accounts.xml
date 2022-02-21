@@ -152,17 +152,40 @@
         </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/profileLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/profileviewLL"
+        android:layout_marginTop="@dimen/_5sdp"
         android:background="@color/white"
-        android:paddingBottom="@dimen/_10sdp"
-        android:paddingTop="@dimen/_20sdp"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_6sdp"
-            android:background="#F6F9FE"/>
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_11sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/profile" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/business_personal_account_name"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Jonathan Joestar"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_open_account"
@@ -197,7 +220,6 @@
                     android:textSize="@dimen/_11sdp" />
             </LinearLayout>
 
-        </LinearLayout>
 
     </LinearLayout>
 

@@ -26,6 +26,7 @@ import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -38,12 +39,11 @@ import java.util.List;
 
 public class BusinessCreateAccountsActivity extends BaseActivity {
 
-    TextView userShortInfoTV, userNameTV, userBalanceTV;
-    ImageView imgProfile, accountsCloseIV;
-    LinearLayout llOpenAccount;
-    MyApplication objMyApplication;
+    private TextView userShortInfoTV, userNameTV, userBalanceTV,businessPersonalAccountNameTv;
+    private ImageView imgProfile, accountsCloseIV;
+    private LinearLayout llOpenAccount;
     private MyApplication myApplication;
-    DashboardViewModel dashboardViewModel;
+    private DashboardViewModel dashboardViewModel;
     private int lastExpandedPosition = -1;// last index selected
 
     ExpandableListView brandsGV;
@@ -64,7 +64,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             initFields();
             showUserData();
-
             initObservers();
 
 
@@ -98,6 +97,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             userBalanceTV = findViewById(R.id.userBalanceTV);
             accountsCloseIV = findViewById(R.id.accountsCloseIV);
              brandsGV = findViewById(R.id.recyclerView);
+            businessPersonalAccountNameTv = findViewById(R.id.business_personal_account_name);
 
             myApplication = (MyApplication) getApplicationContext();
         } catch (Exception e) {
@@ -149,16 +149,22 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
                     filterList = profilesResponse.getData();
-//                    for(int i=0;i<=filterList.size();i++){
-//                         if(filterList.get(i).getAccountType().equals(Utils.BUSINESS_ACCOUNT)){
-//                             businessAccountList.add(i, ProfilesResponse.Profiles);
-//                         } else {
-//                             personalAccountList
-//                         }
-//                    }
 
-                    BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, filterList);
+                    for(ProfilesResponse.Profiles c: filterList){
+                        if(c.getAccountType().equals(Utils.BUSINESS)){
+                                businessAccountList.add(c);
+                        } else {
+                            personalAccountList.add(c);
+                        }
+
+                    }
+
+                    BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, businessAccountList);
                     brandsGV.setAdapter(listAdapter);
+
+                    if(personalAccountList.size()!=0) {
+                        businessPersonalAccountNameTv.setText(personalAccountList.get(0).getCompanyName());
+                    }
                 }
             }
         });
