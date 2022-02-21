@@ -86,9 +86,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     MyApplication myApplicationObj;
     private ExpandableListView brandsGV;
 
-    private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
+    List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
+    List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
 
     LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL;
     @SuppressLint("StaticFieldLeak")
@@ -390,8 +390,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 //                    int width = mertics.widthPixels;
 
                     CardView doneButton=dialog.findViewById(R.id.default_DoneBtn);
-                    brandsGV = findViewById(R.id.recyclerView);
-                    defualtAccountDialogPersonalNameTV = findViewById(R.id.defualt_account_dialog_personal_name);
+                    brandsGV = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
+                    defualtAccountDialogPersonalNameTV = dialog.findViewById(R.id.defualt_account_dialog_personal_name);
 
 
                     Window window = dialog.getWindow();
@@ -403,17 +403,19 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-
                     BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
                     brandsGV.setAdapter(listAdapter);
 
                     if(personalAccountList.size()!=0) {
                         defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getCompanyName());
                     }
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+
+
 
                     doneButton.setOnClickListener(view1 -> dialog.dismiss());
                 } catch (Exception e) {
