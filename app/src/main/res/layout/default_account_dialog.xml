@@ -25,40 +25,27 @@
             android:background="@drawable/shape_green_round_rect"
             android:layout_marginTop="@dimen/_13sdp"
             android:layout_marginBottom="@dimen/_28sdp"/>
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/_3sdp">
-            <LinearLayout
+            android:layout_marginTop="@dimen/_10ssp"
+            android:layout_marginBottom="@dimen/_10ssp"
+            android:background="@drawable/fullradius_list_items"
+            android:orientation="vertical">
+
+            <ExpandableListView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="@dimen/_11sdp"
-                android:layout_marginHorizontal="@dimen/_20sdp"
-                android:gravity="center">
+                android:layout_marginTop="@dimen/_20sdp"
+                android:divider="@null"
+                android:groupIndicator="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/profile"
-                    android:contentDescription=""/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="greenbox pos"
-                    android:textSize="@dimen/_11sdp"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:textColor="@color/primary_black"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:layout_weight="1"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_down" />
-            </LinearLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -91,6 +78,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/defualt_account_dialog_personal_name"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Jonathan Joestar"

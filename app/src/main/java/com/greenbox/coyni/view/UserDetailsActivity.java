@@ -39,6 +39,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,13 +52,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 
+import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -76,10 +80,16 @@ import okhttp3.RequestBody;
 public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
 
     ImageView editProfileIV, userProfileIV;
-    TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV;
+    private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV ,defualtAccountDialogPersonalNameTV;
     TextInputLayout business_defaultAccTIL;
     TextInputEditText business_defaultaccountET;
     MyApplication myApplicationObj;
+    private ExpandableListView brandsGV;
+
+    private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
+
     LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL;
     @SuppressLint("StaticFieldLeak")
     public static UserDetailsActivity userDetailsActivity;
@@ -114,8 +124,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             setContentView(R.layout.activity_user_details);
 
             initFields();
-//            getStates();
             initObservers();
+            dashboardViewModel.getProfiles();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,6 +163,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             business_AddreLL=findViewById(R.id.b_addressLL);
             business_defaultAccTIL=findViewById(R.id.b_accountTIL);
             business_defaultaccountET=findViewById(R.id.b_accountET);
+
+
 
             business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
@@ -377,6 +390,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 //                    int width = mertics.widthPixels;
 
                     CardView doneButton=dialog.findViewById(R.id.default_DoneBtn);
+                    brandsGV = findViewById(R.id.recyclerView);
+                    defualtAccountDialogPersonalNameTV = findViewById(R.id.defualt_account_dialog_personal_name);
+
 
                     Window window = dialog.getWindow();
                     window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.75));
@@ -391,6 +407,13 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
+
+                    BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
+                    brandsGV.setAdapter(listAdapter);
+
+                    if(personalAccountList.size()!=0) {
+                        defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getCompanyName());
+                    }
 
                     doneButton.setOnClickListener(view1 -> dialog.dismiss());
                 } catch (Exception e) {
@@ -506,6 +529,26 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 //                                profile.getData().getLastName().substring(0,1).toUpperCase();
 //                        imageTextTV.setText(imageText);
 //                    }
+                }
+            }
+        });
+
+        dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
+            @Override
+            public void onChanged(ProfilesResponse profilesResponse) {
+                if (profilesResponse != null) {
+                    filterList = profilesResponse.getData();
+
+                    for(ProfilesResponse.Profiles c: filterList){
+                        if(c.getAccountType().equals(Utils.BUSINESS)){
+                            businessAccountList.add(c);
+                        } else {
+                            personalAccountList.add(c);
+                        }
+
+                    }
+
+
                 }
             }
         });

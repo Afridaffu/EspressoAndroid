@@ -45,7 +45,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private MyApplication myApplication;
     private DashboardViewModel dashboardViewModel;
     private ExpandableListView brandsGV;
-
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
