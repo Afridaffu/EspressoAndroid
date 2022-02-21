@@ -145,13 +145,14 @@ public class SignatureActivity extends BaseActivity {
         String filePath = null;
         try {
             Bitmap bmp = mCustomSignatureView.getSignature();
+            Bitmap bitmap = Bitmap.createScaledBitmap(bmp, 300, 100, false);
             String destFolder = getCacheDir().getAbsolutePath();
             File f = new File(destFolder, mSignatureFile);
             if (f.exists()) {
                 f.delete();
             }
             FileOutputStream out = new FileOutputStream(f);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 40, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             filePath = f.getAbsolutePath();
             //filePath = compressImage(filePath);
             LogUtils.v(TAG, "file path " + filePath);

@@ -108,12 +108,8 @@ public class MerchantsAgrementActivity extends BaseActivity {
     private void sendSignatureRequest(String filepath) {
         File file = new File(filepath);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        String extention = file.getName().substring(file.getName().lastIndexOf("."));
-        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-        RequestBody agreementType = RequestBody.create(MediaType.parse("text/plain"), "5");
-        businessDashboardViewModel.signedAgreement(body, agreementType);
-
-
+        MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
+        businessDashboardViewModel.signedAgreement(body, 5);
     }
 
     private void initObservers() {
@@ -123,10 +119,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
             public void onChanged(SignedAgreementResponse signedAgreementResponse) {
                 try {
                     if (signedAgreementResponse != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
-
-                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
-                        activityResultLauncher.launch(intent);
-
+//                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
+//                        activityResultLauncher.launch(intent);
+                        finish();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
