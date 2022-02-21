@@ -79,18 +79,19 @@ import okhttp3.RequestBody;
 
 public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
 
-    ImageView editProfileIV, userProfileIV;
-    private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV ,defualtAccountDialogPersonalNameTV;
-    TextInputLayout business_defaultAccTIL;
-    TextInputEditText business_defaultaccountET;
-    MyApplication myApplicationObj;
+    ImageView editProfileIV, userProfileIV,mIvUserIcon;
+    private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV ,defualtAccountDialogPersonalNameTV,
+            mTvUserIconText;
+    private TextInputLayout business_defaultAccTIL;
+    private TextInputEditText business_defaultaccountET;
+    private MyApplication myApplicationObj;
     private ExpandableListView brandsGV;
 
-    List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
-    List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
 
-    LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL;
+    LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL,businessPersonalProfileAccount;
     @SuppressLint("StaticFieldLeak")
     public static UserDetailsActivity userDetailsActivity;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
@@ -391,6 +392,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
                     CardView doneButton=dialog.findViewById(R.id.default_DoneBtn);
                     brandsGV = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
+                    mIvUserIcon = dialog.findViewById(R.id.profile_img);
+                    mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
+                    businessPersonalProfileAccount = dialog.findViewById(R.id.profileLL);
                     defualtAccountDialogPersonalNameTV = dialog.findViewById(R.id.defualt_account_dialog_personal_name);
 
 
@@ -403,11 +407,39 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
-                    brandsGV.setAdapter(listAdapter);
+                    if(businessAccountList.size()!=0) {
+                        brandsGV.setVisibility(View.VISIBLE);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
+                        brandsGV.setAdapter(listAdapter);
+                    } else {
+                        brandsGV.setVisibility(View.GONE);
+                    }
 
                     if(personalAccountList.size()!=0) {
+                        businessPersonalProfileAccount.setVisibility(View.VISIBLE);
+                        String iconText = "";
+                        if (personalAccountList.get(0).getCompanyName() != null
+                        ) {
+                            String firstName = personalAccountList.get(0).getCompanyName();
+                            iconText = firstName.substring(0, 1).toUpperCase();
+                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+
+                        }
+                        if (personalAccountList.get(0).getImage()!= null) {
+                            mTvUserIconText.setVisibility(View.GONE);
+                            mIvUserIcon.setVisibility(View.VISIBLE);
+                            Glide.with(UserDetailsActivity.this)
+                                    .load(personalAccountList.get(0).getImage())
+                                    .placeholder(R.drawable.ic_profile_male_user)
+                                    .into(mIvUserIcon);
+                        } else {
+                            mTvUserIconText.setVisibility(View.VISIBLE);
+                            mIvUserIcon.setVisibility(View.GONE);
+                            mTvUserIconText.setText(iconText);
+                        }
                         defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getCompanyName());
+                    } else {
+                        businessPersonalProfileAccount.setVisibility(View.GONE);
                     }
 
                     dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
