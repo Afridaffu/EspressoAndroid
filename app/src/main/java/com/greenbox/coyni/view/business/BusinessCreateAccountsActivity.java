@@ -44,13 +44,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private LinearLayout llOpenAccount;
     private MyApplication myApplication;
     private DashboardViewModel dashboardViewModel;
-    private int lastExpandedPosition = -1;// last index selected
+    private ExpandableListView brandsGV;
 
-    ExpandableListView brandsGV;
-
-    List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
-    List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BusinessProfileRecyclerAdapter giftCardsAdapter;
 
 
@@ -65,8 +63,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             initFields();
             showUserData();
             initObservers();
-
-
+            
             accountsCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

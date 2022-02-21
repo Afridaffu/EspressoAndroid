@@ -67,8 +67,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
-            Log.d("eeeee","eeeee"+objMyApplication.getAccountType());
-
             if(objMyApplication.getAccountType() == 2) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
@@ -87,7 +85,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
 //                    objMyApplication.setStrRetrEmail(usersData.get(0).getEmail());
                 }
             }
-            Log.d("userdata","user"+objMyApplication.getObjRetUsers().getData());
             btnChangePassCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -206,7 +203,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
-            Log.e("dropAllTables","dropAllTables");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
@@ -217,7 +213,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
             editor.apply();
-            Log.e("dropAllTables","dropAllTables");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

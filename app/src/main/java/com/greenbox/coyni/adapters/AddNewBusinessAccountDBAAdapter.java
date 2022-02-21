@@ -16,7 +16,6 @@ import java.util.List;
 public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNewBusinessAccountDBAAdapter.MyViewHolder> {
     List<String> listCompany;
     Context mContext;
-    MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txvCompanyName;

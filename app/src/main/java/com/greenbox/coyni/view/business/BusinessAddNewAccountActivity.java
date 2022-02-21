@@ -18,7 +18,7 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
 
     ImageView imageViewClose;
     LinearLayout llBusinessAccount,llPersonalAccount;
-    MyApplication objMyApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
