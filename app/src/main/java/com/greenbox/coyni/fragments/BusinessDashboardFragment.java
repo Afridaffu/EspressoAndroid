@@ -1,6 +1,8 @@
 package com.greenbox.coyni.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 
 public class BusinessDashboardFragment extends BaseFragment {
 
@@ -21,13 +24,22 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
     private TextView mTvUserName, mTvUserIconText;
-    private RelativeLayout mRlBaseLayout;
+    private RelativeLayout mUserIconRelativeLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
+
         showUserData();
+
+        mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+
+            }
+        });
         return mCurrentView;
     }
 
@@ -37,7 +49,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initFields() {
-        mRlBaseLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
+        mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);

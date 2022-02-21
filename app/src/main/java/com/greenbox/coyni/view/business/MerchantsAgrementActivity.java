@@ -25,6 +25,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 import java.io.File;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
@@ -105,9 +106,14 @@ public class MerchantsAgrementActivity extends BaseActivity {
     }
 
     private void sendSignatureRequest(String filepath) {
-        MultipartBody.Part file = null;
-        RequestBody agreementType = null;
-        businessDashboardViewModel.signedAgreement(file, agreementType);
+        File file = new File(filepath);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//        String extention = file.getName().substring(file.getName().lastIndexOf("."));
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+        RequestBody agreementType = RequestBody.create(MediaType.parse("text/plain"), "5");
+        businessDashboardViewModel.signedAgreement(body, agreementType);
+
+
     }
 
     private void initObservers() {

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ScanActivity;
@@ -67,6 +69,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
+            Log.d("baseurll","baseurl"+ Utils.getStrURL_PRODUCTION());
             mDashboardViewModel.meProfile();
         } catch (Exception e) {
             e.printStackTrace();
