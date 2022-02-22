@@ -446,136 +446,139 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private void initObservers() {
 
-        coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
-            @Override
-            public void onChanged(BiometricResponse biometricResponse) {
-                try {
-                    if (enablePopup != null) {
-                        enablePopup.dismiss();
-                    }
-//                    dialog.dismiss();
-                    if (biometricResponse != null) {
-                        saveToken(biometricResponse.getData().getToken());
-                        Utils.generateUUID(BusinessProfileActivity.this);
-                        if (!isSwitchEnabled) {
-                            if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-//                                saveFace("false");
-//                                saveThumb("true");
+        try {
+            coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
+                @Override
+                public void onChanged(BiometricResponse biometricResponse) {
+                    try {
+                        if (enablePopup != null) {
+                            enablePopup.dismiss();
+                        }
+    //                    dialog.dismiss();
+                        if (biometricResponse != null) {
+                            saveToken(biometricResponse.getData().getToken());
+                            Utils.generateUUID(BusinessProfileActivity.this);
+                            if (!isSwitchEnabled) {
+                                if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+    //                                saveFace("false");
+    //                                saveThumb("true");
+                                    if (!isLoggedOut) {
+                                        saveFace("false");
+                                        saveThumb("true");
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                                    }
+                                } else {
+    //                                saveFace("true");
+    //                                saveThumb("false");
+                                    if (!isLoggedOut) {
+                                        saveFace("true");
+                                        saveThumb("false");
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                                    }
+                                }
+
+                                isSwitchEnabled = true;
+                                switchOnLL.setVisibility(View.VISIBLE);
+                                switchOffLL.setVisibility(View.GONE);
+                                myApplication.setBiometric(true);
+                            } else {
+                                if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                                    if (!isLoggedOut)
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
+                                } else {
+                                    if (!isLoggedOut)
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
+                                }
+                                myApplication.setBiometric(false);
                                 if (!isLoggedOut) {
                                     saveFace("false");
-                                    saveThumb("true");
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
-                                }
-                            } else {
-//                                saveFace("true");
-//                                saveThumb("false");
-                                if (!isLoggedOut) {
-                                    saveFace("true");
                                     saveThumb("false");
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
                                 }
+                                isSwitchEnabled = false;
+                                switchOnLL.setVisibility(View.GONE);
+                                switchOffLL.setVisibility(View.VISIBLE);
+                                Log.e("isFace1", isFaceEnabled() + "");
+                                Log.e("isTouch1", isTouchEnabled() + "");
                             }
 
-                            isSwitchEnabled = true;
-                            switchOnLL.setVisibility(View.VISIBLE);
-                            switchOffLL.setVisibility(View.GONE);
-                            myApplication.setBiometric(true);
-                        } else {
-                            if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                if (!isLoggedOut)
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
-                            } else {
-                                if (!isLoggedOut)
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
-                            }
-                            myApplication.setBiometric(false);
-                            if (!isLoggedOut) {
-                                saveFace("false");
-                                saveThumb("false");
-                            }
-                            isSwitchEnabled = false;
-                            switchOnLL.setVisibility(View.GONE);
-                            switchOffLL.setVisibility(View.VISIBLE);
-                            Log.e("isFace1", isFaceEnabled() + "");
-                            Log.e("isTouch1", isTouchEnabled() + "");
                         }
-
+                    } catch (
+                            Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (
-                        Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
 
 
-        dashboardViewModel.getProfileMutableLiveData().
+            dashboardViewModel.getProfileMutableLiveData().
 
-                observe(this, new Observer<Profile>() {
-                    @Override
-                    public void onChanged(Profile profile) {
-                        try {
-                            if (profile != null) {
-                                myApplication.setMyProfile(profile);
-                                bindImage(profile.getData().getImage());
+                    observe(this, new Observer<Profile>() {
+                        @Override
+                        public void onChanged(Profile profile) {
+                            try {
+                                if (profile != null) {
+                                    myApplication.setMyProfile(profile);
+                                    bindImage(profile.getData().getImage());
 
-                                if (profile.getData().getAccountStatus() != null) {
-                                    try {
-                                        if (profile.getData().getAccountStatus().equals("Active")) {
-                                            account_status.setTextColor(getResources().getColor(R.color.active_green));
-                                            statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                                        } else if (profile.getData().getAccountStatus().equals("Unverified")) {
-                                            account_status.setTextColor(getResources().getColor(R.color.orange));
-                                            statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                                        } else if (profile.getData().getAccountStatus().equals("Under Review")) {
-                                            account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
-                                            statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                                        } else {
+                                    if (profile.getData().getAccountStatus() != null) {
+                                        try {
+                                            if (profile.getData().getAccountStatus().equals("Active")) {
+                                                account_status.setTextColor(getResources().getColor(R.color.active_green));
+                                                statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
+                                            } else if (profile.getData().getAccountStatus().equals("Unverified")) {
+                                                account_status.setTextColor(getResources().getColor(R.color.orange));
+                                                statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                                            } else if (profile.getData().getAccountStatus().equals("Under Review")) {
+                                                account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
+                                                statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
+                                            }
+                                            //                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                                            //                        cardviewYourAccount.setVisibility(View.VISIBLE);
+                                            //                    } else {
+                                            //                        cardviewYourAccount.setVisibility(View.GONE);
+                                            //                    }
+                                            account_status.setText(profile.getData().getAccountStatus());
+                                            account_id.setText("Account ID M-" + profile.getData().getId());
+                                            String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                                            userFullname.setText(fullname);
+                                        } catch (Resources.NotFoundException e) {
+                                            e.printStackTrace();
                                         }
-                                        //                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                                        //                        cardviewYourAccount.setVisibility(View.VISIBLE);
-                                        //                    } else {
-                                        //                        cardviewYourAccount.setVisibility(View.GONE);
-                                        //                    }
-                                        account_status.setText(profile.getData().getAccountStatus());
-                                        account_id.setText("Account ID M-" + profile.getData().getId());
-                                        String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                                        userFullname.setText(fullname);
-                                    } catch (Resources.NotFoundException e) {
-                                        e.printStackTrace();
+
+                                    } else {
+                                        account_status.setText("");
                                     }
-
-                                } else {
-                                    account_status.setText("");
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                    });
+            businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
+                @Override
+                public void onChanged(DBAInfoResp dbaInfoResp) {
+                    try {
+                        myApplication.setDbaInfoResp(dbaInfoResp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
-        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
-            @Override
-            public void onChanged(DBAInfoResp dbaInfoResp) {
-                try {
-                    myApplication.setDbaInfoResp(dbaInfoResp);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-            }
-        });
-
-        businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
-            @Override
-            public void onChanged(BusinessTypeResp businessTypeResp) {
-                try {
-                    myApplication.setBusinessTypeResp(businessTypeResp);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+                    try {
+                        myApplication.setBusinessTypeResp(businessTypeResp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
