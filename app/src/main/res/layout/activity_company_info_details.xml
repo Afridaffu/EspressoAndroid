@@ -19,7 +19,7 @@
         android:paddingBottom="@dimen/_11sdp">
 
         <LinearLayout
-            android:id="@+id/CloseLL"
+            android:id="@+id/bpCloseLL"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="wrap_content">
 
