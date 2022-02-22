@@ -491,5 +491,11 @@
     <string name="full_amount">Full Amount</string>
     <string name="amount">1/2 Amount</string>
     <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
+    <string name="add_new_team_member">Add New Team Member</string>
+    <string name="administrator">Administrator</string>
+    <string name="full_administrator_permission">Full administrator permission</string>
+    <string name="name">Name</string>
+    <string name="send">Send</string>
+    <string name="please_note_new_team_members">*Please Note: New team members get full administrator permission</string>
 
 </resources>
