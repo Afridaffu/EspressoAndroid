@@ -101,29 +101,29 @@
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <ImageView
-                                    android:id="@+id/userProfileIV"
+                                    android:id="@+id/dba_userProfileIV"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
-                                    android:visibility="visible" />
+                                    android:visibility="gone" />
 
                                 <TextView
-                                    android:id="@+id/imageTextTV"
+                                    android:id="@+id/dba_imageTextTV"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:text="VT"
+                                    android:text="SS"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_20sdp"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
                             </androidx.cardview.widget.CardView>
 
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <ImageView
-                            android:id="@+id/editProfileIV"
+                            android:id="@+id/dba_editProfileIV"
                             android:layout_width="@dimen/_17sdp"
                             android:layout_height="@dimen/_17sdp"
                             android:src="@drawable/ic_editicon"
@@ -133,6 +133,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
+                        android:id="@+id/nameTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -154,6 +155,7 @@
                             android:src="@drawable/ic_x"
                             />
                         <TextView
+                            android:id="@+id/websiteTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
@@ -165,6 +167,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/businessTypeTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -229,6 +232,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/emailIDTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
@@ -272,6 +276,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/phoneNumberTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
@@ -331,11 +336,11 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/addressTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="3131 Camino Del Rio, San Diego,\nCA, 92108"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                        <View

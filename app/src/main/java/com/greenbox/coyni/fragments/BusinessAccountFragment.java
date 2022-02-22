@@ -30,6 +30,7 @@ import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.TransactionListActivity;
+import com.greenbox.coyni.view.business.BusinessTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -166,7 +167,7 @@ public class BusinessAccountFragment extends BaseFragment {
     }
 
     public void goToTransact(){
-        startActivity(new Intent(requireActivity().getApplication(), TransactionListActivity.class));
+        startActivity(new Intent(requireActivity().getApplication(), BusinessTransactionListActivity.class));
     }
     @Override
     public void updateData() {

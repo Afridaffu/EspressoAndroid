@@ -29,6 +29,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -43,6 +45,7 @@ import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -53,6 +56,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
             businessResetPin, preferencesLL;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
@@ -79,8 +83,12 @@ public class BusinessProfileActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_profile);
-        initFields();
-        initObservers();
+        try {
+            initFields();
+            initObservers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initFields() {
@@ -93,8 +101,9 @@ public class BusinessProfileActivity extends AppCompatActivity {
             cvLogout = findViewById(R.id.cvLogout);
             switchOnLL = findViewById(R.id.switchOn);
             businessResetPin = findViewById(R.id.businessResetPin);
-
             dbainfoLL = findViewById(R.id.DBAInformationLL);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+
             dbainfoLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -545,7 +554,28 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
+        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
+            @Override
+            public void onChanged(DBAInfoResp dbaInfoResp) {
+                try {
+                    myApplication.setDbaInfoResp(dbaInfoResp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+            }
+        });
+
+        businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+            @Override
+            public void onChanged(BusinessTypeResp businessTypeResp) {
+                try {
+                    myApplication.setBusinessTypeResp(businessTypeResp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -553,6 +583,8 @@ public class BusinessProfileActivity extends AppCompatActivity {
         super.onResume();
         try {
             dashboardViewModel.meProfile();
+            businessIdentityVerificationViewModel.getDBAInfo();
+            businessIdentityVerificationViewModel.getBusinessType();
         } catch (Exception e) {
             e.printStackTrace();
         }
