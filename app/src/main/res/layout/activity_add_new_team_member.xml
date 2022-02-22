@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+    tools:context=".view.business.AddNewTeamMemberActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/backBtnLL"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginBottom="@dimen/_14sdp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/no_go_back"
+                android:src="@drawable/ic_back" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:text="@string/add_new_team_member"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+        <LinearLayout
+            android:id="@+id/administatorLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_31sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/administrator"
+                android:src="@drawable/ic_person_img" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/administrator"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/full_administrator_permission"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/_11ssp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fnameTIL"
+            style="@style/TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:hint="@string/firstName"
+            android:textColorHint="@color/light_gray"
+            app:boxStrokeColor="@color/primary_green"
+            app:errorIconDrawable="@null"
+            app:hintTextColor="@color/primary_green">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fnameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
+                android:fontFamily="@font/opensans_semibold"
+                android:imeOptions="actionNext"
+                android:inputType="textVisiblePassword|textNoSuggestions"
+                android:maxLength="100"
+                android:maxLines="1"
+                android:padding="@dimen/_14sdp"
+                android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                android:singleLine="true"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/light_gray"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/_12ssp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/fnameLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:contentDescription="@string/firstName"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/address1ErrorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lNameTIL"
+            style="@style/TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:hint="@string/lastName"
+            android:textColorHint="@color/light_gray"
+            app:boxStrokeColor="@color/primary_green"
+            app:errorIconDrawable="@null"
+            app:hintTextColor="@color/primary_green">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lNameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
+                android:fontFamily="@font/opensans_semibold"
+                android:imeOptions="actionNext"
+                android:inputType="textVisiblePassword|textNoSuggestions"
+                android:maxLength="100"
+                android:maxLines="1"
+                android:padding="@dimen/_14sdp"
+                android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                android:singleLine="true"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/light_gray"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/_12ssp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/lNameLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:contentDescription="@string/lastName"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/lNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailIdTIL"
+            style="@style/TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:hint="@string/email"
+            android:importantForAutofill="no"
+            android:textColorHint="@color/light_gray"
+            app:boxStrokeColor="@color/primary_green"
+            app:errorIconDrawable="@null"
+            app:hintTextColor="@color/primary_green">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailIdET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:fontFamily="@font/opensans_semibold"
+                android:imeOptions="actionNext"
+                android:inputType="textVisiblePassword|textNoSuggestions"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:padding="@dimen/_14sdp"
+                android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                android:singleLine="true"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/light_gray"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/_12ssp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/emailIdLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:contentDescription="@string/send"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/emailIdTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
+            android:id="@+id/phoneNoET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp" />
+
+        <LinearLayout
+            android:id="@+id/phoneNoLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:contentDescription="@string/send"
+                android:src="@drawable/ic_erro" />
+
+            <TextView
+                android:id="@+id/phoneNoTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/please_note_new_team_members"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_11ssp" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvSend"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:gravity="center"
+        app:cardBackgroundColor="@color/bg_inactive"
+        app:cardCornerRadius="@dimen/_22sdp"
+        app:cardElevation="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="@string/send"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
