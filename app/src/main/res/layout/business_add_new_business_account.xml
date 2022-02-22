@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="@dimen/_21sdp"
-        android:paddingEnd="@dimen/_21sdp">
+        android:paddingStart="@dimen/_22sdp"
+        android:paddingEnd="@dimen/_22sdp"
+        >
         <ImageView
             android:id="@+id/imv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10sdp"
             android:src="@drawable/ic_x"
             android:layout_marginTop="@dimen/_44sdp"
             android:layout_marginBottom="@dimen/_13sdp"
@@ -20,83 +24,75 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/open_new_account"
+            android:text="Open New Account"
             android:fontFamily="@font/opensans_bold"
             android:textSize="@dimen/_16ssp"
-            android:textColor="@color/black"
-            android:layout_marginBottom="@dimen/_28sdp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Please select the account type you wish to \nopen:"
-            android:textSize="@dimen/_12ssp"
             android:textColor="@color/primary_black"
-            android:fontFamily="@font/opensans_regular"
-            android:layout_marginBottom="@dimen/_62sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
             />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_76sdp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/businessAccontLL"
+                android:id="@+id/ll_new_company"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginEnd="@dimen/_7sdp"
+                android:layout_height="64dp"
                 android:layout_weight="1"
                 android:background="@drawable/account_type_bg"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:gravity="left"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/_54sdp"
-                    android:layout_height="@dimen/_54sdp"
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_10ssp"
+                    android:layout_height="@dimen/_26sdp"
                     android:src="@drawable/ic_case" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10ssp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="Business"
+                    android:text="New Company"
+                    android:layout_gravity="center"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/personalAccontLL"
+                android:id="@+id/ll_new_dba"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginStart="@dimen/_7sdp"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/_10ssp"
                 android:layout_weight="1"
                 android:background="@drawable/account_type_bg"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:gravity="left"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/_54sdp"
-                    android:layout_height="@dimen/_54sdp"
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_10ssp"
+                    android:layout_height="@dimen/_26sdp"
                     android:src="@drawable/ic_user" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_10ssp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="Personal"
+                    android:text="New DBA"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
 
-
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/bottom_onboard_image"
-        android:scaleType="fitEnd"
-        />
+
 </LinearLayout>

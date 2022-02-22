@@ -72,6 +72,13 @@
     <string name="identityInstruction">Enter your mailing address of your primary residence. Please do not use a PO Box.</string>
     <string name="submitbtn">Submit</string>
     <string name="exitbtn">Exit</string>
+    <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.You will need to complete a new Merchant Application for each DBA you add.</string>
+    <string name="addDBAButton">Add DBA</string>
+
+    <string name="businessProfileAccountItemChildImage">Business Profile account Sub Profile Image</string>
+    <string name="businessProfileAccountItemImage">Business Profile account Profile Image</string>
+    <string name="businessProfileAccountExpandDownArrow">Business Profile account Profile Expand Down Arrow</string>
+
 
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailling Address</string>
@@ -479,6 +486,8 @@
     <string name="transaction_subtype">Transaction SubType</string>
     <string name="pending">Pending</string>
     <string name="failed">Failed</string>
+    <string name="continue_text">Continue</string>
+    <string name="additional_data_message">The coyni team requires your additional action to further verify you.</string>
     <string name="in_progress">In progress</string>
     <string name="insufficient_funds">Insufficient Funds</string>
     <string name="merchant_insufficient_funds">Insufficient funds in your Merchant\n Balance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>

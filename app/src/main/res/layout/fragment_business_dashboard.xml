@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ll_profile_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/mask_group_16"
@@ -74,7 +75,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scrollbars="none">
 
             <LinearLayout
@@ -1229,7 +1230,6 @@
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_10sdp" />
 
-
                                     </LinearLayout>
 
                                     <TextView
@@ -1598,7 +1598,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -1606,7 +1606,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginRight="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_85sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
@@ -1620,11 +1620,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_20sdp"
+                                android:contentDescription="@string/additional_action_required"
                                 android:src="@drawable/ic_additional_action_required" />
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
                                 android:layout_marginTop="@dimen/_20sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_bold"
@@ -1639,7 +1640,7 @@
                                 android:layout_marginTop="@dimen/_20sdp"
                                 android:layout_marginBottom="@dimen/_30sdp"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="TThe coyni team requires your additional action\n to further verify you."
+                                android:text="@string/additional_data_message"
                                 android:textAlignment="center"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11sdp" />
@@ -1647,14 +1648,13 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
                                 android:layout_marginStart="@dimen/_15sdp"
                                 android:layout_marginEnd="@dimen/_7sdp"
-                                android:layout_marginBottom="@dimen/_100sdp"
+                                android:layout_marginBottom="@dimen/_10sdp"
                                 android:orientation="vertical">
 
                                 <androidx.cardview.widget.CardView
-                                    android:id="@+id/cvDone"
+                                    android:id="@+id/cv_additional_data_continue"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/_43sdp"
                                     android:gravity="center"
@@ -1666,7 +1666,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:fontFamily="@font/opensans_bold"
-                                        android:text="Continue"
+                                        android:text="@string/continue_text"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/_12ssp" />
                                 </androidx.cardview.widget.CardView>
@@ -1684,49 +1684,68 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:contentDescription="@string/identify_verification_failed"
-                        android:src="@drawable/ic_failed" />
-
-                    <TextView
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_25sdp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:gravity="center"
-                        android:text="@string/iv_failed"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_16ssp" />
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        app:cardCornerRadius="@dimen/_10sdp">
 
-                    <TextView
-                        android:id="@+id/failedcontent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_21sdp"
-                        android:layout_marginTop="@dimen/_18sdp"
-                        android:layout_marginRight="@dimen/_21sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="@string/iv_verification_failed_content"
-                        android:textAlignment="center"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/contactUSTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/opensans_regular"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/contactus"
-                        android:textColor="@color/primary_color"
-                        android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:contentDescription="@string/identify_verification_failed"
+                                android:src="@drawable/ic_failed" />
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_25sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:gravity="center"
+                                android:text="@string/iv_failed"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_16ssp" />
+
+                            <TextView
+                                android:id="@+id/failedcontent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_21sdp"
+                                android:layout_marginTop="@dimen/_18sdp"
+                                android:layout_marginRight="@dimen/_21sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="@string/iv_verification_failed_content"
+                                android:textAlignment="center"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <TextView
+                                android:id="@+id/contactUSTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_10sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="@string/contactus"
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
             </LinearLayout>

@@ -21,6 +21,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,8 +32,11 @@ import com.greenbox.coyni.model.business_id_verification.CancelApplicationRespon
 import com.greenbox.coyni.utils.CustomConfirmationDialog;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.OnDialogButtonClickListener;
+import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
+
 
 public class BusinessDashboardFragment extends BaseFragment {
 
@@ -40,11 +44,12 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
     private TextView mTvUserName, mTvUserIconText;
-    private RelativeLayout mRlBaseLayout;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView;
     private TextView mTvIdentityReviewCancelMessage;
+    private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
+    private RelativeLayout mUserIconRelativeLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +58,23 @@ public class BusinessDashboardFragment extends BaseFragment {
         initObservers();
         showUserData();
         showIdentityVerificationReview();
+        //showAdditionalActionView();
+
+        mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+
+            }
+        });
+
+        mCvAdditionalDataContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AdditionalInformationRequiredActivity.class));
+
+            }
+        });
         return mCurrentView;
     }
 
@@ -62,11 +84,12 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initFields() {
-        mRlBaseLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
+        mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
         mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
+        mCvAdditionalDataContinue = mCurrentView.findViewById(R.id.cv_additional_data_continue);
         mLlBusinessDashboardView = mCurrentView.findViewById(R.id.ll_business_dashboard_view);
         mLlIdentityAdditionDataRequired = mCurrentView.findViewById(R.id.ll_identity_additional_data);
         mLlIdentityVerificationReview = mCurrentView.findViewById(R.id.ll_identity_verification_review);
@@ -135,6 +158,13 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBusinessDashboardView.setVisibility(View.GONE);
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
+    }
+
+    private void showAdditionalActionView() {
+        mLlIdentityVerificationReview.setVisibility(View.GONE);
+        mLlBusinessDashboardView.setVisibility(View.GONE);
+        mLlIdentityAdditionDataRequired.setVisibility(View.VISIBLE);
+        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
     }
 
     private void showIdentityVerificationReview() {

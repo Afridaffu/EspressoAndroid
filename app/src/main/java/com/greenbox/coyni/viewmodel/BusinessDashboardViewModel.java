@@ -171,10 +171,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void signedAgreement(MultipartBody.Part file, RequestBody agreementType) {
+    public void signedAgreement(MultipartBody.Part file, int agreementType) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<SignedAgreementResponse> mCall = apiService.signedAgreement(file,agreementType);
+            Call<SignedAgreementResponse> mCall = apiService.signedAgreement(file, agreementType);
             mCall.enqueue(new Callback<SignedAgreementResponse>() {
                 @Override
                 public void onResponse(Call<SignedAgreementResponse> call, Response<SignedAgreementResponse> response) {
