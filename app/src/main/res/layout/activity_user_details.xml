@@ -603,6 +603,7 @@
         android:layout_marginBottom="@dimen/_11sdp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/stateCL"
             android:layout_width="match_parent"

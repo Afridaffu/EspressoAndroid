@@ -282,7 +282,7 @@ public interface ApiService {
     @Multipart
     @POST("api/v2/business/sign-agreement")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
-                                                  @Part("agreementType") RequestBody agreementType);
+                                                  @Part("agreementType") int agreementType);
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
