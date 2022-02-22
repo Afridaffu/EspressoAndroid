@@ -39,13 +39,12 @@ import java.util.List;
 
 public class BusinessCreateAccountsActivity extends BaseActivity {
 
-    private TextView userShortInfoTV, userNameTV, userBalanceTV,businessPersonalAccountNameTv;
-    private ImageView imgProfile, accountsCloseIV;
-    private LinearLayout llOpenAccount;
+    private TextView userShortInfoTV, userNameTV, userBalanceTV,businessPersonalAccountNameTv,mTvUserIconText;
+    private ImageView imgProfile, accountsCloseIV,mIvUserIcon;
+    private LinearLayout llOpenAccount,businessPersonalProfileAccount;
     private MyApplication myApplication;
     private DashboardViewModel dashboardViewModel;
     private ExpandableListView brandsGV;
-
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
@@ -95,6 +94,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             accountsCloseIV = findViewById(R.id.accountsCloseIV);
              brandsGV = findViewById(R.id.recyclerView);
             businessPersonalAccountNameTv = findViewById(R.id.business_personal_account_name);
+            mIvUserIcon = findViewById(R.id.profile_img);
+            mTvUserIconText = findViewById(R.id.b_imageTextTV);
+            businessPersonalProfileAccount = findViewById(R.id.profileLL);
 
             myApplication = (MyApplication) getApplicationContext();
         } catch (Exception e) {
@@ -156,11 +158,39 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
                     }
 
-                    BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, businessAccountList);
-                    brandsGV.setAdapter(listAdapter);
+                    if(businessAccountList.size()!=0) {
+                        brandsGV.setVisibility(View.VISIBLE);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, businessAccountList);
+                        brandsGV.setAdapter(listAdapter);
+                    } else {
+                        brandsGV.setVisibility(View.GONE);
+                    }
 
                     if(personalAccountList.size()!=0) {
+                        businessPersonalProfileAccount.setVisibility(View.VISIBLE);
+                        String iconText = "";
+                        if (personalAccountList.get(0).getCompanyName() != null
+                                ) {
+                            String firstName = personalAccountList.get(0).getCompanyName();
+                            iconText = firstName.substring(0, 1).toUpperCase();
+                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+
+                        }
+                        if (personalAccountList.get(0).getImage()!= null) {
+                            mTvUserIconText.setVisibility(View.GONE);
+                            mIvUserIcon.setVisibility(View.VISIBLE);
+                            Glide.with(BusinessCreateAccountsActivity.this)
+                                    .load(personalAccountList.get(0).getImage())
+                                    .placeholder(R.drawable.ic_profile_male_user)
+                                    .into(mIvUserIcon);
+                        } else {
+                            mTvUserIconText.setVisibility(View.VISIBLE);
+                            mIvUserIcon.setVisibility(View.GONE);
+                            mTvUserIconText.setText(iconText);
+                        }
                         businessPersonalAccountNameTv.setText(personalAccountList.get(0).getCompanyName());
+                    } else {
+                        businessPersonalProfileAccount.setVisibility(View.GONE);
                     }
                 }
             }

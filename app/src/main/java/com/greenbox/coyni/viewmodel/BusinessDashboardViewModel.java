@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -32,6 +33,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
 
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
@@ -53,6 +55,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<SignedAgreementResponse> getSignedAgreementResponseMutableLiveData() {
         return signedAgreementResponseMutableLiveData;
+    }
+
+    public MutableLiveData<CancelApplicationResponse> getCancelApplicationResponseMutableLiveData() {
+        return cancelApplicationResponseMutableLiveData;
     }
 
     public MutableLiveData<Fees> getFeesMutableLiveData() {
@@ -202,6 +208,11 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void cancelBusinessApplication() {
+
+    }
+
     public void meFees(int UserID) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

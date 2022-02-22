@@ -1,8 +1,8 @@
 package com.greenbox.coyni.model.register;
 
 public class PhNoWithCountryCode {
-    private String countryCode;
-    private String phoneNumber;
+    private String countryCode = "";
+    private String phoneNumber = "";
 
     public String getCountryCode() {
         return countryCode;

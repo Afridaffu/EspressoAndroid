@@ -30,6 +30,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/RefundbackIV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/refund_transaction"
@@ -64,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:background="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
@@ -183,7 +184,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="amount"
+                                android:text="1/2 Amount"
                                 android:textAlignment="center"
                                 android:textColor="@color/chip_text_color"
                                 android:textSize="@dimen/_11ssp"
@@ -219,7 +220,6 @@
                 </androidx.cardview.widget.CardView>
 
                 <com.greenbox.coyni.utils.keyboards.CustomKeyboard
-                    android:id="@+id/ckb"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp" />
