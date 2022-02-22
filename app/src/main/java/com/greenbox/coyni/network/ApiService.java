@@ -69,6 +69,7 @@ import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -297,7 +298,10 @@ public interface ApiService {
     Call<TrackerResponse> statusTracker();
 
     @POST("api/v2/register/add-customer")
-    Call<TrackerResponse> registerAddCustomer();
+    Call<AddBusinessUserResponse> registerAddCustomer();
+
+    @POST("api/v2/register/add-business-user")
+    Call<AddBusinessUserResponse> addBusinessUserInIndividual();
 
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);

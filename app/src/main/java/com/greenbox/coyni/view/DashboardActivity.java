@@ -49,6 +49,7 @@ import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
@@ -398,14 +399,14 @@ public class DashboardActivity extends AppCompatActivity {
             cvProfileSmall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, BusinessCreateAccountsActivity.class));
                 }
             });
 
             cvProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(DashboardActivity.this, AccountsActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, BusinessCreateAccountsActivity.class));
                 }
             });
 
