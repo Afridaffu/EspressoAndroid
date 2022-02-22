@@ -29,7 +29,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class MerchantsAgrementActivity extends BaseActivity  {
+public class MerchantsAgrementActivity extends BaseActivity {
     public CardView doneCV;
     LinearLayout signatureEditLl;
     ImageView mIVSignature;
@@ -53,9 +53,8 @@ public class MerchantsAgrementActivity extends BaseActivity  {
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSignatureRequest(filePath);
-                Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
-                activityResultLauncher.launch(intent);
+                showProgressDialog();
+                sendSignatureRequest();
             }
         });
 
@@ -86,9 +85,8 @@ public class MerchantsAgrementActivity extends BaseActivity  {
         if (data != null) {
             String filePath = data.getStringExtra(Utils.DATA);
             File targetFile = new File(filePath);
-              if (targetFile.exists()) {
-                  this.filePath = filePath;
-//                sendSignatureRequest(filePath);
+            if (targetFile.exists()) {
+                this.filePath = filePath;
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
                 doneCV.setVisibility(View.VISIBLE);
                 savedText.setVisibility(View.VISIBLE);
@@ -98,12 +96,15 @@ public class MerchantsAgrementActivity extends BaseActivity  {
         }
     }
 
-    private void sendSignatureRequest(String filepath) {
-        if(filepath!=null) {
-            File file = new File(filepath);
+    private void sendSignatureRequest() {
+        if (filePath != null) {
+            File file = new File(filePath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
             businessDashboardViewModel.signedAgreement(body, 5);
+        } else {
+            dismissDialog();
+            LogUtils.v(TAG, "File path is null");
         }
     }
 
@@ -113,15 +114,25 @@ public class MerchantsAgrementActivity extends BaseActivity  {
             @Override
             public void onChanged(SignedAgreementResponse signedAgreementResponse) {
                 try {
-                    if (signedAgreementResponse != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
-//                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
-//                        activityResultLauncher.launch(intent);
-                        finish();
+                    dismissDialog();
+                    if(signedAgreementResponse != null) {
+                        if (signedAgreementResponse.getStatus() != null
+                                && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
+                            //If require need to show the Toast to the User.
+                            finish();
+                        } else {
+                            String errorMessage = getString(R.string.something_went_wrong);
+                            if(signedAgreementResponse.getError() != null
+                                    && signedAgreementResponse.getError().getErrorDescription() != null) {
+                                errorMessage = signedAgreementResponse.getError().getErrorDescription();
+                            }
+                            Utils.displayAlert(errorMessage,
+                                    MerchantsAgrementActivity.this, "", signedAgreementResponse.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+                         LogUtils.v(TAG, "signedAgreementResponse is null");
                     }
-                    else {
-                        Utils.displayAlert(signedAgreementResponse.getError().getErrorDescription(),
-                                MerchantsAgrementActivity.this, "", signedAgreementResponse.getError().getFieldErrors().get(0));
-                    }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
