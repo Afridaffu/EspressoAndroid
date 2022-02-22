@@ -28,6 +28,7 @@ import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
@@ -62,6 +63,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_business_dashboard);
             initialization();
             initObserver();
+            pushFragment(new BusinessDashboardFragment());
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -76,7 +78,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        pushFragment(new BusinessDashboardFragment());
+//        pushFragment(new BusinessDashboardFragment());
     }
 
     public void onDashboardTabSelected(View view) {
@@ -269,6 +271,18 @@ public class BusinessDashboardActivity extends BaseActivity {
                         }
                     }
                 });
+        mDashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
+            @Override
+            public void onChanged(LatestTxnResponse latestTxnResponse) {
+                try {
+                    if (latestTxnResponse !=null) {
+                        objMyApplication.setListLatestTxn(latestTxnResponse);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {
@@ -282,6 +296,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
                 businessDashboardViewModel.meMerchantWallet();
+                mDashboardViewModel.getLatestTxns();
 //                notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();

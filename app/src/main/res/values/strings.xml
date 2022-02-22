@@ -492,4 +492,13 @@
     <string name="amount">1/2 Amount</string>
     <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
 
+    <string name="reference_id_name">Reference ID.</string>
+    <string name="you_have_no_transactions">You have no transactions</string>
+    <string name="load_more">Load More</string>
+    <string name="you_have_no_more_transactions">You have no more transactions</string>
+    <string name="close_button">close Button</string>
+    <string name="search_button">search_button</string>
+    <string name="filter_button">filter Button</string>
+    <string name="total_available_funds">Total Available Funds</string>
+    <string name="recent_token_transactions">Recent Token Transactions</string>
 </resources>
