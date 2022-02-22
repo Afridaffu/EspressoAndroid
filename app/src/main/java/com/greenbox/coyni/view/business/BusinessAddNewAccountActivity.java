@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -21,10 +22,12 @@ import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 public class BusinessAddNewAccountActivity extends AppCompatActivity {
 
-    ImageView imageViewClose;
-    LinearLayout llBusinessAccount,llPersonalAccount;
+    private ImageView imageViewClose,ivPersonalProfileIcon;
+    private TextView tvPersonalProfileName;
+    private LinearLayout llBusinessAccount,llPersonalAccount;
     private String personalAccountSize;
     private IdentityVerificationViewModel identityVerificationViewModel;
+    private String personalAccountAvailable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,25 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
 
         llBusinessAccount = findViewById(R.id.businessAccontLL);
         llPersonalAccount = findViewById(R.id.personalAccontLL);
+        ivPersonalProfileIcon = findViewById(R.id.iv_personal_profile_icon);
+        tvPersonalProfileName = findViewById(R.id.tv_personal_profile_name);
         imageViewClose = findViewById(R.id.imv_close);
 
-        identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+//        if (getIntent().getStringExtra("PersonalAccount") != null && !getIntent().getStringExtra("PersonalAccount").equals("")) {
+//            LogUtils.d("PersonalAccount","PersonalAccount"+getIntent().getStringExtra("PersonalAccount"));
+//            personalAccountAvailable = getIntent().getStringExtra("PersonalAccount");
+//            if(personalAccountAvailable.equalsIgnoreCase("true")){
+//                ivPersonalProfileIcon.setBackgroundResource(R.drawable.ic_user_inactive);
+//                tvPersonalProfileName.setTextColor(getResources().getColor(R.color.trans_black));
+//
+//            } else {
+//                ivPersonalProfileIcon.setBackgroundResource(R.drawable.ic_user);
+//                tvPersonalProfileName.setTextColor(getResources().getColor(R.color.primary_black));
+//
+//            }
+//        }
 
+        identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
         llBusinessAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +71,8 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         llPersonalAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                identityVerificationViewModel.getPostAddCustomer();
+                    identityVerificationViewModel.getPostAddCustomer();
+
             }
         });
 

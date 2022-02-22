@@ -32,6 +32,8 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.BindingLayoutActivity;
+import com.greenbox.coyni.view.CreatePasswordActivity;
 import com.greenbox.coyni.view.GiftCardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -52,6 +54,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BusinessProfileRecyclerAdapter giftCardsAdapter;
+    private String personalAccountExist;
 
 
     @Override
@@ -75,6 +78,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             llOpenAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+//                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class)
+//                            .putExtra("PersonalAccount", personalAccountExist)
+//                    );
                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
                 }
             });
@@ -190,6 +196,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
                     if(personalAccountList.size()!=0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
+                         personalAccountExist = "true";
                         String iconText = "";
                         if (personalAccountList.get(0).getCompanyName() != null
                                 ) {
@@ -212,6 +219,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         }
                         businessPersonalAccountNameTv.setText(personalAccountList.get(0).getFullName());
                     } else {
+                        personalAccountExist = "false";
                         businessPersonalProfileAccount.setVisibility(View.GONE);
                     }
                 }
