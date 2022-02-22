@@ -588,6 +588,26 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.RefundTransactionActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.BusinessSalesOrderActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+        </activity>
+        <activity
+            android:name=".view.business.TransactionDetailsFailedActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+
 
         <activity
             android:name=".view.business.BusinessCreateAccountsActivity"
