@@ -2,15 +2,14 @@ package com.greenbox.coyni.view.business;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class AddtionaInfoRequired extends AppCompatActivity {
+public class AdditionalInformationRequiredActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addtiona_info_required);
+        setContentView(R.layout.activity_additional_information_required);
     }
 }

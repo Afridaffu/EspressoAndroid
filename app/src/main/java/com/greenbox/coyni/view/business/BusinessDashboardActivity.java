@@ -1,7 +1,5 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.fragment.app.FragmentTransaction;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +8,11 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
@@ -79,6 +77,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             e.printStackTrace();
         }
 //        pushFragment(new BusinessDashboardFragment());
+
     }
 
     public void onDashboardTabSelected(View view) {

@@ -42,6 +42,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressResponse = new MutableLiveData<>();
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressPatchResponse = new MutableLiveData<>();
     private MutableLiveData<TrackerResponse> getStatusTracker = new MutableLiveData<>();
+    private MutableLiveData<TrackerResponse> getBusinessAddCustomer = new MutableLiveData<>();
     private MutableLiveData<GetIdentityResponse> getIdentity = new MutableLiveData<>();
 
     public IdentityVerificationViewModel(@NonNull Application application) {
@@ -62,6 +63,10 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
     public MutableLiveData<TrackerResponse> getGetStatusTracker() {
         return getStatusTracker;
+    }
+
+    public MutableLiveData<TrackerResponse> getBusinessAddCustomer() {
+        return getBusinessAddCustomer;
     }
 
     public MutableLiveData<IdentityAddressResponse> getUploadIdentityAddressResponse() {
@@ -199,6 +204,42 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         getStatusTracker.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TrackerResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getPostAddCustomer() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<TrackerResponse> mCall = apiService.registerAddCustomer();
+            mCall.enqueue(new Callback<TrackerResponse>() {
+                @Override
+                public void onResponse(Call<TrackerResponse> call, Response<TrackerResponse> response) {
+                    try {
+                        Log.d("businessreg","rrrrr"+response);
+//                        if (response.isSuccessful()) {
+//                            TrackerResponse obj = response.body();
+//                            getBusinessAddCustomer.setValue(obj);
+//                        } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<TrackerResponse>() {
+//                            }.getType();
+//                            TrackerResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            getBusinessAddCustomer.setValue(errorResponse);
+//                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getBusinessAddCustomer.setValue(null);
                     }
                 }
 

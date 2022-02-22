@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.business.DefaultAccountDialogActivity"
     android:background="@drawable/dialog_bg">
+
     <LinearLayout
         android:id="@+id/profileviewLL"
         android:layout_width="match_parent"

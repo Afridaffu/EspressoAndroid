@@ -234,6 +234,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+
                     if (businessTrackerResponse.getData().isIsbankAccount()) {
                         Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
                         startActivity(intent);

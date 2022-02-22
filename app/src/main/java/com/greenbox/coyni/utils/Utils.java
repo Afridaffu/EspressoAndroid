@@ -89,6 +89,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
+    public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";
