@@ -108,12 +108,23 @@ public class MerchantsAgrementActivity extends BaseActivity {
         }
     }
 
+    private void deleteTemporarySignatureFile() {
+        if (filePath != null) {
+            File file = new File(filePath);
+            if(file.exists()) {
+                file.delete();
+            }
+            filePath = null;
+        }
+    }
+
     private void initObservers() {
 
         businessDashboardViewModel.getSignedAgreementResponseMutableLiveData().observe(this, new Observer<SignedAgreementResponse>() {
             @Override
             public void onChanged(SignedAgreementResponse signedAgreementResponse) {
                 try {
+                    deleteTemporarySignatureFile();
                     dismissDialog();
                     if(signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
