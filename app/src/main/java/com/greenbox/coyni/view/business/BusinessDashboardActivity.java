@@ -39,6 +39,7 @@ import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+
 //Business dashboard activity created
 public class BusinessDashboardActivity extends BaseActivity {
 
