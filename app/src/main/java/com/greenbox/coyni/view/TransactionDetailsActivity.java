@@ -5,8 +5,11 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.utils.MyApplication;
@@ -456,12 +460,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         cancelTxnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
-                    dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+//                try {
+//                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+//                    dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+                cancelPopup();
             }
         });
 
@@ -908,6 +913,55 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
                 break;
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void cancelPopup() {
+        try {
+            final Dialog dialog = new Dialog(TransactionDetailsActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.canceltransaction);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvNo = dialog.findViewById(R.id.tvNo);
+            TextView tvYes = dialog.findViewById(R.id.tvYes);
+
+            tvNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            tvYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        dialog.dismiss();
+                        progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                        dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -3,6 +3,7 @@ package com.greenbox.coyni.model.profile;
 import com.greenbox.coyni.model.Error;
 
 public class TrackerResponse {
+
     private String status;
     private String timestamp;
     private TrackerData data;

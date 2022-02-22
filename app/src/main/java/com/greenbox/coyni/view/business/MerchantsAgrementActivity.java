@@ -25,6 +25,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 import java.io.File;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
@@ -105,9 +106,10 @@ public class MerchantsAgrementActivity extends BaseActivity {
     }
 
     private void sendSignatureRequest(String filepath) {
-        MultipartBody.Part file = null;
-        RequestBody agreementType = null;
-        businessDashboardViewModel.signedAgreement(file, agreementType);
+        File file = new File(filepath);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
+        businessDashboardViewModel.signedAgreement(body, 5);
     }
 
     private void initObservers() {
@@ -117,10 +119,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
             public void onChanged(SignedAgreementResponse signedAgreementResponse) {
                 try {
                     if (signedAgreementResponse != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
-
-                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
-                        activityResultLauncher.launch(intent);
-
+//                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
+//                        activityResultLauncher.launch(intent);
+                        finish();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

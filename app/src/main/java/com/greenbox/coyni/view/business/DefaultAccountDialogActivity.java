@@ -7,8 +7,6 @@ import android.os.Bundle;
 import com.greenbox.coyni.R;
 
 public class DefaultAccountDialogActivity extends AppCompatActivity {
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -29,6 +29,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/BackIV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_chevron_left" />
@@ -320,7 +321,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="99.00 CYN"
+                                android:text="99.00 "
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -382,6 +383,7 @@
                             android:layout_marginBottom="@dimen/_11sdp"
                             android:background="@color/blue_light" />
                         <ImageView
+                            android:id="@+id/RefundIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

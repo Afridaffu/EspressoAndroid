@@ -2,6 +2,9 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
@@ -282,7 +285,7 @@ public interface ApiService {
     @Multipart
     @POST("api/v2/business/sign-agreement")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
-                                                  @Part("agreementType") RequestBody agreementType);
+                                                  @Part("agreementType") int agreementType);
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
@@ -292,6 +295,9 @@ public interface ApiService {
 
     @POST("api/v2/profile/me/tracker")
     Call<TrackerResponse> statusTracker();
+
+    @POST("api/v2/register/add-customer")
+    Call<TrackerResponse> registerAddCustomer();
 
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);
@@ -442,6 +448,18 @@ public interface ApiService {
 
     @POST("api/v2/user/biometric/token")
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
+
+    @GET("api/v2/banks/me")
+    Call<PaymentMethodsResponse> meBanks();
+
+    @GET("api/v2/business/beneficial-owners")
+    Call<BOResp> getBeneficailOwners();
+
+    @POST("api/v2/business/beneficial-owners")
+    Call<BOIdResp> postBeneficailOwnersID();
+
+    @DELETE("api/v2/business/beneficial-owners")
+    Call<DeleteBOResp> deleteBeneficialOwner(@Query("beneficialOwnerId") Integer beneficialOwnerId);
 
 }
 
