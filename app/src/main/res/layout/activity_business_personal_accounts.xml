@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/accounts_bg_color"
+    tools:context=".view.AccountsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/_20sdp"
+        android:paddingEnd="@dimen/_20sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingTop="@dimen/_20sdp">
+
+        <ImageView
+            android:id="@+id/accountsCloseIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:src="@drawable/ic_close" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_17sdp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvProfile"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_margin="1dp"
+                android:visibility="visible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_20sdp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvUserInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/text_size_20sp" />
+
+
+                    <ImageView
+                        android:id="@+id/imgProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/userNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_14ssp"
+                    tools:text="Jonathan Joestar" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_27sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_13sdp"
+                    app:cardElevation="@dimen/_5sdp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_20sdp">
+
+                        <TextView
+                            android:id="@+id/userBalanceTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_12ssp"
+                            tools:text="19.999" />
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="@dimen/_5sdp"-->
+<!--                            android:fontFamily="@font/opensans_semibold"-->
+<!--                            android:text="CYN"-->
+<!--                            android:textColor="@color/primary_black"-->
+<!--                            android:textSize="@dimen/_10ssp"-->
+<!--                            tools:text="CYN" />-->
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_custom_tick"
+                app:tint="@color/primary_green"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/_15sdp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10ssp"
+            android:layout_marginBottom="@dimen/_10ssp"
+            android:background="@drawable/fullradius_list_items"
+            android:orientation="vertical">
+
+            <ExpandableListView
+                android:id="@+id/recyclerView"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:divider="@null"
+                android:groupIndicator="@null"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="match_parent"/>
+
+        </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/profileLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileviewLL"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_11sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/profile" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/business_personal_account_name"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Jonathan Joestar"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_open_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileLL"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_11sdp"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_circle" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Open New Account"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11sdp" />
+            </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

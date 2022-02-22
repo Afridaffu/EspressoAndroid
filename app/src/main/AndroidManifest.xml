@@ -387,6 +387,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -578,6 +579,25 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.BusinessReceivePaymentActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
+            android:name=".view.business.BusinessCreateAccountsActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.BusinessAddNewAccountActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.BusinessAddNewBusinessAccountActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
