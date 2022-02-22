@@ -115,9 +115,9 @@
     <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
 
     <string name="iv_failed">Identity Verification Failed</string>
-    <string name="iv_failedcontent">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
+    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
     <string name="iv_failedcontentextention"> If you need any help please</string>
-    <string name="iv_failedcontactex"><u>Contact Us</u></string>
+    <string name="contactus"><u>Contact Us</u></string>
 
     <string name="exit">Exit</string>
     <string name="bank_account">Bank Account</string>
@@ -363,7 +363,7 @@
     <string name="new_dba">New DBA</string>
     <string name="add_dba">Add DBA</string>
     <string name="open_new_account">Open New Account</string>
-
+    <string name="application_cancelled_message">Thank you for your interest in merchant processing through coyni. Hope to see you again </string>
 
     <string name="buy_tokens_signet">Buy Tokens - Signet</string>
     <string name="descriptor_name">Descriptor Name</string>
@@ -453,8 +453,9 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
-
-
+    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application  click here</string>
+    <string name="cancel_application">Cancel Application</string>
+    <string name="cancel_application_message">Are you sure to cancel your merchant application?</string>
     <string name="today_current_batch">Today(Current batch)</string>
     <string name="yesterday">Yesterday</string>
     <string name="month_to_date">Month to Date(MTD)</string>
@@ -485,6 +486,8 @@
     <string name="transaction_subtype">Transaction SubType</string>
     <string name="pending">Pending</string>
     <string name="failed">Failed</string>
+    <string name="continue_text">Continue</string>
+    <string name="additional_data_message">The coyni team requires your additional action to further verify you.</string>
     <string name="in_progress">In progress</string>
     <string name="insufficient_funds">Insufficient Funds</string>
     <string name="merchant_insufficient_funds">Insufficient funds in your Merchant\n Balance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>
@@ -498,5 +501,20 @@
     <string name="full_amount">Full Amount</string>
     <string name="amount">1/2 Amount</string>
     <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
+    <string name="add_new_team_member">Add New Team Member</string>
+    <string name="administrator">Administrator</string>
+    <string name="full_administrator_permission">Full administrator permission</string>
+    <string name="name">Name</string>
+    <string name="send">Send</string>
+    <string name="please_note_new_team_members">*Please Note: New team members get full administrator permission</string>
 
+    <string name="reference_id_name">Reference ID.</string>
+    <string name="you_have_no_transactions">You have no transactions</string>
+    <string name="load_more">Load More</string>
+    <string name="you_have_no_more_transactions">You have no more transactions</string>
+    <string name="close_button">close Button</string>
+    <string name="search_button">search_button</string>
+    <string name="filter_button">filter Button</string>
+    <string name="total_available_funds">Total Available Funds</string>
+    <string name="recent_token_transactions">Recent Token Transactions</string>
 </resources>

@@ -1,20 +1,18 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.fragment.app.FragmentTransaction;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,13 +26,14 @@ import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -42,16 +41,18 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 //Business dashboard activity created
 public class BusinessDashboardActivity extends BaseActivity {
-
     private BusinessDashboardViewModel businessDashboardViewModel;
     private CustomerProfileViewModel customerProfileViewModel;
     private MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile;
     private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
+
     private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
+
     private DashboardViewModel mDashboardViewModel;
     private BaseFragment mCurrentFragment;
+    Long mLastClickTimeQA = 0L;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_business_dashboard);
             initialization();
             initObserver();
+            pushFragment(new BusinessDashboardFragment());
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -70,12 +72,12 @@ public class BusinessDashboardActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
-            Log.d("baseurll","baseurl"+ Utils.getStrURL_PRODUCTION());
             mDashboardViewModel.meProfile();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        pushFragment(new BusinessDashboardFragment());
+//        pushFragment(new BusinessDashboardFragment());
+
     }
 
     public void onDashboardTabSelected(View view) {
@@ -124,11 +126,11 @@ public class BusinessDashboardActivity extends BaseActivity {
         dialog.setContentView(R.layout.activity_business_quick_action);
         Window window = dialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams wl=window.getAttributes();
-        wl.gravity= Gravity.BOTTOM;
+        WindowManager.LayoutParams wl = window.getAttributes();
+        wl.gravity = Gravity.BOTTOM;
         wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wl);
-        dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
         LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
@@ -139,7 +141,18 @@ public class BusinessDashboardActivity extends BaseActivity {
         buyTokenLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class));
+                try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                        return;
+                    }
+                    mLastClickTimeQA = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
+                    i.putExtra("screen", "dashboard");
+                    startActivity(i);
+                    //startActivity(new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
@@ -163,10 +176,10 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     private void setSelectedTab(boolean isDashboard, boolean isAccount, boolean isTransactions, boolean isProfile) {
-        mIvDashboard.setImageResource(isDashboard ? R.drawable.ic_dashboard_active: R.drawable.ic_dashboard_inactive);
+        mIvDashboard.setImageResource(isDashboard ? R.drawable.ic_dashboard_active : R.drawable.ic_dashboard_inactive);
         mIvAccount.setImageResource(isAccount ? R.drawable.ic_account_active : R.drawable.ic_account_inactive);
-        mIvTransactions.setImageResource(isTransactions ? R.drawable.ic_transactions_active: R.drawable.ic_transactions_inactive);
-        mIvProfile.setImageResource(isProfile ? R.drawable.ic_profile_active: R.drawable.ic_profile);
+        mIvTransactions.setImageResource(isTransactions ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_inactive);
+        mIvProfile.setImageResource(isProfile ? R.drawable.ic_profile_active : R.drawable.ic_profile);
 
         int selectedTextColor = getColor(R.color.primary_green);
         int unSelectedTextColor = getColor(R.color.dark_grey);
@@ -248,7 +261,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                         try {
                             if (profile != null) {
                                 objMyApplication.setMyProfile(profile);
-                                if(mCurrentFragment!=null) {
+                                if (mCurrentFragment != null) {
                                     mCurrentFragment.updateData();
                                 }
                             }
@@ -257,6 +270,18 @@ public class BusinessDashboardActivity extends BaseActivity {
                         }
                     }
                 });
+        mDashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
+            @Override
+            public void onChanged(LatestTxnResponse latestTxnResponse) {
+                try {
+                    if (latestTxnResponse !=null) {
+                        objMyApplication.setListLatestTxn(latestTxnResponse);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {
@@ -270,6 +295,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
                 businessDashboardViewModel.meMerchantWallet();
+                mDashboardViewModel.getLatestTxns();
 //                notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();

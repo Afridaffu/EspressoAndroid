@@ -149,7 +149,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
             toggleBtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.b_tvWalletAddress);
 
-            idIVQrcode = (ImageView) findViewById(R.id.b_idIVQrcode);
+            idIVQrcode =  findViewById(R.id.b_idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
             businessreceivePaymentActivity = this;
@@ -258,7 +258,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
                         setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                         setAmountDialog.setContentView(R.layout.fragment_set_limit);
                         setAmountDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        ctKey = (CustomKeyboard) setAmountDialog.findViewById(R.id.customKeyBoard);
+                        ctKey =  setAmountDialog.findViewById(R.id.customKeyBoard);
                         setAmount = setAmountDialog.findViewById(R.id.setAmountET);
                         InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                         ctKey.setInputConnection(ic);
