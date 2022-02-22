@@ -59,12 +59,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     int mYear, mMonth, mDay;
     private DatePicker datepicker;
     Long mLastClickTime = 0L;
-    IdentityPagerAdapter identityPagerAdapter;
+    BOPagerAdapter boPagerAdapter;
     static AutoScrollViewPager viewPager;
     int pagerPosition = 0, diffMonths = -1;
     public static int focusedID = 0;
     RelativeLayout layoutUpload, layoutMailingAddress;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +72,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_add_benificial_owner);
 
-        identityPagerAdapter = new IdentityPagerAdapter();
+        boPagerAdapter = new BOPagerAdapter();
         viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(identityPagerAdapter);
+        viewPager.setAdapter(boPagerAdapter);
         viewPager.setPagingEnabled(false);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -961,7 +960,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         }
     }
 
-    class IdentityPagerAdapter extends PagerAdapter {
+    class BOPagerAdapter extends PagerAdapter {
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
