@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
-import com.greenbox.coyni.model.fee.FeeData;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -176,6 +175,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             SignedAgreementResponse obj = response.body();
                             signedAgreementResponseMutableLiveData.setValue(obj);
+                            Log.d("Signed agreement", obj.toString());
+
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<SignedAgreementResponse>() {

@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -29,13 +29,13 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class MerchantsAgrementActivity extends BaseActivity {
+public class MerchantsAgrementActivity extends BaseActivity  {
     public CardView doneCV;
     LinearLayout signatureEditLl;
     ImageView mIVSignature;
-    CheckBox agreeCb;
-
+    TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
+    private String filePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,38 +48,28 @@ public class MerchantsAgrementActivity extends BaseActivity {
         doneCV = findViewById(R.id.AgreeDoneCv);
         signatureEditLl = findViewById(R.id.signatureEditLL);
         mIVSignature = findViewById(R.id.signatureEditIV);
-        agreeCb = findViewById(R.id.agreementCB);
+        savedText = findViewById(R.id.savedtextTV);
 
-        agreeCb.setOnClickListener(new View.OnClickListener() {
+        doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (agreeCb.isEnabled()) {
-                    doneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                } else {
-                    doneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                }
+                sendSignatureRequest(filePath);
+                Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
+                activityResultLauncher.launch(intent);
             }
         });
-
-//        doneCV.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MerchantsAgrementActivity.this, GetstartedSuccessAcivity.class);
-//                activityResultLauncher.launch(intent);
-//            }
-//        });
 
 
         signatureEditLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchsignature();
+                launchSignature();
             }
         });
 
     }
 
-    private void launchsignature() {
+    private void launchSignature() {
         Intent inSignature = new Intent(MerchantsAgrementActivity.this, SignatureActivity.class);
         activityResultLauncher.launch(inSignature);
     }
@@ -96,9 +86,12 @@ public class MerchantsAgrementActivity extends BaseActivity {
         if (data != null) {
             String filePath = data.getStringExtra(Utils.DATA);
             File targetFile = new File(filePath);
-            if (targetFile.exists()) {
-                sendSignatureRequest(filePath);
+              if (targetFile.exists()) {
+                  this.filePath = filePath;
+//                sendSignatureRequest(filePath);
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
+                doneCV.setVisibility(View.VISIBLE);
+                savedText.setVisibility(View.VISIBLE);
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
             }
@@ -106,10 +99,12 @@ public class MerchantsAgrementActivity extends BaseActivity {
     }
 
     private void sendSignatureRequest(String filepath) {
-        File file = new File(filepath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
-        businessDashboardViewModel.signedAgreement(body, 5);
+        if(filepath!=null) {
+            File file = new File(filepath);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
+            businessDashboardViewModel.signedAgreement(body, 5);
+        }
     }
 
     private void initObservers() {
@@ -122,6 +117,10 @@ public class MerchantsAgrementActivity extends BaseActivity {
 //                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
 //                        activityResultLauncher.launch(intent);
                         finish();
+                    }
+                    else {
+                        Utils.displayAlert(signedAgreementResponse.getError().getErrorDescription(),
+                                MerchantsAgrementActivity.this, "", signedAgreementResponse.getError().getFieldErrors().get(0));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

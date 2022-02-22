@@ -229,11 +229,13 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
+                      startActivity(intent);
 
-                    if (businessTrackerResponse.getData().isIsbankAccount()) {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
-                        startActivity(intent);
-                    }
+//                    if (businessTrackerResponse.getData().isIsbankAccount()) {
+//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
+//                        startActivity(intent);
+//                    }
                 }
             });
 
