@@ -515,7 +515,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.AccountHasCreatedSucessful"
+            android:name=".view.business.AddBankAccount"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

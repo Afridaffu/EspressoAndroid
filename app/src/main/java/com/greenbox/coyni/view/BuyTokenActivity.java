@@ -431,6 +431,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }else{
+                    if (!transactionLimitResponse.getError().getErrorDescription().equals("")) {
+                        Utils.displayAlert(transactionLimitResponse.getError().getErrorDescription(), BuyTokenActivity.this, "", transactionLimitResponse.getError().getFieldErrors().get(0));
+                    } else {
+                        Utils.displayAlert(transactionLimitResponse.getError().getFieldErrors().get(0), BuyTokenActivity.this, "", "");
+                    }
                 }
             }
         });

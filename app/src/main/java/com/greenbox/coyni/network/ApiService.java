@@ -443,5 +443,8 @@ public interface ApiService {
     @POST("api/v2/user/biometric/token")
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
+    @GET("api/v2/banks/me")
+    Call<PaymentMethodsResponse> meBanks();
+
 }
 

@@ -21,6 +21,7 @@ import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
+import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 
 import java.util.List;
 
@@ -83,7 +84,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 } else {
                     holder.imgBankArrow.setVisibility(View.GONE);
                 }
-//                if (!strScreen.equals("selectpay")) {
                 if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
                     if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgBankTick.setVisibility(View.VISIBLE);
@@ -105,6 +105,36 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 } else {
                     holder.tvAccount.setText(objData.getAccountNumber());
                 }
+            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                holder.layoutBank.setVisibility(View.VISIBLE);
+                holder.layoutCard.setVisibility(View.GONE);
+                holder.imgPayMethod.setImageResource(R.drawable.ic_signet_ac_logo);
+                if (strScreen.equals("withdraw")) {
+                    holder.imgBankArrow.setVisibility(View.VISIBLE);
+                } else {
+                    holder.imgBankArrow.setVisibility(View.GONE);
+                }
+                if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
+                    if (objData.getId() == objMyApplication.getSelectedCard().getId()) {
+                        holder.imgBankTick.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.imgBankTick.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.imgBankTick.setVisibility(View.GONE);
+                }
+                if (!objData.getRelink()) {
+                    holder.layoutError.setVisibility(View.GONE);
+                } else {
+                    holder.layoutError.setVisibility(View.VISIBLE);
+                    holder.tvError.setText("There’s a issue with your payment ");
+                }
+                holder.tvBankName.setText("Signet Account");
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
+                    holder.tvAccount.setText(objData.getAccountNumber().substring(0, 5) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                } else {
+                    holder.tvAccount.setText(objData.getAccountNumber());
+                }
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.layoutCard.setVisibility(View.VISIBLE);
@@ -114,7 +144,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 } else {
                     holder.imgCardArrow.setVisibility(View.GONE);
                 }
-//                if (!strScreen.equals("selectpay") && !strScreen.equals("withdrawtoken")) {
                 if (strScreen.equals("buytoken") || strScreen.equals("wdrawtoken")) {
                     if (objMyApplication.getSelectedCard() != null && objData.getId() == objMyApplication.getSelectedCard().getId()) {
                         holder.imgCardTick.setVisibility(View.VISIBLE);
@@ -161,11 +190,19 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                         switch (strScreen) {
                             case "selectpay":
                                 objMyApplication.setSelectedCard(objData);
-                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
                                     if (!objData.getRelink()) {
-                                        ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
+                                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                            ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
+                                        } else {
+                                            ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
+                                        }
                                     } else {
-                                        ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                            ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                        } else {
+                                            ((SelectPaymentMethodActivity) mContext).expiry();
+                                        }
                                     }
                                 } else if (!objData.getExpired()) {
                                     ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
@@ -182,7 +219,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
-//                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdrawtoken");
                                     ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdrawtoken");
                                 } else {
                                     ((WithdrawPaymentMethodsActivity) mContext).expiry();
