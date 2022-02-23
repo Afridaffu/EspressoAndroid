@@ -20,19 +20,20 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.Objects;
 
-public class AddNewTeamMemberActivity extends AppCompatActivity {
+public class AddNewTeamMemberActivity extends BaseActivity {
 
-    LinearLayout backBtnLL, administratorLL, fNameErrorLL, lNameErrorLL, emailIdErrorLL, phoneNoErrorLL;
-    TextInputEditText fNameET, lNameET, emailIdET;
-    TextInputLayout fNameTIL, lNameTIL, emailIdTIL;
-    TextView fNameErrorTV, lNameErrorTV, emailIdErrorTV, phoneNoErrorTV;
-    OutLineBoxPhoneNumberEditText phoneNoET;
-    CardView cvSend;
-    boolean isFName = false, isLName = false, isEmailId = false;
+    private LinearLayout backBtnLL, fNameErrorLL, lNameErrorLL, emailIdErrorLL, phoneNoErrorLL;
+    private TextInputEditText fNameET, lNameET, emailIdET;
+    private TextInputLayout fNameTIL, lNameTIL, emailIdTIL;
+    private TextView fNameErrorTV, lNameErrorTV, emailIdErrorTV, phoneNoErrorTV;
+    private OutLineBoxPhoneNumberEditText phoneNoET;
+    private CardView cvSend;
+    private boolean isFName = false, isLName = false, isEmailId = false;
 
     LoginViewModel loginViewModel;
     public static int focusedID = 0;
@@ -56,7 +57,6 @@ public class AddNewTeamMemberActivity extends AppCompatActivity {
 
         try {
             backBtnLL = findViewById(R.id.backBtnLL);
-            administratorLL = findViewById(R.id.administratorLL);
             fNameET = findViewById(R.id.fNameET);
             lNameET = findViewById(R.id.lNameET);
             emailIdET = findViewById(R.id.emailIdET);
