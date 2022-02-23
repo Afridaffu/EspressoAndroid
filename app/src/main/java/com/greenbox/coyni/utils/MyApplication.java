@@ -941,14 +941,6 @@ public class MyApplication extends Application {
         this.buyTokenResponse = buyTokenResponse;
     }
 
-    public BOResp getBeneficialOwnersResponse() {
-        return beneficialOwnersResponse;
-    }
-
-    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
-        this.beneficialOwnersResponse = beneficialOwnersResponse;
-    }
-
     public Date getDate(String date) {
         Date dtExpiry = null;
         try {
