@@ -232,17 +232,21 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             addBankIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    if (businessTrackerResponse.getData().isBeneficialOwners()) {
-//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
-//                        startActivity(intent);
-//                    }
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+                            startActivity(intent);
+                        }
 
-                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+//                    startActivity(intent);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 

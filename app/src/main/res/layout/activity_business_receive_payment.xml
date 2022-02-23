@@ -131,7 +131,7 @@
                         android:layout_marginTop="@dimen/_13sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Set amount to request a payment or scan QR\n code to pay me"
+                        android:text="Set amount to request a payment or scan QR\n code to pay"
                         android:textAlignment="center"
                         android:textColor="@color/xdark_gray"
                         android:textSize="@dimen/_11ssp" />

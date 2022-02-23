@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/Cardnextcv"
+                android:id="@+id/cvDone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_85sdp"

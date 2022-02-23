@@ -17,6 +17,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -456,7 +457,7 @@ public interface ApiService {
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
     @GET("api/v2/banks/me")
-    Call<PaymentMethodsResponse> meBanks();
+    Call<BankResponse> meBanks();
 
     @GET("api/v2/business/beneficial-owners")
     Call<BOResp> getBeneficailOwners();

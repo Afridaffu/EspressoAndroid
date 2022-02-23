@@ -649,12 +649,18 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private void dropAllTables() {
         try {
             enableBiometric(false);
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+            mydatabase.execSQL("Delete from tblUserDetails;");
+            mydatabase.execSQL("Delete from tblRemember;");
+            mydatabase.execSQL("Delete from tblThumbPinLock;");
+            mydatabase.execSQL("Delete from tblFacePinLock;");
+            mydatabase.execSQL("Delete from tblPermanentToken;");
+            mydatabase.execSQL("Delete from tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();

@@ -213,6 +213,17 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/duplicateVIEWMORETV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Click here to View More"
+                    android:fontFamily="@font/opensans_bold"
+                    android:textSize="@dimen/_12ssp"
+                    android:textColor="@color/error_red"
+                    android:textAlignment="center"
+                    android:layout_below="@id/recentTxnLL"/>
+
             </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -35,6 +35,7 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -158,7 +159,8 @@ public class BusinessDashboardActivity extends BaseActivity {
         widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, SelectWithdrawMethodActivity.class));
+//                startActivity(new Intent(BusinessDashboardActivity.this, SelectWithdrawMethodActivity.class));
+                startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
             }
         });
         receivePaymentLL.setOnClickListener(new View.OnClickListener() {
