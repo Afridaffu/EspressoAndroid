@@ -56,7 +56,7 @@ public class CompanyInfoResp {
         private String country;
         private String businessEntity;
         private String ssnOrEin;
-        private ArrayList<RequiredDocumets> requiredDocumets = new ArrayList<>();
+        private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
 
 
         public String getName() {
@@ -148,11 +148,11 @@ public class CompanyInfoResp {
         }
 
         public ArrayList<RequiredDocumets> getRequiredDocumets() {
-            return requiredDocumets;
+            return requiredDocuments;
         }
 
         public void setRequiredDocumets(ArrayList<RequiredDocumets> requiredDocumets) {
-            this.requiredDocumets = requiredDocumets;
+            this.requiredDocuments = requiredDocumets;
         }
 
         public String getIdentificationType() {

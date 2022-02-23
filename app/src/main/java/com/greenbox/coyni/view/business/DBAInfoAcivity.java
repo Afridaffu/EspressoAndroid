@@ -164,8 +164,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             backIV.setVisibility(GONE);
             viewPager.setCurrentItem(0);
             viewBarLeft.setBackgroundResource(R.drawable.button_background);
-            viewBarLeft.setBackgroundResource(R.drawable.button_background1);
-
+            viewBarRight.setBackgroundResource(R.drawable.button_background1);
         }
     }
 

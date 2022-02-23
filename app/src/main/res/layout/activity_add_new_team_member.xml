@@ -38,7 +38,7 @@
             android:textSize="@dimen/_16ssp" />
 
         <LinearLayout
-            android:id="@+id/administatorLL"
+            android:id="@+id/administratorLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_31sdp"
@@ -79,7 +79,7 @@
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fnameTIL"
+            android:id="@+id/fNameTIL"
             style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,14 +91,15 @@
             app:hintTextColor="@color/primary_green">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fnameET"
+                android:id="@+id/fNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
+                android:autofillHints="creditCardSecurityCode"
+                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
-                android:inputType="textVisiblePassword|textNoSuggestions"
-                android:maxLength="100"
+                android:inputType="textVisiblePassword|textCapSentences|textNoSuggestions"
+                android:maxLength="30"
                 android:maxLines="1"
                 android:padding="@dimen/_14sdp"
                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -112,7 +113,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:id="@+id/fnameLL"
+            android:id="@+id/fNameLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_5sdp"
@@ -128,7 +129,7 @@
                 android:src="@drawable/ic_erro" />
 
             <TextView
-                android:id="@+id/address1ErrorTV"
+                android:id="@+id/fNameTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -153,11 +154,12 @@
                 android:id="@+id/lNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
+                android:autofillHints="creditCardSecurityCode"
+                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
-                android:inputType="textVisiblePassword|textNoSuggestions"
-                android:maxLength="100"
+                android:inputType="textVisiblePassword|textCapSentences|textNoSuggestions"
+                android:maxLength="30"
                 android:maxLines="1"
                 android:padding="@dimen/_14sdp"
                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -213,10 +215,11 @@
                 android:id="@+id/emailIdET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:autofillHints="creditCardSecurityCode"
+                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
-                android:inputType="textVisiblePassword|textNoSuggestions"
+                android:inputType="textEmailAddress|textNoSuggestions"
                 android:maxLength="50"
                 android:maxLines="1"
                 android:padding="@dimen/_14sdp"
@@ -251,6 +254,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:text="@string/email_error_warning"
                 android:fontFamily="@font/opensans_regular"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10ssp" />
@@ -283,6 +287,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:text="@string/phone_number_error_warning"
                 android:fontFamily="@font/opensans_regular"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10ssp" />

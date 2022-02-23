@@ -917,6 +917,14 @@ public class MyApplication extends Application {
         this.dbaInfoResp = dbaInfoResp;
     }
 
+    public BOResp getBeneficialOwnersResponse() {
+        return beneficialOwnersResponse;
+    }
+
+    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
+        this.beneficialOwnersResponse = beneficialOwnersResponse;
+    }
+
     public String getStrMobileToken() {
         return strMobileToken;
     }
@@ -931,14 +939,6 @@ public class MyApplication extends Application {
 
     public void setBuyTokenResponse(BuyTokenResponse buyTokenResponse) {
         this.buyTokenResponse = buyTokenResponse;
-    }
-
-    public BOResp getBeneficialOwnersResponse() {
-        return beneficialOwnersResponse;
-    }
-
-    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
-        this.beneficialOwnersResponse = beneficialOwnersResponse;
     }
 
     public Date getDate(String date) {

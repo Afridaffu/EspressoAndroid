@@ -835,36 +835,43 @@ public class BusinessProfileActivity extends AppCompatActivity {
         boolean isFace = false;
         boolean isTouch = false;
         boolean isBiometric = false;
+        try {
+            String faceValue = dbHandler.getFacePinLock();
+            if (faceValue != null && faceValue.equals("true")) {
+                isFace = true;
+                myApplication.setLocalBiometric(true);
+            } else {
+                isFace = false;
+                myApplication.setLocalBiometric(false);
+            }
 
-        String faceValue = dbHandler.getFacePinLock();
-        if (faceValue != null && faceValue.equals("true")) {
-            isFace = true;
-            myApplication.setLocalBiometric(true);
-        } else {
-            isFace = false;
-            myApplication.setLocalBiometric(false);
+            String thumbValue = dbHandler.getThumbPinLock();
+            if (thumbValue != null && thumbValue.equals("true")) {
+                isTouch = true;
+                myApplication.setLocalBiometric(true);
+            } else {
+                isTouch = false;
+                myApplication.setLocalBiometric(false);
+            }
+
+            isBiometric = isFace || isTouch;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-        String thumbValue = dbHandler.getThumbPinLock();
-        if (thumbValue != null && thumbValue.equals("true")) {
-            isTouch = true;
-            myApplication.setLocalBiometric(true);
-        } else {
-            isTouch = false;
-            myApplication.setLocalBiometric(false);
-        }
-
-        isBiometric = isFace || isTouch;
         return isBiometric;
     }
 
     public boolean isTouchEnabled() {
         boolean touch = false;
-        String value = dbHandler.getThumbPinLock();
-        if (value != null && value.equals("true")) {
-            touch = true;
-        } else {
-            touch = false;
+        try {
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                touch = true;
+            } else {
+                touch = false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return touch;
     }
