@@ -517,4 +517,6 @@
     <string name="filter_button">filter Button</string>
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
+    <string name="email_error_warning">User already exists. Try a new email or log in.</string>
+    <string name="phone_number_error_warning">User already exists. Try a new phone number or log in.</string>
 </resources>
