@@ -25,12 +25,17 @@ import com.greenbox.coyni.model.giftcard.Brand;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.wallet.WalletInfo;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.BindingLayoutActivity;
+import com.greenbox.coyni.view.CreatePasswordActivity;
 import com.greenbox.coyni.view.GiftCardActivity;
+import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -49,6 +54,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BusinessProfileRecyclerAdapter giftCardsAdapter;
+    private String personalAccountExist;
 
 
     @Override
@@ -72,7 +78,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             llOpenAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
+//                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class)
+//                            .putExtra("PersonalAccount", personalAccountExist)
+//                    );
+                   startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
                 }
             });
         } catch (Exception e) {
@@ -80,7 +89,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         }
 
         dashboardViewModel.getProfiles();
-
 
     }
 
@@ -107,8 +115,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
     private void showUserData() {
         String iconText = "";
-
-        Log.d("getwallet", "getwallet" + myApplication.getWalletResponse());
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getFirstName() != null) {
             String firstName = myApplication.getMyProfile().getData().getFirstName();
@@ -135,10 +141,32 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             imgProfile.setVisibility(View.GONE);
             userShortInfoTV.setText(iconText);
         }
-        Double bal = myApplication.getGBTBalance();
-        String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
-        userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
 
+        setUserBalance(myApplication.getWalletResponse());
+
+//        Double bal = myApplication.getGBTBalance();
+//        String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+//        userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
+
+    }
+
+    private void setUserBalance(WalletResponse walletResponse) {
+        try {
+            String strAmount = "";
+            List<WalletInfo> walletInfo = walletResponse.getData().getWalletInfo();
+            if (walletInfo != null && walletInfo.size() > 0) {
+                for (int i = 0; i < walletInfo.size(); i++) {
+                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
+                        myApplication.setGbtWallet(walletInfo.get(i));
+                        strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
+                        userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+                        myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void initObservers() {
@@ -168,6 +196,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
                     if(personalAccountList.size()!=0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
+                         personalAccountExist = "true";
                         String iconText = "";
                         if (personalAccountList.get(0).getCompanyName() != null
                                 ) {
@@ -188,8 +217,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                             mIvUserIcon.setVisibility(View.GONE);
                             mTvUserIconText.setText(iconText);
                         }
-                        businessPersonalAccountNameTv.setText(personalAccountList.get(0).getCompanyName());
+                        businessPersonalAccountNameTv.setText(personalAccountList.get(0).getFullName());
                     } else {
+                        personalAccountExist = "false";
                         businessPersonalProfileAccount.setVisibility(View.GONE);
                     }
                 }

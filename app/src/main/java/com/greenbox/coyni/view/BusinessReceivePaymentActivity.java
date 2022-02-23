@@ -217,7 +217,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
                     myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                     ClipData myClip;
-                    String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
+                    String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
                     myClip = ClipData.newPlainText("text", text);
                     myClipboard.setPrimaryClip(myClip);
 

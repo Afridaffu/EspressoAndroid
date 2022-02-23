@@ -32,5 +32,9 @@
         android:id="@+id/withdrawBank"
         layout="@layout/activity_withdraw_bank_acc_transctn"
         android:visibility="gone"/>
+    <include
+        android:id="@+id/buyTokenSignet"
+        layout="@layout/buy_token_signet_tdetails"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

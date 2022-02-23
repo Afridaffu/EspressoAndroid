@@ -117,6 +117,7 @@ public class Utils {
     public static final String giftcardType = "6";
     public static final String signetType = "7";
     public static final String payType = "12";
+    public static final String businessType = "19";
     public static final String paySubType = "8";
     public static final String requestSubType = "9";
     public static final String eventTypeId = "0";
@@ -163,6 +164,7 @@ public class Utils {
     public static final int refund = 9;
     public static final int accountTransfer = 0; //Not available
     public static final int paidInvoice = 15;
+    public static final int businessPayout = 19;
 
     public static final int sent = 8;
     public static final int received = 9;

@@ -179,13 +179,15 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
                         try {
-                            passwordET.setHint("Password");
-                            layoutIndicator.setVisibility(VISIBLE);
                             passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
                             passwordTIL.setHint("New Password");
-                            tvPasswordInfo.setVisibility(VISIBLE);
+                            passwordET.setHint("Password");
+                            layoutIndicator.setVisibility(VISIBLE);
                             passwordErrorLL.setVisibility(GONE);
+                            if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
+                                tvPasswordInfo.setVisibility(VISIBLE);
+                            }
                         } catch (Resources.NotFoundException e) {
                             e.printStackTrace();
                         }

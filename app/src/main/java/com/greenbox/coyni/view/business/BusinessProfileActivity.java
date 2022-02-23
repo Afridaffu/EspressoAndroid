@@ -29,6 +29,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -43,6 +45,7 @@ import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -53,6 +56,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
             businessResetPin, preferencesLL;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
@@ -79,8 +83,12 @@ public class BusinessProfileActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_profile);
-        initFields();
-        initObservers();
+        try {
+            initFields();
+            initObservers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initFields() {
@@ -93,8 +101,9 @@ public class BusinessProfileActivity extends AppCompatActivity {
             cvLogout = findViewById(R.id.cvLogout);
             switchOnLL = findViewById(R.id.switchOn);
             businessResetPin = findViewById(R.id.businessResetPin);
-
             dbainfoLL = findViewById(R.id.DBAInformationLL);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+
             dbainfoLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -437,115 +446,139 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private void initObservers() {
 
-        coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
-            @Override
-            public void onChanged(BiometricResponse biometricResponse) {
-                try {
-                    if (enablePopup != null) {
-                        enablePopup.dismiss();
-                    }
-//                    dialog.dismiss();
-                    if (biometricResponse != null) {
-                        saveToken(biometricResponse.getData().getToken());
-                        Utils.generateUUID(BusinessProfileActivity.this);
-                        if (!isSwitchEnabled) {
-                            if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-//                                saveFace("false");
-//                                saveThumb("true");
+        try {
+            coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
+                @Override
+                public void onChanged(BiometricResponse biometricResponse) {
+                    try {
+                        if (enablePopup != null) {
+                            enablePopup.dismiss();
+                        }
+    //                    dialog.dismiss();
+                        if (biometricResponse != null) {
+                            saveToken(biometricResponse.getData().getToken());
+                            Utils.generateUUID(BusinessProfileActivity.this);
+                            if (!isSwitchEnabled) {
+                                if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+    //                                saveFace("false");
+    //                                saveThumb("true");
+                                    if (!isLoggedOut) {
+                                        saveFace("false");
+                                        saveThumb("true");
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
+                                    }
+                                } else {
+    //                                saveFace("true");
+    //                                saveThumb("false");
+                                    if (!isLoggedOut) {
+                                        saveFace("true");
+                                        saveThumb("false");
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
+                                    }
+                                }
+
+                                isSwitchEnabled = true;
+                                switchOnLL.setVisibility(View.VISIBLE);
+                                switchOffLL.setVisibility(View.GONE);
+                                myApplication.setBiometric(true);
+                            } else {
+                                if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                                    if (!isLoggedOut)
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
+                                } else {
+                                    if (!isLoggedOut)
+                                        Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
+                                }
+                                myApplication.setBiometric(false);
                                 if (!isLoggedOut) {
                                     saveFace("false");
-                                    saveThumb("true");
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
-                                }
-                            } else {
-//                                saveFace("true");
-//                                saveThumb("false");
-                                if (!isLoggedOut) {
-                                    saveFace("true");
                                     saveThumb("false");
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
                                 }
+                                isSwitchEnabled = false;
+                                switchOnLL.setVisibility(View.GONE);
+                                switchOffLL.setVisibility(View.VISIBLE);
+                                Log.e("isFace1", isFaceEnabled() + "");
+                                Log.e("isTouch1", isTouchEnabled() + "");
                             }
 
-                            isSwitchEnabled = true;
-                            switchOnLL.setVisibility(View.VISIBLE);
-                            switchOffLL.setVisibility(View.GONE);
-                            myApplication.setBiometric(true);
-                        } else {
-                            if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                if (!isLoggedOut)
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned off", R.drawable.ic_touch_id, "authid");
-                            } else {
-                                if (!isLoggedOut)
-                                    Utils.showCustomToast(BusinessProfileActivity.this, "Face ID has been turned off", R.drawable.ic_faceid, "authid");
-                            }
-                            myApplication.setBiometric(false);
-                            if (!isLoggedOut) {
-                                saveFace("false");
-                                saveThumb("false");
-                            }
-                            isSwitchEnabled = false;
-                            switchOnLL.setVisibility(View.GONE);
-                            switchOffLL.setVisibility(View.VISIBLE);
-                            Log.e("isFace1", isFaceEnabled() + "");
-                            Log.e("isTouch1", isTouchEnabled() + "");
                         }
-
+                    } catch (
+                            Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (
-                        Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
 
 
-        dashboardViewModel.getProfileMutableLiveData().
+            dashboardViewModel.getProfileMutableLiveData().
 
-                observe(this, new Observer<Profile>() {
-                    @Override
-                    public void onChanged(Profile profile) {
-                        try {
-                            if (profile != null) {
-                                myApplication.setMyProfile(profile);
-                                bindImage(profile.getData().getImage());
+                    observe(this, new Observer<Profile>() {
+                        @Override
+                        public void onChanged(Profile profile) {
+                            try {
+                                if (profile != null) {
+                                    myApplication.setMyProfile(profile);
+                                    bindImage(profile.getData().getImage());
 
-                                if (profile.getData().getAccountStatus() != null) {
-                                    try {
-                                        if (profile.getData().getAccountStatus().equals("Active")) {
-                                            account_status.setTextColor(getResources().getColor(R.color.active_green));
-                                            statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                                        } else if (profile.getData().getAccountStatus().equals("Unverified")) {
-                                            account_status.setTextColor(getResources().getColor(R.color.orange));
-                                            statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                                        } else if (profile.getData().getAccountStatus().equals("Under Review")) {
-                                            account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
-                                            statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                                        } else {
+                                    if (profile.getData().getAccountStatus() != null) {
+                                        try {
+                                            if (profile.getData().getAccountStatus().equals("Active")) {
+                                                account_status.setTextColor(getResources().getColor(R.color.active_green));
+                                                statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
+                                            } else if (profile.getData().getAccountStatus().equals("Unverified")) {
+                                                account_status.setTextColor(getResources().getColor(R.color.orange));
+                                                statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                                            } else if (profile.getData().getAccountStatus().equals("Under Review")) {
+                                                account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
+                                                statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
+                                            }
+                                            //                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                                            //                        cardviewYourAccount.setVisibility(View.VISIBLE);
+                                            //                    } else {
+                                            //                        cardviewYourAccount.setVisibility(View.GONE);
+                                            //                    }
+                                            account_status.setText(profile.getData().getAccountStatus());
+                                            account_id.setText("Account ID M-" + profile.getData().getId());
+                                            String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                                            userFullname.setText(fullname);
+                                        } catch (Resources.NotFoundException e) {
+                                            e.printStackTrace();
                                         }
-                                        //                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                                        //                        cardviewYourAccount.setVisibility(View.VISIBLE);
-                                        //                    } else {
-                                        //                        cardviewYourAccount.setVisibility(View.GONE);
-                                        //                    }
-                                        account_status.setText(profile.getData().getAccountStatus());
-                                        account_id.setText("Account ID M-" + profile.getData().getId());
-                                        String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                                        userFullname.setText(fullname);
-                                    } catch (Resources.NotFoundException e) {
-                                        e.printStackTrace();
+
+                                    } else {
+                                        account_status.setText("");
                                     }
-
-                                } else {
-                                    account_status.setText("");
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                    });
+            businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
+                @Override
+                public void onChanged(DBAInfoResp dbaInfoResp) {
+                    try {
+                        myApplication.setDbaInfoResp(dbaInfoResp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
 
+                }
+            });
+
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+                    try {
+                        myApplication.setBusinessTypeResp(businessTypeResp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -553,6 +586,8 @@ public class BusinessProfileActivity extends AppCompatActivity {
         super.onResume();
         try {
             dashboardViewModel.meProfile();
+            businessIdentityVerificationViewModel.getDBAInfo();
+            businessIdentityVerificationViewModel.getBusinessType();
         } catch (Exception e) {
             e.printStackTrace();
         }
