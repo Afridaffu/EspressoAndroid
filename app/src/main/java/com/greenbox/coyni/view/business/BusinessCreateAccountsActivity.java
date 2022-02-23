@@ -105,8 +105,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             mIvUserIcon = findViewById(R.id.profile_img);
             mTvUserIconText = findViewById(R.id.b_imageTextTV);
             businessPersonalProfileAccount = findViewById(R.id.profileLL);
-
             myApplication = (MyApplication) getApplicationContext();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

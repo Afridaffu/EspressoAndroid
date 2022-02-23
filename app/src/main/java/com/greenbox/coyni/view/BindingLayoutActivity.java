@@ -11,14 +11,21 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessAddNewAccountActivity;
+import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 import java.util.List;
 
@@ -33,6 +40,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
     TextView txvVerifyName,txvVerifyDescription;
+    private IdentityVerificationViewModel identityVerificationViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +79,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
             if(objMyApplication.getAccountType() == 2) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
+                identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
            }
-
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
                 usersData = objMyApplication.getObjRetUsers().getData();
@@ -128,9 +137,14 @@ public class BindingLayoutActivity extends AppCompatActivity {
             nextGetStartedCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                    startActivity(i);
-                    finish();
+                    if(objMyApplication.getAccountType()==2){
+                        identityVerificationViewModel.getPostAddCustomer();
+
+                    } else {
+                        Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
                 }
             });
 
@@ -143,6 +157,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        initObservers();
+
     }
 
     private void ControlMethod(String methodToShow) {
@@ -222,5 +238,26 @@ public class BindingLayoutActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+    }
+
+    public void initObservers() {
+        try {
+            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+                        startActivity(i);
+                        finish();
+
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BindingLayoutActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
