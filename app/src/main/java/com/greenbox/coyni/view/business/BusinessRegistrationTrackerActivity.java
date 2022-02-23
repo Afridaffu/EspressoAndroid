@@ -213,17 +213,21 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             addBankIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    if (businessTrackerResponse.getData().isBeneficialOwners()) {
-//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
-//                        startActivity(intent);
-//                    }
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+                            startActivity(intent);
+                        }
 
-                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+//                    startActivity(intent);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -279,7 +283,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         DBAInfoResp.Data dia = dbaInfoResp.getData();
                         if (dia.getName() != null && !dia.getName().equals("")
                                 || dia.getEmail() != null && !dia.getEmail().equals("")
-                                || dia.getPhoneNumberDto()!= null|| dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
+                                || dia.getPhoneNumberDto() != null || dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
                                 || dia.getBusinessType() != null && !dia.getBusinessType().equals("")
                                 || dia.getWebsite() != null && !dia.getWebsite().equals("")
                                 || dia.getMonthlyProcessingVolume() != null && !dia.getMonthlyProcessingVolume().equals("")
@@ -319,7 +323,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")
-                                        || cir.getPhoneNumberDto()!= null || cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
+                                        || cir.getPhoneNumberDto() != null || cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
                                         || cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")
                                         || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")
                                         || cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")
