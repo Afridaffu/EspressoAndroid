@@ -179,6 +179,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 }
             });
 
+            caCompleteLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, CompanyInformationActivity.class);
+                    startActivity(intent);
+
+                }
+            });
+
             dbaIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -247,6 +260,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            boCompleteLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    boAPICallFrom = "INCOMPLETE";
+                    businessIdentityVerificationViewModel.getBeneficialOwners();
+
                 }
             });
 

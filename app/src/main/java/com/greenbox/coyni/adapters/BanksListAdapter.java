@@ -17,26 +17,30 @@ import com.greenbox.coyni.model.bank.BankItem;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
+import com.greenbox.coyni.view.business.AddBankAccount;
 import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 
 import java.util.List;
 
-public class BanksListAdapter extends RecyclerView.Adapter<BanksListAdapter.MyViewHolder> {
+public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyViewHolder> {
     List<BankItem> listBanks;
     Context mContext;
     MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankName, tvAccount;
+        public LinearLayout deleteLL;
 
         public MyViewHolder(View view) {
             super(view);
             tvBankName = view.findViewById(R.id.tvBankName);
             tvAccount = view.findViewById(R.id.tvAccount);
+            deleteLL = view.findViewById(R.id.deleteLL);
         }
     }
 
@@ -64,6 +68,14 @@ public class BanksListAdapter extends RecyclerView.Adapter<BanksListAdapter.MyVi
             } else {
                 holder.tvAccount.setText(objData.getAccountNumber());
             }
+
+            holder.deleteLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AddBankAccount addBankAccount = (AddBankAccount) mContext;
+                    addBankAccount.deleteBankAPICall(objData.getId());
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -74,5 +86,9 @@ public class BanksListAdapter extends RecyclerView.Adapter<BanksListAdapter.MyVi
         return listBanks.size();
     }
 
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipeLayout;
+    }
 }
 
