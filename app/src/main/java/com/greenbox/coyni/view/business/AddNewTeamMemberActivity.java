@@ -7,11 +7,9 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -36,7 +34,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     private boolean isFName = false, isLName = false, isEmailId = false;
 
     LoginViewModel loginViewModel;
-    public static int focusedID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +81,9 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void initObserver() {
         loginViewModel.getEmailExistsResponseMutableLiveData().observe(this, emailExistsResponse -> {
-            if (emailExistsResponse.getError() != null){
+            if (emailExistsResponse.getError() != null) {
                 emailIdErrorLL.setVisibility(VISIBLE);
-                emailIdErrorTV.setText(emailExistsResponse.getError().getErrorDescription().split("or")[0]+".");
+                emailIdErrorTV.setText(emailExistsResponse.getError().getErrorDescription().split("or")[0] + ".");
             }
         });
 
@@ -118,7 +115,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
                     fNameErrorLL.setVisibility(GONE);
-                    focusedID = fNameET.getId();
                     fNameET.setHint("First Name");
                     fNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(fNameTIL, getColor(R.color.primary_green));
@@ -147,7 +143,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                 } else {
 
                     lNameErrorLL.setVisibility(GONE);
-                    focusedID = lNameET.getId();
                     lNameET.setHint("Last Name");
                     lNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(lNameTIL, getColor(R.color.primary_green));
@@ -180,7 +175,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     }
                 } else {
                     emailIdErrorLL.setVisibility(GONE);
-                    focusedID = emailIdET.getId();
                     emailIdET.setHint("Email");
                     emailIdTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(emailIdTIL, getColor(R.color.primary_green));
