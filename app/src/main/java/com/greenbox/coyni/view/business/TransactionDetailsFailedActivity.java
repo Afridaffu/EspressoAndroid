@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.greenbox.coyni.R;
 
-public class RemoveTeamMembersActivity extends AppCompatActivity {
+public class TransactionDetailsFailedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_remove_team_members);
+        setContentView(R.layout.activity_transaction_details_failed);
     }
 }

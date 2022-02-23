@@ -1168,6 +1168,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                                 || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
                                 || respCode.equalsIgnoreCase("CI24")) {
                             //Success
+                            Log.d("pbjectt","iiii"+myApplicationObj.getAccountType());
+//                            if(myApplicationObj.getAccountType() == 2) {
+//                                identityVerificationViewModel.getPostAddCustomer();
+//
+//                            }
                             startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
                                     .putExtra("screen", "SUCCESS"));
                         } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
@@ -1190,10 +1195,16 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
                         }
                     } else {
+                        Log.d("pbjectt","iiii"+myApplicationObj.getAccountType());
+//                        if(myApplicationObj.getAccountType() == 2) {
+//                            identityVerificationViewModel.getPostAddCustomer();
+//
+//                        }
                         Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
 
-                    identityVerificationViewModel.getStatusTracker();
+
+                        identityVerificationViewModel.getStatusTracker();
 
                 }
             });

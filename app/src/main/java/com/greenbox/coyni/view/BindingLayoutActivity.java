@@ -32,6 +32,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
     SQLiteDatabase mydatabase;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
+    TextView txvVerifyName,txvVerifyDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -59,8 +61,17 @@ public class BindingLayoutActivity extends AppCompatActivity {
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
             verifyAccountCloseLL = findViewById(R.id.verifyAccountCloseLL);
             retEmailRV = findViewById(R.id.retEmailRV);
+            txvVerifyName = findViewById(R.id.txv_verify_name);
+            txvVerifyDescription = findViewById(R.id.txv_verify_description);
+
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
+
+            if(objMyApplication.getAccountType() == 2) {
+                txvVerifyName.setText("Add Personal Account");
+                txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
+           }
+
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
                 usersData = objMyApplication.getObjRetUsers().getData();
@@ -192,7 +203,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
-            Log.e("dropAllTables","dropAllTables");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
             mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
@@ -203,7 +213,6 @@ public class BindingLayoutActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
             editor.apply();
-            Log.e("dropAllTables","dropAllTables");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

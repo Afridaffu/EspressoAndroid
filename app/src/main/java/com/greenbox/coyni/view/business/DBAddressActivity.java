@@ -100,18 +100,18 @@ public class DBAddressActivity extends AppCompatActivity {
                 if (!hasFocus) {
                     adressET1.setHint("");
                     if (adressET1.getText().toString().trim().length() > 1) {
-                        adresstil1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        adresstil1.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         adressET1.setHintTextColor(getColor(R.color.light_gray));
                         Utils.setUpperHintColor(adresstil1, getColor(R.color.primary_black));
                         adressll.setVisibility(GONE);
                     } else if (adressET1.getText().toString().trim().length() == 1) {
-                        adresstil1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        adresstil1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         adressET1.setHintTextColor(getColor(R.color.light_gray));
                         Utils.setUpperHintColor(adresstil1, getColor(R.color.error_red));
                         adressll.setVisibility(View.VISIBLE);
                         adressTV.setText("Minimum 2 Characters Required");
                     } else {
-                        adresstil1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        adresstil1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(adresstil1, getColor(R.color.light_gray));
                         adressll.setVisibility(VISIBLE);
                         adressTV.setText("Field Required");
@@ -131,7 +131,7 @@ public class DBAddressActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     adressET2.setHint("");
-                    adresstil2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    adresstil2.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                     Utils.setUpperHintColor(adresstil2, getColor(R.color.light_gray));
                 } else {
                     adressET2.setHint("Apt#, Suit, Floor");
@@ -148,11 +148,11 @@ public class DBAddressActivity extends AppCompatActivity {
                     cityET1.setHint("");
                     if (cityET1.getText().toString().trim().length() > 0) {
                         cityll1.setVisibility(GONE);
-                        citytil1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        citytil1.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(citytil1, getColor(R.color.primary_black));
 
                     } else {
-                        citytil1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        citytil1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(citytil1, getColor(R.color.light_gray));
                         cityll1.setVisibility(VISIBLE);
                         cityTV1.setText("Field Required");
@@ -172,11 +172,11 @@ public class DBAddressActivity extends AppCompatActivity {
                     stateET1.setHint("");
                     if (stateET1.getText().toString().trim().length() > 0) {
                         statell1.setVisibility(GONE);
-                        statetil1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        statetil1.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(statetil1, getColor(R.color.primary_black));
 
                     } else {
-                        statetil1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        statetil1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(statetil1, getColor(R.color.light_gray));
                         statell1.setVisibility(VISIBLE);
                         stateTV1.setText("Field Required");
@@ -196,18 +196,18 @@ public class DBAddressActivity extends AppCompatActivity {
                     zipcodeET1.setHint("");
                     if (zipcodeET1.getText().toString().trim().length() > 0 && zipcodeET1.getText().toString().trim().length() == 5) {
                         zipcodell1.setVisibility(GONE);
-                        zipcodetil1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        zipcodetil1.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodetil1, getColor(R.color.primary_black));
 
                     }
                     else if (zipcodeET1.getText().toString().trim().length() >=1 && zipcodeET1.getText().toString().trim().length() <= 4 ) {
-                        zipcodetil1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        zipcodetil1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodetil1, getColor(R.color.error_red));
                         zipcodell1.setVisibility(VISIBLE);
                         zipcodeTV1.setText("Field Required 5 Characters");
                     }
                     else {
-                        zipcodetil1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        zipcodetil1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodetil1, getColor(R.color.light_gray));
                         zipcodell1.setVisibility(VISIBLE);
                         zipcodeTV1.setText("Field Required");

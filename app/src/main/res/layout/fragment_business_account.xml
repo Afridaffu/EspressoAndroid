@@ -1,12 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="#f2f4f5">
+
+
+    <TextView
+        android:id="@+id/buyTokenAccountTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_17sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:fontFamily="@font/opensans_bold"
+        android:text="@string/business_token_account"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_11ssp" />
 
     <LinearLayout
+        android:id="@+id/cvHeader"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buyTokenAccountTV"
+        android:layout_marginStart="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
+        android:background="@drawable/round_corner"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/cvHeaderRL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBalHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/total_available_funds"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12ssp"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/balanceLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_21sdp"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_11sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:textColor="@color/price"
+                        android:textSize="@dimen/_30ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="CYN"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_14ssp"
+
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/latestTxnRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cvHeader"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/transactionsNSV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/layoutMenu"
+            android:layout_below="@+id/cvHeader"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+
+                <LinearLayout
+                    android:id="@+id/recentTxnLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="@string/recent_token_transactions"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_12ssp" />
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <!--                    <ScrollView-->
+                        <!--                        android:layout_width="match_parent"-->
+                        <!--                        android:layout_height="match_parent">-->
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:id="@+id/rvLL"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/txnRV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/noTxnTV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_34sdp"
+                                    android:layout_marginBottom="@dimen/_100sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:gravity="center"
+                                    android:text="You have no recent transactions"
+                                    android:textColor="@color/light_gray"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/viewMoreLL"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_33sdp"
+                                android:layout_below="@id/rvLL"
+                                android:layout_centerInParent="true"
+                                android:layout_marginTop="@dimen/_26sdp"
+                                android:layout_marginBottom="@dimen/_20sdp"
+                                android:background="@drawable/shape_green_round_rect_core"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_20sdp"
+                                    android:layout_marginEnd="@dimen/_20sdp"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:gravity="center"
+                                    android:text="View More"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="@dimen/_12ssp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <!--                    </ScrollView>-->
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

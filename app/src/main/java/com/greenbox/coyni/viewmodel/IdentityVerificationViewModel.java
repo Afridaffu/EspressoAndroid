@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.network.ApiService;
@@ -42,6 +43,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressResponse = new MutableLiveData<>();
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressPatchResponse = new MutableLiveData<>();
     private MutableLiveData<TrackerResponse> getStatusTracker = new MutableLiveData<>();
+    private MutableLiveData<AddBusinessUserResponse> getBusinessAddCustomer = new MutableLiveData<>();
     private MutableLiveData<GetIdentityResponse> getIdentity = new MutableLiveData<>();
 
     public IdentityVerificationViewModel(@NonNull Application application) {
@@ -62,6 +64,10 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
     public MutableLiveData<TrackerResponse> getGetStatusTracker() {
         return getStatusTracker;
+    }
+
+    public MutableLiveData<AddBusinessUserResponse> getBusinessAddCustomer() {
+        return getBusinessAddCustomer;
     }
 
     public MutableLiveData<IdentityAddressResponse> getUploadIdentityAddressResponse() {
@@ -204,6 +210,76 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<TrackerResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getPostAddCustomer() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<AddBusinessUserResponse> mCall = apiService.registerAddCustomer();
+            mCall.enqueue(new Callback<AddBusinessUserResponse>() {
+                @Override
+                public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            AddBusinessUserResponse obj = response.body();
+                            getBusinessAddCustomer.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<AddBusinessUserResponse>() {
+                            }.getType();
+                            AddBusinessUserResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            getBusinessAddCustomer.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getBusinessAddCustomer.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AddBusinessUserResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void getAddBusinessUser() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<AddBusinessUserResponse> mCall = apiService.addBusinessUserInIndividual();
+            mCall.enqueue(new Callback<AddBusinessUserResponse>() {
+                @Override
+                public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
+                    try {
+                        Log.d("businessreg","rrrrr"+response);
+                        if (response.isSuccessful()) {
+                            AddBusinessUserResponse obj = response.body();
+                            getBusinessAddCustomer.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<TrackerResponse>() {
+                            }.getType();
+                            AddBusinessUserResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            getBusinessAddCustomer.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getBusinessAddCustomer.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AddBusinessUserResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

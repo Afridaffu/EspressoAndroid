@@ -71,6 +71,7 @@ import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -287,7 +288,7 @@ public interface ApiService {
     @Multipart
     @POST("api/v2/business/sign-agreement")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
-                                                  @Part("agreementType") RequestBody agreementType);
+                                                  @Part("agreementType") int agreementType);
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
@@ -297,6 +298,12 @@ public interface ApiService {
 
     @POST("api/v2/profile/me/tracker")
     Call<TrackerResponse> statusTracker();
+
+    @POST("api/v2/register/add-customer")
+    Call<AddBusinessUserResponse> registerAddCustomer();
+
+    @POST("api/v2/register/add-business-user")
+    Call<AddBusinessUserResponse> addBusinessUserInIndividual();
 
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);
@@ -447,6 +454,9 @@ public interface ApiService {
 
     @POST("api/v2/user/biometric/token")
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
+
+    @GET("api/v2/banks/me")
+    Call<PaymentMethodsResponse> meBanks();
 
     @GET("api/v2/business/beneficial-owners")
     Call<BOResp> getBeneficailOwners();
