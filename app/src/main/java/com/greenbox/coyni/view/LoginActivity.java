@@ -47,9 +47,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
-import com.greenbox.coyni.fragments.FaceIdNotAvailable_BottomSheet;
-import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
@@ -63,10 +60,8 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
-import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -137,18 +132,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 etEmail.setText(value);
                 if (isEmailValid(etEmail.getText().toString().trim())) {
                     Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                     layoutEmailError.setVisibility(GONE);
                 }
                 etPassword.setText("");
                 etPassword.setHint("");
                 Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             } else {
                 etPassword.setText("");
                 etPassword.setHint("");
                 Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -246,9 +241,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(LoginActivity.this);
+
                         if (Utils.getIsTouchEnabled() || Utils.getIsFaceEnabled()) {
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(LoginActivity.this);
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(LoginActivity.this)) {
                                 if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
                                     Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
@@ -275,6 +271,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 isPwdEye = true;
                                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeopen));
                                 etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
                             } else {
                                 isPwdEye = false;
                                 endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_eyeclose));
@@ -321,6 +318,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
                                 etEmail.setHint("Coyni@example.com");
+                                layoutEmailError.setVisibility(GONE);
                             }
                         }
                     } catch (Exception ex) {
@@ -357,6 +355,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     Utils.shwForcedKeypad(LoginActivity.this);
                                 etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
+                                layoutPwdError.setVisibility(GONE);
                                 etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
                                 if (etPassword.getText().toString().length() > 0)
                                     etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
