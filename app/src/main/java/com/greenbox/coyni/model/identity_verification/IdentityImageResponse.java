@@ -41,7 +41,7 @@ public class IdentityImageResponse {
         this.error = error;
     }
 
-    public class Daata{
+    public class Daata {
         private String identityUrl;
         private String message;
 

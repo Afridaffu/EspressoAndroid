@@ -3,6 +3,8 @@ package com.greenbox.coyni.network;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
+import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.ChangePassword;
@@ -454,6 +456,20 @@ public interface ApiService {
 
     @DELETE("api/v2/business/beneficial-owners")
     Call<DeleteBOResp> deleteBeneficialOwner(@Query("beneficialOwnerId") Integer beneficialOwnerId);
+
+    @PATCH("api/v2/business/beneficial-owners/update")
+    Call<BOPatchResp> patchBeneficialOwner(@Query("id") Integer beneficialOwnerId, @Body BORequest boRequest);
+
+    @Multipart
+    @POST("api/v2/business/beneficial-owners-doc/{beneficialOwnerId}")
+    Call<IdentityImageResponse> uploadBODoc(@Path("beneficialOwnerId") Integer beneficialOwnerId, @Part MultipartBody.Part filee,
+                                            @Part("identityType") RequestBody type);
+
+    @DELETE("api/v2/business/beneficial-owners-doc/remove")
+    Call<RemoveIdentityResponse> removeBODoc(@Query("identityType") String identityType, @Query("beneficialOwnerId") String beneficialOwnerId);
+
+    @GET("api/v2/business/beneficial-owners-validate")
+    Call<BOIdResp> validateBeneficailOwners();
 
 }
 
