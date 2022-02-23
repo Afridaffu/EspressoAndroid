@@ -1,4 +1,5 @@
 package com.greenbox.coyni.model.signedagreements;
+import com.greenbox.coyni.model.Error;
 
 public class SignedAgreementResponse {
     private String status;

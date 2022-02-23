@@ -70,7 +70,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             PaymentsList objData = listPayments.get(position);
-            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+            if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
                 holder.imgBankIcon.setImageResource(R.drawable.ic_bankactive);
@@ -87,7 +87,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 } else {
                     holder.tvAccNumber.setText(objData.getAccountNumber());
                 }
-            } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("signet")) {
                 holder.tvBankHead.setText("Signet Account");
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);

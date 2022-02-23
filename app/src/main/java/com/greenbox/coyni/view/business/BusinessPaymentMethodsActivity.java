@@ -371,7 +371,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
                             strCurrent = "signet";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
                             startActivityForResult(i, 2);

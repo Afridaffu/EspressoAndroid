@@ -20,6 +20,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
@@ -112,7 +114,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             aggrementsStartTV = findViewById(R.id.aggrementsStartTV);
             businessTrackerCloseIV = findViewById(R.id.businessTrackerCloseIV);
 
-            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
             businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
             caStartTV = findViewById(R.id.caStartTV);
@@ -202,8 +203,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (businessTrackerResponse.getData().isDbaInfo()) {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBeneficialOwnerActivity.class);
-                        startActivity(intent);
+                        businessIdentityVerificationViewModel.getBeneficialOwners();
+//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBeneficialOwnerActivity.class);
+//                        startActivity(intent);
                     }
                 }
             });
@@ -215,10 +217,13 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (businessTrackerResponse.getData().isBeneficialOwners()) {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AccountHasCreatedSucessful.class);
-                        startActivity(intent);
-                    }
+//                    if (businessTrackerResponse.getData().isBeneficialOwners()) {
+//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+//                        startActivity(intent);
+//                    }
+
+                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+                    startActivity(intent);
                 }
             });
 
@@ -229,7 +234,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
                     if (businessTrackerResponse.getData().isIsbankAccount()) {
                         Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
                         startActivity(intent);
@@ -274,7 +278,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         DBAInfoResp.Data dia = dbaInfoResp.getData();
                         if (dia.getName() != null && !dia.getName().equals("")
                                 || dia.getEmail() != null && !dia.getEmail().equals("")
-                                || dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
+                                || dia.getPhoneNumberDto()!= null|| dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
                                 || dia.getBusinessType() != null && !dia.getBusinessType().equals("")
                                 || dia.getWebsite() != null && !dia.getWebsite().equals("")
                                 || dia.getMonthlyProcessingVolume() != null && !dia.getMonthlyProcessingVolume().equals("")
@@ -314,7 +318,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")
-                                        || cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
+                                        || cir.getPhoneNumberDto()!= null || cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
                                         || cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")
                                         || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")
                                         || cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")
@@ -336,6 +340,44 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getBeneficialOwnersResponse().observe(this, new Observer<BOResp>() {
+                @Override
+                public void onChanged(BOResp boResp) {
+
+                    if (boResp != null) {
+                        if (boResp.getStatus().toLowerCase().toString().equals("success") && boResp.getData().size() > 0) {
+                            objMyApplication.setBeneficialOwnersResponse(boResp);
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
+                            startActivity(intent);
+                        } else {
+                            businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getBeneficialOwnersIDResponse().observe(this, new Observer<BOIdResp>() {
+                @Override
+                public void onChanged(BOIdResp boIdResp) {
+
+                    if (boIdResp != null) {
+                        if (boIdResp.getStatus().toLowerCase().toString().equals("success")) {
+
+                        } else {
 
                         }
                     }

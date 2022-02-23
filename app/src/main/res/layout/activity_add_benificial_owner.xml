@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:paddingLeft="@dimen/_20sdp"
     android:paddingTop="@dimen/_20sdp"
@@ -83,7 +84,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:fillViewport="true"
-                android:fitsSystemWindows="true"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -467,7 +467,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:fillViewport="true"
-                android:fitsSystemWindows="true"
                 android:scrollbars="none">
 
                 <LinearLayout

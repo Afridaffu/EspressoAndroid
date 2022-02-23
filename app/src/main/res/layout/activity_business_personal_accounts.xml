@@ -130,7 +130,7 @@
         </LinearLayout>
     </LinearLayout>
 
-        <RelativeLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10ssp"
@@ -211,7 +211,7 @@
 
     </LinearLayout>
 
-        <LinearLayout
+     <LinearLayout
             android:id="@+id/ll_open_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

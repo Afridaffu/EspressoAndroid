@@ -1,16 +1,16 @@
 package com.greenbox.coyni.view.business;
 
-import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 
 import com.greenbox.coyni.R;
 
-public class AddtionaInfoRequired extends AppCompatActivity {
+public class TransactionDetailsFailedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addtiona_info_required);
+        setContentView(R.layout.activity_transaction_details_failed);
     }
 }

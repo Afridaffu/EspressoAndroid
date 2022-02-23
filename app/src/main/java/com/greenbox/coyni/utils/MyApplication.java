@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -29,6 +30,7 @@ import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
 import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
@@ -78,6 +80,7 @@ public class MyApplication extends Application {
     UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     UserDetails userDetails;
     List<States> listStates = new ArrayList<>();
+    LatestTxnResponse listLatestTxn;
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
@@ -102,7 +105,15 @@ public class MyApplication extends Application {
     CompanyInfoResp companyInfoResp;
     DBAInfoResp dbaInfoResp;
     BuyTokenRequest buyRequest;
+    BOResp beneficialOwnersResponse;
 
+    public LatestTxnResponse getListLatestTxn() {
+        return listLatestTxn;
+    }
+
+    public void setListLatestTxn(LatestTxnResponse listLatestTxn) {
+        this.listLatestTxn = listLatestTxn;
+    }
 
     public UserDetails getUserDetails() {
         return userDetails;
@@ -920,6 +931,14 @@ public class MyApplication extends Application {
 
     public void setBuyTokenResponse(BuyTokenResponse buyTokenResponse) {
         this.buyTokenResponse = buyTokenResponse;
+    }
+
+    public BOResp getBeneficialOwnersResponse() {
+        return beneficialOwnersResponse;
+    }
+
+    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
+        this.beneficialOwnersResponse = beneficialOwnersResponse;
     }
 
     public Date getDate(String date) {

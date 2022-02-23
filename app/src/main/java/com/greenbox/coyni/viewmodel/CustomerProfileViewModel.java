@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -36,6 +37,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     private MutableLiveData<UpdatePhoneResponse> updatePhoneSendOTPResponse = new MutableLiveData<>();
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
 
     public CustomerProfileViewModel(@NonNull Application application) {
         super(application);
@@ -70,6 +72,10 @@ public class CustomerProfileViewModel extends AndroidViewModel {
 
     public MutableLiveData<SyncAccount> getSyncAccountMutableLiveData() {
         return syncAccountMutableLiveData;
+    }
+
+    public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
+        return paymentMethodsResponseMutableLiveData;
     }
 
     public void updateEmailSendOTP(UpdateEmailRequest request) {
@@ -287,4 +293,40 @@ public class CustomerProfileViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void meBanks() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<PaymentMethodsResponse> mCall = apiService.meBanks();
+            mCall.enqueue(new Callback<PaymentMethodsResponse>() {
+                @Override
+                public void onResponse(Call<PaymentMethodsResponse> call, Response<PaymentMethodsResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            PaymentMethodsResponse obj = response.body();
+                            paymentMethodsResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<PaymentMethodsResponse>() {
+                            }.getType();
+                            PaymentMethodsResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            paymentMethodsResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        paymentMethodsResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PaymentMethodsResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    paymentMethodsResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
