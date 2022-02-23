@@ -97,13 +97,21 @@ public class DBAInfoDetails extends AppCompatActivity {
             editProfileIV = findViewById(R.id.dba_editProfileIV);
 
             editProfileIV.setOnClickListener(view -> {
-                if (checkAndRequestPermissions(this)) {
-    //                    chooseImage(this);
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+                try {
+                    if (checkAndRequestPermissions(this)) {
+        //                    chooseImage(this);
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        try {
+                            showImagePickerDialog(this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    showImagePickerDialog(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
 
