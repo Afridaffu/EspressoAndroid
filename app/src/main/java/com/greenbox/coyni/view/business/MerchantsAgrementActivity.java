@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -33,9 +33,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
     public CardView doneCV;
     LinearLayout signatureEditLl;
     ImageView mIVSignature;
-    CheckBox agreeCb;
-
+    TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
+    private String filePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,38 +48,27 @@ public class MerchantsAgrementActivity extends BaseActivity {
         doneCV = findViewById(R.id.AgreeDoneCv);
         signatureEditLl = findViewById(R.id.signatureEditLL);
         mIVSignature = findViewById(R.id.signatureEditIV);
-        agreeCb = findViewById(R.id.agreementCB);
+        savedText = findViewById(R.id.savedtextTV);
 
-        agreeCb.setOnClickListener(new View.OnClickListener() {
+        doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (agreeCb.isEnabled()) {
-                    doneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                } else {
-                    doneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                }
+                showProgressDialog();
+                sendSignatureRequest();
             }
         });
-
-//        doneCV.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MerchantsAgrementActivity.this, GetstartedSuccessAcivity.class);
-//                activityResultLauncher.launch(intent);
-//            }
-//        });
 
 
         signatureEditLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchsignature();
+                launchSignature();
             }
         });
 
     }
 
-    private void launchsignature() {
+    private void launchSignature() {
         Intent inSignature = new Intent(MerchantsAgrementActivity.this, SignatureActivity.class);
         activityResultLauncher.launch(inSignature);
     }
@@ -97,19 +86,36 @@ public class MerchantsAgrementActivity extends BaseActivity {
             String filePath = data.getStringExtra(Utils.DATA);
             File targetFile = new File(filePath);
             if (targetFile.exists()) {
-                sendSignatureRequest(filePath);
+                this.filePath = filePath;
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
+                doneCV.setVisibility(View.VISIBLE);
+                savedText.setVisibility(View.VISIBLE);
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
             }
         }
     }
 
-    private void sendSignatureRequest(String filepath) {
-        File file = new File(filepath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
-        businessDashboardViewModel.signedAgreement(body, 5);
+    private void sendSignatureRequest() {
+        if (filePath != null) {
+            File file = new File(filePath);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
+            businessDashboardViewModel.signedAgreement(body, 5);
+        } else {
+            dismissDialog();
+            LogUtils.v(TAG, "File path is null");
+        }
+    }
+
+    private void deleteTemporarySignatureFile() {
+        if (filePath != null) {
+            File file = new File(filePath);
+            if(file.exists()) {
+                file.delete();
+            }
+            filePath = null;
+        }
     }
 
     private void initObservers() {
@@ -118,11 +124,26 @@ public class MerchantsAgrementActivity extends BaseActivity {
             @Override
             public void onChanged(SignedAgreementResponse signedAgreementResponse) {
                 try {
-                    if (signedAgreementResponse != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
-//                        Intent intent = new Intent(MerchantsAgrementActivity.this, BusinessRegistrationTrackerActivity.class);
-//                        activityResultLauncher.launch(intent);
-                        finish();
+                    deleteTemporarySignatureFile();
+                    dismissDialog();
+                    if(signedAgreementResponse != null) {
+                        if (signedAgreementResponse.getStatus() != null
+                                && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
+                            //If require need to show the Toast to the User.
+                            finish();
+                        } else {
+                            String errorMessage = getString(R.string.something_went_wrong);
+                            if(signedAgreementResponse.getError() != null
+                                    && signedAgreementResponse.getError().getErrorDescription() != null) {
+                                errorMessage = signedAgreementResponse.getError().getErrorDescription();
+                            }
+                            Utils.displayAlert(errorMessage,
+                                    MerchantsAgrementActivity.this, "", signedAgreementResponse.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+                         LogUtils.v(TAG, "signedAgreementResponse is null");
                     }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
