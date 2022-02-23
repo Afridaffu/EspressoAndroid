@@ -46,25 +46,16 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
-import com.greenbox.coyni.custom_camera.CameraFragment;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
-import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.CreateAccountActivity;
-import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
-import com.greenbox.coyni.view.IdentityVerificationActivity;
-import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 import java.io.File;
@@ -86,14 +77,14 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     ConstraintLayout stateCL;
     TextView uploadTV, fnameTV, lnameTV, dobTV, ssnTV, ownershipTV, address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV,
             updatedOnTV, uploadedTV;
-    public static CardView nextcv, Addbenifitialowner2CloseCV;
-    ImageView closeIV, uploadIV, backIV, stateimg;
+    public static CardView nextcv, doneCV;
+    ImageView closeIV, backIV;
     View divider1, divider2;
     public static boolean isfname = false, islname = false, isssn = false, isownership = false, isNextEnabled = false,
             isDOBSelected = false, isAddress1 = false, isAddress2 = false, isCity = false, isState = false,
             isZipcode = false, isSaveEnabled = false, isFileUploaded = false;
 
-    public static String dateOfBirth = "";
+    public String dateOfBirth = "";
     int mYear, mMonth, mDay;
     private DatePicker datepicker;
     Long mLastClickTime = 0L;
@@ -123,7 +114,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         initObservers();
         textWatchers();
         focusWatchers();
-
 
     }
 
@@ -185,15 +175,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     divider1.setBackgroundResource(R.drawable.button_background1);
                     divider2.setBackgroundResource(R.drawable.button_background);
                 }
-
-                pagerPosition = position;
-                if (position == 0) {
-                    divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
-                    divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                } else if (position == 1) {
-                    divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                    divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
-                }
             }
 
             @Override
@@ -201,28 +182,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
             }
         });
-        stateimg = findViewById(R.id.Stateimg);
-        stateimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog dialog = new Dialog((AddBeneficialOwnerActivity.this));
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-                dialog.setContentView(R.layout.states_bottom_dialog);
-                Window window = dialog.getWindow();
-//                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.45);
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                WindowManager.LayoutParams wl = window.getAttributes();
-                wl.gravity = Gravity.BOTTOM;
-                wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wl);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
 
-            }
-        });
         fromScreen = getIntent().getStringExtra("FROM");
         boID = getIntent().getIntExtra("ID", -1);
 
@@ -290,7 +250,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         zipcodeErrorTV = findViewById(R.id.Zip_ErrorTV);
         countryTIL = findViewById(R.id.Country_TIL);
 
-        Addbenifitialowner2CloseCV = findViewById(R.id.addbenifitialowner2CloseCV);
+        doneCV = findViewById(R.id.doneCV);
         dobtil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -370,12 +330,55 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 }
             }
         });
-//        backIV.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
+
+        divider1.setOnClickListener(view -> {
+            closeIV.setVisibility(VISIBLE);
+            backIV.setVisibility(GONE);
+            viewPager.setCurrentItem(0);
+            divider1.setBackgroundResource(R.drawable.button_background);
+            divider2.setBackgroundResource(R.drawable.button_background1);
+        });
+
+        divider2.setOnClickListener(view -> {
+            if (isNextEnabled) {
+                closeIV.setVisibility(GONE);
+                backIV.setVisibility(VISIBLE);
+                viewPager.setCurrentItem(1);
+                divider1.setBackgroundResource(R.drawable.button_background1);
+                divider2.setBackgroundResource(R.drawable.button_background);
+            }
+        });
+
+        doneCV.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (isSaveEnabled) {
+                beneficialOwnerAPICall(boID, prepareRequest());
+            }
+        });
+
+        stateET.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            Utils.populateStates(this, stateET, objMyApplication);
+        });
+
+        stateCL.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            Utils.populateStates(this, stateET, objMyApplication);
+        });
+
 
     }
 
@@ -508,6 +511,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             uploadTV.setVisibility(VISIBLE);
                             uploadedLL.setVisibility(GONE);
                         }
+
+                        enableOrDisableNext();
+                        enableOrDisableSave();
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), AddBeneficialOwnerActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
@@ -1223,12 +1229,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
     public void enableOrDisableSave() {
         try {
-            if (isAddress1 && isCity && isZipcode) {
+            if (isAddress1 && isCity && isState && isZipcode) {
                 isSaveEnabled = true;
-                Addbenifitialowner2CloseCV.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                doneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
             } else {
                 isSaveEnabled = false;
-                Addbenifitialowner2CloseCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                doneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             }
         } catch (Exception e) {
             e.printStackTrace();

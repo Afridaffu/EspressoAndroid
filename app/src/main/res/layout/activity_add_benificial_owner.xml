@@ -68,7 +68,6 @@
             android:textSize="@dimen/_16ssp" />
     </LinearLayout>
 
-
     <com.greenbox.coyni.intro_slider.AutoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -335,9 +334,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignEnd="@id/IdveriDOBTIL"
-                            android:layout_marginTop="@dimen/_45sdp"
                             android:layout_marginRight="@dimen/_10sdp"
-                            android:src="@drawable/ic_chevron_down" />
+                            android:src="@drawable/ic_down"
+                            android:layout_centerInParent="true"/>
                     </RelativeLayout>
 
                     <LinearLayout
@@ -883,7 +882,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/addbenifitialowner2CloseCV"
+                        android:id="@+id/doneCV"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_42sdp"
                         android:layout_marginTop="@dimen/_26sdp"

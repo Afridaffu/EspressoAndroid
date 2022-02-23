@@ -43,6 +43,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DBAInfoResp dbaInfoResponse;
+    String boAPICallFrom = "RESUME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,12 +187,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() == -1) {
+                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() == 0) {
                             dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                        } else {
+                        } else if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != 0) {
                             Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
                             intent.putExtra("TYPE", "EXIST");
                             startActivity(intent);
+                        } else {
+
                         }
                     }
                 }
@@ -220,9 +223,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (businessTrackerResponse.getData().isDbaInfo()) {
+                        boAPICallFrom = "INCOMPLETE";
                         businessIdentityVerificationViewModel.getBeneficialOwners();
-//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBeneficialOwnerActivity.class);
-//                        startActivity(intent);
                     }
                 }
             });
@@ -374,10 +376,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success") && boResp.getData().size() > 0) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
-                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
-                            startActivity(intent);
+                            if (boAPICallFrom.equals("INCOMPLETE")) {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
+                                startActivity(intent);
+                            } else {
+                                boTV.setTextColor(getResources().getColor(R.color.primary_green));
+                                boIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
+                                boIncompleteTV.setText("In Progress");
+                                boStartTV.setVisibility(GONE);
+                                boInProgressIV.setVisibility(VISIBLE);
+                            }
                         } else {
-                            businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                            if (boAPICallFrom.equals("INCOMPLETE"))
+                                businessIdentityVerificationViewModel.postBeneficialOwnersID();
                         }
                     }
                 }
@@ -423,6 +434,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
         businessIdentityVerificationViewModel.getCompanyInfo();
         businessIdentityVerificationViewModel.getDBAInfo();
+        boAPICallFrom = "RESUME";
+        businessIdentityVerificationViewModel.getBeneficialOwners();
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
