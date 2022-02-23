@@ -517,4 +517,12 @@
     <string name="filter_button">filter Button</string>
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
+    <string name="purchase_amount_processing_fee">(Purchase Amount + Processing Fee)</string>
+    <string name="dollor">$</string>
+    <string name="recipient_name">Recipient Name</string>
+    <string name="recipient_email">Recipient Email</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="gift_card_name">Gift Card Name</string>
+
 </resources>
