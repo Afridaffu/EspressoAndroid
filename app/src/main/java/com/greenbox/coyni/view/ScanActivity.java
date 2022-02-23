@@ -83,7 +83,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ScanActivity extends AppCompatActivity implements TextWatcher {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
-    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL;
+    LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL,scanMeScanCodeLL;
     ConstraintLayout flashLL;
     ScrollView scanMeSV;
     QRGEncoder qrgEncoder;
@@ -190,7 +190,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             scannerLayout = findViewById(R.id.scannerLayout);
             scannerBar = findViewById(R.id.lineView);
             flashLL = findViewById(R.id.flashBtnRL);
-            idIVQrcode = (ImageView) findViewById(R.id.idIVQrcode);
+            idIVQrcode = findViewById(R.id.idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
             scanMeRequestAmount = findViewById(R.id.scanMeRequestAmount);
@@ -214,6 +214,14 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             saveProfileIV = findViewById(R.id.saveprofileIV);
             saveProfileTitle = findViewById(R.id.saveprofileTitle);
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
+            scanMeScanCodeLL = findViewById(R.id.scanMeScanCodeLL);
+
+            if (objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT){
+                scanMeScanCodeLL.setVisibility(View.VISIBLE);
+            }
+            if (objMyApplication.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                scanMeScanCodeLL.setVisibility(View.GONE);
+            }
 
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             if (strName != null && strName.length() > 22) {

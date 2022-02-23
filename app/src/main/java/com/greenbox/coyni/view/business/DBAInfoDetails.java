@@ -343,7 +343,7 @@ public class DBAInfoDetails extends AppCompatActivity {
                     if (profile.getStatus().equalsIgnoreCase("SUCCESS")) {
                         try {
                             objMyApplication.setMyProfile(profile);
-                            bindImage(profile.getData().getImage(),objMyApplication.getDbaInfoResp());
+//                            bindImage(profile.getData().getImage(),objMyApplication.getDbaInfoResp());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
