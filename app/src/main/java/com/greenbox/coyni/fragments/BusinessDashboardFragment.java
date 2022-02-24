@@ -32,6 +32,8 @@ import com.greenbox.coyni.model.business_id_verification.CancelApplicationRespon
 import com.greenbox.coyni.utils.CustomConfirmationDialog;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.OnDialogButtonClickListener;
+import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
@@ -50,7 +52,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvIdentityReviewCancelMessage;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
-    private RelativeLayout mUserIconRelativeLayout;
+    private RelativeLayout mUserIconRelativeLayout,notificationsRL;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,7 +99,16 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityVerificationReview = mCurrentView.findViewById(R.id.ll_identity_verification_review);
         mLlIdentityVerificationFailedView = mCurrentView.findViewById(R.id.ll_identity_verification_failed);
         mTvIdentityReviewCancelMessage = mCurrentView.findViewById(R.id.tv_identity_review_cancel_text);
+        notificationsRL = mCurrentView.findViewById(R.id.notificationsRL);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
+
+
+        notificationsRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(requireContext(), NotificationsActivity.class));
+            }
+        });
     }
 
     private void initObservers() {

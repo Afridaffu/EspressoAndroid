@@ -206,8 +206,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                             Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
                             intent.putExtra("TYPE", "EXIST");
                             startActivity(intent);
-                        } else {
-
                         }
                     }
                 }
