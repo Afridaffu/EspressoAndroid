@@ -30,14 +30,10 @@ import com.greenbox.coyni.model.businesswallet.WalletName;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
-import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -88,41 +84,68 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onDashboardTabSelected(View view) {
-        if (selectedTab != Tabs.DASHBOARD) {
-            selectedTab = Tabs.DASHBOARD;
-            setSelectedTab(true, false, false, false);
-            LogUtils.d(TAG, "onDashboardTabSelected");
-            pushFragment(new BusinessDashboardFragment());
+        try {
+            if (selectedTab != Tabs.DASHBOARD) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                selectedTab = Tabs.DASHBOARD;
+                setSelectedTab(true, false, false, false);
+                LogUtils.d(TAG, "onDashboardTabSelected");
+                pushFragment(new BusinessDashboardFragment());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void onAccountTabSelected(View view) {
-        if (selectedTab != Tabs.ACCOUNT) {
-            selectedTab = Tabs.ACCOUNT;
-            setSelectedTab(false, true, false, false);
-            LogUtils.d(TAG, "onAccountTabSelected");
-            pushFragment(new BusinessAccountFragment());
+        try {
+            if (selectedTab != Tabs.ACCOUNT) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                selectedTab = Tabs.ACCOUNT;
+                setSelectedTab(false, true, false, false);
+                LogUtils.d(TAG, "onAccountTabSelected");
+                pushFragment(new BusinessAccountFragment());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void onTransactionsTabSelected(View view) {
-        if (selectedTab != Tabs.TRANSACTIONS) {
-            selectedTab = Tabs.TRANSACTIONS;
-            setSelectedTab(false, false, true, false);
-            LogUtils.d(TAG, "onTransactionsTabSelected");
-            pushFragment(new BusinessTransactionsFragment());
+        try {
+            if (selectedTab != Tabs.TRANSACTIONS) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                selectedTab = Tabs.TRANSACTIONS;
+                setSelectedTab(false, false, true, false);
+                LogUtils.d(TAG, "onTransactionsTabSelected");
+                pushFragment(new BusinessTransactionsFragment());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void onProfileTabSelected(View view) {
-//        if (selectedTab != Tabs.PROFILE) {
-//            selectedTab = Tabs.PROFILE;
-//            setSelectedTab(false, false, false, true);
-//            LogUtils.d(TAG, "onProfileTabSelected");
-//            pushFragment(new BusinessProfileFragment());
-//        }
-        startActivity(new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class));
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                return;
+            }
 
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startActivity(new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void onQuickMenuTabSelected(View view) {
@@ -158,7 +181,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                         Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
                         i.putExtra("screen", "dashboard");
                         startActivity(i);
-                        //startActivity(new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
