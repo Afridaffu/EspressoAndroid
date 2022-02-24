@@ -635,7 +635,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
                             einLetterUpdatedOnTV.setText(dateString);
                             isEINLetterUploaded = true;
-                        } else if (docTypeID == 7) {
+                        } else if (docTypeID == 7 || docTypeID == 11) {
                             w9FormUploadTV.setVisibility(GONE);
                             w9FormUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
@@ -666,7 +666,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         } else if (docTypeID == 6) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), einLetterFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", einLetterFile.getName(), requestBody);
-                        } else if (docTypeID == 7) {
+                        } else if (docTypeID == 7 || docTypeID == 11) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), w9FormFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", w9FormFile.getName(), requestBody);
                         }

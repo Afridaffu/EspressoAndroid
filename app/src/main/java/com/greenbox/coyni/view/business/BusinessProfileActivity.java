@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,6 +77,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     //    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
     TextView tvVersion;
+    ScrollView profileSV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             switchOnLL = findViewById(R.id.switchOn);
             businessResetPin = findViewById(R.id.businessResetPin);
             dbainfoLL = findViewById(R.id.DBAInformationLL);
+            profileSV = findViewById(R.id.profileSV);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
             dbainfoLL.setOnClickListener(new View.OnClickListener() {
@@ -454,22 +457,22 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         if (enablePopup != null) {
                             enablePopup.dismiss();
                         }
-    //                    dialog.dismiss();
+                        //                    dialog.dismiss();
                         if (biometricResponse != null) {
                             saveToken(biometricResponse.getData().getToken());
                             Utils.generateUUID(BusinessProfileActivity.this);
                             if (!isSwitchEnabled) {
                                 if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-    //                                saveFace("false");
-    //                                saveThumb("true");
+                                    //                                saveFace("false");
+                                    //                                saveThumb("true");
                                     if (!isLoggedOut) {
                                         saveFace("false");
                                         saveThumb("true");
                                         Utils.showCustomToast(BusinessProfileActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
                                     }
                                 } else {
-    //                                saveFace("true");
-    //                                saveThumb("false");
+                                    //                                saveFace("true");
+                                    //                                saveThumb("false");
                                     if (!isLoggedOut) {
                                         saveFace("true");
                                         saveThumb("false");
@@ -585,6 +588,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+            profileSV.scrollTo(0, 0);
             dashboardViewModel.meProfile();
             businessIdentityVerificationViewModel.getDBAInfo();
             businessIdentityVerificationViewModel.getBusinessType();

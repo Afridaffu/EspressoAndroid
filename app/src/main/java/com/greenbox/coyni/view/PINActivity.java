@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -18,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -60,6 +64,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    Dialog prevDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -353,7 +358,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            launchDashboard();
+                                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                                finish();
+                                            } else {
+                                                launchDashboard();
+                                            }
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -570,6 +579,14 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+        buyTokenViewModel.getBuyTokenFailureMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
+            @Override
+            public void onChanged(BuyTokenResponse buyTokenResponse) {
+                if (buyTokenResponse != null) {
+                    buyTokenFailure(buyTokenResponse);
+                }
+            }
+        });
     }
 
     @Override
@@ -1054,6 +1071,48 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             if (Utils.checkInternet(PINActivity.this)) {
                 buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void buyTokenFailure(BuyTokenResponse objData) {
+        try {
+            prevDialog = new Dialog(PINActivity.this);
+            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            prevDialog.setContentView(R.layout.buy_token_transaction_failed);
+            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+
+            TextView tvMessage = prevDialog.findViewById(R.id.tvMessage);
+            CardView cvTryAgain = prevDialog.findViewById(R.id.cvTryAgain);
+
+            tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription() + ". Please try again.");
+            Window window = prevDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            prevDialog.setCancelable(false);
+            prevDialog.show();
+
+            cvTryAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                    finish();
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
