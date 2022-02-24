@@ -311,8 +311,8 @@ public interface ApiService {
     @POST("api/v2/register/add-business-user")
     Call<AddBusinessUserResponse> addBusinessUserInIndividual();
 
-    @POST("api/v2/register/add-dba")
-    Call<AddBusinessUserResponse> addDBAInBusinessAccount();
+    @POST("api/v2/register/add-dba/{companyID}")
+    Call<AddBusinessUserResponse> addDBAInBusinessAccount(@Path("companyID") int companyID);
 
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);

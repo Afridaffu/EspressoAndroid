@@ -63,12 +63,15 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,9 +117,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     Long mLastClickTime = 0L;
     DashboardViewModel dashboardViewModel;
     private DatePicker datepicker;
+    private LoginViewModel loginViewModel;
+    private String addBusiness="false";
 
     IdentityPagerAdapter identityPagerAdapter;
     static AutoScrollViewPager viewPager;
+    private String respCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +164,13 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
                 }
             });
+
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+            if(getIntent().getStringExtra("ADDPERSONAL")!=null) {
+                addBusiness = getIntent().getStringExtra("ADDPERSONAL");
+                LogUtils.d("addBusiness","addBusiness"+addBusiness);
+            }
 
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -798,21 +811,34 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+
+                    if(addBusiness.equalsIgnoreCase("true")){
+                        loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
+                    } else {
+                        finish();
+                    }
                 }
             });
 
             exitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    if(addBusiness.equalsIgnoreCase("true")){
+                        loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
+                    } else {
+                        finish();
+                    }
                 }
             });
 
             btnExit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    if(addBusiness.equalsIgnoreCase("true")){
+                        loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
+                    } else {
+                        finish();
+                    }
                 }
             });
 
@@ -1137,6 +1163,50 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse btResp) {
+                    LogUtils.d("addBusiness","addBusiness"+btResp);
+                    if (btResp != null) {
+                        LogUtils.d("afternulll","addBusiness"+btResp.getStatus());
+                        if (btResp.getStatus().toLowerCase().toString().equals("success") || btResp.getStatus().equals("SUCCESS")) {
+                            LogUtils.d("btResp","btResp"+btResp);
+                            Utils.setStrAuth(btResp.getData().getJwtToken());
+                            if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+                                    || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+                                    || respCode.equalsIgnoreCase("CI24")) {
+                                //Success
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "SUCCESS"));
+                            } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+                                //SSN Error
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
+
+                            } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+                                    || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+                                    || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+                                    || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+                                    || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+                                //Under Review
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "UNDER_REVIEW"));
+
+                            } else {
+                                //Failed
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "FAILED"));
+
+                            }
+                        } else {
+                            LogUtils.d("elseeeee","addBusiness"+btResp);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
@@ -1163,48 +1233,45 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         dialog.dismiss();
                     }
                     if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
-                        String respCode = identityAddressResponse.getData().getGiactResponseName();
-                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-                                || respCode.equalsIgnoreCase("CI24")) {
-                            //Success
-                            Log.d("pbjectt","iiii"+myApplicationObj.getAccountType());
-//                            if(myApplicationObj.getAccountType() == 2) {
-//                                identityVerificationViewModel.getPostAddCustomer();
-//
-//                            }
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "SUCCESS"));
-                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-                            //SSN Error
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
+                        LogUtils.d("addBusiness","addBusiness"+addBusiness);
+                        respCode = identityAddressResponse.getData().getGiactResponseName();
 
-                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-                            //Under Review
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "UNDER_REVIEW"));
-
+                        if(addBusiness.equalsIgnoreCase("true")){
+                            loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
                         } else {
-                            //Failed
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "FAILED"));
+                            if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+                                    || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+                                    || respCode.equalsIgnoreCase("CI24")) {
+                                //Success
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "SUCCESS"));
+                            } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+                                //SSN Error
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
+
+                            } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+                                    || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+                                    || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+                                    || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+                                    || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+                                //Under Review
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "UNDER_REVIEW"));
+
+                            } else {
+                                //Failed
+                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "FAILED"));
+
+                            }
 
                         }
+
                     } else {
-                        Log.d("pbjectt","iiii"+myApplicationObj.getAccountType());
-//                        if(myApplicationObj.getAccountType() == 2) {
-//                            identityVerificationViewModel.getPostAddCustomer();
-//
-//                        }
                         Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
 
-
-                        identityVerificationViewModel.getStatusTracker();
+                   identityVerificationViewModel.getStatusTracker();
 
                 }
             });
@@ -1218,6 +1285,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onChanged(TrackerResponse trackerResponse) {
                     if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
                         myApplicationObj.setTrackerResponse(trackerResponse);
+
                     }
                 }
             });

@@ -286,10 +286,10 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
         }
     }
 
-    public void getPostAddDBABusiness() {
+    public void getPostAddDBABusiness(int companyID) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<AddBusinessUserResponse> mCall = apiService.addDBAInBusinessAccount();
+            Call<AddBusinessUserResponse> mCall = apiService.addDBAInBusinessAccount(companyID);
             mCall.enqueue(new Callback<AddBusinessUserResponse>() {
                 @Override
                 public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {

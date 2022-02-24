@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
@@ -69,6 +70,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
             @Override
             public void onClick(View v) {
                 try {
+                    LogUtils.d("position","postion"+position+listCompany.size());
                     for (int i = 0; i < listCompany.size(); i++) {
                         if (position == i) {
                             listCompany.get(i).setSelected(true);
@@ -76,7 +78,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
                         } else {
                             listCompany.get(i).setSelected(false);
-                            listener.selectedItem(null);
+                           // listener.selectedItem(null);
                         }
                     }
                     notifyDataSetChanged();

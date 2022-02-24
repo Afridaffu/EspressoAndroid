@@ -47,6 +47,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DBAInfoResp dbaInfoResponse;
     private String addBusiness="false";
+    private String addDBA="false";
     private LoginViewModel loginViewModel;
     String boAPICallFrom = "RESUME";
 
@@ -65,6 +66,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 addBusiness = getIntent().getStringExtra("ADDBUSINESS");
                 LogUtils.d("addBusiness","addBusiness"+addBusiness);
             }
+
+            if(getIntent().getStringExtra("ADDDBA")!=null) {
+                loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+                addDBA = getIntent().getStringExtra("ADDDBA");
+                LogUtils.d("addDBA","addDBA"+addDBA);
+
+            }
+
 
             dashboardTV.setOnClickListener(view -> {
                 startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
@@ -171,6 +180,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             if (businessTrackerResponse != null) {
                 reloadTrackerDashboard(businessTrackerResponse);
             }
+
+
 
             businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -499,6 +510,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         businessIdentityVerificationViewModel.getDBAInfo();
         boAPICallFrom = "RESUME";
         businessIdentityVerificationViewModel.getBeneficialOwners();
+        LogUtils.d("BusinessTrackerResponse","BusinessTrackerResponse"+businessTrackerResponse);
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
@@ -513,7 +525,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             caIncompleteLL.setVisibility(View.VISIBLE);
         }
 
-        if (businessTrackerResponse.getData().isDbaInfo()) {
+        if(addDBA.equalsIgnoreCase("true")) {
+            caIncompleteLL.setVisibility(View.GONE);
+        }
+
+            if (businessTrackerResponse.getData().isDbaInfo()) {
             boInProgressIV.setVisibility(GONE);
             boStartTV.setVisibility(View.VISIBLE);
             boIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
