@@ -75,7 +75,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             PaymentsList objData = listPayments.get(position);
-            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+            if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.layoutCard.setVisibility(View.GONE);
                 holder.imgPayMethod.setImageResource(R.drawable.ic_bankactive);
@@ -159,23 +159,25 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.layoutError.setVisibility(View.VISIBLE);
                     holder.tvError.setText("Expired");
                 }
-                switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
-                    case "VISA":
-                        holder.tvCardName.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
-                        holder.imgPayMethod.setImageResource(R.drawable.ic_visaactive);
-                        break;
-                    case "MASTERCARD":
-                        holder.tvCardName.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
-                        holder.imgPayMethod.setImageResource(R.drawable.ic_masteractive);
-                        break;
-                    case "AMERICANEXPRESS":
-                        holder.tvCardName.setText("American Express Card");
-                        holder.imgPayMethod.setImageResource(R.drawable.ic_amexactive);
-                        break;
-                    case "DISCOVER":
-                        holder.tvCardName.setText("Discover Card");
-                        holder.imgPayMethod.setImageResource(R.drawable.ic_discoveractive);
-                        break;
+                if (objData.getCardBrand() != null) {
+                    switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
+                        case "VISA":
+                            holder.tvCardName.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
+                            holder.imgPayMethod.setImageResource(R.drawable.ic_visaactive);
+                            break;
+                        case "MASTERCARD":
+                            holder.tvCardName.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
+                            holder.imgPayMethod.setImageResource(R.drawable.ic_masteractive);
+                            break;
+                        case "AMERICANEXPRESS":
+                            holder.tvCardName.setText("American Express Card");
+                            holder.imgPayMethod.setImageResource(R.drawable.ic_amexactive);
+                            break;
+                        case "DISCOVER":
+                            holder.tvCardName.setText("Discover Card");
+                            holder.imgPayMethod.setImageResource(R.drawable.ic_discoveractive);
+                            break;
+                    }
                 }
             }
 
