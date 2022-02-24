@@ -353,7 +353,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            launchDashboard();
+                                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                                finish();
+                                            } else {
+                                                launchDashboard();
+                                            }
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }

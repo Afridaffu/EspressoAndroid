@@ -43,6 +43,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private View mCurrentView;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
+    private CardView mIvUserIconCV;
     private TextView mTvUserName, mTvUserIconText;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView;
@@ -87,6 +88,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
+        mIvUserIconCV = mCurrentView.findViewById(R.id.iv_user_icon_CV);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
         mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
         mCvAdditionalDataContinue = mCurrentView.findViewById(R.id.cv_additional_data_continue);
@@ -131,7 +133,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             iconText = firstName.substring(0, 1).toUpperCase();
             String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
             if (myApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = myApplication.getMyProfile().getData().getFirstName();
+                String lastName = myApplication.getMyProfile().getData().getLastName();
                 iconText = iconText + lastName.substring(0, 1).toUpperCase();
                 username = username + " ";
                 username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
