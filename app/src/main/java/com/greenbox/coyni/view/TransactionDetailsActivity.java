@@ -69,6 +69,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     case "withdraw":
                         txnType = Integer.parseInt(Utils.withdrawType);
                         break;
+                    case "business payout":
+                        txnType = Integer.parseInt(Utils.businessType);
+                        break;
                 }
             }
             if (getIntent().getStringExtra("txnSubType") != null && !getIntent().getStringExtra("txnSubType").equals("")) {
@@ -94,6 +97,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         break;
                     case "instant pay":
                         txnSubType = Integer.parseInt(Utils.instantType);
+                        break;
+                    case "signet":
+                        txnSubType = Integer.parseInt(Utils.signetType);
                         break;
                 }
             }
@@ -137,6 +143,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                                     ControlMethod("buytokenbank");
                                     buyTokenBankAccount(transactionDetails.getData());
                                     break;
+                                case "signet":
+                                    ControlMethod("buytokensignet");
+                                    buyTokenSignet(transactionDetails.getData());
+                                    break;
                             }
                             break;
                         case "withdraw":
@@ -176,6 +186,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void payRequest(TransactionData objData) {
         try {
@@ -487,6 +498,30 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
     }
+    private void buyTokenSignet(TransactionData objData) {
+        TextView headerText,amount,status,date,purchaseAmount,processingFee
+                ,totalAmount,depositID,referenceID,descriptorName
+                ,nameOnAccount,walletID;
+        LinearLayout copyRefID,copyDepositeID;
+        headerText=findViewById(R.id.buySignetHeaderTV);
+        amount = findViewById(R.id.signetAmountTV);
+        status = findViewById(R.id.signetStatusTV);
+        date = findViewById(R.id.signetdateTimeTV);
+        purchaseAmount = findViewById(R.id.signetPurchaseTV);
+        processingFee = findViewById(R.id.signetProcessingFeeTV);
+        totalAmount = findViewById(R.id.signetTotalAmountTV);
+        depositID = findViewById(R.id.signetDepositIDTV);
+        referenceID = findViewById(R.id.signetReferIDTV);
+        descriptorName = findViewById(R.id.signetDescNameTV);
+        nameOnAccount = findViewById(R.id.signetNameOnAccountTV);
+        walletID = findViewById(R.id.signetWalletIdTV);
+        copyRefID = findViewById(R.id.copyRefID);
+        copyDepositeID = findViewById(R.id.copyDepositID);
+
+
+
+    }
+
 
     private void withdrawGiftcard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
@@ -814,6 +849,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                 }
                 break;
                 case "buytoken": {
@@ -823,6 +859,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                 }
                 break;
                 case "buytokenbank": {
@@ -832,6 +869,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                }
+                break;
+                case "buytokensignet":{
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.VISIBLE);
                 }
                 break;
                 case "withdrawgift": {
@@ -841,6 +889,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawinstant": {
@@ -850,6 +899,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawbankaccount": {
@@ -859,40 +909,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.VISIBLE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                 }
                 break;
-//                case "paymentMethods": {
-//                    findViewById(R.id.payrequest).setVisibility(View.GONE);
-//                    findViewById(R.id.externalBank).setVisibility(View.GONE);
-//                    findViewById(R.id.paymentMethods).setVisibility(View.VISIBLE);
-//                    findViewById(R.id.firstError).setVisibility(View.GONE);
-//                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
-//                }
-//                break;
-//                case "externalBank": {
-//                    findViewById(R.id.payrequest).setVisibility(View.GONE);
-//                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
-//                    findViewById(R.id.externalBank).setVisibility(View.VISIBLE);
-//                    findViewById(R.id.firstError).setVisibility(View.GONE);
-//                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
-//                }
-//                break;
-//                case "firstError": {
-//                    findViewById(R.id.payrequest).setVisibility(View.GONE);
-//                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
-//                    findViewById(R.id.externalBank).setVisibility(View.GONE);
-//                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
-//                    findViewById(R.id.firstError).setVisibility(View.VISIBLE);
-//                }
-//                break;
-//                case "banksuccess": {
-//                    findViewById(R.id.payrequest).setVisibility(View.GONE);
-//                    findViewById(R.id.paymentMethods).setVisibility(View.GONE);
-//                    findViewById(R.id.externalBank).setVisibility(View.GONE);
-//                    findViewById(R.id.firstError).setVisibility(View.GONE);
-//                    findViewById(R.id.banksuccess).setVisibility(View.VISIBLE);
-//                }
-//                break;
             }
         } catch (Exception ex) {
             ex.printStackTrace();

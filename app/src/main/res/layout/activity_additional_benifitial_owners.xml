@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_bold"
-                android:text="@string/percentage"
+                android:text=" 51% or"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_11ssp" />
         </LinearLayout>
@@ -80,7 +80,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/buttonCV"
+        android:layout_above="@id/validateCV"
         android:layout_below="@+id/topLL"
         android:scrollbars="none">
 
@@ -93,7 +93,8 @@
                 android:id="@+id/beneficialOwnersRV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:layout_marginBottom="@dimen/_21sdp"/>
 
             <TextView
                 android:id="@+id/notFoundTV"
@@ -105,8 +106,7 @@
                 android:text="No Beneficial Owner is found"
                 android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_12ssp"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/_21sdp"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/percentageTV"
@@ -125,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_21sdp"
                 android:background="@drawable/corner_bg_lt"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -169,7 +170,7 @@
     </ScrollView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/buttonCV"
+        android:id="@+id/validateCV"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
         android:layout_alignParentBottom="true"

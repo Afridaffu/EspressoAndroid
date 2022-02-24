@@ -506,7 +506,8 @@
             android:name=".view.business.AddBeneficialOwnerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.business.BenificialMaillingAddressActivity"
             android:exported="false"

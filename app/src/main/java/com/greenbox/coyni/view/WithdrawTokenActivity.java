@@ -71,6 +71,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -637,9 +638,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 public void onClick(View v) {
                     try {
                         payDialog.dismiss();
-                        Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "withdraw");
-                        startActivity(i);
+                        try {
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
+                                i.putExtra("screen", "withdraw");
+                                startActivity(i);
+                            } else {
+                                Intent i = new Intent(WithdrawTokenActivity.this, SelectPaymentMethodActivity.class);
+                                i.putExtra("screen", "withdraw");
+                                startActivity(i);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

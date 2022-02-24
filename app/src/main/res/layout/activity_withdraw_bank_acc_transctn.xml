@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/backgrndbtmcornrs"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_22sdp">
+            android:paddingStart="@dimen/_22sdp">
 
             <LinearLayout
                 android:id="@+id/withbankCloseLL"
@@ -151,7 +151,6 @@
                                 android:background="@drawable/txn_completed_bg"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text="Completed"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_7sdp" />
                         </LinearLayout>
@@ -399,7 +398,6 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="right"
-                                    android:text="874jeM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -444,7 +442,6 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="right"
-                                    android:text="1d3hsM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -499,7 +496,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="Dan Nusinovich"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -526,11 +522,10 @@
                                 android:id="@+id/withBankBanknameTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="right"
+                                android:gravity="end"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:singleLine="true"
-                                android:text="Bank of America"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -560,7 +555,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="••••5359"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>

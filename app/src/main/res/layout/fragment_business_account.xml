@@ -89,12 +89,41 @@
         </RelativeLayout>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/recentTokenTextLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_below="@id/cvHeader"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:layout_weight="0.8"
+            android:text="@string/recent_token_transactions"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_12ssp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:textSize="@dimen/_10ssp"
+            android:layout_weight="0.2"
+            android:textColor="@color/primary_black"
+            android:gravity="end"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="(CYN)"/>
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/latestTxnRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cvHeader"
+        android:layout_below="@+id/recentTokenTextLL"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp">
 
@@ -121,18 +150,6 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_11sdp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="@string/recent_token_transactions"
-                        android:textColor="@color/primary_green"
-                        android:textSize="@dimen/_12ssp" />
-
-
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

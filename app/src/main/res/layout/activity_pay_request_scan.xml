@@ -64,6 +64,7 @@
         app:cardCornerRadius="@dimen/_19sdp">
 
         <LinearLayout
+            android:id="@+id/scanMeScanCodeLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -532,7 +533,7 @@
                     android:id="@+id/saveprofileTitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/primary_green"
+                    android:background="@drawable/round_color_bg"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center"
                     android:maxLength="2"

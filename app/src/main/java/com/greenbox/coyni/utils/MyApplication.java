@@ -917,6 +917,14 @@ public class MyApplication extends Application {
         this.dbaInfoResp = dbaInfoResp;
     }
 
+    public BOResp getBeneficialOwnersResponse() {
+        return beneficialOwnersResponse;
+    }
+
+    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
+        this.beneficialOwnersResponse = beneficialOwnersResponse;
+    }
+
     public String getStrMobileToken() {
         return strMobileToken;
     }
@@ -933,14 +941,6 @@ public class MyApplication extends Application {
         this.buyTokenResponse = buyTokenResponse;
     }
 
-    public BOResp getBeneficialOwnersResponse() {
-        return beneficialOwnersResponse;
-    }
-
-    public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
-        this.beneficialOwnersResponse = beneficialOwnersResponse;
-    }
-
     public Date getDate(String date) {
         Date dtExpiry = null;
         try {
@@ -951,4 +951,28 @@ public class MyApplication extends Application {
         }
         return dtExpiry;
     }
+
+    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse) {
+        try {
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                PaymentMethodsResponse objData = objResponse;
+                List<PaymentsList> listPayments = objData.getData().getData();
+                List<PaymentsList> listBusPayments = new ArrayList<>();
+                if (listPayments != null && listPayments.size() > 0) {
+                    for (int i = 0; i < listPayments.size(); i++) {
+//                        if (listPayments.get(i).getPaymentMethod() != null
+//                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
+                            listBusPayments.add(listPayments.get(i));
+                        }
+                    }
+                }
+                objResponse.getData().setData(listBusPayments);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return objResponse;
+    }
+
 }

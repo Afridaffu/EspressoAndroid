@@ -76,7 +76,7 @@
                         android:paddingBottom="@dimen/_9sdp">
 
                         <TextView
-                            android:id="@+id/headerTV"
+                            android:id="@+id/buySignetHeaderTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -95,7 +95,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/amountTV"
+                                android:id="@+id/signetAmountTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
@@ -129,7 +129,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_8sdp"
                                 android:layout_marginBottom="@dimen/_11sdp"
@@ -140,7 +140,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/payreqStatusTV"
+                                android:id="@+id/signetStatusTV"
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -168,7 +168,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/dateTimeTV"
+                                android:id="@+id/signetdateTimeTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -179,7 +179,6 @@
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
                         <LinearLayout
-                            android:id="@+id/purchaseAmtLL"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/_18sdp"
@@ -196,19 +195,18 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/pFeeTV"
+                                android:id="@+id/signetPurchaseTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="$100.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/payreqPfLL"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/_18sdp"
@@ -225,12 +223,12 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/feeTV"
+                                android:id="@+id/signetProcessingFeeTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="$1.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
@@ -245,9 +243,9 @@
                             android:visibility="visible">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_weight="0.5"
                                 android:orientation="vertical"
                                 android:visibility="visible">
 
@@ -269,13 +267,14 @@
                             </LinearLayout>
 
                             <TextView
-                                android:id="@+id/totalTV"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/signetTotalAmountTV"
+                                android:layout_width="@dimen/_60sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="$101.00"
+                                android:gravity="end"
+                                android:layout_weight=".1"
+                                android:text="$10100888888.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -316,18 +315,18 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <LinearLayout
-                                android:id="@+id/lyRefID"
+                                android:id="@+id/copyDepositID"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/copyRefTV"
-                                    android:layout_width="match_parent"
+                                    android:id="@+id/signetDepositIDTV"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
+                                    android:gravity="end"
                                     android:text="874jeM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
@@ -335,7 +334,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/_11sdp"
                                     android:layout_height="@dimen/_11sdp"
-                                    android:layout_gravity="right|center"
+                                    android:layout_gravity="end"
                                     android:layout_marginLeft="@dimen/_6sdp"
                                     android:src="@drawable/ic_copy" />
                             </LinearLayout>
@@ -348,27 +347,27 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.3"
+                                android:layout_weight="0.3"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/reference_id"
                                 android:textColor="@color/xdark_gray"
                                 android:textSize="@dimen/_11ssp" />
 
                             <LinearLayout
-                                android:id="@+id/lyAcAdd"
+                                android:id="@+id/copyRefID"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/referIDTV"
-                                    android:layout_width="match_parent"
+                                    android:id="@+id/signetReferIDTV"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
+                                    android:gravity="end"
                                     android:text="1d3hsM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
@@ -376,7 +375,7 @@
                                 <ImageView
                                     android:layout_width="@dimen/_11sdp"
                                     android:layout_height="@dimen/_11sdp"
-                                    android:layout_gravity="right|center"
+                                    android:layout_gravity="end"
                                     android:layout_marginLeft="@dimen/_6sdp"
                                     android:src="@drawable/ic_copy" />
                             </LinearLayout>
@@ -398,7 +397,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/descNameTV"
+                                android:id="@+id/signetDescNameTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -445,12 +444,12 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/nameTV"
+                                android:id="@+id/signetNameOnAccountTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="Dan Nusinovich"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
@@ -473,12 +472,12 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/walletIdTV"
+                                android:id="@+id/signetWalletIdTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="••••5359"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />

@@ -8,9 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
+import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
@@ -20,11 +25,15 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
 import java.lang.reflect.Type;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,14 +51,36 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
 
     private MutableLiveData<BOResp> beneficialOwnersResponse = new MutableLiveData<>();
     private MutableLiveData<BOIdResp> beneficialOwnersIDResponse = new MutableLiveData<>();
-    private MutableLiveData<DeleteBOResp> deleteBOesponse = new MutableLiveData<>();
+    private MutableLiveData<DeleteBOResp> deleteBOresponse = new MutableLiveData<>();
+    private MutableLiveData<BOPatchResp> patchBOresponse = new MutableLiveData<>();
+    private MutableLiveData<IdentityImageResponse> uploadBODocResponse = new MutableLiveData<>();
+    private MutableLiveData<RemoveIdentityResponse> removeBODocResponse = new MutableLiveData<>();
+    private MutableLiveData<BOValidateResp> validateBOResponse = new MutableLiveData<>();
+
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
         super(application);
     }
 
+
+    public MutableLiveData<BOValidateResp> getValidateBOResponse() {
+        return validateBOResponse;
+    }
+
+    public MutableLiveData<IdentityImageResponse> getUploadBODocResponse() {
+        return uploadBODocResponse;
+    }
+
+    public MutableLiveData<RemoveIdentityResponse> getRemoveBODocResponse() {
+        return removeBODocResponse;
+    }
+
+    public MutableLiveData<BOPatchResp> getPatchBOresponse() {
+        return patchBOresponse;
+    }
+
     public MutableLiveData<DeleteBOResp> getDeleteBOesponse() {
-        return deleteBOesponse;
+        return deleteBOresponse;
     }
 
     public MutableLiveData<BOIdResp> getBeneficialOwnersIDResponse() {
@@ -459,24 +490,167 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                     try {
                         if (response.isSuccessful()) {
                             DeleteBOResp obj = response.body();
-                            deleteBOesponse.setValue(obj);
+                            deleteBOresponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<DeleteBOResp>() {
                             }.getType();
                             DeleteBOResp errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            deleteBOesponse.setValue(errorResponse);
+                            deleteBOresponse.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        deleteBOesponse.setValue(null);
+                        deleteBOresponse.setValue(null);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<DeleteBOResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    deleteBOesponse.setValue(null);
+                    deleteBOresponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void patchBeneficialOwner(int id, BORequest boRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BOPatchResp> mCall = apiService.patchBeneficialOwner(id, boRequest);
+            mCall.enqueue(new Callback<BOPatchResp>() {
+                @Override
+                public void onResponse(Call<BOPatchResp> call, Response<BOPatchResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BOPatchResp obj = response.body();
+                            patchBOresponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BOPatchResp>() {
+                            }.getType();
+                            BOPatchResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            patchBOresponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        patchBOresponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BOPatchResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    patchBOresponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void uploadBODoc(int id, MultipartBody.Part idFile, RequestBody idType) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<IdentityImageResponse> mCall = apiService.uploadBODoc(id, idFile, idType);
+            mCall.enqueue(new Callback<IdentityImageResponse>() {
+                @Override
+                public void onResponse(Call<IdentityImageResponse> call, Response<IdentityImageResponse> response) {
+                    if (response.isSuccessful()) {
+                        IdentityImageResponse obj = response.body();
+                        uploadBODocResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<IdentityImageResponse>() {
+                        }.getType();
+                        try {
+                            IdentityImageResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                uploadBODocResponse.setValue(errorResponse);
+                            }
+                        } catch (JsonIOException e) {
+                            e.printStackTrace();
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<IdentityImageResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    uploadBODocResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void removeBODoc(String identityType, String boID) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<RemoveIdentityResponse> mCall = apiService.removeBODoc(identityType, boID);
+            mCall.enqueue(new Callback<RemoveIdentityResponse>() {
+                @Override
+                public void onResponse(Call<RemoveIdentityResponse> call, Response<RemoveIdentityResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            RemoveIdentityResponse obj = response.body();
+                            removeBODocResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<RemoveIdentityResponse>() {
+                            }.getType();
+                            RemoveIdentityResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            removeBODocResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        removeBODocResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RemoveIdentityResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    removeBODocResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void validateBeneficialOwners() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BOValidateResp> mCall = apiService.validateBeneficailOwners();
+            mCall.enqueue(new Callback<BOValidateResp>() {
+                @Override
+                public void onResponse(Call<BOValidateResp> call, Response<BOValidateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BOValidateResp obj = response.body();
+                            validateBOResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BOValidateResp>() {
+                            }.getType();
+                            BOValidateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            validateBOResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        validateBOResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BOValidateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    validateBOResponse.setValue(null);
                 }
             });
         } catch (Exception ex) {
