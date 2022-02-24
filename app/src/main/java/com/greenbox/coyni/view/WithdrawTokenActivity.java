@@ -292,7 +292,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             SetFaceLock();
             SetTouchId();
-
+            pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             bindPayMethod(selectedCard);
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
@@ -377,6 +377,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
                 if (transactionLimitResponse != null) {
                     objResponse = transactionLimitResponse;
                     setDailyWeekLimit(transactionLimitResponse.getData());
