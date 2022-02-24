@@ -178,11 +178,13 @@ public class BusinessAccountFragment extends BaseFragment {
     private void getBalance(WalletResponseData walletResponse) {
         try {
             String strAmount;
-            for (int i = 0; i < walletResponse.getWalletNames().size(); i++) {
-                if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
-                    tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            if (walletResponse.getWalletNames() != null && walletResponse.getWalletNames().size() > 0) {
+                for (int i = 0; i < walletResponse.getWalletNames().size(); i++) {
+                    if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
+                        strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
+                        tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
 
+                    }
                 }
             }
         } catch (Exception ex) {
