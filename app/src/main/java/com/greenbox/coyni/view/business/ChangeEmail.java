@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class ChangeEmail extends AppCompatActivity {
     private String companyEmail="",companyPhone="";
     int changeEmail=0;
     private CardView mChange;
+    LinearLayout closeLL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,15 @@ public class ChangeEmail extends AppCompatActivity {
         companyPhone = bundle.getString("CompanyPhone");
         changeEmail=bundle.getInt("ChangeEmail");
         setContentView(R.layout.activity_change_email);
+        closeLL = findViewById(R.id.bpCloseLL);
+        closeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChangeEmail.this, CompanyInfoDetails.class);
+
+                startActivity(intent);
+            }
+        });
         initFields();
         initObserver();
 
@@ -62,9 +73,9 @@ public class ChangeEmail extends AppCompatActivity {
                 Intent intent = new Intent(ChangeEmail.this, EditEmail.class);
                 intent.putExtra("CompanyEmail",companyEmail);
                 intent.putExtra("CompanyPhone",companyPhone);
-                intent.putExtra("ChangeEmail",1);
+                intent.putExtra("ChangeEmail",changeEmail);
                 startActivity(intent);
-                companyInfoAPICall(prepareRequest());
+               // companyInfoAPICall(prepareRequest());
             }
         });
     }

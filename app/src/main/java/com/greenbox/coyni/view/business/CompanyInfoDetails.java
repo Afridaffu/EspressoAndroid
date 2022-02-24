@@ -27,7 +27,7 @@ public class CompanyInfoDetails extends AppCompatActivity {
         setContentView(R.layout.activity_company_info_details);
         initFields();
         initObservers();
-        closeLL = findViewById(R.id.CloseLL);
+        closeLL = findViewById(R.id.bpCloseLL);
         closeLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +40,7 @@ public class CompanyInfoDetails extends AppCompatActivity {
 
 
     private void initFields() {
+
         mEmailTx=(TextView) findViewById(R.id.emailTx);
         mPhoneNumberTx=(TextView) findViewById(R.id.phoneNumberTx);
         mAddressTx=(TextView) findViewById(R.id.addressTx);
@@ -64,7 +65,7 @@ public class CompanyInfoDetails extends AppCompatActivity {
                 Intent intent = new Intent(CompanyInfoDetails.this, ChangeEmail.class);
                 intent.putExtra("CompanyEmail",companyEmail);
                 intent.putExtra("CompanyPhone",companyPhone);
-                intent.putExtra("ChangeEmail",1);
+                intent.putExtra("ChangeEmail",2);
                 startActivity(intent);
             }
         });

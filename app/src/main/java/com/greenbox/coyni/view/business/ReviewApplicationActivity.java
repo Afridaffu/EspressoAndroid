@@ -369,12 +369,10 @@ public class ReviewApplicationActivity extends AppCompatActivity {
                             if (agreements.getData().getItems() != null && agreements.getData().getItems().size() > 0) {
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
                                     if (agreements.getData().getItems().get(i).getSignatureType() == 0) {
-                                        mPrivacyVno.setText(agreements.getData().getItems().get(i).getDocumentVersion());
-
+                                        mTermsVno.setText(agreements.getData().getItems().get(i).getDocumentVersion());
                                     }
                                     if (agreements.getData().getItems().get(i).getSignatureType() == 1) {
-                                        mTermsVno.setText(agreements.getData().getItems().get(i).getDocumentVersion());
-
+                                        mPrivacyVno.setText(agreements.getData().getItems().get(i).getDocumentVersion());
                                     }
                                     if (agreements.getData().getItems().get(i).getSignatureType() == 5) {
                                         mMerchantsVno.setText(agreements.getData().getItems().get(i).getDocumentVersion());
