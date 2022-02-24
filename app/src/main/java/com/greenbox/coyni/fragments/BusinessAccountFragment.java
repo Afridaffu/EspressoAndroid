@@ -39,16 +39,17 @@ import java.util.List;
 public class BusinessAccountFragment extends BaseFragment {
     LinearLayout viewMoreLL;
     RecyclerView txnRV;
-    TextView noTxnTV,tvBalance;
+    TextView noTxnTV, tvBalance;
     SwipeRefreshLayout latestTxnRefresh;
     DashboardViewModel dashboardViewModel;
     BusinessDashboardViewModel businessDashboardViewModel;
     MyApplication objMyApplication;
     NestedScrollView transactionsNSV;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View currentView = inflater.inflate(R.layout.fragment_business_account, container, false);
-        viewMoreLL=currentView.findViewById(R.id.viewMoreLL);
+        viewMoreLL = currentView.findViewById(R.id.viewMoreLL);
         txnRV = currentView.findViewById(R.id.txnRV);
         noTxnTV = currentView.findViewById(R.id.noTxnTV);
         tvBalance = currentView.findViewById(R.id.tvBalance);
@@ -70,11 +71,11 @@ public class BusinessAccountFragment extends BaseFragment {
             try {
 //                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
 //                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
-                    dashboardViewModel.getLatestTxns();
-                    dashboardViewModel.meWallet();
-                    transactionsNSV.smoothScrollTo(0, 0);
+                dashboardViewModel.getLatestTxns();
+                dashboardViewModel.meWallet();
+                transactionsNSV.smoothScrollTo(0, 0);
 //                    } else {
-                    latestTxnRefresh.setRefreshing(false);
+                latestTxnRefresh.setRefreshing(false);
 //                    }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -99,11 +100,11 @@ public class BusinessAccountFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null){
+                if (businessWalletResponse != null) {
                     try {
                         List<WalletName> walletInfo = businessWalletResponse.getData().getWalletNames();
                         if (walletInfo != null && walletInfo.size() > 0) {
-                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                            objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -160,20 +161,24 @@ public class BusinessAccountFragment extends BaseFragment {
 
     }
 
-    public void goToTransact(){
+    public void goToTransact() {
         startActivity(new Intent(requireActivity().getApplication(), BusinessTransactionListActivity.class));
     }
+
     @Override
     public void updateData() {
 
     }
+
     private void getBalance(WalletResponseData walletResponse) {
         try {
             String strAmount;
+            if (walletResponse.getWalletNames() != null && walletResponse.getWalletNames().size() > 0) {
                 for (int i = 0; i < walletResponse.getWalletNames().size(); i++) {
                     if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
                         strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
                         tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -190,10 +195,11 @@ public class BusinessAccountFragment extends BaseFragment {
             dashboardViewModel.getLatestTxns();
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
-            Utils.displayAlert(getString(R.string.internet),requireActivity(), "", "");
+            Utils.displayAlert(getString(R.string.internet), requireActivity(), "", "");
         }
     }
-    public void getLatestTxns(LatestTxnResponse daata){
+
+    public void getLatestTxns(LatestTxnResponse daata) {
 
         try {
             transactionsNSV.setVisibility(View.VISIBLE);
@@ -228,4 +234,4 @@ public class BusinessAccountFragment extends BaseFragment {
     }
 
 
-    }
+}
