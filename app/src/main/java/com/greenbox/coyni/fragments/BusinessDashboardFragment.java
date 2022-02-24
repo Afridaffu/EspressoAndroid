@@ -35,6 +35,7 @@ import com.greenbox.coyni.utils.OnDialogButtonClickListener;
 import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 
@@ -43,6 +44,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private View mCurrentView;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
+    private CardView mIvUserIconCV;
     private TextView mTvUserName, mTvUserIconText;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView;
@@ -75,6 +77,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             }
         });
+
+        showUserData();
         return mCurrentView;
     }
 
@@ -87,6 +91,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
+        mIvUserIconCV = mCurrentView.findViewById(R.id.iv_user_icon_CV);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
         mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
         mCvAdditionalDataContinue = mCurrentView.findViewById(R.id.cv_additional_data_continue);
@@ -124,33 +129,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             });
 
     private void showUserData() {
-        String iconText = "";
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                && myApplication.getMyProfile().getData().getFirstName() != null) {
-            String firstName = myApplication.getMyProfile().getData().getFirstName();
-            iconText = firstName.substring(0, 1).toUpperCase();
-            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-            if (myApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = myApplication.getMyProfile().getData().getFirstName();
-                iconText = iconText + lastName.substring(0, 1).toUpperCase();
-                username = username + " ";
-                username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
-            }
-            mTvUserName.setText(getResources().getString(R.string.dba_name, username));
-        }
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                && myApplication.getMyProfile().getData().getImage() != null) {
-            mTvUserIconText.setVisibility(View.GONE);
-            mIvUserIcon.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(myApplication.getMyProfile().getData().getImage())
-                    .placeholder(R.drawable.ic_profile_male_user)
-                    .into(mIvUserIcon);
-        } else {
-            mTvUserIconText.setVisibility(View.VISIBLE);
-            mIvUserIcon.setVisibility(View.GONE);
-            mTvUserIconText.setText(iconText);
-        }
+        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
     }
 
     private void showIdentityVerificationFailed() {

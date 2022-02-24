@@ -60,6 +60,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -431,7 +432,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }else{
+                } else {
                     if (!transactionLimitResponse.getError().getErrorDescription().equals("")) {
                         Utils.displayAlert(transactionLimitResponse.getError().getErrorDescription(), BuyTokenActivity.this, "", transactionLimitResponse.getError().getFieldErrors().get(0));
                     } else {
@@ -745,6 +746,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter;
             prevSelectedCard = objMyApplication.getSelectedCard();
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                    paymentMethodsResponse = objMyApplication.businessPaymentMethods(paymentMethodsResponse);
+                }
                 selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(paymentMethodsResponse.getData().getData(), BuyTokenActivity.this, "buytoken");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(BuyTokenActivity.this);
                 rvSelPayMethods.setLayoutManager(mLayoutManager);
@@ -770,9 +774,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 public void onClick(View v) {
                     try {
                         payDialog.dismiss();
-                        Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "buytoken");
-                        startActivityForResult(i, 3);
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
+                            i.putExtra("screen", "buytoken");
+                            startActivityForResult(i, 3);
+                        } else {
+                            Intent i = new Intent(BuyTokenActivity.this, SelectPaymentMethodActivity.class);
+                            i.putExtra("screen", "buytoken");
+                            startActivityForResult(i, 3);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

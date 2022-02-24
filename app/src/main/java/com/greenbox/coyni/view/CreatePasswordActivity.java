@@ -153,6 +153,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                 tvMessage.setVisibility(VISIBLE);
                 tvHead.setText("Welcome Back!");
+                tvchangepass.setVisibility(GONE);
             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
                 tvHead.setText("Change Password");
                 tvchangepass.setVisibility(VISIBLE);

@@ -847,41 +847,55 @@
                             android:textSize="@dimen/_10ssp" />
                     </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/Country_TIL"
-                        style="@style/TextInputLayout.OutlinedBox"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_14sdp"
-                        android:background="@drawable/corner_bg_grey"
-                        android:hint="@string/country"
-                        android:textColorHint="@color/dark_grey"
-                        app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
-                        app:boxCornerRadiusBottomStart="@dimen/_10sdp"
-                        app:boxCornerRadiusTopEnd="@dimen/_10sdp"
-                        app:boxCornerRadiusTopStart="@dimen/_10sdp"
-                        app:boxStrokeColor="@color/primary_green"
-                        app:expandedHintEnabled="false"
-                        app:hintTextColor="@color/primary_green">
+                        android:layout_marginTop="@dimen/_14sdp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/Country_ET"
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_39sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:background="@drawable/disable_bg" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/Country_TIL"
+                            style="@style/TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="false"
-                            android:cursorVisible="false"
-                            android:enabled="false"
-                            android:focusable="false"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:maxLength="30"
-                            android:padding="@dimen/_12sdp"
-                            android:text="@string/countryhint"
-                            android:textColor="@color/xdark_gray"
-                            android:textColorHint="@color/light_gray"
-                            android:textSize="@dimen/_12ssp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:hint="@string/country"
+                            android:textColorHint="@color/dark_grey"
+                            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                            app:boxStrokeColor="@color/primary_color"
+                            app:expandedHintEnabled="false"
+                            app:hintTextColor="@color/black">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/Country_ET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:enabled="false"
+                                android:focusable="false"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:hint="@string/countryhint"
+                                android:imeOptions="actionDone"
+                                android:inputType="text"
+                                android:maxLength="30"
+                                android:padding="@dimen/_12sdp"
+                                android:text="United States"
+                                android:textColor="@color/dark_grey"
+                                android:textColorHint="@color/light_gray"
+                                android:textSize="@dimen/_12ssp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </RelativeLayout>
+
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/doneCV"

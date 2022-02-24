@@ -39,6 +39,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -55,7 +56,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     WalletResponse walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     Dialog payDialog;
@@ -177,6 +178,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 ControlMethod("withdrawmethod");
                 selectWithdrawMethod();
             } else {
+                isNoToken = true;
                 ControlMethod("withdrawnotoken");
                 bindWithdrawNoTokens();
             }
@@ -297,9 +299,15 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-                        ControlMethod("withdrawmethod");
-                        selectWithdrawMethod();
-                        strScreen = "withdrawmethod";
+                        if (isNoToken) {
+                            isNoToken = false;
+                            ControlMethod("withdrawnotoken");
+                            bindWithdrawNoTokens();
+                        } else {
+                            ControlMethod("withdrawmethod");
+                            selectWithdrawMethod();
+                            strScreen = "withdrawmethod";
+                        }
                     } else if (isPayments && strCurrent.equals("debit")) {
                         isPayments = false;
                         ControlMethod("withdrawpay");
@@ -818,9 +826,19 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             lyAddPay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
-                    i.putExtra("screen", "withdraw");
-                    startActivity(i);
+                    try {
+                        if(objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
+                            i.putExtra("screen", "withdraw");
+                            startActivity(i);
+                        }else{
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);
+                            i.putExtra("screen", "withdraw");
+                            startActivity(i);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             lyNTClose.setOnClickListener(new View.OnClickListener() {

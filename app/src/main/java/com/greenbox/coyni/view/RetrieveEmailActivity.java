@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.Login_EmPaIncorrect_BottomSheet;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
@@ -92,6 +92,11 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 firstNameErrorLL.setVisibility(GONE);
                 Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_black));
+                String str = firstName.getText().toString();
+                if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                    firstName.setText(firstName.getText().toString().replaceAll(" ", ""));
+                    firstName.setSelection(firstName.getText().length());
+                }
             }
 //            else if (firstName.getText().toString().trim().length() == 0) {
 //                firstNameErrorLL.setVisibility(VISIBLE);
@@ -102,6 +107,11 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 lastNameErrorLL.setVisibility(GONE);
                 Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_black));
+                String str = lastName.getText().toString();
+                if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                    lastName.setText(lastName.getText().toString().replaceAll(" ", ""));
+                    lastName.setSelection(lastName.getText().length());
+                }
             }
 //            else if (lastName.getText().toString().trim().length() == 0) {
 //                lastNameErrorLL.setVisibility(VISIBLE);
@@ -244,6 +254,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
                         firstName.setHint("First Name");
+                        firstName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
                     }
                 }
             });
@@ -275,6 +287,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
                         lastName.setHint("Last Name");
+//                        lastName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                     }
                 }
             });

@@ -320,7 +320,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     private void initObservers() {
@@ -371,7 +370,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         DBAInfoResp.Data dia = dbaInfoResp.getData();
                         if (dia.getName() != null && !dia.getName().equals("")
                                 || dia.getEmail() != null && !dia.getEmail().equals("")
-                                || dia.getPhoneNumberDto() != null || dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
+                                || dia.getPhoneNumberDto() != null && dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
                                 || dia.getBusinessType() != null && !dia.getBusinessType().equals("")
                                 || dia.getWebsite() != null && !dia.getWebsite().equals("")
                                 || dia.getMonthlyProcessingVolume() != null && !dia.getMonthlyProcessingVolume().equals("")
@@ -382,7 +381,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                 || dia.getCity() != null && !dia.getCity().equals("")
                                 || dia.getState() != null && !dia.getState().equals("")
                                 || dia.getZipCode() != null && !dia.getZipCode().equals("")
-                                || dia.getRequiredDocuments().size() > 0) {
+                                || dia.getRequiredDocuments() != null && dia.getRequiredDocuments().size() > 0) {
 
                             dbaTV.setTextColor(getResources().getColor(R.color.primary_green));
                             dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
@@ -411,7 +410,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")
-                                        || cir.getPhoneNumberDto() != null || cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
+                                        || cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
                                         || cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")
                                         || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")
                                         || cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")
@@ -420,7 +419,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                         || cir.getCity() != null && !cir.getCity().equals("")
                                         || cir.getState() != null && !cir.getState().equals("")
                                         || cir.getZipCode() != null && !cir.getZipCode().equals("")
-                                        || cir.getRequiredDocumets().size() > 0) {
+                                        || cir.getRequiredDocumets() != null && cir.getRequiredDocumets().size() > 0) {
 
                                     caTV.setTextColor(getResources().getColor(R.color.primary_green));
                                     caIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
