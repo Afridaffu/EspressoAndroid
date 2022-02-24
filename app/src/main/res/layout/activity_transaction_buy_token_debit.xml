@@ -71,7 +71,6 @@
                 android:id="@+id/headTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Buy Tokens - Debit Card"
                 android:fontFamily="@font/opensans_semibold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
@@ -92,7 +91,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="0.00"
                     android:textColor="@color/primary_color"
                     android:textSize="@dimen/_24ssp"
                     />
@@ -148,7 +146,6 @@
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
                     android:background="@drawable/txn_completed_bg"
-                    android:text="Completed"
                     android:textColor="@color/active_green"
                     android:textSize="@dimen/_7sdp" />
             </LinearLayout>
@@ -529,13 +526,12 @@
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:layout_marginTop="@dimen/_3sdp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_visa" />
+                            />
 
                         <TextView
                             android:id="@+id/cardnumTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="••••2338"
                             android:layout_marginTop="@dimen/_8sdp"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
