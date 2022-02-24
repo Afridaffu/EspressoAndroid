@@ -44,7 +44,7 @@ public class DBAInfoResp {
     }
 
     public class Data {
-        private int id=-1;
+        private int id = -1;
         private String name;
         private String email;
         private String identificationType;

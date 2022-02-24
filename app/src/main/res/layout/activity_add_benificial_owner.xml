@@ -69,6 +69,7 @@
     </LinearLayout>
 
 
+
     <com.greenbox.coyni.intro_slider.AutoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -298,14 +299,14 @@
                     <RelativeLayout
                         android:id="@+id/IdveriDOBRL"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_14sdp">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/IdveriDOBTIL"
                             style="@style/TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_14sdp"
                             android:hint="@string/dobol"
                             android:textColorHint="@color/light_gray"
                             app:boxStrokeColor="@color/primary_green"
@@ -319,7 +320,7 @@
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:imeOptions="actionDone"
+                                android:imeOptions="actionNext"
                                 android:inputType="none"
                                 android:maxLength="30"
                                 android:paddingVertical="@dimen/_12sdp"
@@ -335,9 +336,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignEnd="@id/IdveriDOBTIL"
-                            android:layout_marginTop="@dimen/_45sdp"
                             android:layout_marginRight="@dimen/_10sdp"
-                            android:src="@drawable/ic_chevron_down" />
+                            android:src="@drawable/ic_down"
+                            android:layout_centerInParent="true"/>
                     </RelativeLayout>
 
                     <LinearLayout
@@ -381,7 +382,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
-                            android:imeOptions="actionDone"
+                            android:imeOptions="actionNext"
                             android:inputType="numberPassword"
                             android:maxLength="9"
                             android:paddingVertical="@dimen/_12sdp"
@@ -425,7 +426,6 @@
                         android:hint="@string/Ownership"
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
-
                         app:hintTextColor="@color/primary_green">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -440,7 +440,8 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_green"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:imeOptions="actionDone"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
@@ -883,7 +884,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/addbenifitialowner2CloseCV"
+                        android:id="@+id/doneCV"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_42sdp"
                         android:layout_marginTop="@dimen/_26sdp"

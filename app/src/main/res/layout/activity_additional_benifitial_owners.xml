@@ -93,7 +93,8 @@
                 android:id="@+id/beneficialOwnersRV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:layout_marginBottom="@dimen/_21sdp"/>
 
             <TextView
                 android:id="@+id/notFoundTV"
@@ -105,8 +106,7 @@
                 android:text="No Beneficial Owner is found"
                 android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_12ssp"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/_21sdp"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/percentageTV"
@@ -125,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_21sdp"
                 android:background="@drawable/corner_bg_lt"
                 android:gravity="center"
                 android:orientation="horizontal">
