@@ -2,6 +2,9 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
@@ -67,6 +70,7 @@ import com.greenbox.coyni.model.preauth.PreAuthResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -100,6 +104,8 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
+import com.greenbox.coyni.model.team.TeamDeleteModel;
+import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
 import com.greenbox.coyni.model.templates.TemplateRequest;
@@ -299,7 +305,10 @@ public interface ApiService {
     Call<TrackerResponse> statusTracker();
 
     @POST("api/v2/register/add-customer")
-    Call<TrackerResponse> registerAddCustomer();
+    Call<AddBusinessUserResponse> registerAddCustomer();
+
+    @POST("api/v2/register/add-business-user")
+    Call<AddBusinessUserResponse> addBusinessUserInIndividual();
 
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);
@@ -451,6 +460,18 @@ public interface ApiService {
     @POST("api/v2/user/biometric/token")
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
+    @GET("api/v2/banks/me")
+    Call<PaymentMethodsResponse> meBanks();
+
+    @GET("api/v2/business/beneficial-owners")
+    Call<BOResp> getBeneficailOwners();
+
+    @POST("api/v2/business/beneficial-owners")
+    Call<BOIdResp> postBeneficailOwnersID();
+
+    @DELETE("api/v2/business/beneficial-owners")
+    Call<DeleteBOResp> deleteBeneficialOwner(@Query("beneficialOwnerId") Integer beneficialOwnerId);
+
     @GET("/api/v2/banks/me")
     Call<BanksResponseModel> getBankAccountsData();
 
@@ -459,6 +480,15 @@ public interface ApiService {
 
     @POST("/api/v2/team/retrieve")
     Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
+
+    @PATCH("/api/v2/team/{teamMemberId}")
+    Call<TeamResponseModel> updateTeamData(@Body TeamRequest request,@Query("teamMemberId") Integer teamMemberId);
+
+    @DELETE("/api/v2/team/{teamMemberId}")
+    Call<TeamDeleteModel> deleteTeam(@Query("teamMemberId") Integer teamMemberId);
+
+    @POST("/api/v2/team/send-invitation")
+    Call<TeamInfoAddModel> addTeamMember(@Body TeamRequest request);
 
 
 }

@@ -119,9 +119,9 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <ImageView
-                            android:id="@+id/editProfileIV"
-                            android:layout_width="@dimen/_10sdp"
-                            android:layout_height="@dimen/_10sdp"
+                            android:id="@+id/editStatusIV"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
                             android:background="@drawable/pending_dot"
                             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                             app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
@@ -154,6 +154,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/status"
                         android:layout_width="@dimen/_68sdp"
                         android:layout_height="@dimen/_14sdp"
                         android:layout_marginTop="@dimen/_6sdp"
@@ -217,6 +218,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/emailAddress"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
@@ -260,6 +262,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/phoneNumber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
@@ -318,6 +321,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cancelCv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_marginStart="@dimen/_21sdp"
@@ -341,6 +345,62 @@
                         android:fontFamily="@font/opensans_bold"
                         android:text="Cancel"
                         android:textColor="@color/error_red"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/removeCv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_43sdp"
+                android:layout_marginStart="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_21sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_22sdp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_13sdp"
+                    android:layout_marginBottom="@dimen/_13sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Remove This Member"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/resendInvitationCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_43sdp"
+                android:layout_marginStart="@dimen/_21sdp"
+                android:layout_marginEnd="@dimen/_21sdp"
+                app:cardBackgroundColor="@color/primary_green"
+                app:cardCornerRadius="@dimen/_22sdp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_13sdp"
+                    android:layout_marginBottom="@dimen/_13sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Resend Invitation"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
