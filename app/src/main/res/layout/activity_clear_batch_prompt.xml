@@ -135,7 +135,7 @@
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 app:cardBackgroundColor="@color/slidebtn_bg"
-                app:cardCornerRadius="@dimen/_21sdp"
+                app:cardCornerRadius="@dimen/_22sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -157,7 +157,7 @@
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:visibility="invisible"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_20sdp"
+                app:cardCornerRadius="@dimen/_22sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
