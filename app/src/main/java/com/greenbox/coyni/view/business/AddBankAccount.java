@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
 import java.util.List;
@@ -40,6 +42,7 @@ public class AddBankAccount extends BaseActivity {
     MyApplication objMyApplication;
     SignOnData signOnData;
     Boolean isBank = false;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +217,20 @@ public class AddBankAccount extends BaseActivity {
             tvLearnMore = findViewById(R.id.tvLearnMore);
             cvNext = findViewById(R.id.cvNext);
             tvHead.setText("I’m Ready");
+            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.populateLearnMore(AddBankAccount.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             cvNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
