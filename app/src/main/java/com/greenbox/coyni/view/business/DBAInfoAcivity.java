@@ -202,7 +202,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             dbaPhoneOET = findViewById(R.id.dbaPhoneOET);
             dbaPhoneOET.setFrom("DbaInfo", this);
-            dbaPhoneOET.setHintText("Customer Service Phone Number");
+            dbaPhoneOET.setHintText("Customer Service Number");
             customerphonenumLL = findViewById(R.id.customerphoneNumberErrorLL);
             customernumTV = findViewById(R.id.customerphoneNumberErrorTV);
 
