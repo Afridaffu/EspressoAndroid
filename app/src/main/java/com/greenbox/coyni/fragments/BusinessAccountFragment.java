@@ -36,6 +36,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import java.util.List;
 
 public class BusinessAccountFragment extends BaseFragment {
+
     private LinearLayout viewMoreLL;
     private RecyclerView txnRV;
     private TextView noTxnTV, tvBalance;
@@ -181,6 +182,7 @@ public class BusinessAccountFragment extends BaseFragment {
                 if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
                     tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+
                 }
             }
         } catch (Exception ex) {
