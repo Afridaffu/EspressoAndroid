@@ -51,6 +51,7 @@ import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 import java.util.List;
@@ -268,9 +269,19 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    try {
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(GiftCardBindingLayoutActivity.this, BusinessDashboardActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 

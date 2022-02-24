@@ -181,7 +181,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
-            businessPaymentMethods(objMyApplication.getPaymentMethodsResponse());
+            paymentMethodsResponse = objMyApplication.businessPaymentMethods(objMyApplication.getPaymentMethodsResponse());
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -321,8 +321,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         paymentMethodsResponse = objResponse;
                     } else {
                         objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-                        paymentMethodsResponse = payMethodsResponse;
-                        businessPaymentMethods(payMethodsResponse);
+                        paymentMethodsResponse = objMyApplication.businessPaymentMethods(payMethodsResponse);
                     }
 //                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
 //                    objMyApplication.setPaymentMethodsResponse(objResponse);
@@ -544,11 +543,11 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             if (paymentMethodsResponse.getData() != null) {
                 tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
                 tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
-                tvSignetCount.setText("(" + paymentMethodsResponse.getData().getCreditCardCount() + "/" + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + ")");
+                tvSignetCount.setText("(" + paymentMethodsResponse.getData().getSignetCount() + "/" + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + ")");
 
                 tvBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
                 tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
-                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + " accounts");
+                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + " accounts");
             }
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
@@ -1002,27 +1001,6 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
         try {
             Intent i = new Intent(SelectPaymentMethodActivity.this, BuyTokenActivity.class);
             startActivity(i);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void businessPaymentMethods(PaymentMethodsResponse objResponse) {
-        try {
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                PaymentMethodsResponse objData = objResponse;
-                List<PaymentsList> listPayments = objData.getData().getData();
-                List<PaymentsList> listBusPayments = new ArrayList<>();
-                if (listPayments != null && listPayments.size() > 0) {
-                    for (int i = 0; i < listPayments.size(); i++) {
-                        if (listPayments.get(i).getPaymentMethod() != null
-                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
-                            listBusPayments.add(listPayments.get(i));
-                        }
-                    }
-                }
-                paymentMethodsResponse.getData().setData(listBusPayments);
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

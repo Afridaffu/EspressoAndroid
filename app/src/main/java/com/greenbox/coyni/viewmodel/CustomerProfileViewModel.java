@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -37,7 +38,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     private MutableLiveData<UpdatePhoneResponse> updatePhoneSendOTPResponse = new MutableLiveData<>();
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BankResponse> bankResponseMutableLiveData = new MutableLiveData<>();
 
     public CustomerProfileViewModel(@NonNull Application application) {
         super(application);
@@ -74,8 +75,8 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         return syncAccountMutableLiveData;
     }
 
-    public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
-        return paymentMethodsResponseMutableLiveData;
+    public MutableLiveData<BankResponse> getBankResponseMutableLiveData() {
+        return bankResponseMutableLiveData;
     }
 
     public void updateEmailSendOTP(UpdateEmailRequest request) {
@@ -297,31 +298,31 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     public void meBanks() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<PaymentMethodsResponse> mCall = apiService.meBanks();
-            mCall.enqueue(new Callback<PaymentMethodsResponse>() {
+            Call<BankResponse> mCall = apiService.meBanks();
+            mCall.enqueue(new Callback<BankResponse>() {
                 @Override
-                public void onResponse(Call<PaymentMethodsResponse> call, Response<PaymentMethodsResponse> response) {
+                public void onResponse(Call<BankResponse> call, Response<BankResponse> response) {
                     try {
                         if (response.isSuccessful()) {
-                            PaymentMethodsResponse obj = response.body();
-                            paymentMethodsResponseMutableLiveData.setValue(obj);
+                            BankResponse obj = response.body();
+                            bankResponseMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<PaymentMethodsResponse>() {
+                            Type type = new TypeToken<BankResponse>() {
                             }.getType();
-                            PaymentMethodsResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            paymentMethodsResponseMutableLiveData.setValue(errorResponse);
+                            BankResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            bankResponseMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        paymentMethodsResponseMutableLiveData.setValue(null);
+                        bankResponseMutableLiveData.setValue(null);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<PaymentMethodsResponse> call, Throwable t) {
+                public void onFailure(Call<BankResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    paymentMethodsResponseMutableLiveData.setValue(null);
+                    bankResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

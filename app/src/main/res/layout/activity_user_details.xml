@@ -659,7 +659,6 @@
                     android:focusable="false"
                     android:fontFamily="@font/opensans_semibold"
                     android:imeOptions="actionNext"
-                    android:text="Shiva Siddagoni"
                     android:importantForAutofill="no"
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:maxLines="1"

@@ -164,8 +164,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             backIV.setVisibility(GONE);
             viewPager.setCurrentItem(0);
             viewBarLeft.setBackgroundResource(R.drawable.button_background);
-            viewBarLeft.setBackgroundResource(R.drawable.button_background1);
-
+            viewBarRight.setBackgroundResource(R.drawable.button_background1);
         }
     }
 
@@ -203,7 +202,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             dbaPhoneOET = findViewById(R.id.dbaPhoneOET);
             dbaPhoneOET.setFrom("DbaInfo", this);
-            dbaPhoneOET.setHintText("Customer Service Phone Number");
+            dbaPhoneOET.setHintText("Customer Service Number");
             customerphonenumLL = findViewById(R.id.customerphoneNumberErrorLL);
             customernumTV = findViewById(R.id.customerphoneNumberErrorTV);
 

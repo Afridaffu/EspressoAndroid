@@ -26,7 +26,9 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 public class BusinessRegistrationTrackerActivity extends BaseActivity {
@@ -41,6 +43,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DBAInfoResp dbaInfoResponse;
+    String boAPICallFrom = "RESUME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +179,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 }
             });
 
+//            caCompleteLL.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, CompanyInformationActivity.class);
+//                    startActivity(intent);
+//
+//                }
+//            });
+
             dbaIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -184,16 +200,33 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != -1) {
+                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() == 0) {
                             dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                        } else {
+                        } else if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != 0) {
                             Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
                             intent.putExtra("TYPE", "EXIST");
                             startActivity(intent);
+                        } else {
+
                         }
                     }
                 }
             });
+
+//            dbaCompleteLL.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
+//
+//                        dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+//
+//                    }
+//                }
+//            });
 
             boIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -203,9 +236,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (businessTrackerResponse.getData().isDbaInfo()) {
+                        boAPICallFrom = "INCOMPLETE";
                         businessIdentityVerificationViewModel.getBeneficialOwners();
-//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBeneficialOwnerActivity.class);
-//                        startActivity(intent);
                     }
                 }
             });
@@ -213,19 +245,36 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             addBankIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    if (businessTrackerResponse.getData().isBeneficialOwners()) {
-//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
-//                        startActivity(intent);
-//                    }
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+                            startActivity(intent);
+                        }
 
-                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
+//                    startActivity(intent);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
+
+//            boCompleteLL.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    boAPICallFrom = "INCOMPLETE";
+//                    businessIdentityVerificationViewModel.getBeneficialOwners();
+//
+//                }
+//            });
 
             aggrementsIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -244,7 +293,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     private void initObservers() {
@@ -278,7 +326,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         DBAInfoResp.Data dia = dbaInfoResp.getData();
                         if (dia.getName() != null && !dia.getName().equals("")
                                 || dia.getEmail() != null && !dia.getEmail().equals("")
-                                || dia.getPhoneNumberDto()!= null|| dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
+                                || dia.getPhoneNumberDto() != null && dia.getPhoneNumberDto().getPhoneNumber() != null && !dia.getPhoneNumberDto().getPhoneNumber().equals("")
                                 || dia.getBusinessType() != null && !dia.getBusinessType().equals("")
                                 || dia.getWebsite() != null && !dia.getWebsite().equals("")
                                 || dia.getMonthlyProcessingVolume() != null && !dia.getMonthlyProcessingVolume().equals("")
@@ -289,7 +337,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                 || dia.getCity() != null && !dia.getCity().equals("")
                                 || dia.getState() != null && !dia.getState().equals("")
                                 || dia.getZipCode() != null && !dia.getZipCode().equals("")
-                                || dia.getRequiredDocuments().size() > 0) {
+                                || dia.getRequiredDocuments() != null && dia.getRequiredDocuments().size() > 0) {
 
                             dbaTV.setTextColor(getResources().getColor(R.color.primary_green));
                             dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
@@ -318,7 +366,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")
-                                        || cir.getPhoneNumberDto()!= null || cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
+                                        || cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
                                         || cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")
                                         || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")
                                         || cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")
@@ -327,7 +375,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                         || cir.getCity() != null && !cir.getCity().equals("")
                                         || cir.getState() != null && !cir.getState().equals("")
                                         || cir.getZipCode() != null && !cir.getZipCode().equals("")
-                                        || cir.getRequiredDocumets().size() > 0) {
+                                        || cir.getRequiredDocumets() != null && cir.getRequiredDocumets().size() > 0) {
 
                                     caTV.setTextColor(getResources().getColor(R.color.primary_green));
                                     caIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
@@ -357,10 +405,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success") && boResp.getData().size() > 0) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
-                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
-                            startActivity(intent);
+                            if (boAPICallFrom.equals("INCOMPLETE")) {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
+                                startActivity(intent);
+                            } else {
+                                boTV.setTextColor(getResources().getColor(R.color.primary_green));
+                                boIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
+                                boIncompleteTV.setText("In Progress");
+                                boStartTV.setVisibility(GONE);
+                                boInProgressIV.setVisibility(VISIBLE);
+                            }
                         } else {
-                            businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                            if (boAPICallFrom.equals("INCOMPLETE"))
+                                businessIdentityVerificationViewModel.postBeneficialOwnersID();
                         }
                     }
                 }
@@ -376,9 +433,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
                     if (boIdResp != null) {
                         if (boIdResp.getStatus().toLowerCase().toString().equals("success")) {
-
+                            startActivity(new Intent(BusinessRegistrationTrackerActivity.this, AddBeneficialOwnerActivity.class)
+                                    .putExtra("FROM", "ADD_BO")
+                                    .putExtra("ID", boIdResp.getData().getId()));
                         } else {
-
+                            Utils.displayAlert(boIdResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", boIdResp.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -404,6 +463,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
         businessIdentityVerificationViewModel.getCompanyInfo();
         businessIdentityVerificationViewModel.getDBAInfo();
+        boAPICallFrom = "RESUME";
+        businessIdentityVerificationViewModel.getBeneficialOwners();
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
