@@ -297,8 +297,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-//                        ControlMethod("paymentMethods");
-//                        strCurrent = "paymentMethods";
                         ControlMethod("withdrawmethod");
                         selectWithdrawMethod();
                         strScreen = "withdrawmethod";

@@ -8,7 +8,7 @@ public class WalletName {
     private int availabilityToUse;
     private int exchangeRate;
     private String exchangeVariation;
-    private int exchangeAmount;
+    private double exchangeAmount;
     private String status;
     private String walletCategory;
     private String type;
@@ -74,11 +74,11 @@ public class WalletName {
         this.exchangeVariation = exchangeVariation;
     }
 
-    public int getExchangeAmount() {
+    public double getExchangeAmount() {
         return exchangeAmount;
     }
 
-    public void setExchangeAmount(int exchangeAmount) {
+    public void setExchangeAmount(double exchangeAmount) {
         this.exchangeAmount = exchangeAmount;
     }
 

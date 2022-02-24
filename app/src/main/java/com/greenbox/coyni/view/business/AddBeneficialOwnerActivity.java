@@ -3,19 +3,32 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +38,10 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -32,38 +49,64 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
-import com.greenbox.coyni.custom_camera.CameraFragment;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
+import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
+import com.greenbox.coyni.model.BeneficialOwners.BORequest;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
+import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.CreateAccountActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-public class AddBeneficialOwnerActivity extends BaseActivity {
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
+public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     TextInputLayout fnametil, lnametil, dobtil, ssntil, ownershiptil, address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
     TextInputEditText fnameET, lnameET, dobET, ssnET, ownershipET, address1ET, address2ET, cityET, stateET, zipcodeET;
-    LinearLayout fnameLL, lnameLL, dobLL, ssnLL, ownershipLL, uploadLL, address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
+    LinearLayout fnameLL, lnameLL, dobLL, ssnLL, ownershipLL, uploadLL, address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL, uploadedLL;
     ConstraintLayout stateCL;
-    TextView uploadTV, fnameTV, lnameTV, dobTV, ssnTV, ownershipTV, address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
-    public CardView nextcv, Addbenifitialowner2CloseCV;
-    ImageView closeIV, CompleteIV, uploadIV, backIV, stateimg;
+    TextView uploadTV, fnameTV, lnameTV, dobTV, ssnTV, ownershipTV, address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV,
+            updatedOnTV, uploadedTV;
+    public static CardView nextcv, doneCV;
+    ImageView closeIV, backIV;
     View divider1, divider2;
-    public boolean isfname = false, islname = false, isssn = false, isownership = false, isNextEnabled = false, isDOBSelected = false, isAddress1, isAddress2, isCity, isState, isZipcode, isSaveEnabled;
+    public static boolean isfname = false, islname = false, isssn = false, isownership = false, isNextEnabled = false,
+            isDOBSelected = false, isAddress1 = false, isAddress2 = false, isCity = false, isState = false,
+            isZipcode = false, isSaveEnabled = false, isFileUploaded = false;
 
-    public static String dateOfBirth = "";
+    public String dateOfBirth = "";
     int mYear, mMonth, mDay;
     private DatePicker datepicker;
     Long mLastClickTime = 0L;
     BOPagerAdapter boPagerAdapter;
     static AutoScrollViewPager viewPager;
-    int pagerPosition = 0, diffMonths = -1;
-    public static int focusedID = 0;
+    int pagerPosition = 0, diffMonths = -1, selectedPage = 0;
     RelativeLayout layoutUpload, layoutMailingAddress;
+    String fromScreen = "";
+    int boID = -1, totalOwnerShipPerc = 0;
+    MyApplication objMyApplication;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    AddBeneficialOwnerActivity myActivity;
+    public static AddBeneficialOwnerActivity addBeneficialOwnerActivity;
+    public static File identityFile;
+    public static int identityType = 0, existingIdentityType = -1;
+    public static boolean isFileSelected = false;
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +114,25 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_add_benificial_owner);
+
+        initFields();
+        initObservers();
+        textWatchers();
+        focusWatchers();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fnameET.requestFocus();
+    }
+
+    private void initFields() {
+        businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+        objMyApplication = (MyApplication) getApplicationContext();
+        addBeneficialOwnerActivity = myActivity = this;
+        setKeyboardVisibilityListener(AddBeneficialOwnerActivity.this);
 
         boPagerAdapter = new BOPagerAdapter();
         viewPager = findViewById(R.id.view_pager);
@@ -85,13 +147,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                pagerPosition = position;
+
+                selectedPage = position;
                 if (position == 0) {
-                    divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
-                    divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                    closeIV.setVisibility(VISIBLE);
+                    backIV.setVisibility(GONE);
+                    divider1.setBackgroundResource(R.drawable.button_background);
+                    divider2.setBackgroundResource(R.drawable.button_background1);
                 } else if (position == 1) {
-                    divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
-                    divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
+                    closeIV.setVisibility(GONE);
+                    backIV.setVisibility(VISIBLE);
+                    divider1.setBackgroundResource(R.drawable.button_background1);
+                    divider2.setBackgroundResource(R.drawable.button_background);
                 }
             }
 
@@ -100,92 +167,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
             }
         });
-        stateimg = findViewById(R.id.Stateimg);
-        stateimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog dialog = new Dialog((AddBeneficialOwnerActivity.this));
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-                dialog.setContentView(R.layout.states_bottom_dialog);
-                Window window = dialog.getWindow();
-//                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.45);
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                WindowManager.LayoutParams wl = window.getAttributes();
-                wl.gravity = Gravity.BOTTOM;
-                wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wl);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
 
-            }
-        });
-        initFields();
-        textWatchers();
-        focusWatchers();
+        fromScreen = getIntent().getStringExtra("FROM");
+        boID = getIntent().getIntExtra("ID", -1);
 
-        uploadLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LinearLayout DrivingLicence;
-                Dialog dialog = new Dialog((AddBeneficialOwnerActivity.this));
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-                dialog.setContentView(R.layout.activity_choose_id_dialog);
-                Window window = dialog.getWindow();
-//                int height = (int)(getResources().getDisplayMetrics().heightPixels*0.45);
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                WindowManager.LayoutParams wl = window.getAttributes();
-                wl.gravity = Gravity.BOTTOM;
-                wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wl);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.setCanceledOnTouchOutside(true);
-                DrivingLicence = dialog.findViewById(R.id.payRequestLL);
-                DrivingLicence.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            startActivity(new Intent(AddBeneficialOwnerActivity.this, CameraActivity.class));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        businessIdentityVerificationViewModel.getBeneficialOwners();
 
-
-                dialog.show();
-            }
-        });
-
-        closeIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (fnameET.getId() == focusedID) {
-            fnameET.requestFocus();
-        } else if (address1ET.getId() == focusedID) {
-            address1ET.requestFocus();
-        }
-    }
-
-    private void initFields() {
         divider1 = findViewById(R.id.divider1);
         divider2 = findViewById(R.id.divider2);
         layoutUpload = findViewById(R.id.layoutUpload);
         layoutMailingAddress = findViewById(R.id.layoutMailingAddress);
-        closeIV = findViewById(R.id.addbenifitialownerCloseIV);
+        closeIV = findViewById(R.id.closeIV);
+        backIV = findViewById(R.id.backIV);
         uploadLL = findViewById(R.id.UploadLL);
         fnametil = findViewById(R.id.FirstNameTIL);
         lnametil = findViewById(R.id.LastNameTIL);
@@ -204,13 +197,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         dobLL = findViewById(R.id.IdveriDOBLL);
         ssnLL = findViewById(R.id.SsnErrorLL);
         ownershipLL = findViewById(R.id.OwnershipErrorLL);
-        uploadTV = findViewById(R.id.UploadTV);
+        uploadTV = findViewById(R.id.uploadTV);
+        updatedOnTV = findViewById(R.id.updatedOnTV);
+        uploadedTV = findViewById(R.id.uploadedTV);
+        uploadedLL = findViewById(R.id.uploadedLL);
+
         fnameTV = findViewById(R.id.FirstNameErrorTV);
         lnameTV = findViewById(R.id.LastNameErrorTV);
         dobTV = findViewById(R.id.IdveriDOBTV);
         ssnTV = findViewById(R.id.SsnErrorTV);
         ownershipTV = findViewById(R.id.OwnershipErrorTV);
-        CompleteIV = findViewById(R.id.complete);
         nextcv = findViewById(R.id.nextcv);
 
         address1TIL = findViewById(R.id.mailing_address_TIL);
@@ -225,7 +221,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         cityET = findViewById(R.id.City_ET);
         stateET = findViewById(R.id.stateET);
         zipcodeET = findViewById(R.id.Zip_ET);
-//        backIV = findViewById(R.id.backIV);
 
         address1ErrorLL = findViewById(R.id.mailing_addressErrorLL);
         address1ErrorTV = findViewById(R.id.mailing_addressErrorTV);
@@ -240,7 +235,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         zipcodeErrorTV = findViewById(R.id.Zip_ErrorTV);
         countryTIL = findViewById(R.id.Country_TIL);
 
-        Addbenifitialowner2CloseCV = findViewById(R.id.addbenifitialowner2CloseCV);
+        doneCV = findViewById(R.id.doneCV);
         dobtil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -276,12 +271,293 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             }
         });
 
-//        backIV.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
+        uploadLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                ssnET.clearFocus();
+                showIdentityTypePopup(AddBeneficialOwnerActivity.this);
+
+            }
+        });
+
+        closeIV.setOnClickListener(v -> finish());
+
+        backIV.setOnClickListener(v -> {
+            if (selectedPage == 1) {
+                closeIV.setVisibility(VISIBLE);
+                backIV.setVisibility(GONE);
+                viewPager.setCurrentItem(0);
+                divider1.setBackgroundResource(R.drawable.button_background);
+                divider2.setBackgroundResource(R.drawable.button_background1);
+            } else if (selectedPage == 2) {
+                closeIV.setVisibility(GONE);
+                backIV.setVisibility(VISIBLE);
+                viewPager.setCurrentItem(1);
+                divider1.setBackgroundResource(R.drawable.button_background1);
+                divider2.setBackgroundResource(R.drawable.button_background);
+            }
+        });
+
+        nextcv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                if (isNextEnabled) {
+                    beneficialOwnerAPICall(boID, prepareRequest());
+                }
+            }
+        });
+
+        divider1.setOnClickListener(view -> {
+            closeIV.setVisibility(VISIBLE);
+            backIV.setVisibility(GONE);
+            viewPager.setCurrentItem(0);
+            divider1.setBackgroundResource(R.drawable.button_background);
+            divider2.setBackgroundResource(R.drawable.button_background1);
+        });
+
+        divider2.setOnClickListener(view -> {
+            if (isNextEnabled) {
+                closeIV.setVisibility(GONE);
+                backIV.setVisibility(VISIBLE);
+                viewPager.setCurrentItem(1);
+                divider1.setBackgroundResource(R.drawable.button_background1);
+                divider2.setBackgroundResource(R.drawable.button_background);
+            }
+        });
+
+        doneCV.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (isSaveEnabled) {
+                beneficialOwnerAPICall(boID, prepareRequest());
+            }
+        });
+
+        stateET.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            Utils.populateStates(this, stateET, objMyApplication);
+        });
+
+        stateCL.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            Utils.populateStates(this, stateET, objMyApplication);
+        });
+
+
+    }
+
+    private void initObservers() {
+        try {
+            businessIdentityVerificationViewModel.getBeneficialOwnersResponse().observe(this, new Observer<BOResp>() {
+                @Override
+                public void onChanged(BOResp boResp) {
+
+                    if (boResp != null) {
+                        if (boResp.getStatus().toLowerCase().toString().equals("success") && boResp.getData().size() > 0) {
+                            objMyApplication.setBeneficialOwnersResponse(boResp);
+
+                            for (int i = 0; i < boResp.getData().size(); i++) {
+                                totalOwnerShipPerc = totalOwnerShipPerc + boResp.getData().get(i).getOwnershipParcentage();
+                                if (boResp.getData().get(i).getId() == boID) {
+                                    if (boResp.getData().get(i).getFirstName() != null && !boResp.getData().get(i).getFirstName().equals("")) {
+                                        fnameET.setText(boResp.getData().get(i).getFirstName());
+                                        fnameET.setSelection(boResp.getData().get(i).getFirstName().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getLastName() != null && !boResp.getData().get(i).getLastName().equals("")) {
+                                        lnameET.setText(boResp.getData().get(i).getLastName());
+                                        lnameET.setSelection(boResp.getData().get(i).getFirstName().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getDob() != null && !boResp.getData().get(i).getDob().equals("")) {
+                                        dobET.setText(convertDateNew(boResp.getData().get(i).getDob()));
+                                        dateOfBirth = boResp.getData().get(i).getDob();
+                                    }
+
+                                    if (boResp.getData().get(i).getSsn() != null && !boResp.getData().get(i).getSsn().equals("")) {
+                                        ssnET.setText(boResp.getData().get(i).getSsn());
+                                        ssnET.setSelection(boResp.getData().get(i).getSsn().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getOwnershipParcentage() != -1) {
+                                        ownershipET.setText(boResp.getData().get(i).getOwnershipParcentage() + "");
+                                        ownershipET.setSelection(String.valueOf(boResp.getData().get(i).getOwnershipParcentage()).length());
+                                    }
+
+                                    if (boResp.getData().get(i).getAddressLine1() != null && !boResp.getData().get(i).getAddressLine1().equals("")) {
+                                        address1ET.setText(boResp.getData().get(i).getAddressLine1());
+                                        address1ET.setSelection(boResp.getData().get(i).getAddressLine1().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getAddressLine2() != null && !boResp.getData().get(i).getAddressLine2().equals("")) {
+                                        address2ET.setText(boResp.getData().get(i).getAddressLine2());
+                                        address2ET.setSelection(boResp.getData().get(i).getAddressLine2().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getCity() != null && !boResp.getData().get(i).getCity().equals("")) {
+                                        cityET.setText(boResp.getData().get(i).getCity());
+                                        cityET.setSelection(boResp.getData().get(i).getCity().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getState() != null && !boResp.getData().get(i).getState().equals("")) {
+                                        stateET.setText(boResp.getData().get(i).getState());
+                                        stateET.setSelection(boResp.getData().get(i).getState().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getZipCode() != null && !boResp.getData().get(i).getZipCode().equals("")) {
+                                        zipcodeET.setText(boResp.getData().get(i).getZipCode());
+                                        zipcodeET.setSelection(boResp.getData().get(i).getZipCode().length());
+                                    }
+
+                                    if (boResp.getData().get(i).getRequiredDocuments().size() > 0) {
+                                        existingIdentityType = boResp.getData().get(i).getRequiredDocuments().get(0).getIdentityId();
+
+                                        isFileUploaded = true;
+
+                                        uploadTV.setVisibility(GONE);
+                                        uploadedLL.setVisibility(VISIBLE);
+                                        updatedOnTV.setText(Utils.convertDocUploadedDate(boResp.getData().get(i).getRequiredDocuments().get(0).getUpdatedAt()));
+
+                                        if (existingIdentityType == 4)
+                                            uploadedTV.setText("Uploaded Driver’s License");
+                                        else if (existingIdentityType == 2)
+                                            uploadedTV.setText("Uploaded Passport");
+                                        else if (existingIdentityType == 1)
+                                            uploadedTV.setText("Uploaded State-Issued Card");
+
+                                    }
+                                    enableOrDisableNext();
+                                    enableOrDisableSave();
+                                }
+                            }
+
+                        } else {
+                            Utils.displayAlert(boResp.getError().getErrorDescription(), AddBeneficialOwnerActivity.this, "", boResp.getError().getFieldErrors().get(0));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getRemoveBODocResponse().observe(this, new Observer<RemoveIdentityResponse>() {
+                @Override
+                public void onChanged(RemoveIdentityResponse imageResponse) {
+                    try {
+                        if (imageResponse != null) {
+                            RequestBody requestBody = null;
+                            MultipartBody.Part idFile = null;
+
+                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), identityFile);
+                            idFile = MultipartBody.Part.createFormData("identityFile", identityFile.getName(), requestBody);
+
+                            RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identityType + "");
+                            businessIdentityVerificationViewModel.uploadBODoc(boID, idFile, idType);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getUploadBODocResponse().observe(this, new Observer<IdentityImageResponse>() {
+                @Override
+                public void onChanged(IdentityImageResponse identityImageResponse) {
+
+                    Log.e("upload respo", identityImageResponse.toString());
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        isFileUploaded = true;
+                        if (identityType == 4) {
+                            uploadTV.setVisibility(GONE);
+                            uploadedLL.setVisibility(VISIBLE);
+                            uploadedTV.setText("Uploaded Driver’s License");
+                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                        } else if (identityType == 2) {
+                            uploadTV.setVisibility(GONE);
+                            uploadedLL.setVisibility(VISIBLE);
+                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            uploadedTV.setText("Uploaded Passport");
+                        } else if (identityType == 1) {
+                            uploadTV.setVisibility(GONE);
+                            uploadedLL.setVisibility(VISIBLE);
+                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            uploadedTV.setText("Uploaded State-Issued Card");
+                        } else {
+                            isFileUploaded = false;
+                            uploadTV.setVisibility(VISIBLE);
+                            uploadedLL.setVisibility(GONE);
+                        }
+
+                        enableOrDisableNext();
+                        enableOrDisableSave();
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), AddBeneficialOwnerActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getPatchBOresponse().observe(this, new Observer<BOPatchResp>() {
+                @Override
+                public void onChanged(BOPatchResp boPatchResp) {
+
+                    if (boPatchResp != null) {
+                        if (boPatchResp.getStatus().toLowerCase().toString().equals("success")) {
+//                            objMyApplication.setBeneficialOwnersResponse(boResp);
+
+                            closeIV.setVisibility(GONE);
+                            backIV.setVisibility(VISIBLE);
+
+                            if (selectedPage == 0) {
+                                viewPager.setCurrentItem(1);
+                                closeIV.setVisibility(GONE);
+                                backIV.setVisibility(VISIBLE);
+                                divider1.setBackgroundResource(R.drawable.button_background1);
+                                divider2.setBackgroundResource(R.drawable.button_background);
+                            } else if (selectedPage == 1) {
+                                startActivity(new Intent(AddBeneficialOwnerActivity.this, AdditionalBeneficialOwnersActivity.class));
+                                finish();
+                            }
+
+                        } else {
+                            Utils.displayAlert(boPatchResp.getError().getErrorDescription(), AddBeneficialOwnerActivity.this, "", boPatchResp.getError().getFieldErrors().get(0));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -289,6 +565,19 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         String strDate = "";
         try {
             SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MMMM dd, yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public static String convertDateNew(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
             Date newDate = spf.parse(date);
             spf = new SimpleDateFormat("MMMM dd, yyyy");
             strDate = spf.format(newDate);
@@ -353,10 +642,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     isfname = true;
                     fnameLL.setVisibility(GONE);
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
                 } else if (fnameET.getText().toString().trim().length() == 0) {
-                    fnameLL.setVisibility(VISIBLE);
-                    fnameTV.setText("Field Required");
+//                    fnameLL.setVisibility(VISIBLE);
+//                    fnameTV.setText("Field Required");
+                    isfname = false;
                 } else {
                     isfname = false;
                 }
@@ -391,14 +681,17 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
+                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                     islname = true;
+                    lnameLL.setVisibility(GONE);
                     lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
+                } else if (lnameTV.getText().toString().trim().length() == 0) {
+//                    lnameLL.setVisibility(VISIBLE);
+//                    lnameTV.setText("Field Required");
+                    islname = false;
                 } else {
                     islname = false;
-                    lnameLL.setVisibility(VISIBLE);
-                    lnameTV.setText("Field Required");
                 }
                 enableOrDisableNext();
             }
@@ -421,6 +714,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             }
         });
 
+
         dobET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -432,6 +726,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 try {
                     if (charSequence.toString().trim().length() > 0) {
                         isDOBSelected = true;
+                        Utils.setUpperHintColor(dobtil, getResources().getColor(R.color.primary_black));
                     } else {
                         isDOBSelected = false;
                     }
@@ -447,6 +742,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
             }
         });
+
         ssnET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -454,12 +750,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
+                if (charSequence.toString().trim().length() == 9) {
                     isssn = true;
                     ssntil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(ssntil, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(ssntil, getResources().getColor(R.color.primary_black));
                 } else {
-                    ssnTV.setText("Field Required");
+//                    ssnTV.setText("Field Required");
                     isssn = false;
                 }
                 enableOrDisableNext();
@@ -473,6 +769,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 }
             }
         });
+
         ownershipET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -480,13 +777,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() == 2) {
-                    isownership = true;
+                if (charSequence.toString().trim().length() > 0) {
+                    int allowPerc = 100 - totalOwnerShipPerc;
+                    if (Integer.parseInt(charSequence.toString().trim()) <= allowPerc) {
+                        isownership = true;
+                    } else {
+                        isownership = false;
+                    }
                     ownershipLL.setVisibility(GONE);
                     ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(ownershiptil, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(ownershiptil, getResources().getColor(R.color.primary_black));
                 } else {
-                    ownershipTV.setText("Field Required");
+//                    ownershipTV.setText("Field Required");
                     isownership = false;
                 }
                 enableOrDisableNext();
@@ -495,15 +797,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    if (s.length() == 2) {
-                        s.append("%");
-                    }
+//                    if (s.length() > 0) {
+//                        s.append("%");
+//                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         });
-// AddBeneficialOwners Address
+
+        // AddBeneficialOwners Address
         address1ET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -516,7 +819,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     isAddress1 = true;
                     address1ErrorLL.setVisibility(GONE);
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
                 } else {
                     address1ErrorLL.setVisibility(VISIBLE);
                     address1ErrorTV.setText("Field Required");
@@ -598,7 +901,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 if (charSequence.length() > 0) {
                     isCity = true;
                     cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                     cityErrorLL.setVisibility(GONE);
                 } else {
                     cityErrorLL.setVisibility(VISIBLE);
@@ -630,33 +933,35 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 }
             }
         });
-//        stateET.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                try {
-//                    if (charSequence.length() > 0) {
-//                        Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
-//                        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                        isState = true;
-//                    } else {
-//                        isState = false;
-//                    }
-//                    enableOrDisableSave();
-//                } catch (Resources.NotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
+
+        stateET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.length() > 0) {
+                        Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
+                        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                        isState = true;
+                    } else {
+                        isState = false;
+                    }
+                    enableOrDisableSave();
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         zipcodeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -669,7 +974,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
@@ -691,6 +996,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
     }
 
     private void focusWatchers() {
+
         fnameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -698,29 +1004,29 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     fnameET.setHint("");
                     if (fnameET.getText().toString().trim().length() > 1) {
                         fnameLL.setVisibility(GONE);
-                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(fnametil, getColor(R.color.primary_black));
-                    } else if (fnameET.getText().toString().trim().length() == 1) {
-                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                        Utils.setUpperHintColor(fnametil, getColor(R.color.light_gray));
-                        fnameLL.setVisibility(VISIBLE);
-                        fnameTV.setText("Field Required Mininmum 2 characters");
 
+                    } else if (fnameET.getText().toString().trim().length() == 1) {
+                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                        Utils.setUpperHintColor(fnametil, getColor(R.color.error_red));
+                        fnameLL.setVisibility(VISIBLE);
+                        fnameTV.setText("Minimum 2 Characters Required");
                     } else {
-                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                        fnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(fnametil, getColor(R.color.light_gray));
                         fnameLL.setVisibility(VISIBLE);
                         fnameTV.setText("Field Required");
                     }
                 } else {
-                    focusedID = fnameET.getId();
+                    fnameLL.setVisibility(GONE);
                     fnameET.setHint("First Name");
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(fnametil, getColor(R.color.primary_green));
-                    fnameLL.setVisibility(GONE);
                 }
             }
         });
+
         lnameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -728,28 +1034,29 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     lnameET.setHint("");
                     if (lnameET.getText().toString().trim().length() > 1) {
                         lnameLL.setVisibility(GONE);
-                        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        lnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.primary_black));
+
                     } else if (lnameET.getText().toString().trim().length() == 1) {
-                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                        Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
+                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                        Utils.setUpperHintColor(lnametil, getColor(R.color.error_red));
                         lnameLL.setVisibility(VISIBLE);
-                        lnameTV.setText("Field Required Mininmum 2 characters");
+                        lnameTV.setText("Minimum 2 Characters Required");
                     } else {
-                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                        lnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(lnametil, getColor(R.color.light_gray));
                         lnameLL.setVisibility(VISIBLE);
                         lnameTV.setText("Field Required");
                     }
                 } else {
-                    focusedID = lnameET.getId();
-                    lnameET.setHint("LastName");
+                    lnameLL.setVisibility(GONE);
+                    lnameET.setHint("Last Name");
                     lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(lnametil, getColor(R.color.primary_green));
-                    lnameLL.setVisibility(GONE);
                 }
             }
         });
+
         dobET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -757,42 +1064,58 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     Utils.hideKeypad(AddBeneficialOwnerActivity.this);
             }
         });
+
         ssnET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     ssnET.setHint("");
-                    if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() <= 8) {
+                    if (ssnET.getText().toString().trim().length() == 9) {
                         ssnLL.setVisibility(GONE);
-                        ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(ssntil, getColor(R.color.primary_black));
 
+                    } else if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() < 9) {
+                        ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                        Utils.setUpperHintColor(ssntil, getColor(R.color.error_red));
+                        ssnLL.setVisibility(VISIBLE);
+                        ssnTV.setText("Please Enter valid SSN");
+
                     } else {
-                        ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                        Utils.setUpperHintColor(ssntil, getColor(R.color.light_gray));
+                        ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                        Utils.setUpperHintColor(ssntil, getColor(R.color.error_red));
                         ssnLL.setVisibility(VISIBLE);
                         ssnTV.setText("Field Required");
                     }
                 } else {
+                    ssnLL.setVisibility(GONE);
                     ssnET.setHint("•••-••-••••");
                     ssntil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(ssntil, getColor(R.color.primary_green));
-                    ssnLL.setVisibility(GONE);
                 }
             }
         });
+
         ownershipET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     ownershipET.setHint("");
-                    if (ownershipET.getText().toString().trim().length() == 2) {
-                        ownershipLL.setVisibility(GONE);
-                        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                        Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
+                    if (ownershipET.getText().toString().trim().length() > 0) {
+                        int allowPerc = 100 - totalOwnerShipPerc;
+                        if (Integer.parseInt(ownershipET.getText().toString().trim()) <= allowPerc) {
+                            ownershipLL.setVisibility(GONE);
+                            ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                            Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
+                        } else {
+                            ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                            Utils.setUpperHintColor(ownershiptil, getColor(R.color.error_red));
+                            ownershipLL.setVisibility(VISIBLE);
+                            ownershipTV.setText("Please Enter a Valid Ownership Percentage");
+                        }
 
                     } else {
-                        ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                        ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
                         ownershipLL.setVisibility(VISIBLE);
                         ownershipTV.setText("Field Required");
@@ -806,6 +1129,28 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
             }
         });
 
+        ownershipET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ownershipET.clearFocus();
+                    int allowPerc = 100 - totalOwnerShipPerc;
+                    if (Integer.parseInt(ownershipET.getText().toString().trim()) <= allowPerc) {
+                        ownershipLL.setVisibility(GONE);
+                        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                        Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
+                    } else {
+                        ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                        Utils.setUpperHintColor(ownershiptil, getColor(R.color.error_red));
+                        ownershipLL.setVisibility(VISIBLE);
+                        ownershipTV.setText("Please Enter a Valid Ownership Percentage");
+                    }
+                }
+
+                return false;
+            }
+        });
+
         address1ET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -813,11 +1158,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     address1ET.setHint("");
                     if (address1ET.getText().toString().trim().length() > 0) {
                         address1ErrorLL.setVisibility(GONE);
-                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_black));
 
                     } else {
-                        address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                        address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.light_gray));
                         address1ErrorLL.setVisibility(VISIBLE);
                         address1ErrorTV.setText("Field Required");
@@ -836,10 +1181,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 if (!b) {
                     address2ET.setHint("");
                     if (address2ET.getText().toString().length() > 0) {
-//                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+//                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
 //                        Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_black));
                     } else {
-//                        address2TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+//                        address2TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
 //                        Utils.setUpperHintColor(address2TIL, getColor(R.color.light_gray));
                     }
                 } else {
@@ -849,6 +1194,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                 }
             }
         });
+
         cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -856,11 +1202,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     cityET.setHint("");
                     if (cityET.getText().toString().trim().length() > 0) {
                         cityErrorLL.setVisibility(GONE);
-                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
 
                     } else {
-                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                         cityErrorLL.setVisibility(VISIBLE);
                         cityErrorTV.setText("Field Required");
@@ -880,16 +1226,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
                     zipcodeET.setHint("");
                     if (zipcodeET.getText().toString().trim().length() == 5) {
                         zipcodeErrorLL.setVisibility(GONE);
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
                     } else if (zipcodeET.getText().toString().trim().length() < 5 && zipcodeET.getText().toString().trim().length() > 0) {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                     } else {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Field Required");
@@ -904,59 +1250,34 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
 
     }
 
-    private void enableOrDisableNext() {
+    public static void enableOrDisableNext() {
 
         try {
-            if (isfname && islname && isDOBSelected && isssn && isownership) {
+            if (isfname && islname && isDOBSelected && isssn && isownership && isFileUploaded) {
                 isNextEnabled = true;
-//                     CompleteIV.setVisibility(VISIBLE);
-                nextcv.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-                Log.e("All boolean", isfname + " " + islname + " " + isDOBSelected + " " + isssn + " " + isownership);
+                nextcv.setCardBackgroundColor(addBeneficialOwnerActivity.getResources().getColor(R.color.primary_green));
+                viewPager.setPagingEnabled(true);
             } else {
-
-                Log.e("All boolean", isfname + " " + islname + " " + isDOBSelected + " " + isssn + " " + isownership);
-
                 isNextEnabled = false;
-                nextcv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                nextcv.setCardBackgroundColor(addBeneficialOwnerActivity.getResources().getColor(R.color.inactive_color));
+                viewPager.setPagingEnabled(false);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (isNextEnabled) {
-            nextcv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AddBeneficialOwnerActivity.this, AddBeneficialOwnerActivity.class);
-                    startActivity(intent);
-                }
-            });
-        } else {
-            nextcv.setClickable(false);
         }
     }
 
     public void enableOrDisableSave() {
         try {
-            if (isAddress1 && isCity && isZipcode) {
+            if (isAddress1 && isCity && isState && isZipcode) {
                 isSaveEnabled = true;
-                Addbenifitialowner2CloseCV.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                doneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
             } else {
                 isSaveEnabled = false;
-                Addbenifitialowner2CloseCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                doneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (isSaveEnabled) {
-            Addbenifitialowner2CloseCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AddBeneficialOwnerActivity.this, AdditionalBeneficialOwnersActivity.class);
-                    startActivity(intent);
-                }
-            });
-        } else {
-            Addbenifitialowner2CloseCV.setClickable(false);
         }
     }
 
@@ -989,6 +1310,241 @@ public class AddBeneficialOwnerActivity extends BaseActivity {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             // No super
+        }
+    }
+
+    public BORequest prepareRequest() {
+        BORequest boRequest = new BORequest();
+
+        try {
+            //Basic
+//            if (isBasicNextEnabled) {
+
+            if (fnameET.getText().toString().trim().length() > 1)
+                boRequest.setFirstName(fnameET.getText().toString().trim());
+
+            if (lnameET.getText().toString().trim().length() > 1)
+                boRequest.setLastName(lnameET.getText().toString().trim());
+
+            if (dateOfBirth.trim().length() > 0)
+                boRequest.setDob(dateOfBirth.trim());
+
+            if (ssnET.getText().toString().trim().length() == 9)
+                boRequest.setSsn(ssnET.getText().toString().trim());
+
+            if (ownershipET.getText().toString().trim().length() > 0)
+                boRequest.setOwnershipParcentage(Integer.parseInt(ownershipET.getText().toString().replace("%", "")));
+//            }
+
+            //Address
+//            if (isAddressNextEnabled) {
+            if (address1ET.getText().toString().trim().length() > 0)
+                boRequest.setAddressLine1(address1ET.getText().toString().trim());
+
+            if (address2ET.getText().toString().trim().length() > 0)
+                boRequest.setAddressLine2(address2ET.getText().toString().trim());
+
+            if (cityET.getText().toString().trim().length() > 0)
+                boRequest.setCity(cityET.getText().toString().trim());
+
+            if (stateET.getText().toString().trim().length() > 0)
+                boRequest.setState(stateET.getText().toString().trim());
+
+            if (zipcodeET.getText().toString().trim().length() >= 5)
+                boRequest.setZipCode(zipcodeET.getText().toString().trim());
+            boRequest.setCountry("us");
+
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return boRequest;
+    }
+
+    public void beneficialOwnerAPICall(int boID, BORequest boRequest) {
+        businessIdentityVerificationViewModel.patchBeneficialOwner(boID, boRequest);
+    }
+
+    public static void showIdentityTypePopup(final Context context) {
+        try {
+            final Dialog dialog = new Dialog(context);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.fragment_id_ve_bottom_sheet);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            LinearLayout driverlicensell = dialog.findViewById(R.id.driverlicensell);
+            LinearLayout passportll = dialog.findViewById(R.id.passportll);
+            LinearLayout sicardll = dialog.findViewById(R.id.sicardll);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            WindowManager.LayoutParams wlp = window.getAttributes();
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            driverlicensell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    if (checkAndRequestPermissions((Activity) context)) {
+                        identityType = 4;
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM", "ADD_BO"));
+                    }
+                }
+            });
+
+            passportll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    if (checkAndRequestPermissions((Activity) context)) {
+                        identityType = 2;
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM", "ADD_BO"));
+                    }
+                }
+            });
+
+            sicardll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    if (checkAndRequestPermissions((Activity) context)) {
+                        identityType = 1;
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM", "ADD_BO"));
+                    }
+                }
+            });
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean checkAndRequestPermissions(final Activity context) {
+        try {
+            int WExtstorePermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.CAMERA);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
+            }
+            if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded
+                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                                .toArray(new String[listPermissionsNeeded.size()]),
+                        REQUEST_ID_MULTIPLE_PERMISSIONS);
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        try {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            switch (requestCode) {
+                case REQUEST_ID_MULTIPLE_PERMISSIONS:
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        Utils.displayAlert("Requires Access to Camera.", AddBeneficialOwnerActivity.this, "", "");
+
+                    } else if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Utils.displayAlert("Requires Access to Your Storage.", AddBeneficialOwnerActivity.this, "", "");
+
+                    } else {
+                        showIdentityTypePopup(AddBeneficialOwnerActivity.this);
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+        } else {
+            Utils.isKeyboardVisible = false;
+        }
+    }
+
+    public void removeAndUploadBODoc() {
+        try {
+            if (existingIdentityType != -1)
+                businessIdentityVerificationViewModel.removeBODoc(existingIdentityType + "", boID + "");
+            else
+                businessIdentityVerificationViewModel.removeBODoc(identityType + "", boID + "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (selectedPage == 0) {
+            super.onBackPressed();
+        } else if (selectedPage == 1) {
+            closeIV.setVisibility(VISIBLE);
+            backIV.setVisibility(GONE);
+            viewPager.setCurrentItem(0);
+            divider1.setBackgroundResource(R.drawable.button_background);
+            divider2.setBackgroundResource(R.drawable.button_background1);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            super.onDestroy();
+            businessIdentityVerificationViewModel.patchBeneficialOwner(boID, prepareRequest());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

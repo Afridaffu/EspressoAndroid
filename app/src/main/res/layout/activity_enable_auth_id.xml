@@ -454,8 +454,6 @@
                 android:id="@+id/businessGetStartedCV"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
-                android:layout_marginStart="@dimen/_29sdp"
-                android:layout_marginEnd="@dimen/_29sdp"
                 android:layout_marginBottom="@dimen/_60sdp"
                 app:cardBackgroundColor="@color/primary_color"
                 app:cardCornerRadius="@dimen/_21sdp">

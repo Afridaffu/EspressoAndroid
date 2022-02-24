@@ -26,18 +26,25 @@ import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletName;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.wallet.WalletInfo;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+
+import java.util.List;
 
 //Business dashboard activity created
 public class BusinessDashboardActivity extends BaseActivity {
@@ -119,60 +126,69 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
-        LogUtils.d(TAG, "onQuickMenuTabSelected");
-        Dialog dialog = new Dialog(BusinessDashboardActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-        dialog.setContentView(R.layout.activity_business_quick_action);
-        Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams wl = window.getAttributes();
-        wl.gravity = Gravity.BOTTOM;
-        wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wl);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-        LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
-        LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
-        LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
-        LinearLayout llScan = dialog.findViewById(R.id.llScan);
+        try {
+            LogUtils.d(TAG, "onQuickMenuTabSelected");
+            Dialog dialog = new Dialog(BusinessDashboardActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
+            dialog.setContentView(R.layout.activity_business_quick_action);
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            WindowManager.LayoutParams wl = window.getAttributes();
+            wl.gravity = Gravity.BOTTOM;
+            wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wl);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+            LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
+            LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
+            LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
+            LinearLayout llScan = dialog.findViewById(R.id.llScan);
 
-        buyTokenLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
-                        return;
+            buyTokenLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                            return;
+                        }
+                        dialog.dismiss();
+                        mLastClickTimeQA = SystemClock.elapsedRealtime();
+                        Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
+                        i.putExtra("screen", "dashboard");
+                        startActivity(i);
+                        //startActivity(new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTimeQA = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
-                    i.putExtra("screen", "dashboard");
-                    startActivity(i);
-                    //startActivity(new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
-        });
-        widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, SelectWithdrawMethodActivity.class));
-            }
-        });
-        receivePaymentLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
-            }
-        });
-        llScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
-            }
-        });
+            });
+            widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+//                startActivity(new Intent(BusinessDashboardActivity.this, SelectWithdrawMethodActivity.class));
+                    startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
+                }
+            });
+            receivePaymentLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
+                }
+            });
+            llScan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void setSelectedTab(boolean isDashboard, boolean isAccount, boolean isTransactions, boolean isProfile) {
@@ -250,31 +266,32 @@ public class BusinessDashboardActivity extends BaseActivity {
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 if (businessWalletResponse != null) {
                     objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                    getBalance(businessWalletResponse);
                 }
             }
         });
 
-        mDashboardViewModel.getProfileMutableLiveData().
-                observe(this, new Observer<Profile>() {
-                    @Override
-                    public void onChanged(Profile profile) {
-                        try {
-                            if (profile != null) {
-                                objMyApplication.setMyProfile(profile);
-                                if (mCurrentFragment != null) {
-                                    mCurrentFragment.updateData();
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        mDashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                try {
+                    if (profile != null) {
+                        objMyApplication.setMyProfile(profile);
+                        if (mCurrentFragment != null) {
+                            mCurrentFragment.updateData();
                         }
                     }
-                });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         mDashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
             @Override
             public void onChanged(LatestTxnResponse latestTxnResponse) {
                 try {
-                    if (latestTxnResponse !=null) {
+                    if (latestTxnResponse != null) {
                         objMyApplication.setListLatestTxn(latestTxnResponse);
                     }
                 } catch (Exception e) {
@@ -282,6 +299,21 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void getBalance(BusinessWalletResponse walletResponse) {
+        try {
+            List<WalletName> walletInfo = walletResponse.getData().getWalletNames();
+            if (walletInfo != null && walletInfo.size() > 0) {
+                for (int i = 0; i < walletInfo.size(); i++) {
+                    if (walletInfo.get(i).getWalletCategory().equals(getString(R.string.currency))) {
+                        objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {

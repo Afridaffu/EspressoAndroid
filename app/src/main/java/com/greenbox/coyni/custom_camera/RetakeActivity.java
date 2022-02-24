@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
+import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
@@ -53,6 +54,10 @@ public class RetakeActivity extends AppCompatActivity {
                     IdentityVerificationActivity.identityFile = null;
                     IdentityVerificationActivity.isFileSelected = false;
                     IdentityVerificationActivity.enableNext();
+                } else if (from.equals("ADD_BO")) {
+                    AddBeneficialOwnerActivity.identityFile = null;
+                    AddBeneficialOwnerActivity.isFileSelected = false;
+                    AddBeneficialOwnerActivity.enableOrDisableNext();
                 }
                 finish();
             }
@@ -70,11 +75,17 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("CI-EINLETTER")) {
                     CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(6);
                 } else if (from.equals("CI-W9")) {
-                    CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
+                    if (CompanyInformationActivity.companyInformationActivity.SSNTYPE.equals("SSN"))
+                        CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(11);
+                    else if (CompanyInformationActivity.companyInformationActivity.SSNTYPE.equals("EIN/TIN"))
+                        CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
                 } else if (from.equals("DBA_INFO")) {
                     DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
-                }else if (from.equals("IDVE")) {
+                } else if (from.equals("IDVE")) {
                     IdentityVerificationActivity.enableNext();
+                } else if (from.equals("ADD_BO")) {
+                    AddBeneficialOwnerActivity.addBeneficialOwnerActivity.removeAndUploadBODoc();
+                    AddBeneficialOwnerActivity.enableOrDisableNext();
                 }
             }
         });
@@ -95,6 +106,10 @@ public class RetakeActivity extends AppCompatActivity {
                     IdentityVerificationActivity.identityFile = null;
                     IdentityVerificationActivity.isFileSelected = false;
                     IdentityVerificationActivity.enableNext();
+                } else if (from.equals("ADD_BO")) {
+                    AddBeneficialOwnerActivity.identityFile = null;
+                    AddBeneficialOwnerActivity.isFileSelected = false;
+                    AddBeneficialOwnerActivity.enableOrDisableNext();
                 }
             }
         });

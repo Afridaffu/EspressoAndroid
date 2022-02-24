@@ -1015,8 +1015,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 List<PaymentsList> listBusPayments = new ArrayList<>();
                 if (listPayments != null && listPayments.size() > 0) {
                     for (int i = 0; i < listPayments.size(); i++) {
-                        if (listPayments.get(i).getPaymentMethod() != null
-                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+//                        if (listPayments.get(i).getPaymentMethod() != null
+//                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
                             listBusPayments.add(listPayments.get(i));
                         }
                     }
