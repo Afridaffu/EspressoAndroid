@@ -15,6 +15,7 @@ import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
@@ -54,7 +55,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<BOPatchResp> patchBOresponse = new MutableLiveData<>();
     private MutableLiveData<IdentityImageResponse> uploadBODocResponse = new MutableLiveData<>();
     private MutableLiveData<RemoveIdentityResponse> removeBODocResponse = new MutableLiveData<>();
-    private MutableLiveData<BOIdResp> validateBOResponse = new MutableLiveData<>();
+    private MutableLiveData<BOValidateResp> validateBOResponse = new MutableLiveData<>();
 
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
@@ -62,7 +63,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     }
 
 
-    public MutableLiveData<BOIdResp> getValidateBOResponse() {
+    public MutableLiveData<BOValidateResp> getValidateBOResponse() {
         return validateBOResponse;
     }
 
@@ -625,19 +626,19 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     public void validateBeneficialOwners() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BOIdResp> mCall = apiService.validateBeneficailOwners();
-            mCall.enqueue(new Callback<BOIdResp>() {
+            Call<BOValidateResp> mCall = apiService.validateBeneficailOwners();
+            mCall.enqueue(new Callback<BOValidateResp>() {
                 @Override
-                public void onResponse(Call<BOIdResp> call, Response<BOIdResp> response) {
+                public void onResponse(Call<BOValidateResp> call, Response<BOValidateResp> response) {
                     try {
                         if (response.isSuccessful()) {
-                            BOIdResp obj = response.body();
+                            BOValidateResp obj = response.body();
                             validateBOResponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<BOIdResp>() {
+                            Type type = new TypeToken<BOValidateResp>() {
                             }.getType();
-                            BOIdResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            BOValidateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
                             validateBOResponse.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
@@ -647,7 +648,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<BOIdResp> call, Throwable t) {
+                public void onFailure(Call<BOValidateResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     validateBOResponse.setValue(null);
                 }

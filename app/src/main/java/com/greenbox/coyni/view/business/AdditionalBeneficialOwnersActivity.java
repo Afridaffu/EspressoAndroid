@@ -27,6 +27,7 @@ import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.adapters.BeneficialOwnersAdapter;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -155,6 +156,25 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                             finish();
                         } else {
 
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getValidateBOResponse().observe(this, new Observer<BOValidateResp>() {
+                @Override
+                public void onChanged(BOValidateResp boValidateResp) {
+
+                    if (boValidateResp != null) {
+                        if (boValidateResp.getStatus().toLowerCase().toString().equals("success")) {
+                            finish();
+                        } else {
+                            Utils.displayAlert(boValidateResp.getError().getErrorDescription(),
+                                    AdditionalBeneficialOwnersActivity.this, "", boValidateResp.getError().getFieldErrors().get(0));
                         }
                     }
                 }

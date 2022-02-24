@@ -55,7 +55,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     WalletResponse walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     Dialog payDialog;
@@ -177,6 +177,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 ControlMethod("withdrawmethod");
                 selectWithdrawMethod();
             } else {
+                isNoToken = true;
                 ControlMethod("withdrawnotoken");
                 bindWithdrawNoTokens();
             }
@@ -297,11 +298,15 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-//                        ControlMethod("paymentMethods");
-//                        strCurrent = "paymentMethods";
-                        ControlMethod("withdrawmethod");
-                        selectWithdrawMethod();
-                        strScreen = "withdrawmethod";
+                        if (isNoToken) {
+                            isNoToken = false;
+                            ControlMethod("withdrawnotoken");
+                            bindWithdrawNoTokens();
+                        } else {
+                            ControlMethod("withdrawmethod");
+                            selectWithdrawMethod();
+                            strScreen = "withdrawmethod";
+                        }
                     } else if (isPayments && strCurrent.equals("debit")) {
                         isPayments = false;
                         ControlMethod("withdrawpay");

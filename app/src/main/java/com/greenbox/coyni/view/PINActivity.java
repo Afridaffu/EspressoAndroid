@@ -487,39 +487,47 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 @Override
                                 public void run() {
                                     try {
-
                                         String strScreen = "";
                                         if (getIntent().getStringExtra("screen") != null) {
                                             strScreen = getIntent().getStringExtra("screen");
                                         }
-                                        if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
-                                            launchDashboard();
-                                        } else {
-                                            if (!isDontRemind) {
-                                                if (Utils.checkBiometric(PINActivity.this)) {
-                                                    if (Utils.checkAuthentication(PINActivity.this)) {
-                                                        if (Utils.isFingerPrint(PINActivity.this)) {
+                                        switch (strScreen) {
+                                            case "loginExpiry":
+                                                Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
+                                                i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                                startActivity(i);
+                                                break;
+                                            case "login":
+                                                if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+                                                    launchDashboard();
+                                                } else {
+                                                    if (!isDontRemind) {
+                                                        if (Utils.checkBiometric(PINActivity.this)) {
+                                                            if (Utils.checkAuthentication(PINActivity.this)) {
+                                                                if (Utils.isFingerPrint(PINActivity.this)) {
+                                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                            .putExtra("screen", strScreen));
+                                                                } else {
+                                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                            .putExtra("ENABLE_TYPE", "FACE")
+                                                                            .putExtra("screen", strScreen));
+                                                                }
+                                                            } else {
+                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                        .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                        .putExtra("screen", strScreen));
+                                                            }
+                                                        } else {
                                                             startActivity(new Intent(PINActivity.this, EnableAuthID.class)
                                                                     .putExtra("ENABLE_TYPE", "TOUCH")
                                                                     .putExtra("screen", strScreen));
-                                                        } else {
-                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                    .putExtra("ENABLE_TYPE", "FACE")
-                                                                    .putExtra("screen", strScreen));
                                                         }
                                                     } else {
-                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                .putExtra("ENABLE_TYPE", "SUCCESS")
-                                                                .putExtra("screen", strScreen));
+                                                        launchDashboard();
                                                     }
-                                                } else {
-                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                            .putExtra("ENABLE_TYPE", "TOUCH")
-                                                            .putExtra("screen", strScreen));
                                                 }
-                                            } else {
-                                                launchDashboard();
-                                            }
+                                                break;
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -833,7 +841,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 //                request.setActionType(Utils.changeActionType);
 //            }
             //Uncomment for stepup process
-            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login"))) {
+            if (getIntent().getStringExtra("screen") != null && ((getIntent().getStringExtra("screen").equals("login")) || (getIntent().getStringExtra("screen").equals("loginExpiry")))) {
                 coyniViewModel.stepUpPin(request);
             } else {
                 coyniViewModel.validateCoyniPin(request);
