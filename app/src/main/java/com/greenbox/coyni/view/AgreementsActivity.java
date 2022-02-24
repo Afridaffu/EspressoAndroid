@@ -94,28 +94,28 @@ public class AgreementsActivity extends AppCompatActivity {
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
                                     if (agreements.getData().getItems().get(i).getSignatureType() == 0) {
                                         if (cTSVersion == 0) {
-                                            cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim());
+                                            cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                         } else {
-                                            if (cTSVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim())) {
-                                                cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim());
+                                            if (cTSVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim())) {
+                                                cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                             }
                                         }
                                     }
                                     if (agreements.getData().getItems().get(i).getSignatureType() == 1) {
                                         if (cPPVersion == 0) {
-                                            cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim());
+                                            cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                         } else {
-                                            if (cPPVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim())) {
-                                                cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim());
+                                            if (cPPVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim())) {
+                                                cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                             }
                                         }
                                     }
                                     if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                         if (agreements.getData().getItems().get(i).getSignatureType() == 5) {
                                             if (bMAVersion == 0) {
-                                                bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim());
+                                                bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                             } else {
-                                                if (bMAVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim())) {
+                                                if (bMAVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim())) {
                                                     bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim());
                                                 }
                                             }
@@ -123,11 +123,11 @@ public class AgreementsActivity extends AppCompatActivity {
                                     }
                                 }
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
-                                    if (agreements.getData().getItems().get(i).getDocumentVersion().contains("V")) {
-                                      versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("V ", "").replace(".", "").trim()));
+                                    if (agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().contains("v")) {
+                                      versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
                                     }
                                     if (agreements.getData().getItems().get(i).getDocumentVersion().contains("v") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                        versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().replace("v", "").replace(".", "").trim()));
+                                        versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
                                     }
                                      if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 0) {
                                         activeItems.add(agreements.getData().getItems().get(i));
@@ -202,6 +202,14 @@ public class AgreementsActivity extends AppCompatActivity {
                         startActivity(inte);
 
                     }
+//                    if (position == 0) {
+//                        Intent inte = new Intent(Intent.ACTION_VIEW);
+//                        inte.setDataAndType(
+//                                Uri.parse(MerchantURL + "?" + System.currentTimeMillis()),
+//                                "application/pdf");
+//                        startActivity(inte);
+//
+//                    }
                 }
                 if(objMyApplication.getAccountType()== Utils.PERSONAL_ACCOUNT){
                     if (position == 1) {
