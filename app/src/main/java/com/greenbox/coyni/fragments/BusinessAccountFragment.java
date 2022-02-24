@@ -84,14 +84,8 @@ public class BusinessAccountFragment extends BaseFragment {
 
         initObservers();
 
-        viewMoreLL.setOnClickListener(view -> goToTransact());
+//        viewMoreLL.setOnClickListener(view -> goToTransact());
 
-        currentView.findViewById(R.id.duplicateVIEWMORETV).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToTransact();
-            }
-        });
         return currentView;
     }
 
