@@ -27,7 +27,6 @@
                 android:paddingEnd="@dimen/_21sdp"
                 android:paddingBottom="@dimen/_16sdp">
 
-
                 <RelativeLayout
                     android:id="@+id/rl_user_icon_layout"
                     android:layout_width="@dimen/_50sdp"
@@ -60,13 +59,11 @@
                             android:layout_centerInParent="true"
                             android:layout_gravity="center"
                             android:fontFamily="@font/opensans_bold"
-                            android:text="TT"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_20sdp"
                             android:visibility="gone" />
 
                     </androidx.cardview.widget.CardView>
-
 
                 </RelativeLayout>
 
@@ -1581,7 +1578,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -1590,6 +1587,7 @@
                         android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
@@ -1648,7 +1646,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"

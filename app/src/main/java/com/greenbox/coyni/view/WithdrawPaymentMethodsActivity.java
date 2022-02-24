@@ -39,6 +39,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -825,9 +826,19 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             lyAddPay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
-                    i.putExtra("screen", "withdraw");
-                    startActivity(i);
+                    try {
+                        if(objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
+                            i.putExtra("screen", "withdraw");
+                            startActivity(i);
+                        }else{
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);
+                            i.putExtra("screen", "withdraw");
+                            startActivity(i);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             lyNTClose.setOnClickListener(new View.OnClickListener() {

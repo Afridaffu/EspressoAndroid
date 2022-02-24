@@ -60,6 +60,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
     View divider;
     Dialog setAmountDialog;
     Long mLastClickTime = 0L;
+    Long mLastClickTimeQA = 0L;
     ImageView idIVQrcode, imageShare, copyRecipientAddress, albumIV;
     ImageView closeBtnScanCode, closeBtnScanMe, imgProfile;
     @SuppressLint("StaticFieldLeak")
@@ -250,10 +251,10 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
             scanMeSetAmountTV.setOnClickListener(view -> {
                 try {
                     if (!scanMeSetAmountTV.getText().equals("Clear Amount")) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                             return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
+                        mLastClickTimeQA = SystemClock.elapsedRealtime();
                         setAmountDialog = new Dialog(BusinessReceivePaymentActivity.this);
                         setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                         setAmountDialog.setContentView(R.layout.fragment_set_limit);

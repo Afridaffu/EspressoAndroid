@@ -18,7 +18,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
-import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
 import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;

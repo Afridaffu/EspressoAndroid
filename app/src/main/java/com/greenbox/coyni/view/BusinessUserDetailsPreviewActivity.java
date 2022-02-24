@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
@@ -30,6 +31,8 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_user_details_preview);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         heading = findViewById(R.id.intentName);
