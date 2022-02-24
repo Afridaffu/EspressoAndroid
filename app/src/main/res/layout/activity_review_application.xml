@@ -999,6 +999,7 @@
                             android:textSize="@dimen/_11ssp" />
 
                         <ImageView
+                            android:id="@+id/privacy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -1038,6 +1039,7 @@
                             android:textSize="@dimen/_11ssp" />
 
                         <ImageView
+                            android:id="@+id/terms"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -1076,6 +1078,7 @@
                             android:textSize="@dimen/_11ssp" />
 
                         <ImageView
+                            android:id="@+id/merchant_agreem"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

@@ -2,11 +2,13 @@ package com.greenbox.coyni.view.business;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -66,6 +68,9 @@ public class ReviewApplicationActivity extends AppCompatActivity {
     ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private int monthlyProcVolume=0;
     private List<Item> items=new ArrayList<>();
+    String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
+    String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
+    ImageView mPrivacyImg,mTermsImg,mAgreementsImg;
 
 
 
@@ -137,11 +142,11 @@ public class ReviewApplicationActivity extends AppCompatActivity {
         phone.setCountryCode(Utils.strCCode);
         phone.setPhoneNumber(mPhoneNumberTx.getText().toString());
         request.setCompanyPhoneNumberDto(phone);
-        ArrayList<ApplicationSubmitRequest.RequiredDocumets> companyRequiredDocumets = new ArrayList<>();
-        companyRequiredDocumets.get(0).setUpdatedAt(mArticleDateTx.getText().toString());
-        companyRequiredDocumets.get(1).setUpdatedAt(mEINDateTx.getText().toString());
-        companyRequiredDocumets.get(2).setUpdatedAt(mW9DateTx.getText().toString());
-        request.setCompanyRequiredDocumets(companyRequiredDocumets);
+        //ArrayList<ApplicationSubmitRequest.RequiredDocumets> companyRequiredDocumets = new ArrayList<>();
+//        companyRequiredDocumets.get(0).setUpdatedAt(mArticleDateTx.getText().toString());
+//        companyRequiredDocumets.get(1).setUpdatedAt(mEINDateTx.getText().toString());
+//        companyRequiredDocumets.get(2).setUpdatedAt(mW9DateTx.getText().toString());
+        //request.setCompanyRequiredDocumets(companyRequiredDocumets);
 //        companyRequiredDocumets.set(0,)
 //        companyRequiredDocumets.setUpdatedAt(mArticleDateTx.getText().toString());
 //        companyRequiredDocumets.setUpdatedAt(mEINDateTx.getText().toString());
@@ -203,7 +208,29 @@ public class ReviewApplicationActivity extends AppCompatActivity {
         mPrivacyVno=(TextView)findViewById(R.id.privacy_policy);
         mTermsVno=(TextView)findViewById(R.id.terms_of_service);
         mMerchantsVno=(TextView)findViewById(R.id.merchant_agreements);
-
+        mPrivacyImg=(ImageView)findViewById(R.id.privacy);
+        mTermsImg=(ImageView)findViewById(R.id.terms);
+        mAgreementsImg=(ImageView)findViewById(R.id.merchant_agreem);
+        mPrivacyImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyURL));
+                startActivity(browserIntent);
+            }
+        });
+        mTermsImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(tosURL));
+                startActivity(browserIntent);
+            }
+        });
+//        mAgreementsImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessIdentityVerificationViewModel.getCompanyInfo();

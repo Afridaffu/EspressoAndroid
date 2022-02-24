@@ -46,7 +46,6 @@ public class ChangeEmail extends AppCompatActivity {
             }
         });
         initFields();
-        initObserver();
 
     }
 
@@ -75,34 +74,8 @@ public class ChangeEmail extends AppCompatActivity {
                 intent.putExtra("CompanyPhone",companyPhone);
                 intent.putExtra("ChangeEmail",changeEmail);
                 startActivity(intent);
-               // companyInfoAPICall(prepareRequest());
             }
         });
     }
-    private void initObserver() {
 
-    }
-    public void companyInfoAPICall(CompanyInfoRequest companyInfoRequest) {
-        businessIdentityVerificationViewModel.patchCompanyInfo(companyInfoRequest);
-    }
-    public CompanyInfoRequest prepareRequest() {
-        CompanyInfoRequest companyInfoRequest = new CompanyInfoRequest();
-
-        try {
-               if(changeEmail==1){
-                   companyInfoRequest.setEmail(emailTx.getText().toString());
-               }
-               else{
-                   PhNoWithCountryCode phone = new PhNoWithCountryCode();
-                   phone.setCountryCode(Utils.strCCode);
-                   phone.setPhoneNumber(emailTx.getText().toString());
-                   companyInfoRequest.setPhoneNumberDto(phone);
-               }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return companyInfoRequest;
-    }
 }
