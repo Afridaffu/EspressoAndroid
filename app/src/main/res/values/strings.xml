@@ -33,7 +33,10 @@
     <string name="processingcontent">We are looking for your account in the moment. Thank you for your patience.</string>
     <string name="sorrytxt">Sorry We Can’t Find Anything on File</string>
     <string name="tryagain">Try Again</string>
+    <string name="thank_you_for_submission">Thank you for your submission to the coyni review\nteam. No additional information needed at this time.\nPlease check back here for updates. If you wish to</string>
     <string name="coyni_account">Coyni Account</string>
+    <string name="cancel_merchant">cancel your merchant application </string>
+    <string name="thank_you_for_intrest">Thank you for your interest in coyni. Please allow\nus up to 3 business days for further review of\nyour account. Within that time you may receive a\nnotification and/or email if further information is\nneeded.</string>
     <string name="foundacc">We’ve Found Your Account!</string>
     <string name="belowtxtre">Click the Link below to log in</string>
     <string name="jona_gmail_com">Jona***@gmail.com</string>
@@ -400,9 +403,11 @@
     <string name="id">" [#ID]"</string>
     <string name="cyn_no_6435_21">6435.21 CYN</string>
     <string name="payout_date">Payout Date</string>
+    <string name="payout_information">Payout Information</string>
     <string name="date_time">07/27/2020 @ 2:20 am</string>
     <string name="payout_reference_id">Payout Reference ID</string>
     <string name="snd_no">SND327433N</string>
+    <string name="total_transactions">Total Transactions</string>
     <string name="to_token_account">To Token Account</string>
     <string name="as28027281">aS28027281</string>
     <string name="recent_transactions">Recent Transactions</string>
@@ -494,11 +499,14 @@
     <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for\n this refund</string>
     <string name="refund_preview">Refund Preview </string>
     <string name="total">Total </string>
+    <string name="business_tokenaccount">Business Token Account </string>
     <string name="reason_for_refund">Reason for Refund </string>
     <string name="request_by_customer">Request by customer</string>
     <string name="refund_transaction">Refund Transaction</string>
     <string name="transactionamount">Transaction Amount:</string>
     <string name="full_amount">Full Amount</string>
+    <string name="payout_transactions">Payout Transactions</string>
+    <string name="search_by_payout">Search By Payout Date or Payout ID</string>
     <string name="amount">1/2 Amount</string>
     <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
     <string name="add_new_team_member">Add New Team Member</string>
@@ -506,6 +514,12 @@
     <string name="full_administrator_permission">Full administrator permission</string>
     <string name="name">Name</string>
     <string name="send">Send</string>
+    <string name="reserve_amount">Reserve Amount</string>
+    <string name="recipient_email">Recipient Email</string>
+    <string name="recipient_name">Recipient Name</string>
+    <string name="sender_name">Sender Name</string>
+    <string name="sender_email">Sender Email</string>
+    <string name="original_transaction_information">Original Transaction Information</string>
     <string name="please_note_new_team_members">*Please Note: New team members get full administrator permission</string>
 
     <string name="reference_id_name">Reference ID.</string>
@@ -517,4 +531,6 @@
     <string name="filter_button">filter Button</string>
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
+    <string name="identify_verification_nUnder_review">Identify Verification\nUnder Review</string>
+
 </resources>

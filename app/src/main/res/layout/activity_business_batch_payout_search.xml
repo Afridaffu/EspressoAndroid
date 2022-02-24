@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_21sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="Payout Transactions"
+            android:text="@string/payout_transactions"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_16ssp" />
 
@@ -73,7 +73,7 @@
                         android:cursorVisible="true"
                         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                         android:fontFamily="@font/opensans_regular"
-                        android:hint="Search By Payout Date or Payout ID"
+                        android:hint="@string/search_by_payout"
                         android:imeOptions="actionDone"
                         android:maxLength="35"
                         android:maxLines="1"
