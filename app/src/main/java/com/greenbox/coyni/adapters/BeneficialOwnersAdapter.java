@@ -29,10 +29,11 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
     Context context;
     BOResp boResp;
     AdditionalBeneficialOwnersActivity activity;
+
     public BeneficialOwnersAdapter(Context context, BOResp boResp) {
         this.context = context;
         this.boResp = boResp;
-        this.activity =  (AdditionalBeneficialOwnersActivity) context;
+        this.activity = (AdditionalBeneficialOwnersActivity) context;
     }
 
     @NonNull
@@ -46,15 +47,21 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
 
         try {
-            if (boResp.getData().get(pos).getFirstName() != null && boResp.getData().get(pos).getLastName() != null) {
-                holder.ownerNameTV.setText(boResp.getData().get(pos).getFirstName() + " " + boResp.getData().get(pos).getLastName());
-            } else if (boResp.getData().get(pos).getFirstName() != null && boResp.getData().get(pos).getLastName() == null) {
-                holder.ownerNameTV.setText(boResp.getData().get(pos).getFirstName());
-            } else if (boResp.getData().get(pos).getFirstName() == null && boResp.getData().get(pos).getLastName() != null) {
-                holder.ownerNameTV.setText(boResp.getData().get(pos).getLastName());
-            } else {
-                holder.ownerNameTV.setText("No name");
+            try {
+                if ((boResp.getData().get(pos).getFirstName() != null || !boResp.getData().get(pos).getFirstName().equals(""))
+                        && (boResp.getData().get(pos).getLastName() != null && !boResp.getData().get(pos).getLastName().equals(""))) {
+                    holder.ownerNameTV.setText(boResp.getData().get(pos).getFirstName() + " " + boResp.getData().get(pos).getLastName());
+                } else if ((boResp.getData().get(pos).getFirstName() != null || !boResp.getData().get(pos).getFirstName().equals("")) && (boResp.getData().get(pos).getLastName() == null || boResp.getData().get(pos).getLastName().equals(""))) {
+                    holder.ownerNameTV.setText(boResp.getData().get(pos).getFirstName());
+                } else if ((boResp.getData().get(pos).getFirstName() == null || boResp.getData().get(pos).getFirstName().equals("")) && (boResp.getData().get(pos).getLastName() != null || !boResp.getData().get(pos).getLastName().equals(""))) {
+                    holder.ownerNameTV.setText(boResp.getData().get(pos).getLastName());
+                } else {
+                    holder.ownerNameTV.setText("No name");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
 
             holder.ownershipTV.setText(boResp.getData().get(pos).getOwnershipParcentage() + "% Ownership");
 

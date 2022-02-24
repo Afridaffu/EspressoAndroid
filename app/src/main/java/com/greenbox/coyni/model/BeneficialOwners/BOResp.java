@@ -49,7 +49,7 @@ public class BOResp {
         private String firstName;
         private String lastName;
         private String dob;
-        private int ownershipParcentage = 0;
+        private int ownershipParcentage = -1;
         private String addressLine1;
         private String addressLine2;
         private String city;
@@ -57,7 +57,7 @@ public class BOResp {
         private String zipCode;
         private String country;
         private String ssn;
-        private ArrayList<RequiredDocumets> requiredDocumets = new ArrayList<>();
+        private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
 
         public int getId() {
             return id;
@@ -155,12 +155,12 @@ public class BOResp {
             this.ssn = ssn;
         }
 
-        public ArrayList<RequiredDocumets> getRequiredDocumets() {
-            return requiredDocumets;
+        public ArrayList<RequiredDocumets> getRequiredDocuments() {
+            return requiredDocuments;
         }
 
-        public void setRequiredDocumets(ArrayList<RequiredDocumets> requiredDocumets) {
-            this.requiredDocumets = requiredDocumets;
+        public void setRequiredDocuments(ArrayList<RequiredDocumets> requiredDocumets) {
+            this.requiredDocuments = requiredDocumets;
         }
     }
 

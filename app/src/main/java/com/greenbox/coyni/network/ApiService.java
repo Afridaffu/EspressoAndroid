@@ -3,7 +3,10 @@ package com.greenbox.coyni.network;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
+import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
@@ -15,6 +18,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -454,7 +458,7 @@ public interface ApiService {
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
     @GET("api/v2/banks/me")
-    Call<PaymentMethodsResponse> meBanks();
+    Call<BankResponse> meBanks();
 
     @GET("api/v2/business/beneficial-owners")
     Call<BOResp> getBeneficailOwners();
@@ -464,6 +468,20 @@ public interface ApiService {
 
     @DELETE("api/v2/business/beneficial-owners")
     Call<DeleteBOResp> deleteBeneficialOwner(@Query("beneficialOwnerId") Integer beneficialOwnerId);
+
+    @PATCH("api/v2/business/beneficial-owners/update")
+    Call<BOPatchResp> patchBeneficialOwner(@Query("id") Integer beneficialOwnerId, @Body BORequest boRequest);
+
+    @Multipart
+    @POST("api/v2/business/beneficial-owners-doc/{beneficialOwnerId}")
+    Call<IdentityImageResponse> uploadBODoc(@Path("beneficialOwnerId") Integer beneficialOwnerId, @Part MultipartBody.Part filee,
+                                            @Part("identityType") RequestBody type);
+
+    @DELETE("api/v2/business/beneficial-owners-doc/remove")
+    Call<RemoveIdentityResponse> removeBODoc(@Query("identityType") String identityType, @Query("beneficialOwnerId") String beneficialOwnerId);
+
+    @GET("api/v2/business/beneficial-owners-validate")
+    Call<BOValidateResp> validateBeneficailOwners();
 
 }
 

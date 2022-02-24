@@ -117,6 +117,7 @@ public class Utils {
     public static final String giftcardType = "6";
     public static final String signetType = "7";
     public static final String payType = "12";
+    public static final String businessType = "19";
     public static final String paySubType = "8";
     public static final String requestSubType = "9";
     public static final String eventTypeId = "0";
@@ -139,7 +140,7 @@ public class Utils {
     public static String deviceID = "";
     public static Long mLastClickTime = 0L;
     public static final int duration = 1000;
-//    public static final int userTypeCust = 0;
+    //    public static final int userTypeCust = 0;
     public static final int userTypeCust = 1;
     public static final int userTypeBusiness = 2;
     public static final String DATA = "data";
@@ -163,6 +164,7 @@ public class Utils {
     public static final int refund = 9;
     public static final int accountTransfer = 0; //Not available
     public static final int paidInvoice = 15;
+    public static final int businessPayout = 19;
 
     public static final int sent = 8;
     public static final int received = 9;
@@ -195,6 +197,7 @@ public class Utils {
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
 
+    public static final int boTargetPercentage = 51;
 
     public static String getStrLang() {
         return strLang;
@@ -388,6 +391,19 @@ public class Utils {
         String strDate = "";
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("dd/MM/yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public static String convertDocUploadedDateAPITime(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
             Date newDate = spf.parse(date);
             spf = new SimpleDateFormat("dd/MM/yyyy");
             strDate = spf.format(newDate);
@@ -1203,10 +1219,10 @@ public class Utils {
             RecyclerView bTypesRV = dialog.findViewById(R.id.bTypesRV);
             EditText searchET = dialog.findViewById(R.id.searchET);
             TextView notFoundTV = dialog.findViewById(R.id.notFoundTV);
-            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog,from);
+            BusinessTypeListAdapter businessTypeListAdapter = new BusinessTypeListAdapter(null, context, editText, dialog, from);
 
             List<BusinessType> listBT = new ArrayList<>();
-            if(myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
+            if (myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
                 listBT = myApplicationObj.getBusinessTypeResp().getData();
             }
 
@@ -1220,7 +1236,7 @@ public class Utils {
             if (listBT.size() > 0) {
                 bTypesRV.setVisibility(View.VISIBLE);
                 notFoundTV.setVisibility(View.GONE);
-                businessTypeListAdapter = new BusinessTypeListAdapter(listBT, context, editText, dialog,from);
+                businessTypeListAdapter = new BusinessTypeListAdapter(listBT, context, editText, dialog, from);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
                 bTypesRV.setLayoutManager(mLayoutManager);
                 bTypesRV.setItemAnimator(new DefaultItemAnimator());

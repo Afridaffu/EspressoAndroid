@@ -435,7 +435,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
         // custom dialog
         final Dialog dialog = new Dialog(BusinessTransactionListActivity.this);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_filters);
+        dialog.setContentView(R.layout.transactions_filter);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         Window window = dialog.getWindow();
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.90);
@@ -445,26 +445,26 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
         wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
-        Chip transTypePR = dialog.findViewById(R.id.transTypePR);
+        Chip transTypeBP = dialog.findViewById(R.id.transTypeBP);
         Chip transTypeBT = dialog.findViewById(R.id.transTypeBT);
-        Chip transTypeSO = dialog.findViewById(R.id.transTypeSO);
+//        Chip transTypeSO = dialog.findViewById(R.id.transTypeSO);
         Chip transTypeWithdraw = dialog.findViewById(R.id.transTypeWithdraw);
-        Chip transTypeRefund = dialog.findViewById(R.id.transTypeRefund);
-        Chip transTypeAT = dialog.findViewById(R.id.transTypeAT);
-        Chip transTypePI = dialog.findViewById(R.id.transTypePI);
-
-        Chip transSubTypeSent = dialog.findViewById(R.id.transSubTypeSent);
-        Chip transSubTypeReceived = dialog.findViewById(R.id.transSubTypeReceived);
+//        Chip transTypeRefund = dialog.findViewById(R.id.transTypeRefund);
+//        Chip transTypeAT = dialog.findViewById(R.id.transTypeAT);
+//        Chip transTypePI = dialog.findViewById(R.id.transTypePI);
+//
+//        Chip transSubTypeSent = dialog.findViewById(R.id.transSubTypeSent);
+//        Chip transSubTypeReceived = dialog.findViewById(R.id.transSubTypeReceived);
         Chip transSubTypeBA = dialog.findViewById(R.id.transSubTypeBA);
-        Chip transSubTypeCC = dialog.findViewById(R.id.transSubTypeCC);
-        Chip transSubTypeDC = dialog.findViewById(R.id.transSubTypeDC);
+//        Chip transSubTypeCC = dialog.findViewById(R.id.transSubTypeCC);
+//        Chip transSubTypeDC = dialog.findViewById(R.id.transSubTypeDC);
         Chip transSubTypeSignet = dialog.findViewById(R.id.transSubTypeSignet);
         Chip transSubTypeIP = dialog.findViewById(R.id.transSubTypeIP);
-        Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
-        Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
-        Chip transSubTypeFW = dialog.findViewById(R.id.transSubTypeFW);
-        Chip transSubTypeCW = dialog.findViewById(R.id.transSubTypeCW);
-
+//        Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
+//        Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
+//        Chip transSubTypeFW = dialog.findViewById(R.id.transSubTypeFW);
+//        Chip transSubTypeCW = dialog.findViewById(R.id.transSubTypeCW);
+//
         Chip transStatusPending = dialog.findViewById(R.id.transStatusPending);
         Chip transStatusCompleted = dialog.findViewById(R.id.transStatusCompleted);
         Chip transStatusCanceled = dialog.findViewById(R.id.transStatusCanceled);
@@ -473,71 +473,74 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
 
         EditText transAmountStartET = dialog.findViewById(R.id.transAmountStartET);
         EditText transAmountEndET = dialog.findViewById(R.id.transAmountEndET);
-
+//
         CardView applyFilterBtnCV = dialog.findViewById(R.id.applyFilterBtnCV);
         LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
         EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
         TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
-
+//
         if (isFilters) {
             if (transactionType.size() > 0) {
                 for (int i = 0; i < transactionType.size(); i++) {
                     switch (transactionType.get(i)) {
-                        case Utils.payRequest:
-                            transTypePR.setChecked(true);
-                            break;
+//                        case Utils.payRequest:
+//                            transTypePR.setChecked(true);
+//                            break;
 
                         case Utils.buyTokens:
                             transTypeBT.setChecked(true);
                             break;
 
-                        case Utils.saleOrder:
-                            transTypeSO.setChecked(true);
-                            break;
+//                        case Utils.saleOrder:
+//                            transTypeSO.setChecked(true);
+//                            break;
 
                         case Utils.withdraw:
                             transTypeWithdraw.setChecked(true);
                             break;
+//
+//                        case Utils.refund:
+//                            transTypeRefund.setChecked(true);
+//                            break;
 
-                        case Utils.refund:
-                            transTypeRefund.setChecked(true);
-                            break;
+//                        case Utils.accountTransfer:
+//                            transTypeAT.setChecked(true);
+//                            break;
 
-                        case Utils.accountTransfer:
-                            transTypeAT.setChecked(true);
-                            break;
-
-                        case Utils.paidInvoice:
-                            transTypePI.setChecked(true);
+//                        case Utils.paidInvoice:
+//                            transTypePI.setChecked(true);
+//                            break;
+                        case Utils.businessPayout:
+                            transTypeBP.setChecked(true);
                             break;
 
 
                     }
                 }
             }
-
+//
             if (transactionSubType.size() > 0) {
                 for (int i = 0; i < transactionSubType.size(); i++) {
                     switch (transactionSubType.get(i)) {
-                        case Utils.sent:
-                            transSubTypeSent.setChecked(true);
-                            break;
-
-                        case Utils.received:
-                            transSubTypeReceived.setChecked(true);
-                            break;
+//                        case Utils.sent:
+//                            transSubTypeSent.setChecked(true);
+//                            break;
+//
+//                        case Utils.received:
+//                            transSubTypeReceived.setChecked(true);
+//                            break;
 
                         case Utils.bankAccount:
                             transSubTypeBA.setChecked(true);
                             break;
 
-                        case Utils.creditCard:
-                            transSubTypeCC.setChecked(true);
-                            break;
-
-                        case Utils.debitCard:
-                            transSubTypeDC.setChecked(true);
-                            break;
+//                        case Utils.creditCard:
+//                            transSubTypeCC.setChecked(true);
+//                            break;
+//
+//                        case Utils.debitCard:
+//                            transSubTypeDC.setChecked(true);
+//                            break;
 
                         case Utils.signet:
                             transSubTypeSignet.setChecked(true);
@@ -546,22 +549,22 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                         case Utils.instantPay:
                             transSubTypeIP.setChecked(true);
                             break;
-
-                        case Utils.giftCard:
-                            transSubTypeGiftCard.setChecked(true);
-                            break;
+//
+//                        case Utils.giftCard:
+//                            transSubTypeGiftCard.setChecked(true);
+//                            break;
 
 //                    case Utils.saleOrderToken:
 //                        transSubTypeSOToken.setChecked(true);
 //                        break;
 
-                        case Utils.failedWithdraw:
-                            transSubTypeFW.setChecked(true);
-                            break;
-
-                        case Utils.cancelledWithdraw:
-                            transSubTypeCW.setChecked(true);
-                            break;
+//                        case Utils.failedWithdraw:
+//                            transSubTypeFW.setChecked(true);
+//                            break;
+//
+//                        case Utils.cancelledWithdraw:
+//                            transSubTypeCW.setChecked(true);
+//                            break;
 
                     }
                 }
@@ -593,7 +596,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                     }
                 }
             }
-
+//
             if (!strStartAmount.trim().equals("")) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
@@ -662,25 +665,26 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
             transAmountEndET.clearFocus();
             getDateFromPickerET.clearFocus();
 
-            transTypePR.setChecked(false);
+//            transTypePR.setChecked(false);
             transTypeBT.setChecked(false);
-            transTypeSO.setChecked(false);
+//            transTypeSO.setChecked(false);
             transTypeWithdraw.setChecked(false);
-            transTypeRefund.setChecked(false);
-            transTypeAT.setChecked(false);
-            transTypePI.setChecked(false);
+//            transTypeRefund.setChecked(false);
+//            transTypeAT.setChecked(false);
+//            transTypePI.setChecked(false);
+            transTypeBP.setChecked(false);
 
-            transSubTypeSent.setChecked(false);
-            transSubTypeReceived.setChecked(false);
+//            transSubTypeSent.setChecked(false);
+//            transSubTypeReceived.setChecked(false);
             transSubTypeBA.setChecked(false);
-            transSubTypeCC.setChecked(false);
-            transSubTypeDC.setChecked(false);
+//            transSubTypeCC.setChecked(false);
+//            transSubTypeDC.setChecked(false);
             transSubTypeSignet.setChecked(false);
             transSubTypeIP.setChecked(false);
-            transSubTypeGiftCard.setChecked(false);
-            transSubTypeSOToken.setChecked(false);
-            transSubTypeFW.setChecked(false);
-            transSubTypeCW.setChecked(false);
+//            transSubTypeGiftCard.setChecked(false);
+//            transSubTypeSOToken.setChecked(false);
+//            transSubTypeFW.setChecked(false);
+//            transSubTypeCW.setChecked(false);
 
             transStatusPending.setChecked(false);
             transStatusCompleted.setChecked(false);
@@ -704,24 +708,24 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
             objMyApplication.initializeTransactionSearch();
             objMyApplication.setTransactionListSearch(transactionListRequest);
         });
-
-        transTypePR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionType.add(Utils.payRequest);
-                } else {
-                    for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.payRequest) {
-                            transactionType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
+//
+//        transTypePR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionType.add(Utils.payRequest);
+//                } else {
+//                    for (int i = 0; i < transactionType.size(); i++) {
+//                        if (transactionType.get(i) == Utils.payRequest) {
+//                            transactionType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
         transTypeBT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -738,24 +742,24 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 }
             }
         });
-
-        transTypeSO.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionType.add(Utils.saleOrder);
-                } else {
-                    for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.saleOrder) {
-                            transactionType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
+//
+//        transTypeSO.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionType.add(Utils.saleOrder);
+//                } else {
+//                    for (int i = 0; i < transactionType.size(); i++) {
+//                        if (transactionType.get(i) == Utils.saleOrder) {
+//                            transactionType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
         transTypeWithdraw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -772,52 +776,68 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 }
             }
         });
-
-        transTypeRefund.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionType.add(Utils.refund);
-                } else {
-                    for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.refund) {
-                            transactionType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        transTypeAT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-//                    transactionType.add(Utils.accountTransfer);
-                    transTypeAT.setChecked(false);
-                } else {
-//                    for (int i=0; i < transactionType.size();i++){
-//                        if(transactionType.get(i) == Utils.refund){
+//
+//        transTypeRefund.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionType.add(Utils.refund);
+//                } else {
+//                    for (int i = 0; i < transactionType.size(); i++) {
+//                        if (transactionType.get(i) == Utils.refund) {
 //                            transactionType.remove(i);
 //                            break;
 //                        }
 //                    }
-                    transTypeAT.setChecked(false);
-                }
-            }
-        });
-
-        transTypePI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                }
+//            }
+//        });
+//
+//        transTypeAT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+////                    transactionType.add(Utils.accountTransfer);
+//                    transTypeAT.setChecked(false);
+//                } else {
+////                    for (int i=0; i < transactionType.size();i++){
+////                        if(transactionType.get(i) == Utils.refund){
+////                            transactionType.remove(i);
+////                            break;
+////                        }
+////                    }
+//                    transTypeAT.setChecked(false);
+//                }
+//            }
+//        });
+//
+//        transTypePI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionType.add(Utils.paidInvoice);
+//                } else {
+//                    for (int i = 0; i < transactionType.size(); i++) {
+//                        if (transactionType.get(i) == Utils.paidInvoice) {
+//                            transactionType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+        transTypeBP.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.paidInvoice);
+                    transactionType.add(Utils.businessPayout);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.paidInvoice) {
+                        if (transactionType.get(i) == Utils.businessPayout) {
                             transactionType.remove(i);
                             break;
                         }
@@ -825,41 +845,41 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 }
             }
         });
-
-        transSubTypeSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.sent);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.sent) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        transSubTypeReceived.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.received);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.received) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
+//
+//        transSubTypeSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.sent);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.sent) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//        transSubTypeReceived.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.received);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.received) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
         transSubTypeBA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -876,41 +896,41 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 }
             }
         });
-
-        transSubTypeCC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.creditCard);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.creditCard) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        transSubTypeDC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.debitCard);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.debitCard) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
+//
+//        transSubTypeCC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.creditCard);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.creditCard) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//        transSubTypeDC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.debitCard);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.debitCard) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
         transSubTypeSignet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -944,75 +964,75 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 }
             }
         });
-
-        transSubTypeGiftCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.giftCard);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.giftCard) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        transSubTypeSOToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.saleOrderToken);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.saleOrderToken) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        transSubTypeFW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.failedWithdraw);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.failedWithdraw) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        transSubTypeCW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionSubType.add(Utils.cancelledWithdraw);
-                } else {
-                    for (int i = 0; i < transactionSubType.size(); i++) {
-                        if (transactionSubType.get(i) == Utils.cancelledWithdraw) {
-                            transactionSubType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
+//
+//        transSubTypeGiftCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.giftCard);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.giftCard) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//        transSubTypeSOToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.saleOrderToken);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.saleOrderToken) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//        transSubTypeFW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.failedWithdraw);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.failedWithdraw) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//        transSubTypeCW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//                if (b) {
+//                    transactionSubType.add(Utils.cancelledWithdraw);
+//                } else {
+//                    for (int i = 0; i < transactionSubType.size(); i++) {
+//                        if (transactionSubType.get(i) == Utils.cancelledWithdraw) {
+//                            transactionSubType.remove(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
         transStatusPending.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1228,7 +1248,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 return false;
             }
         });
-
+//
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1335,28 +1355,28 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.show();
-
-        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
-                    return;
-                }
-                mLastClickTimeFilters = SystemClock.elapsedRealtime();
-                showCalendar(getDateFromPickerET);
-            }
-        });
-
-        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
-                    return;
-                }
-                mLastClickTimeFilters = SystemClock.elapsedRealtime();
-                showCalendar(getDateFromPickerET);
-            }
-        });
+//
+//        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+//                    return;
+//                }
+//                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+//                showCalendar(getDateFromPickerET);
+//            }
+//        });
+//
+//        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+//                    return;
+//                }
+//                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+//                showCalendar(getDateFromPickerET);
+//            }
+//        });
 
     }
 

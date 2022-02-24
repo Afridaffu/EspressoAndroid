@@ -24,15 +24,15 @@ import java.util.List;
 
 public class BindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
-    LinearLayout lyClose,verifyAccountCloseLL;
+    LinearLayout lyClose, verifyAccountCloseLL;
     TextView tvEmail;
     MyApplication objMyApplication;
-    CardView reTryAgainBtn,btnChangePassCV,nextGetStartedCV;
+    CardView reTryAgainBtn, btnChangePassCV, nextGetStartedCV;
     CardView editEmailLogoutCV;
     SQLiteDatabase mydatabase;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
-    TextView txvVerifyName,txvVerifyDescription;
+    TextView txvVerifyName, txvVerifyDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
             lyClose = findViewById(R.id.lyClose);
             tvEmail = findViewById(R.id.tvEmail);
             reTryAgainBtn = findViewById(R.id.reTryAgainBtn);
-            btnChangePassCV=findViewById(R.id.btnCV);
-            nextGetStartedCV=findViewById(R.id.nextGetStartedCV);
+            btnChangePassCV = findViewById(R.id.btnCV);
+            nextGetStartedCV = findViewById(R.id.nextGetStartedCV);
             editEmailLogoutCV = findViewById(R.id.editEmailLogoutCV);
             verifyAccountCloseLL = findViewById(R.id.verifyAccountCloseLL);
             retEmailRV = findViewById(R.id.retEmailRV);
@@ -67,16 +67,16 @@ public class BindingLayoutActivity extends AppCompatActivity {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
-            if(objMyApplication.getAccountType() == 2) {
+            if (objMyApplication.getAccountType() == 2) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
-           }
+            }
 
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
                 usersData = objMyApplication.getObjRetUsers().getData();
                 if (usersData != null && usersData.size() > 0) {
-                    retEmailAdapter = new RetEmailAdapter(usersData,this);
+                    retEmailAdapter = new RetEmailAdapter(usersData, this);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
                     retEmailRV.setLayoutManager(mLayoutManager);
                     retEmailRV.setItemAnimator(new DefaultItemAnimator());
@@ -203,12 +203,18 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
-            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
+//            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+            mydatabase.execSQL("Delete from tblUserDetails;");
+            mydatabase.execSQL("Delete from tblRemember;");
+            mydatabase.execSQL("Delete from tblThumbPinLock;");
+            mydatabase.execSQL("Delete from tblFacePinLock;");
+            mydatabase.execSQL("Delete from tblPermanentToken;");
+            mydatabase.execSQL("Delete from tblDontRemind;");
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();

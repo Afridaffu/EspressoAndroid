@@ -72,7 +72,7 @@
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/_14sdp"
+                        android:layout_marginTop="@dimen/_25sdp"
                         android:visibility="visible"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_20sdp">
@@ -120,6 +120,7 @@
                         android:layout_marginStart="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_11sdp"
+                        android:visibility="gone"
                         android:background="@color/viewcolor" />
 
                     <TextView
@@ -131,7 +132,7 @@
                         android:layout_marginTop="@dimen/_13sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Set amount to request a payment or scan QR\n code to pay me"
+                        android:text="Set amount to request a payment or scan QR\n code to pay"
                         android:textAlignment="center"
                         android:textColor="@color/xdark_gray"
                         android:textSize="@dimen/_11ssp" />

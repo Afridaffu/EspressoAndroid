@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/backgrndbtmcornrs"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_22sdp">
+            android:paddingStart="@dimen/_22sdp">
 
             <LinearLayout
                 android:id="@+id/withGiftprevious"
@@ -29,7 +29,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/ic_chevron_left" />
             </LinearLayout>
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="Transaction Details"
+                android:text="@string/transaction_details"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />
         </LinearLayout>
@@ -88,9 +88,9 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/_6sdp"
+                                android:layout_marginEnd="@dimen/_6sdp"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="$"
+                                android:text="@string/dollor"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_24ssp" />
 
@@ -99,7 +99,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="100.00"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_24ssp" />
                         </LinearLayout>
@@ -118,17 +117,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingRight="@dimen/_10sdp">
+                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingEnd="@dimen/_10sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_8sdp"
                                 android:layout_marginBottom="@dimen/_11sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Status"
+                                android:text="@string/status"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -140,7 +139,6 @@
                                 android:background="@drawable/fill_grn_color_smallradius"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text="Completed"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_7ssp" />
 
@@ -172,7 +170,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -181,9 +179,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
@@ -191,7 +189,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Gift Card Name"
+                                android:text="@string/gift_card_name"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -201,7 +199,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -210,9 +208,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp"
 
                             >
@@ -222,7 +220,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Sub Total"
+                                android:text="@string/sub_total"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -232,7 +230,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -240,7 +238,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text=" CYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
@@ -250,9 +248,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp"
 
                             >
@@ -262,7 +260,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Processing Fee"
+                                android:text="@string/processing_fee"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -272,7 +270,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -280,7 +278,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text=" CYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
@@ -302,7 +300,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Grand Total"
+                                android:text="@string/grand_total"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -312,7 +310,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -346,17 +344,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Withdraw ID"
+                                android:text="@string/withdraw_id"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -368,12 +366,11 @@
 
                                 <TextView
                                     android:id="@+id/withgiftid"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text="98236587165871"
+                                    android:gravity="end"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -382,7 +379,7 @@
                                     android:layout_width="@dimen/_11sdp"
                                     android:layout_height="@dimen/_11sdp"
                                     android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
+                                    android:layout_marginStart="@dimen/_6sdp"
                                     android:src="@drawable/ic_copy" />
                             </LinearLayout>
                         </LinearLayout>
@@ -391,17 +388,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Reference ID"
+                                android:text="@string/reference_id"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -413,11 +410,11 @@
 
                                 <TextView
                                     android:id="@+id/withdrawGiftrefidTV"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
+                                    android:gravity="end"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -426,7 +423,7 @@
                                     android:layout_width="@dimen/_11sdp"
                                     android:layout_height="@dimen/_11sdp"
                                     android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
+                                    android:layout_marginStart="@dimen/_6sdp"
                                     android:src="@drawable/ic_copy" />
                             </LinearLayout>
                         </LinearLayout>
@@ -451,9 +448,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
@@ -461,7 +458,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Recipient Name"
+                                android:text="@string/recipient_name"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -471,7 +468,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -480,9 +477,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
@@ -490,7 +487,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight=".9"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Recipient Email"
+                                android:text="@string/recipient_email"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -500,7 +497,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 

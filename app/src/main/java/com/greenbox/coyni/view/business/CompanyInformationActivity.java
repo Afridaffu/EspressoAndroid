@@ -101,7 +101,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public View divider0, divider1, divider2, pageOneView, pageTwoView;
     ConstraintLayout businessEntityCL, timeZoneCL, stateCL;
     public SSNOutlineBoxNumberEditText ssnET;
-    String SSNTYPE = "";
+    public String SSNTYPE = "";
     int identificationType = 0;
     MyApplication objMyApplication;
     public ScrollView basicInfoSL, addressSL;
@@ -123,6 +123,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     String selectedDocType = "";
     CompanyInformationActivity myActivity;
     View globalView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -634,7 +635,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
                             einLetterUpdatedOnTV.setText(dateString);
                             isEINLetterUploaded = true;
-                        } else if (docTypeID == 7) {
+                        } else if (docTypeID == 7 || docTypeID == 11) {
                             w9FormUploadTV.setVisibility(GONE);
                             w9FormUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
@@ -665,7 +666,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         } else if (docTypeID == 6) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), einLetterFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", einLetterFile.getName(), requestBody);
-                        } else if (docTypeID == 7) {
+                        } else if (docTypeID == 7 || docTypeID == 11) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), w9FormFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", w9FormFile.getName(), requestBody);
                         }
@@ -1307,19 +1308,19 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             });
 
             sCorpTV.setOnClickListener(view -> {
-                setBusinessEntity("SSN", sCorpTV, chooseEntityDialog);
+                setBusinessEntity("EIN/TIN", sCorpTV, chooseEntityDialog);
             });
 
             partnershipTV.setOnClickListener(view -> {
-                setBusinessEntity("SSN", partnershipTV, chooseEntityDialog);
+                setBusinessEntity("EIN/TIN", partnershipTV, chooseEntityDialog);
             });
 
             trustTV.setOnClickListener(view -> {
-                setBusinessEntity("SSN", trustTV, chooseEntityDialog);
+                setBusinessEntity("EIN/TIN", trustTV, chooseEntityDialog);
             });
 
             llcTV.setOnClickListener(view -> {
-                setBusinessEntity("SSN", llcTV, chooseEntityDialog);
+                setBusinessEntity("EIN/TIN", llcTV, chooseEntityDialog);
             });
 
             chooseEntityDialog.show();
@@ -1645,7 +1646,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 removeAndUploadAdditionalDoc(6);
             } else if (selectedDocType.equals("CI-W9")) {
                 w9FormFile = mediaFile;
-                removeAndUploadAdditionalDoc(7);
+                if (SSNTYPE.equals("SSN"))
+                    removeAndUploadAdditionalDoc(11);
+                else if (SSNTYPE.equals("EIN/TIN"))
+                    removeAndUploadAdditionalDoc(7);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

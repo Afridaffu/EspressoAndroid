@@ -88,10 +88,29 @@ public class AccountLimitsData{
     @SerializedName("status")
     @Expose
     private String status;
-
+    @SerializedName("transactionHighTicketMinLimit")
+    @Expose
     private String transactionHighTicketMinLimit;
+    @SerializedName("transactionHighTicketType")
+    @Expose
+    private int transactionHighTicketType;
+    @SerializedName("transactionHighTicketTxnLimit")
+    @Expose
+    private String transactionHighTicketTxnLimit;
 
     public AccountLimitsData() {
+    }
+
+    public String getTransactionHighTicketMinLimit() {
+        return transactionHighTicketMinLimit;
+    }
+
+    public int getTransactionHighTicketType() {
+        return transactionHighTicketType;
+    }
+
+    public String getTransactionHighTicketTxnLimit() {
+        return transactionHighTicketTxnLimit;
     }
 
     public int getUserType() {
