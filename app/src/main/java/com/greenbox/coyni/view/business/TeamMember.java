@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view.business;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -25,20 +26,21 @@ import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.team.TeamDeleteModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
-public class TeamMember extends AppCompatActivity {
+public class TeamMember extends BaseActivity {
     private TextView txName, txRole, txStatus, txImageName,txEmailAddress,txPhoneNumber;
-    String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
-    int roleId=0,statusValue=1;
-    CardView mEditCv,mCancelCV,mRemoveCv,mResendInvitation;
-    ImageView mStatusIcon;
-    TeamViewModel teamViewModel;
-
+    private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
+    private int roleId=0,statusValue=1;
+    private CardView mEditCv,mCancelCV,mRemoveCv,mResendInvitation;
+    private ImageView mStatusIcon;
+    private TeamViewModel teamViewModel;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class TeamMember extends AppCompatActivity {
             @Override
             public void onChanged(TeamDeleteModel teamDeleteModel) {
                 if (teamDeleteModel.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(TeamMember.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    Utils.showCustomToast(TeamMember.this, "Removed Successfully.", R.drawable.ic_custom_tick, "");
                 }
             }
         });
@@ -121,6 +123,7 @@ public class TeamMember extends AppCompatActivity {
         mEditCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent=new Intent(TeamMember.this,EditTeamMember.class);
                 intent.putExtra("TeamMemberFirstName",firstName);
                 intent.putExtra("TeamMemberLastName",lastName);
@@ -165,7 +168,6 @@ public class TeamMember extends AppCompatActivity {
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
                     DisplayMetrics mertics = getApplicationContext().getResources().getDisplayMetrics();
-//                    int width = mertics.widthPixels;
                     TextView yesTx=(TextView)dialog.findViewById(R.id.tvYes);
                     TextView noTx=(TextView)dialog.findViewById(R.id.tvNo);
 
@@ -205,24 +207,4 @@ public class TeamMember extends AppCompatActivity {
         });
 
     }
-//    public void teamInfoApiCall(TeamRequest teamRequest) {
-//        teamViewModel.updateTeamInfo(teamRequest);
-//    }
-
-//    public TeamRequest prepareRequest() {
-//        TeamRequest teamRequest = new TeamRequest();
-//
-//        try {
-//                teamRequest.setFirstName(firstName);
-//                teamRequest.setLastName(firstName);
-//                PhNoWithCountryCode phone = new PhNoWithCountryCode();
-//                phone.setCountryCode(Utils.strCCode);
-//                phone.setPhoneNumber(emailTx.getText().toString());
-//                companyInfoRequest.setPhoneNumberDto(phone);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

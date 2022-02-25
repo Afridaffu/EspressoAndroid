@@ -14,9 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
-public class CompanyInfoDetails extends AppCompatActivity {
+public class CompanyInfoDetails extends BaseActivity {
     LinearLayout closeLL,emailLL,phoneLL;
     TextView mEmailTx,mPhoneNumberTx,mAddressTx;
     private String companyEmail="",companyPhone="";
@@ -27,6 +28,11 @@ public class CompanyInfoDetails extends AppCompatActivity {
         setContentView(R.layout.activity_company_info_details);
         initFields();
         initObservers();
+
+    }
+
+
+    private void initFields() {
         closeLL = findViewById(R.id.bpCloseLL);
         closeLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,11 +42,6 @@ public class CompanyInfoDetails extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-
-    private void initFields() {
-
         mEmailTx=(TextView) findViewById(R.id.emailTx);
         mPhoneNumberTx=(TextView) findViewById(R.id.phoneNumberTx);
         mAddressTx=(TextView) findViewById(R.id.addressTx);

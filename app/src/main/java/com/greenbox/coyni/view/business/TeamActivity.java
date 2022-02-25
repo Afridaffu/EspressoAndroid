@@ -35,6 +35,7 @@ import com.greenbox.coyni.model.team.TeamData;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.GiftCardActivity;
 import com.greenbox.coyni.viewmodel.GiftCardsViewModel;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
@@ -42,16 +43,16 @@ import com.greenbox.coyni.viewmodel.TeamViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamActivity extends AppCompatActivity {
+public class TeamActivity extends BaseActivity {
 
     private LinearLayout bpbackBtn, addTeamMemberL,clearTextLL;
-    TeamViewModel teamViewModel;
-    RecyclerView recyclerViewTeam;
-    TeamAdapter teamAdapter;
+    private TeamViewModel teamViewModel;
+    private RecyclerView recyclerViewTeam;
+    private TeamAdapter teamAdapter;
     public static TeamActivity teamActivity;
-    List<TeamData> datumList = new ArrayList<>();
-    TextView noBrandsTV;
-    EditText searchET;
+    private List<TeamData> datumList = new ArrayList<>();
+    private TextView noBrandsTV;
+    private EditText searchET;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,10 @@ public class TeamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team);
         initFields();
         initObservers();
+
+    }
+
+    private void initFields() {
         bpbackBtn = findViewById(R.id.bpbackBtn);
         addTeamMemberL = findViewById(R.id.addTeamMemberL);
         searchET = findViewById(R.id.searchET);
@@ -78,11 +83,7 @@ public class TeamActivity extends AppCompatActivity {
                 startActivity(new Intent(TeamActivity.this, AddNewTeamMemberActivity.class));
             }
         });
-    }
-
-    private void initFields() {
         TeamRequest request = new TeamRequest();
-        ArrayList<ApplicationSubmitRequest.RequiredDocumets> companyRequiredDocumets = new ArrayList<>();
         searchET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(60)});
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
         teamViewModel.getTeamInfo(request);

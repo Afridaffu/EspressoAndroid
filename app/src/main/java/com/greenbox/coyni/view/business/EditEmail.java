@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,30 +19,24 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
-public class EditEmail extends AppCompatActivity {
+public class EditEmail extends BaseActivity {
 
-    TextView mEditTitle;
-    TextInputLayout textInputLayout;
-    TextInputEditText textInputEditText;
+    private TextView mEditTitle;
+    private TextInputLayout textInputLayout;
+    private TextInputEditText textInputEditText;
     private String companyEmail,companyPhone;
-    int changeEmail=0;
-    CardView mSave;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    LinearLayout closeLL;
+    private int changeEmail=0;
+    private CardView mSave;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private LinearLayout closeLL;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_email2);
-        closeLL = findViewById(R.id.bpCloseLL);
-        closeLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditEmail.this, ChangeEmail.class);
-                startActivity(intent);
-            }
-        });
         Bundle bundle=getIntent().getExtras();
         companyEmail=bundle.getString("CompanyEmail");
         companyPhone = bundle.getString("CompanyPhone");
@@ -51,6 +46,14 @@ public class EditEmail extends AppCompatActivity {
     }
 
     private void initFields() {
+        closeLL = findViewById(R.id.bpCloseLL);
+        closeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditEmail.this, ChangeEmail.class);
+                startActivity(intent);
+            }
+        });
         mEditTitle=(TextView) findViewById(R.id.editTitle);
         textInputLayout=(TextInputLayout) findViewById(R.id.textInputLayout);
         textInputEditText=(TextInputEditText) findViewById(R.id.companyEmailET);
@@ -59,6 +62,7 @@ public class EditEmail extends AppCompatActivity {
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog=Utils.showProgressDialog(EditEmail.this);
                 businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
                 if(changeEmail==1) {
                     Utils.showCustomToast(EditEmail.this, "Email Updated.", R.drawable.ic_custom_tick, "");
@@ -83,7 +87,7 @@ public class EditEmail extends AppCompatActivity {
     }
     public CompanyInfoRequest prepareRequest() {
         CompanyInfoRequest companyInfoRequest = new CompanyInfoRequest();
-
+        progressDialog.dismiss();
         try {
             if(changeEmail==1) {
                 companyInfoRequest.setEmail(textInputEditText.getText().toString());

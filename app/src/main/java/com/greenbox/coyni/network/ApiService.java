@@ -465,7 +465,7 @@ public interface ApiService {
     Call<BiometricTokenResponse> biometricToken(@Body BiometricTokenRequest request);
 
     @GET("api/v2/banks/me")
-    Call<PaymentMethodsResponse> meBanks();
+    Call<BankResponse> meBanks();
 
     @GET("api/v2/business/beneficial-owners")
     Call<BOResp> getBeneficailOwners();

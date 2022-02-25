@@ -22,21 +22,24 @@ import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
-public class AddNewTeamMemberActivity extends AppCompatActivity {
-    TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
-    TextInputEditText editFNameET,editLNameET,editEmailET;
-    OutLineBoxPhoneNumberEditText editPhoneET;
-    LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
-    TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
-    public static int focusedID = 0;
-    public CardView sendCV;
-    public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
-    String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
-    TeamViewModel teamViewModel;
+public class AddNewTeamMemberActivity extends BaseActivity {
+    private TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
+    private TextInputEditText editFNameET,editLNameET,editEmailET;
+    private OutLineBoxPhoneNumberEditText phoneNumberET;
+    private LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
+    private TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
+    private static int focusedID = 0;
+    private CardView sendCV;
+    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
+    private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
+    private TeamViewModel teamViewModel;
     private LinearLayout backBtnLL;
-    LinearLayout administatorLL;
+    private LoginViewModel loginViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,6 @@ public class AddNewTeamMemberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_team_member);
 
         backBtnLL = findViewById(R.id.backBtnLL);
-        //administatorLL = findViewById(R.id.administatorLL);
         backBtnLL.setOnClickListener(v -> onBackPressed());
         initFields();
         focusWatchers();
@@ -55,12 +57,11 @@ public class AddNewTeamMemberActivity extends AppCompatActivity {
         editFNameTil = findViewById(R.id.edit_fName_til);
         editLNameTil = findViewById(R.id.edit_lName_til);
         editEmailTil = findViewById(R.id.edit_email_til);
-        //editPhoneTil = findViewById(R.id.phoneNumberOET);
 
         editFNameET = findViewById(R.id.editFNameET);
         editLNameET = findViewById(R.id.editLNameET);
         editEmailET = findViewById(R.id.editEmailET);
-        editPhoneET=findViewById(R.id.phoneNumberOET);
+        phoneNumberET=findViewById(R.id.phoneNumberOET);
 
         editFNameLL = findViewById(R.id.editfirstNameErrorLL);
         editLNameLL = findViewById(R.id.editlastNameErrorLL);
@@ -75,28 +76,32 @@ public class AddNewTeamMemberActivity extends AppCompatActivity {
         editFNameET.setText(firstName);
         editLNameET.setText(lastName);
         editEmailET.setText(emailAddress);
-        editPhoneET.setText(phoneNumber);
+        phoneNumberET.setText(phoneNumber);
 
         sendCV = findViewById(R.id.sendCV);
+
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
+                phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
                 teamInfoAddAPICall(prepareRequest());
             }
         });
 
 
     }
+
     public TeamRequest prepareRequest() {
         TeamRequest teamRequest = new TeamRequest();
         try {
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
-            phone.setPhoneNumber(editPhoneET.getText().toString());
+            phone.setPhoneNumber(phoneNumberET.getText().toString());
             teamRequest.setFirstName(editFNameET.getText().toString());
             teamRequest.setFirstName(editLNameET.getText().toString());
             teamRequest.setFirstName(editEmailET.getText().toString());
-            teamRequest.setFirstName(editPhoneET.getText().toString());
+            teamRequest.setFirstName(phoneNumberET.getText().toString());
 
         } catch (Exception e) {
             e.printStackTrace();

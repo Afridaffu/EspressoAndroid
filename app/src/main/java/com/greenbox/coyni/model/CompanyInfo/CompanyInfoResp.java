@@ -57,7 +57,6 @@ public class CompanyInfoResp {
         private String businessEntity;
         private String ssnOrEin;
 
-        private ArrayList<RequiredDocumets> requiredDocumets = new ArrayList<>();
         private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
 
 
@@ -166,7 +165,7 @@ public class CompanyInfoResp {
         }
     }
 
-    public static class RequiredDocumets {
+    public class RequiredDocumets {
         private String imgSize;
         private String imgName;
         private String imgLink;
